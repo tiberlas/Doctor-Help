@@ -14,7 +14,7 @@ public class DoctorPOJO implements Serializable{
 	
 	private Long id;
 	private String password;
-	private RoleEnum role;
+	private RoleEnum role = RoleEnum.DOCTOR;
 	private String firstName;
 	private String lastName;
 	private String email;

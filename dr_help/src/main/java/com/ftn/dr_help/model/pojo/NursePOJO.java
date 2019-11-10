@@ -14,7 +14,7 @@ public class NursePOJO implements Serializable{
 	
 	private Long id;
 	private String password;
-	private RoleEnum role;
+	private RoleEnum role = RoleEnum.NURSE;
 	private String firstName;
 	private String lastName;
 	private String email;

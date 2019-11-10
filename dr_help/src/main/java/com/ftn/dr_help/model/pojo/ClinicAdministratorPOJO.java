@@ -21,7 +21,7 @@ public class ClinicAdministratorPOJO implements Serializable{
 	private String city;
 	private String state;
 	private String phoneNumber;
-	private RoleEnum role;
+	private RoleEnum role = RoleEnum.CLINICAL_ADMINISTRATOR;
 	private Calendar birthday;
 	
 	public ClinicAdministratorPOJO() {

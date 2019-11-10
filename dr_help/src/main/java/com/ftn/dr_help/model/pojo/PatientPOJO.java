@@ -21,7 +21,7 @@ public class PatientPOJO implements Serializable{
 	private String state;
 	private String phoneNumber;
 	private Long id;
-	private RoleEnum role;
+	private RoleEnum role = RoleEnum.PATIENT;
 	private Calendar birthday;
 	private Long insuranceNumber;
 	private HealthRecordPOJO healthRecord;
