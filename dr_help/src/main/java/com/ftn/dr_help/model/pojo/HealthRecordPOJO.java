@@ -16,6 +16,7 @@ public class HealthRecordPOJO implements Serializable {
 	private double height;
 	private double diopter;
 	private BloodTypeEnum bloodType;
+	private ExaminationReportPOJO examinationReport;
 	
 	public HealthRecordPOJO () {
 		super ();
@@ -50,6 +51,18 @@ public class HealthRecordPOJO implements Serializable {
 	}
 	public void setBloodType(BloodTypeEnum bloodType) {
 		this.bloodType = bloodType;
+	}
+
+	public ExaminationReportPOJO getExaminationReport() {
+		return examinationReport;
+	}
+
+	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
+		this.examinationReport = examinationReport;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	

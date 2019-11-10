@@ -11,7 +11,7 @@ public class PerscriptionPOJO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private DiagnosisPOJO diagnosis;
 	private ArrayList<MedicationPOJO> medicationList;
-	//private NursePOJO nurse;
+	private NursePOJO signingNurse;
 	
 	public DiagnosisPOJO getDiagnosis() {
 		return diagnosis;
@@ -28,13 +28,12 @@ public class PerscriptionPOJO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	/*
-	public Nurse getNurse () {
-		return this.nurse;
+	public NursePOJO getSigningNurse () {
+		return this.signingNurse;
 	}
-	public void setNurse (Nurse nurse) {
-		this.nurse = nurse;
+	public void setigningNurse (NursePOJO signingNurse) {
+		this.signingNurse = signingNurse;
 	}
-	*/
+	
 
 }

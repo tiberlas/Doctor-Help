@@ -24,7 +24,7 @@ public class PatientPOJO implements Serializable{
 	private RoleEnum role;
 	private Calendar birthday;
 	private Long insuranceNumber;
-	
+	private HealthRecordPOJO healthRecord;
 	
 	public PatientPOJO() {
 		super();
@@ -100,6 +100,18 @@ public class PatientPOJO implements Serializable{
 	}
 	public void setRole(RoleEnum role) {
 		this.role = role;
+	}
+	public HealthRecordPOJO getHealthRecord() {
+		return healthRecord;
+	}
+	public void setHealthRecord(HealthRecordPOJO healthRecord) {
+		this.healthRecord = healthRecord;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public void setInsuranceNumber(Long insuranceNumber) {
+		this.insuranceNumber = insuranceNumber;
 	}
 	
 }
