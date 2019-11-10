@@ -1,5 +1,7 @@
 package com.ftn.dr_help.model;
 
+import interfaces.OperationRequestInterface;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 

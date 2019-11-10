@@ -1,5 +1,7 @@
 package com.ftn.dr_help.model;
 
+import interfaces.AppointmentRequestInterface;
+
 import java.util.Calendar;
 
 import com.ftn.dr_help.model.pojo.PatientPOJO;

@@ -3,7 +3,7 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import com.ftn.dr_help.model.AppointmentState;
+import enums.AppointmentStateEnum;
 
 public class AppointmentPOJO implements Serializable{
 
@@ -16,7 +16,7 @@ public class AppointmentPOJO implements Serializable{
 	private DoctorPOJO dostor;
 	private NursePOJO nurse;
 	private PatientPOJO patient;
-	private AppointmentState status;
+	private AppointmentStateEnum status;
 	private double discount;
 	private ProceduresTypePOJO procedureType;
 	private RoomPOJO room;
@@ -50,10 +50,10 @@ public class AppointmentPOJO implements Serializable{
 	public void setPatient(PatientPOJO patient) {
 		this.patient = patient;
 	}
-	public AppointmentState getStatus() {
+	public AppointmentStateEnum getStatus() {
 		return status;
 	}
-	public void setStatus(AppointmentState status) {
+	public void setStatus(AppointmentStateEnum status) {
 		this.status = status;
 	}
 	public double getDiscount() {

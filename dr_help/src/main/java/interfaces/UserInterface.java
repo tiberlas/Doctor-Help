@@ -1,6 +1,8 @@
-package com.ftn.dr_help.model;
+package interfaces;
 
 import java.util.Calendar;
+
+import enums.RoleEnum;
 
 public interface UserInterface {
 

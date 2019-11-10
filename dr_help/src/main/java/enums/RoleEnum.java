@@ -1,4 +1,4 @@
-package com.ftn.dr_help.model;
+package enums;
 
 public enum RoleEnum {
 	

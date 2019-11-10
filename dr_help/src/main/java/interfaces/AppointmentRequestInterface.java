@@ -1,4 +1,4 @@
-package com.ftn.dr_help.model;
+package interfaces;
 
 import java.util.Calendar;
 

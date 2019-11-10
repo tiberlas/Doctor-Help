@@ -3,7 +3,7 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import com.ftn.dr_help.model.RoleEnum;
+import enums.RoleEnum;
 
 public class LeaveRequestPOJO implements Serializable{
 
