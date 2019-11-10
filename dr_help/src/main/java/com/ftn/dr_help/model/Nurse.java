@@ -2,13 +2,15 @@ package com.ftn.dr_help.model;
 
 import interfaces.UserInterface;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.ftn.dr_help.model.pojo.NursePOJO;
 
+import enums.DayEnum;
 import enums.RoleEnum;
 
-public class Nurse implements UserInterface {
+public class Nurse implements UserInterface, MedicalStaffInterface {
 
 	private NursePOJO nurse;
 	private WorkSchedule workSchedule;
@@ -90,6 +92,36 @@ public class Nurse implements UserInterface {
 	public Calendar getBirthday() {
 		// TODO Auto-generated method stub
 		return this.nurse.getBirthday();
+	}
+
+	@Override
+	public void requestLeave() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Calendar getShiftStart() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Calendar getShiftEnd() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<DayEnum> getDaysOff() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Calendar> getLeaveDays() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
