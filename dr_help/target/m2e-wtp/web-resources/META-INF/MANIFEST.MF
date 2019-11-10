@@ -1,6 +1,10 @@
 Manifest-Version: 1.0
 Implementation-Title: dr_help
 Implementation-Version: 0.0.1-SNAPSHOT
+<<<<<<< HEAD
 Build-Jdk-Spec: 1.8
+=======
+Build-Jdk-Spec: 1.7
+>>>>>>> a9f3ff25557173e47817248ca062986a6d405a69
 Created-By: Maven Integration for Eclipse
 
