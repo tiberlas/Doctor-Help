@@ -1,4 +1,4 @@
-package interfaces;
+package com.ftn.dr_help.model.interfaces;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,12 +1,10 @@
 package com.ftn.dr_help.model;
 
-import interfaces.UserInterface;
-
 import java.util.Calendar;
 
+import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.interfaces.UserInterface;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
-
-import enums.RoleEnum;
 
 public class ClinicAdministrator implements UserInterface{
 
