@@ -1,9 +1,15 @@
 package com.ftn.dr_help.model.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ClinicPOJO {
+public class ClinicPOJO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	private String address;
 	private String description;
