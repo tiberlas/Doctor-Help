@@ -3,7 +3,7 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import enums.AppointmentStateEnum;
+import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 
 public class AppointmentPOJO implements Serializable{
 

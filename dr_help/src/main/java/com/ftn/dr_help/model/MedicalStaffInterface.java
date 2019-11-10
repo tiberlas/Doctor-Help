@@ -3,7 +3,7 @@ package com.ftn.dr_help.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import enums.DayEnum;
+import com.ftn.dr_help.model.enums.DayEnum;
 
 public interface MedicalStaffInterface {
 

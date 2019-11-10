@@ -3,7 +3,7 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import enums.BloodTypeEnum;
+import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
 public class HealthRecordPOJO implements Serializable {
 

@@ -1,4 +1,4 @@
-package enums;
+package com.ftn.dr_help.model.enums;
 
 public enum BloodTypeEnum {
 

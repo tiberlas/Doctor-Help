@@ -1,17 +1,15 @@
 package com.ftn.dr_help.model;
 
-import interfaces.UserInterface;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.ftn.dr_help.model.enums.DayEnum;
+import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.interfaces.UserInterface;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 
-import enums.DayEnum;
-import enums.RoleEnum;
-
 public class Doctor implements UserInterface, MedicalStaffInterface{
-	
+
 	private DoctorPOJO doctor;
 	private WorkSchedule workSchedule;
 	
