@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 import com.ftn.dr_help.model.RoleEnum;
 
-public class ClinicAdministrator implements Serializable{
+public class ClinicAdministratorPOJO implements Serializable{
 
 	/**
 	 * 
@@ -24,7 +24,7 @@ public class ClinicAdministrator implements Serializable{
 	private RoleEnum role;
 	private Calendar birthday;
 	
-	public ClinicAdministrator() {
+	public ClinicAdministratorPOJO() {
 		super();
 	}
 	

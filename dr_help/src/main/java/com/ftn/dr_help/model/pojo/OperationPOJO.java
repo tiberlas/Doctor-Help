@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class OperatinPOJO implements Serializable{
+public class OperationPOJO implements Serializable{
 
 	/**
 	 * 
@@ -17,7 +17,7 @@ public class OperatinPOJO implements Serializable{
 	private RoomPOJO room;
 	private ProceduresTypePOJO procedureType;
 	
-	public OperatinPOJO() {
+	public OperationPOJO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
