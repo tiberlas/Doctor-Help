@@ -13,7 +13,9 @@ public class ClinicAdministrator implements UserInterface{
 	public ClinicAdministrator() {
 		super();
 		this.clinicAdministrator = new ClinicAdministratorPOJO();
+		//initialize();
 	}
+	
 
 	@Override
 	public RoleEnum getRole() {
