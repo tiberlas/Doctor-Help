@@ -3,6 +3,19 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+@Entity
+@Table(name = "Clinic")
 public class ClinicPOJO implements Serializable {
 
 	/**
@@ -10,10 +23,25 @@ public class ClinicPOJO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@NotBlank
+	@Column(name = "name", nullable = false)
 	private String name;
+	
+	@NotBlank
+	@Column(name = "address", nullable = false)
 	private String address;
+	
+	@NotBlank
+	@Column(name = "description", nullable = false)
 	private String description;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ArrayList<ClinicAdministratorPOJO> clinicAdminList;
+	
 	private ArrayList<NursePOJO> nurseList;
 	private ArrayList<DoctorPOJO> doctorList;
 	private ArrayList<RoomPOJO> roomList;
@@ -30,6 +58,20 @@ public class ClinicPOJO implements Serializable {
 		procedureTypesList = new  ArrayList<ProceduresTypePOJO>();
 		
 	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 
 
 	public String getName() {
