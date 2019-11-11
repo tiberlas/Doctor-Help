@@ -35,7 +35,7 @@ public class PerscriptionPOJO implements Serializable {
 	private DiagnosisPOJO diagnosis;
 	
 	@OneToMany(mappedBy = "perscriptionpojo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private ArrayList<MedicationPOJO> medicationList;
+	private List<MedicationPOJO> medicationList;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private NursePOJO signingNurse;
