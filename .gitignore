@@ -20,7 +20,12 @@
 *.rar
 
 # folder #
-target\
+
+#za maven update
+dr_help/target/m2e-wtp/web-resources/META-INF/maven/com.ftn/dr_help/pom.properties
+
+#za application-properties
+dr_help/src/main/resources/application-properties
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml

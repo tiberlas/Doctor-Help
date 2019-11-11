@@ -79,6 +79,32 @@ public class CentreAdministratorPOJO implements Serializable{
 		return role;
 	}
 	
+	
+	public CentreAdministratorPOJO( @NotBlank String password, @NotBlank String email,
+			@NotBlank String firstName, @NotBlank String lastName, @NotBlank String address, @NotBlank String city,
+			@NotBlank String state, @NotBlank String phoneNumber, @NotBlank RoleEnum role,
+			@NotBlank Calendar birthday) {
+		super();
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNumber = phoneNumber;
+		this.role = role;
+		this.birthday = birthday;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "CentreAdministratorPOJO [id=" + id + ", password=" + password + ", email=" + email + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", address=" + address + ", city=" + city + ", state=" + state
+				+ ", phoneNumber=" + phoneNumber + ", role=" + role + ", birthday=" + birthday + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}

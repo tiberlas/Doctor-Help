@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
-import com.ftn.dr_help.reposirory.ClinicAdministratorRepository;
+import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 
 @Service
 public class ClinicAdministratorService {

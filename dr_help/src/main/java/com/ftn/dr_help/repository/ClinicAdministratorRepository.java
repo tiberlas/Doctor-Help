@@ -1,4 +1,4 @@
-package com.ftn.dr_help.reposirory;
+package com.ftn.dr_help.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
