@@ -71,12 +71,13 @@ public class PatientPOJO implements Serializable{
 	
 	@OneToOne (fetch = FetchType.LAZY)
 	private HealthRecordPOJO healthRecord;
-	
+
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<OperationPOJO> operationList;
 	
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AppointmentPOJO> appointments;
+
 	
 	public PatientPOJO() {
 		super();
@@ -165,6 +166,7 @@ public class PatientPOJO implements Serializable{
 	public void setInsuranceNumber(Long insuranceNumber) {
 		this.insuranceNumber = insuranceNumber;
 	}
+
 	public List<OperationPOJO> getOperationList() {
 		return operationList;
 	}

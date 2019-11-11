@@ -17,7 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
+import javax.persistence.OneToOne;
+
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -90,6 +92,7 @@ public class DoctorPOJO implements Serializable{
 	@ManyToMany 
 	@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"))
 	private List<OperationPOJO> operationList;
+
 	
 	public DoctorPOJO() {
 		super();
@@ -184,6 +187,7 @@ public class DoctorPOJO implements Serializable{
 
 	public void setOperationList(List<OperationPOJO> operationList) {
 		this.operationList = operationList;
+
 	}
 	
 }

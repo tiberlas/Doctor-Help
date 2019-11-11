@@ -2,6 +2,15 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class DoctorReviewPOJO implements Serializable {
 
 	/**
@@ -9,9 +18,17 @@ public class DoctorReviewPOJO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@OneToOne(fetch = FetchType.LAZY)
 	private DoctorPOJO doctor;
+	
+	@OneToOne(fetch = FetchType.LAZY)
 	private PatientPOJO patient;
+	
+	@Column(name = "rating", nullable = true)
 	private Integer rating;
 	
 	public DoctorReviewPOJO() {

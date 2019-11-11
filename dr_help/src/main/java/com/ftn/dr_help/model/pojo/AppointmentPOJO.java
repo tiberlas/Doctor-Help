@@ -25,9 +25,6 @@ import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 @Table (name = "appointments")
 public class AppointmentPOJO implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id

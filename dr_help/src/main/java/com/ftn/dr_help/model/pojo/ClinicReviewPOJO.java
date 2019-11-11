@@ -2,10 +2,17 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "clinicRewiew")
 public class ClinicReviewPOJO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Id
 	private Long id;
 	private PatientPOJO patient;
 	private Integer rating;
