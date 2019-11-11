@@ -1,7 +1,6 @@
 package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,12 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import java.util.List;
+import javax.persistence.Table;
 
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
 @Entity
+@Table(name = "healthrecord")
 public class HealthRecordPOJO implements Serializable {
 
 	/**
@@ -48,7 +47,6 @@ public class HealthRecordPOJO implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "bloodType", nullable = true)
 	private BloodTypeEnum bloodType;
-	
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private ExaminationReportPOJO examinationReport;
