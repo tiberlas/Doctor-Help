@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
-import com.ftn.dr_help.reposirory.CenterAdministratorRepository;
+import com.ftn.dr_help.repository.CentreAdministratorRepository;
 
 @Service
 public class CenterAdministratorService {
 	
 	@Autowired
-	private CenterAdministratorRepository administratorRepository;
+	private CentreAdministratorRepository administratorRepository;
 
 	public CentreAdministratorPOJO findOne(Long id) {
 		return administratorRepository.findById(id).orElseGet(null);
