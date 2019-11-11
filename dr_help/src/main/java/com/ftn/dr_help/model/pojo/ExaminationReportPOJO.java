@@ -2,11 +2,13 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -32,6 +34,9 @@ public class ExaminationReportPOJO implements Serializable {
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private HealthRecordPOJO healthRecord;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private ClinicPOJO clinic;
 	
 	public Long getId() {
 		return id;
