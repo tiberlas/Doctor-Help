@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -39,6 +40,7 @@ public class ClinicPOJO implements Serializable {
 	@Column(name = "description", nullable = false)
 	private String description;
 	
+	@OneToMany(mappedBy = "Clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<ClinicAdministratorPOJO> clinicAdminList;
 	
 	private ArrayList<NursePOJO> nurseList;

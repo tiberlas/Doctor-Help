@@ -3,19 +3,24 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 @Entity
+@Table(name = "ClinicAdministrator")
 public class ClinicAdministratorPOJO implements Serializable{
 
 	/**
@@ -57,6 +62,9 @@ public class ClinicAdministratorPOJO implements Serializable{
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar birthday;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private ClinicPOJO clinic;
 	
 	public ClinicAdministratorPOJO() {
 		super();
