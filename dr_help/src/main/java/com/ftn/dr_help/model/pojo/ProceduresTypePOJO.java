@@ -53,7 +53,6 @@ public class ProceduresTypePOJO implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private ClinicPOJO clinic;
 	
-	
 	public ProceduresTypePOJO() {
 		super();
 		// TODO Auto-generated constructor stub

@@ -44,6 +44,9 @@ public class RoomPOJO implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ClinicPOJO clinic;
 	
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AppointmentPOJO> appointments;
+	
 	public RoomPOJO() {
 		super();
 		// TODO Auto-generated constructor stub

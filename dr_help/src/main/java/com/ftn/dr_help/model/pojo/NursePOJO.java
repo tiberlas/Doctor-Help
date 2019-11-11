@@ -2,6 +2,7 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,8 +80,11 @@ public class NursePOJO implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private ClinicPOJO clinic;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	private LeaveRequestPOJO leaveRequest;
+	@OneToMany (mappedBy = "nurse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AppointmentPOJO> operationList;
+	
+	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AppointmentPOJO> appointments;
 	
 	public NursePOJO() {
 		super();
@@ -161,13 +165,23 @@ public class NursePOJO implements Serializable{
 		this.clinic = clinic;
 	}
 
-	public LeaveRequestPOJO getLeaveRequest() {
-		return leaveRequest;
+	public List<AppointmentPOJO> getOperationList() {
+		return operationList;
 	}
 
-	public void setLeaveRequest(LeaveRequestPOJO leaveRequest) {
-		this.leaveRequest = leaveRequest;
+	public void setOperationList(List<AppointmentPOJO> operationList) {
+		this.operationList = operationList;
 	}
+
+	public List<AppointmentPOJO> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(List<AppointmentPOJO> appointments) {
+		this.appointments = appointments;
+	}
+
+
 	
 	
 }

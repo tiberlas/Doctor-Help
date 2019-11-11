@@ -20,18 +20,16 @@
 *.rar
 
 # folder #
-<<<<<<< HEAD
-**\target\
-**\resources\
-=======
+dr_help/target*
+dr_help/src/main/resources/application.properties
+
 
 #za maven update
 dr_help/target/m2e-wtp/web-resources/META-INF/maven/com.ftn/dr_help/pom.properties
 
-#za application-properties
-dr_help/src/main/resources/application-properties
-
->>>>>>> 03d6338232fedbb7dcbc82f6826ee8d7f2abb81e
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+#react ignore
+react/drhelp_react/node_modues/*

@@ -1,10 +1,27 @@
 package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Entity
+@Table (name = "operations")
 public class OperationPOJO implements Serializable{
 
 	/**
@@ -12,10 +29,24 @@ public class OperationPOJO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar date;
+	
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PatientPOJO patient;
-	private ArrayList<DoctorPOJO> doctorLIst;
+	
+	@ManyToMany 
+	@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"))
+	List<DoctorPOJO> doctorLIst;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private RoomPOJO room;
+	
+	@OneToOne (fetch = FetchType.LAZY)
 	private ProceduresTypePOJO procedureType;
 	
 	public OperationPOJO() {
@@ -35,10 +66,10 @@ public class OperationPOJO implements Serializable{
 	public void setPatient(PatientPOJO patient) {
 		this.patient = patient;
 	}
-	public ArrayList<DoctorPOJO> getDoctorLIst() {
+	public List<DoctorPOJO> getDoctorLIst() {
 		return doctorLIst;
 	}
-	public void setDoctorLIst(ArrayList<DoctorPOJO> doctorLIst) {
+	public void setDoctorLIst(List<DoctorPOJO> doctorLIst) {
 		this.doctorLIst = doctorLIst;
 	}
 	public RoomPOJO getRoom() {
