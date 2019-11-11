@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -72,10 +73,10 @@ public class PatientPOJO implements Serializable{
 	@OneToOne (fetch = FetchType.LAZY)
 	private HealthRecordPOJO healthRecord;
 
-	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OperationPOJO> operationList;
 	
-	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<AppointmentPOJO> appointments;
 
 	

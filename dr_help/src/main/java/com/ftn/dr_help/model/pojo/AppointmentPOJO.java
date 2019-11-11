@@ -34,14 +34,14 @@ public class AppointmentPOJO implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column (name = "date", nullable = false)
 	private Calendar date;
-	
-	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private DoctorPOJO doctor;
 	
-	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private NursePOJO nurse;
 	
-	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private PatientPOJO patient;
 
 	@Enumerated(EnumType.STRING)

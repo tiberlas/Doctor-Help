@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -83,6 +82,9 @@ public class NursePOJO implements Serializable{
 	
 	@OneToMany (mappedBy = "nurse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<AppointmentPOJO> operationList;
+	
+	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AppointmentPOJO> appointments;
 	
 	public NursePOJO() {
 		super();
@@ -169,6 +171,14 @@ public class NursePOJO implements Serializable{
 
 	public void setOperationList(List<AppointmentPOJO> operationList) {
 		this.operationList = operationList;
+	}
+
+	public List<AppointmentPOJO> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(List<AppointmentPOJO> appointments) {
+		this.appointments = appointments;
 	}
 
 
