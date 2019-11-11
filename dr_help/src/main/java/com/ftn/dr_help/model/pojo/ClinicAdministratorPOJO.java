@@ -52,6 +52,7 @@ public class ClinicAdministratorPOJO implements Serializable{
 	private String phoneNumber;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "role", nullable = false)
 	private RoleEnum role = RoleEnum.CLINICAL_ADMINISTRATOR;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -61,6 +62,26 @@ public class ClinicAdministratorPOJO implements Serializable{
 		super();
 	}
 	
+
+	
+	public ClinicAdministratorPOJO(String password, String email,
+			String firstName, String lastName, String address, String city,
+			String state, String phoneNumber, RoleEnum role, Calendar birthday) {
+		super();
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNumber = phoneNumber;
+		this.role = role;
+		this.birthday = birthday;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}

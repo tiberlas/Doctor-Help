@@ -39,7 +39,6 @@ public class ClinicPOJO implements Serializable {
 	@Column(name = "description", nullable = false)
 	private String description;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ArrayList<ClinicAdministratorPOJO> clinicAdminList;
 	
 	private ArrayList<NursePOJO> nurseList;
