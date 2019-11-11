@@ -3,8 +3,21 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import com.ftn.dr_help.model.enums.RoleEnum;
 
+@Entity
 public class PatientPOJO implements Serializable{
 
 	/**
@@ -12,18 +25,46 @@ public class PatientPOJO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Column (name = "password", nullable = false)
 	private String password;
+	
+	@Column (name = "email", nullable = false)
 	private String email;
+	
+	@Column (name = "firstName", nullable = false)
 	private String firstName;
+	
+	@Column (name = "lastName", nullable = false)
 	private String lastName;
+	
+	@Column (name = "address", nullable = false)
 	private String address;
+	
+	@Column (name = "city", nullable = false)
 	private String city;
+	
+	@Column (name = "state", nullable = false)
 	private String state;
+	
+	@Column (name = "phoneNumber", nullable = false)
 	private String phoneNumber;
+	
+	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.PATIENT;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column (name = "date", nullable = false)
 	private Calendar birthday;
+	
+	@Column (name = "insuranceNumber", nullable = false)
 	private Long insuranceNumber;
+	
+	@OneToOne (fetch = FetchType.LAZY)
 	private HealthRecordPOJO healthRecord;
 	
 	public PatientPOJO() {
