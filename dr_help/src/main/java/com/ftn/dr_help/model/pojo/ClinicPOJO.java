@@ -2,6 +2,7 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,12 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+
+
 @Entity
-@Table(name = "Clinic")
+@Table(name = "clinic")
 public class ClinicPOJO implements Serializable {
 
 	/**
@@ -36,15 +39,25 @@ public class ClinicPOJO implements Serializable {
 	private String address;
 	
 	@NotBlank
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = true)
 	private String description;
 	
-	private ArrayList<ClinicAdministratorPOJO> clinicAdminList;
+	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ClinicAdministratorPOJO> clinicAdminList;
 	
-	private ArrayList<NursePOJO> nurseList;
+	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<NursePOJO> nurseList;
+	
+	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<DoctorPOJO> doctorList;
+	
+	//@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<RoomPOJO> roomList;
+	
+	//@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<ExaminationReportPOJO> reportList;
+	
+	//@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<ProceduresTypePOJO> procedureTypesList;
 	
 	
@@ -103,18 +116,18 @@ public class ClinicPOJO implements Serializable {
 	}
 
 
-	public ArrayList<ClinicAdministratorPOJO> getClinicAdminList() {
+	public List<ClinicAdministratorPOJO> getClinicAdminList() {
 		return clinicAdminList;
 	}
 
 
 	public void setClinicAdminList(
-			ArrayList<ClinicAdministratorPOJO> clinicAdminList) {
+			List<ClinicAdministratorPOJO> clinicAdminList) {
 		this.clinicAdminList = clinicAdminList;
 	}
 
 
-	public ArrayList<NursePOJO> getNurseList() {
+	public List<NursePOJO> getNurseList() {
 		return nurseList;
 	}
 
@@ -124,7 +137,7 @@ public class ClinicPOJO implements Serializable {
 	}
 
 
-	public ArrayList<DoctorPOJO> getDoctorList() {
+	public List<DoctorPOJO> getDoctorList() {
 		return doctorList;
 	}
 
@@ -134,7 +147,7 @@ public class ClinicPOJO implements Serializable {
 	}
 
 
-	public ArrayList<RoomPOJO> getRoomList() {
+	public List<RoomPOJO> getRoomList() {
 		return roomList;
 	}
 
@@ -144,7 +157,7 @@ public class ClinicPOJO implements Serializable {
 	}
 
 
-	public ArrayList<ExaminationReportPOJO> getReportList() {
+	public List<ExaminationReportPOJO> getReportList() {
 		return reportList;
 	}
 
@@ -154,7 +167,7 @@ public class ClinicPOJO implements Serializable {
 	}
 
 
-	public ArrayList<ProceduresTypePOJO> getProcedureTypesList() {
+	public List<ProceduresTypePOJO> getProcedureTypesList() {
 		return procedureTypesList;
 	}
 
