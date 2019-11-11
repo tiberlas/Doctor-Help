@@ -3,8 +3,19 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import com.ftn.dr_help.model.enums.RoleEnum;
 
+@Entity
 public class ClinicAdministratorPOJO implements Serializable{
 
 	/**
@@ -12,16 +23,38 @@ public class ClinicAdministratorPOJO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "password", nullable = false)
 	private String password;
+	
+	@Column(name = "email", nullable = false)
 	private String email;
+	
+	@Column(name = "firstName", nullable = false)
 	private String firstName;
+	
+	@Column(name = "lastName", nullable = false)
 	private String lastName;
+	
+	@Column(name = "address", nullable = false)
 	private String address;
+	
+	@Column(name ="city", nullable = false)
 	private String city;
+	
+	@Column(name = "state", nullable = false)
 	private String state;
+	
+	@Column(name = "phoneNumber", nullable = false)
 	private String phoneNumber;
+	
+	@Enumerated(EnumType.STRING)
 	private RoleEnum role = RoleEnum.CLINICAL_ADMINISTRATOR;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar birthday;
 	
 	public ClinicAdministratorPOJO() {
