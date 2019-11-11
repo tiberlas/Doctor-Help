@@ -63,12 +63,12 @@ public class CentreAdministratorPOJO implements Serializable{
 	
 	@NotBlank
 	@Enumerated(EnumType.STRING)
-	@Column(name = "state", nullable = false)
+	@Column(name = "role", nullable = false)
 	private RoleEnum role = RoleEnum.CENTRE_ADMINISTRATOR;
 	
 	@NotBlank
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "state", nullable = false)
+	@Column(name = "birthday", nullable = false)
 	private Calendar birthday;
 	
 	public CentreAdministratorPOJO() {
