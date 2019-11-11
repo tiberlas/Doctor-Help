@@ -65,5 +65,17 @@ public class ExaminationReportPOJO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	public HealthRecordPOJO getHealthRecord() {
+		return healthRecord;
+	}
+	public void setHealthRecord(HealthRecordPOJO healthRecord) {
+		this.healthRecord = healthRecord;
+	}
+	public ClinicPOJO getClinic() {
+		return clinic;
+	}
+	public void setClinic(ClinicPOJO clinic) {
+		this.clinic = clinic;
+	}
 	
 }

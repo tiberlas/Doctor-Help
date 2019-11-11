@@ -159,6 +159,18 @@ public class ClinicAdministratorPOJO implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+
+
+	public ClinicPOJO getClinic() {
+		return clinic;
+	}
+
+
+
+	public void setClinic(ClinicPOJO clinic) {
+		this.clinic = clinic;
+	}
 	
 	
 }

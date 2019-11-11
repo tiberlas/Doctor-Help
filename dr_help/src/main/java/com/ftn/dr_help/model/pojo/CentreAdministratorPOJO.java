@@ -165,4 +165,8 @@ public class CentreAdministratorPOJO implements Serializable{
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
 	}
+
+	public void setRole(RoleEnum role) {
+		this.role = role;
+	}
 }

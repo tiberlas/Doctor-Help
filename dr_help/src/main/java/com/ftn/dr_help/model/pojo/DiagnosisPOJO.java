@@ -53,6 +53,14 @@ public class DiagnosisPOJO implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public PerscriptionPOJO getPerscription() {
+		return perscription;
+	}
+
+	public void setPerscription(PerscriptionPOJO perscription) {
+		this.perscription = perscription;
+	}
 	
 	
 	

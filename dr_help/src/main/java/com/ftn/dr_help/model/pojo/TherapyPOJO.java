@@ -37,12 +37,7 @@ public class TherapyPOJO implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public ExaminationReportPOJO getExaminationReport() {
-		return examinationReport;
-	}
-	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
-		this.examinationReport = examinationReport;
-	}
+
 	public String getAdvice() {
 		return advice;
 	}
@@ -57,6 +52,12 @@ public class TherapyPOJO implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public ExaminationReportPOJO getExaminationReport() {
+		return examinationReport;
+	}
+	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
+		this.examinationReport = examinationReport;
 	}
 	
 

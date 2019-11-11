@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -78,6 +79,12 @@ public class DoctorPOJO implements Serializable{
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private ClinicPOJO clinic;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private DoctorReviewPOJO doctorReview;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private LeaveRequestPOJO leaveRequest;
 	
 	
 	public DoctorPOJO() {
@@ -149,6 +156,30 @@ public class DoctorPOJO implements Serializable{
 	}
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
+	}
+
+	public ClinicPOJO getClinic() {
+		return clinic;
+	}
+
+	public void setClinic(ClinicPOJO clinic) {
+		this.clinic = clinic;
+	}
+
+	public DoctorReviewPOJO getDoctorReview() {
+		return doctorReview;
+	}
+
+	public void setDoctorReview(DoctorReviewPOJO doctorReview) {
+		this.doctorReview = doctorReview;
+	}
+
+	public LeaveRequestPOJO getLeaveRequest() {
+		return leaveRequest;
+	}
+
+	public void setLeaveRequest(LeaveRequestPOJO leaveRequest) {
+		this.leaveRequest = leaveRequest;
 	}
 	
 }
