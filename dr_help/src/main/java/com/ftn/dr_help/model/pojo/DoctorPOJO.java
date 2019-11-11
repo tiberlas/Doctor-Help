@@ -27,7 +27,7 @@ import javax.validation.constraints.NotBlank;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 @Entity
-@Table(name = "doctor")
+@Table(name = "doctors")
 public class DoctorPOJO implements Serializable{
 
 	/**
