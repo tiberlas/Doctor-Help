@@ -30,6 +30,9 @@ public class ExaminationReportPOJO implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	private AppointmentPOJO appointment;
 	
+	@OneToOne(fetch = FetchType.LAZY)
+	private HealthRecordPOJO healthRecord;
+	
 	public Long getId() {
 		return id;
 	}

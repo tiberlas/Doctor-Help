@@ -3,6 +3,14 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
 public class HealthRecordPOJO implements Serializable {
@@ -11,11 +19,25 @@ public class HealthRecordPOJO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@OneToMany(mappedBy = "healthrecordpojo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<String> alergyList;
+	
+	@Column(name = "weight", nullable = true)
 	private double weight;
+	
+	@Column(name = "height", nullable = true)
 	private double height;
+	
+	@Column(name = "diopter", nullable = true)
 	private double diopter;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "bloodType", nullable = true)
 	private BloodTypeEnum bloodType;
+	
+	
+	@OneToOne(fetch = FetchType.LAZY)
 	private ExaminationReportPOJO examinationReport;
 	
 	public HealthRecordPOJO () {
