@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
@@ -45,7 +46,6 @@ public class HealthRecordPOJO implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "bloodType", nullable = true)
 	private BloodTypeEnum bloodType;
-	
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private ExaminationReportPOJO examinationReport;
