@@ -32,8 +32,7 @@ public class HealthRecordPOJO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany(mappedBy = "healthrecordpojo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-
+	@OneToMany(mappedBy = "healthRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<AllergyPOJO> alergyList;
 
 	

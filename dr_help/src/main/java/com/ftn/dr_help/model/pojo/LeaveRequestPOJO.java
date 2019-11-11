@@ -93,6 +93,14 @@ public class LeaveRequestPOJO implements Serializable{
 	public void setIdNur(NursePOJO idNur) {
 		this.idNur = idNur;
 	}
+
+	public DoctorPOJO getIdDoc() {
+		return idDoc;
+	}
+
+	public void setIdDoc(DoctorPOJO idDoc) {
+		this.idDoc = idDoc;
+	}
 	
 	
 	

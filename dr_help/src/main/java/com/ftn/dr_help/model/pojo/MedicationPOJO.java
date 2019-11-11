@@ -54,5 +54,13 @@ public class MedicationPOJO implements Serializable{
 	public void setMedDescription(String medDescription) {
 		this.medDescription = medDescription;
 	}
+
+	public PerscriptionPOJO getPerscription() {
+		return perscription;
+	}
+
+	public void setPerscription(PerscriptionPOJO perscription) {
+		this.perscription = perscription;
+	}
 	
 }
