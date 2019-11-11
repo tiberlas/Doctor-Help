@@ -48,7 +48,7 @@ public class ClinicPOJO implements Serializable {
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<NursePOJO> nurseList;
 	
-	//@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<DoctorPOJO> doctorList;
 	
 	//@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
