@@ -3,6 +3,7 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,13 +12,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 
 @Entity
+@Table (name = "appointments")
 public class AppointmentPOJO implements Serializable{
 
 	/**
@@ -33,13 +38,13 @@ public class AppointmentPOJO implements Serializable{
 	@Column (name = "date", nullable = false)
 	private Calendar date;
 	
-	@OneToOne (fetch = FetchType.LAZY)
+	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private DoctorPOJO doctor;
 	
-	@OneToOne (fetch = FetchType.LAZY)
+	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private NursePOJO nurse;
 	
-	@OneToOne (fetch = FetchType.LAZY)
+	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private PatientPOJO patient;
 
 	@Enumerated(EnumType.STRING)
@@ -49,10 +54,10 @@ public class AppointmentPOJO implements Serializable{
 	@Column (name = "discount", nullable = true)
 	private double discount;
 	
-	@OneToOne (fetch = FetchType.LAZY)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private ProceduresTypePOJO procedureType;
 	
-	@OneToOne (fetch = FetchType.LAZY)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private RoomPOJO room;
 	
 	@OneToOne(fetch = FetchType.LAZY)

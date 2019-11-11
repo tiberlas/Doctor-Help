@@ -2,6 +2,7 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +13,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,6 +84,12 @@ public class DoctorPOJO implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private ClinicPOJO clinic;
 	
+	@OneToMany (mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AppointmentPOJO> appointmentList;
+	
+	@ManyToMany 
+	@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"))
+	private List<OperationPOJO> operationList;
 	
 	public DoctorPOJO() {
 		super();
@@ -149,6 +160,30 @@ public class DoctorPOJO implements Serializable{
 	}
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
+	}
+
+	public ClinicPOJO getClinic() {
+		return clinic;
+	}
+
+	public void setClinic(ClinicPOJO clinic) {
+		this.clinic = clinic;
+	}
+
+	public List<AppointmentPOJO> getAppointmentList() {
+		return appointmentList;
+	}
+
+	public void setAppointmentList(List<AppointmentPOJO> appointmentList) {
+		this.appointmentList = appointmentList;
+	}
+
+	public List<OperationPOJO> getOperationList() {
+		return operationList;
+	}
+
+	public void setOperationList(List<OperationPOJO> operationList) {
+		this.operationList = operationList;
 	}
 	
 }
