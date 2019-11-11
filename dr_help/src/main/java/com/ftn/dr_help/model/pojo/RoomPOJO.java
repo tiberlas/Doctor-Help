@@ -72,6 +72,15 @@ public class RoomPOJO implements Serializable{
 	public void setProcedurasTypes(ArrayList<ProceduresTypePOJO> procedurasTypes) {
 		this.procedurasTypes = procedurasTypes;
 	}
+	public ClinicPOJO getClinic() {
+		return clinic;
+	}
+	public void setClinic(ClinicPOJO clinic) {
+		this.clinic = clinic;
+	}
+	public void setProcedurasTypes(List<ProceduresTypePOJO> procedurasTypes) {
+		this.procedurasTypes = procedurasTypes;
+	}
 	
 	
 	

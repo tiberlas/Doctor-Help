@@ -76,6 +76,21 @@ public class PerscriptionPOJO implements Serializable {
 	public void setSigningNurse(NursePOJO signingNurse) {
 		this.signingNurse = signingNurse;
 	}
+	public TherapyPOJO getTherapy() {
+		return therapy;
+	}
+	public void setTherapy(TherapyPOJO therapy) {
+		this.therapy = therapy;
+	}
+	public ExaminationReportPOJO getExaminationReport() {
+		return examinationReport;
+	}
+	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
+		this.examinationReport = examinationReport;
+	}
+	public void setMedicationList(List<MedicationPOJO> medicationList) {
+		this.medicationList = medicationList;
+	}
 	
 
 }

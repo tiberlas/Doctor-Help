@@ -3,9 +3,11 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
+@Entity
 public class TherapyPOJO implements Serializable {
 
 	/**
@@ -36,6 +38,12 @@ public class TherapyPOJO implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public ExaminationReportPOJO getExaminationReport() {
+		return examinationReport;
+	}
+	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
+		this.examinationReport = examinationReport;
 	}
 	
 

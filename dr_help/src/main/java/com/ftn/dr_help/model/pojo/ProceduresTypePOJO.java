@@ -80,6 +80,18 @@ public class ProceduresTypePOJO implements Serializable{
 	public void setDuration(Calendar duration) {
 		this.duration = duration;
 	}
+	public RoomPOJO getRoom() {
+		return room;
+	}
+	public void setRoom(RoomPOJO room) {
+		this.room = room;
+	}
+	public ClinicPOJO getClinic() {
+		return clinic;
+	}
+	public void setClinic(ClinicPOJO clinic) {
+		this.clinic = clinic;
+	}
 	
 	
 

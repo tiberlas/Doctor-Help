@@ -67,6 +67,9 @@ public class PatientPOJO implements Serializable{
 	@OneToOne (fetch = FetchType.LAZY)
 	private HealthRecordPOJO healthRecord;
 	
+	@OneToOne(fetch = FetchType.LAZY)
+	private DoctorReviewPOJO doctorReview;
+	
 	public PatientPOJO() {
 		super();
 	}
@@ -153,6 +156,12 @@ public class PatientPOJO implements Serializable{
 	}
 	public void setInsuranceNumber(Long insuranceNumber) {
 		this.insuranceNumber = insuranceNumber;
+	}
+	public DoctorReviewPOJO getDoctorReview() {
+		return doctorReview;
+	}
+	public void setDoctorReview(DoctorReviewPOJO doctorReview) {
+		this.doctorReview = doctorReview;
 	}
 	
 }

@@ -5,14 +5,18 @@ import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import java.util.List;
+
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
+@Entity
 public class HealthRecordPOJO implements Serializable {
 
 	/**
@@ -21,7 +25,7 @@ public class HealthRecordPOJO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@OneToMany(mappedBy = "healthrecordpojo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private ArrayList<String> alergyList;
+	private List<AllergyPOJO> alergyList;
 	
 	@Column(name = "weight", nullable = true)
 	private double weight;
@@ -44,10 +48,10 @@ public class HealthRecordPOJO implements Serializable {
 		super ();
 	}
 	
-	public ArrayList<String> getAlergyList() {
+	public List<AllergyPOJO> getAlergyList() {
 		return alergyList;
 	}
-	public void setAlergyList(ArrayList<String> alergyList) {
+	public void setAlergyList(List<AllergyPOJO> alergyList) {
 		this.alergyList = alergyList;
 	}
 	public double getWeight() {
