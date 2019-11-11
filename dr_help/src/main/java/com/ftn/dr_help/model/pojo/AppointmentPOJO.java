@@ -3,8 +3,19 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 
+@Entity
 public class AppointmentPOJO implements Serializable{
 
 	/**
@@ -12,15 +23,35 @@ public class AppointmentPOJO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Calendar date;
-	private DoctorPOJO dostor;
-	private NursePOJO nurse;
-	private PatientPOJO patient;
-	private AppointmentStateEnum status;
-	private double discount;
-	private ProceduresTypePOJO procedureType;
-	private RoomPOJO room;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column (name = "date", nullable = false)
+	private Calendar date;
+	
+	@Column (name = "doctor", nullable = false)
+	private DoctorPOJO doctor;
+	
+	@Column (name = "nurse", nullable = false)
+	private NursePOJO nurse;
+	
+	@Column (name = "patient", nullable = false)
+	private PatientPOJO patient;
+
+	@Enumerated(EnumType.STRING)
+	@Column (name = "status", nullable = false)
+	private AppointmentStateEnum status;
+	
+	@Column (name = "discount", nullable = true)
+	private double discount;
+	
+	@Column (name = "procedureTpe", nullable = false)
+	private ProceduresTypePOJO procedureType;
+	
+	@Column (name = "room", nullable = false)
+	private RoomPOJO room;
 	
 	public AppointmentPOJO() {
 		super();
@@ -32,11 +63,11 @@ public class AppointmentPOJO implements Serializable{
 	public void setDate(Calendar date) {
 		this.date = date;
 	}
-	public DoctorPOJO getDostor() {
-		return dostor;
+	public DoctorPOJO getDoctor() {
+		return doctor;
 	}
-	public void setDostor(DoctorPOJO dostor) {
-		this.dostor = dostor;
+	public void setDoctor(DoctorPOJO doctor) {
+		this.doctor = doctor;
 	}
 	public NursePOJO getNurse() {
 		return nurse;
@@ -73,6 +104,12 @@ public class AppointmentPOJO implements Serializable{
 	}
 	public void setRoom(RoomPOJO room) {
 		this.room = room;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	
