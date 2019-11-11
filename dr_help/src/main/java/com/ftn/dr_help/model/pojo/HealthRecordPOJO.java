@@ -2,17 +2,23 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
+@Entity
 public class HealthRecordPOJO implements Serializable {
 
 	/**
@@ -20,8 +26,12 @@ public class HealthRecordPOJO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	@OneToMany(mappedBy = "healthrecordpojo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private ArrayList<String> alergyList;
+	private List<String> alergyList;
 	
 	@Column(name = "weight", nullable = true)
 	private double weight;
@@ -44,7 +54,27 @@ public class HealthRecordPOJO implements Serializable {
 		super ();
 	}
 	
-	public ArrayList<String> getAlergyList() {
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public void setAlergyList(List<String> alergyList) {
+		this.alergyList = alergyList;
+	}
+
+
+
+	public List<String> getAlergyList() {
 		return alergyList;
 	}
 	public void setAlergyList(ArrayList<String> alergyList) {
