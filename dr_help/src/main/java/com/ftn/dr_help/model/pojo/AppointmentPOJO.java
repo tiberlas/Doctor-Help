@@ -33,13 +33,13 @@ public class AppointmentPOJO implements Serializable{
 	@Column (name = "date", nullable = false)
 	private Calendar date;
 	
-	@Column (name = "doctor", nullable = false)
+	@OneToOne (fetch = FetchType.LAZY)
 	private DoctorPOJO doctor;
 	
-	@Column (name = "nurse", nullable = false)
+	@OneToOne (fetch = FetchType.LAZY)
 	private NursePOJO nurse;
 	
-	@Column (name = "patient", nullable = false)
+	@OneToOne (fetch = FetchType.LAZY)
 	private PatientPOJO patient;
 
 	@Enumerated(EnumType.STRING)
@@ -49,10 +49,10 @@ public class AppointmentPOJO implements Serializable{
 	@Column (name = "discount", nullable = true)
 	private double discount;
 	
-	@Column (name = "procedureTpe", nullable = false)
+	@OneToOne (fetch = FetchType.LAZY)
 	private ProceduresTypePOJO procedureType;
 	
-	@Column (name = "room", nullable = false)
+	@OneToOne (fetch = FetchType.LAZY)
 	private RoomPOJO room;
 	
 	@OneToOne(fetch = FetchType.LAZY)
