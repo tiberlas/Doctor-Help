@@ -2,15 +2,38 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class DiagnosisPOJO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String diagnosis;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "diagnosis", nullable = false)
+	private String diagnosis;
+	
+	@Column(name = "description", nullable = false)
 	private String description;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private PerscriptionPOJO perscription;
+	
+	public DiagnosisPOJO() {
+		
+	}
 	
 	public String getDiagnosis() {
 		return diagnosis;

@@ -7,9 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -52,6 +54,9 @@ public class AppointmentPOJO implements Serializable{
 	
 	@Column (name = "room", nullable = false)
 	private RoomPOJO room;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private ExaminationReportPOJO examinationReport;
 	
 	public AppointmentPOJO() {
 		super();
