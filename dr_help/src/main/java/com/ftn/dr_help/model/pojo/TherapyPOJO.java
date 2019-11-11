@@ -2,14 +2,22 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+
 public class TherapyPOJO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	private String advice;
+	
 	private PerscriptionPOJO perscription;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	private ExaminationReportPOJO examinationReport;
 	
 	public String getAdvice() {
 		return advice;

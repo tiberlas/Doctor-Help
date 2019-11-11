@@ -4,11 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+
+
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 
 @Entity
 public class PerscriptionPOJO implements Serializable {
@@ -18,18 +24,18 @@ public class PerscriptionPOJO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Column (name = "diagnosis", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
 	private DiagnosisPOJO diagnosis;
 	
-	@Column (name = "medicationList", nullable = true)
-	private List<MedicationPOJO> medicationList;
 	
-	@Column (name = "signingNurse", nullable = false)
+	private ArrayList<MedicationPOJO> medicationList;
 	private NursePOJO signingNurse;
 	
-	@Id
-	@GeneratedValue (strategy=GenerationType.IDENTITY)
-	private Long id;
+	@OneToOne(fetch = FetchType.LAZY)
+	private TherapyPOJO therapy;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private ExaminationReportPOJO examinationReport;
 	
 	public DiagnosisPOJO getDiagnosis() {
 		return diagnosis;
