@@ -3,13 +3,12 @@ package com.ftn.dr_help.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.repository.AppointmentRepository;
+import com.ftn.dr_help.reposirory.MedicationRepository;
 
 @Service
-public class AppointmentService {
+public class MedicationService {
 
 	@Autowired
-	private AppointmentRepository appointmentRepository;
-	
+	private MedicationRepository medicationRepository;
 	
 }
