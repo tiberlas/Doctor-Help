@@ -3,8 +3,13 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.ftn.dr_help.model.enums.RoleEnum;
 
+@Entity
+@Table(name = "doctor")
 public class DoctorPOJO implements Serializable{
 
 	/**
