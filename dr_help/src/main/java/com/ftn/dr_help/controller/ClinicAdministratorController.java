@@ -23,7 +23,7 @@ public class ClinicAdministratorController {
 		private ClinicAdministratorService clinicAdministratorService;
 
 		@GetMapping(value = "/all")
-		public ResponseEntity<List<ClinicAdministratorPOJO>> getAllTeachers() {
+		public ResponseEntity<List<ClinicAdministratorPOJO>> getAllCentreAdministrators() {
 
 			ClinicAdministratorPOJO c = new ClinicAdministratorPOJO("password1", "mika@email.com", "Mika", "Peric", "Bul smrti 1", "Novi Sad", "Serbia", "0643312351", RoleEnum.CLINICAL_ADMINISTRATOR, Calendar.getInstance());
 			//ClinicAdministratorService cas = new ClinicAdministratorService();

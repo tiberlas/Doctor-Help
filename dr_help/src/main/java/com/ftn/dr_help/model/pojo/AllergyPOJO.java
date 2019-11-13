@@ -3,6 +3,7 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,9 @@ public class AllergyPOJO implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "allergy", nullable = false) 
+	private String allergy;
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
