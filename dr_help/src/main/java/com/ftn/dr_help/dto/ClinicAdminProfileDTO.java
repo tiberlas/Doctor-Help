@@ -16,6 +16,25 @@ public class ClinicAdminProfileDTO {
 	private String phoneNumber;
 	private Calendar birthday;
 	
+	public ClinicAdminProfileDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public ClinicAdminProfileDTO(Long id, String email, String firstName, String lastName, String address, String city,
+			String state, String phoneNumber, Calendar birthday) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNumber = phoneNumber;
+		this.birthday = birthday;
+	}
+
 	public ClinicAdminProfileDTO(ClinicAdministratorPOJO admin) {
 		this.id = admin.getId();
 		this.email = admin.getEmail();

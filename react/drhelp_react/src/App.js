@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Router, Route, browserHistory, BrowserRouter} from "react-router-dom";
+import {Router, Route, browserHistory, BrowserRouter, Switch} from "react-router-dom";
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import NewClinicForm from './components/clinic/NewClinicForm.js';
@@ -16,11 +16,14 @@ class App extends Component {
             <Header /> 
 
             <div>
-                <BrowserRouter>
+                <BrowserRouter >
+                <Switch>
                   <Route exact path="/" component={Home} />
                   <Route exact path="/home" component={Home} />
                   <Route path={"/clinic/add"} component={NewClinicForm} />
                   <Route path={"/clinic+administrator"} component={ClinicAdministrator} /> 
+
+                </Switch>
                 </BrowserRouter>
             </div>
             

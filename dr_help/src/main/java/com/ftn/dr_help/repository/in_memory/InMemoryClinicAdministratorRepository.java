@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 
@@ -31,6 +32,8 @@ public class InMemoryClinicAdministratorRepository implements ClinicAdministrato
 		admin.setEmail("nesto@nesto");
 		
 	}
+	
+	//just getOne saveDTO
 	
 	@Override
 	public List<ClinicAdministratorPOJO> findAll() {
@@ -106,10 +109,22 @@ public class InMemoryClinicAdministratorRepository implements ClinicAdministrato
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public <S extends ClinicAdministratorPOJO> S save(S entity) {
-		// TODO Auto-generated method stub
+	public ClinicAdminProfileDTO save(ClinicAdminProfileDTO entity) {
+		if(entity.getId() == 25) {
+			admin.setFirstName(entity.getFirstName());
+			admin.setLastName(entity.getLastName());
+			admin.setEmail(entity.getEmail());
+			admin.setPhoneNumber(entity.getPhoneNumber());
+			admin.setCity(entity.getCity());
+			admin.setState(entity.getState());
+			admin.setAddress(entity.getAddress());
+			admin.setBirthday(entity.getBirthday());
+		
+			return new ClinicAdminProfileDTO(admin);
+		}
+		
 		return null;
 	}
 
@@ -178,6 +193,13 @@ public class InMemoryClinicAdministratorRepository implements ClinicAdministrato
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public <S extends ClinicAdministratorPOJO> S save(S entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 

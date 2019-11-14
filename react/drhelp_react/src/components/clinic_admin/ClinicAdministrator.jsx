@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ClinicAdminHeader from './ClinicAdminHeader';
 import HandlingRooms from './HandlingRooms';
-import {Route} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import ClinicAdminBlank from './ClinicAdminBlank';
 
 class ClinicAdministrator extends Component {
@@ -25,8 +25,10 @@ class ClinicAdministrator extends Component {
                 <div>HELLO ADMIN</div>
 
                 <div>
-                    <Route exact path="/clinic+administrator" ><ClinicAdminBlank id={this.state.id} /> </Route>
-                    <Route path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
+                <Switch>
+                    <Route exact path="/clinic+administrator/" ><ClinicAdminBlank id={this.state.id} /> </Route>
+                    <Route exact path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
+                </Switch>
                 </div>
             </div> );
     }

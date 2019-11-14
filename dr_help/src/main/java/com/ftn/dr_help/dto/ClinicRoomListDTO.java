@@ -10,9 +10,16 @@ public class ClinicRoomListDTO {
 	private ArrayList<RoomDTO> rooms;
 
 	public ClinicRoomListDTO() {
+		super();
 		rooms = new ArrayList<RoomDTO>();
 	}
 	
+	public ClinicRoomListDTO(ArrayList<RoomDTO> rooms) {
+		super();
+		this.rooms = rooms;
+	}
+
+
 	public ClinicRoomListDTO(ClinicPOJO clinic) {
 		super();
 		ArrayList<RoomPOJO> rom = (ArrayList<RoomPOJO>) clinic.getRoomList();
@@ -21,11 +28,6 @@ public class ClinicRoomListDTO {
 		for (RoomPOJO roomPOJO : rom) {
 			rooms.add(new RoomDTO(roomPOJO));
 		}
-	}
-	
-	public ClinicRoomListDTO(ArrayList<RoomDTO> rooms) {
-		super();
-		this.rooms = rooms;
 	}
 
 	public ArrayList<RoomDTO> getRooms() {

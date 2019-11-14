@@ -53,11 +53,39 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.findAll(page);
 	}
 
-	public ClinicAdministratorPOJO save(ClinicAdministratorPOJO admin) {
-		return clinicAdministratorRepository.save(admin);
+	public ClinicAdminProfileDTO save(ClinicAdminProfileDTO admin) {
+		ClinicAdminProfileDTO current = findOneProfile(admin.getId());
+		//treba validacija
+		if(admin.getFirstName() != null && admin.getFirstName() != "")
+			current.setFirstName(admin.getFirstName());
+		
+		if(admin.getLastName() != null && admin.getLastName() != "")
+			current.setLastName(admin.getLastName());
+		
+		if(admin.getEmail() != null && admin.getEmail() != "")
+			current.setEmail(admin.getEmail());
+		
+		if(admin.getPhoneNumber() != null && admin.getPhoneNumber() != "")
+			current.setPhoneNumber(admin.getPhoneNumber());
+		
+		if(admin.getCity() != null && admin.getCity() != "")
+			current.setCity(admin.getCity());
+		
+		if(admin.getState() != null && admin.getState() != "")
+			current.setState(admin.getState());
+		
+		if(admin.getAddress() != null && admin.getAddress() != "")
+			current.setAddress(admin.getAddress());
+		
+		if(admin.getBirthday() != null)
+			current.setBirthday(admin.getBirthday());
+		
+		return clinicAdministratorRepository.save(current);
 	}
 
 	public void remove(Long id) {
 		clinicAdministratorRepository.deleteById(id);
 	}
+	
+
 }

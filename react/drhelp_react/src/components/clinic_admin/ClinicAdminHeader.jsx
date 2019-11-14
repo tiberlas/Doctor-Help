@@ -13,10 +13,10 @@ class ClinicAdminHeader extends Component {
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
                 <Nav.Link >
-                    <NavLink to = "clinic+administrator" exact activeClassName='active'>profile</NavLink>
+                    <NavLink to = 'clinic+administrator' >profile</NavLink>
                 </Nav.Link>
                 <Nav.Link>
-                    <NavLink to = "clinic+administrator/rooms" exact activeClassName='active'>rooms</NavLink>
+                    <NavLink to = 'clinic+administrator/rooms'  >rooms</NavLink>
                 </Nav.Link>
                 <Nav.Link >medical staff</Nav.Link>   
             </Nav>
