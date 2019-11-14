@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Router, Route, browserHistory} from "react-router";
+import {Router, Route, browserHistory, BrowserRouter} from "react-router-dom";
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import NewClinicForm from './components/clinic/NewClinicForm.js';
 import ClinicAdministrator from './components/clinic_admin/ClinicAdministrator';
+import Home from './components/Home.jsx';
 
 class App extends Component {
   
@@ -15,10 +16,12 @@ class App extends Component {
             <Header /> 
 
             <div>
-                <Router path={"/"} history={browserHistory}>
-                  <Route path={"clinic/add"} component={NewClinicForm} />
-                  <Route path={"clinic+administrator"} component={ClinicAdministrator} />
-                </Router>
+                <BrowserRouter>
+                  <Route path="/" component={Home} />
+                  <Route path="/home" component={Home} />
+                  <Route path={"/clinic/add"} component={NewClinicForm} />
+                  <Route path={"/clinic+administrator"} component={ClinicAdministrator} /> 
+                </BrowserRouter>
             </div>
             
             <Footer />

@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import ClinicAdminHeader from './ClinicAdminHeader';
+import HandlingRooms from './HandlingRooms';
+import {Route} from "react-router-dom";
+import ClinicAdminBlank from './ClinicAdminBlank';
 
 class ClinicAdministrator extends Component {
     state = { name: "to be added" }
@@ -12,10 +16,14 @@ class ClinicAdministrator extends Component {
     }
 
     render() { 
-        return ( <div>
-                    Clinic admin&nbsp;{this.state.name}
+        return (
+             <div>
+                <ClinicAdminHeader name={this.state.name} ></ClinicAdminHeader>
+                <div>HELLO ADMIN</div>
 
-                </div> );
+                    <Route path="/clinic+administrator" ><ClinicAdminBlank /> </Route>
+                    <Route path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
+            </div> );
     }
 }
  
