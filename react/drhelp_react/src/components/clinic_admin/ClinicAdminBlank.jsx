@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ClinicAdminChangeProfile from './ClinicAdminChangeProfile';
 
 class ClinicAdminBlank extends Component {
     constructor(props) {
@@ -13,29 +14,35 @@ class ClinicAdminBlank extends Component {
             city: "Boston",
             state: "USA",
             phoneNumber: "023/555-555",
-            birthday: "1999-03-01T23:00:00.000+0000"
+            birthday: "1999-03-01T23:00:00.000+0000",
+            show: false
         }
     }
 
     componentDidMount() {
         fetch("http://localhost:8080/api/clinicAdmins/"+this.state.id+"/profile", { method: "GET" })
             .then(response => response.json())
-            .then(response => {
+            .then(json => {
                 this.setState({
-                    email: response.email,
-                    firstName: response.firstName,
-                    lastName: response.lastName,
-                    address: response.address,
-                    city: response.city,
-                    state: response.state,
-                    phoneNumber: response.phoneNumber,
-                    birthday: response.birthday
+                    email: json.email,
+                    firstName: json.firstName,
+                    lastName: json.lastName,
+                    address: json.address,
+                    city: json.city,
+                    state: json.state,
+                    phoneNumber: json.phoneNumber,
+                    birthday: json.birthday
                 })
             })
     }
 
+    ChangeProfile = () => {
+        this.setState({show: !this.state.show}) 
+    }
+
     render() { 
         return ( 
+            
             <div>
                 <div>
                 <span>
@@ -85,7 +92,15 @@ class ClinicAdminBlank extends Component {
                     <label>{this.state.birthday}</label>
                 </span>
                 </div>
+
+                <div>
+                    <button onClick={this.ChangeProfile}>change profile</button>
+                </div>
+                 
+                {this.state.show && <ClinicAdminChangeProfile /> }
             </div>
+
+
          );
     }
 }

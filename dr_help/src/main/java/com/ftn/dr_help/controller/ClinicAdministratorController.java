@@ -46,6 +46,7 @@ public class ClinicAdministratorController {
 			return new ResponseEntity<ClinicAdminProfileDTO>(ret, HttpStatus.OK);
 		}
 
+		@CrossOrigin
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody ClinicAdminProfileDTO admin) {
 			

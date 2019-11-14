@@ -22,7 +22,6 @@ class App extends Component {
                   <Route exact path="/home" component={Home} />
                   <Route path={"/clinic/add"} component={NewClinicForm} />
                   <Route path={"/clinic+administrator"} component={ClinicAdministrator} /> 
-
                 </Switch>
                 </BrowserRouter>
             </div>

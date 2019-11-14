@@ -26,8 +26,9 @@ class ClinicAdministrator extends Component {
 
                 <div>
                 <Switch>
-                    <Route exact path="/clinic+administrator/" ><ClinicAdminBlank id={this.state.id} /> </Route>
-                    <Route exact path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
+                <Route exact={true} path="/clinic+administrator" ><ClinicAdminBlank id={this.state.id} /> </Route>
+                    <Route path="/clinic+administrator/profile" ><ClinicAdminBlank id={this.state.id} /> </Route>
+                    <Route path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
                 </Switch>
                 </div>
             </div> );
