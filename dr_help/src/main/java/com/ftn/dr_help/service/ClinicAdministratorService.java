@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
+import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 
@@ -22,13 +23,22 @@ public class ClinicAdministratorService {
 	public ClinicAdministratorPOJO findOne(Long id) {
 		return clinicAdministratorRepository.findById(id).orElseGet(null);
 	}
+	
+	public ClinicAdminProfileDTO findOneProfile(Long id) {
+		ClinicAdministratorPOJO admin = clinicAdministratorRepository.getOne(id);
+		
+		if(admin == null)
+			return null;
+		
+		return new ClinicAdminProfileDTO(admin);
+	}
 
 	public ClinicAdminNameDTO findOnesName(Long id) {
 		ClinicAdministratorPOJO admin = clinicAdministratorRepository.getOne(id);
 		ClinicAdminNameDTO ret;
 		
 		if(admin == null)
-			ret = new ClinicAdminNameDTO("", "");
+			ret = null;
 		else
 			ret = new ClinicAdminNameDTO(admin);
 		

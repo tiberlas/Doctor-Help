@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ftn.dr_help.dto.ClinicAdminDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
+import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.service.ClinicAdministratorService;
@@ -46,10 +46,25 @@ public class ClinicAdministratorController {
 		}
 		
 		@GetMapping(value = "/{id}/name")
-		public ResponseEntity<ClinicAdminNameDTO> getCentreAdministratorsName(@PathVariable("id") Long id) {
+		public ResponseEntity<ClinicAdminNameDTO> getClinicAdministratorsName(@PathVariable("id") Long id) {
 			ClinicAdminNameDTO ret = clinicAdministratorService.findOnesName(id);
 			
+			if(ret == null) {
+				return new ResponseEntity<ClinicAdminNameDTO>(HttpStatus.NOT_FOUND);
+			}
+			
 			return new ResponseEntity<ClinicAdminNameDTO>(ret, HttpStatus.OK);
+		}
+		
+		@GetMapping(value = "/{id}/profile")
+		public ResponseEntity<ClinicAdminProfileDTO> getClinicAdminProfile(@PathVariable("id") Long id) {
+			ClinicAdminProfileDTO ret = clinicAdministratorService.findOneProfile(id);
+			
+			if(ret == null) {
+				return new ResponseEntity<ClinicAdminProfileDTO>(HttpStatus.NOT_FOUND);
+			}
+			
+			return new ResponseEntity<ClinicAdminProfileDTO>(ret, HttpStatus.OK);
 		}
 
 	

@@ -25,7 +25,7 @@ public class ClinicController {
 		ClinicRoomListDTO ret = service.getAllRooms(id);
 		
 		if(ret == null)
-			return new ResponseEntity<ClinicRoomListDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<ClinicRoomListDTO>(HttpStatus.NOT_FOUND);
 		return new ResponseEntity<ClinicRoomListDTO>(ret, HttpStatus.OK);
 	}
 

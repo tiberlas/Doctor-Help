@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import {NavLink } from "react-router-dom";
 
 class ClinicAdminHeader extends Component {
     state = {  }
@@ -11,9 +12,13 @@ class ClinicAdminHeader extends Component {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-                <Nav.Link href="clinic+administrator">profile</Nav.Link>
-                <Nav.Link href="clinic+administrator/rooms">rooms</Nav.Link>
-                <Nav.Link href="">medical staff</Nav.Link>   
+                <Nav.Link >
+                    <NavLink to = "clinic+administrator" exact activeClassName='active'>profile</NavLink>
+                </Nav.Link>
+                <Nav.Link>
+                    <NavLink to = "clinic+administrator/rooms" exact activeClassName='active'>rooms</NavLink>
+                </Nav.Link>
+                <Nav.Link >medical staff</Nav.Link>   
             </Nav>
         </Navbar.Collapse>
         </Navbar>);

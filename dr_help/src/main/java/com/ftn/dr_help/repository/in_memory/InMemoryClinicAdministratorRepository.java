@@ -1,5 +1,6 @@
 package com.ftn.dr_help.repository.in_memory;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,13 @@ public class InMemoryClinicAdministratorRepository implements ClinicAdministrato
 		admin.setId(25L);
 		admin.setFirstName("imenko");
 		admin.setLastName("prezimenic");
+		admin.setAddress("adresa");
+		admin.setBirthday(new GregorianCalendar(1999, 2, 2));
+		admin.setCity("Boston");
+		admin.setState("USA");
+		admin.setPhoneNumber("023/555-555");
+		admin.setEmail("nesto@nesto");
+		
 	}
 	
 	@Override
