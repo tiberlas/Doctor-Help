@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.dto.ClinicDTO;
@@ -54,8 +53,6 @@ public class ClinicController {
 
 		List<ClinicPOJO> clinics = clinicService.findAll();
 
-		
-		// convert teachers to DTOs
 		List<ClinicDTO> clinicDTO = new ArrayList<>();
 		for (ClinicPOJO c : clinics) {
 			clinicDTO.add(new ClinicDTO(c));

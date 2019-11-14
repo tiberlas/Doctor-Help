@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import TempHome from './TempHome.js'
+import TempHome from './components/TempHome.js'
 
 class App extends Component {
   

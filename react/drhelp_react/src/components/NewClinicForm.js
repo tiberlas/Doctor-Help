@@ -2,6 +2,7 @@ import React from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
+
 class NewClinicForm extends React.Component {
 
     constructor() {
@@ -41,6 +42,7 @@ class NewClinicForm extends React.Component {
     render() {
         return (
             <div> 
+            <h1>>New clinic </h1>
             <Form onSubmit = {this.handleSubmit}>
             <Form.Group controlId="formClinicName">
                 {/* <Form.Label>Naziv klinike</Form.Label> */}

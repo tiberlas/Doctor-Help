@@ -4,6 +4,7 @@ import com.ftn.dr_help.model.pojo.ClinicPOJO;
 
 public class ClinicDTO {
 	
+	private Long id;
 	private String name;
 	private String address;
 	private String description;
@@ -12,15 +13,16 @@ public class ClinicDTO {
 		
 	}
 	
-	public ClinicDTO(String name, String address, String description) {
+	public ClinicDTO(Long id, String name, String address, String description) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.description = description;
 	}
 
 	public ClinicDTO(ClinicPOJO clinic) {
-		this(clinic.getName(), clinic.getAddress(), clinic.getDescription());
+		this(clinic.getId(), clinic.getName(), clinic.getAddress(), clinic.getDescription());
 	}
 	
 	public String getName() {
@@ -40,6 +42,14 @@ public class ClinicDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

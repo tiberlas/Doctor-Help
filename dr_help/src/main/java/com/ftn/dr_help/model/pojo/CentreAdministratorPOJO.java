@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
 
 import com.ftn.dr_help.model.enums.RoleEnum;
 
@@ -29,46 +28,36 @@ public class CentreAdministratorPOJO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
 	@Column(name = "password", nullable = false)
 	private String password;
-	
-	@NotBlank
+
 	@Column(name = "email", unique = true, nullable = false)
 	private String email;
 	
-	@NotBlank
 	@Column(name = "firstName", nullable = false)
 	private String firstName;
 	
-	@NotBlank
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 	
-	@NotBlank
-	@Column(name = "address", nullable = false)
+	@Column(name = "address", nullable = true)
 	private String address;
 
-	@NotBlank
-	@Column(name = "city", nullable = false)
+	@Column(name = "city", nullable = true)
 	private String city;
 	
-	@NotBlank
-	@Column(name = "state", nullable = false)
+	@Column(name = "state", nullable = true)
 	private String state;
 	
-	@NotBlank
-	@Column(name = "phoneNumber", nullable = false)
+	@Column(name = "phoneNumber", nullable = true)
 	private String phoneNumber;
 	
-	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
 	private RoleEnum role = RoleEnum.CENTRE_ADMINISTRATOR;
 	
-	@NotBlank
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "birthday", nullable = false)
+	@Column(name = "birthday", nullable = true)
 	private Calendar birthday;
 	
 	public CentreAdministratorPOJO() {
@@ -80,10 +69,10 @@ public class CentreAdministratorPOJO implements Serializable{
 	}
 	
 	
-	public CentreAdministratorPOJO( @NotBlank String password, @NotBlank String email,
-			@NotBlank String firstName, @NotBlank String lastName, @NotBlank String address, @NotBlank String city,
-			@NotBlank String state, @NotBlank String phoneNumber, @NotBlank RoleEnum role,
-			@NotBlank Calendar birthday) {
+	public CentreAdministratorPOJO( String password, String email,
+			 String firstName,  String lastName,  String address,  String city,
+			 String state,  String phoneNumber,  RoleEnum role,
+			 Calendar birthday) {
 		super();
 		this.password = password;
 		this.email = email;
