@@ -1,12 +1,15 @@
 package com.ftn.dr_help.controller;
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +23,7 @@ import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value = "/api/clinics")
 public class ClinicController {
 
@@ -28,25 +31,22 @@ public class ClinicController {
 	private ClinicService clinicService;
 	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
-	public ResponseEntity<ClinicDTO> saveClinic(@RequestBody ClinicDTO courseDTO) {
-		System.out.println("works");
+	public ResponseEntity<ClinicDTO> saveClinic(@RequestBody ClinicDTO clinicDTO) {
+//		for (ClinicDTO c : clinicDTO.values()) {
+//			System.out.println(c);
+//		}
+//		System.out.println(clinicDTO.getAddress());
+//		//System.out.println(clinicDTO.containsValue(arg0));
+//		System.out.println("works" + clinicDTO.getName() + " " + clinicDTO.getAddress() + " " + clinicDTO.getDescription());
 		ClinicPOJO clinic = new ClinicPOJO();
-		clinic.setName(courseDTO.getName());
-		clinic.setAddress(courseDTO.getAddress());
-		clinic.setDescription(courseDTO.getDescription());
+		clinic.setName(clinicDTO.getName());
+		clinic.setAddress(clinicDTO.getAddress());
+		clinic.setDescription(clinicDTO.getDescription());
 
 		clinic = clinicService.save(clinic);
-		return new ResponseEntity<>(new ClinicDTO(clinic), HttpStatus.CREATED);
+		return new ResponseEntity<>(new ClinicDTO(clinic) , HttpStatus.CREATED);
 	}
-	
-	@CrossOrigin(value= "/api/**")
-	public void corsHeaders(HttpServletResponse response) {
-	    System.out.println("got in here");
-		response.addHeader("Access-Control-Allow-Origin", "*");
-	    response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-	    response.addHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with");
-	    response.addHeader("Access-Control-Max-Age", "3600");
-	}
+
 	
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<ClinicDTO>> getAllClinics() {
@@ -59,16 +59,6 @@ public class ClinicController {
 		}
 		
 		return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
-		
-//		List<Course> courses = courseService.findAll();
-//
-//		// convert courses to DTOs
-//		List<CourseDTO> coursesDTO = new ArrayList<>();
-//		for (Course s : courses) {
-//			coursesDTO.add(new CourseDTO(s));
-//		}
-//
-//		return new ResponseEntity<>(coursesDTO, HttpStatus.OK);
 	}
 	
 	

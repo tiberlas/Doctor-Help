@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 @Entity
@@ -67,16 +68,17 @@ public class ClinicAdministratorPOJO implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar birthday;
 	
-	@Autowired
+	
+	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ClinicPOJO clinic;
 	
 	
-	@PostConstruct
-	public void init() {
-		clinic.setClinicAdminList(new ArrayList<>());
-	}
-	
+//	@PostConstruct
+//	public void init() {
+//		clinic.setClinicAdminList(new ArrayList<>());
+//	}
+//	
 	
 	public ClinicAdministratorPOJO() {
 		super();
@@ -179,7 +181,7 @@ public class ClinicAdministratorPOJO implements Serializable{
 	}
 
 
-
+	@Autowired
 	public void setClinic(ClinicPOJO clinic) {
 		this.clinic = clinic;
 	}

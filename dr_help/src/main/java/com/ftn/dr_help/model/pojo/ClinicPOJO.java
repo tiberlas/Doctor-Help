@@ -17,6 +17,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 
 @Entity
@@ -32,19 +34,20 @@ public class ClinicPOJO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
+	
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@NotBlank
+	
 	@Column(name = "address", nullable = false)
 	private String address;
 	
-	@NotBlank
+	
 	@Column(name = "description", nullable = true)
 	private String description;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<ClinicAdministratorPOJO> clinicAdminList;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -72,6 +75,12 @@ public class ClinicPOJO implements Serializable {
 		procedureTypesList = new  ArrayList<ProceduresTypePOJO>();
 		
 	}
+	
+//	@Autowired
+//	public ClinicPOJO(@Lazy listClinicAdministrator<ClinicAdministratorPOJO> list) {
+//		this.clinicAdminList = list;
+//		
+//	}
 
 
 	public Long getId() {
@@ -123,6 +132,7 @@ public class ClinicPOJO implements Serializable {
 	}
 
 
+	@Autowired
 	public void setClinicAdminList(
 			List<ClinicAdministratorPOJO> clinicAdminList) {
 		this.clinicAdminList = clinicAdminList;

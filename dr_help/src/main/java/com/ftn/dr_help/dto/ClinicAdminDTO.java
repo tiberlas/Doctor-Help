@@ -3,6 +3,7 @@ package com.ftn.dr_help.dto;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 
 public class ClinicAdminDTO {
+	
 	private String email;
 	private String firstName;
 	private String lastName;

@@ -3,6 +3,8 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 
+
+
 class NewAdminForm extends React.Component {
     
     constructor() {
@@ -12,42 +14,59 @@ class NewAdminForm extends React.Component {
             firstName: "",
             lastName: "",
             adminRole: "",
-            clinicList: {}
+            clinicList: {},
+            id: ""
         }
         this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.componentDidMount= this.componentDidMount.bind(this)
     }
 
     handleChange(event) {
+        console.log("THE EV VAL", event.target.value);
+        console.log("THE EV NAME", event.target.value);
         this.setState( {
             [event.target.name]: event.target.value
         })
     }
 
 
-    componentDidMount() {
+    componentDidMount = () => {
         console.log("didmount")
         axios.get(`http://localhost:8080/api/clinics/all`)
       .then(res => {
-        const clinicList = res.data;
-        console.log(clinicList)
+        const clinicList = res.data
         this.setState({ clinicList });
+        //const items = clinicList.map(item => )
+        console.log(res.data[0].address)
+        console.log(this.state.clinicList[0].name)
+
+       
+
       })
     }
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         event.preventDefault()
 
         const data = {
             email: this.state.email,
             firstName: this.state.firstName,
-            lastName: this.state.lastName
+            lastName: this.state.lastName,
+            id: this.state.id
           };
 
+        console.log("THE ID IS" + this.state.id)
         console.log(data)
       
         if(this.state.adminRole === "clinic") {
-                axios.post('http://localhost:8080/api/clinicAdmins/newAdmin', { data })
+                axios.post('http://localhost:8080/api/clinicAdmins/newAdmin', { 
+
+                    email: this.state.email,
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    id: this.state.id
+
+                 })
                     .then(res => {
                     console.log(data);
                     })
@@ -58,6 +77,28 @@ class NewAdminForm extends React.Component {
             })
         }
     }
+
+
+    createSelectItems() {
+        let items = []; 
+        var size = Object.keys(this.state.clinicList).length;
+        for (let i = 0; i < size; i++) {             
+             items.push(<option key={i} name = "id" value={this.state.clinicList[i].id}> {this.state.clinicList[i].name} </option>);   
+             //here I will be creating my options dynamically based on
+             //what props are currently passed to the parent component
+             console.log("doing it fam")
+        }
+        return items;
+    }  
+   
+   onDropdownSelected(e) {
+    //    let id = e.target.value
+    //    this.setState({
+    //         [e.target.name]: e.target.value
+    //     })
+       console.log("THE VAL", e.target.value);
+       //here you will see the current selected value of the select input
+   }
 
     render() {
         return (
@@ -108,6 +149,9 @@ class NewAdminForm extends React.Component {
                     <option value="orange">Orange</option>
                     <option value="yellow">Yellow</option>
                 </select>} */}
+                {this.state.adminRole==="clinic" && <select onChange={this.handleChange} label="Multiple Select">
+       {this.createSelectItems()}
+  </select>}
                 </Form.Group>
             </Form.Group>
 
@@ -115,7 +159,7 @@ class NewAdminForm extends React.Component {
                 Submit
             </Button>
             </Form>
-            <h1> {this.state.email} {this.state.firstName} {this.state.lastName} {this.state.adminRole} </h1>
+            <h1> {this.state.email} {this.state.firstName} {this.state.lastName} {this.state.adminRole} {}</h1>
             </div>
         )
     }
