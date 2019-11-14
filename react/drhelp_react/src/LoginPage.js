@@ -49,7 +49,7 @@ class LoginPage extends React.Component {
 						email: email.value, 
 						password: password.value
 					}).then (function (response) {
-						alert (response.);
+						alert (response);
 						if (response.userRole !== 'guest') {
 							userRole = response.userRole;
 						}
