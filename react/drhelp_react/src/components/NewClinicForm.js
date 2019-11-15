@@ -35,26 +35,26 @@ class NewClinicForm extends React.Component {
         console.log(data)
         const datastr = JSON.stringify(data)
         console.log(" str "+datastr)
-          axios.post('http://localhost:8080/api/clinics/newClinic', {
-              name: this.state.name,
-              address: this.state.address,
-              description: this.state.description
+        //   axios.post('http://localhost:8080/api/clinics/newClinic', {
+        //       name: this.state.name,
+        //       address: this.state.address,
+        //       description: this.state.description
             
-            })
-            .then(res => {
-              console.log(res.data);
-            })
+        //     })
+        //     .then(res => {
+        //       console.log(res.data);
+        //     })
 
 
-        // fetch('http://localhost:8080/api/clinics/newClinic', {
-        //     method: 'post',
-        //     headers: {'Content-Type':'application/json'},
-        //     body: {
-        //         name: this.state.clinicName,
-        //         address: this.state.clinicAddress,
-        //         description: this.state.clinicDescription
-        //     }
-        //    });
+        fetch('http://localhost:8080/api/clinics/newClinic', {
+            method: 'post',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify( {
+                name: this.state.clinicName,
+                address: this.state.clinicAddress,
+                description: this.state.clinicDescription
+            })
+           });
     }
 
     render() {
