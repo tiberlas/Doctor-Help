@@ -20,7 +20,7 @@ class ClinicAdminBlank extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8080/api/clinicAdmins/"+this.state.id+"/profile", { method: "GET" })
+        fetch("http://localhost:8080/api/clinicAdmins/"+ this.state.id + "/profile", { method: "GET" }) //this.state.id
             .then(response => response.json())
             .then(json => {
                 this.setState({

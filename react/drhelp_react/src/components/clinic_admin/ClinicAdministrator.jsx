@@ -5,9 +5,13 @@ import {Route, Switch} from "react-router-dom";
 import ClinicAdminBlank from './ClinicAdminBlank';
 
 class ClinicAdministrator extends Component {
-    state = { 
-        name: "to be added", 
-        id: 25
+    
+    constructor(props) {
+        super(props)
+        this.state = { 
+            name: "to be added", 
+            id: this.props.id
+        }
     }
 
     componentDidMount() {

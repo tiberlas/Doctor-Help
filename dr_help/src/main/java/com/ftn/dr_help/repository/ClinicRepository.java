@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 
-@Repository
 public interface ClinicRepository extends JpaRepository<ClinicPOJO, Long>{
 
 }

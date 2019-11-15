@@ -8,13 +8,15 @@ class HandlingRooms extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/api/clinics/30/rooms', { method: "GET" })
+        fetch('http://localhost:8080/api/clinics/1/rooms', { method: "GET" })
         .then(response => response.json())
-        .then(response => {
+        .then(json => {
             this.setState({
-                rooms: response.rooms
+                rooms: json.rooms
             })
         })
+
+
     }
 
     render() { 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class ClinicAdminChangeProfile extends Component {
     state = {
-            id: 25, 
+            id: 1, 
             email: "",
             firstName: "paolo",
             lastName: "",
@@ -20,11 +20,7 @@ class ClinicAdminChangeProfile extends Component {
         fetch('http://localhost:8080/api/clinicAdmins/change', {
             method: "PUT",
             headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" 
-            },
+              'Content-Type': 'application/json'},
             body: JSON.stringify(
                 {
                     id: this.state.id,

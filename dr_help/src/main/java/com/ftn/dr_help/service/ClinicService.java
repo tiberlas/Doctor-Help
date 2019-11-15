@@ -17,11 +17,11 @@ import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.repository.ClinicRepositorium;
 
 
-@Service
+@Service()
 public class ClinicService {
 
 	@Autowired
-	@Qualifier("InMemoryClinicRepository")
+	@Qualifier("postgre")
 	private ClinicRepositorium repository;
 	
 	

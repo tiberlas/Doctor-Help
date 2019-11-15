@@ -58,7 +58,7 @@ public class ClinicController {
 		List<ClinicDTO> clinicDTO = new ArrayList<>();
 		for (ClinicPOJO c : clinics) {
 			clinicDTO.add(new ClinicDTO(c));
-		}
+		} 
 		
 		return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
 	}

@@ -17,7 +17,7 @@ import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 public class ClinicAdministratorService {
 
 	@Autowired
-	@Qualifier("InMemoryClinicAdmin")
+	@Qualifier("clinicAdminPostgre")
 	private ClinicAdministratorRepository clinicAdministratorRepository;
 	
 	public ClinicAdministratorPOJO findOne(Long id) {
@@ -54,7 +54,7 @@ public class ClinicAdministratorService {
 	}
 
 	public ClinicAdminProfileDTO save(ClinicAdminProfileDTO admin) {
-		ClinicAdminProfileDTO current = findOneProfile(admin.getId());
+		ClinicAdministratorPOJO current = findOne(admin.getId());
 		//treba validacija
 		if(admin.getFirstName() != null && admin.getFirstName() != "")
 			current.setFirstName(admin.getFirstName());
@@ -80,7 +80,11 @@ public class ClinicAdministratorService {
 		if(admin.getBirthday() != null)
 			current.setBirthday(admin.getBirthday());
 		
-		return clinicAdministratorRepository.save(current);
+		//ClinicAdministratorPOJO krstio = new ClinicAdministratorPOJO();
+		//krstio.setFirstName(admin.getFirstName());
+		clinicAdministratorRepository.save(current);
+	
+		return new ClinicAdminProfileDTO(current);
 	}
 
 	public void remove(Long id) {

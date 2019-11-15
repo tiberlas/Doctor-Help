@@ -12,10 +12,19 @@ import axios from 'axios';
 
 class LoginPage extends React.Component {
 
-	state = {
-    	loggedIn: false, 
-  	}
+	constructor() {
+		super()
+		this.state = {
+			loggedIn: false, 
+		  }
+	}
 
+
+	  handleLogIn = () => {
+		this.setState ({
+			loggedIn: true
+		})
+	}
 	
 	render () {
 
@@ -49,7 +58,7 @@ class LoginPage extends React.Component {
 						email: email.value, 
 						password: password.value
 					}).then (function (response) {
-						alert (response);
+						//alert (response);
 						if (response.userRole !== 'guest') {
 							userRole = response.userRole;
 						}
@@ -60,7 +69,7 @@ class LoginPage extends React.Component {
 
 						return (
 							<div>
-								<TempHome userRole={userRole}/>			
+								<TempHome userRole={userRole} userId = "1"/>			
 							</div>
 						)
 					}
@@ -86,12 +95,7 @@ class LoginPage extends React.Component {
 			}
 		}
 
-		const handleLogIn = () => {
-			this.setState (() => ({
-				loggedIn: true
-			}))
-		}
-
+		
 
 		return (
 			<div>
@@ -101,7 +105,7 @@ class LoginPage extends React.Component {
 					<Button 	
 						variant="primary" 
 						type="submit" 
-						onClick={handleLogIn}
+						onClick={this.handleLogIn}
 					>
 						Submit
 					</Button>
