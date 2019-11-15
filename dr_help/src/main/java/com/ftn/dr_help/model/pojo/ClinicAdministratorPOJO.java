@@ -1,8 +1,10 @@
 package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 @Entity
@@ -63,8 +68,17 @@ public class ClinicAdministratorPOJO implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar birthday;
 	
+	
+	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ClinicPOJO clinic;
+	
+	
+//	@PostConstruct
+//	public void init() {
+//		clinic.setClinicAdminList(new ArrayList<>());
+//	}
+//	
 	
 	public ClinicAdministratorPOJO() {
 		super();
@@ -167,7 +181,7 @@ public class ClinicAdministratorPOJO implements Serializable{
 	}
 
 
-
+	@Autowired
 	public void setClinic(ClinicPOJO clinic) {
 		this.clinic = clinic;
 	}

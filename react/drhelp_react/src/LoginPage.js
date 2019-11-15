@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
-import TempHome from './TempHome.js';
+import TempHome from './components/TempHome.js';
 import axios from 'axios';
 
 

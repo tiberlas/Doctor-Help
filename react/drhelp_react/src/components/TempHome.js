@@ -8,7 +8,8 @@ import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 
 
-import NewClinicForm from './NewClinicForm'
+import NewClinicForm from './NewClinicForm';
+import NewAdminForm from './NewAdminForm';
 
 class TempHome extends React.Component {
     
@@ -17,36 +18,36 @@ class TempHome extends React.Component {
 
         this.state = {
             showClinicForm: false,
-            showClinicAdminForm: false,
-            showCentreAdminForm: false
+            showAdminForm: false,
         }
 
-        this.newClinicEvent = this.newClinicEvent.bind(this)
+         this.onChange = this.onChange.bind(this)
     }
 
+    onChange(event) {
 
-    newClinicEvent() {
+        event.persist()
+        console.log(event.target.name)
         this.setState( (prevState) => {
-            if(!prevState.showClinicForm) {
+            if(event.target.name === "showClinicForm") {
                 return {
-                    ...prevState,
+                    showAdminForm: false,
                     showClinicForm: true
                 }
-            } 
-
-            console.log("BOOLEAN " + this.state.showClinicForm)
+            }
+            if(event.target.name === "showAdminForm") {
+                return {
+                    showAdminForm: true,
+                    showClinicForm: false
+                }
+            }
         })
-
-
-        console.log("doing it fam.")
     }
+   
 
     render() {
-        let showClinicForm = this.state.showClinicForm
-        if(showClinicForm) {
-            return <NewClinicForm/>
-        }
-
+        let showClinicForm = this.state.showClinicForm ? <NewClinicForm/> : ''
+        let showAdminForm = this.state.showAdminForm ? <NewAdminForm/> : ''
         return(
             <div> 
                 <Navbar bg="light" expand="lg">
@@ -56,10 +57,9 @@ class TempHome extends React.Component {
                         <Nav className="mr-auto">
                         <Nav.Link href="#home">Home</Nav.Link>
                         <Nav.Link href="#link">Link</Nav.Link>
-                        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1" onClick = {this.newClinicEvent}>Add new clinic</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Add new clinic administrator</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">Add new centre administrator</NavDropdown.Item>
+                        <NavDropdown title="Dropdown" id="basic-nav-dropdown"> 
+                            <NavDropdown.Item href="#action/3.1" name = "showClinicForm" onClick = {this.onChange}>Add new clinic</NavDropdown.Item>
+                            <NavDropdown.Item href="#action/3.2"  name = "showAdminForm" onClick = {this.onChange}> Add new administrator</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                         </NavDropdown>
@@ -70,7 +70,16 @@ class TempHome extends React.Component {
                 </Form>
                 </Navbar.Collapse>
                 </Navbar>
+
+                <body> {/*ovde lupam forme */}
+
+                {this.state.showClinicForm && <NewClinicForm/>}
+                {this.state.showAdminForm && <NewAdminForm/>}
+
+                </body>
             </div>
+
+            
         )
     }
 }
