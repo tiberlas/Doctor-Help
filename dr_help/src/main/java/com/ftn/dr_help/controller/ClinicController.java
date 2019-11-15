@@ -3,9 +3,6 @@ package com.ftn.dr_help.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
@@ -32,12 +31,17 @@ public class ClinicController {
 	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	public ResponseEntity<ClinicDTO> saveClinic(@RequestBody ClinicDTO clinicDTO) {
-//		for (ClinicDTO c : clinicDTO.values()) {
-//			System.out.println(c);
+//		ObjectMapper mapper = new ObjectMapper();
+//		ClinicDTO[] jsonObj = mapper.readValue(clinicDTO, ClinicDTO[].class);
+		
+		System.out.println("works clinicdto" + clinicDTO.getName() + " " + clinicDTO.getDescription() + " "+ clinicDTO.getDescription());
+
+
+//		for (ClinicDTO itr : jsonObj) {
+//		    System.out.println("Val of name is: " + p.getName());
+//		    System.out.println("Val of name is: " + p.getAddress());
 //		}
-//		System.out.println(clinicDTO.getAddress());
-//		//System.out.println(clinicDTO.containsValue(arg0));
-//		System.out.println("works" + clinicDTO.getName() + " " + clinicDTO.getAddress() + " " + clinicDTO.getDescription());
+		
 		ClinicPOJO clinic = new ClinicPOJO();
 		clinic.setName(clinicDTO.getName());
 		clinic.setAddress(clinicDTO.getAddress());

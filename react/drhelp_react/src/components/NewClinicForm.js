@@ -4,16 +4,6 @@ import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 
 
-
-class Card {
-    constructor(name, address, description) {
-      this.name = name;
-      this.address = address;
-      this.description = description;
-    }
-  }
-
-
 class NewClinicForm extends React.Component {
 
     constructor() {
@@ -42,23 +32,29 @@ class NewClinicForm extends React.Component {
             description: this.state.clinicDescription
           };
 
-        let data1 = new Card(this.state.name, this.state.address, this.state.description)
-        //   Object data1 = new Object()
-        //   data1.name = this.state.name
-        //   data1.address = this.state.address
-        //   data1.description = this.state.description
         console.log(data)
         const datastr = JSON.stringify(data)
         console.log(" str "+datastr)
           axios.post('http://localhost:8080/api/clinics/newClinic', {
-            //   name: this.state.name,
-            //   address: this.state.address,
-            //   description: this.state.description
-            data1
-            },  {headers: {'content-type': 'application/json'}})
+              name: this.state.name,
+              address: this.state.address,
+              description: this.state.description
+            
+            })
             .then(res => {
               console.log(res.data);
             })
+
+
+        // fetch('http://localhost:8080/api/clinics/newClinic', {
+        //     method: 'post',
+        //     headers: {'Content-Type':'application/json'},
+        //     body: {
+        //         name: this.state.clinicName,
+        //         address: this.state.clinicAddress,
+        //         description: this.state.clinicDescription
+        //     }
+        //    });
     }
 
     render() {

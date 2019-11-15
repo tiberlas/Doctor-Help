@@ -7,7 +7,7 @@ public class ClinicAdminDTO {
 	private String email;
 	private String firstName;
 	private String lastName;
-	private Long clinicId;
+	private Long id;
 	
 	public ClinicAdminDTO() {
 		
@@ -18,7 +18,7 @@ public class ClinicAdminDTO {
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.clinicId = id;
+		this.id = id;
 	}
 
 	public ClinicAdminDTO(ClinicAdministratorPOJO admin) {
@@ -49,11 +49,11 @@ public class ClinicAdminDTO {
 		this.lastName = lastName;
 	}
 
-	public Long getClinicId() {
-		return clinicId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setClinicId(Long clinicId) {
-		this.clinicId = clinicId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

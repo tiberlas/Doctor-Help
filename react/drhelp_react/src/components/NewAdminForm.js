@@ -23,7 +23,7 @@ class NewAdminForm extends React.Component {
 
     handleChange(event) {
         console.log("THE EV VAL", event.target.value);
-        console.log("THE EV NAME", event.target.value);
+        console.log("THE EV NAME", event.target.name);
         this.setState( {
             [event.target.name]: event.target.value
         })
@@ -37,8 +37,8 @@ class NewAdminForm extends React.Component {
         const clinicList = res.data
         this.setState({ clinicList });
         //const items = clinicList.map(item => )
-        console.log(res.data[0].address)
-        console.log(this.state.clinicList[0].name)
+        // console.log(res.data[0].address)
+        // console.log(this.state.clinicList[0].name)
 
        
 
@@ -71,7 +71,9 @@ class NewAdminForm extends React.Component {
                     console.log(data);
                     })
         } else {
-            axios.post('http://localhost:8080/api/centreAdmins/newAdmin', { data })
+            axios.post('http://localhost:8080/api/centreAdmins/newAdmin', {  email: this.state.email,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName })
             .then(res => {
             console.log(data);
             })
@@ -149,7 +151,7 @@ class NewAdminForm extends React.Component {
                     <option value="orange">Orange</option>
                     <option value="yellow">Yellow</option>
                 </select>} */}
-                {this.state.adminRole==="clinic" && <select onChange={this.handleChange} label="Multiple Select">
+                {this.state.adminRole==="clinic" && <select name = "id" onChange={this.handleChange} label="Multiple Select">
        {this.createSelectItems()}
   </select>}
                 </Form.Group>

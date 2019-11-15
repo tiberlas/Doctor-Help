@@ -13,17 +13,22 @@ public class ClinicDTO {
 		
 	}
 	
-	public ClinicDTO( Long id, String name, String address, String description) {
+	public ClinicDTO( String name, String address, String description) {
 		super();
-		this.id = id;
+		//this.id = id;
 		this.name = name;
 		this.address = address;
 		this.description = description;
 	}
-
+	
 	public ClinicDTO(ClinicPOJO clinic) {
-		this(clinic.getId(), clinic.getName(), clinic.getAddress(), clinic.getDescription()); //clinic.getId(),
+		this(clinic.getName(), clinic.getAddress(), clinic.getDescription());
 	}
+	
+
+//	public ClinicDTO(ClinicPOJO clinic) {
+//		this(clinic.getId(), clinic.getName(), clinic.getAddress(), clinic.getDescription()); //clinic.getId(),
+//	}
 	
 	public String getName() {
 		return name;

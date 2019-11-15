@@ -43,7 +43,7 @@ public class ClinicPOJO implements Serializable {
 	private String address;
 	
 	
-	@Column(name = "description", nullable = true)
+	@Column(name = "description", nullable = false)
 	private String description;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

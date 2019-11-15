@@ -34,11 +34,11 @@ public class ClinicAdministratorController {
 		
 		@PostMapping(value = "/newAdmin", consumes = "application/json")
 		public ResponseEntity<ClinicAdminDTO> saveAdmin(@RequestBody ClinicAdminDTO clinicAdminDTO) {
-			System.out.println("works");
+			System.out.println("works" + clinicAdminDTO.getId() + " " +  clinicAdminDTO.getFirstName() + " " + clinicAdminDTO.getLastName() + " " + clinicAdminDTO.getEmail());
 			ClinicAdministratorPOJO admin = new ClinicAdministratorPOJO();
 			
 			//TODO: find the clinic that is sent via DTO:
-			ClinicPOJO c = clinicService.findOne(clinicAdminDTO.getClinicId());
+			ClinicPOJO c = clinicService.findOne(clinicAdminDTO.getId());
 			if(c != null) admin.setClinic(c);
 			admin.setFirstName(clinicAdminDTO.getFirstName());
 			admin.setLastName(clinicAdminDTO.getLastName());
