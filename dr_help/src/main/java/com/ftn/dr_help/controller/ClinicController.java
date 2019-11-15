@@ -1,6 +1,5 @@
 package com.ftn.dr_help.controller;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.dto.ClinicDTO;
+import com.ftn.dr_help.dto.ClinicRoomListDTO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
 
@@ -63,4 +64,14 @@ public class ClinicController {
 	}
 	
 	
+	@GetMapping(value = "/{id}/rooms")
+	public ResponseEntity<ClinicRoomListDTO> getCentreAdministratorsName(@PathVariable("id") Long id) {
+		System.out.println("ROOMS");
+		ClinicRoomListDTO ret = clinicService.getAllRooms(id);
+		
+		if(ret == null)
+			return new ResponseEntity<ClinicRoomListDTO>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ClinicRoomListDTO>(ret, HttpStatus.OK);
+	}
+
 }

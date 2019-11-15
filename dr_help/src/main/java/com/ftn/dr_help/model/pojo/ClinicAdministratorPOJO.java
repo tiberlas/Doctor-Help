@@ -174,8 +174,6 @@ public class ClinicAdministratorPOJO implements Serializable{
 		return serialVersionUID;
 	}
 
-
-
 	public ClinicPOJO getClinic() {
 		return clinic;
 	}
