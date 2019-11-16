@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -58,7 +60,9 @@ public class PatientPOJO implements Serializable{
 	@Id
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
-
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.PATIENT;
 	
 	@Temporal(TemporalType.TIMESTAMP)

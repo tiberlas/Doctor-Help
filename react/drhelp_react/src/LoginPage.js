@@ -85,6 +85,10 @@ class LoginPage extends React.Component {
 							email: email.value, 
 							password: password.value
 						})
+					})
+					.then (response => response.json())
+					.then (response =>  {
+						alert (response.userRole)
 					});
 
 					let loginDataIsValid = true;
