@@ -5,8 +5,6 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,9 +49,7 @@ public class CentreAdministratorPOJO implements Serializable{
 	
 	@Column(name = "phoneNumber", nullable = true)
 	private String phoneNumber;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
+
 	private RoleEnum role = RoleEnum.CENTRE_ADMINISTRATOR;
 	
 	@Temporal(TemporalType.TIMESTAMP)
