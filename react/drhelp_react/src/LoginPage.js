@@ -45,35 +45,39 @@ class LoginPage extends React.Component {
 			//email.value
 			
 			if ((email.value === 'doctor') && (password.value === 'doctor')) {
-				this.props.fcnSetLoginData ();
+				this.props.setLoginDoctor ();
+				this.setState ({
+					userRole: 'doctor'
+				});
 			}
 			else if ((email.value === 'nurse') && (password.value === 'nurse')) {
-				
+				this.props.setLoginNurse ();
+				this.setState ({
+					userRole: 'nurse'
+				});
 			}
 			else if ((email.value === 'clinicAdmin') && (password.value === 'clinicAdmin')) {
-				
+				this.props.setLoginClinicAdmin ();
+				this.setState ({
+					userRole: 'clinicAdmin'
+				});
 			}
 			else if ((email.value === 'centreAdmin') && (password.value === 'centreAdmin')) {
-				
+				this.props.setLoginCentreAdmin ();
+				this.setState ({
+					userRole: 'centreAdmin'
+				});
 			}
 			else if ((email.value === 'patient') && (password.value === 'patient')) {
-				
+				this.props.setLoginPatient ();
+				this.setState ({
+					userRole: 'patient'
+				});
 			}
 			
 			if (email.value.length > 3) {
 				if  (password.value.length > 3) {
-					/*
-					axios.post ('http://localhost:8080/api/login', JSON.stringify ({
-						email: email.value, 
-						password: password.value
-					})).then (function (response) {
-						//alert (response);
-						if (response.userRole !== 'guest') {
-							userRole = response.userRole;
-						}
-					});
-					*/
-
+					
 					fetch ('http://localhost:8080/api/login', {
 						method: 'post',
 						headers: {'Content-Type' : 'application/json'},
@@ -83,10 +87,9 @@ class LoginPage extends React.Component {
 						})
 					});
 
+					let loginDataIsValid = true;
 
-					if (this.props.userRole !== 'guest') {
-
-
+					if (loginDataIsValid) {
 						return (
 							<div>
 								<TempHome userRole={this.props.userRole} userId = "1"/>			

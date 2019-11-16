@@ -23,6 +23,33 @@ class App extends Component {
     })
   }
 
+  setNurse () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'nurse',
+    })
+  }
+
+  setCentreAdmin () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'centreAdmin',
+    })
+  }
+
+  setClinicAdmin () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'dclinicAdminoctor',
+    })
+  }
+
+  setPatient () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'patient',
+    })
+  }
 
   render() {
 
@@ -32,7 +59,11 @@ class App extends Component {
             <LoginPage 
               loggedIn={this.state.loggedIn}
               userRole={this.state.userRole}
-              fcnSetLoginData={() => this.setDoctor ()}
+              setLoginDoctor={() => this.setDoctor ()}
+              setLoginNurse={() => this.setNurse ()}
+              setLoginCentreAdmin={() => this.setCentreAdmin ()}
+              setLoginClinicAdmin={() => this.setClinicAdmin ()}
+              setLoginPatient={() => this.setPatient ()}
             />
         </div>
       );
