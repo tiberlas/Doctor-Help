@@ -13,6 +13,7 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       userRole: 'guest', 
+      userId: 1
     }
   }
 
@@ -71,7 +72,7 @@ class App extends Component {
     else {
       return (
         <div>
-					<TempHome userRole={this.props.userRole} userId = "1"/>			
+					<TempHome userRole={this.state.userRole} userId = {this.state.userId}/>			
 				</div>
       );
     }
