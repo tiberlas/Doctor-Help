@@ -4,7 +4,8 @@ import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import {BrowserRouter, Switch} from "react-router-dom";
+import UserContextProvider from './context/UserContextProvider';
 
 class App extends Component {
   
@@ -72,7 +73,13 @@ class App extends Component {
     else {
       return (
         <div>
-					<TempHome userRole={this.state.userRole} userId = {this.state.userId}/>			
+          <BrowserRouter >
+            <Switch>
+                <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
+					        <TempHome role = {this.state.userRole} />	
+                </UserContextProvider>		
+            </Switch>
+          </BrowserRouter>
 				</div>
       );
     }

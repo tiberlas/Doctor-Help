@@ -1,48 +1,30 @@
 
 import React from 'react'
-import Button from 'react-bootstrap/Button'
-import Nav from 'react-bootstrap/Nav'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Navbar from 'react-bootstrap/Navbar'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
-import {Router, Route, browserHistory, BrowserRouter, Switch} from "react-router-dom";
-import Header from './header.jsx';
 import Footer from './footer.jsx';
 import ClinicAdministrator from './clinic_admin/ClinicAdministrator';
-import Home from './Home.jsx';
-
-import NewClinicForm from './NewClinicForm';
-import NewAdminForm from './NewAdminForm';
-import UserContextProvider from '../context/UserContextProvider.js';
+import {UserContext} from '../context/UserContextProvider'
+import CenterAdministrator from './centre_admin/CentreAdministrator.js';
+import Doctor from './doctor/Doctor.jsx'
 
 class TempHome extends React.Component {
 
-   
+    static contextType = UserContext
+
     render() {
-        return(
-            <div>  
-                <div>
+        if(this.props.role === 'centreAdmin')
+            return(
+                <CenterAdministrator />)
+        else if(this.props.role === 'clinicAdmin')
+            return(<ClinicAdministrator />)
+        else if(this.props.role === 'doctor')
+            return(<Doctor />)
+        else
+            return(
+                <div><h1>THIS SHOULD NOT BE SHOWN</h1></div>
+            )
 
-                    <BrowserRouter >
-                        <UserContextProvider role = {this.props.userRole} id = {this.props.userId}>
-                        <Header />
-                        <Switch>
-                            <Route exact path="/" component={Home} />
-                            <Route exact path="/home" component={Home} />
-                            <Route path={"/clinic/add"} component={NewClinicForm} />
-                            <Route path={"/clinic/add+admin"} component={NewAdminForm} />     
-                        </Switch>
-                        </UserContextProvider> 
-                    </BrowserRouter>
-                </div>
-
-                <Footer />
-            </div>
-
-            
-        )
-    }
+        return( <Footer />)
+    };
 }
 
 

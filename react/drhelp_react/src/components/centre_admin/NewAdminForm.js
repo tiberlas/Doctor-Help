@@ -4,8 +4,6 @@ import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 
 
-
-
 class NewAdminForm extends React.Component {
     constructor() {
         super()

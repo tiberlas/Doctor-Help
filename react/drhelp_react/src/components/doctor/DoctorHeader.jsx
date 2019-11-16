@@ -4,7 +4,7 @@ class DoctorHeader extends Component {
     state = {  }
     render() { 
         return (  
-            
+            <div>header</div>
         );
     }
 }
