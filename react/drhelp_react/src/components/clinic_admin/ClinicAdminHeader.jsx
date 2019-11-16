@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import {NavLink } from "react-router-dom";
+import {Link } from "react-router-dom";
 
 class ClinicAdminHeader extends Component {
     state = {  }
@@ -13,10 +13,10 @@ class ClinicAdminHeader extends Component {
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
                 <Nav.Link >
-                    <NavLink to = 'clinic+administrator/profile' >profile</NavLink>
+                    <Link exact to = '/clinic+administrator/profile' >profile</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <NavLink to = 'clinic+administrator/rooms'  >rooms</NavLink>
+                    <Link exact to = '/clinic+administrator/rooms'  >rooms</Link>
                 </Nav.Link>
                 <Nav.Link >medical staff</Nav.Link>   
             </Nav>

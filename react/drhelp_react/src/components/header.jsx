@@ -5,6 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import Navbar from 'react-bootstrap/Navbar'
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
+import {Link} from 'react-router-dom'
 
 class Header extends React.Component {
 
@@ -15,13 +16,23 @@ class Header extends React.Component {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                <Nav.Link href="home">Home</Nav.Link>
-                <Nav.Link href="clinic+administrator">clinic administrator</Nav.Link>
+                <Nav.Link >
+                    <Link exact to='/home'>Home</Link>
+                </Nav.Link>
+                <Nav.Link>
+                    <Link exact to='/clinic+administrator'>clinic administrator</Link>
+                </Nav.Link>
                 <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="clinic/add" >Add new clinic</NavDropdown.Item>
-                    <NavDropdown.Item href="clinic/add+admin"  name = "showAdminForm"> Add new administrator</NavDropdown.Item>
+                    <NavDropdown.Item >
+                        <Link exact to='/clinic/add'>Add new clinic</Link>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item name = "showAdminForm"> 
+                        <Link exact to='/clinic/add+admin'> Add new administrator </Link>
+                    </NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item href="clinic/add">Separated link</NavDropdown.Item>
+                    <NavDropdown.Item >
+                        <Link exact to='/clinic/add'>Separated link</Link>
+                    </NavDropdown.Item>
                 </NavDropdown>
             </Nav>
         <Form inline>
