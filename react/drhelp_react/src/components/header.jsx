@@ -12,7 +12,9 @@ class Header extends React.Component {
     render() {
         return(
             <Navbar bg="light" expand="lg">
-            <Navbar.Brand href="home">Doctor Help</Navbar.Brand>
+            <Navbar.Brand>
+                <Link exact to='/home'>Doctor Help</Link>
+            </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
