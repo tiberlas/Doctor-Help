@@ -14,32 +14,28 @@ import Home from './Home.jsx';
 
 import NewClinicForm from './NewClinicForm';
 import NewAdminForm from './NewAdminForm';
+import UserContextProvider from '../context/UserContextProvider.js';
 
 class TempHome extends React.Component {
-    
-    constructor(props) {
-        super(props)
 
-        this.state = {
-            id: this.props.userId,
-            role: this.props.userRole
-        }
-    }
    
     render() {
-        console.log("ID: " + this.state.id)
+        console.log("ID: " + this.props.userId)
         return(
             <div>  
                 <div>
+
                     <BrowserRouter >
+                        <UserContextProvider role = {this.props.userRole} id = {this.props.userId}>
                         <Header />
                         <Switch>
                             <Route exact path="/" component={Home} />
                             <Route exact path="/home" component={Home} />
                             <Route path={"/clinic/add"} component={NewClinicForm} />
                             <Route path={"/clinic/add+admin"} component={NewAdminForm} />
-                            <Route path={"/clinic+administrator"} > <ClinicAdministrator id = {this.state.id} /> </Route>     
+                            <Route path={"/clinic+administrator"} > <ClinicAdministrator/> </Route>     
                         </Switch>
+                        </UserContextProvider> 
                     </BrowserRouter>
                 </div>
 

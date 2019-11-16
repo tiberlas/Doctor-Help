@@ -6,10 +6,12 @@ import Navbar from 'react-bootstrap/Navbar'
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
+import { UserContext } from '../context/UserContextProvider';
 
 class Header extends React.Component {
-
+    static contextType = UserContext
     render() {
+        console.log("context is " + this.context.user.role)
         return(
             <Navbar bg="light" expand="lg">
             <Navbar.Brand href="home">Doctor Help</Navbar.Brand>
