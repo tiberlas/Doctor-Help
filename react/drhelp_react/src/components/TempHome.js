@@ -29,19 +29,17 @@ class TempHome extends React.Component {
     render() {
         console.log("ID: " + this.state.id)
         return(
-            <div> 
-                <Header /> 
-
+            <div>  
                 <div>
                     <BrowserRouter >
-                    <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/home" component={Home} />
-                    <Route path={"/clinic/add"} component={NewClinicForm} />
-                    <Route path={"/clinic/add+admin"} component={NewAdminForm} />
-                    <Route path={"/clinic+administrator"} > <ClinicAdministrator id = {this.state.id} /> </Route> 
-                    
-                    </Switch>
+                        <Header />
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <Route exact path="/home" component={Home} />
+                            <Route path={"/clinic/add"} component={NewClinicForm} />
+                            <Route path={"/clinic/add+admin"} component={NewAdminForm} />
+                            <Route path={"/clinic+administrator"} > <ClinicAdministrator id = {this.state.id} /> </Route>     
+                        </Switch>
                     </BrowserRouter>
                 </div>
 
