@@ -41,7 +41,7 @@ class App extends Component {
   setClinicAdmin () {
     this.setState ({
       loggedIn: true,
-      userRole: 'dclinicAdminoctor',
+      userRole: 'clinicAdmin',
     })
   }
 

@@ -1,51 +1,21 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button'
-import Nav from 'react-bootstrap/Nav'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Navbar from 'react-bootstrap/Navbar'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
-import {Link} from 'react-router-dom'
 import { UserContext } from '../context/UserContextProvider';
+import CentreAdminHeader from './centre_admin/CentreAdminHeader';
+import ClinicAdminHeader from './clinic_admin/ClinicAdminHeader';
 
 class Header extends React.Component {
     static contextType = UserContext
     render() {
         console.log("context is " + this.context.user.role)
-        return(
-            <Navbar bg="light" expand="lg">
-            <Navbar.Brand>
-                <Link exact to='/home'>Doctor Help</Link>
-            </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                <Nav.Link >
-                    <Link exact to='/home'>Home</Link>
-                </Nav.Link>
-                <Nav.Link>
-                    <Link exact to='/clinic+administrator'>clinic administrator</Link>
-                </Nav.Link>
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                    <NavDropdown.Item >
-                        <Link exact to='/clinic/add'>Add new clinic</Link>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item name = "showAdminForm"> 
-                        <Link exact to='/clinic/add+admin'> Add new administrator </Link>
-                    </NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item >
-                        <Link exact to='/clinic/add'>Separated link</Link>
-                    </NavDropdown.Item>
-                </NavDropdown>
-            </Nav>
-        <Form inline>
-        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-        <Button variant="outline-success">Search</Button>
-        </Form>
-        </Navbar.Collapse>
-        </Navbar>
-        );
+        
+        if(this.context.user.role === 'centreAdmin')
+            return(<CentreAdminHeader id={this.context.user.id}></CentreAdminHeader>);
+        else if(this.context.user.role === 'clinicAdmin')
+            return(<ClinicAdminHeader id={this.context.user.id}></ClinicAdminHeader>)
+        else
+            return(
+                <div><h1>THIS SHOULD NOT BE SHOWN</h1></div>
+            )
     };
 
 } export default Header

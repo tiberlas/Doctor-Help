@@ -7,35 +7,27 @@ import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
 
-class ClinicAdminHeader extends Component {
-    state = { name: '' }
-
-    componentDidMount() {
-        fetch('http://localhost:8080/api/clinicAdmins/'+this.props.id+'/name', { method: "GET" })
-        .then(responce => responce.json())
-        .then(responce => {
-            this.setState({name: responce.firstName + ' ' + responce.lastName})
-        });
-    }
-
+class CentreAdminHeader extends Component {
+    state = {  }
     render() { 
         return ( 
-        <Navbar bg="light" expand="lg">
-        <Navbar.Brand >{this.state.name}</Navbar.Brand>
+            <Navbar bg="light" expand="lg">
+        <Navbar.Brand >{this.props.id}</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
                 <Nav.Link >
-                    <Link exact to = '/clinic+administrator/profile' >profile</Link>
+                    <Link exact to = '/clinic/add' >add clinic</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <Link exact to = '/clinic+administrator/rooms'  >rooms</Link>
+                    <Link exact to = '/clinic/add+admin'  >add admin</Link>
                 </Nav.Link>
                 <Nav.Link >medical staff</Nav.Link>   
             </Nav>
         </Navbar.Collapse>
-        </Navbar>);
+        </Navbar>
+         );
     }
 }
  
-export default ClinicAdminHeader;
+export default CentreAdminHeader;

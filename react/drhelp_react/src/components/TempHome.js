@@ -20,7 +20,6 @@ class TempHome extends React.Component {
 
    
     render() {
-        console.log("ID: " + this.props.userId)
         return(
             <div>  
                 <div>
@@ -32,8 +31,7 @@ class TempHome extends React.Component {
                             <Route exact path="/" component={Home} />
                             <Route exact path="/home" component={Home} />
                             <Route path={"/clinic/add"} component={NewClinicForm} />
-                            <Route path={"/clinic/add+admin"} component={NewAdminForm} />
-                            <Route path={"/clinic+administrator"} > <ClinicAdministrator/> </Route>     
+                            <Route path={"/clinic/add+admin"} component={NewAdminForm} />     
                         </Switch>
                         </UserContextProvider> 
                     </BrowserRouter>
