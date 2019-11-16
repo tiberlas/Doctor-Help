@@ -5,23 +5,24 @@ import axios from 'axios'
 
 
 
+
 class NewAdminForm extends React.Component {
-    
     constructor() {
         super()
         this.state = {
             email: "",
             firstName: "",
             lastName: "",
-            adminRole: "",
+            adminRole: "centre",
             clinicList: {},
-            id: ""
+            id: "",
+            clinic_numbers: 0
         }
         this.handleChange = this.handleChange.bind(this)
         this.componentDidMount= this.componentDidMount.bind(this)
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         console.log("THE EV VAL", event.target.value);
         console.log("THE EV NAME", event.target.name);
         this.setState( {
@@ -40,7 +41,15 @@ class NewAdminForm extends React.Component {
         // console.log(res.data[0].address)
         // console.log(this.state.clinicList[0].name)
 
-       
+        this.state.clinic_numbers = Object.keys(this.state.clinicList).length;
+        console.log("size is " + this.state.clinic_numbers)
+        if(this.state.clinic_numbers > 0) {
+            // this.setState( (prevState) => 
+            // {
+            //     ...prevState,
+                this.state.id = this.state.clinicList[0].id
+            // })
+        }
 
       })
     }
@@ -140,26 +149,15 @@ class NewAdminForm extends React.Component {
                     /> Clinical centre
                 </label>
                 <Form.Group controlId="formSelectClinic">
-                {/* {<select 
-                    value={this.state.clinicList.name}
-                    onChange={this.handleChange}
-                    name="favColor"
-                >
-                    <option value="blue">Blue</option>
-                    <option value="green">Green</option>
-                    <option value="red">Red</option>
-                    <option value="orange">Orange</option>
-                    <option value="yellow">Yellow</option>
-                </select>} */}
                 {this.state.adminRole==="clinic" && <select name = "id" onChange={this.handleChange} label="Multiple Select">
        {this.createSelectItems()}
   </select>}
                 </Form.Group>
             </Form.Group>
 
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
+            { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="primary" type="submit"> Submit </Button> 
+            : <div> <label>You must add at least 1 clinic. <Button variant="primary" type="submit" disabled> Submit </Button> </label> </div>}
+               
             </Form>
             <h1> {this.state.email} {this.state.firstName} {this.state.lastName} {this.state.adminRole} {}</h1>
             </div>

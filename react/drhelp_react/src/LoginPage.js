@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import TempHome from './components/TempHome.js';
 import axios from 'axios';
+import { appendToMemberExpression } from '@babel/types';
+import App from './App.js';
 
 
 //import { createAppContainer } from 'react-navigation';
@@ -12,64 +14,85 @@ import axios from 'axios';
 
 class LoginPage extends React.Component {
 
+	
 	constructor() {
 		super()
 		this.state = {
-			loggedIn: false, 
-		  }
+			loggedIn: false,
+			userRole: 'guest', 
+		}
 	}
 
 
-	  handleLogIn = () => {
+	handleLogIn = () => {
 		this.setState ({
 			loggedIn: true
 		})
 	}
 	
 	render () {
-
+		
 		if (this.state.loggedIn === true) {
+			if (this.state.userRole !== 'guest') {
+				return (
+					<div>
+						<TempHome userRole={this.props.userRole} userId = "1"/>			
+					</div>
+				)
+			}
 			let email = document.getElementById('tb_email');
 			let password = document.getElementById('tb_password');
 			//email.value
 			
-			let userRole = "guest";
-
 			if ((email.value === 'doctor') && (password.value === 'doctor')) {
-				userRole = 'doctor';
-			} 
+				this.props.setLoginDoctor ();
+				this.setState ({
+					userRole: 'doctor'
+				});
+			}
 			else if ((email.value === 'nurse') && (password.value === 'nurse')) {
-				userRole = 'nurse';
+				this.props.setLoginNurse ();
+				this.setState ({
+					userRole: 'nurse'
+				});
 			}
 			else if ((email.value === 'clinicAdmin') && (password.value === 'clinicAdmin')) {
-				userRole = 'clinicAdmin';
+				this.props.setLoginClinicAdmin ();
+				this.setState ({
+					userRole: 'clinicAdmin'
+				});
 			}
 			else if ((email.value === 'centreAdmin') && (password.value === 'centreAdmin')) {
-				userRole = 'centreAdmin';
+				this.props.setLoginCentreAdmin ();
+				this.setState ({
+					userRole: 'centreAdmin'
+				});
 			}
 			else if ((email.value === 'patient') && (password.value === 'patient')) {
-				userRole = 'patient';
+				this.props.setLoginPatient ();
+				this.setState ({
+					userRole: 'patient'
+				});
 			}
-
+			
 			if (email.value.length > 3) {
 				if  (password.value.length > 3) {
-
-					axios.post ('http://localhost:8080/api/login', {		
-						email: email.value, 
-						password: password.value
-					}).then (function (response) {
-						//alert (response);
-						if (response.userRole !== 'guest') {
-							userRole = response.userRole;
-						}
+					
+					fetch ('http://localhost:8080/api/login', {
+						method: 'post',
+						headers: {'Content-Type' : 'application/json'},
+						body: JSON.stringify ({
+							email: email.value, 
+							password: password.value
+						})
 					});
 
-					if (userRole !== 'guest') {
+					let loginDataIsValid = true;
 
-
+					if (loginDataIsValid) {
 						return (
 							<div>
-								<TempHome userRole={userRole} userId = "1"/>			
+								<TempHome userRole={this.props.userRole} userId = "1"/>			
 							</div>
 						)
 					}

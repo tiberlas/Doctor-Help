@@ -55,6 +55,9 @@ public class PatientPOJO implements Serializable{
 	@Column (name = "phoneNumber", nullable = false)
 	private String phoneNumber;
 	
+	@Column (name = "isActivated", nullable = false)
+	private boolean isActivated;
+	
 	@Id
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -179,6 +182,12 @@ public class PatientPOJO implements Serializable{
 	}
 	public void setAppointments(List<AppointmentPOJO> appointments) {
 		this.appointments = appointments;
+	}
+	public boolean isActivated() {
+		return isActivated;
+	}
+	public void setActivated(boolean isActivated) {
+		this.isActivated = isActivated;
 	}
 	
 }

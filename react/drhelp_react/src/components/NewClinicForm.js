@@ -35,6 +35,7 @@ class NewClinicForm extends React.Component {
         console.log(data)
         const datastr = JSON.stringify(data)
         console.log(" str "+datastr)
+        
         //   axios.post('http://localhost:8080/api/clinics/newClinic', {
         //       name: this.state.name,
         //       address: this.state.address,
