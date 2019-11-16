@@ -18,7 +18,7 @@ import com.ftn.dr_help.model.enums.RoleEnum;
 @CrossOrigin (origins="http://localhost:3000")
 public class LoginController {
 	
-	@PostMapping (value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping (value = "/login", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LoginResponseDTO> login (@RequestBody  LoginRequestDTO loginRequest){
 
 		System.out.println("Email: " + loginRequest.getEmail());
@@ -29,6 +29,5 @@ public class LoginController {
 		
 		return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
 	}
-	
 	
 }

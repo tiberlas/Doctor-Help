@@ -8,15 +8,73 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   
+  constructor() {
+    super()
+    this.state = {
+      loggedIn: false,
+      userRole: 'guest', 
+    }
+  }
+
+  setDoctor () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'doctor',
+    })
+  }
+
+  setNurse () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'nurse',
+    })
+  }
+
+  setCentreAdmin () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'centreAdmin',
+    })
+  }
+
+  setClinicAdmin () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'dclinicAdminoctor',
+    })
+  }
+
+  setPatient () {
+    this.setState ({
+      loggedIn: true,
+      userRole: 'patient',
+    })
+  }
+
   render() {
+
+    if (!this.state.loggedIn) {
       return (
-
         <div className="App">
-            <LoginPage/>
-
+            <LoginPage 
+              loggedIn={this.state.loggedIn}
+              userRole={this.state.userRole}
+              setLoginDoctor={() => this.setDoctor ()}
+              setLoginNurse={() => this.setNurse ()}
+              setLoginCentreAdmin={() => this.setCentreAdmin ()}
+              setLoginClinicAdmin={() => this.setClinicAdmin ()}
+              setLoginPatient={() => this.setPatient ()}
+            />
         </div>
-
       );
+    }
+    else {
+      return (
+        <div>
+					<TempHome userRole={this.props.userRole} userId = "1"/>			
+				</div>
+      );
+    }
   }
 }
 
