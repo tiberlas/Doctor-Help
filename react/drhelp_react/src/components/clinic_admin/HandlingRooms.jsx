@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RoomItem from './RoomItem';
+import { UserContext } from '../../context/UserContextProvider'
 
 class HandlingRooms extends Component {
     
@@ -7,8 +8,10 @@ class HandlingRooms extends Component {
         rooms: []
     }
 
+    static contextType = UserContext
+
     componentDidMount() {
-        fetch('http://localhost:8080/api/clinics/1/rooms', { method: "GET" })
+        fetch('http://localhost:8080/api/clinics/'+this.context.user.id+'/rooms', { method: "GET" })
         .then(response => response.json())
         .then(json => {
             this.setState({
@@ -19,7 +22,8 @@ class HandlingRooms extends Component {
 
     }
 
-    render() { 
+    render() {
+
         return ( 
             <div>
                 {this.state.rooms.map(c => (
