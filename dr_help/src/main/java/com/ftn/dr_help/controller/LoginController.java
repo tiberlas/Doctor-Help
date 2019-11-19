@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
-import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.LoginService;
  
 @RestController
@@ -29,16 +31,47 @@ public class LoginController {
 		System.out.println("Email: " + loginRequest.getEmail());
 		System.out.println("Password: " + loginRequest.getPassword());
 		
-		LoginResponseDTO response = loginService.getLoginResponse(loginRequest.getEmail());
-
-		if (response == null) {
-			System.out.println("Nemam response");
-		}
-		else {
-			System.out.println("Imam response");
+		PatientPOJO patientResponse =  loginService.getPatientLoginResponse(loginRequest.getEmail());
+		if (patientResponse != null) {
+			if (!patientResponse.getPassword ().equals (loginRequest.getPassword())) {
+				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+			}
+			if (!patientResponse.isActivated()) {
+				return new ResponseEntity<> (null, HttpStatus.PRECONDITION_REQUIRED);
+			}
+			LoginResponseDTO retVal = new LoginResponseDTO ();
+			retVal.setId (patientResponse.getId ());
+			retVal.setUserRole (patientResponse.getRole ());
+			
+			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
 		}
 		
-		return new ResponseEntity<LoginResponseDTO> (response, HttpStatus.OK);
+		DoctorPOJO doctorResponse = loginService.getDoctorLoginResponse (loginRequest.getEmail());
+		if (doctorResponse != null) {
+			if (!doctorResponse.getPassword ().equals (loginRequest.getPassword ())) {
+				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+			}
+			LoginResponseDTO retVal = new LoginResponseDTO ();
+			retVal.setId(doctorResponse.getId ());
+			retVal.setUserRole(doctorResponse.getRole ());
+		
+			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
+		}
+		
+		CentreAdministratorPOJO centreAdministratorResponse = loginService.getCentreAdministratorLoginResponse (loginRequest.getEmail ());
+		if (centreAdministratorResponse != null) {
+			if (!centreAdministratorResponse.getPassword ().equals (loginRequest.getPassword ())) {
+				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+			}
+			LoginResponseDTO retVal = new LoginResponseDTO ();
+			retVal.setId(centreAdministratorResponse.getId ());
+			retVal.setUserRole(centreAdministratorResponse.getRole());
+		}
+		
+		
+		
+		return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+		
 	}
 	
 }

@@ -9,5 +9,7 @@ import com.ftn.dr_help.model.pojo.PatientPOJO;
 public interface PatientRepository extends JpaRepository<PatientPOJO, Long>{
 
 	PatientPOJO findOneByEmail (String email);
+	
+	
 
 }

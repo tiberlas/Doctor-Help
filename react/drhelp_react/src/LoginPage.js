@@ -6,7 +6,7 @@ import TempHome from './components/TempHome.js';
 import axios from 'axios';
 import { appendToMemberExpression } from '@babel/types';
 import App from './App.js';
-
+import {UserContext} from './context/UserContextProvider'
 
 //import { createAppContainer } from 'react-navigation';
 //import { createStackNavigator } from 'react-navigation-stack';
@@ -14,6 +14,10 @@ import App from './App.js';
 
 class LoginPage extends React.Component {
 
+
+	state = {  }
+
+    static contextType = UserContext
 	
 	constructor() {
 		super()
@@ -88,7 +92,14 @@ class LoginPage extends React.Component {
 					})
 					.then (response => response.json())
 					.then (response =>  {
-						alert (response.userRole)
+						if (response.userRole === "PATIENT") {
+							this.props.setLoginPatient ();
+							
+							
+						}
+						else if (response.userRole === "DOCTOR") {
+							this.props.setLoginDoctor ()
+						}
 					});
 
 					let loginDataIsValid = true;

@@ -8,4 +8,6 @@ import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 @Repository
 public interface CentreAdministratorRepository extends JpaRepository<CentreAdministratorPOJO, Long>{
 
+	CentreAdministratorPOJO findOneByEmail (String email);
+	
 }
