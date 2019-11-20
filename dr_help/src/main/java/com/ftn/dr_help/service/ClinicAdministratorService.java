@@ -55,6 +55,10 @@ public class ClinicAdministratorService {
 
 	public ClinicAdminProfileDTO save(ClinicAdminProfileDTO admin) {
 		ClinicAdministratorPOJO current = findOne(admin.getId());
+		
+		if(current == null)
+			return new ClinicAdminProfileDTO();
+		
 		//treba validacija
 		if(admin.getFirstName() != null && admin.getFirstName() != "")
 			current.setFirstName(admin.getFirstName());
@@ -80,8 +84,6 @@ public class ClinicAdministratorService {
 		if(admin.getBirthday() != null)
 			current.setBirthday(admin.getBirthday());
 		
-		//ClinicAdministratorPOJO krstio = new ClinicAdministratorPOJO();
-		//krstio.setFirstName(admin.getFirstName());
 		clinicAdministratorRepository.save(current);
 	
 		return new ClinicAdminProfileDTO(current);

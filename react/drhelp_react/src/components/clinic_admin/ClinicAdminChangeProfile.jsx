@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
+import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
+import { Redirect } from 'react-router-dom'
 
 class ClinicAdminChangeProfile extends Component {
-    state = {
-            id: 1, 
-            email: "",
-            firstName: "paolo",
-            lastName: "",
-            address: "",
-            city: "",
-            state: "",
-            phoneNumber: "",
-            birthday: ""
-     }
     
+    static contextType = ClinicAdminContext
+    state = {
+        go_profile: false,
+        id: this.context.admin.id,
+        email: this.context.admin.email,
+        firstName: this.context.admin.firstName,
+        lastName: this.context.admin.lastName,
+        address: this.context.admin.address,
+        city: this.context.admin.city,
+        state: this.context.admin.state,
+        phoneNumber: this.context.admin.phoneNumber,
+        birthday: this.context.admin.birthday
+    }
+
+
     handleSubmit = (event) => {
         event.preventDefault();
-        alert("SUBMIT")
 
         fetch('http://localhost:8080/api/clinicAdmins/change', {
             method: "PUT",
@@ -34,7 +39,8 @@ class ClinicAdminChangeProfile extends Component {
                     birthday: this.state.birthday
                 })
       }).then(
-        alert("done")
+        this.props.handleUpdate,
+        this.setState({go_profile: true})
       );
     }
 
@@ -45,35 +51,37 @@ class ClinicAdminChangeProfile extends Component {
   }
 
     render() { 
+        if(this.state.go_profile == true)
+            return (<Redirect to='/clinic+administrator/'></Redirect>);
         return (  
             <form onSubmit={this.handleSubmit}>
                 <div>
                     <p>Enter your first name:</p>
-                    <input type='text'name='firstName' value={this.firstName} onChange={this.handlerChange} />
+                    <input type='text'name='firstName' value={this.state.firstName} onChange={this.handlerChange} />
                 </div>
                 <div>
                     <p>Enter your last name:</p>
-                    <input type='text'name='lastName' onChange={this.handlerChange} />
+                    <input type='text'name='lastName' value={this.state.lastName} onChange={this.handlerChange} />
                 </div>
                 <div>
                     <p>Enter your email:</p>
-                    <input type='text'name='email' onChange={this.handlerChange} />
+                    <input type='text'name='email' value={this.state.email} onChange={this.handlerChange} />
                 </div>
                 <div>
                     <p>Enter your state:</p>
-                    <input type='text'name='state' onChange={this.handlerChange} />
+                    <input type='text'name='state' value={this.state.state} onChange={this.handlerChange} />
                 </div>
                 <div>
                     <p>Enter your city:</p>
-                    <input type='text'name='city' onChange={this.handlerChange} />
+                    <input type='text'name='city' value={this.state.city} onChange={this.handlerChange} />
                 </div>
                 <div>
                     <p>Enter your address:</p>
-                    <input type='text'name='address' onChange={this.handlerChange} />
+                    <input type='text'name='address' value={this.state.address} onChange={this.handlerChange} />
                 </div>
                 <div>
                     <p>Enter your phoneNumber:</p>
-                    <input type='text'name='phoneNumber' onChange={this.handlerChange} />
+                    <input type='text'name='phoneNumber' value={this.state.phoneNumber} onChange={this.handlerChange} />
                 </div>
                 <div>
                     <input type='submit' value='submit'/>

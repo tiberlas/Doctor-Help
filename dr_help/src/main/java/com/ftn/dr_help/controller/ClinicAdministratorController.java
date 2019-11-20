@@ -98,6 +98,7 @@ public class ClinicAdministratorController {
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody ClinicAdminProfileDTO admin) {
 			
+			System.out.println("PUT: " + admin);
 			ClinicAdminProfileDTO ret = clinicAdministratorService.save(admin);
 			
 			if(ret == null) {
