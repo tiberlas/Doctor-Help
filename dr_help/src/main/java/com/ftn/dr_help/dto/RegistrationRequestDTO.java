@@ -1,7 +1,5 @@
 package com.ftn.dr_help.dto;
 
-import java.util.Calendar;
-
 public class RegistrationRequestDTO {
 
 	private String email;
@@ -13,15 +11,26 @@ public class RegistrationRequestDTO {
 	private String state;
 	private String phoneNumber;
 	private Long insuranceNumber;
+	private int birthDay;
+	private int birthMonth;
+	private int birthYear;
 	private Long id;
-	private Calendar birthday;
 	
 	public RegistrationRequestDTO (String email, String password, String firstName, String lastName, 
-				String address, String city, String state, String phoneNumber, Calendar birthday, Long insuranceNumber) {
+				String address, String city, String state, String phoneNumber, Long insuranceNumber, 
+				int birthDay, int birthMonth, int birthYear) {
 		this.email = email;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNumber = phoneNumber;
+		this.insuranceNumber = insuranceNumber;
+		this.birthDay = birthDay;
+		this.birthMonth = birthMonth;
+		this.birthYear = birthYear;
 	}
 	
 	
@@ -73,12 +82,6 @@ public class RegistrationRequestDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Calendar getBirthday() {
-		return birthday;
-	}
-	public void setBirthday(Calendar birthday) {
-		this.birthday = birthday;
-	}
 	public Long getInsuranceNumber() {
 		return insuranceNumber;
 	}
@@ -94,5 +97,35 @@ public class RegistrationRequestDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+
+	public int getBirthDay() {
+		return birthDay;
+	}
+
+
+	public void setBirthDay(int birthDay) {
+		this.birthDay = birthDay;
+	}
+
+
+	public int getBirthMonth() {
+		return birthMonth;
+	}
+
+
+	public void setBirthMonth(int birthMonth) {
+		this.birthMonth = birthMonth;
+	}
+
+
+	public int getBirthYear() {
+		return birthYear;
+	}
+
+
+	public void setBirthYear(int birthYear) {
+		this.birthYear = birthYear;
 	}
 }

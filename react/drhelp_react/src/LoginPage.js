@@ -130,10 +130,6 @@ class LoginPage extends React.Component {
 	
 	render () {
 		
-		
-
-		
-
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
@@ -141,15 +137,6 @@ class LoginPage extends React.Component {
 					<FormControl type="password" placeholder="Password" id='tb_password'/>
 					<input type="submit" value="Submit">
 					</input>
-					{/*
-					<Button 	
-						variant="primary" 
-						type="submit" 
-						onClick={this.handleLogIn}
-					>
-						Submit
-					</Button>
-					*/}
 				</form>
 			</div>
 		)
