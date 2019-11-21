@@ -3,25 +3,61 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import com.ftn.dr_help.model.enums.RoleEnum;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-public class RegistrationRequestPOJO implements Serializable {
+
+@Entity
+public class UserRequestPOJO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String email;
-	private String firstName;
-	private String lastName;
-	private String address;
-	private String city;
-	private String state;
-	private String phoneNumber;
+	
+	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
-	private RoleEnum role;
+	
+	@Column(name = "password", nullable = false)
+	private String password;
+	
+	@Column(name = "email", nullable = false)
+	private String email;
+	
+	@Column(name = "firstName", nullable = false)
+	private String firstName;
+	
+	@Column(name = "lastName", nullable = false)
+	private String lastName;
+	
+	@Column(name = "address", nullable = false)
+	private String address;
+	
+	@Column(name = "city", nullable = false)
+	private String city;
+	
+	@Column(name = "state", nullable = false)
+	private String state;
+	
+	@Column(name = "phoneNumber", nullable = false)
+	private String phoneNumber;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column (name = "birthday", nullable = false)
 	private Calendar birthday;
+	
+	@Column (name = "insuranceNumber", nullable = false)
 	private Long insuranceNumber;
+	
+	public UserRequestPOJO() {
+		
+	}
 	
 	public String getEmail() {
 		return email;
@@ -71,12 +107,6 @@ public class RegistrationRequestPOJO implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public RoleEnum getRole() {
-		return role;
-	}
-	public void setRole(RoleEnum role) {
-		this.role = role;
-	}
 	public Calendar getBirthday() {
 		return birthday;
 	}
@@ -91,6 +121,14 @@ public class RegistrationRequestPOJO implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	

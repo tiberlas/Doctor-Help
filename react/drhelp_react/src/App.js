@@ -15,8 +15,11 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       userRole: 'guest', 
-      userId: 1
+      userId: 1,
+      currentUrl: window.location.href.split('=')[0]
     }
+
+    this.confirmRegistration = this.confirmRegistration.bind(this)
   }
 
   setDoctor () {
@@ -54,11 +57,38 @@ class App extends Component {
     })
   }
 
-  
+  confirmRegistration = () => {
+    console.log("bingo")
+    fetch('http://localhost:8080/api/patients/confirmAccount', {
+      method: 'put',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify( {
+          email: window.location.href.split('=')[1]
+      })
+     }).then(response => response.json()).then(console.log("done"))
+
+  }
 
   render() {
 
-   
+    console.log("href " + this.state.currentUrl)
+    if(this.state.currentUrl === 'http://localhost:3000/activate') {
+      console.log("bingo")
+    fetch('http://localhost:8080/api/patients/confirmAccount', {
+      method: 'put',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify( {
+          email: window.location.href.split('=')[1]
+      })
+     }).then(response => response.json()).then(console.log("done"))
+        return (
+          <div> 
+            
+            <h2> Your account has been confirmed. Click the <a href="http://localhost:3000/"> link </a> 
+            to log in with your credentials. </h2>
+        </div>
+        )
+    }
       return (
         <div>
           <BrowserRouter >
@@ -81,7 +111,8 @@ class App extends Component {
 				</div>
       );
     
-  }
+
+}
 }
 
 export default App;
