@@ -13,7 +13,8 @@ class ClinicAdminContextProvider extends Component {
             city: this.props.admin.city,
             state: this.props.admin.state,
             phoneNumber: this.props.admin.phoneNumber,
-            birthday: this.props.admin.birthday
+            birthday: this.props.admin.birthday,
+            clinicId: this.props.admin.clinicId
         }
     }
 
@@ -28,7 +29,8 @@ class ClinicAdminContextProvider extends Component {
                     city: this.props.admin.city,
                     state: this.props.admin.state,
                     phoneNumber: this.props.admin.phoneNumber,
-                    birthday: this.props.admin.birthday
+                    birthday: this.props.admin.birthday,
+                    clinicId: this.props.admin.clinicId
                 }
             })
         }

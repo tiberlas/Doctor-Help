@@ -7,14 +7,6 @@ import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 class ClinicAdminHeader extends Component {
     static contextType = ClinicAdminContext
 
-    // componentDidMount() {
-    //     fetch('http://localhost:8080/api/clinicAdmins/'+this.context.admin.id+'/name', { method: "GET" })
-    //     .then(responce => responce.json())
-    //     .then(responce => {
-    //         this.setState({name: responce.firstName + ' ' + responce.lastName})
-    //     });
-    // }
-
     render() { 
         return ( 
         <Navbar bg="light" expand="lg">
@@ -28,7 +20,9 @@ class ClinicAdminHeader extends Component {
                 <Nav.Link>
                     <NavLink exact to = '/clinic+administrator/rooms'  >rooms</NavLink>
                 </Nav.Link>
-                <Nav.Link >medical staff</Nav.Link>
+                <Nav.Link>
+                    <NavLink exact to='/clinic+administrator/medical+staff'>medical staff</NavLink>
+                </Nav.Link>
             </Nav>
         </Navbar.Collapse>
         </Navbar>);

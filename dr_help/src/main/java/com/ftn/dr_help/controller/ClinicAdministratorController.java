@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
@@ -108,5 +109,16 @@ public class ClinicAdministratorController {
 			return new ResponseEntity<ClinicAdminProfileDTO>(ret, HttpStatus.OK);
 		}
 		
+		@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
+			boolean ret = clinicAdministratorService.changePassword(passwords);
+			
+			if(ret) {
+				return new ResponseEntity<String>("changed", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<String>("not changed", HttpStatus.NOT_ACCEPTABLE);
+			}
+			
+		}  
 	
 }

@@ -6,6 +6,8 @@ import ClinicAdminProfile from './ClinicAdminProfile';
 import { UserContext } from '../../context/UserContextProvider'
 import ClinicAdminChangeProfile from './ClinicAdminChangeProfile';
 import ClinicAdminContextProvider from '../../context/ClinicAdminContextProvider';
+import ClinicAdminMedicalStaff from './ClinicAdminMedicalStaff';
+import ClinicAdminChangePassword from './ClinicAdminChangePassword';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -17,7 +19,8 @@ class ClinicAdministrator extends Component {
             city: "",
             state: "",
             phoneNumber: "",
-            birthday: ""
+            birthday: "",
+            clinicId: 1
     }
 
 
@@ -39,13 +42,14 @@ class ClinicAdministrator extends Component {
                     city: json.city,
                     state: json.state,
                     phoneNumber: json.phoneNumber,
-                    birthday: json.birthday
+                    birthday: json.birthday,
+                    clinicId: json.clinicId
                 })
             })
     }
 
     render() {
-        var admin = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday} 
+        var admin = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId} 
         return (
              <div>
                 <ClinicAdminContextProvider admin={admin}>
@@ -57,6 +61,8 @@ class ClinicAdministrator extends Component {
                     <Route exact path="/clinic+administrator/profile" ><ClinicAdminProfile /> </Route>
                     <Route exact path="/clinic+administrator/profile/change" ><ClinicAdminChangeProfile  handleUpdate={this.handleClinicAdmin}/> </Route>
                     <Route exact path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
+                    <Route exact path='/clinic+administrator/medical+staff'> <ClinicAdminMedicalStaff /> </Route>
+                    <Route exact path='/clinic+administrator/profile/change/password'> <ClinicAdminChangePassword /> </Route>
                 </Switch>
                 </div>
                 </ClinicAdminContextProvider>

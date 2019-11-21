@@ -8,10 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
+import com.ftn.dr_help.validation.ProfileValidation;
+import com.ftn.dr_help.validation.ProfileValidationInterface;
 
 @Service
 public class ClinicAdministratorService {
@@ -59,29 +62,30 @@ public class ClinicAdministratorService {
 		if(current == null)
 			return new ClinicAdminProfileDTO();
 		
-		//treba validacija
-		if(admin.getFirstName() != null && admin.getFirstName() != "")
+		ProfileValidationInterface validate = new ProfileValidation();
+		
+		if(validate.isValidName(admin.getFirstName()))
 			current.setFirstName(admin.getFirstName());
 		
-		if(admin.getLastName() != null && admin.getLastName() != "")
+		if(validate.isValidName(admin.getLastName()))
 			current.setLastName(admin.getLastName());
 		
-		if(admin.getEmail() != null && admin.getEmail() != "")
+		if(validate.isValidEmail(admin.getEmail()))
 			current.setEmail(admin.getEmail());
 		
-		if(admin.getPhoneNumber() != null && admin.getPhoneNumber() != "")
+		if(validate.isValidPhoneNumber(admin.getPhoneNumber()))
 			current.setPhoneNumber(admin.getPhoneNumber());
 		
-		if(admin.getCity() != null && admin.getCity() != "")
+		if(validate.isValidPlace(admin.getCity()))
 			current.setCity(admin.getCity());
 		
-		if(admin.getState() != null && admin.getState() != "")
+		if(validate.isValidPlace(admin.getState()))
 			current.setState(admin.getState());
 		
-		if(admin.getAddress() != null && admin.getAddress() != "")
+		if(validate.isValidPlace(admin.getAddress()))
 			current.setAddress(admin.getAddress());
 		
-		if(admin.getBirthday() != null)
+		if(validate.isValidDate(admin.getBirthday()))
 			current.setBirthday(admin.getBirthday());
 		
 		clinicAdministratorRepository.save(current);
@@ -97,5 +101,19 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.save(admin);
 	}
 	
-
+	public boolean changePassword(ChangePasswordDTO password) {
+		ClinicAdministratorPOJO finded = clinicAdministratorRepository.findById(password.getId()).orElseGet(null);
+		
+		if(finded == null)
+			return false;
+		
+		if(finded.getPassword().equals(password.getOldPassword())) {
+			finded.setPassword(password.getNewPassword());
+			clinicAdministratorRepository.save(finded);
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

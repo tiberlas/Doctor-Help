@@ -65,6 +65,11 @@ class ClinicAdminProfile extends Component {
                         change profile
                     </NavLink>
                 </div>
+                <div>
+                    <NavLink to = '/clinic+administrator/profile/change/password'>
+                        change password
+                    </NavLink>
+                </div>
             </div>
 
 
