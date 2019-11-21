@@ -1,27 +1,29 @@
-package com.ftn.dr_help.model.pojo;
+package com.ftn.dr_help.dto;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
-import com.ftn.dr_help.model.enums.RoleEnum;
+public class RegistrationRequestDTO {
 
-public class UserRequestPOJO implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private String email;
+	private String password;
 	private String firstName;
 	private String lastName;
 	private String address;
 	private String city;
 	private String state;
 	private String phoneNumber;
-	private Long id;
-	private RoleEnum role;
-	private Calendar birthday;
 	private Long insuranceNumber;
+	private Long id;
+	private Calendar birthday;
+	
+	public RegistrationRequestDTO (String email, String password, String firstName, String lastName, 
+				String address, String city, String state, String phoneNumber, Calendar birthday, Long insuranceNumber) {
+		this.email = email;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
 	
 	public String getEmail() {
 		return email;
@@ -71,12 +73,6 @@ public class UserRequestPOJO implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public RoleEnum getRole() {
-		return role;
-	}
-	public void setRole(RoleEnum role) {
-		this.role = role;
-	}
 	public Calendar getBirthday() {
 		return birthday;
 	}
@@ -89,9 +85,14 @@ public class UserRequestPOJO implements Serializable {
 	public void setInsuranceNumber(Long insuranceNumber) {
 		this.insuranceNumber = insuranceNumber;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+
+
+	public String getPassword() {
+		return password;
 	}
-	
-	
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

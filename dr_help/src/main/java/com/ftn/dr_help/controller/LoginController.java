@@ -81,6 +81,9 @@ public class LoginController {
 			retVal.setId(clinicAdministratorResponse.getId ());
 			retVal.setUserRole(clinicAdministratorResponse.getRole());
 			
+			System.out.println(loginRequest.getEmail() + "   " + loginRequest.getPassword());
+			
+			
 			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
 		}
 		

@@ -6,6 +6,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Switch} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
+import RegistrationPage from './components/RegistrationPage';
 
 class App extends Component {
   
@@ -57,6 +58,13 @@ class App extends Component {
 
     if (!this.state.loggedIn) {
       return (
+        /*
+        <div>
+          <RegistrationPage>
+            
+          </RegistrationPage>
+        </div>
+        */
         <div className="App">
             <LoginPage 
               loggedIn={this.state.loggedIn}
@@ -68,6 +76,7 @@ class App extends Component {
               setLoginPatient={() => this.setPatient ()}
             />
         </div>
+        
       );
     }
     else {
