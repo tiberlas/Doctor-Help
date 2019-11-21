@@ -26,9 +26,6 @@ import com.ftn.dr_help.model.enums.RoleEnum;
 @Table(name = "ClinicAdministrator")
 public class ClinicAdministratorPOJO implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -72,17 +69,9 @@ public class ClinicAdministratorPOJO implements Serializable{
 	private ClinicPOJO clinic;
 	
 	
-//	@PostConstruct
-//	public void init() {
-//		clinic.setClinicAdminList(new ArrayList<>());
-//	}
-//	
-	
 	public ClinicAdministratorPOJO() {
 		super();
 	}
-	
-
 	
 	public ClinicAdministratorPOJO(String password, String email,
 			String firstName, String lastName, String address, String city,
@@ -100,8 +89,8 @@ public class ClinicAdministratorPOJO implements Serializable{
 		this.birthday = birthday;
 	}
 
-
-
+	
+	
 	public Long getId() {
 		return id;
 	}

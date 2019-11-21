@@ -10,8 +10,8 @@ class UserContextProvider extends Component {
         }
     }
 
-    updateValue = (key, value) => {
-        this.setState ({[key]: value})
+    updateValue = (value_id, value_role) => {
+        this.setState ({user:{ id: value_id, role: value_role}})
     }
 
     render() {

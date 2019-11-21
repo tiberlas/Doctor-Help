@@ -3,9 +3,6 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 
-import DatePicker from 'react-datepicker';
-
-
 class RegistrationPage extends React.Component {
 
 	
@@ -17,6 +14,7 @@ class RegistrationPage extends React.Component {
 			alert ("Both instances of the password must be the same");
 			return;
 		}
+
 
 		var dateInput = document.getElementById ('tb_birthday').value;
 		var dateSegments = dateInput.split ('/');
@@ -72,7 +70,6 @@ class RegistrationPage extends React.Component {
 		}
 		alert ("The date format must be: dd/mm/yyyy");
 
-		
 	}
 
 

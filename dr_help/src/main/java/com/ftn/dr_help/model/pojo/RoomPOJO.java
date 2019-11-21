@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "room")
 public class RoomPOJO implements Serializable{
@@ -37,19 +39,47 @@ public class RoomPOJO implements Serializable{
 	@Column(name = "number", nullable = false)
 	private int number;
 	
-	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@Column(name = "proceduresTypes", nullable = false)
-	private List<ProceduresTypePOJO> procedurasTypes = null;
+	@Column(name="deleted", nullable= false)
+	private boolean deleted;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	ProceduresTypePOJO procedurasTypes;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private ClinicPOJO clinic;
 	
 	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<AppointmentPOJO> appointments;
+	private List<AppointmentPOJO> appointmentList;
 	
 	public RoomPOJO() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.deleted = false;
+		this.appointmentList = new ArrayList<AppointmentPOJO>();
+	}
+	
+	public RoomPOJO(Long id, @NotBlank String name, @NotBlank int number, ProceduresTypePOJO procedurasTypes, ClinicPOJO clinic) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.number = number;
+		this.deleted = false;
+		this.procedurasTypes = procedurasTypes;
+		this.clinic = clinic;
+		this.appointmentList = new ArrayList<AppointmentPOJO>();
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	public List<AppointmentPOJO> getAppointments() {
+		return appointmentList;
+	}
+	public void setAppointments(List<AppointmentPOJO> appointments) {
+		this.appointmentList = appointments;
 	}
 	public Long getId() {
 		return id;
@@ -69,10 +99,10 @@ public class RoomPOJO implements Serializable{
 	public void setNumber(int number) {
 		this.number = number;
 	}
-	public List<ProceduresTypePOJO> getProcedurasTypes() {
+	public ProceduresTypePOJO getProcedurasTypes() {
 		return procedurasTypes;
 	}
-	public void setProcedurasTypes(ArrayList<ProceduresTypePOJO> procedurasTypes) {
+	public void setProcedurasTypes(ProceduresTypePOJO procedurasTypes) {
 		this.procedurasTypes = procedurasTypes;
 	}
 	public ClinicPOJO getClinic() {
@@ -81,12 +111,13 @@ public class RoomPOJO implements Serializable{
 	public void setClinic(ClinicPOJO clinic) {
 		this.clinic = clinic;
 	}
-	public void setProcedurasTypes(List<ProceduresTypePOJO> procedurasTypes) {
-		this.procedurasTypes = procedurasTypes;
+	
+	public void addAppointment(AppointmentPOJO appointment) {
+		this.appointmentList.add(appointment);
 	}
 	
-	
-	
-	
+	public void removeAppointment(AppointmentPOJO appointment) {
+		this.appointmentList.remove(appointment);
+	}
 
 }
