@@ -8,7 +8,7 @@ public class LoginResponseDTO {
 	private RoleEnum userRole;
 	
 	public LoginResponseDTO() {
-		super();
+		
 	}
 	
 	public LoginResponseDTO(Long id, RoleEnum userRole) {

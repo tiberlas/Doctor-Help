@@ -1,16 +1,84 @@
 package com.ftn.dr_help.service;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.PatientRepository;
+import com.ftn.dr_help.repository.UserRequestRepository;
 
 @Service
 public class PatientService {
 	
 	@Autowired
+	@Qualifier("patientRepository")
 	private PatientRepository patientRepository;
 	
+	@Autowired
+	@Qualifier("userRequestRepository")
+	private UserRequestRepository userRequestRepository;
 	
+	
+	public List<UserRequestPOJO> findAllRequests() {
+		return userRequestRepository.findAll();
+	}
+	
+	public UserRequestPOJO findByEmail(String email) {
+		return userRequestRepository.findByEmail(email);
+	}
+	
+	
+	public PatientPOJO findPatientByEmail(String email) {
+		return patientRepository.findByEmail(email);
+	}
+	
+	
+	public void remove(UserRequestPOJO user) {
+		userRequestRepository.deleteById(user.getId());
+	}
+	
+	public PatientPOJO save(PatientPOJO patient) {
+		return patientRepository.save(patient);
+	}
+	
+	
+	public List<PatientPOJO> findAll() {
+		return patientRepository.findAll();
+	}
+	
+	public void createAllRequests() {
+		UserRequestPOJO u1 = new UserRequestPOJO();
+
+		u1.setEmail("nikolic.dusan.dey@gmail.com");
+		u1.setFirstName("Duki");
+		u1.setLastName("Kuki");
+		u1.setAddress("C dom");
+		u1.setCity("Djurvidek");
+		u1.setState("Djurbija");
+		u1.setPhoneNumber("BoyOhBOYOHBOOOY");
+		u1.setBirthday(Calendar.getInstance());
+		u1.setInsuranceNumber(123456789L);
+		u1.setPassword("ohb0y");
+		userRequestRepository.save(u1);
+		
+		UserRequestPOJO u2 = new UserRequestPOJO();
+		u2.setEmail("TestB0i@yahoo.com");
+		u2.setFirstName("Miroslav");
+		u2.setLastName("Krleža");
+		u2.setAddress("F dom");
+		u2.setCity("Zapadni istočnjak");
+		u2.setState("Arabija");
+		u2.setPhoneNumber("123312");
+		u2.setBirthday(Calendar.getInstance());
+		u2.setInsuranceNumber(987654312L);
+		u2.setPassword("ohb0y");
+		
+		userRequestRepository.save(u2);
+	}
 	
 }

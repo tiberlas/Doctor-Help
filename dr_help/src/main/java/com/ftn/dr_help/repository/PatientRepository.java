@@ -5,11 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 
-@Repository
-public interface PatientRepository extends JpaRepository<PatientPOJO, Long>{
 
-	PatientPOJO findOneByEmail (String email);
 	
-	
+@Repository("patientRepository")
+public interface PatientRepository extends JpaRepository<PatientPOJO, Long> {
 
+	public PatientPOJO save(PatientPOJO patient);
+	
+	public PatientPOJO findByEmail(String email);
+	public PatientPOJO findOneByEmail (String email);
 }

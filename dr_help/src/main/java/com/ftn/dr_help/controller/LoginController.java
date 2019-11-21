@@ -36,10 +36,10 @@ public class LoginController {
 		PatientPOJO patientResponse =  loginService.getPatientLoginResponse(loginRequest.getEmail());
 		if (patientResponse != null) {
 			if (!patientResponse.getPassword ().equals (loginRequest.getPassword())) {
-				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
 			}
 			if (!patientResponse.isActivated()) {
-				return new ResponseEntity<> (null, HttpStatus.PRECONDITION_REQUIRED);
+				return new ResponseEntity<> (HttpStatus.PRECONDITION_REQUIRED);
 			}
 			LoginResponseDTO retVal = new LoginResponseDTO ();
 			retVal.setId (patientResponse.getId ());
@@ -51,7 +51,7 @@ public class LoginController {
 		DoctorPOJO doctorResponse = loginService.getDoctorLoginResponse (loginRequest.getEmail());
 		if (doctorResponse != null) {
 			if (!doctorResponse.getPassword ().equals (loginRequest.getPassword ())) {
-				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
 			}
 			LoginResponseDTO retVal = new LoginResponseDTO ();
 			retVal.setId(doctorResponse.getId ());
@@ -63,7 +63,7 @@ public class LoginController {
 		CentreAdministratorPOJO centreAdministratorResponse = loginService.getCentreAdministratorLoginResponse (loginRequest.getEmail ());
 		if (centreAdministratorResponse != null) {
 			if (!centreAdministratorResponse.getPassword ().equals (loginRequest.getPassword ())) {
-				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
 			}
 			LoginResponseDTO retVal = new LoginResponseDTO ();
 			retVal.setId(centreAdministratorResponse.getId ());
@@ -75,7 +75,7 @@ public class LoginController {
 		ClinicAdministratorPOJO clinicAdministratorResponse = loginService.getClinicAdministratorLoginResponse (loginRequest.getEmail ());
 		if (clinicAdministratorResponse != null) {
 			if (!clinicAdministratorResponse.getPassword ().equals (loginRequest.getPassword ())) {
-				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
 			}
 			LoginResponseDTO retVal = new LoginResponseDTO ();
 			retVal.setId(clinicAdministratorResponse.getId ());
@@ -90,7 +90,7 @@ public class LoginController {
 		NursePOJO nurseResponse = loginService.getNurseLoginResponse (loginRequest.getEmail ());
 		if (nurseResponse != null) {
 			if (!nurseResponse.getPassword ().equals (loginRequest.getPassword ())) {
-				return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
 			}
 			LoginResponseDTO retVal = new LoginResponseDTO ();
 			retVal.setId(nurseResponse.getId ());
@@ -99,7 +99,7 @@ public class LoginController {
 			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
 		}
 		
-		return new ResponseEntity<> (null, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
 		
 	}
 	

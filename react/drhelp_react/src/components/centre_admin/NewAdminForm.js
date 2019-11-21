@@ -34,7 +34,7 @@ class NewAdminForm extends React.Component {
         axios.get(`http://localhost:8080/api/clinics/all`)
       .then(res => {
         const clinicList = res.data
-        this.setState({ clinicList });
+        this.setState({ clinicList })
         //const items = clinicList.map(item => )
         // console.log(res.data[0].address)
         // console.log(this.state.clinicList[0].name)
@@ -50,6 +50,10 @@ class NewAdminForm extends React.Component {
         }
 
       })
+    }
+
+    componentDidUnmount() {
+        console.log("unmount")
     }
 
     handleSubmit = (event) => {
@@ -112,7 +116,7 @@ class NewAdminForm extends React.Component {
     render() {
         return (
             <div> 
-            <h1>> New administrator </h1>
+            <h1>>New administrator </h1>
             <Form onSubmit = {this.handleSubmit}>
             <Form.Group controlId="formAdminEmail">
                 <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange}/>

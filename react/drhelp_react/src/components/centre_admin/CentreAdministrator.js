@@ -4,6 +4,7 @@ import CentreAdminHeader from './CentreAdminHeader'
 import {Route, Switch} from "react-router-dom"
 import NewClinicForm from './NewClinicForm'
 import NewAdminForm from './NewAdminForm'
+import PatientRequests from './PatientRequests';
 
 class CenterAdministrator extends Component {
     state = {  }
@@ -17,7 +18,8 @@ class CenterAdministrator extends Component {
 
                 <Switch>
                     <Route path="/clinic/add" ><NewClinicForm /> </Route>
-                    <Route path="/clinic/add+admin" ><NewAdminForm /> </Route>
+                    <Route path="/admin/add" ><NewAdminForm /> </Route>
+                    <Route path = "/admin/requests"> <PatientRequests/> </Route>
                 </Switch>
             </div>
           );
