@@ -80,18 +80,18 @@ class LoginPage extends React.Component {
 				.then (response =>  {
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
-						this.context.updateValue ("id", response.id);
-						this.context.updateValue ("role", response.userRole);
+						this.context.updateValue (response.id, response.userRole);
+						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "DOCTOR") {
 						this.props.setLoginDoctor ()
-						this.context.updateValue ("id", response.id);
-						this.context.updateValue ("role", response.userRole);
+						this.context.updateValue (response.id, response.userRole);
+						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "NURSE") {
 						this.props.setLoginNurse ()
-						this.context.updateValue ("id", response.id);
-						this.context.updateValue ("role", response.userRole);
+						this.context.updateValue (response.id, response.userRole);
+						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "CLINICAL_ADMINISTRATOR") {
 						this.props.setLoginClinicAdmin ()
@@ -100,8 +100,8 @@ class LoginPage extends React.Component {
 					}
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {
 						this.props.setLoginCentreAdmin ()
-						this.context.updateValue ("id", response.id);
-						this.context.updateValue ("role", response.userRole);
+						this.context.updateValue ( response.id, response.userRole);
+						//this.context.updateValue ("role", response.userRole);
 					}
 				});
 			}
