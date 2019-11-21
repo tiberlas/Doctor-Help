@@ -94,29 +94,21 @@ class LoginPage extends React.Component {
 					.then (response =>  {
 						if (response.userRole === "PATIENT") {
 							this.props.setLoginPatient ();
-							
-							
 						}
 						else if (response.userRole === "DOCTOR") {
 							this.props.setLoginDoctor ()
 						}
+						else if (response.userRole === "NURSE") {
+							this.props.setLoginNurse ()
+						}
+						else if (response.userRole === "CLINICAL_ADMINISTRATOR") {
+							this.props.setLoginClinicAdmin ()
+						}
+						else if (response.userRole === "CENTRE_ADMINISTRATOR") {
+							this.props.setLoginCentreAdmin ()
+						}
 					});
 
-					let loginDataIsValid = true;
-
-					if (loginDataIsValid) {
-						return (
-							<div>
-								<TempHome userRole={this.props.userRole} userId = "1"/>			
-							</div>
-						)
-					}
-					else {
-						alert ('Invalid user id');
-						this.setState (() => ({
-							loggedIn: false
-						}))
-					}
 				}
 				else {
 					alert ('Password too short');

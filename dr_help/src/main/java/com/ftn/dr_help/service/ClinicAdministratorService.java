@@ -16,8 +16,6 @@ import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 @Service
 public class ClinicAdministratorService {
 
-	@Autowired
-	@Qualifier("clinicAdminPostgre")
 	private ClinicAdministratorRepository clinicAdministratorRepository;
 	
 	public ClinicAdministratorPOJO findOne(Long id) {

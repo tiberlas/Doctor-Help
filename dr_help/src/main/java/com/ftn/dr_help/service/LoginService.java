@@ -48,7 +48,7 @@ public class LoginService {
 	}
 	
 	public ClinicAdministratorPOJO getClinicAdministratorLoginResponse (String email) {
-		ClinicAdministratorPOJO retVal = null; // clinicAdministratorRepository.findOneByEmail(email);
+		ClinicAdministratorPOJO retVal = clinicAdministratorRepository.findOneByEmail(email);
 		return retVal;
 	}
 	
