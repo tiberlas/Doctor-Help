@@ -17,12 +17,14 @@ class CentreAdminHeader extends Component {
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
                 <Nav.Link >
-                    <Link exact to = '/clinic/add' >add clinic</Link>
+                    <Link exact to = '/clinic/add' >New clinic</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <Link exact to = '/clinic/add+admin'  >add admin</Link>
+                    <Link exact to = '/admin/add'  >New admin</Link>
                 </Nav.Link>
-                <Nav.Link >medical staff</Nav.Link>   
+                <Nav.Link >
+                    <Link exact to = '/admin/requests'> Patient requests </Link>
+                </Nav.Link>   
             </Nav>
         </Navbar.Collapse>
         </Navbar>

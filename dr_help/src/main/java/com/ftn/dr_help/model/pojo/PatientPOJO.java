@@ -146,12 +146,7 @@ public class PatientPOJO implements Serializable{
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
 	}
-	public long getInsuranceNumber() {
-		return insuranceNumber;
-	}
-	public void setInsuranceNumber(long insuranceNumber) {
-		this.insuranceNumber = insuranceNumber;
-	}
+	
 	public RoleEnum getRole() {
 		return role;
 	}
@@ -188,6 +183,20 @@ public class PatientPOJO implements Serializable{
 	}
 	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
+	}
+	public Long getInsuranceNumber() {
+		return insuranceNumber;
+	}
+	@Override
+	public String toString() {
+		return "PatientPOJO [password=" + password + ", email=" + email
+				+ ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", address=" + address + ", city=" + city + ", state="
+				+ state + ", phoneNumber=" + phoneNumber + ", isActivated="
+				+ isActivated + ", id=" + id + ", role=" + role + ", birthday="
+				+ birthday + ", insuranceNumber=" + insuranceNumber
+				+ ", healthRecord=" + healthRecord + ", operationList="
+				+ operationList + ", appointments=" + appointments + "]";
 	}
 	
 }
