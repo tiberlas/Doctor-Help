@@ -17,6 +17,12 @@ public class LoginResponseDTO {
 		this.userRole = userRole;
 	}
 	
+	public LoginResponseDTO(LoginResponseDTO loginResponse) {
+		super ();
+		this.id = loginResponse.id;
+		this.userRole = loginResponse.getUserRole();
+	}
+
 	public Long getId() {
 		return id;
 	}

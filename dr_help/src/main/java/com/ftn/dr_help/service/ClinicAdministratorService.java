@@ -18,9 +18,8 @@ import com.ftn.dr_help.validation.ProfileValidationInterface;
 
 @Service
 public class ClinicAdministratorService {
-
+	
 	@Autowired
-	@Qualifier("clinicAdminPostgre")
 	private ClinicAdministratorRepository clinicAdministratorRepository;
 	
 	public ClinicAdministratorPOJO findOne(Long id) {

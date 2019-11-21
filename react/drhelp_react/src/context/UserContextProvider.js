@@ -9,10 +9,15 @@ class UserContextProvider extends Component {
             role: this.props.role
         }
     }
+
+    updateValue = (value_id, value_role) => {
+        this.setState ({user:{ id: value_id, role: value_role}})
+    }
+
     render() {
 
         return ( 
-            <UserContext.Provider value = {{...this.state}}>
+            <UserContext.Provider value = {{...this.state, updateValue: this.updateValue}}>
                 {this.props.children}
             </UserContext.Provider>
          )

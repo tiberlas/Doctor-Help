@@ -5,6 +5,9 @@ import ClinicAdministrator from './clinic_admin/ClinicAdministrator';
 import {UserContext} from '../context/UserContextProvider'
 import CenterAdministrator from './centre_admin/CentreAdministrator.js';
 import Doctor from './doctor/Doctor.jsx'
+import Patient from './patient/Patient'
+import LoginPage from '../LoginPage.js';
+
 
 class TempHome extends React.Component {
 
@@ -18,9 +21,11 @@ class TempHome extends React.Component {
             return(<ClinicAdministrator />)
         else if(this.props.role === 'doctor')
             return(<Doctor />)
+        else if(this.props.role === 'patient')
+            return(<Patient />)
         else
             return(
-                <div><h1>THIS SHOULD NOT BE SHOWN</h1></div>
+                <div><LoginPage /></div>
             )
 
         return( <Footer />)

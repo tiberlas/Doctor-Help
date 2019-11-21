@@ -13,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -67,7 +66,7 @@ public class PatientPOJO implements Serializable{
 	private RoleEnum role = RoleEnum.PATIENT;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column (name = "date", nullable = false)
+	@Column (name = "birthday", nullable = false)
 	private Calendar birthday;
 	
 	@Column (name = "insuranceNumber", nullable = false)

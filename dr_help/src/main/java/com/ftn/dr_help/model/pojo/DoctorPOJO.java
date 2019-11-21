@@ -45,9 +45,8 @@ public class DoctorPOJO implements Serializable{
 	@Column(name = "password", nullable = false)
 	private String password;
 	
-	@NotBlank
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
+	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.DOCTOR;
 	
 	@NotBlank

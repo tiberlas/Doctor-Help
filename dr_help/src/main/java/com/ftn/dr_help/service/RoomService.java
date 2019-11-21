@@ -15,7 +15,6 @@ import com.ftn.dr_help.repository.RoomRepository;
 public class RoomService {
 
 	@Autowired
-	@Qualifier("RoomRepository")
 	private RoomRepository repository;
 	
 	public List<RoomDTO> findAll(Long clinicID) {

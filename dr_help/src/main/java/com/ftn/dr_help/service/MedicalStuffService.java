@@ -17,11 +17,9 @@ import com.ftn.dr_help.repository.NurseRepository;
 public class MedicalStuffService {
 
 	@Autowired
-	@Qualifier("NurseRepository")
 	private NurseRepository nurseRepository;
 	
 	@Autowired
-	@Qualifier("DoctorRepository")
 	private DoctorRepository doctorRepository;
 
 	public List<MedicalStuffDTO> findAll(Long clinic_id) {

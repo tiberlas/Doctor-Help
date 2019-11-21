@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 
-@Repository("RoomRepository")
+@Repository
 public interface RoomRepository extends JpaRepository <RoomPOJO, Long>{ 
 
 	List<RoomPOJO> findAllByClinic_id(Long id);

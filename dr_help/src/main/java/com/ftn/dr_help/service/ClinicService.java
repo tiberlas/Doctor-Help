@@ -17,7 +17,6 @@ import com.ftn.dr_help.repository.ClinicRepositorium;
 public class ClinicService {
 
 	@Autowired
-	@Qualifier("postgre")
 	private ClinicRepositorium repository;
 	
 	public ClinicPOJO findOne(Long id) {

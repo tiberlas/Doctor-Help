@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 
-@Repository("postgre")
+@Repository
 public interface ClinicRepositorium extends JpaRepository<ClinicPOJO, Long> {
 	
 }
