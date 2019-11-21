@@ -66,7 +66,6 @@ class LoginPage extends React.Component {
 		
 		if (email.value.length > 3) {
 			if  (password.value.length > 3) {
-				alert (email.value);
 				fetch ('http://localhost:8080/api/login', {
 					method: 'post',
 					headers: {'Content-Type' : 'application/json'},
@@ -77,7 +76,6 @@ class LoginPage extends React.Component {
 				})
 				.then (response => response.json())
 				.then (response =>  {
-										alert ('dva');
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
 					}
