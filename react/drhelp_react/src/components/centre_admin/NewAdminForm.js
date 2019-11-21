@@ -116,7 +116,7 @@ class NewAdminForm extends React.Component {
     render() {
         return (
             <div> 
-            <h1>> New administrator </h1>
+            <h1>>New administrator </h1>
             <Form onSubmit = {this.handleSubmit}>
             <Form.Group controlId="formAdminEmail">
                 <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange}/>
