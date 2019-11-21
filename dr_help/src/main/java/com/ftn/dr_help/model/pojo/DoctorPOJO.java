@@ -24,6 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 @Entity
@@ -44,9 +45,8 @@ public class DoctorPOJO implements Serializable{
 	@Column(name = "password", nullable = false)
 	private String password;
 	
-	@NotBlank
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
+	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.DOCTOR;
 	
 	@NotBlank
@@ -79,10 +79,11 @@ public class DoctorPOJO implements Serializable{
 	
 	@NotBlank
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "birthDay", nullable = false)
+	@Column(name = "birthday", nullable = false)
 	private Calendar birthday;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private ClinicPOJO clinic;
 	
 	@OneToMany (mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

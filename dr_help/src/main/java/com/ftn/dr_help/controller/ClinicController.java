@@ -63,7 +63,17 @@ public class ClinicController {
 		return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/id={id}")
+	public ResponseEntity<ClinicDTO> getOneCLinic(@PathVariable("id") Long id) {
+		ClinicDTO finded = clinicService.findOneDTO(id);
+		
+		if(finded == null)
+			return new ResponseEntity<ClinicDTO>(HttpStatus.NOT_FOUND);
+		
+		return new ResponseEntity<ClinicDTO>(finded,  HttpStatus.OK);
+	} 
 	
+	//FUCK PREBACENO U ROOMS CONTROLLER
 	@GetMapping(value = "/{id}/rooms")
 	public ResponseEntity<ClinicRoomListDTO> getCentreAdministratorsName(@PathVariable("id") Long id) {
 		System.out.println("ROOMS");

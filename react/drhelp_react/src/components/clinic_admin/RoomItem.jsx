@@ -19,7 +19,7 @@ class RoomItem extends Component {
         return ( 
             <span>
                 <h3>{this.state.name}</h3>&nbsp;
-                {this.state.number}&nbsp;
+                number: {this.state.number}&nbsp;
                 <button onClick={this.onDelite}>delete</button>
             </span>
          );

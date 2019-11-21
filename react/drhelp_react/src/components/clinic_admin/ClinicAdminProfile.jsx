@@ -1,44 +1,11 @@
 import React, { Component } from 'react';
-import ClinicAdminChangeProfile from './ClinicAdminChangeProfile';
+import {NavLink} from 'react-router-dom'
+import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 
-class ClinicAdminBlank extends Component {
-    constructor(props) {
-        super(props)
 
-        this.state = { 
-            id: this.props.id,
-            email: "",
-            firstName: "imenko",
-            lastName: "prezimenic",
-            address: "adresa",
-            city: "Boston",
-            state: "USA",
-            phoneNumber: "023/555-555",
-            birthday: "1999-03-01T23:00:00.000+0000",
-            show: false
-        }
-    }
+class ClinicAdminProfile extends Component {
 
-    componentDidMount() {
-        fetch("http://localhost:8080/api/clinicAdmins/"+ this.state.id + "/profile", { method: "GET" }) //this.state.id
-            .then(response => response.json())
-            .then(json => {
-                this.setState({
-                    email: json.email,
-                    firstName: json.firstName,
-                    lastName: json.lastName,
-                    address: json.address,
-                    city: json.city,
-                    state: json.state,
-                    phoneNumber: json.phoneNumber,
-                    birthday: json.birthday
-                })
-            })
-    }
-
-    ChangeProfile = () => {
-        this.setState({show: !this.state.show}) 
-    }
+    static contextType = ClinicAdminContext;
 
     render() { 
         return ( 
@@ -47,57 +14,62 @@ class ClinicAdminBlank extends Component {
                 <div>
                 <span>
                     <label>first name:</label>
-                    <label>{this.state.firstName}</label>
+                    <label>{this.context.admin.firstName}</label>
                 </span>
                 </div>
                 <div>
                 <span>
                     <label>last name:</label>
-                    <label>{this.state.lastName}</label>
+                    <label>{this.context.admin.lastName}</label>
                 </span>
                 </div>
                 <div>
                 <span>
                     <label>email:</label>
-                    <label>{this.state.email}</label>
+                    <label>{this.context.admin.email}</label>
                 </span>
                 </div>
                 <div>
                 <span>
                     <label>address:</label>
-                    <label>{this.state.address}</label>
+                    <label>{this.context.admin.address}</label>
                 </span>
                 </div>
                 <div>
                 <span>
                     <label>city:</label>
-                    <label>{this.state.city}</label>
+                    <label>{this.context.admin.city}</label>
                 </span>
                 </div>
                 <div>
                 <span>
                     <label>state:</label>
-                    <label>{this.state.state}</label>
+                    <label>{this.context.admin.state}</label>
                 </span>
                 </div>
                 <div>
                 <span>
                     <label>phoneNumber:</label>
-                    <label>{this.state.phoneNumber}</label>
+                    <label>{this.context.admin.phoneNumber}</label>
                 </span>
                 </div>
                 <div>
                 <span>
                     <label>birthday:</label>
-                    <label>{this.state.birthday}</label>
+                    <label>{this.context.admin.birthday}</label>
                 </span>
                 </div>
 
                 <div>
-                    <button onClick={this.ChangeProfile}>change profile</button>
+                    <NavLink to = '/clinic+administrator/profile/change'>
+                        change profile
+                    </NavLink>
                 </div>
-                 
-                {this.state.show && <ClinicAdminChangeProfile /> }
+                <div>
+                    <NavLink to = '/clinic+administrator/profile/change/password'>
+                        change password
+                    </NavLink>
+                </div>
             </div>
 
 
@@ -105,4 +77,4 @@ class ClinicAdminBlank extends Component {
     }
 }
  
-export default ClinicAdminBlank;
+export default ClinicAdminProfile;

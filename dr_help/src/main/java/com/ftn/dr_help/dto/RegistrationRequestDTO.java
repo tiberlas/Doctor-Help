@@ -2,60 +2,29 @@ package com.ftn.dr_help.dto;
 
 import java.util.Calendar;
 
-import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
+public class RegistrationRequestDTO {
 
-public class ClinicAdminProfileDTO {
-
-	private Long id;
 	private String email;
+	private String password;
 	private String firstName;
 	private String lastName;
 	private String address;
 	private String city;
 	private String state;
 	private String phoneNumber;
+	private Long insuranceNumber;
+	private Long id;
 	private Calendar birthday;
-	private Long clinicId;
 	
-	public ClinicAdminProfileDTO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public ClinicAdminProfileDTO(Long id, String email, String firstName, String lastName, String address, String city,
-			String state, String phoneNumber, Calendar birthday, Long clinicId) {
-		super();
-		this.id = id;
+	public RegistrationRequestDTO (String email, String password, String firstName, String lastName, 
+				String address, String city, String state, String phoneNumber, Calendar birthday, Long insuranceNumber) {
 		this.email = email;
+		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.phoneNumber = phoneNumber;
-		this.birthday = birthday;
-		this.clinicId = clinicId;
-	}
-
-	public ClinicAdminProfileDTO(ClinicAdministratorPOJO admin) {
-		this.id = admin.getId();
-		this.email = admin.getEmail();
-		this.firstName = admin.getFirstName();
-		this.lastName = admin.getLastName();
-		this.address = admin.getAddress();
-		this.city = admin.getCity();
-		this.state = admin.getState();
-		this.phoneNumber = admin.getPhoneNumber();
-		this.birthday = admin.getBirthday();
-		this.clinicId = admin.getClinic().getId();
 	}
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
 	public String getEmail() {
 		return email;
 	}
@@ -98,18 +67,32 @@ public class ClinicAdminProfileDTO {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public Calendar getBirthday() {
 		return birthday;
 	}
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
 	}
-	public Long getClinicId() {
-		return clinicId;
+	public Long getInsuranceNumber() {
+		return insuranceNumber;
 	}
-	public void setClinicId(Long clinicId) {
-		this.clinicId = clinicId;
+	public void setInsuranceNumber(Long insuranceNumber) {
+		this.insuranceNumber = insuranceNumber;
 	}
-	
-	
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

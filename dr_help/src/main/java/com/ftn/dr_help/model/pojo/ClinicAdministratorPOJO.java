@@ -1,10 +1,8 @@
 package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,9 +26,6 @@ import com.ftn.dr_help.model.enums.RoleEnum;
 @Table(name = "ClinicAdministrator")
 public class ClinicAdministratorPOJO implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -62,7 +57,7 @@ public class ClinicAdministratorPOJO implements Serializable{
 	private String phoneNumber;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
+	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.CLINICAL_ADMINISTRATOR;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -74,17 +69,9 @@ public class ClinicAdministratorPOJO implements Serializable{
 	private ClinicPOJO clinic;
 	
 	
-//	@PostConstruct
-//	public void init() {
-//		clinic.setClinicAdminList(new ArrayList<>());
-//	}
-//	
-	
 	public ClinicAdministratorPOJO() {
 		super();
 	}
-	
-
 	
 	public ClinicAdministratorPOJO(String password, String email,
 			String firstName, String lastName, String address, String city,
@@ -102,8 +89,8 @@ public class ClinicAdministratorPOJO implements Serializable{
 		this.birthday = birthday;
 	}
 
-
-
+	
+	
 	public Long getId() {
 		return id;
 	}

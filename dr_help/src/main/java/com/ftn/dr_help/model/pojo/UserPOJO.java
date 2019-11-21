@@ -1,34 +1,38 @@
 package com.ftn.dr_help.model.pojo;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
-import com.ftn.dr_help.model.enums.RoleEnum;
+public class UserPOJO {
 
-public class UserRequestPOJO implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String email;
 	private String firstName;
 	private String lastName;
+	private String email;
+	private String password;
 	private String address;
 	private String city;
 	private String state;
 	private String phoneNumber;
-	private Long id;
-	private RoleEnum role;
 	private Calendar birthday;
-	private Long insuranceNumber;
 	
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
+	public UserPOJO(String firstName, String lastName, String email, String password, String address, String city,
+			String state, String phoneNumber, Calendar birthday) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNumber = phoneNumber;
+		this.birthday = birthday;
 	}
+	
+	public UserPOJO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -40,6 +44,18 @@ public class UserRequestPOJO implements Serializable {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getAddress() {
 		return address;
@@ -65,33 +81,13 @@ public class UserRequestPOJO implements Serializable {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public RoleEnum getRole() {
-		return role;
-	}
-	public void setRole(RoleEnum role) {
-		this.role = role;
-	}
 	public Calendar getBirthday() {
 		return birthday;
 	}
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
 	}
-	public Long getInsuranceNumber() {
-		return insuranceNumber;
-	}
-	public void setInsuranceNumber(Long insuranceNumber) {
-		this.insuranceNumber = insuranceNumber;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+	
 	
 	
 }

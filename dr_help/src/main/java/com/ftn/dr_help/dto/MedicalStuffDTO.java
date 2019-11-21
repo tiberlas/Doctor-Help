@@ -2,9 +2,11 @@ package com.ftn.dr_help.dto;
 
 import java.util.Calendar;
 
-import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
+import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 
-public class ClinicAdminProfileDTO {
+public class MedicalStuffDTO {
 
 	private Long id;
 	private String email;
@@ -15,15 +17,43 @@ public class ClinicAdminProfileDTO {
 	private String state;
 	private String phoneNumber;
 	private Calendar birthday;
-	private Long clinicId;
+	private RoleEnum role;
 	
-	public ClinicAdminProfileDTO() {
+	public MedicalStuffDTO(NursePOJO nurse) {
+		super();
+		this.id = nurse.getId();
+		this.email = nurse.getEmail();
+		this.firstName = nurse.getFirstName();
+		this.lastName = nurse.getLastName();
+		this.address = nurse.getAddress();
+		this.city = nurse.getCity();
+		this.state = nurse.getState();
+		this.phoneNumber = nurse.getPhoneNumber();
+		this.birthday = nurse.getBirthday();
+		this.role = RoleEnum.NURSE;
+	}
+	
+	public MedicalStuffDTO(DoctorPOJO doctor) {
+		super();
+		this.id = doctor.getId();
+		this.email = doctor.getEmail();
+		this.firstName = doctor.getFirstName();
+		this.lastName = doctor.getLastName();
+		this.address = doctor.getAddress();
+		this.city = doctor.getCity();
+		this.state = doctor.getState();
+		this.phoneNumber = doctor.getPhoneNumber();
+		this.birthday = doctor.getBirthday();
+		this.role = RoleEnum.DOCTOR;
+	}
+	
+	public MedicalStuffDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	public ClinicAdminProfileDTO(Long id, String email, String firstName, String lastName, String address, String city,
-			String state, String phoneNumber, Calendar birthday, Long clinicId) {
+	
+	public MedicalStuffDTO(Long id, String email, String firstName, String lastName, String address, String city,
+			String state, String phoneNumber, Calendar birthday, RoleEnum role) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -34,20 +64,7 @@ public class ClinicAdminProfileDTO {
 		this.state = state;
 		this.phoneNumber = phoneNumber;
 		this.birthday = birthday;
-		this.clinicId = clinicId;
-	}
-
-	public ClinicAdminProfileDTO(ClinicAdministratorPOJO admin) {
-		this.id = admin.getId();
-		this.email = admin.getEmail();
-		this.firstName = admin.getFirstName();
-		this.lastName = admin.getLastName();
-		this.address = admin.getAddress();
-		this.city = admin.getCity();
-		this.state = admin.getState();
-		this.phoneNumber = admin.getPhoneNumber();
-		this.birthday = admin.getBirthday();
-		this.clinicId = admin.getClinic().getId();
+		this.role = role;
 	}
 	
 	public Long getId() {
@@ -104,12 +121,13 @@ public class ClinicAdminProfileDTO {
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
 	}
-	public Long getClinicId() {
-		return clinicId;
+	public RoleEnum getRole() {
+		return role;
 	}
-	public void setClinicId(Long clinicId) {
-		this.clinicId = clinicId;
+	public void setRole(RoleEnum role) {
+		this.role = role;
 	}
+	
 	
 	
 }

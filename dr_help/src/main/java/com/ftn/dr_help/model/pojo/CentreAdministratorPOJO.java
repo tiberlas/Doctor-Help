@@ -53,7 +53,7 @@ public class CentreAdministratorPOJO implements Serializable{
 	private String phoneNumber;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
+	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.CENTRE_ADMINISTRATOR;
 	
 	@Temporal(TemporalType.TIMESTAMP)

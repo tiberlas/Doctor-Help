@@ -6,6 +6,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Switch} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
+import RegistrationPage from './components/RegistrationPage';
 
 class App extends Component {
   
@@ -53,36 +54,33 @@ class App extends Component {
     })
   }
 
+  
+
   render() {
 
-    if (!this.state.loggedIn) {
-      return (
-        <div className="App">
-            <LoginPage 
-              loggedIn={this.state.loggedIn}
-              userRole={this.state.userRole}
-              setLoginDoctor={() => this.setDoctor ()}
-              setLoginNurse={() => this.setNurse ()}
-              setLoginCentreAdmin={() => this.setCentreAdmin ()}
-              setLoginClinicAdmin={() => this.setClinicAdmin ()}
-              setLoginPatient={() => this.setPatient ()}
-            />
-        </div>
-      );
-    }
-    else {
+   
       return (
         <div>
           <BrowserRouter >
             <Switch>
                 <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
-					        <TempHome role = {this.state.userRole} />	
+                 {!this.state.loggedIn && <LoginPage 
+                    loggedIn={this.state.loggedIn}
+                    userRole={this.state.userRole}
+                    setLoginDoctor={() => this.setDoctor ()}
+                    setLoginNurse={() => this.setNurse ()}
+                    setLoginCentreAdmin={() => this.setCentreAdmin ()}
+                    setLoginClinicAdmin={() => this.setClinicAdmin ()}
+                    setLoginPatient={() => this.setPatient ()}
+                  />}
+                  {this.state.loggedIn &&
+                  <TempHome role = {this.state.userRole} />	}
                 </UserContextProvider>		
             </Switch>
           </BrowserRouter>
 				</div>
       );
-    }
+    
   }
 }
 

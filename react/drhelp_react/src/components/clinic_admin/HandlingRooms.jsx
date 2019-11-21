@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RoomItem from './RoomItem';
-import { UserContext } from '../../context/UserContextProvider'
+import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 
 class HandlingRooms extends Component {
     
@@ -8,14 +8,14 @@ class HandlingRooms extends Component {
         rooms: []
     }
 
-    static contextType = UserContext
+    static contextType = ClinicAdminContext
 
     componentDidMount() {
-        fetch('http://localhost:8080/api/clinics/'+this.context.user.id+'/rooms', { method: "GET" })
+        fetch('http://localhost:8080/api/rooms/clinic='+this.context.admin.clinicId+'/all', { method: "GET" })
         .then(response => response.json())
         .then(json => {
             this.setState({
-                rooms: json.rooms
+                rooms: json
             })
         })
 
