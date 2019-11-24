@@ -2,12 +2,19 @@ import React from 'react';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
+import Axios from 'axios';
 
 class RegistrationPage extends React.Component {
 
-	
-	handleRegister = () => {
-		
+	constructor () {
+    	super()
+    	this.state = { iHaveWaited: false }
+  	}
+
+
+	handleRegister = async (event) => {
+		event.preventDefault ();
+
 		let pass1 = document.getElementById ('tb_pass1').value;
 		let pass2 = document.getElementById ('tb_pass2').value;
 		if (pass1 !== pass2) {
@@ -33,8 +40,9 @@ class RegistrationPage extends React.Component {
 						if (!Number.isNaN (day)) {
 							if (!Number.isNaN (month)) {
 								if (!Number.isNaN (year)) {
+					
 									let email = document.getElementById ('tb_email').value;
-									let pass = document.getElementById ('tb_pass1')
+									let pass = document.getElementById ('tb_pass1').value;
 									let name = document.getElementById ('tb_name').value;
 									let last_name = document.getElementById ('tb_last_name').value;
 									let address = document.getElementById ('tb_address').value;
@@ -43,24 +51,34 @@ class RegistrationPage extends React.Component {
 									let phone = document.getElementById ('tb_phone').value;
 									let insurance = document.getElementById ('tb_insurance').value;
 
+									if (!Number.isNaN (insurance)) {
+										alert ('Insurance number must be a number!');
+										return;
+									}
+
 									fetch ('http://localhost:8080/api/register', {
 										method: 'post', 
 										headers: {'Content-Type' : 'application/json'}, 
 										body: JSON.stringify ({
 											email: email, 
 											password: pass, 
-											first_name: name, 
-											last_name: last_name, 
+											firstName: name, 
+											lastName: last_name, 
 											address: address, 
-											town: town, 
-											country: country, 
-											phone: phone, 
-											insurance: insurance, 
+											city: town, 
+											state: country, 
+											phoneNumber: phone, 
+											insuranceNumber: insurance, 
 											day: day, 
 											month: month, 
 											year: year
 										})
+									})
+									.then (data => data.json ())
+									.then (function (data) {
+										alert (data.response)
 									});
+								
 								}
 							}
 						}
@@ -68,8 +86,10 @@ class RegistrationPage extends React.Component {
 				}
 			}
 		}
-		alert ("The date format must be: dd/mm/yyyy");
-
+		else {
+			alert ('Date must be in format dd/mm/yyyy');
+		}
+		
 	}
 
 
@@ -78,7 +98,6 @@ class RegistrationPage extends React.Component {
 		return (
 			<div>
 				<form onSubmit={this.handleRegister}>
-					
 					<FormControl required type="text" placeholder="Email" id="tb_email"/>
 					<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
 					<FormControl required type="password" placeholder="Repeat password" id="tb_pass2"/>

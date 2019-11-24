@@ -91,33 +91,32 @@ class App extends Component {
         )
     }
 
+
+   
       return (
         <div>
-          <RegistrationPage></RegistrationPage>
-        </div>
+          <BrowserRouter >
+            <Switch>
+                <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
+                 {!this.state.loggedIn && 
+                    <LoginPage 
+                    loggedIn={this.state.loggedIn}
+                    userRole={this.state.userRole}
+                    setLoginDoctor={() => this.setDoctor ()}
+                    setLoginNurse={() => this.setNurse ()}
+                    setLoginCentreAdmin={() => this.setCentreAdmin ()}
+                    setLoginClinicAdmin={() => this.setClinicAdmin ()}
+                    setLoginPatient={() => this.setPatient ()}
+                    />
+                    
+                  }
+                  {this.state.loggedIn &&
+                  <TempHome role = {this.state.userRole} />	}
+                </UserContextProvider>		
+            </Switch>
+          </BrowserRouter>
+				</div>
       );
-   
-      // return (
-      //   <div>
-      //     <BrowserRouter >
-      //       <Switch>
-      //           <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
-      //            {!this.state.loggedIn && <LoginPage 
-      //               loggedIn={this.state.loggedIn}
-      //               userRole={this.state.userRole}
-      //               setLoginDoctor={() => this.setDoctor ()}
-      //               setLoginNurse={() => this.setNurse ()}
-      //               setLoginCentreAdmin={() => this.setCentreAdmin ()}
-      //               setLoginClinicAdmin={() => this.setClinicAdmin ()}
-      //               setLoginPatient={() => this.setPatient ()}
-      //             />}
-      //             {this.state.loggedIn &&
-      //             <TempHome role = {this.state.userRole} />	}
-      //           </UserContextProvider>		
-      //       </Switch>
-      //     </BrowserRouter>
-			// 	</div>
-      // );
     
 
 }

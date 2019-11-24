@@ -3,7 +3,10 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import TempHome from './components/TempHome.js';
-import {UserContext} from './context/UserContextProvider'
+import {UserContext} from './context/UserContextProvider';
+import {Route, Switch} from 'react-router-dom';
+import RegistrationPage from './components/RegistrationPage.js';
+import { Link } from 'react-router-dom';
 
 
 
@@ -132,12 +135,43 @@ class LoginPage extends React.Component {
 		
 		return (
 			<div>
-				<form onSubmit={this.handleSubmit}>
+				<switch>
+					<Route path = "/login">
+						<form onSubmit={this.handleSubmit}>
+							<FormControl type="text" placeholder="Email" id="tb_email"/>
+							<FormControl type="password" placeholder="Password" id='tb_password'/>
+							<input type="submit" value="Submit">
+							</input>
+						</form>
+						<Link to="/register">
+							<Button >Register</Button>
+						</Link>
+					</Route>
+					<Route path = "/register">
+						<RegistrationPage></RegistrationPage>
+						<Link to="/login">
+							<Button>Login</Button>
+						</Link>
+					</Route>
+				</switch>
+
+{/* 
+<Link to="/login">
+  <Button renderAs="button">
+    <span>Login</span>
+  </Button>
+</Link> */}
+
+
+
+
+				{/* <form onSubmit={this.handleSubmit}>
 					<FormControl type="text" placeholder="Email" id="tb_email"/>
 					<FormControl type="password" placeholder="Password" id='tb_password'/>
 					<input type="submit" value="Submit">
 					</input>
 				</form>
+				<Button>Register</Button> */}
 			</div>
 		)
 	}

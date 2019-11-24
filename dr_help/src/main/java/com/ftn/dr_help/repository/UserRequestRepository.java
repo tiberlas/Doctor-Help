@@ -8,7 +8,8 @@ import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 @Repository("userRequestRepository")
 public interface UserRequestRepository extends JpaRepository<UserRequestPOJO, Long> {
 	
-	
 	UserRequestPOJO findByEmail(String email);
+	
+	UserRequestPOJO findByInsuranceNumber (Long insuranceNumber);
 	
 }
