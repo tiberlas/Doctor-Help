@@ -29,17 +29,6 @@ public class UserRequestController {
 
 		UserResponseDTO retVal = new UserResponseDTO ();
 
-		System.out.println("Email: " + userRequest.getEmail());
-		System.out.println("Password: " + userRequest.getPassword());
-		System.out.println("First name: " + userRequest.getFirstName());
-		System.out.println("Last name: " + userRequest.getLastName());
-		System.out.println("Address: " + userRequest.getAddress());
-		System.out.println("City: " + userRequest.getCity());
-		System.out.println("State: " + userRequest.getState());
-		System.out.println("Phone number: " + userRequest.getPhoneNumber());
-		System.out.println("Insurance number: " + userRequest.getInsuranceNumber());
-		System.out.println("Birthday: " + userRequest.getDay() + "." + userRequest.getMonth() + "." + userRequest.getYear());
-
 		if (userRequestService.patientExists(userRequest.getEmail()) ) {
 			retVal.setResponse("An account under this email address already exists. ");
 			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
@@ -74,7 +63,7 @@ public class UserRequestController {
 		}
 		
 		Calendar birthday = Calendar.getInstance();
-		birthday.set(userRequest.getYear(), userRequest.getMonth(), userRequest.getDay());
+		birthday.setTime(userRequest.getBirthday());
 		UserRequestPOJO validRequest = new UserRequestPOJO ();
 		validRequest.setEmail(userRequest.getEmail());
 		validRequest.setPassword(userRequest.getPassword());

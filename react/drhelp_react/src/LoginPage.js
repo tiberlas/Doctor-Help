@@ -138,7 +138,7 @@ class LoginPage extends React.Component {
 				<switch>
 					<Route path = "/login">
 						<form onSubmit={this.handleSubmit}>
-							<FormControl type="text" placeholder="Email" id="tb_email"/>
+							<FormControl type="email" placeholder="Email" id="tb_email"/>
 							<FormControl type="password" placeholder="Password" id='tb_password'/>
 							<input type="submit" value="Submit">
 							</input>

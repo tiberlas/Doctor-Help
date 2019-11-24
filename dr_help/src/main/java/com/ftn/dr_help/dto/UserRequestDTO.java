@@ -1,9 +1,11 @@
 package com.ftn.dr_help.dto;
 
+import java.util.Date;
+
 public class UserRequestDTO {
 
 	public UserRequestDTO(String email, String password, String firstName, String lastName, String address, String city,
-			String state, String phoneNumber, String insuranceNumber, int day, int month, int year) {
+			String state, String phoneNumber, String insuranceNumber, Date birthday) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -14,9 +16,7 @@ public class UserRequestDTO {
 		this.state = state;
 		this.phoneNumber = phoneNumber;
 		this.insuranceNumber = insuranceNumber;
-		this.day = day;
-		this.month = month;
-		this.year = year;
+		this.birthday = birthday;
 	}
 
 	public UserRequestDTO() {
@@ -41,11 +41,7 @@ public class UserRequestDTO {
 	
 	private String insuranceNumber;
 	
-	private int day;
-	
-	private int month;
-	
-	private int year;
+	private Date birthday;
 
 	
 	
@@ -121,28 +117,12 @@ public class UserRequestDTO {
 		this.insuranceNumber = insuranceNumber;
 	}
 
-	public int getDay() {
-		return day;
+	public Date getBirthday() {
+		return birthday;
 	}
 
-	public void setDay(int day) {
-		this.day = day;
-	}
-
-	public int getMonth() {
-		return month;
-	}
-
-	public void setMonth(int month) {
-		this.month = month;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 	
 }
