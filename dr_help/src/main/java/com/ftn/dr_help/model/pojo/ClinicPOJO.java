@@ -13,7 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 
@@ -30,34 +33,40 @@ public class ClinicPOJO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
+	
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@NotBlank
+	
 	@Column(name = "address", nullable = false)
 	private String address;
 	
-	@NotBlank
-	@Column(name = "description", nullable = true)
+	
+	@Column(name = "description", nullable = false)
 	private String description;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<ClinicAdministratorPOJO> clinicAdminList;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<NursePOJO> nurseList;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<DoctorPOJO> doctorList;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<RoomPOJO> roomList;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<ExaminationReportPOJO> reportList;
 	
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<ProceduresTypePOJO> procedureTypesList;
 	
 	
@@ -70,6 +79,12 @@ public class ClinicPOJO implements Serializable {
 		procedureTypesList = new  ArrayList<ProceduresTypePOJO>();
 		
 	}
+	
+//	@Autowired
+//	public ClinicPOJO(@Lazy listClinicAdministrator<ClinicAdministratorPOJO> list) {
+//		this.clinicAdminList = list;
+//		
+//	}
 
 
 	public Long getId() {
@@ -121,6 +136,7 @@ public class ClinicPOJO implements Serializable {
 	}
 
 
+	@Autowired
 	public void setClinicAdminList(
 			List<ClinicAdministratorPOJO> clinicAdminList) {
 		this.clinicAdminList = clinicAdminList;

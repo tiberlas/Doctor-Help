@@ -17,15 +17,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 @Entity
 @Table(name = "ClinicAdministrator")
 public class ClinicAdministratorPOJO implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -57,20 +57,21 @@ public class ClinicAdministratorPOJO implements Serializable{
 	private String phoneNumber;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
+	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.CLINICAL_ADMINISTRATOR;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar birthday;
 	
+	
+	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ClinicPOJO clinic;
+	
 	
 	public ClinicAdministratorPOJO() {
 		super();
 	}
-	
-
 	
 	public ClinicAdministratorPOJO(String password, String email,
 			String firstName, String lastName, String address, String city,
@@ -88,8 +89,8 @@ public class ClinicAdministratorPOJO implements Serializable{
 		this.birthday = birthday;
 	}
 
-
-
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -160,14 +161,12 @@ public class ClinicAdministratorPOJO implements Serializable{
 		return serialVersionUID;
 	}
 
-
-
 	public ClinicPOJO getClinic() {
 		return clinic;
 	}
 
 
-
+	@Autowired
 	public void setClinic(ClinicPOJO clinic) {
 		this.clinic = clinic;
 	}

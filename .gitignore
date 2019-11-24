@@ -33,3 +33,5 @@ hs_err_pid*
 
 #react ignore
 react/drhelp_react/node_modues/*
+react/drhelp_react/package.json
+react/drhelp_react/package-lock.json

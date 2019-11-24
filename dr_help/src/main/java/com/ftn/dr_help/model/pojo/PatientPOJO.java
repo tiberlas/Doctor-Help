@@ -13,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -55,6 +54,9 @@ public class PatientPOJO implements Serializable{
 	@Column (name = "phoneNumber", nullable = false)
 	private String phoneNumber;
 	
+	@Column (name = "isActivated", nullable = false)
+	private boolean isActivated;
+	
 	@Id
 	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -64,7 +66,7 @@ public class PatientPOJO implements Serializable{
 	private RoleEnum role = RoleEnum.PATIENT;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column (name = "date", nullable = false)
+	@Column (name = "birthday", nullable = false)
 	private Calendar birthday;
 	
 	@Column (name = "insuranceNumber", nullable = false)
@@ -143,12 +145,7 @@ public class PatientPOJO implements Serializable{
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
 	}
-	public long getInsuranceNumber() {
-		return insuranceNumber;
-	}
-	public void setInsuranceNumber(long insuranceNumber) {
-		this.insuranceNumber = insuranceNumber;
-	}
+	
 	public RoleEnum getRole() {
 		return role;
 	}
@@ -179,6 +176,26 @@ public class PatientPOJO implements Serializable{
 	}
 	public void setAppointments(List<AppointmentPOJO> appointments) {
 		this.appointments = appointments;
+	}
+	public boolean isActivated() {
+		return isActivated;
+	}
+	public void setActivated(boolean isActivated) {
+		this.isActivated = isActivated;
+	}
+	public Long getInsuranceNumber() {
+		return insuranceNumber;
+	}
+	@Override
+	public String toString() {
+		return "PatientPOJO [password=" + password + ", email=" + email
+				+ ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", address=" + address + ", city=" + city + ", state="
+				+ state + ", phoneNumber=" + phoneNumber + ", isActivated="
+				+ isActivated + ", id=" + id + ", role=" + role + ", birthday="
+				+ birthday + ", insuranceNumber=" + insuranceNumber
+				+ ", healthRecord=" + healthRecord + ", operationList="
+				+ operationList + ", appointments=" + appointments + "]";
 	}
 	
 }
