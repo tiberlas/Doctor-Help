@@ -1,2 +1,0 @@
-INSERT INTO clinic_administrator(firstName, lastName, password, role, email, phone_number, state, city, address, birthday) 
-						VALUES('BORISLAV','BORISAVLJEVIC', '1234', 'CLINICAL_ADMINISTRATOR', 'admin@admin', '06*-555-555', 'RS', 'NS', 'DOM', 2016-02-05 );

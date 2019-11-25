@@ -1,4 +1,4 @@
-package com.ftn.dr_help;
+package com.ftn.dr_help.config;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

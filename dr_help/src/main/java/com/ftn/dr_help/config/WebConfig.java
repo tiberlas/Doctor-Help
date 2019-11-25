@@ -1,4 +1,4 @@
-package com.ftn.dr_help;
+package com.ftn.dr_help.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -11,6 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
  
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        registry.addMapping("/**").allowedOrigins("http://localhost:3000");
     }
 }
