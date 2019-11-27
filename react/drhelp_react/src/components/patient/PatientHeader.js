@@ -1,10 +1,29 @@
 import React, { Component } from 'react';
+import Nav from 'react-bootstrap/Nav';
+import { PatientContext } from '../../context/PatientContextProvider';
+import { Navbar } from 'react-bootstrap';
+import {NavLink} from 'react-router-dom';
 
 class PatientHeader extends Component {
     state = {  }
+
+    static contectType = PatientContext;
+
     render() { 
         return (  
-            <div>header</div>
+            <Navbar bg="light" expane="lg">
+                <Navbar.Brand>
+                    Placeholder Name
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="patient-navbar">
+                        <Nav.Link>
+                            <NavLink exact to='/patient/profile'>Profile</NavLink>
+                        </Nav.Link>
+                    </Nav>
+                </Navbar.Collapse> 
+            </Navbar>
         );
     }
 }

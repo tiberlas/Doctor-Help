@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.PatientRepository;
@@ -79,6 +80,28 @@ public class PatientService {
 		u2.setPassword("ohb0y");
 		
 		userRequestRepository.save(u2);
+	}
+	
+	public PatientProfileDTO getPatientProfile (Long id) {
+		PatientProfileDTO retVal = new PatientProfileDTO ();
+		PatientPOJO pojo = patientRepository.getOne(id);
+		
+		if (pojo == null) {
+			return null;
+		}
+		
+		retVal.setId(pojo.getId());
+		retVal.setEmail(pojo.getEmail());
+		retVal.setFirstName(pojo.getFirstName());
+		retVal.setLastName(pojo.getLastName());
+		retVal.setAddress(pojo.getAddress());
+		retVal.setCity(pojo.getCity());
+		retVal.setState(pojo.getState());
+		retVal.setPhoneNumber(pojo.getPhoneNumber());
+		retVal.setBirthday(pojo.getBirthday());
+		retVal.setInsuranceNumber(pojo.getInsuranceNumber());
+		
+		return retVal;
 	}
 	
 }

@@ -4,9 +4,11 @@ import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter, Switch} from "react-router-dom";
+import {Switch} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
+import PatientProfile from './components/patient/PatientProfile';
 
 class App extends Component {
   
@@ -108,7 +110,7 @@ class App extends Component {
                     setLoginClinicAdmin={() => this.setClinicAdmin ()}
                     setLoginPatient={() => this.setPatient ()}
                     />
-                    
+                    // <PatientProfile></PatientProfile>
                   }
                   {this.state.loggedIn &&
                   <TempHome role = {this.state.userRole} />	}
