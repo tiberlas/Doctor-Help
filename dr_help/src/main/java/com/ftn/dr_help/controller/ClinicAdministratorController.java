@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class ClinicAdministratorController {
 		
 		
 		@PostMapping(value = "/newAdmin", consumes = "application/json")
+		@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminDTO> saveAdmin(@RequestBody ClinicAdminDTO clinicAdminDTO) {
 			System.out.println("works" + clinicAdminDTO.getId() + " " +  clinicAdminDTO.getFirstName() + " " + clinicAdminDTO.getLastName() + " " + clinicAdminDTO.getEmail());
 			ClinicAdministratorPOJO admin = new ClinicAdministratorPOJO();
@@ -62,6 +64,7 @@ public class ClinicAdministratorController {
 		
 
 		@GetMapping(value = "/all")
+		@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 		public ResponseEntity<List<ClinicAdministratorPOJO>> getAllCentreAdministrators() {
 
 			List<ClinicAdministratorPOJO> admins = clinicAdministratorService.findAll();
@@ -74,6 +77,7 @@ public class ClinicAdministratorController {
 		}
 
 		@GetMapping(value = "/{id}/name")
+		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminNameDTO> getClinicAdministratorsName(@PathVariable("id") Long id) {
 			ClinicAdminNameDTO ret = clinicAdministratorService.findOnesName(id);
 			
@@ -85,6 +89,7 @@ public class ClinicAdministratorController {
 		}
 		
 		@GetMapping(value = "/{id}/profile")
+		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> getClinicAdminProfile(@PathVariable("id") Long id) {
 			ClinicAdminProfileDTO ret = clinicAdministratorService.findOneProfile(id);
 			
@@ -97,6 +102,7 @@ public class ClinicAdministratorController {
 				
 
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
+		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody ClinicAdminProfileDTO admin) {
 			
 			System.out.println("PUT: " + admin);
@@ -110,6 +116,7 @@ public class ClinicAdministratorController {
 		}
 		
 		@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
+		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
 			boolean ret = clinicAdministratorService.changePassword(passwords);
 			
