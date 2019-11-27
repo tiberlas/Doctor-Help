@@ -4,6 +4,10 @@ import com.ftn.dr_help.model.enums.RoleEnum;
 
 public class LoginResponseDTO {
 
+	/*
+	 * when successfully logged in sent id, role, JWT 
+	 * */
+	
 	private String jwtToken;
     private Long expiresIn;
 	private Long id;

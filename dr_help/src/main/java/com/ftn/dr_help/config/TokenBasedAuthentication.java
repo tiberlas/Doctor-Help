@@ -5,6 +5,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class TokenBasedAuthentication extends AbstractAuthenticationToken {
 
+	/*
+	 * this class is used in JwtRequestFilter and it encapsulate authority in JWT
+	 * */
+	
 	private static final long serialVersionUID = 1L;
 
 	private String token;

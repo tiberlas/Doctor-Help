@@ -13,7 +13,7 @@ import com.ftn.dr_help.model.enums.RoleEnum;
 
 public class UserPOJO implements UserDetails{
 
-	/**
+	/*
 	 * base for JWT 
 	 */
 	private static final long serialVersionUID = 1L;

@@ -52,6 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 					// kreiraj autentifikaciju
 					TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
 					authentication.setToken(authToken);
+					authentication.setAuthenticated(true);
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
 			}

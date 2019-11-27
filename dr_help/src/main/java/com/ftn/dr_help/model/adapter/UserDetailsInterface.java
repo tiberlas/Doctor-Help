@@ -9,6 +9,11 @@ import com.ftn.dr_help.model.pojo.UserPOJO;
 
 public interface UserDetailsInterface {
 
+	/*
+	 * this adapter converts specific user from data base to an abstraction of an user
+	 * it is used for JWT to encapsulate all different users 
+	 * */
+	
 	UserPOJO getUser(CentreAdministratorPOJO pojo);
 	UserPOJO getUser(ClinicAdministratorPOJO pojo);
 	UserPOJO getUser(DoctorPOJO pojo);

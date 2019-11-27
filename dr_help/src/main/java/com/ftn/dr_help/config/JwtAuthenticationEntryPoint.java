@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
 	/*
-	 * if rejects every unauthenticated request and sends error code 401
+	 * it rejects every unauthenticated request and sends error code 401
 	 * */
 	
 	private static final long serialVersionUID = -7858869558953243875L;

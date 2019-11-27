@@ -20,6 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
+	/*
+	 * classa sluzi za konfiguraciju autorizacije. Ima filtere koji analiziraju HTTP zahtev 
+	 * i odredjuje koje zahteve ce da pusti, a koje ne. 
+	 * */
+	
 	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	

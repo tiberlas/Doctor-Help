@@ -23,6 +23,12 @@ import com.ftn.dr_help.repository.PatientRepository;
 @Service
 public class JwtUserDetailsService implements UserDetailsService{
 
+	/*
+	 * when requesting to log in it has only e-mail and password of user
+	 * this seeks all repositories and with UserDetailsAdapter encapsulates the user
+	 * and sends the user (if finded) to JwtRequestFilter
+	 * */
+	
 	@Autowired
 	private CentreAdministratorRepository centreAdminRepository;
 

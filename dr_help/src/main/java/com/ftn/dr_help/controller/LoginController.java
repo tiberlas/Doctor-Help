@@ -27,6 +27,11 @@ import com.ftn.dr_help.model.pojo.UserPOJO;
 @CrossOrigin (origins="http://localhost:3000")
 public class LoginController {
 	
+	/*
+	 * login uses JWT and this class has no need for a service
+	 * it uses JWT's service
+	 * */
+	
 //	@Autowired
 //	private LoginService loginService;
 	

@@ -20,6 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtil {
 	/*
 	 *  This class is responsible for creating and validation JWT
+	 *  AHTUNG: in JWT username is actually e-mail address!
 	 * */
 	
 	@Value("${jwt.secret}")
@@ -31,12 +32,14 @@ public class JwtTokenUtil {
 	@Value("somesecret")
 	public String SECRET;
 
+	//when JWT expires in ms
 	@Value("300000")
 	private int EXPIRES_IN;
 
 	@Value("Authorization")
 	private String AUTH_HEADER;
 
+	//when JWT is createt
 	@Autowired
 	TimeProvider timeProvider;
 	
@@ -95,9 +98,9 @@ public class JwtTokenUtil {
 
 	// Funkcija za validaciju JWT tokena
 	public Boolean validateToken(String token, UserDetails userDetails) {
-		UserPOJO user = (UserPOJO) userDetails;
+		//UserPOJO user = (UserPOJO) userDetails;
 		final String username = getUsernameFromToken(token);
-		final Date created = getIssuedAtDateFromToken(token);
+		//final Date created = getIssuedAtDateFromToken(token);
 		
 		return (username != null && username.equals(userDetails.getUsername()));
 	}
