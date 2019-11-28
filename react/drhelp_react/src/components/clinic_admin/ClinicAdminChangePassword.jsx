@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 class ClinicAdminChangePassword extends Component {
     static contextType = ClinicAdminContext
@@ -22,26 +23,16 @@ class ClinicAdminChangePassword extends Component {
             this.setState({error: true})
             return;
         }
-        fetch('http://localhost:8080/api/clinicAdmins/change/password', {
-            method: "PUT",
-            headers: {
-              'Content-Type': 'application/json'},
-            body: JSON.stringify(
-                {
-                    id: this.context.admin.id,
+        axios.put('http://localhost:8080/api/clinicAdmins/change/password', {
                     oldPassword: this.state.oldPassword,
                     newPassword: this.state.newPassword
-                })
-      }).then((response)=> {
+        }).then((response)=> {
+            console.log(response);
             if (response.status !== 200) {
-                throw new Error("Not 200 response")
+                this.setState({errorBack: true});
             } else {
-            
                 this.setState({go_profile: true});
             }
-        }).catch(()=> {
-        
-            this.setState({errorBack: true});
         });
     }
 

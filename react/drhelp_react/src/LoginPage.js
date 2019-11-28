@@ -144,7 +144,7 @@ class LoginPage extends React.Component {
 		
 		return (
 			<div>
-				<switch>
+				<Switch>
 					<Route path = "/login">
 						<form onSubmit={this.handleSubmit}>
 							<FormControl type="email" placeholder="Email" id="tb_email"/>
@@ -162,7 +162,7 @@ class LoginPage extends React.Component {
 							<Button>Login</Button>
 						</Link>
 					</Route>
-				</switch>
+				</Switch>
 
 {/* 
 <Link to="/login">

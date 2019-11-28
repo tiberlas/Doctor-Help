@@ -9,11 +9,13 @@ import {BrowserRouter} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
 import PatientProfile from './components/patient/PatientProfile';
+import interceptor from './Interseptor.js';
+
 
 class App extends Component {
   
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       loggedIn: false,
       userRole: 'guest', 
