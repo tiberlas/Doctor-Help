@@ -86,7 +86,7 @@ public class PatientController {
 	}
 	
 	@GetMapping (value="/{id}/profile")
-	public ResponseEntity<PatientProfileDTO> getPatientProfile (@PathVariable("id") Long id) {
+	public ResponseEntity<PatientProfileDTO> getPatientProfile1 (@PathVariable("id") Long id) {
 		PatientProfileDTO retVal = patientService.getPatientProfile(id);
 		
 		System.out.println("Patient kontroler get proflie " + id);

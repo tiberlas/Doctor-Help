@@ -5,6 +5,7 @@ import { Switch } from 'react-router-dom';
 import PatientProfile from './PatientProfile.js';
 import { UserContext } from '../../context/UserContextProvider.js';
 import PatientContextProvider from '../../context/PatientContextProvider.js';
+import PatientChangeProfile from './PatientChangeProfile';
 
 class Patient extends Component {
     
@@ -67,8 +68,8 @@ class Patient extends Component {
                             <Route exact path="/patient/profile">
                                 <PatientProfile />
                             </Route>
-                            <Route exact path="/">
-                                <p>Some like more text</p>
+                            <Route exact path="/patient/profile/change">
+                                <PatientChangeProfile />
                             </Route>
                         </Switch>
                     </div>

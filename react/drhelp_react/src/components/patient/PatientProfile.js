@@ -10,9 +10,6 @@ class PatientProfile extends Component {
 	render () {
 		return (
 			<div>
-				<p>
-					Patient profile
-				</p>
 				<div>
 					<span>
 						<label>First name: </label>
@@ -68,7 +65,7 @@ class PatientProfile extends Component {
 					</span>
 				</div>
 				<div>
-					<NavLink to = '/clinic+administrator/profile/change'>
+					<NavLink to = '/patient/profile/change'>
 						Change profile
 					</NavLink>
 				</div>
