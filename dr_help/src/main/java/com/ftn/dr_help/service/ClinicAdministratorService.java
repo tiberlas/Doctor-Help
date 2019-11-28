@@ -31,12 +31,12 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.findById(id).orElseGet(null);
 	}
 	
-	public ClinicAdminProfileDTO findOneProfile(Long id) {
-		if(id == null) {
+	public ClinicAdminProfileDTO findOneProfile(String email) {
+		if(email == null) {
 			return null;
 		}
 		
-		ClinicAdministratorPOJO admin = clinicAdministratorRepository.findById(id).orElse(null);
+		ClinicAdministratorPOJO admin = clinicAdministratorRepository.findOneByEmail(email);
 		
 		if(admin == null)
 			return null;
@@ -44,12 +44,12 @@ public class ClinicAdministratorService {
 		return new ClinicAdminProfileDTO(admin);
 	}
 
-	public ClinicAdminNameDTO findOnesName(Long id) {
-		if(id == null) {
+	public ClinicAdminNameDTO findOnesName(String email) {
+		if(email == null) {
 			return null;
 		}
 		
-		ClinicAdministratorPOJO admin = clinicAdministratorRepository.findById(id).orElse(null);
+		ClinicAdministratorPOJO admin = clinicAdministratorRepository.findOneByEmail(email);
 		ClinicAdminNameDTO ret;
 		
 		if(admin == null)

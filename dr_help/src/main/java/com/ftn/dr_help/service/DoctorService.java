@@ -13,12 +13,12 @@ public class DoctorService {
 	@Autowired
 	private DoctorRepository repository;
 	
-	public DoctorProfileDTO findById(Long id) {
-		if(id == null) {
+	public DoctorProfileDTO findByEmail(String email) {
+		if(email == null) {
 			return null;
 		}
 		
-		DoctorPOJO finded = repository.findById(id).orElse(null);
+		DoctorPOJO finded = repository.findOneByEmail(email);
 		
 		if(finded == null) {
 			return null;

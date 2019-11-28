@@ -6,10 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -21,10 +21,12 @@ public class DoctorController {
 	@Autowired
 	private DoctorService service;
 	
-	@GetMapping(value = "/id={id}/profile")
+	@GetMapping(value = "/profile")
 	@PreAuthorize("hasAuthority('DOCTOR')")
-	public ResponseEntity<DoctorProfileDTO> findProfile(@PathVariable("id") Long id) {
-		DoctorProfileDTO ret = service.findById(id);
+	public ResponseEntity<DoctorProfileDTO> findProfile() {
+		String email = CurrentUser.getEmail();
+		
+		DoctorProfileDTO ret = service.findByEmail(email);
 		
 		if(ret == null) {
 			return new ResponseEntity<DoctorProfileDTO>(HttpStatus.NOT_FOUND);
@@ -32,7 +34,5 @@ public class DoctorController {
 		
 		return new ResponseEntity<DoctorProfileDTO>(ret, HttpStatus.OK);
 	}
-	
-	
 	
 }
