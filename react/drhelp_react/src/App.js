@@ -7,6 +7,45 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Switch} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
+import axios from "axios"
+
+//const http = axios.create() 
+
+const interceptor = axios.interceptors.request.use(function(config) {
+  let token = JSON.parse(localStorage.getItem('token'))
+  alert(token)
+  if ( token != null ) {
+   // alert("1token is " + token).then(  axios.interceptors.request.eject(interceptor)).then(  alert("2token is " + token))
+    axios.interceptors.request.eject(interceptor)
+    axios.post('http://localhost:8080/api/refreshToken', {
+
+                    'jwtToken': JSON.parse(localStorage.getItem('token'))
+
+                  }).then(response => {
+                      console.log(response.data.jwtToken)
+                      localStorage.removeItem('token')
+                      localStorage.setItem('token', JSON.stringify(response.data.jwtToken))
+                      alert("set a new token.")
+                      
+                  })
+                  const token = JSON.parse(localStorage.getItem('token'))
+                  config.headers.Authorization = `Bearer ${token}`;
+                  //config.headers.Authorization = 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+  return config;
+  }
+}, function(err) {
+  return Promise.reject(err);
+});
+
+axios.interceptors.response.use(null, function(err) {
+    if ( err.status === 401 ) {
+        localStorage.removeItem('token')
+        window.location.href = 'http://localhost:3000/login'//temp solution
+    }
+    return Promise.reject(err);
+  });
+
+
 
 class App extends Component {
   

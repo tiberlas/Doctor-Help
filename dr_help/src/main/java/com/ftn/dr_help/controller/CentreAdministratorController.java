@@ -47,6 +47,7 @@ public class CentreAdministratorController {
 
 	
 	@PostMapping(value = "/newAdmin", consumes = "application/json")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<CentreAdminDTO> saveAdmin(@RequestBody CentreAdminDTO centreAdminDTO) {
 		System.out.println("works");
 		CentreAdministratorPOJO admin = new CentreAdministratorPOJO();

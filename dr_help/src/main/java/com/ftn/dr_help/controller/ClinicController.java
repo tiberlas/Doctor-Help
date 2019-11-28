@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,18 +29,8 @@ public class ClinicController {
 	private ClinicService clinicService;
 	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<ClinicDTO> saveClinic(@RequestBody ClinicDTO clinicDTO) {
-//		ObjectMapper mapper = new ObjectMapper();
-//		ClinicDTO[] jsonObj = mapper.readValue(clinicDTO, ClinicDTO[].class);
-		
-		System.out.println("works clinicdto " + clinicDTO.getName() + " " + clinicDTO.getDescription() + " "+ clinicDTO.getDescription());
-
-
-//		for (ClinicDTO itr : jsonObj) {
-//		    System.out.println("Val of name is: " + p.getName());
-//		    System.out.println("Val of name is: " + p.getAddress());
-//		}
-		
 		ClinicPOJO clinic = new ClinicPOJO();
 		clinic.setName(clinicDTO.getName());
 		clinic.setAddress(clinicDTO.getAddress());
@@ -51,6 +42,7 @@ public class ClinicController {
 
 	
 	@GetMapping(value = "/all")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<List<ClinicDTO>> getAllClinics() {
 
 		List<ClinicPOJO> clinics = clinicService.findAll();
