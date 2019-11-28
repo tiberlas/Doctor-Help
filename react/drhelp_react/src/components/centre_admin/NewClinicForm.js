@@ -46,16 +46,36 @@ class NewClinicForm extends React.Component {
         //       console.log(res.data);
         //     })
 
+        var token = JSON.parse(localStorage.getItem('token'));
 
-        fetch('http://localhost:8080/api/clinics/newClinic', {
-            method: 'post',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify( {
-                name: this.state.clinicName,
-                address: this.state.clinicAddress,
-                description: this.state.clinicDescription
-            })
-           });
+        axios.post('http://localhost:8080/api/clinics/newClinic', { 
+
+            name: this.state.clinicName,
+            address: this.state.clinicAddress,
+            description: this.state.clinicDescription
+                 })
+                    .then(res => {
+                    console.log(data);
+                })
+
+
+        // fetch('http://localhost:8080/api/clinics/newClinic', {
+        //     method: 'post',
+        //     headers: {'Content-Type':'application/json', 'Authorization': 'Bearer ' + token},
+        //     body: JSON.stringify( {
+        //         name: this.state.clinicName,
+        //         address: this.state.clinicAddress,
+        //         description: this.state.clinicDescription
+        //     })
+        //    }).then(response => {
+        //        if(response.status === 401 || response.status === 403) {
+        //             alert("Session expired, please log in again.")
+        //             localStorage.removeItem('token')
+        //             window.location.href = 'http://localhost:3000/login'
+        //        }
+        //    })
+        
+           
     }
 
     render() {

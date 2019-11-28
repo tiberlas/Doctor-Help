@@ -33,7 +33,7 @@ public class JwtTokenUtil {
 	public String SECRET;
 
 	//when JWT expires in ms
-	@Value("300000")
+	@Value("100000")
 	private int EXPIRES_IN;
 
 	@Value("Authorization")
@@ -90,10 +90,8 @@ public class JwtTokenUtil {
 		return refreshedToken;
 	}
 
-	public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-		final Date created = this.getIssuedAtDateFromToken(token);
-		return (!(this.isCreatedBeforeLastPasswordReset(created, lastPasswordReset))
-				&& (!(this.isTokenExpired(token))));
+	public Boolean canTokenBeRefreshed(String token) {
+		return (!(this.isTokenExpired(token)));
 	}
 
 	// Funkcija za validaciju JWT tokena

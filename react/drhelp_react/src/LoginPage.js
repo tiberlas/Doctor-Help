@@ -81,9 +81,15 @@ class LoginPage extends React.Component {
 				})
 				.then (response => response.json())
 				.then (response =>  {
+
+					localStorage.setItem('token', JSON.stringify(response.jwtToken));
+					var token = JSON.parse(localStorage.getItem('token'));
+					console.log(`Authorization=Bearer ${token}`)
+
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
 						this.context.updateValue (response.id, response.userRole);
+
 						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "DOCTOR") {
@@ -104,6 +110,9 @@ class LoginPage extends React.Component {
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {
 						this.props.setLoginCentreAdmin ()
 						this.context.updateValue ( response.id, response.userRole);
+
+						
+						alert("Token is " + token)
 						//this.context.updateValue ("role", response.userRole);
 					}
 				});
