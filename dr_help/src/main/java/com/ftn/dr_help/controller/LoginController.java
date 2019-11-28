@@ -6,6 +6,7 @@ import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.config.JwtTokenUtil;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
+import com.ftn.dr_help.dto.TokenDTO;
 import com.ftn.dr_help.model.pojo.UserPOJO;
  
 @RestController
@@ -40,6 +42,19 @@ public class LoginController {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	
+	@PostMapping(value = "/refreshToken", consumes = "application/json", produces = "application/json") 
+	public ResponseEntity<TokenDTO> refreshToken(@RequestBody TokenDTO token) {
+		TokenDTO t = new TokenDTO();
+		System.out.println("i am here");
+		if(tokenUtils.canTokenBeRefreshed(token.getJwtToken())) {
+			String jwt = tokenUtils.refreshToken(token.getJwtToken());
+			t.setJwtToken(jwt);
+			return ResponseEntity.ok(t);
+		} 
+		return new ResponseEntity<TokenDTO>(HttpStatus.NOT_FOUND);
+	}
 	
 	@PostMapping (value = "/login", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<LoginResponseDTO> createAuthenticationToken(@RequestBody LoginRequestDTO loginRequest,
