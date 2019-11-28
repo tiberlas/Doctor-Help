@@ -61,6 +61,8 @@ public class PatientController {
 	public ResponseEntity<PatientProfileDTO> getPatientProfile (@PathVariable("id") Long id) {
 		PatientProfileDTO retVal = patientService.getPatientProfile(id);
 		
+		System.out.println("Patient kontroler get proflie " + id);
+		
 		if (retVal == null) {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		}

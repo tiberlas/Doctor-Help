@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import { Switch } from 'react-router-dom';
 import PatientProfile from './PatientProfile.js';
 import { UserContext } from '../../context/UserContextProvider.js';
+import PatientContextProvider from '../../context/PatientContextProvider.js';
 
 class Patient extends Component {
     
@@ -45,19 +46,33 @@ class Patient extends Component {
     }
 
     render() {     
+        var patient = {
+            id: this.state.id,
+            email: this.state.email, 
+            firstName: this.state.firstName, 
+            lastName: this.state.lastName,
+            address: this.state.address, 
+            city: this.state.city, 
+            state: this.state.state, 
+            phoneNumber: this.state.phoneNumber, 
+            birthday: this.state.birthday,
+            insuranceNumber: this.state.insuranceNumber
+        }
         return ( 
             <div>
-                <PatientHeader />
-                <div>
-                    <Switch>
-                        <Route exact path="/patient/profile">
-                            <PatientProfile />
-                        </Route>
-                        <Route exact path="/">
-                            <p>Some like more text</p>
-                        </Route>
-                    </Switch>
-                </div>
+                <PatientContextProvider patient={patient}>
+                    <PatientHeader />
+                    <div>
+                        <Switch>
+                            <Route exact path="/patient/profile">
+                                <PatientProfile />
+                            </Route>
+                            <Route exact path="/">
+                                <p>Some like more text</p>
+                            </Route>
+                        </Switch>
+                    </div>
+                </PatientContextProvider>
             </div>
          );
     }
