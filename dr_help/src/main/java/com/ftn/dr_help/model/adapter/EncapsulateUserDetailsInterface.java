@@ -7,7 +7,7 @@ import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserPOJO;
 
-public interface UserDetailsInterface {
+public interface EncapsulateUserDetailsInterface {
 
 	/*
 	 * this adapter converts specific user from data base to an abstraction of an user

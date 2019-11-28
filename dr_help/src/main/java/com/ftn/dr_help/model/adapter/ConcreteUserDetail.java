@@ -1,0 +1,146 @@
+package com.ftn.dr_help.model.adapter;
+
+import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
+import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
+import com.ftn.dr_help.model.pojo.PatientPOJO;
+
+public class ConcreteUserDetail implements ConcreteUserDetailInterface{
+
+	/*
+	 * assumption UserDetailDTO is valid but may have empty fields 
+	 * */
+	
+	@Override
+	public void changeTo(CentreAdministratorPOJO to, UserDetailDTO from) {
+		if(from.getFirstName() != null && from.getFirstName().trim() != "") {
+			to.setFirstName(from.getFirstName());
+		}
+		if(from.getLastName() != null && from.getLastName().trim() != "") {
+			to.setLastName(from.getLastName());
+		}
+		if(from.getAddress() != null && from.getAddress().trim() != "") {
+			to.setAddress(from.getAddress());
+		}
+		if(from.getState() != null && from.getState().trim() != "") {
+			to.setState(from.getState());
+		}
+		if(from.getCity() != null && from.getCity().trim() != "") {
+			to.setCity(from.getCity());
+		}
+		if(from.getPhoneNumber() != null && from.getPhoneNumber().trim() != "") {
+			to.setPhoneNumber(from.getPhoneNumber());
+		}
+		if(from.getBirthday() != null) {
+			to.setBirthday(from.getBirthday());
+		}
+		
+	}
+
+	@Override
+	public void changeTo(ClinicAdministratorPOJO to, UserDetailDTO from) {
+		if(from.getFirstName() != null && from.getFirstName().trim() != "") {
+			to.setFirstName(from.getFirstName());
+		}
+		if(from.getLastName() != null && from.getLastName().trim() != "") {
+			to.setLastName(from.getLastName());
+		}
+		if(from.getAddress() != null && from.getAddress().trim() != "") {
+			to.setAddress(from.getAddress());
+		}
+		if(from.getState() != null && from.getState().trim() != "") {
+			to.setState(from.getState());
+		}
+		if(from.getCity() != null && from.getCity().trim() != "") {
+			to.setCity(from.getCity());
+		}
+		if(from.getPhoneNumber() != null && from.getPhoneNumber().trim() != "") {
+			to.setPhoneNumber(from.getPhoneNumber());
+		}
+		if(from.getBirthday() != null) {
+			to.setBirthday(from.getBirthday());
+		}
+		
+	}
+
+	@Override
+	public void changeTo(DoctorPOJO to, UserDetailDTO from) {
+		if(from.getFirstName() != null || from.getFirstName().trim() != "") {
+			to.setFirstName(from.getFirstName());
+		}
+		if(from.getLastName() != null || from.getLastName().trim() != "") {
+			to.setLastName(from.getLastName());
+		}
+		if(from.getAddress() != null || from.getAddress().trim() != "") {
+			to.setAddress(from.getAddress());
+		}
+		if(from.getState() != null || from.getState().trim() != "") {
+			to.setState(from.getState());
+		}
+		if(from.getCity() != null || from.getCity().trim() != "") {
+			to.setCity(from.getCity());
+		}
+		if(from.getPhoneNumber() != null || from.getPhoneNumber().trim() != "") {
+			to.setPhoneNumber(from.getPhoneNumber());
+		}
+		if(from.getBirthday() != null) {
+			to.setBirthday(from.getBirthday());
+		}
+		
+	}
+
+	@Override
+	public void changeTo(NursePOJO to, UserDetailDTO from) {
+		if(from.getFirstName() != null || from.getFirstName().trim() != "") {
+			to.setFirstName(from.getFirstName());
+		}
+		if(from.getLastName() != null || from.getLastName().trim() != "") {
+			to.setLastName(from.getLastName());
+		}
+		if(from.getAddress() != null || from.getAddress().trim() != "") {
+			to.setAddress(from.getAddress());
+		}
+		if(from.getState() != null || from.getState().trim() != "") {
+			to.setState(from.getState());
+		}
+		if(from.getCity() != null || from.getCity().trim() != "") {
+			to.setCity(from.getCity());
+		}
+		if(from.getPhoneNumber() != null || from.getPhoneNumber().trim() != "") {
+			to.setPhoneNumber(from.getPhoneNumber());
+		}
+		if(from.getBirthday() != null) {
+			to.setBirthday(from.getBirthday());
+		}
+		
+	}
+
+	@Override
+	public void changeTo(PatientPOJO to, UserDetailDTO from) {
+		if(from.getFirstName() != null || from.getFirstName().trim() != "") {
+			to.setFirstName(from.getFirstName());
+		}
+		if(from.getLastName() != null || from.getLastName().trim() != "") {
+			to.setLastName(from.getLastName());
+		}
+		if(from.getAddress() != null || from.getAddress().trim() != "") {
+			to.setAddress(from.getAddress());
+		}
+		if(from.getState() != null || from.getState().trim() != "") {
+			to.setState(from.getState());
+		}
+		if(from.getCity() != null || from.getCity().trim() != "") {
+			to.setCity(from.getCity());
+		}
+		if(from.getPhoneNumber() != null || from.getPhoneNumber().trim() != "") {
+			to.setPhoneNumber(from.getPhoneNumber());
+		}
+		if(from.getBirthday() != null) {
+			to.setBirthday(from.getBirthday());
+		}
+		
+	}
+
+}

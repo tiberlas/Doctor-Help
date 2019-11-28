@@ -45,7 +45,6 @@ public class LoginController {
 	public ResponseEntity<LoginResponseDTO> createAuthenticationToken(@RequestBody LoginRequestDTO loginRequest,
 			HttpServletResponse response) throws AuthenticationException, IOException {
 
-		System.out.println("Login kontroler: ");
 		System.out.println("Email: " + loginRequest.getEmail());
 		System.out.println("Password: " + loginRequest.getPassword());
 		
@@ -55,7 +54,7 @@ public class LoginController {
 
 		// Ubaci username + password u kontext
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-
+		
 		// Kreiraj token
 		UserPOJO user = (UserPOJO) authentication.getPrincipal();
 		String jwt = tokenUtils.generateToken(user);

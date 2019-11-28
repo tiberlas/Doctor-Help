@@ -1,4 +1,5 @@
 --SQL skripta koja se pokrece sa Spring boot app i daje dummy podatke
+-- enkripcija sa sajta: https://bcrypt-generator.com/
 
 insert into clinic(address, name, description) values('gospodnja 11', 'KLINIKA ZDRAVOG UMA', 'KLINIKA JE NAMENJENA ZA ...');
 

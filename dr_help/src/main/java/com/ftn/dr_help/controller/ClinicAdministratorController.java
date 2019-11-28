@@ -22,6 +22,7 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
+import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicAdministratorService;
@@ -76,7 +77,7 @@ public class ClinicAdministratorController {
 			return new ResponseEntity<>(adminDTO, HttpStatus.OK);
 		}
 
-		@GetMapping(value = "/{id}/name")
+		@GetMapping(value = "/id={id}/name")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminNameDTO> getClinicAdministratorsName(@PathVariable("id") Long id) {
 			ClinicAdminNameDTO ret = clinicAdministratorService.findOnesName(id);
@@ -88,7 +89,7 @@ public class ClinicAdministratorController {
 			return new ResponseEntity<ClinicAdminNameDTO>(ret, HttpStatus.OK);
 		}
 		
-		@GetMapping(value = "/{id}/profile")
+		@GetMapping(value = "/id={id}/profile")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> getClinicAdminProfile(@PathVariable("id") Long id) {
 			ClinicAdminProfileDTO ret = clinicAdministratorService.findOneProfile(id);
@@ -103,13 +104,12 @@ public class ClinicAdministratorController {
 
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody ClinicAdminProfileDTO admin) {
+		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
 			
-			System.out.println("PUT: " + admin);
 			ClinicAdminProfileDTO ret = clinicAdministratorService.save(admin);
 			
 			if(ret == null) {
-				return new ResponseEntity<ClinicAdminProfileDTO>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<ClinicAdminProfileDTO>(HttpStatus.NOT_ACCEPTABLE);
 			}
 			
 			return new ResponseEntity<ClinicAdminProfileDTO>(ret, HttpStatus.OK);

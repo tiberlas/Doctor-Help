@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 
-@Repository("userRequestRepository")
+@Repository
 public interface UserRequestRepository extends JpaRepository<UserRequestPOJO, Long> {
 	
 	
