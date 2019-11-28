@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import { Redirect } from 'react-router-dom'
+import axios from 'axios';
 
 class ClinicAdminChangeProfile extends Component {
     
@@ -22,12 +23,7 @@ class ClinicAdminChangeProfile extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch('http://localhost:8080/api/clinicAdmins/change', {
-            method: "PUT",
-            headers: {
-              'Content-Type': 'application/json'},
-            body: JSON.stringify(
-                {
+        axios.put('http://localhost:8080/api/clinicAdmins/change', {
                     id: this.state.id,
                     email: this.state.email,
                     firstName: this.state.firstName,
@@ -37,10 +33,12 @@ class ClinicAdminChangeProfile extends Component {
                     state: this.state.state,
                     phoneNumber: this.state.phoneNumber,
                     birthday: this.state.birthday
-                })
-      }).then(
-        this.props.handleUpdate,
-        this.setState({go_profile: true})
+        }).then(response => {
+            console.log('odgovor');
+            console.log(response);
+        }).then(
+            this.props.handleUpdate,
+            this.setState({go_profile: true})
       );
     }
 

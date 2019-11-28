@@ -8,6 +8,7 @@ import ClinicAdminChangeProfile from './ClinicAdminChangeProfile';
 import ClinicAdminContextProvider from '../../context/ClinicAdminContextProvider';
 import ClinicAdminMedicalStaff from './ClinicAdminMedicalStaff';
 import ClinicAdminChangePassword from './ClinicAdminChangePassword';
+import axios from 'axios';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -32,19 +33,18 @@ class ClinicAdministrator extends Component {
     }
 
     handleClinicAdmin = () => {
-        fetch("http://localhost:8080/api/clinicAdmins/"+ this.context.user.id + "/profile", { method: "GET" })
-            .then(response => response.json())
-            .then(json => {
+        axios.get("http://localhost:8080/api/clinicAdmins/profile")
+            .then(response =>  {
                 this.setState({
-                    email: json.email,
-                    firstName: json.firstName,
-                    lastName: json.lastName,
-                    address: json.address,
-                    city: json.city,
-                    state: json.state,
-                    phoneNumber: json.phoneNumber,
-                    birthday: json.birthday,
-                    clinicId: json.clinicId
+                    email: response.data.email,
+                    firstName: response.data.firstName,
+                    lastName: response.data.lastName,
+                    address: response.data.address,
+                    city: response.data.city,
+                    state: response.data.state,
+                    phoneNumber: response.data.phoneNumber,
+                    birthday: response.data.birthday,
+                    clinicId: response.data.clinicId
                 })
             })
     }

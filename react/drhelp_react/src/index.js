@@ -4,45 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from "axios"
-
-
-const interceptor = axios.interceptors.request.use(function(config) {
-  const token = JSON.parse(localStorage.getItem('token'))
-  alert(token)
-  if ( token != null ) {
-   // alert("1token is " + token).then(  axios.interceptors.request.eject(interceptor)).then(  alert("2token is " + token))
-  
-    axios.interceptors.request.eject(interceptor)
-    axios.post('http://localhost:8080/api/refreshToken', {
-
-                    'jwtToken': JSON.parse(localStorage.getItem('token'))
-
-                  }).then(response => {
-                      console.log(response.data.jwtToken)
-                      localStorage.removeItem('token')
-                      localStorage.setItem('token', JSON.stringify(response.data.jwtToken))
-                      alert("set a new token.")
-                      
-                  })
-                  const token = JSON.parse(localStorage.getItem('token'))
-                  config.headers.Authorization = `Bearer ${token}`;
-  
-  return config;
-  }
-}, function(err) {
-  return Promise.reject(err);
-});
-
-axios.interceptors.response.use(null, function(err) {
-    if ( err.status === 401 ) {
-
-
-        localStorage.removeItem('token')
-        window.location.href = 'http://localhost:3000/login'//temp solution
-    }
-    return Promise.reject(err);
-  });
 
 // const interceptor = axios.interceptors.response.use(
 //         response => response,

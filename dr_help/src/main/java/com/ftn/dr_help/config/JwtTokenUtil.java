@@ -33,7 +33,7 @@ public class JwtTokenUtil {
 	public String SECRET;
 
 	//when JWT expires in ms
-	@Value("100000")
+	@Value("30000")
 	private int EXPIRES_IN;
 
 	@Value("Authorization")

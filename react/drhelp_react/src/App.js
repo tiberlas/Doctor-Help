@@ -7,11 +7,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Switch} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
+import interceptor from './Interseptor.js';
 
 class App extends Component {
   
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       loggedIn: false,
       userRole: 'guest', 
