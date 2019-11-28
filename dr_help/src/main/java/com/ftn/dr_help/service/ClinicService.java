@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicRoomListDTO;
+import com.ftn.dr_help.model.adapter.ClinicUpdate;
+import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.ClinicRepositorium;
+import com.ftn.dr_help.validation.ClinicValidation;
 
 
 @Service()
@@ -17,6 +21,9 @@ public class ClinicService {
 
 	@Autowired
 	private ClinicRepositorium repository;
+	
+	@Autowired
+	private ClinicAdministratorRepository adminRepository;
 	
 	public ClinicPOJO findOne(Long id) {
 		if(id == null) {
@@ -53,6 +60,30 @@ public class ClinicService {
 		return repository.save(clinic);
 	}
 	
+	public ClinicDTO save(ClinicDTO clinic, String email) {
+		if(email == null) {
+			return null;
+		}
+		
+		if(!ClinicValidation.isValid(clinic)) {
+			return null;
+		}
+		
+		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+		if(admin == null) {
+			return null;
+		}
+		
+		ClinicPOJO oldClinic = admin.getClinic();
+		if(oldClinic == null || !(oldClinic.getId().equals(clinic.getId())) ) {
+			return null;
+		}
+		
+		ClinicUpdate.update(oldClinic, clinic);
+		repository.save(oldClinic);
+		
+		return new ClinicDTO(oldClinic);
+	}
 		
 	public ClinicRoomListDTO getAllRooms(Long clinicId) {
 		if(clinicId == null) {
