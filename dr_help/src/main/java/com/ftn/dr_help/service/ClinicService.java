@@ -4,7 +4,6 @@ package com.ftn.dr_help.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.ClinicDTO;
@@ -20,10 +19,18 @@ public class ClinicService {
 	private ClinicRepositorium repository;
 	
 	public ClinicPOJO findOne(Long id) {
+		if(id == null) {
+			return null;
+		}
+		
 		return repository.findById(id).orElseGet(null); 	
 	}
 	
 	public ClinicDTO findOneDTO(Long id) {
+		if(id == null) {
+			return null;
+		}
+		
 		ClinicPOJO ret = repository.findById(id).orElseGet(null);
 		
 		if(ret == null) {
@@ -39,12 +46,20 @@ public class ClinicService {
 
 
 	public ClinicPOJO save(ClinicPOJO clinic) {
+		if(clinic == null) {
+			return null;
+		}
+		
 		return repository.save(clinic);
 	}
 	
 		
 	public ClinicRoomListDTO getAllRooms(Long clinicId) {
-		ClinicPOJO ret = repository.getOne(clinicId);
+		if(clinicId == null) {
+			return null;
+		}
+		
+		ClinicPOJO ret = repository.findById(clinicId).orElse(null);
 			
 		if(ret == null)
 			return null;

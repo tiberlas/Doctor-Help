@@ -1,4 +1,4 @@
-package com.ftn.dr_help;
+package com.ftn.dr_help.config;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestFilter implements Filter {
+	
+	/*
+	 * FILTER FOR ALLOWING CROSS-DOMEN WITH FRONT END
+	 * */
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
         HttpServletResponse response = (HttpServletResponse) res;

@@ -10,6 +10,6 @@ import com.ftn.dr_help.model.pojo.NursePOJO;
 public interface NurseRepository extends JpaRepository<NursePOJO, Long>{
 	
 	List<NursePOJO> findAllByClinic_id(Long id);
-	public NursePOJO findOneByEmail (String email);
+	NursePOJO findOneByEmail (String email);
 
 }

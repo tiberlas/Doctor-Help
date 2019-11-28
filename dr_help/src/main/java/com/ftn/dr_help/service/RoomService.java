@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.RoomDTO;
@@ -18,6 +17,10 @@ public class RoomService {
 	private RoomRepository repository;
 	
 	public List<RoomDTO> findAll(Long clinicID) {
+		if(clinicID == null) {
+			return null;
+		}
+		
 		List<RoomPOJO> finded = repository.findAllByClinic_id(clinicID);
 		
 		if(finded == null)
@@ -28,10 +31,18 @@ public class RoomService {
 			ret.add(new RoomDTO(room));
 		}
 		
+		if(ret.isEmpty()) {
+			return null;
+		}
+		
 		return ret;
 	}
 	
 	public RoomDTO findOne(Long clinicID, Long roomID) {
+		if(clinicID == null || roomID == null) {
+			return null;
+		}
+		
 		RoomPOJO finded = repository.findByIdAndClinic_id(roomID, clinicID).orElse(null);
 		
 		if(finded == null)

@@ -1,7 +1,6 @@
 package com.ftn.dr_help.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;

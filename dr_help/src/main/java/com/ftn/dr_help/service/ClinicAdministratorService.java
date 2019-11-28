@@ -3,16 +3,21 @@ package com.ftn.dr_help.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
+import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.adapter.ConcreteUserDetail;
+import com.ftn.dr_help.model.adapter.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
+import com.ftn.dr_help.validation.PasswordValidate;
+import com.ftn.dr_help.validation.PasswordValidateInterface;
 import com.ftn.dr_help.validation.ProfileValidation;
 import com.ftn.dr_help.validation.ProfileValidationInterface;
 
@@ -26,8 +31,12 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.findById(id).orElseGet(null);
 	}
 	
-	public ClinicAdminProfileDTO findOneProfile(Long id) {
-		ClinicAdministratorPOJO admin = clinicAdministratorRepository.getOne(id);
+	public ClinicAdminProfileDTO findOneProfile(String email) {
+		if(email == null) {
+			return null;
+		}
+		
+		ClinicAdministratorPOJO admin = clinicAdministratorRepository.findOneByEmail(email);
 		
 		if(admin == null)
 			return null;
@@ -35,8 +44,12 @@ public class ClinicAdministratorService {
 		return new ClinicAdminProfileDTO(admin);
 	}
 
-	public ClinicAdminNameDTO findOnesName(Long id) {
-		ClinicAdministratorPOJO admin = clinicAdministratorRepository.getOne(id);
+	public ClinicAdminNameDTO findOnesName(String email) {
+		if(email == null) {
+			return null;
+		}
+		
+		ClinicAdministratorPOJO admin = clinicAdministratorRepository.findOneByEmail(email);
 		ClinicAdminNameDTO ret;
 		
 		if(admin == null)
@@ -55,59 +68,58 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.findAll(page);
 	}
 
-	public ClinicAdminProfileDTO save(ClinicAdminProfileDTO admin) {
-		ClinicAdministratorPOJO current = findOne(admin.getId());
+	public ClinicAdminProfileDTO save(UserDetailDTO admin, String email) {
+		if(admin == null) {
+			return null;
+		}
+		ClinicAdministratorPOJO current = clinicAdministratorRepository.findOneByEmail(email);
 		
 		if(current == null)
-			return new ClinicAdminProfileDTO();
+			return null;
 		
 		ProfileValidationInterface validate = new ProfileValidation();
+		ConcreteUserDetailInterface convertsToAdmin = new ConcreteUserDetail();
 		
-		if(validate.isValidName(admin.getFirstName()))
-			current.setFirstName(admin.getFirstName());
-		
-		if(validate.isValidName(admin.getLastName()))
-			current.setLastName(admin.getLastName());
-		
-		if(validate.isValidEmail(admin.getEmail()))
-			current.setEmail(admin.getEmail());
-		
-		if(validate.isValidPhoneNumber(admin.getPhoneNumber()))
-			current.setPhoneNumber(admin.getPhoneNumber());
-		
-		if(validate.isValidPlace(admin.getCity()))
-			current.setCity(admin.getCity());
-		
-		if(validate.isValidPlace(admin.getState()))
-			current.setState(admin.getState());
-		
-		if(validate.isValidPlace(admin.getAddress()))
-			current.setAddress(admin.getAddress());
-		
-		if(validate.isValidDate(admin.getBirthday()))
-			current.setBirthday(admin.getBirthday());
-		
-		clinicAdministratorRepository.save(current);
+		if(validate.validUser(admin)) {
+			convertsToAdmin.changeTo(current, admin);
+			clinicAdministratorRepository.save(current);
+				
+			return new ClinicAdminProfileDTO(current);
+		}
 	
-		return new ClinicAdminProfileDTO(current);
+		return null;
 	}
 
 	public void remove(Long id) {
+		if(id == null) {
+			return;
+		}
+		
 		clinicAdministratorRepository.deleteById(id);
 	}
 	
 	public ClinicAdministratorPOJO save(ClinicAdministratorPOJO admin) {
+		if(admin == null) {
+			return null;
+		}
+		
 		return clinicAdministratorRepository.save(admin);
 	}
 	
-	public boolean changePassword(ChangePasswordDTO password) {
-		ClinicAdministratorPOJO finded = clinicAdministratorRepository.findById(password.getId()).orElseGet(null);
+	public boolean changePassword(ChangePasswordDTO password, String email) {
+		if(password == null) {
+			return false;
+		}
 		
+		ClinicAdministratorPOJO finded = clinicAdministratorRepository.findOneByEmail(email);
 		if(finded == null)
 			return false;
 		
-		if(finded.getPassword().equals(password.getOldPassword())) {
-			finded.setPassword(password.getNewPassword());
+		PasswordValidateInterface validate = new PasswordValidate();
+		
+		if(validate.isValid(password, finded.getPassword())) {
+			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
+			finded.setPassword(encoded);
 			clinicAdministratorRepository.save(finded);
 			return true;
 		}

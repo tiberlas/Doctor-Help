@@ -18,7 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
@@ -36,7 +35,6 @@ public class NursePOJO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
 	@Column(name = "password", nullable = false)
 	private String password;
 	
@@ -44,35 +42,27 @@ public class NursePOJO implements Serializable{
 	@Column (name = "status", nullable = false)
 	private RoleEnum role = RoleEnum.NURSE;
 	
-	@NotBlank
 	@Column(name = "firstName", nullable = false)
 	private String firstName;
 	
-	@NotBlank
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 	
-	@NotBlank
 	@Column(name = "email", nullable = false)
 	private String email;
 	
-	@NotBlank
 	@Column(name = "state", nullable = false)
 	private String state;
 	
-	@NotBlank
 	@Column(name = "city", nullable = false)
 	private String city;
 	
-	@NotBlank
 	@Column(name = "address", nullable = false)
 	private String address;
 	
-	@NotBlank
 	@Column(name = "phoneNumber", nullable = false)
 	private String phoneNumber;
 	
-	@NotBlank
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "birthday", nullable = false)
 	private Calendar birthday;
