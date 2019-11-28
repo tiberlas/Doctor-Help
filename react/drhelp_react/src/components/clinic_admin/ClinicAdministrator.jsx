@@ -27,7 +27,7 @@ class ClinicAdministrator extends Component {
     static contextType = UserContext
 
     componentDidMount() {
-        console.log(this.context.user);
+        //console.log(this.context.user);
         this.handleClinicAdmin();
     }
 

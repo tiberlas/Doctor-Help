@@ -1,64 +1,57 @@
 package com.ftn.dr_help.validation;
 
-import java.util.Calendar;
+import com.ftn.dr_help.dto.UserDetailDTO;
 
 public class ProfileValidation implements ProfileValidationInterface{
 
-	@Override
-	public boolean isValidName(String name) {
-		if(name != null) {
-			String trimName = name.trim();
-			if(trimName.length() > 0 && trimName.length() < 31) {
-				return true;
-			}
-		}
-		
-		return false;
+	private NameValidation name;
+	private DateValidation date;
+	private PlaceValidation place;
+	private PhoneNumberValidation phone;
+	
+	public ProfileValidation() {
+		super();
+		this.name = new NameValidation();
+		this.date = new DateValidation();
+		this.place = new PlaceValidation();
+		this.phone = new PhoneNumberValidation();
 	}
 
 	@Override
-	public boolean isValidEmail(String email) {
-		if(email != null) {
-			String trimEmail = email.trim();
-			if(trimEmail.length() > 0 && trimEmail.contains("@")) {
-				return true;
-			}
-		}
-				 
-		return false;
-	}
-
-	@Override
-	public boolean isValidPlace(String place) {
-		if(place != null) {
-			String trimPlace = place.trim();
-			if(trimPlace.length() > 0 && trimPlace.length() < 102) {
-				return true;
-			}
+	public boolean validUser(UserDetailDTO user) {
+		
+		if(!name.isValid(user.getFirstName()) && user.getFirstName()!="") {
+			return false;
 		}
 		
-		return false;
-	}
-
-	@Override
-	public boolean isValidDate(Calendar date) {
-		if(date != null && date.before(Calendar.getInstance())) {
-			return true;
+		if(!name.isValid(user.getLastName()) && user.getLastName()!="") {
+			return false;
 		}
 		
-		return false;
-	}
-
-	@Override
-	public boolean isValidPhoneNumber(String phonenumber) {
-		if(phonenumber != null) {
-			String trimPhone = phonenumber.trim();
-			if(trimPhone.length() > 0 ) {
-				return true;
-			}
+		if(!place.isValid(user.getAddress()) && user.getAddress()!="") {
+			return false;
 		}
 		
-		return false;
+		if(!place.isValid(user.getCity()) && user.getCity()!="") {
+			return false;
+		}
+		
+		if(!place.isValid(user.getState()) && user.getState()!="") {
+			return false;
+		}
+		
+		if(!date.isValid(user.getBirthday()) && user.getBirthday()!=null) {
+			return false;
+		}
+		
+		if(!phone.isValid(user.getPhoneNumber()) && user.getPhoneNumber()!="") {
+			return false;
+		}
+
+		
+		return true;
 	}
+
+
 
 }

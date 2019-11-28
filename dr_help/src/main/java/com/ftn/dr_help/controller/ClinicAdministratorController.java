@@ -11,17 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
+import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicAdministratorService;
@@ -76,10 +77,12 @@ public class ClinicAdministratorController {
 			return new ResponseEntity<>(adminDTO, HttpStatus.OK);
 		}
 
-		@GetMapping(value = "/{id}/name")
+		@GetMapping(value = "/name")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-		public ResponseEntity<ClinicAdminNameDTO> getClinicAdministratorsName(@PathVariable("id") Long id) {
-			ClinicAdminNameDTO ret = clinicAdministratorService.findOnesName(id);
+		public ResponseEntity<ClinicAdminNameDTO> getClinicAdministratorsName() {
+			String email = CurrentUser.getEmail();
+			
+			ClinicAdminNameDTO ret = clinicAdministratorService.findOnesName(email);
 			
 			if(ret == null) {
 				return new ResponseEntity<ClinicAdminNameDTO>(HttpStatus.NOT_FOUND);
@@ -88,10 +91,12 @@ public class ClinicAdministratorController {
 			return new ResponseEntity<ClinicAdminNameDTO>(ret, HttpStatus.OK);
 		}
 		
-		@GetMapping(value = "/{id}/profile")
+		@GetMapping(value = "/profile")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-		public ResponseEntity<ClinicAdminProfileDTO> getClinicAdminProfile(@PathVariable("id") Long id) {
-			ClinicAdminProfileDTO ret = clinicAdministratorService.findOneProfile(id);
+		public ResponseEntity<ClinicAdminProfileDTO> getClinicAdminProfile() {
+			String email = CurrentUser.getEmail();
+			
+			ClinicAdminProfileDTO ret = clinicAdministratorService.findOneProfile(email);
 			
 			if(ret == null) {
 				return new ResponseEntity<ClinicAdminProfileDTO>(HttpStatus.NOT_FOUND);
@@ -103,13 +108,12 @@ public class ClinicAdministratorController {
 
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody ClinicAdminProfileDTO admin) {
+		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
 			
-			System.out.println("PUT: " + admin);
 			ClinicAdminProfileDTO ret = clinicAdministratorService.save(admin);
 			
 			if(ret == null) {
-				return new ResponseEntity<ClinicAdminProfileDTO>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<ClinicAdminProfileDTO>(HttpStatus.NOT_ACCEPTABLE);
 			}
 			
 			return new ResponseEntity<ClinicAdminProfileDTO>(ret, HttpStatus.OK);

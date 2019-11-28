@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.model.adapter.UserDetailsAdapter;
-import com.ftn.dr_help.model.adapter.UserDetailsInterface;
+import com.ftn.dr_help.model.adapter.EncapsulateUserDetailsAdapter;
+import com.ftn.dr_help.model.adapter.EncapsulateUserDetailsInterface;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
@@ -44,11 +44,15 @@ public class JwtUserDetailsService implements UserDetailsService{
 	@Autowired
 	private PatientRepository patientRepository;
 	
-	private UserDetailsInterface convertUser;
+	private EncapsulateUserDetailsInterface convertUser;
 	
 	private UserPOJO loadOneByEmail(String email) {
+		if(email == null || email.trim() == "") {
+			return null;
+		}
 		
-		convertUser = new UserDetailsAdapter();
+		
+		convertUser = new EncapsulateUserDetailsAdapter();
 		
 		CentreAdministratorPOJO finded = centreAdminRepository.findOneByEmail(email);
 		
@@ -86,6 +90,10 @@ public class JwtUserDetailsService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		if(username == null || username.trim() == "") {
+			throw new UsernameNotFoundException(String.format("No user found with email '%s'.", username));
+		}
+		
 		UserPOJO finded = loadOneByEmail(username);
 		
 		if(finded == null) {

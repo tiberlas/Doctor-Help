@@ -7,7 +7,7 @@ import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserPOJO;
 
-public class UserDetailsAdapter implements UserDetailsInterface {
+public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInterface {
 
 	@Override
 	public UserPOJO getUser(CentreAdministratorPOJO pojo) {

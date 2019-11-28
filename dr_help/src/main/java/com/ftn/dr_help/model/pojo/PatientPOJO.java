@@ -69,7 +69,7 @@ public class PatientPOJO implements Serializable{
 	@Column (name = "birthday", nullable = false)
 	private Calendar birthday;
 	
-	@Column (name = "insuranceNumber", nullable = false)
+	@Column (name = "insuranceNumber", nullable = false, unique = true)
 	private Long insuranceNumber;
 	
 	@OneToOne (fetch = FetchType.LAZY)

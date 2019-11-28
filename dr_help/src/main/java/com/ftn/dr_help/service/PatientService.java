@@ -1,12 +1,14 @@
 package com.ftn.dr_help.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.dto.PatientDTO;
+import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.PatientRepository;
@@ -16,13 +18,39 @@ import com.ftn.dr_help.repository.UserRequestRepository;
 public class PatientService {
 	
 	@Autowired
-	@Qualifier("patientRepository")
 	private PatientRepository patientRepository;
 	
 	@Autowired
-	@Qualifier("userRequestRepository")
 	private UserRequestRepository userRequestRepository;
 	
+	public List<PatientNameDTO> findAllNames() {
+		List<PatientPOJO> finded = patientRepository.findAll();
+		
+		if(finded == null) {
+			return null;
+		}
+		
+		List<PatientNameDTO> ret = new ArrayList<PatientNameDTO>();
+		for(PatientPOJO patient : finded) {
+			ret.add(new PatientNameDTO(patient.getId(), patient.getFirstName(), patient.getLastName(), patient.getInsuranceNumber()));
+		}
+		
+		return ret;
+	}
+	
+	public PatientDTO findById(Long id) {
+		if(id == null) {
+			return null;
+		}
+		
+		PatientPOJO finded = patientRepository.findById(id).orElse(null);
+		
+		if(finded == null) {
+			return null;
+		}
+		
+		return new PatientDTO(finded);
+	}
 	
 	public List<UserRequestPOJO> findAllRequests() {
 		return userRequestRepository.findAll();
