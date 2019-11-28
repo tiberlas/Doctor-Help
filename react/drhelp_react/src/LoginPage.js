@@ -3,7 +3,10 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import TempHome from './components/TempHome.js';
-import {UserContext} from './context/UserContextProvider'
+import {UserContext} from './context/UserContextProvider';
+import {Route, Switch} from 'react-router-dom';
+import RegistrationPage from './components/RegistrationPage.js';
+import { Link } from 'react-router-dom';
 
 
 
@@ -78,9 +81,15 @@ class LoginPage extends React.Component {
 				})
 				.then (response => response.json())
 				.then (response =>  {
+
+					localStorage.setItem('token', JSON.stringify(response.jwtToken));
+					var token = JSON.parse(localStorage.getItem('token'));
+					console.log(`Authorization=Bearer ${token}`)
+
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
 						this.context.updateValue (response.id, response.userRole);
+
 						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "DOCTOR") {
@@ -101,6 +110,9 @@ class LoginPage extends React.Component {
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {
 						this.props.setLoginCentreAdmin ()
 						this.context.updateValue ( response.id, response.userRole);
+
+						
+						alert("Token is " + token)
 						//this.context.updateValue ("role", response.userRole);
 					}
 				});
@@ -130,27 +142,45 @@ class LoginPage extends React.Component {
 	
 	render () {
 		
-		
-
-		
-
 		return (
 			<div>
-				<form onSubmit={this.handleSubmit}>
+				<switch>
+					<Route path = "/login">
+						<form onSubmit={this.handleSubmit}>
+							<FormControl type="email" placeholder="Email" id="tb_email"/>
+							<FormControl type="password" placeholder="Password" id='tb_password'/>
+							<input type="submit" value="Submit">
+							</input>
+						</form>
+						<Link to="/register">
+							<Button >Register</Button>
+						</Link>
+					</Route>
+					<Route path = "/register">
+						<RegistrationPage></RegistrationPage>
+						<Link to="/login">
+							<Button>Login</Button>
+						</Link>
+					</Route>
+				</switch>
+
+{/* 
+<Link to="/login">
+  <Button renderAs="button">
+    <span>Login</span>
+  </Button>
+</Link> */}
+
+
+
+
+				{/* <form onSubmit={this.handleSubmit}>
 					<FormControl type="text" placeholder="Email" id="tb_email"/>
 					<FormControl type="password" placeholder="Password" id='tb_password'/>
 					<input type="submit" value="Submit">
 					</input>
-					{/*
-					<Button 	
-						variant="primary" 
-						type="submit" 
-						onClick={this.handleLogIn}
-					>
-						Submit
-					</Button>
-					*/}
 				</form>
+				<Button>Register</Button> */}
 			</div>
 		)
 	}
