@@ -16,18 +16,18 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStuffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
-import com.ftn.dr_help.service.DoctorService;
+import com.ftn.dr_help.service.NurseService;
 
 @RestController
-@RequestMapping(value = "api/doctors")
+@RequestMapping(value = "api/nurses")
 @CrossOrigin(origins = "http://localhost:3000")
-public class DoctorController {
-
+public class NurseController {
+	
 	@Autowired
-	private DoctorService service;
+	private NurseService service;
 	
 	@GetMapping(value = "/profile")
-	@PreAuthorize("hasAuthority('DOCTOR')")
+	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<MedicalStuffProfileDTO> findProfile() {
 		String email = CurrentUser.getEmail();
 		
@@ -41,11 +41,11 @@ public class DoctorController {
 	}
 	
 	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAuthority('DOCTOR')")
-	public ResponseEntity<MedicalStuffProfileDTO> putAdminProfile(@RequestBody UserDetailDTO doctor) {
+	@PreAuthorize("hasAuthority('NURSE')")
+	public ResponseEntity<MedicalStuffProfileDTO> putAdminProfile(@RequestBody UserDetailDTO nurse) {
 		String email = CurrentUser.getEmail();
 		
-		MedicalStuffProfileDTO ret = service.save(doctor, email);
+		MedicalStuffProfileDTO ret = service.save(nurse, email);
 		
 		if(ret == null) {
 			return new ResponseEntity<MedicalStuffProfileDTO>(HttpStatus.NOT_ACCEPTABLE); //406
@@ -55,7 +55,7 @@ public class DoctorController {
 	}
 	
 	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAuthority('DOCTOR')")
+	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
 		String email = CurrentUser.getEmail();
 		
@@ -68,4 +68,5 @@ public class DoctorController {
 		}
 		
 	} 
+
 }

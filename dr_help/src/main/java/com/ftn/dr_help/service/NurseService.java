@@ -9,25 +9,25 @@ import com.ftn.dr_help.dto.MedicalStuffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.adapter.ConcreteUserDetail;
 import com.ftn.dr_help.model.adapter.ConcreteUserDetailInterface;
-import com.ftn.dr_help.model.pojo.DoctorPOJO;
-import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.model.pojo.NursePOJO;
+import com.ftn.dr_help.repository.NurseRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 import com.ftn.dr_help.validation.PasswordValidateInterface;
 import com.ftn.dr_help.validation.ProfileValidation;
 import com.ftn.dr_help.validation.ProfileValidationInterface;
 
 @Service
-public class DoctorService {
+public class NurseService {
 
 	@Autowired
-	private DoctorRepository repository;
+	private NurseRepository repository;
 	
 	public MedicalStuffProfileDTO findByEmail(String email) {
 		if(email == null) {
 			return null;
 		}
 		
-		DoctorPOJO finded = repository.findOneByEmail(email);
+		NursePOJO finded = repository.findOneByEmail(email);
 		
 		if(finded == null) {
 			return null;
@@ -36,30 +36,30 @@ public class DoctorService {
 		return new MedicalStuffProfileDTO(finded);		
 	}
 	
-	public DoctorPOJO findOne(Long id) {
+	public NursePOJO findOne(Long id) {
 		if(id == null) {
 			return null;
 		}
 		
-		DoctorPOJO ret = repository.findById(id).orElse(null);
+		NursePOJO ret = repository.findById(id).orElse(null);
 		
 		return ret;
 	}
 	
-	public MedicalStuffProfileDTO save(UserDetailDTO doctor, String email) {
-		if(doctor == null) {
+	public MedicalStuffProfileDTO save(UserDetailDTO nurse, String email) {
+		if(nurse == null) {
 			return null;
 		}
 		
-		DoctorPOJO current = repository.findOneByEmail(email);
+		NursePOJO current = repository.findOneByEmail(email);
 		if(current == null)
 			return null;
 		
 		ProfileValidationInterface validate = new ProfileValidation();
-		ConcreteUserDetailInterface convertsToDoctor = new ConcreteUserDetail();
+		ConcreteUserDetailInterface convertsToAdmin = new ConcreteUserDetail();
 		
-		if(validate.validUser(doctor)) {
-			convertsToDoctor.changeTo(current, doctor);
+		if(validate.validUser(nurse)) {
+			convertsToAdmin.changeTo(current, nurse);
 			repository.save(current);
 				
 			return new MedicalStuffProfileDTO(current);
@@ -73,7 +73,7 @@ public class DoctorService {
 			return false;
 		}
 		
-		DoctorPOJO finded = repository.findOneByEmail(email);
+		NursePOJO finded = repository.findOneByEmail(email);
 		if(finded == null)
 			return false;
 		
@@ -88,5 +88,4 @@ public class DoctorService {
 		
 		return false;
 	}
-	
 }

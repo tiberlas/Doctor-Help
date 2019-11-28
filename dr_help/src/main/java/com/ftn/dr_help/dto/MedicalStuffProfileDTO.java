@@ -3,8 +3,9 @@ package com.ftn.dr_help.dto;
 import java.util.Calendar;
 
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 
-public class DoctorProfileDTO {
+public class MedicalStuffProfileDTO {
 
 	//private Long id;
 	private String firstName;
@@ -19,12 +20,12 @@ public class DoctorProfileDTO {
 	
 	
 	
-	public DoctorProfileDTO() {
+	public MedicalStuffProfileDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public DoctorProfileDTO(DoctorPOJO doctor) {
+	public MedicalStuffProfileDTO(DoctorPOJO doctor) {
 		super();
 		this.firstName = doctor.getFirstName();
 		this.lastName = doctor.getLastName();
@@ -37,7 +38,20 @@ public class DoctorProfileDTO {
 		this.clinicId = doctor.getClinic().getId();
 	}
 	
-	public DoctorProfileDTO(String firstName, String lastName, String email, String city, String state,
+	public MedicalStuffProfileDTO(NursePOJO nurse) {
+		super();
+		this.firstName = nurse.getFirstName();
+		this.lastName = nurse.getLastName();
+		this.email = nurse.getEmail();
+		this.city = nurse.getCity();
+		this.state = nurse.getState();
+		this.address = nurse.getAddress();
+		this.phoneNumber = nurse.getPhoneNumber();
+		this.birthday = nurse.getBirthday();
+		this.clinicId = nurse.getClinic().getId();
+	}
+	
+	public MedicalStuffProfileDTO(String firstName, String lastName, String email, String city, String state,
 			String address, String phoneNumber, Calendar birthday, Long clinicId) {
 		super();
 		this.firstName = firstName;

@@ -33,9 +33,6 @@ public class ConcreteUserDetail implements ConcreteUserDetailInterface{
 		if(from.getPhoneNumber() != null && from.getPhoneNumber().trim() != "") {
 			to.setPhoneNumber(from.getPhoneNumber());
 		}
-		if(from.getBirthday() != null) {
-			to.setBirthday(from.getBirthday());
-		}
 		
 	}
 
@@ -59,86 +56,74 @@ public class ConcreteUserDetail implements ConcreteUserDetailInterface{
 		if(from.getPhoneNumber() != null && from.getPhoneNumber().trim() != "") {
 			to.setPhoneNumber(from.getPhoneNumber());
 		}
-		if(from.getBirthday() != null) {
-			to.setBirthday(from.getBirthday());
-		}
 		
 	}
 
 	@Override
 	public void changeTo(DoctorPOJO to, UserDetailDTO from) {
-		if(from.getFirstName() != null || from.getFirstName().trim() != "") {
+		if(from.getFirstName() != null && from.getFirstName().trim() != "") {
 			to.setFirstName(from.getFirstName());
 		}
-		if(from.getLastName() != null || from.getLastName().trim() != "") {
+		if(from.getLastName() != null && from.getLastName().trim() != "") {
 			to.setLastName(from.getLastName());
 		}
-		if(from.getAddress() != null || from.getAddress().trim() != "") {
+		if(from.getAddress() != null && from.getAddress().trim() != "") {
 			to.setAddress(from.getAddress());
 		}
-		if(from.getState() != null || from.getState().trim() != "") {
+		if(from.getState() != null && from.getState().trim() != "") {
 			to.setState(from.getState());
 		}
-		if(from.getCity() != null || from.getCity().trim() != "") {
+		if(from.getCity() != null && from.getCity().trim() != "") {
 			to.setCity(from.getCity());
 		}
-		if(from.getPhoneNumber() != null || from.getPhoneNumber().trim() != "") {
+		if(from.getPhoneNumber() != null && from.getPhoneNumber().trim() != "") {
 			to.setPhoneNumber(from.getPhoneNumber());
-		}
-		if(from.getBirthday() != null) {
-			to.setBirthday(from.getBirthday());
 		}
 		
 	}
 
 	@Override
 	public void changeTo(NursePOJO to, UserDetailDTO from) {
-		if(from.getFirstName() != null || from.getFirstName().trim() != "") {
+		if(from.getFirstName() != null && from.getFirstName().trim() != "") {
 			to.setFirstName(from.getFirstName());
 		}
-		if(from.getLastName() != null || from.getLastName().trim() != "") {
+		if(from.getLastName() != null && from.getLastName().trim() != "") {
 			to.setLastName(from.getLastName());
 		}
-		if(from.getAddress() != null || from.getAddress().trim() != "") {
+		if(from.getAddress() != null && from.getAddress().trim() != "") {
 			to.setAddress(from.getAddress());
 		}
-		if(from.getState() != null || from.getState().trim() != "") {
+		if(from.getState() != null && from.getState().trim() != "") {
 			to.setState(from.getState());
 		}
-		if(from.getCity() != null || from.getCity().trim() != "") {
+		if(from.getCity() != null && from.getCity().trim() != "") {
 			to.setCity(from.getCity());
 		}
-		if(from.getPhoneNumber() != null || from.getPhoneNumber().trim() != "") {
+		if(from.getPhoneNumber() != null && from.getPhoneNumber().trim() != "") {
 			to.setPhoneNumber(from.getPhoneNumber());
-		}
-		if(from.getBirthday() != null) {
-			to.setBirthday(from.getBirthday());
 		}
 		
 	}
 
 	@Override
 	public void changeTo(PatientPOJO to, UserDetailDTO from) {
-		if(from.getFirstName() != null || from.getFirstName().trim() != "") {
+		if(from.getFirstName() != null && from.getFirstName().trim() != "") {
 			to.setFirstName(from.getFirstName());
 		}
-		if(from.getLastName() != null || from.getLastName().trim() != "") {
+		if(from.getLastName() != null && from.getLastName().trim() != "") {
 			to.setLastName(from.getLastName());
 		}
-		if(from.getAddress() != null || from.getAddress().trim() != "") {
+		if(from.getAddress() != null && from.getAddress().trim() != "") {
 			to.setAddress(from.getAddress());
 		}
-		if(from.getState() != null || from.getState().trim() != "") {
+		if(from.getState() != null && from.getState().trim() != "") {
 			to.setState(from.getState());
 		}
-		if(from.getCity() != null || from.getCity().trim() != "") {
+		if(from.getCity() != null && from.getCity().trim() != "") {
 			to.setCity(from.getCity());
 		}
-		if(from.getPhoneNumber() != null || from.getPhoneNumber().trim() != "") {
+		if(from.getPhoneNumber() != null && from.getPhoneNumber().trim() != "") {
 			to.setPhoneNumber(from.getPhoneNumber());
-		}
-		if(from.getBirthday() != null) {
-			to.setBirthday(from.getBirthday());
 		}
 		
 	}

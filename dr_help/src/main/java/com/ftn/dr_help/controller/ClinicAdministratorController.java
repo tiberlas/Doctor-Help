@@ -109,8 +109,9 @@ public class ClinicAdministratorController {
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
+			String email = CurrentUser.getEmail();
 			
-			ClinicAdminProfileDTO ret = clinicAdministratorService.save(admin);
+			ClinicAdminProfileDTO ret = clinicAdministratorService.save(admin, email);
 			
 			if(ret == null) {
 				return new ResponseEntity<ClinicAdminProfileDTO>(HttpStatus.NOT_ACCEPTABLE);
@@ -122,7 +123,9 @@ public class ClinicAdministratorController {
 		@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
-			boolean ret = clinicAdministratorService.changePassword(passwords);
+			String email = CurrentUser.getEmail();
+
+			boolean ret = clinicAdministratorService.changePassword(passwords, email);
 			
 			if(ret) {
 				return new ResponseEntity<String>("changed", HttpStatus.OK);

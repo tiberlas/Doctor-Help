@@ -68,11 +68,11 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.findAll(page);
 	}
 
-	public ClinicAdminProfileDTO save(UserDetailDTO admin) {
-		if(admin == null || admin.getId() == null) {
+	public ClinicAdminProfileDTO save(UserDetailDTO admin, String email) {
+		if(admin == null) {
 			return null;
 		}
-		ClinicAdministratorPOJO current = findOne(admin.getId());
+		ClinicAdministratorPOJO current = clinicAdministratorRepository.findOneByEmail(email);
 		
 		if(current == null)
 			return null;
@@ -106,13 +106,12 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.save(admin);
 	}
 	
-	public boolean changePassword(ChangePasswordDTO password) {
-		if(password == null || password.getId() == null) {
+	public boolean changePassword(ChangePasswordDTO password, String email) {
+		if(password == null) {
 			return false;
 		}
 		
-		ClinicAdministratorPOJO finded = clinicAdministratorRepository.findById(password.getId()).orElseGet(null);
-		
+		ClinicAdministratorPOJO finded = clinicAdministratorRepository.findOneByEmail(email);
 		if(finded == null)
 			return false;
 		
