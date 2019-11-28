@@ -12,8 +12,12 @@ public class CurrentUser {
 	
 	public static String getEmail() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		return ((UserDetails)principal).getUsername();
+
+		if( principal instanceof UserDetails) {
+			return ((UserDetails)principal).getUsername();
+		} else {
+			return principal.toString();
+		}
 	}
 
 }

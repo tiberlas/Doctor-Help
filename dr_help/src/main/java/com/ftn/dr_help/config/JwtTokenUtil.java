@@ -33,7 +33,7 @@ public class JwtTokenUtil {
 	public String SECRET;
 
 	//when JWT expires in ms
-	@Value("100000")
+	@Value("30000")
 	private int EXPIRES_IN;
 
 	@Value("Authorization")
@@ -56,13 +56,13 @@ public class JwtTokenUtil {
 				.setAudience(generateAudience())
 				.setIssuedAt(timeProvider.now())
 				.setExpiration(generateExpirationDate())
-				.claim("address", user.getAddress()) //postavljanje proizvoljnih podataka u telo JWT tokena
-				.claim("city", user.getCity())
-				.claim("state", user.getState())
+				//.claim("address", user.getAddress()) //postavljanje proizvoljnih podataka u telo JWT tokena
+				//.claim("city", user.getCity())
+				//.claim("state", user.getState())
 				.claim("birthday", user.getBirthday())
-				.claim("phone_number", user.getPhoneNumber())
-				.claim("first_name", user.getFirstName())
-				.claim("last_name", user.getLastName())
+				//.claim("phone_number", user.getPhoneNumber())
+				//.claim("first_name", user.getFirstName())
+				//.claim("last_name", user.getLastName())
 				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 
