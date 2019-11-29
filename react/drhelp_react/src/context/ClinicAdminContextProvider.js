@@ -7,7 +7,7 @@ class ClinicAdminContextProvider extends Component {
         admin: {
             id: this.props.admin.id, 
             email: this.props.admin.email,
-            firstName: this.props.firstName,
+            firstName: this.props.admin.firstName,
             lastName: this.props.admin.lastName,
             address: this.props.admin.address,
             city: this.props.admin.city,

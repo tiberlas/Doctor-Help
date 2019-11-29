@@ -1,15 +1,62 @@
 import React, { Component } from 'react';
 import DoctorHeader from './DoctorHeader.jsx'
 import DoctorProfile from './DoctorProfile.jsx'
+import { UserContext } from '../../context/UserContextProvider'
+import DoctorContextProvider from '../../context/DoctorContextProvider';
+import {Route, Switch, Redirect} from "react-router-dom";
+import DoctorChangeProfile from './DoctorChangeProfile.jsx';
+import axios from 'axios';
 
 class Doctor extends Component {
-    state = {  }
+    state = { 
+        email: "",
+        firstName: "",
+        lastName: "",
+        address: "",
+        city: "",
+        state: "",
+        phoneNumber: "",
+        birthday: "",
+        clinicId: 1
+     }
+
+    static contextType = UserContext
+
+    componentDidMount() {
+        this.handleDoctor();
+    }
+
+    handleDoctor = () => {
+        axios.get("http://localhost:8080/api/doctors/profile")
+            .then(response =>  {
+                this.setState({
+                    email: response.data.email,
+                    firstName: response.data.firstName,
+                    lastName: response.data.lastName,
+                    address: response.data.address,
+                    city: response.data.city,
+                    state: response.data.state,
+                    phoneNumber: response.data.phoneNumber,
+                    birthday: response.data.birthday,
+                    clinicId: response.data.clinicId
+                })
+            })
+    }
+
     render() { 
+        var doctor = {firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId} 
         return ( 
             <div>
-                <DoctorHeader />
+                <DoctorContextProvider doctor={doctor} >
+                    <DoctorHeader />
 
-                <DoctorProfile />
+                    <div>
+                        <Switch>
+                            <Route exact path="/doctor/profile"> <DoctorProfile /></Route>
+                            <Route exact path="/doctor/profile/change"> <DoctorChangeProfile /></Route>
+                        </Switch>
+                    </div>
+                </DoctorContextProvider>
             </div>
          );
     }
