@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class MedicationPOJO implements Serializable{
 
@@ -29,6 +31,7 @@ public class MedicationPOJO implements Serializable{
 	@Column (name = "medDescription", nullable = true)
 	private String medDescription;
 	
+	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private PerscriptionPOJO perscription;
 	

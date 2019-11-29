@@ -3,6 +3,7 @@ import Tab from 'react-bootstrap/Tab'
 import {Row, Col} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
+import axios from 'axios';
 class PatientRegistrationInformation extends Component {
 
     constructor(props)
@@ -45,18 +46,12 @@ class PatientRegistrationInformation extends Component {
                 console.log("patient info " + patientInfo)
 
 
-                fetch('http://localhost:8080/api/centreAdmins/acceptRequest', {
-                    method: 'post',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify( {
+                axios.post('http://localhost:8080/api/centreAdmins/acceptRequest', {
                         email: this.props.data[i].email
-                    })
-                   }).then(
+             }).then( response => {
                        alert("Successfully accepted.")
-
-                   )
+             })
             }
-
             
         }
 
@@ -95,13 +90,10 @@ class PatientRegistrationInformation extends Component {
                 // }
                 patientInfo = JSON.stringify(patientInfo) 
                 
-                fetch('http://localhost:8080/api/centreAdmins/declineRequest', {
-                    method: 'post',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify( {
+                axios.post('http://localhost:8080/api/centreAdmins/declineRequest', {
+                   
                         email: this.props.data[i].email,
                         declinedDescription: declineDescription
-                    })
                    }).then(
                        alert("Successfully declined.")
                    )

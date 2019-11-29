@@ -17,7 +17,7 @@ class ClinicAdminChangePassword extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.setState({errorBack: false})
+        this.setState({errorBack: false, errorBack: false})
 
         if(this.state.newPassword !== this.state.newPassword1) {
             this.setState({error: true})
@@ -26,13 +26,10 @@ class ClinicAdminChangePassword extends Component {
         axios.put('http://localhost:8080/api/clinicAdmins/change/password', {
                     oldPassword: this.state.oldPassword,
                     newPassword: this.state.newPassword
-        }).then((response)=> {
-            console.log(response);
-            if (response.status !== 200) {
-                this.setState({errorBack: true});
-            } else {
-                this.setState({go_profile: true});
-            }
+        }).then((responce) => {
+            this.setState({go_profile: true})
+        }).catch((error)=> {
+            this.setState({errorBack: true})
         });
     }
 
@@ -43,7 +40,7 @@ class ClinicAdminChangePassword extends Component {
     }
 
     render() {
-        if(this.state.go_profile == true)
+        if(this.state.go_profile === true)
             return(<Redirect to='/clinic+administrator/'></Redirect> );
         
         return ( 

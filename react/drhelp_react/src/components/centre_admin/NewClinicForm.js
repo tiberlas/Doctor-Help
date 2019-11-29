@@ -26,37 +26,15 @@ class NewClinicForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault()
 
-        const data = {
-            name: this.state.clinicName,
-            address: this.state.clinicAddress,
-            description: this.state.clinicDescription
-          };
-
-        console.log(data)
-        const datastr = JSON.stringify(data)
-        console.log(" str "+datastr)
-        
-        //   axios.post('http://localhost:8080/api/clinics/newClinic', {
-        //       name: this.state.name,
-        //       address: this.state.address,
-        //       description: this.state.description
-            
-        //     })
-        //     .then(res => {
-        //       console.log(res.data);
-        //     })
-
-        var token = JSON.parse(localStorage.getItem('token'));
-
         axios.post('http://localhost:8080/api/clinics/newClinic', { 
 
             name: this.state.clinicName,
             address: this.state.clinicAddress,
             description: this.state.clinicDescription
-                 })
-                    .then(res => {
-                    console.log(data);
-                })
+        })
+            .then(res => {
+                alert("Successfully added new clinic.");
+            })
 
 
         // fetch('http://localhost:8080/api/clinics/newClinic', {
