@@ -1,7 +1,7 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import axios from '../../Axios'
+import axios from 'axios'
 
 
 class NewClinicForm extends React.Component {
