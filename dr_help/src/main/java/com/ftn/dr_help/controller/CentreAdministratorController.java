@@ -134,13 +134,11 @@ public class CentreAdministratorController {
 		
 		
 		
-		PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
-		
-		if(passwordEncoder.matches(patientDTO.getPassword(), requested.getPassword())) {
-			String encoded = AppPasswordEncoder.getEncoder().encode(patientDTO.getPassword());
+		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
+			System.out.println("Password is " + requested.getPassword());
+			String encoded = AppPasswordEncoder.getEncoder().encode(requested.getPassword());
 			p.setPassword(encoded);
-			System.out.println("matches");
-		}
+
 		
 	/*	PasswordValidateInterface validate = new PasswordValidate();
 		
