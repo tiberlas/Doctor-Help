@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { PatientContext } from '../../context/PatientContextProvider';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -24,6 +24,7 @@ class PatientChangeProfile extends Component {
 	handleSubmit = async (event) => {
 		event.preventDefault();
 
+
 		axios.put ('http://localhost:8080/api/patients/change', {
 			
 				id: this.context.patient.id, 
@@ -38,27 +39,16 @@ class PatientChangeProfile extends Component {
 				insuranceNumber: this.context.patient.insuranceNumber
 			
 		})
+		.then(response => {
+            console.log('odgovor');
+            console.log(response);
+        })
 		.then (
+			this.props.updateData,
 			this.setState ({
 				to_profile: true
 			})
-			//this.context.updateValue("firstName", document.getElementById('tb_firstName').value)
-			// this.context.patient.firstName = document.getElementById('tb_firstName').value;
-			// this.context.patient.lastName = document.getElementById('tb_lastName').value;
-			// this.context.patient.address = document.getElementById('tb_address').value;
-			// this.context.patient.city = document.getElementById('tb_city').value;
-			// this.context.patient.state = document.getElementById('tb_state').value;
-			// this.context.patient.phoneNumber = document.getElementById('tb_phoneNumber').value;
-			
 		); 
-
-
-		this.updatePatient ();
-		return <Redirect to='/login'></Redirect>;
-	}
-
-	updatePatient () {
-		this.props.updateData ();
 	}
 
 	handleChange = (event) => {
@@ -68,9 +58,12 @@ class PatientChangeProfile extends Component {
 	}
 
 	render () {
+		this.bul = false;
+
 		if (this.state.to_profile === true) {
+			//alert ('To profile is true');
 			return (
-				<Redirect to='/patients/' />
+				<Redirect to ='/patient/profile' />
 			);
 		}
 		else {

@@ -47,6 +47,8 @@ public class ProceduresTypePOJO implements Serializable{
 	@Column(name = "duration", nullable = false)
 	private LocalTime duration;
 	
+	// Ovo je sranje
+	// Treba ga obrisati
 	@OneToOne(fetch = FetchType.LAZY)
 	private AppointmentPOJO appointment;
 	

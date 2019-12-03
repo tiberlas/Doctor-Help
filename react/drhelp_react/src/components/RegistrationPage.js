@@ -35,8 +35,12 @@ class RegistrationPage extends React.Component {
 		let insurance = document.getElementById ('tb_insurance').value;
 		let birthday = document.getElementById('tb_birthday').value;
 
-		if (Number.isNaN (insurance)) {
-			alert ('Insurance number must be a number!');
+		if (Number.isInteger(insurance)){
+			alert ('Insurance number must be an integer!');
+			return;
+		}
+		if (insurance.includes("-") || insurance.includes("+")) {
+			alert ("Insurance number can't have a sign!");
 			return;
 		}
 
@@ -59,10 +63,7 @@ class RegistrationPage extends React.Component {
 		.then (data => data.json ())
 		.then (function (data) {
 			alert (data.response)
-		});
-								
-	
-		
+		});		
 	}
 
 

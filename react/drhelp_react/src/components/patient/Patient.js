@@ -74,7 +74,7 @@ class Patient extends Component {
                                 <PatientProfile />
                             </Route>
                             <Route exact path="/patient/profile/change">
-                                <PatientChangeProfile updateData={() => this.update()}/>
+                                <PatientChangeProfile updateData={() => this.handlePatient()}/>
                             </Route>
                         </Switch>
                     </div>
