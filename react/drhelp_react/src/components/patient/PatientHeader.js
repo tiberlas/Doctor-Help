@@ -17,9 +17,12 @@ class PatientHeader extends Component {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="patient-navbar">
+                    <Nav className="patient-navbar" >
                         <Nav.Link>
                             <NavLink exact to='/patient/profile'>Profile</NavLink>
+                        </Nav.Link>
+                        <Nav.Link>
+                            <NavLink exact to='/login'>Login</NavLink>
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse> 

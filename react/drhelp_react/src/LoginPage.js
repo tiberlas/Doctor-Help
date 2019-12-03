@@ -83,8 +83,19 @@ class LoginPage extends React.Component {
 				.then (response =>  {
 
 					localStorage.setItem('token', JSON.stringify(response.jwtToken));
-					var token = JSON.parse(localStorage.getItem('token'));
-					console.log(`Authorization=Bearer ${token}`)
+////////////////////////////////////////////////////////////////////////////////
+
+					
+
+					try {
+
+					} catch (error) {
+
+					}
+
+////////////////////////////////////////////////////////////////////////////////
+//					var token = JSON.parse(localStorage.getItem('token'));
+//					console.log(`Authorization=Bearer ${token}`)
 
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
@@ -112,7 +123,7 @@ class LoginPage extends React.Component {
 						this.context.updateValue ( response.id, response.userRole);
 
 						
-						alert("Token is " + token)
+//						alert("Token is " + token)
 						//this.context.updateValue ("role", response.userRole);
 					}
 				});
