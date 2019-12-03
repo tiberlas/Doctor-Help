@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicRoomListDTO;
-import com.ftn.dr_help.model.adapter.ClinicUpdate;
+import com.ftn.dr_help.model.convertor.ClinicUpdate;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;

@@ -5,6 +5,7 @@ import { UserContext } from '../../context/UserContextProvider'
 import DoctorContextProvider from '../../context/DoctorContextProvider';
 import {Route, Switch, Redirect} from "react-router-dom";
 import DoctorChangeProfile from './DoctorChangeProfile.jsx';
+import DoctorChangePassword from './DoctorChangePassword.jsx';
 import axios from 'axios';
 
 class Doctor extends Component {
@@ -52,8 +53,10 @@ class Doctor extends Component {
 
                     <div>
                         <Switch>
+                            <Route exact path="/doctor/"> <DoctorProfile /></Route>
                             <Route exact path="/doctor/profile"> <DoctorProfile /></Route>
-                            <Route exact path="/doctor/profile/change"> <DoctorChangeProfile /></Route>
+                            <Route exact path="/doctor/profile/change"> <DoctorChangeProfile handleUpdate={this.handleDoctor}/></Route>
+                            <Route exact path="/doctor/profile/change/password"> <DoctorChangePassword /></Route>
                         </Switch>
                     </div>
                 </DoctorContextProvider>

@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
-import {DoctorContext} from '../../context/DoctorContextProvider';
+import {NurseContext} from '../../context/NurseContextProvider';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 
-class DoctorChangeProfile extends Component {
-    static contextType = DoctorContext;
+class NurseChangeProfile extends Component {
+    static contextType = NurseContext;
     state = { 
         goto_profile: false,
-        email: this.context.doctor.email,
-        firstName: this.context.doctor.firstName,
-        lastName: this.context.doctor.lastName,
-        address: this.context.doctor.address,
-        city: this.context.doctor.city,
-        state: this.context.doctor.state,
-        phoneNumber: this.context.doctor.phoneNumber,
-        birthday: this.context.doctor.birthday,
+        email: this.context.nurse.email,
+        firstName: this.context.nurse.firstName,
+        lastName: this.context.nurse.lastName,
+        address: this.context.nurse.address,
+        city: this.context.nurse.city,
+        state: this.context.nurse.state,
+        phoneNumber: this.context.nurse.phoneNumber,
+        birthday: this.context.nurse.birthday,
         error: false
      }
 
     handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.put('http://localhost:8080/api/doctors/change', {
+        axios.put('http://localhost:8080/api/nurses/change', {
                     id: 100,
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
@@ -47,7 +47,7 @@ class DoctorChangeProfile extends Component {
     render() { 
         if(this.state.goto_profile==true) {
             return (
-                <Redirect to='/doctor/' ></Redirect>
+                <Redirect to='/nurse/' ></Redirect>
             );
         }
         return ( 
@@ -86,4 +86,4 @@ class DoctorChangeProfile extends Component {
     }
 }
  
-export default DoctorChangeProfile;
+export default NurseChangeProfile;

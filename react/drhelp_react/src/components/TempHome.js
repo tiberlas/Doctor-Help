@@ -7,6 +7,7 @@ import CenterAdministrator from './centre_admin/CentreAdministrator.js';
 import Doctor from './doctor/Doctor.jsx'
 import Patient from './patient/Patient'
 import LoginPage from '../LoginPage.js';
+import Nurse from './nurse/Nurse.jsx';
 
 
 class TempHome extends React.Component {
@@ -14,6 +15,22 @@ class TempHome extends React.Component {
     static contextType = UserContext
 
     render() {
+        // preci na ovaj sistem
+        // return(
+        //     <div>
+        //         <header>
+        //             <h1>HEADER</h1>
+        //         </header>
+
+        //     {this.props.role === 'centreAdmin' && <CenterAdministrator />}
+        //     {this.props.role === 'clinicAdmin' && <ClinicAdministrator />}
+
+        //        <Footer />
+        //     </div>
+
+        // )
+
+
         if(this.props.role === 'centreAdmin')
             return(
                 <CenterAdministrator />)
@@ -23,12 +40,13 @@ class TempHome extends React.Component {
             return(<Doctor />)
         else if(this.props.role === 'patient')
             return(<Patient />)
+        else if(this.props.role === 'nurse')
+            return(<Nurse />)
         else
             return(
                 <div><LoginPage /></div>
             )
 
-        return( <Footer />)
     };
 }
 
