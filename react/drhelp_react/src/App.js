@@ -104,13 +104,13 @@ class App extends Component {
                 <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
                  {!this.state.loggedIn && 
                     <LoginPage 
-                    loggedIn={this.state.loggedIn}
-                    userRole={this.state.userRole}
-                    setLoginDoctor={() => this.setDoctor ()}
-                    setLoginNurse={() => this.setNurse ()}
-                    setLoginCentreAdmin={() => this.setCentreAdmin ()}
-                    setLoginClinicAdmin={() => this.setClinicAdmin ()}
-                    setLoginPatient={() => this.setPatient ()}
+                      loggedIn={this.state.loggedIn}
+                      userRole={this.state.userRole}
+                      setLoginDoctor={() => this.setDoctor ()}
+                      setLoginNurse={() => this.setNurse ()}
+                      setLoginCentreAdmin={() => this.setCentreAdmin ()}
+                      setLoginClinicAdmin={() => this.setClinicAdmin ()}
+                      setLoginPatient={() => this.setPatient ()}
                     />
                     // <PatientProfile></PatientProfile>
                   }

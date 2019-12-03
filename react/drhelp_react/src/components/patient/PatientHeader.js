@@ -7,13 +7,13 @@ import {NavLink} from 'react-router-dom';
 class PatientHeader extends Component {
     state = {  }
 
-    static contectType = PatientContext;
+    static contextType = PatientContext;
 
     render() { 
         return (  
             <Navbar bg="light" expane="lg">
                 <Navbar.Brand>
-                    Placeholder Name
+                    {this.context.patient.firstName}&nbsp;{this.context.patient.lastName}
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

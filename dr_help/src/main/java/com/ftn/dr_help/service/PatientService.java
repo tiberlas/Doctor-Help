@@ -131,5 +131,28 @@ public class PatientService {
 		
 		return retVal;
 	}
+
+	public PatientProfileDTO save(PatientProfileDTO profileUpdate) {
+		if (profileUpdate == null) {
+			System.out.println("PRVI NULL");
+			return null;
+		}
+		
+		PatientPOJO current = patientRepository.findOneByEmail (profileUpdate.getEmail());
+		if (current == null) {
+			System.out.println("DRUGI NULL");
+			return null;
+		}
+		
+		current.setFirstName(profileUpdate.getFirstName ());
+		current.setLastName(profileUpdate.getLastName ());
+		current.setAddress (profileUpdate.getAddress());
+		current.setCity(profileUpdate.getCity());
+		current.setState(profileUpdate.getState());
+		current.setPhoneNumber(profileUpdate.getPhoneNumber());
+		
+		patientRepository.save(current);
+		return profileUpdate;
+	}
 	
 }

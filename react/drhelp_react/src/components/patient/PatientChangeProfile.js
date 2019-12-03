@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { PatientContext } from '../../context/PatientContextProvider';
 import { Redirect } from 'react-router';
+import axios from 'axios';
 
 
 
@@ -11,38 +12,53 @@ class PatientChangeProfile extends Component {
 	state = {
 		to_profile: false, 
 		id: this.context.patient.id, 
-		email: this.context.patient.email,
 		firstName: this.context.patient.firstName, 
 		lastName: this.context.patient.lastName, 
 		address: this.context.patient.address, 
 		city: this.context.patient.city, 
 		state: this.context.patient.state, 
 		phoneNumber: this.context.patient.phoneNumber, 
-		birthday: this.context.patient.birthday
+		birthday: this.context.patient.birthday, 
 	}
 
-	handleSubmit = (event) => {
+	handleSubmit = async (event) => {
 		event.preventDefault();
 
-		fetch ('http://localhost:8080/api/patients/change', {
-			method: "PUT", 
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify ({
-				id: this.state.id, 
-				email: this.state.email,
-				firstName: this.state.firstName, 
-				lastName: this.state.lastName, 
-				address: this.state.address, 
-				city: this.state.city, 
-				state: this.state.state, 
-				phoneNumber: this.state.phoneNumber, 
-				birthday: this.state.birthday
-			})
+		axios.put ('http://localhost:8080/api/patients/change', {
+			
+				id: this.context.patient.id, 
+				email: this.context.patient.email,
+				firstName: document.getElementById('tb_firstName').value, 
+				lastName: document.getElementById('tb_lastName').value, 
+				address: document.getElementById('tb_address').value, 
+				city: document.getElementById('tb_city').value, 
+				state: document.getElementById('tb_state').value, 
+				phoneNumber: document.getElementById('tb_phoneNumber').value, 
+				birthday: this.context.patient.birthday, 
+				insuranceNumber: this.context.patient.insuranceNumber
+			
 		})
 		.then (
-			this.props.handleUpdate, 
-			this.setState ({to_profile: true})
-		);
+			this.setState ({
+				to_profile: true
+			})
+			//this.context.updateValue("firstName", document.getElementById('tb_firstName').value)
+			// this.context.patient.firstName = document.getElementById('tb_firstName').value;
+			// this.context.patient.lastName = document.getElementById('tb_lastName').value;
+			// this.context.patient.address = document.getElementById('tb_address').value;
+			// this.context.patient.city = document.getElementById('tb_city').value;
+			// this.context.patient.state = document.getElementById('tb_state').value;
+			// this.context.patient.phoneNumber = document.getElementById('tb_phoneNumber').value;
+			
+		); 
+
+
+		this.updatePatient ();
+		return <Redirect to='/login'></Redirect>;
+	}
+
+	updatePatient () {
+		this.props.updateData ();
 	}
 
 	handleChange = (event) => {
@@ -52,9 +68,9 @@ class PatientChangeProfile extends Component {
 	}
 
 	render () {
-		if (this.state.to_profile) {
+		if (this.state.to_profile === true) {
 			return (
-				<Redirect to='/patients/profile' />
+				<Redirect to='/patients/' />
 			);
 		}
 		else {
@@ -63,43 +79,37 @@ class PatientChangeProfile extends Component {
 					<div>
 						<span>
 							<label>First name: </label>
-							<input type='text' name='firstName' value={this.state.firstName} onChange={this.handleChange}/>
+							<input type='text' name='firstName' id='tb_firstName' value={this.state.firstName} onChange={this.handleChange}/>
 						</span>
 					</div>
 					<div>
 						<span>
 							<label>Last name: </label>
-							<input type='text' name='lastName' value={this.state.lastName} onChange={this.handleChange}/>
-						</span>
-					</div>
-					<div>
-						<span>
-							<label>Email: </label>
-							<input type='text' name='email' value={this.state.email} onChange={this.handleChange}/>
+							<input type='text' name='lastName' id='tb_lastName' value={this.state.lastName} onChange={this.handleChange}/>
 						</span>
 					</div>
 					<div>
 						<span>
 							<label>Address: </label>
-							<input type='text' name='address' value={this.state.address} onChange={this.handleChange}/>
+							<input type='text' name='address' id='tb_address' value={this.state.address} onChange={this.handleChange}/>
 						</span>
 					</div>
 					<div>
 						<span>
 							<label>City: </label>
-							<input type='text' name='city' value={this.state.city} onChange={this.handleChange}/>
+							<input type='text' name='city' id='tb_city' value={this.state.city} onChange={this.handleChange}/>
 						</span>
 					</div>
 					<div>
 						<span>
 							<label>State: </label>
-							<input type='text' name='state' value={this.state.state} onClick={this.handleChange}/>
+							<input type='text' name='state' id='tb_state' value={this.state.state} onClick={this.handleChange}/>
 						</span>
 					</div>
 					<div>
 						<span>
 							<label>Phone number: </label>
-							<input type='text' name='phoneNumber' value={this.state.phoneNumber} onClick={this.handleChange}/>
+							<input type='text' name='phoneNumber' id='tb_phoneNumber' value={this.state.phoneNumber} onClick={this.handleChange}/>
 						</span>
 					</div>
 					<div>

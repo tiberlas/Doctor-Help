@@ -98,4 +98,15 @@ public class PatientController {
 		return new ResponseEntity<PatientProfileDTO> (retVal, HttpStatus.OK);
 	}
 	
+	@PutMapping (value="/change")
+	public ResponseEntity<PatientProfileDTO> updateProfile (@RequestBody PatientProfileDTO profileUpdate) {
+		PatientProfileDTO retVal = patientService.save(profileUpdate);
+		System.out.println("AKTIVIRAN UPDATE PROFILE KONTROLER");
+		if (retVal == null) {
+			return new ResponseEntity<> (HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		return new ResponseEntity<PatientProfileDTO> (retVal, HttpStatus.OK);
+	}
+	
 }

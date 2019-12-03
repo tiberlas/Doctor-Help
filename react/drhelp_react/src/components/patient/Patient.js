@@ -6,6 +6,7 @@ import PatientProfile from './PatientProfile.js';
 import { UserContext } from '../../context/UserContextProvider.js';
 import PatientContextProvider from '../../context/PatientContextProvider.js';
 import PatientChangeProfile from './PatientChangeProfile';
+import axios from 'axios'
 
 class Patient extends Component {
     
@@ -28,21 +29,25 @@ class Patient extends Component {
         this.handlePatient ();
     }
 
+    update () {
+        this.forceUpdate();
+    }
+
     handlePatient = () => {
-        fetch ("http://localhost:8080/api/patients/" + this.context.user.id + "/profile", { method: "GET" })
-        .then (response => response.json ())
-        .then (json => {
+        let path = "http://localhost:8080/api/patients/" + this.context.user.id + "/profile";
+        axios.get (path)
+        .then (response => {
             this.setState ({
-                email: json.email, 
-                firstName: json.firstName, 
-                lastName: json.lastName, 
-                address: json.address, 
-                city: json.city, 
-                state: json.state, 
-                phoneNumber: json.phoneNumber, 
-                birthday: json.birthday, 
-                insuranceNumber: json.insuranceNumber
-            })
+                email: response.data.email, 
+                firstName: response.data.firstName, 
+                lastName: response.data.lastName, 
+                address: response.data.address, 
+                city: response.data.city, 
+                state: response.data.state, 
+                phoneNumber: response.data.phoneNumber, 
+                birthday: response.data.birthday, 
+                insuranceNumber: response.data.insuranceNumber
+            });
         });
     }
 
@@ -69,7 +74,7 @@ class Patient extends Component {
                                 <PatientProfile />
                             </Route>
                             <Route exact path="/patient/profile/change">
-                                <PatientChangeProfile />
+                                <PatientChangeProfile updateData={() => this.update()}/>
                             </Route>
                         </Switch>
                     </div>
