@@ -8,7 +8,6 @@ import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
 
 class CentreAdminHeader extends Component {
-    state = {  }
     render() { 
         return ( 
             <Navbar bg="light" expand="lg">
@@ -25,6 +24,9 @@ class CentreAdminHeader extends Component {
                 <Nav.Link >
                     <Link exact to = '/admin/requests'> Patient requests </Link>
                 </Nav.Link>   
+                <Nav.Link> 
+                    <Link exact to = '/medication/new'> New medication </Link>
+                </Nav.Link>
             </Nav>
         </Navbar.Collapse>
         </Navbar>

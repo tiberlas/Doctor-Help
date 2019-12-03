@@ -13,7 +13,7 @@ class RegistrationPage extends React.Component {
 
 
 	handleRegister = async (event) => {
-		event.preventDefault ();
+		event.preventDefault();
 
 		let pass1 = document.getElementById ('tb_pass1').value;
 		let pass2 = document.getElementById ('tb_pass2').value;

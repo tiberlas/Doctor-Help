@@ -18,12 +18,7 @@ class PatientRequests extends Component {
 
         var token = JSON.parse(localStorage.getItem('token'));
         console.log("token is" + token)
-        axios.get('http://localhost:8080/api/centreAdmins/requests', {
-            headers: {
-                Authorization: 'Bearer' + token
-            }
-        })
-        .then(res => res.json())
+        axios.get('http://localhost:8080/api/centreAdmins/requests',)
         .then(res =>  {
             const patientInfo = res.data
             console.log("patient info from fetch", patientInfo[0])

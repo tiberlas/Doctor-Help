@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class PerscriptionPOJO implements Serializable {
 
@@ -28,6 +30,7 @@ public class PerscriptionPOJO implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	private DiagnosisPOJO diagnosis;
 	
+	@JsonBackReference
 	@OneToMany(mappedBy = "perscription", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MedicationPOJO> medicationList;
 	

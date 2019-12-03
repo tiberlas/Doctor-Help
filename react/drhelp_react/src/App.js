@@ -10,6 +10,7 @@ import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
 import PatientProfile from './components/patient/PatientProfile';
 import interceptor from './Interseptor.js';
+import axios from "axios"
 
 
 class App extends Component {
@@ -63,13 +64,10 @@ class App extends Component {
 
   confirmRegistration = () => {
     console.log("bingo")
-    fetch('http://localhost:8080/api/patients/confirmAccount', {
-      method: 'put',
+    axios.put('http://localhost:8080/api/patients/confirmAccount', {
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify( {
           email: window.location.href.split('=')[1]
-      })
-     }).then(response => response.json()).then(console.log("done"))
+     }).then(response => {console.log("done")})
 
   }
 
