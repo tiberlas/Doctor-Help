@@ -6,6 +6,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom';
 
 class CentreAdminHeader extends Component {
     render() { 
@@ -26,6 +27,11 @@ class CentreAdminHeader extends Component {
                 </Nav.Link>   
                 <Nav.Link> 
                     <Link exact to = '/medication/new'> New medication </Link>
+                </Nav.Link>
+            </Nav>
+            <Nav className="justify-content-end" >
+                <Nav.Link>
+                    <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
                 </Nav.Link>
             </Nav>
         </Navbar.Collapse>

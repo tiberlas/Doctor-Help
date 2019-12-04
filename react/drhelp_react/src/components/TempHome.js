@@ -37,15 +37,15 @@ class TempHome extends React.Component {
 
         if(this.props.role === 'centreAdmin')
             return(
-                <CenterAdministrator />)
+                <CenterAdministrator logout={() => this.props.logout ()}/>)
         else if(this.props.role === 'clinicAdmin')
-            return(<ClinicAdministrator />)
+            return(<ClinicAdministrator logout={() => this.props.logout ()}/>)
         else if(this.props.role === 'doctor')
-            return(<Doctor />)
+            return(<Doctor logout={() => this.props.logout ()}/>)
         else if(this.props.role === 'patient')
             return(<Patient logout={() => this.props.logout ()}/>)
         else if(this.props.role === 'nurse')
-            return(<Nurse />)
+            return(<Nurse logout={() => this.props.logout ()}/>)
         else
             return(
                 <div><LoginPage /></div>

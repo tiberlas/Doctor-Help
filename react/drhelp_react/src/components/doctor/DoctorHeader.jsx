@@ -18,6 +18,11 @@ class DoctorHeader extends Component {
                         <NavLink exact to = '/doctor/profile' >profile</NavLink>
                     </Nav.Link>
                 </Nav>
+                <Nav className="justify-content-end" style={{ width: "100%" }}>
+                    <Nav.Link>
+                            <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
+                        </Nav.Link>
+                    </Nav>
             </Navbar.Collapse>
             </Navbar>);
     }

@@ -9,14 +9,6 @@ class PatientHeader extends Component {
 
     static contextType = PatientContext;
 
-    // handleLogout () { () => this.props.logout}
-        //alert ('logout attempt');
-        //localStorage.setItem('token', null);
-    //     this.props.logout;
-    // }
-
-
-
     render() { 
         return (  
             <Navbar bg="light" expane="lg">

@@ -30,6 +30,11 @@ class ClinicAdminHeader extends Component {
                     <NavLink exact to='/clinic+administrator/medical+staff'>medical staff</NavLink>
                 </Nav.Link>
             </Nav>
+            <Nav className="justify-content-end" >
+                <Nav.Link>
+                    <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
+                </Nav.Link>
+            </Nav>
         </Navbar.Collapse>
         </Navbar>);
     }

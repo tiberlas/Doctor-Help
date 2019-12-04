@@ -15,7 +15,7 @@ class CenterAdministrator extends Component {
     render() { 
         return ( 
             <div>
-                <CentreAdminHeader />
+                <CentreAdminHeader logout={() => this.props.logout ()}/>
 
                 <Switch>
                     <Route path="/clinic/add" ><NewClinicForm /> </Route>

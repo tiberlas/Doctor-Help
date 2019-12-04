@@ -57,7 +57,7 @@ class ClinicAdministrator extends Component {
         return (
              <div>
                 <ClinicAdminContextProvider admin={admin}>
-                <ClinicAdminHeader></ClinicAdminHeader>
+                <ClinicAdminHeader logout={() => this.props.logout ()}></ClinicAdminHeader>
 
                 <div>
                 <Switch>
