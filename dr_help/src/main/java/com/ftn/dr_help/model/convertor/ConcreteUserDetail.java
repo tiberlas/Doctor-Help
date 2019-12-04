@@ -1,5 +1,7 @@
 package com.ftn.dr_help.model.convertor;
 
+import org.springframework.stereotype.Service;
+
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
@@ -7,6 +9,7 @@ import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 
+@Service
 public class ConcreteUserDetail implements ConcreteUserDetailInterface{
 
 	/*
