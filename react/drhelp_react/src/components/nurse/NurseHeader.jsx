@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import {NavLink} from 'react-router-dom'
-import {DoctorContext} from '../../context/DoctorContextProvider';
+import {NurseContext} from '../../context/NurseContextProvider';
 
-class DoctorHeader extends Component {
-    static contextType = DoctorContext;
+class NurseHeader extends Component {
+    static contextType = NurseContext;
 
     render() { 
         return ( 
             <Navbar bg="light" expand="lg">
-            <Navbar.Brand >{this.context.doctor.firstName}&nbsp;{this.context.doctor.lastName}</Navbar.Brand>
+            <Navbar.Brand >{this.context.nurse.firstName}&nbsp;{this.context.nurse.lastName}</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link >
-                        <NavLink exact to = '/doctor/profile' >profile</NavLink>
+                        <NavLink exact to = '/nurse/profile' >profile</NavLink>
                     </Nav.Link>
                 </Nav>
             </Navbar.Collapse>
@@ -23,4 +23,4 @@ class DoctorHeader extends Component {
     }
 }
  
-export default DoctorHeader;
+export default NurseHeader;

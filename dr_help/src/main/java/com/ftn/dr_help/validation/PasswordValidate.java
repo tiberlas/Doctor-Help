@@ -8,7 +8,6 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 public class PasswordValidate implements PasswordValidateInterface{
 	
 	
-	
 	@Override
 	public boolean isValid(ChangePasswordDTO newPassword, String encodedPaString) {
 		if(newPassword == null || newPassword.getNewPassword() == null || newPassword.getOldPassword() == null) {

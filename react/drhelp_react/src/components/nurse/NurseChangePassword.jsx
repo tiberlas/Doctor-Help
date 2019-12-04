@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
+import {NurseContext} from '../../context/NurseContextProvider';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-class ClinicAdminChangePassword extends Component {
-    static contextType = ClinicAdminContext
+class NurseChangePassword extends Component {
+    static contextType = NurseContext
 
     state = {
         oldPassword: '',
@@ -23,7 +23,7 @@ class ClinicAdminChangePassword extends Component {
             this.setState({error: true})
             return;
         }
-        axios.put('http://localhost:8080/api/clinicAdmins/change/password', {
+        axios.put('http://localhost:8080/api/nurses/change/password', {
                     oldPassword: this.state.oldPassword,
                     newPassword: this.state.newPassword
         }).then((responce) => {
@@ -41,7 +41,7 @@ class ClinicAdminChangePassword extends Component {
 
     render() {
         if(this.state.go_profile === true)
-            return(<Redirect to='/clinic+administrator/'></Redirect> );
+            return(<Redirect to='/nurses/'></Redirect> );
         
         return ( 
             <div>
@@ -73,5 +73,5 @@ class ClinicAdminChangePassword extends Component {
     }
 }
  
-export default ClinicAdminChangePassword;
+export default NurseChangePassword;
 

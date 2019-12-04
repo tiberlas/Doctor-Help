@@ -17,6 +17,12 @@ class ClinicAdminHeader extends Component {
                 <Nav.Link >
                     <NavLink exact to = '/clinic+administrator/profile' >profile</NavLink>
                 </Nav.Link>
+                <Nav.Link >
+                    <NavLink exact to = '/clinic+administrator/clinic' >clinic's profile</NavLink>
+                </Nav.Link>
+                <Nav.Link >
+                    <NavLink exact to = '/clinic+administrator/clinic/change' >change clinic's profile</NavLink>
+                </Nav.Link>
                 <Nav.Link>
                     <NavLink exact to = '/clinic+administrator/rooms'  >rooms</NavLink>
                 </Nav.Link>
