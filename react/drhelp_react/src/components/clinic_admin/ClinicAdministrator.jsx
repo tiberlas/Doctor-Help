@@ -9,6 +9,8 @@ import ClinicAdminContextProvider from '../../context/ClinicAdminContextProvider
 import ClinicAdminMedicalStaff from './ClinicAdminMedicalStaff';
 import ClinicAdminChangePassword from './ClinicAdminChangePassword';
 import axios from 'axios';
+import Clinic from '../clinic/Clinic';
+import ClinicChangeProfile from './ClinicChangeProfile';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -58,8 +60,10 @@ class ClinicAdministrator extends Component {
 
                 <div>
                 <Switch>
-                    <Route exact path="/clinic+administrator/" ><ClinicAdminProfile /> </Route>
+                    <Route exact path="/clinic+administrator/clinic" ><Clinic clinicId={this.state.clinicId}/> </Route>
+                    <Route exact path="/clinic+administrator/clinic/change" ><ClinicChangeProfile clinicId={this.state.clinicId}/> </Route>
                     <Route exact path="/clinic+administrator/profile" ><ClinicAdminProfile /> </Route>
+                    <Route exact path="/clinic+administrator/" ><ClinicAdminProfile /> </Route>
                     <Route exact path="/clinic+administrator/profile/change" ><ClinicAdminChangeProfile  handleUpdate={this.handleClinicAdmin}/> </Route>
                     <Route exact path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
                     <Route exact path='/clinic+administrator/medical+staff'> <ClinicAdminMedicalStaff /> </Route>
