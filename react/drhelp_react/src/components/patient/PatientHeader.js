@@ -6,7 +6,7 @@ import {NavLink} from 'react-router-dom';
 
 class PatientHeader extends Component {
     state = {  }
-
+ 
     static contextType = PatientContext;
 
     render() { 

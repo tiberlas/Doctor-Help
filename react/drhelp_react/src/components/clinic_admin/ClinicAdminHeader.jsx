@@ -6,7 +6,7 @@ import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 
 class ClinicAdminHeader extends Component {
     static contextType = ClinicAdminContext
-
+ 
     render() { 
         return ( 
         <Navbar bg="light" expand="lg">

@@ -10,7 +10,7 @@ insert into centre_administrator(first_name, last_name, password, status, email,
 		 '06555555', 'RS', 'NS', 'A DOM', '2003-2-1'::timestamp
 	);
 
-	
+	 
 --password: 1234
 insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
 	values(

@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import {NavLink} from 'react-router-dom'
 import {DoctorContext} from '../../context/DoctorContextProvider';
-
+ 
 class DoctorHeader extends Component {
     static contextType = DoctorContext;
 
