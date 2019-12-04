@@ -62,6 +62,13 @@ class App extends Component {
     })
   }
 
+  logout () {
+    this.setState ({
+      loggedIn: false,
+      userRole: 'guest',
+    })
+  }
+
   confirmRegistration = () => {
     console.log("bingo")
     axios.put('http://localhost:8080/api/patients/confirmAccount', {
@@ -113,7 +120,7 @@ class App extends Component {
                     // <PatientProfile></PatientProfile>
                   }
                   {this.state.loggedIn &&
-                  <TempHome role = {this.state.userRole} />	}
+                  <TempHome role = {this.state.userRole} logout={() => this.logout ()}/>	}
                 </UserContextProvider>		
             </Switch>
           </BrowserRouter>

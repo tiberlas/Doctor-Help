@@ -9,6 +9,14 @@ class PatientHeader extends Component {
 
     static contextType = PatientContext;
 
+    // handleLogout () { () => this.props.logout}
+        //alert ('logout attempt');
+        //localStorage.setItem('token', null);
+    //     this.props.logout;
+    // }
+
+
+
     render() { 
         return (  
             <Navbar bg="light" expane="lg">
@@ -17,12 +25,15 @@ class PatientHeader extends Component {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="patient-navbar" >
+                    <Nav className="justify-content-start" style={{ width: "100%" }}>
                         <Nav.Link>
                             <NavLink exact to='/patient/profile'>Profile</NavLink>
                         </Nav.Link>
+                        
+                    </Nav>
+                    <Nav className="justify-content-end" style={{ width: "100%" }}>
                         <Nav.Link>
-                            <NavLink exact to='/login'>Logout</NavLink>
+                            <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse> 

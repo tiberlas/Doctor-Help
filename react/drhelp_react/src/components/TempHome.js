@@ -13,6 +13,10 @@ class TempHome extends React.Component {
 
     static contextType = UserContext
 
+    handleLogout () {
+        
+    }
+
     render() {
         if(this.props.role === 'centreAdmin')
             return(
@@ -22,7 +26,7 @@ class TempHome extends React.Component {
         else if(this.props.role === 'doctor')
             return(<Doctor />)
         else if(this.props.role === 'patient')
-            return(<Patient />)
+            return(<Patient logout={() => this.props.logout ()}/>)
         else
             return(
                 <div><LoginPage /></div>

@@ -67,7 +67,7 @@ class Patient extends Component {
         return ( 
             <div>
                 <PatientContextProvider patient={patient}>
-                    <PatientHeader />
+                    <PatientHeader logout={() => this.props.logout ()}/>
                     <div>
                         <Switch>
                             <Route exact path="/patient/profile">
