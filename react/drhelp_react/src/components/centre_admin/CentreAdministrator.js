@@ -9,6 +9,7 @@ import NewMedicationForm from '../medication/NewMedicationForm';
 import CentreAdminProfile from './CentreAdminProfile'
 import axios from 'axios'
 import CentreAdminContextProvider from '../../context/CentreAdminContextProvider';
+import CentreAdminChangeProfile from './CentreAdminChangeProfile'
 
 class CenterAdministrator extends Component {
     state = {
@@ -56,6 +57,7 @@ handleCentreAdmin = () => {
 
                 <Switch>
                     <Route exact path="/centreAdministrator/profile" ><CentreAdminProfile /> </Route>
+                    <Route exact path="/centreAdministrator/profile/change" ><CentreAdminChangeProfile  handleUpdate={this.handleCentreAdmin}/> </Route>
                     <Route path="/clinic/add" ><NewClinicForm /> </Route>
                     <Route path="/admin/add" ><NewAdminForm /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>

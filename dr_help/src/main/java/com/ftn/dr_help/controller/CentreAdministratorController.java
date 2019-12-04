@@ -9,6 +9,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +30,7 @@ import com.ftn.dr_help.dto.CentreAdminDTO;
 import com.ftn.dr_help.dto.CentreAdminProfileDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
+import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
@@ -109,6 +112,21 @@ public class CentreAdministratorController {
 		
 		return new ResponseEntity<CentreAdminProfileDTO>(dto, HttpStatus.OK);
 	}
+	
+	
+	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CentreAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
+		String email = CurrentUser.getEmail();
+		
+		CentreAdminProfileDTO ret = centreAdministratorService.save(admin, email);
+		
+		if(ret == null) {
+			return new ResponseEntity<CentreAdminProfileDTO>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		return new ResponseEntity<CentreAdminProfileDTO>(ret, HttpStatus.OK);
+	}
+	
 
 	
 	@GetMapping(value = "/createRequests")
