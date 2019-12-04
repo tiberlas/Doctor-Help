@@ -83,7 +83,7 @@ class LoginPage extends React.Component {
 				.then (response =>  {
 
 					if (response.status === 401) {
-						alert ("Nes");
+						alert ("An account with that email and password doesn't exist or isn't activated. ");
 						return;
 					}
 
