@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button'
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
+import NavLink from 'react-bootstrap/NavLink'
 import Navbar from 'react-bootstrap/Navbar'
+
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
@@ -15,6 +17,9 @@ class CentreAdminHeader extends Component {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
+                <Nav.Link >
+                    <Link exact to = '/centreAdministrator/profile' >Profile</Link>
+                </Nav.Link>
                 <Nav.Link >
                     <Link exact to = '/clinic/add' >New clinic</Link>
                 </Nav.Link>

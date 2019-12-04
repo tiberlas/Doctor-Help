@@ -27,8 +27,6 @@ class TempHome extends React.Component {
             return(
                 <div><LoginPage /></div>
             )
-
-        return( <Footer />)
     };
 }
 

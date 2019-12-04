@@ -1,10 +1,12 @@
 package com.ftn.dr_help.validation;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 
+@Service
 public class PasswordValidate implements PasswordValidateInterface{
 	
 	

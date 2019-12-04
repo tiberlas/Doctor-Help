@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
+import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.CentreAdminDTO;
+import com.ftn.dr_help.dto.CentreAdminProfileDTO;
+import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
@@ -92,6 +95,22 @@ public class CentreAdministratorController {
 		
 	}
 	
+	
+	@GetMapping(value = "/profile")
+	public ResponseEntity<CentreAdminProfileDTO> getCentreAdminProfile() {
+		String email = CurrentUser.getEmail();
+		
+		CentreAdministratorPOJO ret = centreAdministratorService.findOneByEmail(email);
+		CentreAdminProfileDTO dto = new CentreAdminProfileDTO(ret);
+		
+		if(ret == null) {
+			return new ResponseEntity<CentreAdminProfileDTO>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<CentreAdminProfileDTO>(dto, HttpStatus.OK);
+	}
+
+	
 	@GetMapping(value = "/createRequests")
 	public void createRequests() {
 		patientService.createAllRequests();
@@ -131,8 +150,6 @@ public class CentreAdministratorController {
 		p.setInsuranceNumber(requested.getInsuranceNumber());
 		p.setPhoneNumber(requested.getPhoneNumber());
 		System.out.println(p);
-		
-		
 		
 		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
 			System.out.println("Password is " + requested.getPassword());

@@ -79,9 +79,13 @@ class LoginPage extends React.Component {
 						password: password.value
 					})
 				})
-				.then (response => response.json())
-				.then (response =>  {
-
+				.then (response => {
+					if(response.status === 302) {
+						alert("moved")
+						//window
+					}
+					return response.json()
+				}).then (response =>  {
 					localStorage.setItem('token', JSON.stringify(response.jwtToken));
 					var token = JSON.parse(localStorage.getItem('token'));
 					console.log(`Authorization=Bearer ${token}`)
@@ -163,24 +167,6 @@ class LoginPage extends React.Component {
 						</Link>
 					</Route>
 				</Switch>
-
-{/* 
-<Link to="/login">
-  <Button renderAs="button">
-    <span>Login</span>
-  </Button>
-</Link> */}
-
-
-
-
-				{/* <form onSubmit={this.handleSubmit}>
-					<FormControl type="text" placeholder="Email" id="tb_email"/>
-					<FormControl type="password" placeholder="Password" id='tb_password'/>
-					<input type="submit" value="Submit">
-					</input>
-				</form>
-				<Button>Register</Button> */}
 			</div>
 		)
 	}

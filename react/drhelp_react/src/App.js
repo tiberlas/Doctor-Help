@@ -74,12 +74,12 @@ class App extends Component {
     console.log("href " + this.state.currentUrl)
     if(this.state.currentUrl === 'http://localhost:3000/activate') {
       console.log("bingo")
-    fetch('http://localhost:8080/api/patients/confirmAccount', {
-      method: 'put',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify( {
-          email: window.location.href.split('=')[1]
-      })
+      fetch('http://localhost:8080/api/patients/confirmAccount', {
+        method: 'put',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify( {
+            email: window.location.href.split('=')[1]
+        })
      }).then(response => response.json()).then(console.log("done"))
         return (
           <div> 

@@ -27,6 +27,10 @@ public class ClinicAdministratorService {
 	@Autowired
 	private ClinicAdministratorRepository clinicAdministratorRepository;
 	
+	@Autowired 
+	private PasswordValidate passwordValidate;
+	
+	
 	public ClinicAdministratorPOJO findOne(Long id) {
 		return clinicAdministratorRepository.findById(id).orElseGet(null);
 	}
@@ -115,9 +119,9 @@ public class ClinicAdministratorService {
 		if(finded == null)
 			return false;
 		
-		PasswordValidateInterface validate = new PasswordValidate();
+		//PasswordValidateInterface validate = new PasswordValidate();
 		
-		if(validate.isValid(password, finded.getPassword())) {
+		if(passwordValidate.isValid(password, finded.getPassword())) {
 			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
 			finded.setPassword(encoded);
 			clinicAdministratorRepository.save(finded);

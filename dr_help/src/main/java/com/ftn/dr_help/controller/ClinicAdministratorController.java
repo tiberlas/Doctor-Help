@@ -27,6 +27,7 @@ import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicAdministratorService;
 import com.ftn.dr_help.service.ClinicService;
+import com.ftn.dr_help.validation.PasswordValidate;
 
 @RestController
 @RequestMapping(value = "api/clinicAdmins")
@@ -39,6 +40,7 @@ public class ClinicAdministratorController {
 		@Autowired
 		private ClinicService clinicService;
 		
+	
 		
 		@PostMapping(value = "/newAdmin", consumes = "application/json")
 		@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
