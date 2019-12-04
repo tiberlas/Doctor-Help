@@ -28,6 +28,7 @@ import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.CentreAdminDTO;
 import com.ftn.dr_help.dto.CentreAdminProfileDTO;
+import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
@@ -126,6 +127,21 @@ public class CentreAdministratorController {
 		
 		return new ResponseEntity<CentreAdminProfileDTO>(ret, HttpStatus.OK);
 	}
+	
+	
+	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
+		String email = CurrentUser.getEmail();
+
+		boolean ret = centreAdministratorService.changePassword(passwords, email);
+		
+		if(ret) {
+			return new ResponseEntity<String>("changed", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("not changed", HttpStatus.BAD_REQUEST);
+		}
+		
+	}  
 	
 
 	

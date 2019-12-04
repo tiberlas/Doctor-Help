@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {UserContext} from '../../context/UserContextProvider'
 import CentreAdminHeader from './CentreAdminHeader'
 import {Route, Switch} from 'react-router-dom'
 import NewClinicForm from './NewClinicForm'
@@ -10,6 +9,8 @@ import CentreAdminProfile from './CentreAdminProfile'
 import axios from 'axios'
 import CentreAdminContextProvider from '../../context/CentreAdminContextProvider';
 import CentreAdminChangeProfile from './CentreAdminChangeProfile'
+import CentreAdminChangePassword from './CentreAdminChangePassword'
+
 
 class CenterAdministrator extends Component {
     state = {
@@ -49,7 +50,6 @@ handleCentreAdmin = () => {
         })
 }
     render() { 
-        console.log("STATE OF ADMIN IS:", this.state)
         return ( 
             <div>
                 <CentreAdminContextProvider admin={this.state.admin}> {/*probably doesnt work} */}
@@ -58,10 +58,12 @@ handleCentreAdmin = () => {
                 <Switch>
                     <Route exact path="/centreAdministrator/profile" ><CentreAdminProfile /> </Route>
                     <Route exact path="/centreAdministrator/profile/change" ><CentreAdminChangeProfile  handleUpdate={this.handleCentreAdmin}/> </Route>
+                    <Route exact path='/centreAdministrator/profile/change/password'> <CentreAdminChangePassword /> </Route>
                     <Route path="/clinic/add" ><NewClinicForm /> </Route>
                     <Route path="/admin/add" ><NewAdminForm /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>
                     <Route path = "/medication/new"> <NewMedicationForm/> </Route>
+                    
                 </Switch>
                 </CentreAdminContextProvider>
             </div>
