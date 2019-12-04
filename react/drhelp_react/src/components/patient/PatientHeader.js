@@ -22,7 +22,7 @@ class PatientHeader extends Component {
                             <NavLink exact to='/patient/profile'>Profile</NavLink>
                         </Nav.Link>
                         <Nav.Link>
-                            <NavLink exact to='/login'>Login</NavLink>
+                            <NavLink exact to='/login'>Logout</NavLink>
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse> 

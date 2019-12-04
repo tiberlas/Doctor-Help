@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ClinicAdminHeader from './ClinicAdminHeader';
 import HandlingRooms from './HandlingRooms';
-import {Route, Switch, Redirect} from "react-router-dom";
+import {Route, Redirect} from "react-router-dom";
+import {Switch} from "react-router-dom";
 import ClinicAdminProfile from './ClinicAdminProfile';
 import { UserContext } from '../../context/UserContextProvider'
 import ClinicAdminChangeProfile from './ClinicAdminChangeProfile';

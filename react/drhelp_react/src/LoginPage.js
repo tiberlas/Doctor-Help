@@ -87,11 +87,11 @@ class LoginPage extends React.Component {
 
 					
 
-					try {
+					// try {
 
-					} catch (error) {
+					// } catch (error) {
 
-					}
+					// }
 
 ////////////////////////////////////////////////////////////////////////////////
 //					var token = JSON.parse(localStorage.getItem('token'));
