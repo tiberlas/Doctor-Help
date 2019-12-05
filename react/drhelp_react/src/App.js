@@ -9,6 +9,7 @@ import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
 import interceptor from './Interseptor.js';
 import axios from "axios"
+import FirstTimePasswordChange from './components/FirstTimePasswordChange'
 
 class App extends Component {
   
@@ -18,7 +19,8 @@ class App extends Component {
       loggedIn: false,
       userRole: 'guest', 
       userId: 1,
-      currentUrl: window.location.href.split('=')[0]
+      currentUrl: window.location.href.split('=')[0],
+      passwordChange: false
     }
 
     this.confirmRegistration = this.confirmRegistration.bind(this)
@@ -68,29 +70,39 @@ class App extends Component {
 
   }
 
+  setPasswordChange(role) {
+    alert("passchange")
+    this.setState({
+      passwordChange: true,
+      userRole: role
+    })
+  }
+
   render() {
 
 
     console.log("href " + this.state.currentUrl)
     if(this.state.currentUrl === 'http://localhost:3000/activate') {
       console.log("bingo")
-      fetch('http://localhost:8080/api/patients/confirmAccount', {
-        method: 'put',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify( {
+      axios.put('http://localhost:8080/api/patients/confirmAccount', {
             email: window.location.href.split('=')[1]
-        })
-     }).then(response => response.json()).then(console.log("done"))
+     }).then(console.log("done"))
         return (
           <div> 
             
-            <h2> Your account has been confirmed. Click the <a href="http://localhost:3000/"> link </a> 
+            <h2> Your account has been confirmed. Click the <a href="http://localhost:3000/login"> link </a> 
             to log in with your credentials. </h2>
         </div>
         )
     }
 
 
+      if(this.state.passwordChange) {
+        alert("user role is"+this.state.userRole)
+        return (
+          <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>
+        )
+      }
    
       return (
         <div>
@@ -106,10 +118,13 @@ class App extends Component {
                     setLoginCentreAdmin={() => this.setCentreAdmin ()}
                     setLoginClinicAdmin={() => this.setClinicAdmin ()}
                     setLoginPatient={() => this.setPatient ()}
+                    setPasswordChange = {(role) => this.setPasswordChange(role)}
                     />
                     
                   }
-                  {this.state.loggedIn &&
+
+                  {/* {(this.state.passwordChange) && <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>} */}
+                  {(this.state.loggedIn && !this.state.passwordChange) &&
                   <TempHome role = {this.state.userRole} />	}
                 </UserContextProvider>		
             </Switch>

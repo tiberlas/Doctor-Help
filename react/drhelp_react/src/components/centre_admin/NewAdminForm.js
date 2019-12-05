@@ -80,6 +80,7 @@ class NewAdminForm extends React.Component {
                  })
                     .then(res => {
                     console.log(data);
+                    alert("Successfully added new clinic administrator.")
                     })
         } else {
             axios.post('http://localhost:8080/api/centreAdmins/newAdmin', {  email: this.state.email,
@@ -87,6 +88,7 @@ class NewAdminForm extends React.Component {
             lastName: this.state.lastName })
             .then(res => {
             console.log(data);
+                alert("Successfully added new centre administrator.")
             })
         }
     }

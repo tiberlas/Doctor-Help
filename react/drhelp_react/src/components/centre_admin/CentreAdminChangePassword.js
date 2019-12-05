@@ -45,7 +45,7 @@ class CentreAdminChangePassword extends Component {
 
     render() {
         if(this.state.go_profile == true)
-            return(<Redirect to='/centreAdministrator/profile'></Redirect> );
+            return(<Redirect to='/centreAdmin/profile'></Redirect> );
         
         return ( 
             <div>
