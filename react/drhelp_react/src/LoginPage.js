@@ -144,10 +144,6 @@ class LoginPage extends React.Component {
 		
 		return (
 			<div>
-			<div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" id="customCheck2" />
-      <label class="custom-control-label bg-success" for="customCheck2">Disabled custom checkbox</label>
-    </div>
 				<Switch>
 					<Route path = "/login">
 						<form onSubmit={this.handleSubmit}>

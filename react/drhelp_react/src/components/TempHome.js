@@ -10,41 +10,39 @@ import LoginPage from '../LoginPage.js';
 import Nurse from './nurse/Nurse.jsx';
 import Header from './Header.jsx';
 
-
 class TempHome extends React.Component {
 
     static contextType = UserContext
 
     render() {
-        return(
-            <div>
-                <Header />
+        // return(
+        //     <div>
+        //         <Header />
 
-                {this.props.role === 'CENTER_ADMINISTRATOR' && <CenterAdministrator />}
-                {this.props.role === 'clinicAdmin' && <ClinicAdministrator />}
-                {this.props.role === 'DOCTOR' && <Doctor />}
+        //         {this.props.role === 'centerAdmin' && <Redirect to='/clinic+administrator'/>}
+        //         {this.props.role === 'clinicAdmin' && <ClinicAdministrator />}
+        //         {this.props.role === 'doctor' && <Doctor />}
 
-               <Footer />
-            </div>
+        //        <Footer />
+        //     </div>
 
-        )
+        // )
 
-
-        // if(this.props.role === 'centreAdmin')
-        //     return(
-        //         <CenterAdministrator />)
-        // else if(this.props.role === 'clinicAdmin')
-        //     return(<ClinicAdministrator />)
-        // else if(this.props.role === 'doctor')
-        //     return(<Doctor />)
-        // else if(this.props.role === 'patient')
-        //     return(<Patient />)
-        // else if(this.props.role === 'nurse')
-        //     return(<Nurse />)
-        // else
-        //     return(
-        //         <div><LoginPage /></div>
-        //     )
+        if(this.props.role === 'centreAdmin')
+            return(
+                <CenterAdministrator />)
+        else if(this.props.role === 'clinicAdmin')
+            return(<ClinicAdministrator />)
+        else if(this.props.role === 'doctor')
+            return(<Doctor />)
+        else if(this.props.role === 'patient')
+            return(<Patient />)
+        else if(this.props.role === 'nurse')
+            return(<Nurse />)
+        else
+            return(
+                <div><LoginPage /></div>
+            )
 
     };
 }

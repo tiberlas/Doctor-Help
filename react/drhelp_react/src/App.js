@@ -4,7 +4,7 @@ import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
-import {BrowserRouter, Switch} from "react-router-dom";
+import {BrowserRouter, Switch, Redirect, Route} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
 import interceptor from './Interseptor.js';
@@ -111,6 +111,7 @@ class App extends Component {
                   }
                   {this.state.loggedIn &&
                   <TempHome role = {this.state.userRole} />	}
+                  <Route render={() => <Redirect to={{pathname: "/login"}} />} />
                 </UserContextProvider>		
             </Switch>
           </BrowserRouter>
