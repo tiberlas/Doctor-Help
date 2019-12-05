@@ -7,7 +7,7 @@ import {UserContext} from './context/UserContextProvider';
 import {Route, Switch} from 'react-router-dom';
 import RegistrationPage from './components/RegistrationPage.js';
 import { Link } from 'react-router-dom';
-
+import FirstTimePasswordChange from './components/FirstTimePasswordChange'
 
 
 class LoginPage extends React.Component {
@@ -93,7 +93,7 @@ class LoginPage extends React.Component {
 					console.log("must change password, ", response.mustChangePassword)
 					if(response.mustChangePassword === true) {
 						alert("Password change boolean true!")
-						
+						<FirstTimePasswordChange userRole={response.userRole}/>
 					}
 					
 					if (response.userRole === "PATIENT") {
