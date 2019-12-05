@@ -84,7 +84,7 @@ class Patient extends Component {
                     </div>
                 </PatientContextProvider>
             </div>
-         );
+         ); 
     }
 }
  
