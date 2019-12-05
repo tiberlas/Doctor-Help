@@ -5,6 +5,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
+import Dropdown from 'react-dropdown'; 
 
 class ClinicListing extends Component {
 
@@ -33,7 +35,13 @@ class ClinicListing extends Component {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-
+						{this.state.clinics.map (row => (
+							<TableRow key={row.id}>
+								<TableCell><Link>{row.name}</Link></TableCell>
+								<TableCell>{row.address}</TableCell>
+								<TableCell>{row.description}</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</div>
