@@ -8,6 +8,7 @@ class NewDiagnosisForm extends React.Component {
     constructor() {
         super()
         this.state = {
+            
             diagnosisName: "",
             diagnosisDescription: ""
         }

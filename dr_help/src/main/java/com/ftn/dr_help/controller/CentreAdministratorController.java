@@ -15,7 +15,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,19 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.CentreAdminDTO;
 import com.ftn.dr_help.dto.CentreAdminProfileDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
-import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.service.CentreAdministratorService;
 import com.ftn.dr_help.service.PatientService;
-import com.ftn.dr_help.validation.PasswordValidate;
-import com.ftn.dr_help.validation.PasswordValidateInterface;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -55,6 +53,9 @@ public class CentreAdministratorController {
 
 	@Autowired
     private JavaMailSender javaMailSender;
+	
+	@Autowired 
+	private Mail mail;
 
 	
 	@PostMapping(value = "/newAdmin", consumes = "application/json")
@@ -65,7 +66,15 @@ public class CentreAdministratorController {
 		admin.setFirstName(centreAdminDTO.getFirstName());
 		admin.setLastName(centreAdminDTO.getLastName());
 		admin.setEmail(centreAdminDTO.getEmail());
-		admin.setPassword("impressive password");
+		
+		String password = "fakultet";
+		
+		String encoded = AppPasswordEncoder.getEncoder().encode(password);
+		//p.setPassword(encoded);
+		admin.setPassword(encoded);
+		mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CENTRE_ADMINISTRATOR);
+		System.out.println("Successfully sent account info email.");
+		//admin.setPassword("impressive password");
 		
 		admin = centreAdministratorService.save(admin);
 		return new ResponseEntity<>(new CentreAdminDTO(admin), HttpStatus.CREATED);
