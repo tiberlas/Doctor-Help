@@ -5,7 +5,7 @@ class ChangePassword extends Component {
         oldPassword: '',
         newPassword: '',
         newPassword1: '',
-        error: false,
+        error: true,
         errorBack: false
     }
 
@@ -17,9 +17,12 @@ class ChangePassword extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
+        if(this.state.error === true) {
+            return;
+        }
         this.setState({error: false})
 
-        if( this.validate() === true ) {
+        if( this.state.error === false ) {
 
             var data = {
                 oldPassword: this.state.oldPassword,
@@ -31,46 +34,45 @@ class ChangePassword extends Component {
     }
 
     validate = () => {
-        if(this.state.newPassword !== this.state.newPassword1) {
+        this.setState({error: false})
+        if(!this.state.newPassword1 ||!this.state.newPassword || this.state.newPassword !== this.state.newPassword1) {
             this.setState({error: true})
-            return false;
         }
-
-        return true;
     }
 
     handlerChange = (event) => {
+
         let nam = event.target.name;
         let val = event.target.value;
-        this.setState({[nam]: val});
+        this.setState({[nam]: val}, () => { this.validate()});
     }
 
     render() { 
         return ( 
-            <div>
+            <div class='row d-flex justify-content-center'>
+            <div class='col-md-3'>
                 <form onSubmit={this.handleSubmit}>
-                <div>
-                    <p>Enter your old password: </p>
-                    <input type='password'name='oldPassword' onChange={this.handlerChange} />
+
+                <div className={`form-group ${this.state.errorBack? 'has-danger': ''}`}>
+                    <label class="form-control-label" for="oldPassword">Enter your old password:</label>
+                    <input type='password'name='oldPassword' id='oldPassword' className={`form-control ${this.state.errorBack? 'is-invalid': ''}`} onChange={this.handlerChange} />
+                    <div class="invalid-feedback">Sorry, current passowrd did not match. Try another?</div>
                 </div>
-                {this.state.errorBack && <div>
-                    <h3>PASSWORD DID NOT MATCH</h3>
-                </div>}
-                <div>
-                    <p>Enter your new password: </p>
-                    <input type='password'name='newPassword' onChange={this.handlerChange} />
+
+                <div className={`form-group ${this.state.error? 'has-danger': ''}`}>
+                    <label class="form-control-label" for="newPassword">Enter your new password:</label>
+                    <input type='password'name='newPassword' id='newPassword' className={`form-control ${this.state.error? 'is-invalid': ''}`} onChange={this.handlerChange} />
+                </div>
+                <div className={`form-group ${this.state.error? 'has-danger': ''}`}>
+                    <label class="form-control-label" for="newPassword1">Enter your old password:</label>
+                    <input type='password'name='newPassword1' id='newPassword1' className={`form-control ${this.state.error? 'is-invalid': ''}`} onChange={this.handlerChange} />
+                    <div class="invalid-feedback">Passwords did not match</div>
                 </div>
                 <div>
-                    <p>Re-enter your new password: </p>
-                    <input type='password'name='newPassword1' onChange={this.handlerChange} />
-                </div>
-                {this.state.error && <div>
-                    <h3>PASSWORDS MUST MATCH</h3>
-                </div>}
-                <div>
-                    <input type='submit' value='submit'/>
+                    <input type='submit' value='submit' className={`btn btn-success ${this.state.error? 'disabled': ''}`}/>
                 </div>
                 </form>
+            </div>
             </div>
          );
     }
