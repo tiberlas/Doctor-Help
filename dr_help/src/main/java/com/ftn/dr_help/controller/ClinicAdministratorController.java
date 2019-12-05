@@ -17,17 +17,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicAdministratorService;
 import com.ftn.dr_help.service.ClinicService;
-import com.ftn.dr_help.validation.PasswordValidate;
 
 @RestController
 @RequestMapping(value = "api/clinicAdmins")
@@ -40,6 +42,8 @@ public class ClinicAdministratorController {
 		@Autowired
 		private ClinicService clinicService;
 		
+		@Autowired
+		private Mail mail;
 	
 		
 		@PostMapping(value = "/newAdmin", consumes = "application/json")
@@ -54,12 +58,20 @@ public class ClinicAdministratorController {
 			admin.setFirstName(clinicAdminDTO.getFirstName());
 			admin.setLastName(clinicAdminDTO.getLastName());
 			admin.setEmail(clinicAdminDTO.getEmail());
-			admin.setPassword("impressive password");
 			admin.setAddress("...");
 			admin.setBirthday(Calendar.getInstance());
 			admin.setCity("...");
 			admin.setPhoneNumber("...");
 			admin.setState("...");
+			
+			String password = "fakultet";
+			
+			String encoded = AppPasswordEncoder.getEncoder().encode(password);
+			//p.setPassword(encoded);
+			admin.setPassword(encoded);
+			mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CLINICAL_ADMINISTRATOR);
+			System.out.println("Successfully sent account info email.");
+			
 			
 			admin = clinicAdministratorService.save(admin);
 			return new ResponseEntity<>(new ClinicAdminDTO(admin), HttpStatus.CREATED);
