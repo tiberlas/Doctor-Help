@@ -21,7 +21,8 @@ public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInte
 							pojo.getState(),
 							pojo.getPhoneNumber(),
 							pojo.getBirthday(),
-							pojo.getRole());
+							pojo.getRole(),
+							pojo.getMustChangePassword());
 							
 	}
 

@@ -90,6 +90,12 @@ class LoginPage extends React.Component {
 					var token = JSON.parse(localStorage.getItem('token'));
 					console.log(`Authorization=Bearer ${token}`)
 
+					console.log("must change password, ", response.mustChangePassword)
+					if(response.mustChangePassword === true) {
+						alert("Password change boolean true!")
+						
+					}
+					
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
 						this.context.updateValue (response.id, response.userRole);
@@ -114,9 +120,6 @@ class LoginPage extends React.Component {
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {
 						this.props.setLoginCentreAdmin ()
 						this.context.updateValue ( response.id, response.userRole);
-
-						
-						alert("Token is " + token)
 						//this.context.updateValue ("role", response.userRole);
 					}
 				});

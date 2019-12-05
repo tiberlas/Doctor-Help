@@ -28,6 +28,7 @@ public class UserPOJO implements UserDetails{
 	private String state;
 	private String phoneNumber;
 	private Calendar birthday;
+	private Boolean mustChangePassword = false;
 	private List<Authority> authorities;//for jwt it's required to be a list but we only have one element in the list
 	
 	public UserPOJO(Long id, String firstName, String lastName, String email, String password, String address, String city,
@@ -45,6 +46,26 @@ public class UserPOJO implements UserDetails{
 		this.birthday = birthday;
 		this.authorities = new ArrayList<Authority>();
 		this.authorities.add(new Authority(role));
+	}
+	
+	
+	
+	public UserPOJO(Long id, String firstName, String lastName, String email, String password, String address, String city,
+			String state, String phoneNumber, Calendar birthday, RoleEnum role, Boolean mustChangePassword) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNumber = phoneNumber;
+		this.birthday = birthday;
+		this.authorities = new ArrayList<Authority>();
+		this.authorities.add(new Authority(role));
+		this.mustChangePassword = mustChangePassword;
 	}
 	
 	public UserPOJO() {
@@ -160,6 +181,14 @@ public class UserPOJO implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public Boolean getMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(Boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
 	}
 	
 }

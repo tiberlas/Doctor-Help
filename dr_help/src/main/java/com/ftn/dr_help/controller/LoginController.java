@@ -78,10 +78,11 @@ public class LoginController {
 		int expiresIn = tokenUtils.getExpiredIn();
 
 		//odgovor servera
-		LoginResponseDTO ret = new LoginResponseDTO(user.getId(), user.getRole(), jwt, expiresIn);
+		LoginResponseDTO ret = new LoginResponseDTO(user.getId(), user.getRole(), jwt, expiresIn, user.getMustChangePassword());
 		
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return ResponseEntity.ok(ret);
+	
 		
 //		PatientPOJO patientResponse =  loginService.getPatientLoginResponse(loginRequest.getEmail());
 //		if (patientResponse != null) {
