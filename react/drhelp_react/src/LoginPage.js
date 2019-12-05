@@ -91,10 +91,7 @@ class LoginPage extends React.Component {
 					console.log(`Authorization=Bearer ${token}`)
 
 					console.log("must change password, ", response.mustChangePassword)
-					if(response.mustChangePassword === true) {
-						alert("Password change boolean true!")
-						<FirstTimePasswordChange userRole={response.userRole}/>
-					}
+
 					
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
@@ -115,6 +112,11 @@ class LoginPage extends React.Component {
 					else if (response.userRole === "CLINICAL_ADMINISTRATOR") {
 						this.props.setLoginClinicAdmin ()
 						this.context.updateValue (response.id, response.userRole);
+						
+						if(response.mustChangePassword === true) {
+							alert("Password change boolean true!")
+							return (<FirstTimePasswordChange role = {response.userRole}/> )
+						}
 						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {

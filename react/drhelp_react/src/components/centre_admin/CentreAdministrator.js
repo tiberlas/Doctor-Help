@@ -63,6 +63,7 @@ handleCentreAdmin = () => {
                     <Route path="/admin/add" ><NewAdminForm /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>
                     <Route path = "/medication/new"> <NewMedicationForm/> </Route>
+                    <Route path = "/medication/new"> <NewMedicationForm/> </Route>
                     
                 </Switch>
                 </CentreAdminContextProvider>
