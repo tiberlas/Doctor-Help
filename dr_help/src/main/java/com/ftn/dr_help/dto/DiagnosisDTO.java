@@ -15,6 +15,7 @@ public class DiagnosisDTO {
 	
 	public DiagnosisDTO(DiagnosisPOJO med) {
 		super();
+		this.id = med.getId();
 		this.name = med.getDiagnosis();
 		this.description = med.getDescription();
 	}
