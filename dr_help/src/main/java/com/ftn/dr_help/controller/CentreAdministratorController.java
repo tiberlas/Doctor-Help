@@ -166,7 +166,7 @@ public class CentreAdministratorController {
 		 System.out.println("info " + requested.getEmail() + " " + patientDTO.getDeclinedDescription());
 		 //TODO: remove the requested from database, send email
 		
-		sendDeclineEmail(patientDTO.getEmail(), patientDTO.getDeclinedDescription(), requested.getFirstName(), requested.getLastName());
+		mail.sendDeclineEmail(patientDTO.getEmail(), patientDTO.getDeclinedDescription(), requested.getFirstName(), requested.getLastName());
 		System.out.println("Declination mail successfully sent.");
 		
 		patientService.remove(requested);
@@ -212,7 +212,7 @@ public class CentreAdministratorController {
 		System.out.println("Patient successfully registered.");
 		
 		try {
-			sendAcceptEmail(p.getEmail(), p.getFirstName(), p.getLastName());
+			mail.sendAcceptEmail(p.getEmail(), p.getFirstName(), p.getLastName());
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -230,38 +230,7 @@ public class CentreAdministratorController {
 	
 	
 
-	void sendAcceptEmail(String sendTo, String firstName, String lastName) throws MessagingException, IOException  {
-		
-			MimeMessage msg = javaMailSender.createMimeMessage();
-	        MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-	        helper.setTo(sendTo);
-
-	        helper.setSubject("DrHelp account registration");
-	        String text = "Dear sir/madam, " + '\n';
-	        text += "your account request has been reviewed and accepted by our administrator staff. \n Please follow the link below to activate your account.";
-	        text += "http://localhost:3000/activate=" + sendTo + "\n\n\n" + "Forever helping, drHelp.";
-	        helper.setText(text);
-
-	       javaMailSender.send(msg);
-		
-	}
 	
-	
-	void sendDeclineEmail(String sendTo, String description, String firstName, String lastName) {
-
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(sendTo);
-
-        msg.setSubject("DrHelp account registration");
-        String text = "Dear sir/madam, " + '\n';
-        text += "your account request has been reviewed. Unfortunately, it has been declined, with an administrator message attached:";
-        text += "\n\n\n" + description;
-        text += "\n\n\n" + "Forever helping, drHelp.";
-        msg.setText(text);
-
-        javaMailSender.send(msg);
-
-    }
 	
 	
 }

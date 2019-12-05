@@ -10,7 +10,7 @@ import axios from 'axios'
 import CentreAdminContextProvider from '../../context/CentreAdminContextProvider';
 import CentreAdminChangeProfile from './CentreAdminChangeProfile'
 import CentreAdminChangePassword from './CentreAdminChangePassword'
-
+import NewDiagnosisForm from '../diagnoses/NewDiagnosisForm'
 
 class CenterAdministrator extends Component {
     state = {
@@ -52,7 +52,7 @@ handleCentreAdmin = () => {
     render() { 
         return ( 
             <div>
-                <CentreAdminContextProvider admin={this.state.admin}> {/*probably doesnt work} */}
+                <CentreAdminContextProvider admin={this.state.admin}> 
                 <CentreAdminHeader />
 
                 <Switch>
@@ -63,6 +63,7 @@ handleCentreAdmin = () => {
                     <Route path="/admin/add" ><NewAdminForm /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>
                     <Route path = "/medication/new"> <NewMedicationForm/> </Route>
+                    <Route path = "/diagnosis/new"> <NewDiagnosisForm/> </Route>
                     
                 </Switch>
                 </CentreAdminContextProvider>

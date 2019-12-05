@@ -21,7 +21,7 @@ class LoginPage extends React.Component {
 		super(props)
 		this.state = {
 			loggedIn: false,
-			userRole: 'guest', 
+			userRole: 'guest'
 		}
 
 	}
@@ -92,6 +92,12 @@ class LoginPage extends React.Component {
 
 					console.log("must change password, ", response.mustChangePassword)
 
+					if(response.mustChangePassword === true) {
+						let role = response.userRole
+						alert('role here' + role)
+						this.props.setPasswordChange(response.userRole)
+						alert(" dolby" + role)
+					}
 					
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
@@ -113,10 +119,7 @@ class LoginPage extends React.Component {
 						this.props.setLoginClinicAdmin ()
 						this.context.updateValue (response.id, response.userRole);
 						
-						if(response.mustChangePassword === true) {
-							alert("Password change boolean true!")
-							return (<FirstTimePasswordChange role = {response.userRole}/> )
-						}
+					
 						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {
@@ -150,7 +153,7 @@ class LoginPage extends React.Component {
 	}
 	
 	render () {
-		
+
 		return (
 			<div>
 				<Switch>

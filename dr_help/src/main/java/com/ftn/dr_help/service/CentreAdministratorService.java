@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.CentreAdminProfileDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
-import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.adapter.ConcreteUserDetail;
 import com.ftn.dr_help.model.adapter.ConcreteUserDetailInterface;
@@ -83,6 +82,7 @@ public class CentreAdministratorService {
 		if(validate.isValid(password, c.getPassword())) {
 			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
 			c.setPassword(encoded);
+			c.setMustChangePassword(false);
 			administratorRepository.save(c);
 			return true;
 		}
