@@ -74,7 +74,8 @@ public class CentreAdministratorController {
 		admin.setPassword(encoded);
 		mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CENTRE_ADMINISTRATOR);
 		System.out.println("Successfully sent account info email.");
-		//admin.setPassword("impressive password");
+		
+		admin.setMustChangePassword(true);
 		
 		admin = centreAdministratorService.save(admin);
 		return new ResponseEntity<>(new CentreAdminDTO(admin), HttpStatus.CREATED);

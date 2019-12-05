@@ -7,7 +7,7 @@ import {UserContext} from './context/UserContextProvider';
 import {Route, Switch} from 'react-router-dom';
 import RegistrationPage from './components/RegistrationPage.js';
 import { Link } from 'react-router-dom';
-
+import FirstTimePasswordChange from './components/FirstTimePasswordChange'
 
 
 class LoginPage extends React.Component {
@@ -90,6 +90,9 @@ class LoginPage extends React.Component {
 					var token = JSON.parse(localStorage.getItem('token'));
 					console.log(`Authorization=Bearer ${token}`)
 
+					console.log("must change password, ", response.mustChangePassword)
+
+					
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
 						this.context.updateValue (response.id, response.userRole);
@@ -109,14 +112,16 @@ class LoginPage extends React.Component {
 					else if (response.userRole === "CLINICAL_ADMINISTRATOR") {
 						this.props.setLoginClinicAdmin ()
 						this.context.updateValue (response.id, response.userRole);
+						
+						if(response.mustChangePassword === true) {
+							alert("Password change boolean true!")
+							return (<FirstTimePasswordChange role = {response.userRole}/> )
+						}
 						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {
 						this.props.setLoginCentreAdmin ()
 						this.context.updateValue ( response.id, response.userRole);
-
-						
-						alert("Token is " + token)
 						//this.context.updateValue ("role", response.userRole);
 					}
 				});

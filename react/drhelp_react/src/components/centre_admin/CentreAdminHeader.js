@@ -32,6 +32,9 @@ class CentreAdminHeader extends Component {
                 <Nav.Link> 
                     <Link exact to = '/medication/new'> New medication </Link>
                 </Nav.Link>
+                <Nav.Link> 
+                    <Link exact to = '/diagnosis/new'> New diagnosis </Link>
+                </Nav.Link>
             </Nav>
         </Navbar.Collapse>
         </Navbar>
