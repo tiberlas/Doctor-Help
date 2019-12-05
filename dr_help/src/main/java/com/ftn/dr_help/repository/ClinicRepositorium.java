@@ -8,4 +8,5 @@ import com.ftn.dr_help.model.pojo.ClinicPOJO;
 @Repository
 public interface ClinicRepositorium extends JpaRepository<ClinicPOJO, Long> {
 	
+	
 }

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import { Redirect } from 'react-router-dom'
+import axios from 'axios';
 
 class ClinicAdminChangeProfile extends Component {
     
     static contextType = ClinicAdminContext
     state = {
         go_profile: false,
+        errorBack: false,
         id: this.context.admin.id,
-        email: this.context.admin.email,
         firstName: this.context.admin.firstName,
         lastName: this.context.admin.lastName,
         address: this.context.admin.address,
@@ -21,27 +22,23 @@ class ClinicAdminChangeProfile extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
+        this.setState({go_profile: false})
+        this.setState({errorBack: false})
 
-        fetch('http://localhost:8080/api/clinicAdmins/change', {
-            method: "PUT",
-            headers: {
-              'Content-Type': 'application/json'},
-            body: JSON.stringify(
-                {
+        axios.put('http://localhost:8080/api/clinicAdmins/change', {
                     id: this.state.id,
-                    email: this.state.email,
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     address: this.state.address,
                     city: this.state.city,
                     state: this.state.state,
-                    phoneNumber: this.state.phoneNumber,
-                    birthday: this.state.birthday
-                })
-      }).then(
-        this.props.handleUpdate,
-        this.setState({go_profile: true})
-      );
+                    phoneNumber: this.state.phoneNumber
+        }).then( (response) => {
+            this.props.handleUpdate()
+            this.setState({go_profile: true})
+        }).catch((error) => {
+            this.setState({errorBack: true})
+        });
     }
 
     handlerChange = (event) => {
@@ -64,10 +61,6 @@ class ClinicAdminChangeProfile extends Component {
                     <input type='text'name='lastName' value={this.state.lastName} onChange={this.handlerChange} />
                 </div>
                 <div>
-                    <p>Enter your email:</p>
-                    <input type='text'name='email' value={this.state.email} onChange={this.handlerChange} />
-                </div>
-                <div>
                     <p>Enter your state:</p>
                     <input type='text'name='state' value={this.state.state} onChange={this.handlerChange} />
                 </div>
@@ -85,6 +78,9 @@ class ClinicAdminChangeProfile extends Component {
                 </div>
                 <div>
                     <input type='submit' value='submit'/>
+                </div>
+                <div>
+                    {this.state.errorBack && <p>some fiealds are in valid</p>}
                 </div>
             </form>
         );

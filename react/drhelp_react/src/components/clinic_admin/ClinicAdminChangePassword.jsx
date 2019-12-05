@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 class ClinicAdminChangePassword extends Component {
     static contextType = ClinicAdminContext
@@ -16,32 +17,19 @@ class ClinicAdminChangePassword extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.setState({errorBack: false})
+        this.setState({errorBack: false, errorBack: false})
 
         if(this.state.newPassword !== this.state.newPassword1) {
             this.setState({error: true})
             return;
         }
-        fetch('http://localhost:8080/api/clinicAdmins/change/password', {
-            method: "PUT",
-            headers: {
-              'Content-Type': 'application/json'},
-            body: JSON.stringify(
-                {
-                    id: this.context.admin.id,
+        axios.put('http://localhost:8080/api/clinicAdmins/change/password', {
                     oldPassword: this.state.oldPassword,
                     newPassword: this.state.newPassword
-                })
-      }).then((response)=> {
-            if (response.status !== 200) {
-                throw new Error("Not 200 response")
-            } else {
-            
-                this.setState({go_profile: true});
-            }
-        }).catch(()=> {
-        
-            this.setState({errorBack: true});
+        }).then((responce) => {
+            this.setState({go_profile: true})
+        }).catch((error)=> {
+            this.setState({errorBack: true})
         });
     }
 
@@ -52,7 +40,7 @@ class ClinicAdminChangePassword extends Component {
     }
 
     render() {
-        if(this.state.go_profile == true)
+        if(this.state.go_profile === true)
             return(<Redirect to='/clinic+administrator/'></Redirect> );
         
         return ( 

@@ -15,12 +15,18 @@ class PatientRequests extends Component {
 
     componentDidMount = () => {
         this._isMounted = true
-        axios.get('http://localhost:8080/api/centreAdmins/requests')
-        .then(res => {
+
+        var token = JSON.parse(localStorage.getItem('token'));
+        console.log("token is" + token)
+        axios.get('http://localhost:8080/api/centreAdmins/requests',)
+        .then(res =>  {
             const patientInfo = res.data
             console.log("patient info from fetch", patientInfo[0])
             this.setState({patientInfo})
         })
+        .catch(err => 
+            console.log(err)
+        )
     }
 
     componentDidUnmount = () => {

@@ -24,12 +24,7 @@ public class ClinicDTO {
 	public ClinicDTO(ClinicPOJO clinic) {
 		this(clinic.getId(), clinic.getName(), clinic.getAddress(), clinic.getDescription());
 	}
-	
 
-//	public ClinicDTO(ClinicPOJO clinic) {
-//		this(clinic.getId(), clinic.getName(), clinic.getAddress(), clinic.getDescription()); //clinic.getId(),
-//	}
-	
 	public String getName() {
 		return name;
 	}

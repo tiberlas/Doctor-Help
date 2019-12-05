@@ -6,7 +6,7 @@ import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 
 class ClinicAdminHeader extends Component {
     static contextType = ClinicAdminContext
-
+ 
     render() { 
         return ( 
         <Navbar bg="light" expand="lg">
@@ -17,11 +17,22 @@ class ClinicAdminHeader extends Component {
                 <Nav.Link >
                     <NavLink exact to = '/clinic+administrator/profile' >profile</NavLink>
                 </Nav.Link>
+                <Nav.Link >
+                    <NavLink exact to = '/clinic+administrator/clinic' >clinic's profile</NavLink>
+                </Nav.Link>
+                <Nav.Link >
+                    <NavLink exact to = '/clinic+administrator/clinic/change' >change clinic's profile</NavLink>
+                </Nav.Link>
                 <Nav.Link>
                     <NavLink exact to = '/clinic+administrator/rooms'  >rooms</NavLink>
                 </Nav.Link>
                 <Nav.Link>
                     <NavLink exact to='/clinic+administrator/medical+staff'>medical staff</NavLink>
+                </Nav.Link>
+            </Nav>
+            <Nav className="justify-content-end" >
+                <Nav.Link>
+                    <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
                 </Nav.Link>
             </Nav>
         </Navbar.Collapse>

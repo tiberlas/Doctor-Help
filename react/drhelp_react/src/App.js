@@ -4,14 +4,19 @@ import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter, Switch} from "react-router-dom";
+import {Switch} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
+import PatientProfile from './components/patient/PatientProfile';
+import interceptor from './Interseptor.js';
+import axios from "axios"
+
 
 class App extends Component {
   
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       loggedIn: false,
       userRole: 'guest', 
@@ -57,19 +62,25 @@ class App extends Component {
     })
   }
 
+  logout () {
+    this.setState ({
+      loggedIn: false,
+      userRole: 'guest',
+    })
+    localStorage.setItem('token', null);
+  }
+
   confirmRegistration = () => {
     console.log("bingo")
-    fetch('http://localhost:8080/api/patients/confirmAccount', {
-      method: 'put',
+    axios.put('http://localhost:8080/api/patients/confirmAccount', {
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify( {
           email: window.location.href.split('=')[1]
-      })
-     }).then(response => response.json()).then(console.log("done"))
+     }).then(response => {console.log("done")})
 
   }
 
   render() {
+
 
     console.log("href " + this.state.currentUrl)
     if(this.state.currentUrl === 'http://localhost:3000/activate') {
@@ -89,22 +100,28 @@ class App extends Component {
         </div>
         )
     }
+
+
+   
       return (
         <div>
           <BrowserRouter >
             <Switch>
                 <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
-                 {!this.state.loggedIn && <LoginPage 
-                    loggedIn={this.state.loggedIn}
-                    userRole={this.state.userRole}
-                    setLoginDoctor={() => this.setDoctor ()}
-                    setLoginNurse={() => this.setNurse ()}
-                    setLoginCentreAdmin={() => this.setCentreAdmin ()}
-                    setLoginClinicAdmin={() => this.setClinicAdmin ()}
-                    setLoginPatient={() => this.setPatient ()}
-                  />}
+                 {!this.state.loggedIn && 
+                    <LoginPage 
+                      loggedIn={this.state.loggedIn}
+                      userRole={this.state.userRole}
+                      setLoginDoctor={() => this.setDoctor ()}
+                      setLoginNurse={() => this.setNurse ()}
+                      setLoginCentreAdmin={() => this.setCentreAdmin ()}
+                      setLoginClinicAdmin={() => this.setClinicAdmin ()}
+                      setLoginPatient={() => this.setPatient ()}
+                    />
+                    // <PatientProfile></PatientProfile>
+                  }
                   {this.state.loggedIn &&
-                  <TempHome role = {this.state.userRole} />	}
+                  <TempHome role = {this.state.userRole} logout={() => this.logout ()}/>	}
                 </UserContextProvider>		
             </Switch>
           </BrowserRouter>
