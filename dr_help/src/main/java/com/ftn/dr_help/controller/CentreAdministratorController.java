@@ -9,19 +9,29 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.AppPasswordEncoder;
+import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.CentreAdminDTO;
+import com.ftn.dr_help.dto.CentreAdminProfileDTO;
+import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
+import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
@@ -31,6 +41,7 @@ import com.ftn.dr_help.service.PatientService;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value = "api/centreAdmins")
+@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')") //authority level on the hole controller
 public class CentreAdministratorController {
 	
 	@Autowired
@@ -42,16 +53,28 @@ public class CentreAdministratorController {
 
 	@Autowired
     private JavaMailSender javaMailSender;
+	
+	@Autowired 
+	private Mail mail;
 
 	
 	@PostMapping(value = "/newAdmin", consumes = "application/json")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<CentreAdminDTO> saveAdmin(@RequestBody CentreAdminDTO centreAdminDTO) {
 		System.out.println("works");
 		CentreAdministratorPOJO admin = new CentreAdministratorPOJO();
 		admin.setFirstName(centreAdminDTO.getFirstName());
 		admin.setLastName(centreAdminDTO.getLastName());
 		admin.setEmail(centreAdminDTO.getEmail());
-		admin.setPassword("impressive password");
+		
+		String password = "fakultet";
+		
+		String encoded = AppPasswordEncoder.getEncoder().encode(password);
+		//p.setPassword(encoded);
+		admin.setPassword(encoded);
+		mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CENTRE_ADMINISTRATOR);
+		System.out.println("Successfully sent account info email.");
+		//admin.setPassword("impressive password");
 		
 		admin = centreAdministratorService.save(admin);
 		return new ResponseEntity<>(new CentreAdminDTO(admin), HttpStatus.CREATED);
@@ -85,6 +108,52 @@ public class CentreAdministratorController {
 		
 	}
 	
+	
+	@GetMapping(value = "/profile")
+	public ResponseEntity<CentreAdminProfileDTO> getCentreAdminProfile() {
+		String email = CurrentUser.getEmail();
+		
+		CentreAdministratorPOJO ret = centreAdministratorService.findOneByEmail(email);
+		CentreAdminProfileDTO dto = new CentreAdminProfileDTO(ret);
+		
+		if(ret == null) {
+			return new ResponseEntity<CentreAdminProfileDTO>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<CentreAdminProfileDTO>(dto, HttpStatus.OK);
+	}
+	
+	
+	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CentreAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
+		String email = CurrentUser.getEmail();
+		
+		CentreAdminProfileDTO ret = centreAdministratorService.save(admin, email);
+		
+		if(ret == null) {
+			return new ResponseEntity<CentreAdminProfileDTO>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		return new ResponseEntity<CentreAdminProfileDTO>(ret, HttpStatus.OK);
+	}
+	
+	
+	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
+		String email = CurrentUser.getEmail();
+
+		boolean ret = centreAdministratorService.changePassword(passwords, email);
+		
+		if(ret) {
+			return new ResponseEntity<String>("changed", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("not changed", HttpStatus.BAD_REQUEST);
+		}
+		
+	}  
+	
+
+	
 	@GetMapping(value = "/createRequests")
 	public void createRequests() {
 		patientService.createAllRequests();
@@ -92,10 +161,7 @@ public class CentreAdministratorController {
 	
 	@PostMapping(value = "/declineRequest", consumes = "application/json")
 	public ResponseEntity<UserRequestPOJO> declineUserRequest(@RequestBody PatientRequestDTO patientDTO){
-		System.out.println("MY EMAIL IS" + patientDTO.getEmail());
-		System.out.println("MY DESCRIPTION IS" + patientDTO.getDeclinedDescription());
 		 UserRequestPOJO requested = patientService.findByEmail(patientDTO.getEmail());
-		 System.out.println("got in");
 		 System.out.println("info " + requested.getEmail() + " " + patientDTO.getDeclinedDescription());
 		 //TODO: remove the requested from database, send email
 		
@@ -115,28 +181,31 @@ public class CentreAdministratorController {
 		System.out.println("MY EMAIL IS" + patientDTO.getEmail());
 		UserRequestPOJO requested = patientService.findByEmail(patientDTO.getEmail());
 		
-		System.out.println("got here1");
 		PatientPOJO p = new PatientPOJO();
 		p.setActivated(false);
-		System.out.println("got here2");
 		p.setEmail(requested.getEmail());
-		System.out.println("got here3");
 		p.setFirstName(requested.getFirstName());
-		System.out.println("got here4");
 		p.setLastName(requested.getLastName());
-		System.out.println("got here5");
 		p.setAddress(requested.getAddress());
-		System.out.println("got here6");
 		p.setCity(requested.getCity());
-		System.out.println("got here7");
 		p.setState(requested.getState());
-		System.out.println("got here8");
 		p.setBirthday(requested.getBirthday());
-		System.out.println("got here9");
-		p.setInsuranceNumber(requested.getInsuranceNumber()); System.out.println("got here10");
-		p.setPassword(requested.getPassword()); System.out.println("got here11");
+		p.setInsuranceNumber(requested.getInsuranceNumber());
 		p.setPhoneNumber(requested.getPhoneNumber());
 		System.out.println(p);
+		
+		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
+			System.out.println("Password is " + requested.getPassword());
+			String encoded = AppPasswordEncoder.getEncoder().encode(requested.getPassword());
+			p.setPassword(encoded);
+
+		
+	/*	PasswordValidateInterface validate = new PasswordValidate();
+		
+		if(validate.isValid(requested.getPassword(), patientDTO.getPassword())) {
+			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
+			c.setPassword(encoded);*/
+		
 		
 		patientService.save(p);
 		System.out.println("Patient successfully registered.");

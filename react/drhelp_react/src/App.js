@@ -7,11 +7,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Switch} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
+import interceptor from './Interseptor.js';
+import axios from "axios"
 
 class App extends Component {
   
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       loggedIn: false,
       userRole: 'guest', 
@@ -59,27 +61,25 @@ class App extends Component {
 
   confirmRegistration = () => {
     console.log("bingo")
-    fetch('http://localhost:8080/api/patients/confirmAccount', {
-      method: 'put',
+    axios.put('http://localhost:8080/api/patients/confirmAccount', {
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify( {
           email: window.location.href.split('=')[1]
-      })
-     }).then(response => response.json()).then(console.log("done"))
+     }).then(response => {console.log("done")})
 
   }
 
   render() {
 
+
     console.log("href " + this.state.currentUrl)
     if(this.state.currentUrl === 'http://localhost:3000/activate') {
       console.log("bingo")
-    fetch('http://localhost:8080/api/patients/confirmAccount', {
-      method: 'put',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify( {
-          email: window.location.href.split('=')[1]
-      })
+      fetch('http://localhost:8080/api/patients/confirmAccount', {
+        method: 'put',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify( {
+            email: window.location.href.split('=')[1]
+        })
      }).then(response => response.json()).then(console.log("done"))
         return (
           <div> 
@@ -89,12 +89,16 @@ class App extends Component {
         </div>
         )
     }
+
+
+   
       return (
         <div>
           <BrowserRouter >
             <Switch>
                 <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
-                 {!this.state.loggedIn && <LoginPage 
+                 {!this.state.loggedIn && 
+                    <LoginPage 
                     loggedIn={this.state.loggedIn}
                     userRole={this.state.userRole}
                     setLoginDoctor={() => this.setDoctor ()}
@@ -102,7 +106,9 @@ class App extends Component {
                     setLoginCentreAdmin={() => this.setCentreAdmin ()}
                     setLoginClinicAdmin={() => this.setClinicAdmin ()}
                     setLoginPatient={() => this.setPatient ()}
-                  />}
+                    />
+                    
+                  }
                   {this.state.loggedIn &&
                   <TempHome role = {this.state.userRole} />	}
                 </UserContextProvider>		
