@@ -21,7 +21,9 @@ class PatientHeader extends Component {
                         <Nav.Link>
                             <NavLink exact to='/patient/profile'>Profile</NavLink>
                         </Nav.Link>
-                        
+                        <Nav.Link>
+                            <NavLink exact to='/patient/clinicList'>Clinics</NavLink>
+                        </Nav.Link>
                     </Nav>
                     <Nav className="justify-content-end" style={{ width: "100%" }}>
                         <Nav.Link>

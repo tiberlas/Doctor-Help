@@ -86,6 +86,7 @@ public class PatientController {
 	}
 	
 	@GetMapping (value="/{id}/profile")
+	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<PatientProfileDTO> getPatientProfile1 (@PathVariable("id") Long id) {
 		PatientProfileDTO retVal = patientService.getPatientProfile(id);
 		
@@ -99,6 +100,7 @@ public class PatientController {
 	}
 	
 	@PutMapping (value="/change")
+	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<PatientProfileDTO> updateProfile (@RequestBody PatientProfileDTO profileUpdate) {
 		PatientProfileDTO retVal = patientService.save(profileUpdate);
 		System.out.println("AKTIVIRAN UPDATE PROFILE KONTROLER");

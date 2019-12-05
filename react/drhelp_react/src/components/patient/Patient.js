@@ -7,6 +7,7 @@ import { UserContext } from '../../context/UserContextProvider.js';
 import PatientContextProvider from '../../context/PatientContextProvider.js';
 import PatientChangeProfile from './PatientChangeProfile';
 import axios from 'axios'
+import ClinicListing from './ClinicListing.js';
 
 class Patient extends Component {
     
@@ -72,6 +73,9 @@ class Patient extends Component {
                         <Switch>
                             <Route exact path="/patient/profile">
                                 <PatientProfile />
+                            </Route>
+                            <Route exact path="/patient/clinicList">
+                                <ClinicListing />
                             </Route>
                             <Route exact path="/patient/profile/change">
                                 <PatientChangeProfile updateData={() => this.handlePatient()}/>
