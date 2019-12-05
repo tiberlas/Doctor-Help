@@ -70,8 +70,6 @@ public class PatientController {
 	
 	@PutMapping(value = "/confirmAccount", consumes = "application/json")
 	public ResponseEntity<PatientPOJO> confirmPatientAccount(@RequestBody PatientRequestDTO patient) {
-		System.out.println("Upao sam ovde");
-		
 		PatientPOJO p = patientService.findPatientByEmail(patient.getEmail());
 		
 		if(p == null) {
