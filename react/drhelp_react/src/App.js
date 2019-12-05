@@ -67,6 +67,7 @@ class App extends Component {
       loggedIn: false,
       userRole: 'guest',
     })
+    localStorage.setItem('token', null);
   }
 
   confirmRegistration = () => {
