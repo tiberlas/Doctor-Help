@@ -56,7 +56,7 @@ class ClinicAdministrator extends Component {
         return (
              <div>
                 <ClinicAdminContextProvider admin={admin}>
-                <ClinicAdminHeader></ClinicAdminHeader>
+                {/* <ClinicAdminHeader></ClinicAdminHeader> */}
 
                 <div>
                 <Switch>

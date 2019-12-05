@@ -144,25 +144,30 @@ class LoginPage extends React.Component {
 		
 		return (
 			<div>
+			<div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="customCheck2" />
+      <label class="custom-control-label bg-success" for="customCheck2">Disabled custom checkbox</label>
+    </div>
 				<Switch>
 					<Route path = "/login">
 						<form onSubmit={this.handleSubmit}>
 							<FormControl type="email" placeholder="Email" id="tb_email"/>
 							<FormControl type="password" placeholder="Password" id='tb_password'/>
-							<input type="submit" value="Submit">
+							<input type="submit" value="Submit" class="btn btn-outline-success">
 							</input>
 						</form>
 						<Link to="/register">
-							<Button >Register</Button>
+							<a href>register?</a>
 						</Link>
 					</Route>
 					<Route path = "/register">
 						<RegistrationPage></RegistrationPage>
 						<Link to="/login">
-							<Button>Login</Button>
+							<button type="button" class="btn btn-success">Login</button>
 						</Link>
 					</Route>
 				</Switch>
+				
 
 {/* 
 <Link to="/login">

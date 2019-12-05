@@ -3,7 +3,7 @@ import './App.css';
 import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootswatch/dist/darkly/bootstrap.css';
 import {BrowserRouter, Switch} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
