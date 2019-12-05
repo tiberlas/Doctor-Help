@@ -83,5 +83,21 @@ public class ClinicController {
 		return new ResponseEntity<ClinicDTO>(ret, HttpStatus.OK);
 	}
 
+	// Displaying a list of clinics to a patient using this method instead of get all,
+	// Even though their code is identical at this point;
+	// In later sprints I intend to expand this one with filters
+	@GetMapping (value = "/listing")
+	public ResponseEntity <List<ClinicDTO>> getClinicListing () {
+		System.out.println("Patient listing says hi");
+		
+		List<ClinicPOJO> clinics = clinicService.findAll();
+
+		List<ClinicDTO> clinicDTO = new ArrayList<>();
+		for (ClinicPOJO c : clinics) {
+			clinicDTO.add(new ClinicDTO(c));
+		} 
+		
+		return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
+	}
 	
 }
