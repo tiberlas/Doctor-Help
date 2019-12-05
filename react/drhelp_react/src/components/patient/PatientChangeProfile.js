@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { PatientContext } from '../../context/PatientContextProvider';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import ChangeProfile from '../ChangeProfile';
 
 
 
@@ -11,6 +12,7 @@ class PatientChangeProfile extends Component {
 
 	state = {
 		to_profile: false, 
+		errorBack: false,
 		id: this.context.patient.id, 
 		firstName: this.context.patient.firstName, 
 		lastName: this.context.patient.lastName, 
@@ -21,34 +23,26 @@ class PatientChangeProfile extends Component {
 		birthday: this.context.patient.birthday, 
 	}
 
-	handleSubmit = async (event) => {
-		event.preventDefault();
-
+	handleSubmit = async (user) => {
+		this.setState({to_profile: false})
+        this.setState({errorBack: false})
 
 		axios.put ('http://localhost:8080/api/patients/change', {
 			
 				id: this.context.patient.id, 
-				email: this.context.patient.email,
-				firstName: document.getElementById('tb_firstName').value, 
-				lastName: document.getElementById('tb_lastName').value, 
-				address: document.getElementById('tb_address').value, 
-				city: document.getElementById('tb_city').value, 
-				state: document.getElementById('tb_state').value, 
-				phoneNumber: document.getElementById('tb_phoneNumber').value, 
-				birthday: this.context.patient.birthday, 
-				insuranceNumber: this.context.patient.insuranceNumber
+				firstName: user.firstName,
+                lastName: user.lastName,
+                address: user.address,
+                city: user.city,
+                state: user.state,
+                phoneNumber: user.phoneNumber
 			
-		})
-		.then(response => {
-            console.log('odgovor');
-            console.log(response);
-        })
-		.then (
-			this.props.updateData,
-			this.setState ({
-				to_profile: true
-			})
-		); 
+		}).then( (response) => {
+            this.props.updateData()
+            this.setState({to_profile: true})
+        }).catch((error) => {
+            this.setState({errorBack: true})
+        });; 
 	}
 
 	handleChange = (event) => {
@@ -61,54 +55,13 @@ class PatientChangeProfile extends Component {
 		this.bul = false;
 
 		if (this.state.to_profile === true) {
-			//alert ('To profile is true');
 			return (
 				<Redirect to ='/patient/profile' />
 			);
 		}
 		else {
 			return (
-				<form onSubmit={this.handleSubmit}>
-					<div>
-						<span>
-							<label>First name: </label>
-							<input type='text' name='firstName' id='tb_firstName' value={this.state.firstName} onChange={this.handleChange}/>
-						</span>
-					</div>
-					<div>
-						<span>
-							<label>Last name: </label>
-							<input type='text' name='lastName' id='tb_lastName' value={this.state.lastName} onChange={this.handleChange}/>
-						</span>
-					</div>
-					<div>
-						<span>
-							<label>Address: </label>
-							<input type='text' name='address' id='tb_address' value={this.state.address} onChange={this.handleChange}/>
-						</span>
-					</div>
-					<div>
-						<span>
-							<label>City: </label>
-							<input type='text' name='city' id='tb_city' value={this.state.city} onChange={this.handleChange}/>
-						</span>
-					</div>
-					<div>
-						<span>
-							<label>State: </label>
-							<input type='text' name='state' id='tb_state' value={this.state.state} onClick={this.handleChange}/>
-						</span>
-					</div>
-					<div>
-						<span>
-							<label>Phone number: </label>
-							<input type='text' name='phoneNumber' id='tb_phoneNumber' value={this.state.phoneNumber} onClick={this.handleChange}/>
-						</span>
-					</div>
-					<div>
-                    	<input type='submit' value='submit'/>
-                	</div>
-				</form>
+				<ChangeProfile user={this.state} handleSubmit={(user) => this.handleSubmit(user)} errorBack={this.state.errorBack}/>
 			);
 		}
 	}

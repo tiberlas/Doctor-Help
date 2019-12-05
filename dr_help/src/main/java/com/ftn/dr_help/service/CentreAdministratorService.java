@@ -8,16 +8,20 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
-import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.repository.CentreAdministratorRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
-import com.ftn.dr_help.validation.PasswordValidateInterface;
 
 @Service
 public class CentreAdministratorService {
 	
 	@Autowired
 	private CentreAdministratorRepository administratorRepository;
+	
+	@Autowired
+	private AppPasswordEncoder encoder;
+	
+	@Autowired
+	private PasswordValidate passwordValidate;
 
 	public CentreAdministratorPOJO findOne(Long id) {
 		return administratorRepository.findById(id).orElseGet(null);
@@ -45,10 +49,8 @@ public class CentreAdministratorService {
 		if(c == null)
 			return false;
 		
-		PasswordValidateInterface validate = new PasswordValidate();
-		
-		if(validate.isValid(password, c.getPassword())) {
-			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
+		if(passwordValidate.isValid(password, c.getPassword())) {
+			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 			c.setPassword(encoded);
 			administratorRepository.save(c);
 			return true;

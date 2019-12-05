@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import {NavLink} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 
 class ClinicAdminHeader extends Component {
@@ -9,34 +9,35 @@ class ClinicAdminHeader extends Component {
  
     render() { 
         return ( 
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" id="navbarColor03">
         <Navbar.Brand >{this.context.admin.firstName}&nbsp;{this.context.admin.lastName}</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-                <Nav.Link >
-                    <NavLink exact to = '/clinic+administrator/profile' >profile</NavLink>
+                <Nav.Link class="nav-item">
+                    <Link exact to = '/clinic+administrator/profile' class="nav-link" >profile</Link>
                 </Nav.Link>
                 <Nav.Link >
-                    <NavLink exact to = '/clinic+administrator/clinic' >clinic's profile</NavLink>
+                    <Link exact to = '/clinic+administrator/clinic' class="nav-link">clinic's profile</Link>
                 </Nav.Link>
                 <Nav.Link >
-                    <NavLink exact to = '/clinic+administrator/clinic/change' >change clinic's profile</NavLink>
+                    <Link exact to = '/clinic+administrator/clinic/change' class="nav-link">change clinic's profile</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <NavLink exact to = '/clinic+administrator/rooms'  >rooms</NavLink>
+                    <Link exact to = '/clinic+administrator/rooms' class="nav-link">rooms</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <NavLink exact to='/clinic+administrator/medical+staff'>medical staff</NavLink>
+                    <Link exact to='/clinic+administrator/medical+staff' class="nav-link">medical staff</Link>
                 </Nav.Link>
             </Nav>
             <Nav className="justify-content-end" >
                 <Nav.Link>
-                    <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
+                    <Link exact to='/login' onClick={this.props.logout} class="nav-link">Logout</Link>
                 </Nav.Link>
             </Nav>
         </Navbar.Collapse>
-        </Navbar>);
+        </Navbar>
+        );
     }
 }
  

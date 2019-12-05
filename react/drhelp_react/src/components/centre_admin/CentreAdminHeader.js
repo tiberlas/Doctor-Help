@@ -17,21 +17,21 @@ class CentreAdminHeader extends Component {
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
                 <Nav.Link >
-                    <Link exact to = '/clinic/add' >New clinic</Link>
+                    <Link exact to = '/clinic/add' class="nav-link">New clinic</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <Link exact to = '/admin/add'  >New admin</Link>
+                    <Link exact to = '/admin/add' class="nav-link">New admin</Link>
                 </Nav.Link>
                 <Nav.Link >
-                    <Link exact to = '/admin/requests'> Patient requests </Link>
+                    <Link exact to = '/admin/requests' class="nav-link"> Patient requests </Link>
                 </Nav.Link>   
                 <Nav.Link> 
-                    <Link exact to = '/medication/new'> New medication </Link>
+                    <Link exact to = '/medication/new' class="nav-link"> New medication </Link>
                 </Nav.Link>
             </Nav>
             <Nav className="justify-content-end" >
                 <Nav.Link>
-                    <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
+                    <Link exact to='/login' onClick={this.props.logout} class="nav-link">Logout</Link>
                 </Nav.Link>
             </Nav>
         </Navbar.Collapse>

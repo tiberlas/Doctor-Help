@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import { PatientContext } from '../../context/PatientContextProvider';
 import { Navbar } from 'react-bootstrap';
-import {NavLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 class PatientHeader extends Component {
     state = {  }
@@ -19,15 +19,15 @@ class PatientHeader extends Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="justify-content-start" style={{ width: "100%" }}>
                         <Nav.Link>
-                            <NavLink exact to='/patient/profile'>Profile</NavLink>
+                            <Link exact to='/patient/profile' class="nav-link">Profile</Link>
                         </Nav.Link>
                         <Nav.Link>
-                            <NavLink exact to='/patient/clinicList'>Clinics</NavLink>
+                            <Link exact to='/patient/clinicList' class="nav-link">Clinics</Link>
                         </Nav.Link>
                     </Nav>
                     <Nav className="justify-content-end" style={{ width: "100%" }}>
                         <Nav.Link>
-                            <NavLink exact to='/login' onClick={this.props.logout}>Logout</NavLink>
+                            <Link exact to='/login' onClick={this.props.logout} class="nav-link">Logout</Link>
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse> 

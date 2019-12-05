@@ -32,6 +32,9 @@ public class ClinicController {
 	@Autowired
 	private ClinicService clinicService;
 	
+	@Autowired
+	private CurrentUser currentUser;
+	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<ClinicDTO> saveClinic(@RequestBody ClinicDTO clinicDTO) {
@@ -72,7 +75,7 @@ public class ClinicController {
 	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<ClinicDTO> changeClinicProfile(@RequestBody ClinicDTO newClinic) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 
 		ClinicDTO ret = clinicService.save(newClinic, email);
 		

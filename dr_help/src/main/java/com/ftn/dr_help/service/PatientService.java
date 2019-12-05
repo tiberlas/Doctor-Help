@@ -132,13 +132,13 @@ public class PatientService {
 		return retVal;
 	}
 
-	public PatientProfileDTO save(PatientProfileDTO profileUpdate) {
+	public PatientProfileDTO save(PatientProfileDTO profileUpdate, String email) {
 		if (profileUpdate == null) {
 			System.out.println("PRVI NULL");
 			return null;
 		}
 		
-		PatientPOJO current = patientRepository.findOneByEmail (profileUpdate.getEmail());
+		PatientPOJO current = patientRepository.findOneByEmail (email);
 		if (current == null) {
 			System.out.println("DRUGI NULL");
 			return null;

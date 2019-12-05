@@ -14,7 +14,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +29,6 @@ import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.service.CentreAdministratorService;
 import com.ftn.dr_help.service.PatientService;
-import com.ftn.dr_help.validation.PasswordValidate;
-import com.ftn.dr_help.validation.PasswordValidateInterface;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -48,6 +45,9 @@ public class CentreAdministratorController {
 
 	@Autowired
     private JavaMailSender javaMailSender;
+	
+	@Autowired
+	private AppPasswordEncoder encoder;
 
 	
 	@PostMapping(value = "/newAdmin", consumes = "application/json")
@@ -136,7 +136,7 @@ public class CentreAdministratorController {
 		
 		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
 			System.out.println("Password is " + requested.getPassword());
-			String encoded = AppPasswordEncoder.getEncoder().encode(requested.getPassword());
+			String encoded = encoder.getEncoder().encode(requested.getPassword());
 			p.setPassword(encoded);
 
 		

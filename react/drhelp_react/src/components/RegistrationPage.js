@@ -3,6 +3,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 import Axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class RegistrationPage extends React.Component {
 
@@ -70,7 +71,8 @@ class RegistrationPage extends React.Component {
 
 	render () {
 		return (
-			<div>
+			<div class='row d-flex justify-content-center'>
+            <div class='col-md-3'> 
 				<form onSubmit={this.handleRegister}>
 					<FormControl required type="email" placeholder="Email" id="tb_email"/>
 					<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
@@ -83,8 +85,19 @@ class RegistrationPage extends React.Component {
 					<FormControl required type="text" placeholder="Phone number" id="tb_phone"/>
 					<FormControl required type="text" placeholder="Insurance number" id="tb_insurance"/>
 					<FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="tb_birthday"/>
-					<input type="submit" value="Submit"></input>
+					
+					<div class="form-group row">
+						<div class='col-md text-left'>
+							<input type="submit" value="Submit" class='btn btn-success'></input>
+						</div>
+						<div class='col-md text-right'>
+							<Link to="/login">
+								<a href>Login</a>
+							</Link>
+						</div>
+					</div>
 				</form>
+			</div>
 			</div>
 		)
 	}

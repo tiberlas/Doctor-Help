@@ -1,12 +1,12 @@
 import React from 'react'
-import './Footer.css'
+//import './Footer.css'
 
 class Footer extends React.Component {
 
     render() {
         return (
-            <div class="footer" >
-                {/* <p>project for ISA ans PSO 2019/20</p> */}
+            <div class="page-footer font-small bg-success pt-4" >
+                <div class="footer-copyright text-center py-3">©2019/20 </div>
             </div>
         );
     }

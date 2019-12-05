@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import Dropdown from 'react-dropdown'; 
+//import Dropdown from 'react-dropdown'; 
 
 class ClinicListing extends Component {
 

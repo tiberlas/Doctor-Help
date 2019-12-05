@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
@@ -27,6 +28,9 @@ public class PatientController {
 
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private CurrentUser currentUser;
 	
 	@GetMapping(value = "/all/names")
 	@PreAuthorize("hasAuthority('DOCTOR')")
@@ -71,9 +75,9 @@ public class PatientController {
 	
 	@PutMapping(value = "/confirmAccount", consumes = "application/json")
 	public ResponseEntity<PatientPOJO> confirmPatientAccount(@RequestBody PatientRequestDTO patient) {
-		System.out.println("Upao sam ovde");
+		String email = currentUser.getEmail();
 		
-		PatientPOJO p = patientService.findPatientByEmail(patient.getEmail());
+		PatientPOJO p = patientService.findPatientByEmail(email);
 		
 		if(p == null) {
 			return new ResponseEntity<PatientPOJO>(HttpStatus.NOT_FOUND);
@@ -102,8 +106,8 @@ public class PatientController {
 	@PutMapping (value="/change")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<PatientProfileDTO> updateProfile (@RequestBody PatientProfileDTO profileUpdate) {
-		PatientProfileDTO retVal = patientService.save(profileUpdate);
-		System.out.println("AKTIVIRAN UPDATE PROFILE KONTROLER");
+		String email = currentUser.getEmail();
+		PatientProfileDTO retVal = patientService.save(profileUpdate, email);
 		if (retVal == null) {
 			return new ResponseEntity<> (HttpStatus.NOT_ACCEPTABLE);
 		}

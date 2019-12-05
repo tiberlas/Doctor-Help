@@ -8,7 +8,7 @@ import Doctor from './doctor/Doctor.jsx'
 import Patient from './patient/Patient'
 import LoginPage from '../LoginPage.js';
 import Nurse from './nurse/Nurse.jsx';
-
+import Header from './Header.jsx';
 
 class TempHome extends React.Component {
 
@@ -19,41 +19,20 @@ class TempHome extends React.Component {
     }
 
     render() {
-        // preci na ovaj sistem
-        // return(
-        //     <div>
-        //         <header>
-        //             <h1>HEADER</h1>
-        //         </header>
+        return(
+            <div>
+                {this.props.role === 'centreAdmin' && <CenterAdministrator logout={() => this.props.logout ()}/>}
+                {this.props.role === 'clinicAdmin' && <ClinicAdministrator logout={() => this.props.logout ()}/>}
+                {this.props.role === 'doctor' && <Doctor logout={() => this.props.logout ()}/>}
+                {this.props.role === 'patient' && <Patient logout={() => this.props.logout ()}/>}
+                {this.props.role === 'nurse' && <Nurse logout={() => this.props.logout ()}/>}
 
-        //     {this.props.role === 'centreAdmin' && <CenterAdministrator />}
-        //     {this.props.role === 'clinicAdmin' && <ClinicAdministrator />}
+               <Footer />
+            </div>
 
-        //        <Footer />
-        //     </div>
-
-        // )
-
-
-        if(this.props.role === 'centreAdmin')
-            return(
-                <CenterAdministrator logout={() => this.props.logout ()}/>)
-        else if(this.props.role === 'clinicAdmin')
-            return(<ClinicAdministrator logout={() => this.props.logout ()}/>)
-        else if(this.props.role === 'doctor')
-            return(<Doctor logout={() => this.props.logout ()}/>)
-        else if(this.props.role === 'patient')
-            return(<Patient logout={() => this.props.logout ()}/>)
-        else if(this.props.role === 'nurse')
-            return(<Nurse logout={() => this.props.logout ()}/>)
-        else
-            return(
-                <div><LoginPage /></div>
-            )
+        )
 
     };
 }
-
-
 
 export default TempHome

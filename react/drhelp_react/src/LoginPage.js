@@ -153,41 +153,36 @@ class LoginPage extends React.Component {
 			<div>
 				<Switch>
 					<Route path = "/login">
-						<form onSubmit={this.handleSubmit}>
-							<FormControl type="email" placeholder="Email" id="tb_email"/>
-							<FormControl type="password" placeholder="Password" id='tb_password'/>
-							<input type="submit" value="Submit">
-							</input>
-						</form>
-						<Link to="/register">
-							<Button >Register</Button>
-						</Link>
+						<div class='row d-flex justify-content-center' >
+						<div class='col-sm-5'>
+
+							<form onSubmit={this.handleSubmit}>
+							<div class="form-group ">
+								<label for="exampleInputEmail1">Email address</label>
+								<FormControl type="email" placeholder="Email" id="tb_email"/>
+							</div>
+							<div class="form-group ">
+							<label for="exampleInputEmail1">Password</label>
+								<FormControl type="password" placeholder="Password" id='tb_password'/>
+							</div>
+							<div class="form-group row">
+								<div class='col-md text-left'>
+									<input type="submit" value="Submit" class="btn btn-outline-success" />
+								</div>
+								<div class='col-md text-right'>
+									<Link to="/register">
+										<a href>need account?</a>
+									</Link>
+								</div>
+							</div>
+							</form>
+							</div>
+						</div>
 					</Route>
 					<Route path = "/register">
 						<RegistrationPage></RegistrationPage>
-						<Link to="/login">
-							<Button>Login</Button>
-						</Link>
 					</Route>
 				</Switch>
-
-{/* 
-<Link to="/login">
-  <Button renderAs="button">
-    <span>Login</span>
-  </Button>
-</Link> */}
-
-
-
-
-				{/* <form onSubmit={this.handleSubmit}>
-					<FormControl type="text" placeholder="Email" id="tb_email"/>
-					<FormControl type="password" placeholder="Password" id='tb_password'/>
-					<input type="submit" value="Submit">
-					</input>
-				</form>
-				<Button>Register</Button> */}
 			</div>
 		)
 	}
