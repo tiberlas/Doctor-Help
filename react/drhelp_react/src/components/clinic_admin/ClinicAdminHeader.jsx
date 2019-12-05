@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import {NavLink, Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 
 class ClinicAdminHeader extends Component {
@@ -18,16 +18,16 @@ class ClinicAdminHeader extends Component {
                     <Link exact to = '/clinic+administrator/profile' class="nav-link" >profile</Link>
                 </Nav.Link>
                 <Nav.Link >
-                    <NavLink exact to = '/clinic+administrator/clinic' >clinic's profile</NavLink>
+                    <Link exact to = '/clinic+administrator/clinic' class="nav-link">clinic's profile</Link>
                 </Nav.Link>
                 <Nav.Link >
-                    <NavLink exact to = '/clinic+administrator/clinic/change' >change clinic's profile</NavLink>
+                    <Link exact to = '/clinic+administrator/clinic/change' class="nav-link">change clinic's profile</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <NavLink exact to = '/clinic+administrator/rooms'  >rooms</NavLink>
+                    <Link exact to = '/clinic+administrator/rooms' class="nav-link">rooms</Link>
                 </Nav.Link>
                 <Nav.Link>
-                    <NavLink exact to='/clinic+administrator/medical+staff'>medical staff</NavLink>
+                    <Link exact to='/clinic+administrator/medical+staff' class="nav-link">medical staff</Link>
                 </Nav.Link>
             </Nav>
         </Navbar.Collapse>

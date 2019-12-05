@@ -4,55 +4,49 @@ class ViewProfile extends Component {
 
     render() { 
         return ( 
-            <div>
-                <div>
-                <span>
-                    <label>first name:</label>
-                    <label>{this.props.profile.firstName}</label>
-                </span>
+                <div class="row d-flex justify-content-center">
+                <div class='col-md-3'>
+                <div >
+                    <label class="badge badge-success text-right">first name:</label>&nbsp;&nbsp;&nbsp;
+                    <label >{this.props.profile.firstName}</label>
                 </div>
+                
                 <div>
-                <span>
-                    <label>last name:</label>
+                    <label class="badge badge-success text-right">last name:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.lastName}</label>
-                </span>
                 </div>
-                <div>
-                <span>
-                    <label>email:</label>
+                
+                <div >
+                    <label class="badge badge-success text-right">email:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.email}</label>
-                </span>
                 </div>
+               
                 <div>
-                <span>
-                    <label>address:</label>
+                    <label class="badge badge-success text-right">address:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.address}</label>
-                </span>
                 </div>
-                <div>
-                <span>
-                    <label>city:</label>
+               
+                <div >
+                    <label class="badge badge-success text-right">city:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.city}</label>
-                </span>
                 </div>
-                <div>
-                <span>
-                    <label>state:</label>
+                
+                <div >
+                    <label class="badge badge-success text-right">state:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.state}</label>
-                </span>
                 </div>
-                <div>
-                <span>
-                    <label>phoneNumber:</label>
+                
+                <div >
+                    <label class="badge badge-success text-right">phoneNumber:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.phoneNumber}</label>
-                </span>
                 </div>
-                <div>
-                <span>
-                    <label>birthday:</label>
+                
+                <div >
+                    <label class="badge badge-success text-right">birthday:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.birthday}</label>
-                </span>
                 </div>
+                </div>
+                
             </div>
          );
     }

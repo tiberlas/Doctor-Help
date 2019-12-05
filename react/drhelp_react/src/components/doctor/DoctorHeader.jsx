@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import {NavLink} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {DoctorContext} from '../../context/DoctorContextProvider';
 
 class DoctorHeader extends Component {
@@ -15,7 +15,7 @@ class DoctorHeader extends Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link >
-                        <NavLink exact to = '/doctor/profile' >profile</NavLink>
+                        <Link exact to = '/doctor/profile' class="nav-link">profile</Link>
                     </Nav.Link>
                 </Nav>
             </Navbar.Collapse>
