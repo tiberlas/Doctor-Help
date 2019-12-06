@@ -78,14 +78,16 @@ class CentreAdminHeader extends Component {
                     <Link href="#" role="button" aria-haspopup="true" aria-expanded="false">Create</Link>
                 </Nav.Link>
                     <div class="dropdown-menu">
-                        <Nav.Link class="dropdown-item"> 
+                        
+                    </div>
+                </li>
+
+                <Nav.Link class="dropdown-item"> 
                             <Link exact to = '/clinic/add' >New clinic</Link>
                         </Nav.Link>
                         <Nav.Link class="dropdown-item">
                             <Link exact to = '/admin/add'  >New admin</Link>
                         </Nav.Link>
-                    </div>
-                </li>
 
                 {/* <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <button type="button" class="btn btn-success">Success</button>
