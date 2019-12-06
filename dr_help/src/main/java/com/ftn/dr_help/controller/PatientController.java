@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.PatientDTO;
-import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
+import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.PatientService;
@@ -75,9 +75,9 @@ public class PatientController {
 	
 	@PutMapping(value = "/confirmAccount", consumes = "application/json")
 	public ResponseEntity<PatientPOJO> confirmPatientAccount(@RequestBody PatientRequestDTO patient) {
-		String email = currentUser.getEmail();
+		//String email = currentUser.getEmail();
 		
-		PatientPOJO p = patientService.findPatientByEmail(email);
+		PatientPOJO p = patientService.findPatientByEmail(patient.getEmail());
 		
 		if(p == null) {
 			return new ResponseEntity<PatientPOJO>(HttpStatus.NOT_FOUND);
@@ -89,18 +89,18 @@ public class PatientController {
 		return new ResponseEntity<PatientPOJO>(p, HttpStatus.OK);
 	}
 	
-	@GetMapping (value="/{id}/profile")
+	@GetMapping (value="/profile")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<PatientProfileDTO> getPatientProfile1 (@PathVariable("id") Long id) {
-		PatientProfileDTO retVal = patientService.getPatientProfile(id);
-		
-		System.out.println("Patient kontroler get proflie " + id);
+	public ResponseEntity<PatientProfileDTO> getPatientProfile1 () {
+		String email = currentUser.getEmail();
+		PatientPOJO retVal = patientService.findPatientByEmail(email);
 		
 		if (retVal == null) {
-			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+			return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
 		}
+		PatientProfileDTO ret = new PatientProfileDTO(retVal);
 		
-		return new ResponseEntity<PatientProfileDTO> (retVal, HttpStatus.OK);
+		return new ResponseEntity<PatientProfileDTO> (ret, HttpStatus.OK);
 	}
 	
 	@PutMapping (value="/change")

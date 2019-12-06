@@ -35,9 +35,13 @@ class Patient extends Component {
     }
 
     handlePatient = () => {
-        let path = "http://localhost:8080/api/patients/" + this.context.user.id + "/profile";
+        let path = "http://localhost:8080/api/patients/profile";
         axios.get (path)
         .then (response => {
+            // if(response.status === 401) {
+            //     window.location.href='/login';
+            // }
+
             this.setState ({
                 email: response.data.email, 
                 firstName: response.data.firstName, 
@@ -49,7 +53,7 @@ class Patient extends Component {
                 birthday: response.data.birthday, 
                 insuranceNumber: response.data.insuranceNumber
             });
-        });
+        })
     }
 
     render() {     

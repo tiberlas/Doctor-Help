@@ -80,6 +80,7 @@ class NewAdminForm extends React.Component {
                  })
                     .then(res => {
                     console.log(data);
+                    alert("Successfully added new clinic administrator.")
                     })
         } else {
             axios.post('http://localhost:8080/api/centreAdmins/newAdmin', {  email: this.state.email,
@@ -87,6 +88,7 @@ class NewAdminForm extends React.Component {
             lastName: this.state.lastName })
             .then(res => {
             console.log(data);
+                alert("Successfully added new centre administrator.")
             })
         }
     }
@@ -157,8 +159,8 @@ class NewAdminForm extends React.Component {
                 </Form.Group>
             </Form.Group>
 
-            { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="primary" type="submit"> Submit </Button> 
-            : <div> <label>You must add at least 1 clinic. <Button variant="primary" type="submit" disabled> Submit </Button> </label> </div>}
+            { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="success" type="submit"> Submit </Button> 
+            : <div> <label>You must add at least 1 clinic. <Button variant="btn btn-success" type="submit" disabled> Submit </Button> </label> </div>}
                
             </Form>
             <h1> {this.state.email} {this.state.firstName} {this.state.lastName} {this.state.adminRole} {}</h1>

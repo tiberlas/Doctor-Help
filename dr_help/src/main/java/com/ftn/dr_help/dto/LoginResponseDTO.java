@@ -12,6 +12,7 @@ public class LoginResponseDTO {
     private Long expiresIn;
 	private Long id;
 	private RoleEnum userRole;
+	private Boolean mustChangePassword;
 	
 	public LoginResponseDTO() {
 		
@@ -25,6 +26,16 @@ public class LoginResponseDTO {
 		this.expiresIn = expires;
 	}
 	
+	
+	public LoginResponseDTO(Long id, RoleEnum userRole, String jwtToken, long expires, Boolean mustChangePassword) {
+		super();
+		this.id = id;
+		this.userRole = userRole;
+		this.jwtToken = jwtToken;
+		this.expiresIn = expires;
+		this.mustChangePassword = mustChangePassword;
+	}
+//	
 	public LoginResponseDTO(LoginResponseDTO loginResponse) {
 		super ();
 		this.id = loginResponse.id;
@@ -64,6 +75,14 @@ public class LoginResponseDTO {
 
 	public void setExpiresIn(Long expiresIn) {
 		this.expiresIn = expiresIn;
+	}
+
+	public Boolean getMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(Boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
 	}
 	
 }

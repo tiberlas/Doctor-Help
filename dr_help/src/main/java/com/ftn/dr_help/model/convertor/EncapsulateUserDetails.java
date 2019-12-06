@@ -21,7 +21,9 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 							pojo.getState(),
 							pojo.getPhoneNumber(),
 							pojo.getBirthday(),
-							pojo.getRole());
+							pojo.getRole(),
+							pojo.getMustChangePassword(),
+							true);
 							
 	}
 
@@ -37,7 +39,8 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());				
+				pojo.getRole(),
+				true);
 	}
 
 	@Override
@@ -52,7 +55,8 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());				
+				pojo.getRole(),
+				true);				
 	}
 
 	@Override
@@ -67,7 +71,8 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());
+				pojo.getRole(),
+				true);
 	}
 
 	@Override
@@ -82,7 +87,8 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());
+				pojo.getRole(),
+				pojo.isActivated());
 	}
 
 }

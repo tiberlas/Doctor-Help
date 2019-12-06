@@ -29,17 +29,17 @@ class ClinicListing extends Component {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>Naziv klinike</TableCell>
-							<TableCell>Opis</TableCell>
-							<TableCell>Adresa</TableCell>
+							<TableCell><p class='text-success'>Naziv klinike</p></TableCell>
+							<TableCell><p class='text-success'>Opis</p></TableCell>
+							<TableCell><p class='text-success'>Adresa</p></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{this.state.clinics.map (row => (
 							<TableRow key={row.id}>
 								<TableCell><Link>{row.name}</Link></TableCell>
-								<TableCell>{row.address}</TableCell>
-								<TableCell>{row.description}</TableCell>
+								<TableCell><p class='text-white'>{row.address}</p></TableCell>
+								<TableCell><p class='text-white'>{row.description}</p></TableCell>
 							</TableRow>
 						))}
 					</TableBody>

@@ -15,7 +15,7 @@ class ClinicItem extends Component {
 	render () {
 		return (
 			<span>
-				<h4>{this.state.name}</h4>
+				<p class='text-primary'>{this.state.name}</p>
 			</span>
 		);
 	}

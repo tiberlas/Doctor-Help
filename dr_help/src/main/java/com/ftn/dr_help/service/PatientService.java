@@ -63,7 +63,9 @@ public class PatientService {
 	
 	
 	public PatientPOJO findPatientByEmail(String email) {
-		return patientRepository.findByEmail(email);
+		PatientPOJO retVal = patientRepository.findOneByEmail(email);
+		
+		return retVal;
 	}
 	
 	
