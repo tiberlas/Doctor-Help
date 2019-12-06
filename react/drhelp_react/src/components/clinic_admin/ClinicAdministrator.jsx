@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import ClinicAdminHeader from './ClinicAdminHeader';
 import HandlingRooms from './HandlingRooms';
-import {Route, Switch, Redirect} from "react-router-dom";
+import {Route, Redirect} from "react-router-dom";
+import {Switch} from "react-router-dom";
 import ClinicAdminProfile from './ClinicAdminProfile';
 import { UserContext } from '../../context/UserContextProvider'
 import ClinicAdminChangeProfile from './ClinicAdminChangeProfile';
 import ClinicAdminContextProvider from '../../context/ClinicAdminContextProvider';
 import ClinicAdminMedicalStaff from './ClinicAdminMedicalStaff';
 import ClinicAdminChangePassword from './ClinicAdminChangePassword';
+import axios from 'axios';
+import Clinic from '../clinic/Clinic';
+import ClinicChangeProfile from './ClinicChangeProfile';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -27,24 +31,23 @@ class ClinicAdministrator extends Component {
     static contextType = UserContext
 
     componentDidMount() {
-        console.log(this.context.user);
+        //console.log(this.context.user);
         this.handleClinicAdmin();
     }
 
     handleClinicAdmin = () => {
-        fetch("http://localhost:8080/api/clinicAdmins/"+ this.context.user.id + "/profile", { method: "GET" })
-            .then(response => response.json())
-            .then(json => {
+        axios.get("http://localhost:8080/api/clinicAdmins/profile")
+            .then(response =>  {
                 this.setState({
-                    email: json.email,
-                    firstName: json.firstName,
-                    lastName: json.lastName,
-                    address: json.address,
-                    city: json.city,
-                    state: json.state,
-                    phoneNumber: json.phoneNumber,
-                    birthday: json.birthday,
-                    clinicId: json.clinicId
+                    email: response.data.email,
+                    firstName: response.data.firstName,
+                    lastName: response.data.lastName,
+                    address: response.data.address,
+                    city: response.data.city,
+                    state: response.data.state,
+                    phoneNumber: response.data.phoneNumber,
+                    birthday: response.data.birthday,
+                    clinicId: response.data.clinicId
                 })
             })
     }
@@ -54,12 +57,14 @@ class ClinicAdministrator extends Component {
         return (
              <div>
                 <ClinicAdminContextProvider admin={admin}>
-                <ClinicAdminHeader></ClinicAdminHeader>
+                <ClinicAdminHeader logout={() => this.props.logout ()}></ClinicAdminHeader>
 
                 <div>
                 <Switch>
-                    <Route exact path="/clinic+administrator/" ><ClinicAdminProfile /> </Route>
+                    <Route exact path="/clinic+administrator/clinic" ><Clinic clinicId={this.state.clinicId}/> </Route>
+                    <Route exact path="/clinic+administrator/clinic/change" ><ClinicChangeProfile clinicId={this.state.clinicId}/> </Route>
                     <Route exact path="/clinic+administrator/profile" ><ClinicAdminProfile /> </Route>
+                    <Route exact path="/clinic+administrator/" ><ClinicAdminProfile /> </Route>
                     <Route exact path="/clinic+administrator/profile/change" ><ClinicAdminChangeProfile  handleUpdate={this.handleClinicAdmin}/> </Route>
                     <Route exact path="/clinic+administrator/rooms" ><HandlingRooms /> </Route>
                     <Route exact path='/clinic+administrator/medical+staff'> <ClinicAdminMedicalStaff /> </Route>

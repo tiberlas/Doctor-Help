@@ -26,36 +26,34 @@ class NewClinicForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault()
 
-        const data = {
+        axios.post('http://localhost:8080/api/clinics/newClinic', { 
+
             name: this.state.clinicName,
             address: this.state.clinicAddress,
             description: this.state.clinicDescription
-          };
-
-        console.log(data)
-        const datastr = JSON.stringify(data)
-        console.log(" str "+datastr)
-        
-        //   axios.post('http://localhost:8080/api/clinics/newClinic', {
-        //       name: this.state.name,
-        //       address: this.state.address,
-        //       description: this.state.description
-            
-        //     })
-        //     .then(res => {
-        //       console.log(res.data);
-        //     })
-
-
-        fetch('http://localhost:8080/api/clinics/newClinic', {
-            method: 'post',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify( {
-                name: this.state.clinicName,
-                address: this.state.clinicAddress,
-                description: this.state.clinicDescription
+        })
+            .then(res => {
+                alert("Successfully added new clinic.");
             })
-           });
+
+
+        // fetch('http://localhost:8080/api/clinics/newClinic', {
+        //     method: 'post',
+        //     headers: {'Content-Type':'application/json', 'Authorization': 'Bearer ' + token},
+        //     body: JSON.stringify( {
+        //         name: this.state.clinicName,
+        //         address: this.state.clinicAddress,
+        //         description: this.state.clinicDescription
+        //     })
+        //    }).then(response => {
+        //        if(response.status === 401 || response.status === 403) {
+        //             alert("Session expired, please log in again.")
+        //             localStorage.removeItem('token')
+        //             window.location.href = 'http://localhost:3000/login'
+        //        }
+        //    })
+        
+           
     }
 
     render() {
@@ -79,7 +77,7 @@ class NewClinicForm extends React.Component {
                 {/* <Form.Label>Password</Form.Label> */}
                 <Form.Control type="text" name = "clinicDescription" placeholder="Description" onChange = {this.handleChange} />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="btn btn-success" type="submit">
                 Submit
             </Button>
             </Form>

@@ -60,6 +60,9 @@ public class CentreAdministratorPOJO implements Serializable{
 	@Column(name = "birthday", nullable = true)
 	private Calendar birthday;
 	
+	@Column(name = "mustChangePassword", nullable = true)
+	private Boolean mustChangePassword = false;
+	
 	public CentreAdministratorPOJO() {
 		
 	}
@@ -158,4 +161,14 @@ public class CentreAdministratorPOJO implements Serializable{
 	public void setRole(RoleEnum role) {
 		this.role = role;
 	}
+
+	public Boolean getMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(Boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
+	}
+
+	
 }

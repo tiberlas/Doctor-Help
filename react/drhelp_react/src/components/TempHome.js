@@ -7,31 +7,32 @@ import CenterAdministrator from './centre_admin/CentreAdministrator.js';
 import Doctor from './doctor/Doctor.jsx'
 import Patient from './patient/Patient'
 import LoginPage from '../LoginPage.js';
-
+import Nurse from './nurse/Nurse.jsx';
+import Header from './Header.jsx';
 
 class TempHome extends React.Component {
 
     static contextType = UserContext
 
-    render() {
-        if(this.props.role === 'centreAdmin')
-            return(
-                <CenterAdministrator />)
-        else if(this.props.role === 'clinicAdmin')
-            return(<ClinicAdministrator />)
-        else if(this.props.role === 'doctor')
-            return(<Doctor />)
-        else if(this.props.role === 'patient')
-            return(<Patient />)
-        else
-            return(
-                <div><LoginPage /></div>
-            )
+    handleLogout () {
+        
+    }
 
-        return( <Footer />)
+    render() {
+        return(
+            <div>
+                {this.props.role === 'centreAdmin' && <CenterAdministrator logout={() => this.props.logout ()}/>}
+                {this.props.role === 'clinicAdmin' && <ClinicAdministrator logout={() => this.props.logout ()}/>}
+                {this.props.role === 'doctor' && <Doctor logout={() => this.props.logout ()}/>}
+                {this.props.role === 'patient' && <Patient logout={() => this.props.logout ()}/>}
+                {this.props.role === 'nurse' && <Nurse logout={() => this.props.logout ()}/>}
+                <br/>
+               <Footer />
+            </div>
+
+        )
+
     };
 }
-
-
 
 export default TempHome

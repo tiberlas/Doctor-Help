@@ -20,7 +20,7 @@ class RoomItem extends Component {
             <span>
                 <h3>{this.state.name}</h3>&nbsp;
                 number: {this.state.number}&nbsp;
-                <button onClick={this.onDelite}>delete</button>
+                <button onClick={this.onDelite} class='btn btn-success' disabled>delete</button>
             </span>
          );
     }

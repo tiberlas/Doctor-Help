@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.MedicalStuffDTO;
@@ -24,6 +23,10 @@ public class MedicalStuffService {
 
 	public List<MedicalStuffDTO> findAll(Long clinic_id) {
 		
+		if(clinic_id == null) {
+			return null;
+		}
+		
 		List<MedicalStuffDTO> ret = new ArrayList<MedicalStuffDTO>();
 		List<DoctorPOJO> findedDoctors = doctorRepository.findAllByClinic_id(clinic_id);
 		List<NursePOJO> findedNurses = nurseRepository.findAllByClinic_id(clinic_id);
@@ -38,6 +41,10 @@ public class MedicalStuffService {
 			for(NursePOJO nurse : findedNurses) {
 				ret.add(new MedicalStuffDTO(nurse));
 			}
+		}
+		
+		if(ret.isEmpty()) {
+			return null;
 		}
 		
 		return ret;
