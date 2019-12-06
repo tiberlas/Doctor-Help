@@ -12,14 +12,10 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
-import com.ftn.dr_help.model.adapter.ConcreteUserDetail;
-import com.ftn.dr_help.model.adapter.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
-import com.ftn.dr_help.validation.PasswordValidateInterface;
-import com.ftn.dr_help.validation.ProfileValidation;
-import com.ftn.dr_help.validation.ProfileValidationInterface;
 
 @Service
 public class ClinicAdministratorService {
@@ -27,8 +23,14 @@ public class ClinicAdministratorService {
 	@Autowired
 	private ClinicAdministratorRepository clinicAdministratorRepository;
 	
-	@Autowired 
+	@Autowired
+	private AppPasswordEncoder encoder;
+	
+	@Autowired
 	private PasswordValidate passwordValidate;
+	
+	@Autowired
+	private ConcreteUserDetailInterface convertor;
 	
 	
 	public ClinicAdministratorPOJO findOne(Long id) {
@@ -81,17 +83,10 @@ public class ClinicAdministratorService {
 		if(current == null)
 			return null;
 		
-		ProfileValidationInterface validate = new ProfileValidation();
-		ConcreteUserDetailInterface convertsToAdmin = new ConcreteUserDetail();
-		
-		if(validate.validUser(admin)) {
-			convertsToAdmin.changeTo(current, admin);
-			clinicAdministratorRepository.save(current);
+		convertor.changeTo(current, admin);
+		clinicAdministratorRepository.save(current);
 				
-			return new ClinicAdminProfileDTO(current);
-		}
-	
-		return null;
+		return new ClinicAdminProfileDTO(current);
 	}
 
 	public void remove(Long id) {
@@ -122,7 +117,9 @@ public class ClinicAdministratorService {
 		//PasswordValidateInterface validate = new PasswordValidate();
 		
 		if(passwordValidate.isValid(password, finded.getPassword())) {
-			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
+
+			String encoded = encoder.getEncoder().encode(password.getNewPassword());
+
 			finded.setPassword(encoded);
 			clinicAdministratorRepository.save(finded);
 			return true;

@@ -26,10 +26,13 @@ public class DoctorController {
 	@Autowired
 	private DoctorService service;
 	
+	@Autowired
+	private CurrentUser currentUser;
+	
 	@GetMapping(value = "/profile")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<MedicalStuffProfileDTO> findProfile() {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		MedicalStuffProfileDTO ret = service.findByEmail(email);
 		
@@ -43,7 +46,7 @@ public class DoctorController {
 	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<MedicalStuffProfileDTO> putAdminProfile(@RequestBody UserDetailDTO doctor) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		MedicalStuffProfileDTO ret = service.save(doctor, email);
 		
@@ -57,7 +60,7 @@ public class DoctorController {
 	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		boolean ret = service.changePassword(passwords, email);
 		

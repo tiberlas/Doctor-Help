@@ -3,6 +3,7 @@ package com.ftn.dr_help.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.CentreAdministratorRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
@@ -33,7 +34,12 @@ public class UserRequestService {
 	private NurseRepository nurseRepository;
 	
 	public boolean patientExists (String email) {
-		return (patientRepository.findOneByEmail (email) != null);
+		 PatientPOJO finded = patientRepository.findOneByEmail(email);
+		 if(finded != null && finded.isActivated()) {
+			 return true;
+		 }
+		 
+		return false;
 	}
 	
 	public boolean doctorExists (String email) {

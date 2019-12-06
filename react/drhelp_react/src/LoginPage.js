@@ -79,14 +79,22 @@ class LoginPage extends React.Component {
 						password: password.value
 					})
 				})
-				.then (response => {
+				.then(response => response.json())
+				.then (response =>  {
+
+
+					if (response.status === 401) {
+						alert ("An account with that email and password doesn't exist or isn't activated. ");
+						return;
+					}
 					if(response.status === 302) {
 						alert("moved")
 						//window
 					}
-					return response.json()
-				}).then (response =>  {
+					//return response.json()
+
 					localStorage.setItem('token', JSON.stringify(response.jwtToken));
+
 					var token = JSON.parse(localStorage.getItem('token'));
 					console.log(`Authorization=Bearer ${token}`)
 
@@ -156,23 +164,42 @@ class LoginPage extends React.Component {
 
 		return (
 			<div>
+
+				{/* <div class="alert alert-dismissible alert-success">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
+				</div> */}
+
 				<Switch>
 					<Route path = "/login">
-						<form onSubmit={this.handleSubmit}>
-							<FormControl type="email" placeholder="Email" id="tb_email"/>
-							<FormControl type="password" placeholder="Password" id='tb_password'/>
-							<input type="submit" value="Submit">
-							</input>
-						</form>
-						<Link to="/register">
-							<Button >Register</Button>
-						</Link>
+						<div class='row d-flex justify-content-center' >
+						<div class='col-sm-5'>
+
+							<form onSubmit={this.handleSubmit}>
+							<div class="form-group ">
+								<label for="exampleInputEmail1">Email address</label>
+								<FormControl type="email" placeholder="Email" id="tb_email"/>
+							</div>
+							<div class="form-group ">
+							<label for="exampleInputEmail1">Password</label>
+								<FormControl type="password" placeholder="Password" id='tb_password'/>
+							</div>
+							<div class="form-group row">
+								<div class='col-md text-left'>
+									<input type="submit" value="Submit" class="btn btn-outline-success" />
+								</div>
+								<div class='col-md text-right'>
+									<Link to="/register">
+										<a href>need account?</a>
+									</Link>
+								</div>
+							</div>
+							</form>
+							</div>
+						</div>
 					</Route>
 					<Route path = "/register">
 						<RegistrationPage></RegistrationPage>
-						<Link to="/login">
-							<Button>Login</Button>
-						</Link>
 					</Route>
 				</Switch>
 			</div>

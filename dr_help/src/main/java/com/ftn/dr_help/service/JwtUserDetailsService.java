@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.model.adapter.EncapsulateUserDetailsAdapter;
-import com.ftn.dr_help.model.adapter.EncapsulateUserDetailsInterface;
+import com.ftn.dr_help.model.convertor.EncapsulateUserDetails;
+import com.ftn.dr_help.model.convertor.EncapsulateUserDetailsInterface;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
@@ -52,7 +52,7 @@ public class JwtUserDetailsService implements UserDetailsService{
 		}
 		
 		
-		convertUser = new EncapsulateUserDetailsAdapter();
+		convertUser = new EncapsulateUserDetails();
 		
 		CentreAdministratorPOJO finded = centreAdminRepository.findOneByEmail(email);
 		

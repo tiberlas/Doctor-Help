@@ -32,6 +32,9 @@ public class ClinicController {
 	@Autowired
 	private ClinicService clinicService;
 	
+	@Autowired
+	private CurrentUser currentUser;
+	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<ClinicDTO> saveClinic(@RequestBody ClinicDTO clinicDTO) {
@@ -72,7 +75,7 @@ public class ClinicController {
 	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<ClinicDTO> changeClinicProfile(@RequestBody ClinicDTO newClinic) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 
 		ClinicDTO ret = clinicService.save(newClinic, email);
 		
@@ -83,5 +86,21 @@ public class ClinicController {
 		return new ResponseEntity<ClinicDTO>(ret, HttpStatus.OK);
 	}
 
+	// Displaying a list of clinics to a patient using this method instead of get all,
+	// Even though their code is identical at this point;
+	// In later sprints I intend to expand this one with filters
+	@GetMapping (value = "/listing")
+	public ResponseEntity <List<ClinicDTO>> getClinicListing () {
+		System.out.println("Patient listing says hi");
+		
+		List<ClinicPOJO> clinics = clinicService.findAll();
+
+		List<ClinicDTO> clinicDTO = new ArrayList<>();
+		for (ClinicPOJO c : clinics) {
+			clinicDTO.add(new ClinicDTO(c));
+		} 
+		
+		return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
+	}
 	
 }

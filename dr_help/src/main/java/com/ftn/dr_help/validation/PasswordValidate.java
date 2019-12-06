@@ -1,6 +1,6 @@
 package com.ftn.dr_help.validation;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
@@ -9,10 +9,13 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 @Service
 public class PasswordValidate implements PasswordValidateInterface{
 	
-	
+	@Autowired
+	private AppPasswordEncoder encoder;
 	
 	@Override
 	public boolean isValid(ChangePasswordDTO newPassword, String encodedPaString) {
+		System.out.println("password: " + newPassword.getNewPassword() + newPassword.getOldPassword() + encodedPaString);
+		
 		if(newPassword == null || newPassword.getNewPassword() == null || newPassword.getOldPassword() == null) {
 			return false;
 		}
@@ -24,9 +27,12 @@ public class PasswordValidate implements PasswordValidateInterface{
 		if(encodedPaString == null)
 			return false;
 		
-		PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
+		System.out.println(encoder.getClass());
+		System.out.println(encoder);
+		System.out.println(encoder.getEncoder());
+
 		
-		if(passwordEncoder.matches(newPassword.getOldPassword(), encodedPaString)) {
+		if(encoder.getEncoder().matches(newPassword.getOldPassword(), encodedPaString)) {
 			return true;
 		}
 		

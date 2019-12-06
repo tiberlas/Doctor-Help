@@ -9,20 +9,27 @@ import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.CentreAdminProfileDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
-import com.ftn.dr_help.model.adapter.ConcreteUserDetail;
-import com.ftn.dr_help.model.adapter.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.repository.CentreAdministratorRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
-import com.ftn.dr_help.validation.PasswordValidateInterface;
-import com.ftn.dr_help.validation.ProfileValidation;
-import com.ftn.dr_help.validation.ProfileValidationInterface;
+
 
 @Service
 public class CentreAdministratorService {
 	
 	@Autowired
 	private CentreAdministratorRepository administratorRepository;
+	
+	@Autowired
+	private AppPasswordEncoder encoder;
+	
+	@Autowired
+	private PasswordValidate passwordValidate;
+	
+	@Autowired
+	private ConcreteUserDetailInterface convertor;
+	
 
 	public CentreAdministratorPOJO findOneByEmail(String email) {
 		return administratorRepository.findOneByEmail(email);
@@ -53,17 +60,13 @@ public class CentreAdministratorService {
 		if(current == null)
 			return null;
 		
-		ProfileValidationInterface validate = new ProfileValidation();
-		ConcreteUserDetailInterface convertsToAdmin = new ConcreteUserDetail();
+		//ProfileValidationInterface validate = new ProfileValidation();
+		//ConcreteUserDetailInterface convertsToAdmin = new ConcreteUserDetail();
 		
-		if(validate.validUser(admin)) {
-			convertsToAdmin.changeTo(current, admin);
-			administratorRepository.save(current);
+		convertor.changeTo(current, admin);
+		administratorRepository.save(current);
 				
-			return new CentreAdminProfileDTO(current);
-		}
-	
-		return null;
+		return new CentreAdminProfileDTO(current);
 	}
 	
 	
@@ -77,10 +80,8 @@ public class CentreAdministratorService {
 		if(c == null)
 			return false;
 		
-		PasswordValidateInterface validate = new PasswordValidate();
-		
-		if(validate.isValid(password, c.getPassword())) {
-			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
+		if(passwordValidate.isValid(password, c.getPassword())) {
+			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 			c.setPassword(encoded);
 			c.setMustChangePassword(false);
 			administratorRepository.save(c);

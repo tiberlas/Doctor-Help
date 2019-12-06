@@ -52,13 +52,14 @@ handleCentreAdmin = () => {
     render() { 
         return ( 
             <div>
+
                 <CentreAdminContextProvider admin={this.state.admin}> 
-                <CentreAdminHeader />
+                <CentreAdminHeader logout={() => this.props.logout ()}/>
 
                 <Switch>
                     <Route exact path="/centreAdministrator/profile" ><CentreAdminProfile /> </Route>
                     <Route exact path="/centreAdministrator/profile/change" ><CentreAdminChangeProfile  handleUpdate={this.handleCentreAdmin}/> </Route>
-                    <Route exact path='/centreAdministrator/profile/change/password'> <CentreAdminChangePassword /> </Route>
+                    <Route exact path='/centreAdministrator/profile/change/password'> <CentreAdminChangePassword first={false}/> </Route>
                     <Route path="/clinic/add" ><NewClinicForm /> </Route>
                     <Route path="/admin/add" ><NewAdminForm /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>

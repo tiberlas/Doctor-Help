@@ -5,15 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,8 +51,14 @@ public class CentreAdministratorController {
 	@Autowired
     private JavaMailSender javaMailSender;
 	
+	@Autowired
+	private AppPasswordEncoder encoder;
+
 	@Autowired 
 	private Mail mail;
+	
+	@Autowired
+	private CurrentUser currentUser;
 
 	
 	@PostMapping(value = "/newAdmin", consumes = "application/json")
@@ -69,7 +72,7 @@ public class CentreAdministratorController {
 		
 		String password = "fakultet";
 		
-		String encoded = AppPasswordEncoder.getEncoder().encode(password);
+		String encoded = encoder.getEncoder().encode(password);
 		//p.setPassword(encoded);
 		admin.setPassword(encoded);
 		mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CENTRE_ADMINISTRATOR);
@@ -112,7 +115,7 @@ public class CentreAdministratorController {
 	
 	@GetMapping(value = "/profile")
 	public ResponseEntity<CentreAdminProfileDTO> getCentreAdminProfile() {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		CentreAdministratorPOJO ret = centreAdministratorService.findOneByEmail(email);
 		CentreAdminProfileDTO dto = new CentreAdminProfileDTO(ret);
@@ -127,7 +130,7 @@ public class CentreAdministratorController {
 	
 	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CentreAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		CentreAdminProfileDTO ret = centreAdministratorService.save(admin, email);
 		
@@ -141,7 +144,7 @@ public class CentreAdministratorController {
 	
 	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 
 		boolean ret = centreAdministratorService.changePassword(passwords, email);
 		
@@ -197,7 +200,7 @@ public class CentreAdministratorController {
 		
 		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
 			System.out.println("Password is " + requested.getPassword());
-			String encoded = AppPasswordEncoder.getEncoder().encode(requested.getPassword());
+			String encoded = encoder.getEncoder().encode(requested.getPassword());
 			p.setPassword(encoded);
 
 		

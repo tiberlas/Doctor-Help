@@ -3,14 +3,15 @@ import './App.css';
 import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "bootswatch/dist/darkly/bootstrap.css"
-import {BrowserRouter, Switch} from "react-router-dom";
+import 'bootswatch/dist/darkly/bootstrap.css';
+import {BrowserRouter, Switch, Redirect, Route} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
+import PatientProfile from './components/patient/PatientProfile';
 import interceptor from './Interseptor.js';
 import axios from "axios"
 import FirstTimePasswordChange from './components/FirstTimePasswordChange'
+
 
 class App extends Component {
   
@@ -62,6 +63,14 @@ class App extends Component {
     })
   }
 
+  logout () {
+    this.setState ({
+      loggedIn: false,
+      userRole: 'guest',
+    })
+    localStorage.setItem('token', null);
+  }
+
   confirmRegistration = () => {
     console.log("bingo")
     axios.put('http://localhost:8080/api/patients/confirmAccount', {
@@ -85,8 +94,14 @@ class App extends Component {
     console.log("href " + this.state.currentUrl)
     if(this.state.currentUrl === 'http://localhost:3000/activate') {
       console.log("bingo")
-      axios.put('http://localhost:8080/api/patients/confirmAccount', {
-            email: window.location.href.split('=')[1]
+      fetch('http://localhost:8080/api/patients/confirmAccount', {
+            method: 'put',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: window.location.href.split('=')[1]
+            })
      }).then(console.log("done"))
         return (
           <div> 
@@ -98,17 +113,20 @@ class App extends Component {
     }
 
 
-      if(this.state.passwordChange) {
-        alert("user role is"+this.state.userRole)
-        return (
-          <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>
-        )
-      }
+      // if(this.state.passwordChange) {
+      //   return (
+      //     <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>
+      //   )
+      // }
    
       return (
         <div>
           <BrowserRouter >
             <Switch>
+
+                { this.state.passwordChange?
+                 <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>:
+
                 <UserContextProvider id={this.state.userId} role = {this.state.userRole}>
                  {!this.state.loggedIn && 
                     <LoginPage 
@@ -121,16 +139,17 @@ class App extends Component {
                     setLoginPatient={() => this.setPatient ()}
                     setPasswordChange = {(role) => this.setPasswordChange(role)}
                     />
-                    
+                    // <PatientProfile></PatientProfile>
                   }
-
-                  {/* {(this.state.passwordChange) && <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>} */}
                   {(this.state.loggedIn && !this.state.passwordChange) &&
-                  <TempHome role = {this.state.userRole} />	}
-                </UserContextProvider>		
+                  < TempHome role = {this.state.userRole} logout={() => this.logout ()}/>	}
+                  <Route render={() => <Redirect to={{pathname: "/login"}} />} />
+
+                  </UserContextProvider>}		
             </Switch>
           </BrowserRouter>
-				</div>
+        </div>
+
       );
     
 

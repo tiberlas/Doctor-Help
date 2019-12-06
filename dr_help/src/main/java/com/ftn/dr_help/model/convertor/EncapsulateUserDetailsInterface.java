@@ -1,4 +1,4 @@
-package com.ftn.dr_help.model.adapter;
+package com.ftn.dr_help.model.convertor;
 
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;

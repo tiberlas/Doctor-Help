@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {NavLink} from 'react-router-dom'
-import UserProfileInfo from '../UserProfileInfo';
+import ViewProfile from '../ViewProfile';
 import {CentreAdminContext} from '../../context/CentreAdminContextProvider';
 
 class CentreAdminProfile extends Component {
@@ -10,7 +10,7 @@ class CentreAdminProfile extends Component {
     render() { 
         return ( 
         <div>
-            <UserProfileInfo user = {this.context.admin}/>
+            <ViewProfile profile={this.context.admin}/>
                 <div>
                     <NavLink to = '/centreAdministrator/profile/change'>
                         change profile

@@ -77,7 +77,7 @@ class NewClinicForm extends React.Component {
                 {/* <Form.Label>Password</Form.Label> */}
                 <Form.Control type="text" name = "clinicDescription" placeholder="Description" onChange = {this.handleChange} />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="btn btn-success" type="submit">
                 Submit
             </Button>
             </Form>

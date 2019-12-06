@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import MedicalStuffItem from './MedicalStuffItem';
+import axios from 'axios';
 
 class ClinicAdminMedicalStaff extends Component {
     static contextType = ClinicAdminContext
@@ -16,21 +17,19 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     handleCLinicName = () => {
-        fetch("http://localhost:8080/api/clinics/id="+ this.context.admin.clinicId, { method: "GET" })
-            .then(response => response.json())
-            .then(json => {
+        axios.get("http://localhost:8080/api/clinics/id="+ this.context.admin.clinicId)
+            .then(response => {
                 this.setState({
-                    clinicName: json.name        
+                    clinicName: response.data.name        
                 })
             })
     }
 
     handleMedicalStuff = () => {
-        fetch("http://localhost:8080/api/medical+stuff/clinic="+ this.context.admin.clinicId + "/all", { method: "GET" })
-            .then(response => response.json())
-            .then(json => {
+        axios.get("http://localhost:8080/api/medical+stuff/clinic="+ this.context.admin.clinicId + "/all")
+            .then(response => {
                 this.setState({
-                    medicalStuff: json        
+                    medicalStuff: response.data        
                 })
             })
     }

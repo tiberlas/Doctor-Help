@@ -6,11 +6,10 @@ class FirstTimePasswordChange extends Component {
 
     render() {
         if(this.props.role === 'CENTRE_ADMINISTRATOR' || this.props.role === 'centreAdmin') {
-            alert('bigboy')
             return(
                 <div>
                     <h1>>Password change </h1>
-                    <CentreAdminChangePassword />
+                    <CentreAdminChangePassword first={true}/>
                 </div>
             )
         } else 

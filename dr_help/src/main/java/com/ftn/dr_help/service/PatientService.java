@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
@@ -62,7 +63,9 @@ public class PatientService {
 	
 	
 	public PatientPOJO findPatientByEmail(String email) {
-		return patientRepository.findByEmail(email);
+		PatientPOJO retVal = patientRepository.findOneByEmail(email);
+		
+		return retVal;
 	}
 	
 	
@@ -107,6 +110,51 @@ public class PatientService {
 		u2.setPassword("ohb0y");
 		
 		userRequestRepository.save(u2);
+	}
+	
+	public PatientProfileDTO getPatientProfile (Long id) {
+		PatientProfileDTO retVal = new PatientProfileDTO ();
+		PatientPOJO pojo = patientRepository.getOne(id);
+		
+		if (pojo == null) {
+			return null;
+		}
+		
+		retVal.setId(pojo.getId());
+		retVal.setEmail(pojo.getEmail());
+		retVal.setFirstName(pojo.getFirstName());
+		retVal.setLastName(pojo.getLastName());
+		retVal.setAddress(pojo.getAddress());
+		retVal.setCity(pojo.getCity());
+		retVal.setState(pojo.getState());
+		retVal.setPhoneNumber(pojo.getPhoneNumber());
+		retVal.setBirthday(pojo.getBirthday());
+		retVal.setInsuranceNumber(pojo.getInsuranceNumber());
+		
+		return retVal;
+	}
+
+	public PatientProfileDTO save(PatientProfileDTO profileUpdate, String email) {
+		if (profileUpdate == null) {
+			System.out.println("PRVI NULL");
+			return null;
+		}
+		
+		PatientPOJO current = patientRepository.findOneByEmail (email);
+		if (current == null) {
+			System.out.println("DRUGI NULL");
+			return null;
+		}
+		
+		current.setFirstName(profileUpdate.getFirstName ());
+		current.setLastName(profileUpdate.getLastName ());
+		current.setAddress (profileUpdate.getAddress());
+		current.setCity(profileUpdate.getCity());
+		current.setState(profileUpdate.getState());
+		current.setPhoneNumber(profileUpdate.getPhoneNumber());
+		
+		patientRepository.save(current);
+		return profileUpdate;
 	}
 	
 }

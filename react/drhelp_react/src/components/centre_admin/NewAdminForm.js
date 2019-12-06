@@ -159,8 +159,8 @@ class NewAdminForm extends React.Component {
                 </Form.Group>
             </Form.Group>
 
-            { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="primary" type="submit"> Submit </Button> 
-            : <div> <label>You must add at least 1 clinic. <Button variant="primary" type="submit" disabled> Submit </Button> </label> </div>}
+            { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="success" type="submit"> Submit </Button> 
+            : <div> <label>You must add at least 1 clinic. <Button variant="btn btn-success" type="submit" disabled> Submit </Button> </label> </div>}
                
             </Form>
             <h1> {this.state.email} {this.state.firstName} {this.state.lastName} {this.state.adminRole} {}</h1>

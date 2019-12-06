@@ -7,20 +7,25 @@ import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStuffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
-import com.ftn.dr_help.model.adapter.ConcreteUserDetail;
-import com.ftn.dr_help.model.adapter.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.repository.NurseRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
-import com.ftn.dr_help.validation.PasswordValidateInterface;
-import com.ftn.dr_help.validation.ProfileValidation;
-import com.ftn.dr_help.validation.ProfileValidationInterface;
 
 @Service
 public class NurseService {
 
 	@Autowired
 	private NurseRepository repository;
+	
+	@Autowired
+	private AppPasswordEncoder encoder;
+	
+	@Autowired
+	private PasswordValidate passwordValidate;
+	
+	@Autowired
+	private ConcreteUserDetailInterface convertor;
 	
 	public MedicalStuffProfileDTO findByEmail(String email) {
 		if(email == null) {
@@ -55,17 +60,10 @@ public class NurseService {
 		if(current == null)
 			return null;
 		
-		ProfileValidationInterface validate = new ProfileValidation();
-		ConcreteUserDetailInterface convertsToAdmin = new ConcreteUserDetail();
-		
-		if(validate.validUser(nurse)) {
-			convertsToAdmin.changeTo(current, nurse);
-			repository.save(current);
+		convertor.changeTo(current, nurse);
+		repository.save(current);
 				
-			return new MedicalStuffProfileDTO(current);
-		}
-	
-		return null;
+		return new MedicalStuffProfileDTO(current);
 	}
 	
 	public boolean changePassword(ChangePasswordDTO password, String email) {
@@ -76,11 +74,9 @@ public class NurseService {
 		NursePOJO finded = repository.findOneByEmail(email);
 		if(finded == null)
 			return false;
-		
-		PasswordValidateInterface validate = new PasswordValidate();
-		
-		if(validate.isValid(password, finded.getPassword())) {
-			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
+				
+		if(passwordValidate.isValid(password, finded.getPassword())) {
+			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 			finded.setPassword(encoded);
 			repository.save(finded);
 			return true;

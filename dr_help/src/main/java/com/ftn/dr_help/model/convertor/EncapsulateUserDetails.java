@@ -1,4 +1,4 @@
-package com.ftn.dr_help.model.adapter;
+package com.ftn.dr_help.model.convertor;
 
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
@@ -7,7 +7,7 @@ import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserPOJO;
 
-public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInterface {
+public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 
 	@Override
 	public UserPOJO getUser(CentreAdministratorPOJO pojo) {
@@ -22,7 +22,8 @@ public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInte
 							pojo.getPhoneNumber(),
 							pojo.getBirthday(),
 							pojo.getRole(),
-							pojo.getMustChangePassword());
+							pojo.getMustChangePassword(),
+							true);
 							
 	}
 
@@ -38,7 +39,8 @@ public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInte
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());				
+				pojo.getRole(),
+				true);
 	}
 
 	@Override
@@ -53,7 +55,8 @@ public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInte
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());				
+				pojo.getRole(),
+				true);				
 	}
 
 	@Override
@@ -68,7 +71,8 @@ public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInte
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());
+				pojo.getRole(),
+				true);
 	}
 
 	@Override
@@ -83,7 +87,8 @@ public class EncapsulateUserDetailsAdapter implements EncapsulateUserDetailsInte
 				pojo.getState(),
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
-				pojo.getRole());
+				pojo.getRole(),
+				pojo.isActivated());
 	}
 
 }

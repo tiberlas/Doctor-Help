@@ -2,20 +2,23 @@
 -- enkripcija sa sajta: https://bcrypt-generator.com/
 
 insert into clinic(address, name, description) values('gospodnja 11', 'KLINIKA ZDRAVOG UMA', 'KLINIKA JE NAMENJENA ZA ...');
+insert into clinic(address, name, description) values('22 Dunnich Lane', 'Arkham', 'Assylum for the criminally insane');
+insert into clinic(address, name, description) values('24 Plainsburrough', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic');
+insert into clinic(address, name, description) values('Ulica gradska', 'Nasa Mala Klinika', 'Mali svet pun radosti');
 
 --password: sifra
 insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday) 
 	values(
 		'DJURA','DJURIC', '$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG', 'CENTRE_ADMINISTRATOR', 'glavni@sef',
-		 '06*-555-555', 'RS', 'NS', 'A DOM', '2003-2-1'::timestamp
+		 '06555555', 'RS', 'NS', 'A DOM', '2003-2-1'::timestamp
 	);
 
-	
+	 
 --password: 1234
 insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
 	values(
 		'BORISLAV','BORISAVLJEVIC', '$2y$10$5ozpUNr/gCI4YGtih/eSiuWZ6C8L6FLlt4sGuJJbkbD0WxCQe3Mqe', 'CLINICAL_ADMINISTRATOR', 
-		'admin@admin', '06*-555-555', 'RS', 'NS', 'DOM', '2003-2-1'::timestamp, 1 
+		'admin@admin', '06555555', 'RS', 'NS', 'DOM', '2003-2-1'::timestamp, 1 
 	);
 
 --password: maxBezbedno
@@ -46,20 +49,20 @@ insert into patiens (
 --password: 1234
 insert into nurse(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
 	values(
-		'ANA', 'ANICA', '$2y$10$xF3sVXDDtuqCmpL2aI7pK.4/qJYA7r/vlmIIONs5XDfEwTqCLRIHe', 'NURSE', 'ana@gmail', '555-555', 
+		'ANA', 'ANICA', '$2y$10$xF3sVXDDtuqCmpL2aI7pK.4/qJYA7r/vlmIIONs5XDfEwTqCLRIHe', 'NURSE', 'ana@gmail', '555555', 
 		'RS', 'NS', 'ULICA 8', '2003-2-1'::timestamp, 1
 	);
 --password: 1234
 insert into nurse(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
 	values(
-		'MILA', 'MILIC', '$2y$10$xF3sVXDDtuqCmpL2aI7pK.4/qJYA7r/vlmIIONs5XDfEwTqCLRIHe', 'NURSE', 'mila@gmail', '555-555', 
+		'MILA', 'MILIC', '$2y$10$xF3sVXDDtuqCmpL2aI7pK.4/qJYA7r/vlmIIONs5XDfEwTqCLRIHe', 'NURSE', 'mila@gmail', '555555', 
 		'RS', 'NS', 'ULICA 8', '2003-2-1'::timestamp, 1
 	);
 	
 --password: doca 	
 insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
 	values(
-		'PERA', 'PERIC', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'pera@gmail', '555-555', 
+		'PERA', 'PERIC', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'pera@gmail', '555555', 
 		'RS', 'NS', 'ULICA 8', '2003-2-1'::timestamp, 1
 	);
 

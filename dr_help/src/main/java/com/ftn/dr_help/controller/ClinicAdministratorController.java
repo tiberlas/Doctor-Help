@@ -43,6 +43,12 @@ public class ClinicAdministratorController {
 		private ClinicService clinicService;
 		
 		@Autowired
+		private CurrentUser currentUser;
+
+		@Autowired
+		private AppPasswordEncoder encoder;
+		
+		@Autowired
 		private Mail mail;
 	
 		
@@ -66,7 +72,7 @@ public class ClinicAdministratorController {
 			
 			String password = "fakultet";
 			
-			String encoded = AppPasswordEncoder.getEncoder().encode(password);
+			String encoded = encoder.getEncoder().encode(password);
 			//p.setPassword(encoded);
 			admin.setPassword(encoded);
 			mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CLINICAL_ADMINISTRATOR);
@@ -94,7 +100,7 @@ public class ClinicAdministratorController {
 		@GetMapping(value = "/name")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminNameDTO> getClinicAdministratorsName() {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 			
 			ClinicAdminNameDTO ret = clinicAdministratorService.findOnesName(email);
 			
@@ -108,7 +114,7 @@ public class ClinicAdministratorController {
 		@GetMapping(value = "/profile")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> getClinicAdminProfile() {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 			
 			ClinicAdminProfileDTO ret = clinicAdministratorService.findOneProfile(email);
 			
@@ -123,7 +129,7 @@ public class ClinicAdministratorController {
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 			
 			ClinicAdminProfileDTO ret = clinicAdministratorService.save(admin, email);
 			
@@ -137,7 +143,7 @@ public class ClinicAdministratorController {
 		@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 
 			boolean ret = clinicAdministratorService.changePassword(passwords, email);
 			
