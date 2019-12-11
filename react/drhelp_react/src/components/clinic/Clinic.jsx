@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import MapContainer from './MapContainer.jsx';
 
 class Clinic extends Component {
     state = { 
         name: "",
         address: "",
-        description: ""
+        description: "",
+        lat: 45.236476,
+        lng: 19.839958
      }
 
      componentDidMount() {
@@ -23,12 +26,23 @@ class Clinic extends Component {
         })
      }
 
-    render() { 
+    render() {
+        const divMapStyle = {
+            'background-color': 'black',
+            'height': '400px'
+        }; 
         return ( 
             <div>
-                <h1>{this.state.name}</h1>
-                <h3>location for healing: {this.state.address}</h3>
-                <p>{this.state.description}</p>
+                <div>
+                    <h1>{this.state.name}</h1>
+                    <h3>location for healing: {this.state.address}</h3>
+                </div>
+                <div style={divMapStyle}>
+                    <MapContainer lat={this.state.lat} lng={this.state.lng} name={this.state.name} address={this.state.address} />
+                </div>
+                <div>
+                    <p>{this.state.description}</p>
+                </div>
             </div>
          );
     }
