@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
@@ -113,6 +114,16 @@ public class PatientController {
 		}
 		
 		return new ResponseEntity<PatientProfileDTO> (retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping (value="/health_record")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<HealthRecordDTO> getHealthRecord () {
+		HealthRecordDTO retVal = patientService.getHealthRecord (currentUser.getEmail());
+		if (retVal == null) {
+			return new ResponseEntity<HealthRecordDTO>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<HealthRecordDTO> (retVal, HttpStatus.OK);
 	}
 	
 }

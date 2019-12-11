@@ -55,4 +55,14 @@ public class AllergyPOJO implements Serializable{
 		this.healthRecord = healthRecord;
 	}
 
+
+	public String getAllergy() {
+		return allergy;
+	}
+
+
+	public void setAllergy(String allergy) {
+		this.allergy = allergy;
+	}
+
 }

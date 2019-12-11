@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.PatientProfileDTO;
+import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
+import com.ftn.dr_help.model.pojo.AllergyPOJO;
+import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
+import com.ftn.dr_help.repository.AllergyRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.UserRequestRepository;
 
@@ -23,6 +27,9 @@ public class PatientService {
 	
 	@Autowired
 	private UserRequestRepository userRequestRepository;
+	
+	@Autowired
+	private AllergyRepository allergyRepository;
 	
 	public List<PatientNameDTO> findAllNames() {
 		List<PatientPOJO> finded = patientRepository.findAll();
@@ -156,5 +163,52 @@ public class PatientService {
 		patientRepository.save(current);
 		return profileUpdate;
 	}
+	
+	public HealthRecordDTO getHealthRecord (String email) {
+		PatientPOJO patient = patientRepository.findOneByEmail (email);
+		if (patient == null) {
+			System.out.println("Nisam pronasao pleba");
+			return null;
+		}
+		
+		HealthRecordPOJO healthRecord = patient.getHealthRecord();
+		if (healthRecord == null) {
+			System.out.println("Pleb nema karton");
+			return null;
+		}
+		
+		String allergyList = "";
+		List<AllergyPOJO> allergies= allergyRepository.findAllByHealthRecordId(healthRecord.getId());
+		int i = 0;
+		for (; i < allergies.size() - 1; ++i) {
+			allergyList += allergies.get(i).getAllergy() + ", ";
+		}
+		if (i > 0) {
+			allergyList += allergies.get(i).getAllergy();
+		} else if ((i == 0) && (allergies.size() == 1)) {
+			allergyList = allergies.get(i).getAllergy();
+		}
+		if (allergyList.equals ("")) {
+			allergyList = "/";
+		}
+		
+		
+		HealthRecordDTO retVal = new HealthRecordDTO ();
+		
+		retVal.setBirthday(patient.getBirthday());
+		retVal.setBloodType(healthRecord.getBloodType());
+		retVal.setDiopter(healthRecord.getDiopter());
+		retVal.setFirstName(patient.getFirstName());
+		retVal.setHeight(healthRecord.getHeight());
+		retVal.setLastName(patient.getLastName());
+		retVal.setWeight(healthRecord.getWeight());
+		retVal.setAllergyList(allergyList);
+		
+		return retVal;
+	}
+	
+//	public UserRequestPOJO findByEmail(String email) {
+//		return userRequestRepository.findByEmail(email);
+//	}
 	
 }

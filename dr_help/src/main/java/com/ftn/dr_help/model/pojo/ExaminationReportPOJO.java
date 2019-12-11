@@ -34,7 +34,7 @@ public class ExaminationReportPOJO implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	private AppointmentPOJO appointment;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private HealthRecordPOJO healthRecord;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
