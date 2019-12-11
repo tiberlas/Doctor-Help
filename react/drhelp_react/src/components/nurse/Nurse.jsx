@@ -7,6 +7,7 @@ import {Route, Switch, Redirect} from "react-router-dom";
 import NurseChangeProfile from './NurseChangeProfile.jsx';
 import NurseChangePassword from './NurseChangePassword.jsx';
 import axios from 'axios';
+import PatientList from './PatientList'
 
 class Nurse extends Component {
     state = { 
@@ -57,6 +58,7 @@ class Nurse extends Component {
                             <Route exact path="/nurse/profile"> <NurseProfile /></Route>
                             <Route exact path="/nurse/profile/change"> <NurseChangeProfile handleUpdate={this.handleNurse}/></Route>
                             <Route exact path="/nurse/profile/change/password"> <NurseChangePassword /></Route>
+                            <Route exact path="/nurse/patientList"> <PatientList/> </Route>
                         </Switch>
                     </div>
                 </NurseContextProvider>

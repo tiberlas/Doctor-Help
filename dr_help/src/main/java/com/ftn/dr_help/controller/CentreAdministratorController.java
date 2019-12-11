@@ -156,12 +156,6 @@ public class CentreAdministratorController {
 		
 	}  
 	
-
-	
-	@GetMapping(value = "/createRequests")
-	public void createRequests() {
-		patientService.createAllRequests();
-	}
 	
 	@PostMapping(value = "/declineRequest", consumes = "application/json")
 	public ResponseEntity<UserRequestPOJO> declineUserRequest(@RequestBody PatientRequestDTO patientDTO){
@@ -199,9 +193,9 @@ public class CentreAdministratorController {
 		System.out.println(p);
 		
 		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
-			System.out.println("Password is " + requested.getPassword());
-			String encoded = encoder.getEncoder().encode(requested.getPassword());
-			p.setPassword(encoded);
+		System.out.println("Password is " + requested.getPassword());
+		String encoded = encoder.getEncoder().encode(requested.getPassword());
+		p.setPassword(encoded);
 
 		
 	/*	PasswordValidateInterface validate = new PasswordValidate();

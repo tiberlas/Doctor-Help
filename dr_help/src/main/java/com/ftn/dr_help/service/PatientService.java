@@ -1,15 +1,14 @@
 package com.ftn.dr_help.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
+import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.PatientRepository;
@@ -82,35 +81,7 @@ public class PatientService {
 		return patientRepository.findAll();
 	}
 	
-	public void createAllRequests() {
-		UserRequestPOJO u1 = new UserRequestPOJO();
 
-		u1.setEmail("nikolic.dusan.dey@gmail.com");
-		u1.setFirstName("Duki");
-		u1.setLastName("Kuki");
-		u1.setAddress("C dom");
-		u1.setCity("Djurvidek");
-		u1.setState("Djurbija");
-		u1.setPhoneNumber("BoyOhBOYOHBOOOY");
-		u1.setBirthday(Calendar.getInstance());
-		u1.setInsuranceNumber(123456789L);
-		u1.setPassword("ohb0y");
-		userRequestRepository.save(u1);
-		
-		UserRequestPOJO u2 = new UserRequestPOJO();
-		u2.setEmail("TestB0i@yahoo.com");
-		u2.setFirstName("Miroslav");
-		u2.setLastName("Krleža");
-		u2.setAddress("F dom");
-		u2.setCity("Zapadni istočnjak");
-		u2.setState("Arabija");
-		u2.setPhoneNumber("123312");
-		u2.setBirthday(Calendar.getInstance());
-		u2.setInsuranceNumber(987654312L);
-		u2.setPassword("ohb0y");
-		
-		userRequestRepository.save(u2);
-	}
 	
 	public PatientProfileDTO getPatientProfile (Long id) {
 		PatientProfileDTO retVal = new PatientProfileDTO ();
@@ -156,5 +127,25 @@ public class PatientService {
 		patientRepository.save(current);
 		return profileUpdate;
 	}
+	
+	
+	public List<PatientPOJO> singleFilterPatients(String filter) {
+		List<PatientPOJO> patientList = patientRepository.findAll();
+		
+		//masan filter algorithm incoming
+		ArrayList<PatientPOJO> filteredPatients = new ArrayList<PatientPOJO>();
+		if (filter.matches("[0-9]+")) { //IS THE FILTER A NUMBER ONLY STRING ----> insurance search
+			for (PatientPOJO patientPOJO : patientList) {
+				if(patientPOJO.getInsuranceNumber().toString().contains(filter)) {
+					filteredPatients.add(patientPOJO);				}
+			}
+			
+			return filteredPatients;
+		}
+		
+		return patientList;
+	}
+	
+	
 	
 }

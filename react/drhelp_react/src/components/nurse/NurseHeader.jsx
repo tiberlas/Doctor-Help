@@ -15,7 +15,11 @@ class NurseHeader extends Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link >
-                        <Link exact to = '/nurse/profile' class="nav-link">profile</Link>
+                        <Link exact to = '/nurse/profile' class="nav-link">Profile</Link>
+                    </Nav.Link>
+
+                    <Nav.Link>
+                            <Link exact to='/nurse/patientList' class="nav-link">Patients</Link>
                     </Nav.Link>
                 </Nav>
                 <Nav className="justify-content-end" style={{ width: "100%" }}>
