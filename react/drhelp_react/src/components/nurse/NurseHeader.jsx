@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import {Link} from 'react-router-dom'
 import {NurseContext} from '../../context/NurseContextProvider';
-
+ 
 class NurseHeader extends Component {
     static contextType = NurseContext;
 
@@ -16,6 +16,11 @@ class NurseHeader extends Component {
                 <Nav className="mr-auto">
                     <Nav.Link >
                         <Link exact to = '/nurse/profile' class="nav-link">profile</Link>
+                    </Nav.Link>
+                </Nav>
+                <Nav className="justify-content-end" style={{ width: "100%" }}>
+                    <Nav.Link>
+                        <Link exact to='/login' onClick={this.props.logout} class="nav-link">Logout</Link>
                     </Nav.Link>
                 </Nav>
             </Navbar.Collapse>

@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.ClinicAdminDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicAdministratorService;
@@ -39,6 +42,15 @@ public class ClinicAdministratorController {
 		@Autowired
 		private ClinicService clinicService;
 		
+		@Autowired
+		private CurrentUser currentUser;
+
+		@Autowired
+		private AppPasswordEncoder encoder;
+		
+		@Autowired
+		private Mail mail;
+	
 		
 		@PostMapping(value = "/newAdmin", consumes = "application/json")
 		@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
@@ -52,12 +64,20 @@ public class ClinicAdministratorController {
 			admin.setFirstName(clinicAdminDTO.getFirstName());
 			admin.setLastName(clinicAdminDTO.getLastName());
 			admin.setEmail(clinicAdminDTO.getEmail());
-			admin.setPassword("impressive password");
 			admin.setAddress("...");
 			admin.setBirthday(Calendar.getInstance());
 			admin.setCity("...");
 			admin.setPhoneNumber("...");
 			admin.setState("...");
+			
+			String password = "fakultet";
+			
+			String encoded = encoder.getEncoder().encode(password);
+			//p.setPassword(encoded);
+			admin.setPassword(encoded);
+			mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CLINICAL_ADMINISTRATOR);
+			System.out.println("Successfully sent account info email.");
+			
 			
 			admin = clinicAdministratorService.save(admin);
 			return new ResponseEntity<>(new ClinicAdminDTO(admin), HttpStatus.CREATED);
@@ -80,7 +100,7 @@ public class ClinicAdministratorController {
 		@GetMapping(value = "/name")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminNameDTO> getClinicAdministratorsName() {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 			
 			ClinicAdminNameDTO ret = clinicAdministratorService.findOnesName(email);
 			
@@ -94,7 +114,7 @@ public class ClinicAdministratorController {
 		@GetMapping(value = "/profile")
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> getClinicAdminProfile() {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 			
 			ClinicAdminProfileDTO ret = clinicAdministratorService.findOneProfile(email);
 			
@@ -109,7 +129,7 @@ public class ClinicAdministratorController {
 		@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminProfileDTO> putAdminProfile(@RequestBody UserDetailDTO admin) {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 			
 			ClinicAdminProfileDTO ret = clinicAdministratorService.save(admin, email);
 			
@@ -123,7 +143,7 @@ public class ClinicAdministratorController {
 		@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
 		@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 		public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
-			String email = CurrentUser.getEmail();
+			String email = currentUser.getEmail();
 
 			boolean ret = clinicAdministratorService.changePassword(passwords, email);
 			

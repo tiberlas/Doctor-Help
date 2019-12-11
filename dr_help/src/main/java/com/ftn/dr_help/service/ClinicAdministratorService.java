@@ -32,6 +32,7 @@ public class ClinicAdministratorService {
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
 	
+	
 	public ClinicAdministratorPOJO findOne(Long id) {
 		return clinicAdministratorRepository.findById(id).orElseGet(null);
 	}
@@ -116,7 +117,9 @@ public class ClinicAdministratorService {
 		//PasswordValidateInterface validate = new PasswordValidate();
 		
 		if(passwordValidate.isValid(password, finded.getPassword())) {
+
 			String encoded = encoder.getEncoder().encode(password.getNewPassword());
+
 			finded.setPassword(encoded);
 			clinicAdministratorRepository.save(finded);
 			return true;

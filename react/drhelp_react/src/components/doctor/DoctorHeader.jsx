@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import {Link} from 'react-router-dom'
 import {DoctorContext} from '../../context/DoctorContextProvider';
-
+ 
 class DoctorHeader extends Component {
     static contextType = DoctorContext;
 
@@ -18,6 +18,11 @@ class DoctorHeader extends Component {
                         <Link exact to = '/doctor/profile' class="nav-link">profile</Link>
                     </Nav.Link>
                 </Nav>
+                <Nav className="justify-content-end" style={{ width: "100%" }}>
+                    <Nav.Link>
+                            <Link exact to='/login' onClick={this.props.logout} class="nav-link">Logout</Link>
+                        </Nav.Link>
+                    </Nav>
             </Navbar.Collapse>
             </Navbar>);
     }

@@ -94,8 +94,8 @@ class ChangeProfile extends Component {
                     <input type='text'name='address' id='address' className={`form-control ${this.state.errorAddress? 'is-invalid': ''}`} value={this.state.address} onChange={this.handlerChange} />
                 </div>
                 <div className={`form-group ${this.state.errorPhone? 'has-danger': ''}`}>
-                    <label class="form-control-label" for="phone">Enter your phone number:</label>
-                    <input type='number' name='phone' id='phone' className={`form-control ${this.state.errorPhone? 'is-invalid': ''}`} value={this.state.phoneNumber} onChange={this.handlerChange} />
+                    <label class="form-control-label" for="phoneNumber">Enter your phone number:</label>
+                    <input type='number' name='phoneNumber' id='phoneNumber' className={`form-control ${this.state.errorPhone? 'is-invalid': ''}`} value={this.state.phoneNumber} onChange={this.handlerChange} />
                 </div>
                 <div class='row'>
                     <div class='col'>

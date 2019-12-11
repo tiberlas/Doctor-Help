@@ -14,35 +14,23 @@ class TempHome extends React.Component {
 
     static contextType = UserContext
 
+    handleLogout () {
+        
+    }
+
     render() {
         return(
             <div>
-                {this.props.role === 'centreAdmin' && <CenterAdministrator />}
-                {this.props.role === 'clinicAdmin' && <ClinicAdministrator />}
-                {this.props.role === 'doctor' && <Doctor />}
-                {this.props.role === 'pacient' && <Patient />}
-                {this.props.role === 'nurse' && <Nurse />}
-
+                {this.props.role === 'centreAdmin' && <CenterAdministrator logout={() => this.props.logout ()}/>}
+                {this.props.role === 'clinicAdmin' && <ClinicAdministrator logout={() => this.props.logout ()}/>}
+                {this.props.role === 'doctor' && <Doctor logout={() => this.props.logout ()}/>}
+                {this.props.role === 'patient' && <Patient logout={() => this.props.logout ()}/>}
+                {this.props.role === 'nurse' && <Nurse logout={() => this.props.logout ()}/>}
+                <br/>
                <Footer />
             </div>
 
         )
-
-        // if(this.props.role === 'centreAdmin')
-        //     return(
-        //         <CenterAdministrator />)
-        // else if(this.props.role === 'clinicAdmin')
-        //     return(<ClinicAdministrator />)
-        // else if(this.props.role === 'doctor')
-        //     return(<Doctor />)
-        // else if(this.props.role === 'patient')
-        //     return(<Patient />)
-        // else if(this.props.role === 'nurse')
-        //     return(<Nurse />)
-        // else
-        //     return(
-        //         <div><LoginPage /></div>
-        //     )
 
     };
 }

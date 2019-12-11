@@ -26,10 +26,13 @@ public class NurseController {
 	@Autowired
 	private NurseService service;
 	
+	@Autowired
+	private CurrentUser currentUser;
+	
 	@GetMapping(value = "/profile")
 	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<MedicalStuffProfileDTO> findProfile() {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		MedicalStuffProfileDTO ret = service.findByEmail(email);
 		
@@ -43,7 +46,7 @@ public class NurseController {
 	@PutMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<MedicalStuffProfileDTO> putAdminProfile(@RequestBody UserDetailDTO nurse) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		MedicalStuffProfileDTO ret = service.save(nurse, email);
 		
@@ -57,7 +60,7 @@ public class NurseController {
 	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<String> putAdminPassword(@RequestBody ChangePasswordDTO passwords) {
-		String email = CurrentUser.getEmail();
+		String email = currentUser.getEmail();
 		
 		boolean ret = service.changePassword(passwords, email);
 		

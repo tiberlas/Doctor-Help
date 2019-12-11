@@ -2,6 +2,9 @@
 -- enkripcija sa sajta: https://bcrypt-generator.com/
 
 insert into clinic(address, name, description) values('gospodnja 11', 'KLINIKA ZDRAVOG UMA', 'KLINIKA JE NAMENJENA ZA ...');
+insert into clinic(address, name, description) values('22 Dunnich Lane', 'Arkham', 'Assylum for the criminally insane');
+insert into clinic(address, name, description) values('24 Plainsburrough', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic');
+insert into clinic(address, name, description) values('Ulica gradska', 'Nasa Mala Klinika', 'Mali svet pun radosti');
 
 --password: sifra
 insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday) 
@@ -10,7 +13,7 @@ insert into centre_administrator(first_name, last_name, password, status, email,
 		 '06555555', 'RS', 'NS', 'A DOM', '2003-2-1'::timestamp
 	);
 
-	
+	 
 --password: 1234
 insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
 	values(

@@ -26,6 +26,7 @@ if ( token != null ) {
         localStorage.removeItem('token')
         localStorage.setItem('token', JSON.stringify(response.jwtToken))
     })
+
     
     const token = JSON.parse(localStorage.getItem('token'))
     config.headers.Authorization = `Bearer ${token}`;
@@ -43,5 +44,28 @@ return config;
   return Promise.reject(err);
 
 });
+
+
+// axios.interceptors.response.use((response) => {
+//     return response;
+// }, (error) => {
+//     if (!error.response) {
+//         alert('NETWORK ERROR')
+//     } else {
+//         const code = error.response.status
+//         const response = error.response.data
+//         const originalRequest = error.config;
+
+//         if (code === 400) { // && !originalRequest._retry
+//            // originalRequest._retry = true
+//             alert("dolby25")
+//             // auth.commit('logout');
+//             // window.location.href = "/login";
+//         }
+
+//         return Promise.reject(error)
+//     }
+// });
+
 
 export default interceptor;

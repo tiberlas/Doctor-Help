@@ -78,27 +78,29 @@ class ClinicChangeProfile extends Component {
             return (<Redirect to='/clinic+administrator/clinic'></Redirect>);
         } 
         return ( 
-            <div>
+            <div class='row d-flex justify-content-center'>
+            <div class='col-md-3'> 
             <form onSubmit={this.handleSubmit}>
-                <div>
-                    <p>Enter clinic's name:</p>
-                    <input type='text'name='name' value={this.state.name} onChange={this.handlerChange} />
-                    {this.state.errorName && <div>input must not be blank</div>}
+                <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
+                    <label class="form-control-label" for="name">Enter clinic's name:</label>
+                    <input type='text'name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': ''}`} value={this.state.name} onChange={this.handlerChange} />
+                    <div class="invalid-feedback">input must not be blank</div>
+                </div>
+                <div className={`form-group ${this.state.errorAddress? 'has-danger': ''}`}>
+                    <label class="form-control-label" for="address">Enter clinic's address:</label>
+                    <input type='text'name='address' id='address' className={`form-control ${this.state.errorAddress? 'is-invalid': ''}`} value={this.state.address} onChange={this.handlerChange} />
+                    <div class="invalid-feedback">input must not be blank</div>
+                </div>
+                <div className={`form-group ${this.state.errorDescription? 'has-danger': ''}`}>
+                    <label class="form-control-label" for="description">Enter clinic's description:</label>
+                    <input type='text'name='description' id='description' className={`form-control ${this.state.errorDescription? 'is-invalid': ''}`} value={this.state.description} onChange={this.handlerChange} />
+                    <div class="invalid-feedback">input must not be blank</div>
                 </div>
                 <div>
-                    <p>Enter clinic's address:</p>
-                    <input type='text'name='address' value={this.state.address} onChange={this.handlerChange} />
-                    {this.state.errorAddress && <div>input must not be blank</div>}
-                </div>
-                <div>
-                    <p>Enter clinic's description:</p>
-                    <textarea name='description' value={this.state.description} onChange={this.handlerChange} />
-                    {this.state.errorDescription && <div>input must not be blank</div>}
-                </div>
-                <div>
-                    <input type='submit' value='submit' disabled={this.state.errorName || this.state.errorAddress || this.state.errorDescription}/>
+                    <input type='submit' value='submit' class='btn btn-success' disabled={this.state.errorName || this.state.errorAddress || this.state.errorDescription}/>
                 </div>
             </form>
+            </div>
             </div>
          );
     }

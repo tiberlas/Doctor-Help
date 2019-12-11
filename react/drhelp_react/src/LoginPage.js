@@ -7,7 +7,7 @@ import {UserContext} from './context/UserContextProvider';
 import {Route, Switch} from 'react-router-dom';
 import RegistrationPage from './components/RegistrationPage.js';
 import { Link } from 'react-router-dom';
-
+import FirstTimePasswordChange from './components/FirstTimePasswordChange'
 
 
 class LoginPage extends React.Component {
@@ -21,7 +21,7 @@ class LoginPage extends React.Component {
 		super(props)
 		this.state = {
 			loggedIn: false,
-			userRole: 'guest', 
+			userRole: 'guest'
 		}
 
 	}
@@ -79,13 +79,34 @@ class LoginPage extends React.Component {
 						password: password.value
 					})
 				})
-				.then (response => response.json())
+				.then(response => response.json())
 				.then (response =>  {
 
+
+					if (response.status === 401) {
+						alert ("An account with that email and password doesn't exist or isn't activated. ");
+						return;
+					}
+					if(response.status === 302) {
+						alert("moved")
+						//window
+					}
+					//return response.json()
+
 					localStorage.setItem('token', JSON.stringify(response.jwtToken));
+
 					var token = JSON.parse(localStorage.getItem('token'));
 					console.log(`Authorization=Bearer ${token}`)
 
+					console.log("must change password, ", response.mustChangePassword)
+
+					if(response.mustChangePassword === true) {
+						let role = response.userRole
+						alert('role here' + role)
+						this.props.setPasswordChange(response.userRole)
+						alert(" dolby" + role)
+					}
+					
 					if (response.userRole === "PATIENT") {
 						this.props.setLoginPatient ();
 						this.context.updateValue (response.id, response.userRole);
@@ -105,14 +126,13 @@ class LoginPage extends React.Component {
 					else if (response.userRole === "CLINICAL_ADMINISTRATOR") {
 						this.props.setLoginClinicAdmin ()
 						this.context.updateValue (response.id, response.userRole);
+						
+					
 						//this.context.updateValue ("role", response.userRole);
 					}
 					else if (response.userRole === "CENTRE_ADMINISTRATOR") {
 						this.props.setLoginCentreAdmin ()
 						this.context.updateValue ( response.id, response.userRole);
-
-						
-						alert("Token is " + token)
 						//this.context.updateValue ("role", response.userRole);
 					}
 				});
@@ -141,9 +161,15 @@ class LoginPage extends React.Component {
 	}
 	
 	render () {
-		
+
 		return (
 			<div>
+
+				{/* <div class="alert alert-dismissible alert-success">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
+				</div> */}
+
 				<Switch>
 					<Route path = "/login">
 						<div class='row d-flex justify-content-center' >
@@ -174,9 +200,6 @@ class LoginPage extends React.Component {
 					</Route>
 					<Route path = "/register">
 						<RegistrationPage></RegistrationPage>
-						<Link to="/login">
-							<button type="button" class="btn btn-success">Login</button>
-						</Link>
 					</Route>
 				</Switch>
 			</div>

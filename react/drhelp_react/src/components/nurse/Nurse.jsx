@@ -49,7 +49,7 @@ class Nurse extends Component {
         return ( 
             <div>
                 <NurseContextProvider nurse={nurse} >
-                    <NurseHeader />
+                    <NurseHeader logout={() => this.props.logout ()}/>
 
                     <div>
                         <Switch>
