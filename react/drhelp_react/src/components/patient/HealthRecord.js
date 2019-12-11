@@ -1,23 +1,31 @@
 import React, {Component} from 'react';
 import axios from 'axios'
+import { PatientContext } from '../../context/PatientContextProvider';
 
 
 class HealthRecord extends Component {
 
 	state = {
-		firstName: "", 
-		lastName: "", 
-		weight: "", 
-		height: "", 
-		birthday: "", 
-		diopter: "", 
-		bloodType: ""
+		firstName: this.context.patient.firstName, 
+		lastName: this.context.patient.lastName, 
+		weight: "UNKNOWN", 
+		height: "UNKNOWN", 
+		birthday: "UNKNOWN", 
+		diopter: "UNKNOWN", 
+		bloodType: "UNKNOWN", 
+		allergyList: "/"
 	}
+
+	static contextType = PatientContext;
 
 	componentDidMount () {
 		let path = "http://localhost:8080/api/patients/health_record";
-        axios.get (path)
+		axios.get (path)
         .then (response => {
+			if (response.status === 404) {
+				alert ("You have no health record");
+
+			}
             this.setState ({
                 firstName: response.data.firstName, 
 				lastName: response.data.lastName, 
@@ -25,9 +33,13 @@ class HealthRecord extends Component {
 				height: response.data.height, 
 				birthday: response.data.birthday, 
 				diopter: response.data.diopter, 
-				bloodType: response.data.bloodType
+				bloodType: response.data.bloodType, 
+				allergyList: response.data.allergyList
             });
-        })
+		})
+		.catch (function (error) {
+			
+		});
 	}
 
 	render () {
@@ -64,7 +76,7 @@ class HealthRecord extends Component {
 					</div>
 					<div >
 						<label class="badge badge-success text-right">Alergies:</label>&nbsp;&nbsp;&nbsp;
-						<label >PLACEHOLDER</label>
+						<label >{this.state.allergyList}</label>
 					</div>
                 </div>
                 
