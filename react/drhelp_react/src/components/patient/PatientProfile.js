@@ -12,16 +12,29 @@ class PatientProfile extends Component {
 		return (
 			<div>
 				<ViewProfile profile={this.context.patient}/>
-				<div>
-					<NavLink to = '/patient/profile/change'>
-						Change profile
-					</NavLink>
-				</div>
-				<div>
-					<NavLink to = '/clinic+administrator/profile/change'>
-						Change password
-					</NavLink>
-				</div>
+				<div class="row d-flex justify-content-center">
+					<div class='col-md-3'>
+						<div >
+                    		<label class="badge badge-success text-right">Insurance Number:</label>&nbsp;&nbsp;&nbsp;
+                    		<label >{this.context.patient.insuranceNumber}</label>
+                		</div>
+						<div>
+							<NavLink to = '/patient/health-record'>
+								Health Record
+							</NavLink>
+						</div>
+						<div>
+							<NavLink to = '/patient/profile/change'>
+								Change profile
+							</NavLink>
+						</div>
+						<div>
+							<NavLink to = '/clinic+administrator/profile/change'>
+								Change password
+							</NavLink>
+						</div>
+                	</div>
+            	</div>
 			</div>
 		);
 	}

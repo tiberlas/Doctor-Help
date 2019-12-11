@@ -8,6 +8,7 @@ import PatientContextProvider from '../../context/PatientContextProvider.js';
 import PatientChangeProfile from './PatientChangeProfile';
 import axios from 'axios'
 import ClinicListing from './ClinicListing.js';
+import HealthRecord from './HealthRecord.js';
 
 class Patient extends Component {
     
@@ -83,6 +84,9 @@ class Patient extends Component {
                             </Route>
                             <Route exact path="/patient/profile/change">
                                 <PatientChangeProfile updateData={() => this.handlePatient()}/>
+                            </Route>
+                            <Route exact path="/patient/health-record">
+                                <HealthRecord />
                             </Route>
                         </Switch>
                     </div>
