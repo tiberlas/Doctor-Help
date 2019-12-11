@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 @Entity
@@ -72,7 +74,9 @@ public class PatientPOJO implements Serializable{
 	@Column (name = "insuranceNumber", nullable = false, unique = true)
 	private Long insuranceNumber;
 	
-	@OneToOne (fetch = FetchType.LAZY)
+	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private HealthRecordPOJO healthRecord;
 
 	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

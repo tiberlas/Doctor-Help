@@ -3,7 +3,9 @@ import './App.css';
 import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
+
 import {BrowserRouter, Switch, Redirect, Route} from "react-router-dom";
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
@@ -25,7 +27,7 @@ class App extends Component {
       passwordChange: false
     }
 
-    this.confirmRegistration = this.confirmRegistration.bind(this)
+    //this.confirmRegistration = this.confirmRegistration.bind(this)
   }
 
   setDoctor () {
@@ -71,14 +73,14 @@ class App extends Component {
     localStorage.setItem('token', null);
   }
 
-  confirmRegistration = () => {
-    console.log("bingo")
-    axios.put('http://localhost:8080/api/patients/confirmAccount', {
-      headers: {'Content-Type':'application/json'},
-          email: window.location.href.split('=')[1]
-     }).then(response => {console.log("done")})
+  // confirmRegistration = () => {
+  //   console.log("bingo")
+  //   axios.put('http://localhost:8080/api/patients/confirmAccount', {
+  //     headers: {'Content-Type':'application/json'},
+  //         email: window.location.href.split('=')[1]
+  //    }).then(response => {console.log("done")})
 
-  }
+  // }
 
   setPasswordChange(role) {
     alert("passchange")
@@ -93,7 +95,7 @@ class App extends Component {
 
     console.log("href " + this.state.currentUrl)
     if(this.state.currentUrl === 'http://localhost:3000/activate') {
-      console.log("bingo")
+      console.log("bingo" + window.location.href.split('=')[1] )
       fetch('http://localhost:8080/api/patients/confirmAccount', {
             method: 'put',
             headers: {

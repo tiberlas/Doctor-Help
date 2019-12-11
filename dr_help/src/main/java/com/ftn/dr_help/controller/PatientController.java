@@ -19,7 +19,10 @@ import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
+import com.ftn.dr_help.model.enums.BloodTypeEnum;
+import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.service.HealthRecordService;
 import com.ftn.dr_help.service.PatientService;
 
 @RestController
@@ -31,6 +34,10 @@ public class PatientController {
 	
 	@Autowired
 	private CurrentUser currentUser;
+	
+	
+	@Autowired 
+	private HealthRecordService healthRecordService;
 	
 	@GetMapping(value = "/all/names")
 	@PreAuthorize("hasAuthority('DOCTOR')")
@@ -72,19 +79,48 @@ public class PatientController {
 		return new ResponseEntity<>(patientDTO, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/allRecords")
+	public ResponseEntity<List<HealthRecordPOJO>> getAllRecords() {
+
+		List<HealthRecordPOJO> patients = healthRecordService.findAll();
+
+		List<HealthRecordPOJO> patientDTO = new ArrayList<>();
+		for (HealthRecordPOJO p : patients) {
+			patientDTO.add(p);
+		}
+		
+		return new ResponseEntity<>(patientDTO, HttpStatus.OK);
+	}
+	
 	
 	@PutMapping(value = "/confirmAccount", consumes = "application/json")
 	public ResponseEntity<PatientPOJO> confirmPatientAccount(@RequestBody PatientRequestDTO patient) {
 		//String email = currentUser.getEmail();
+		System.out.println("USO SAM");
 		
 		PatientPOJO p = patientService.findPatientByEmail(patient.getEmail());
 		
 		if(p == null) {
+			
 			return new ResponseEntity<PatientPOJO>(HttpStatus.NOT_FOUND);
 		}
 		
+		
+		HealthRecordPOJO healthRecord = new HealthRecordPOJO();
+		healthRecord.setDiopter(null); //generic health record
+		healthRecord.setHeight(null);
+		healthRecord.setWeight(null);
+		healthRecord.setBloodType(null);
+		
 		p.setActivated(true);
+		p.setHealthRecord(healthRecord);
+		
 		patientService.save(p);
+		healthRecord.setPatient(p);
+		healthRecordService.save(healthRecord);
+		
+		System.out.println("Health record created.");
+		
 		
 		return new ResponseEntity<PatientPOJO>(p, HttpStatus.OK);
 	}
