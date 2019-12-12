@@ -31,11 +31,9 @@ public class RoomPOJO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@NotBlank
 	@Column(name = "number", nullable = false)
 	private int number;
 	
@@ -45,8 +43,8 @@ public class RoomPOJO implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	ProceduresTypePOJO procedurasTypes;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ClinicPOJO clinic;
 	
 	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

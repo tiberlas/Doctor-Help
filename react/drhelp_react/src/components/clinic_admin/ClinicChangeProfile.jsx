@@ -63,7 +63,7 @@ class ClinicChangeProfile extends Component {
         fetch('https://api.opencagedata.com/geocode/v1/json?q='+this.stringParser(this.state.address)+'%2c+'+this.stringParser(this.state.city)+'%2c+'+this.stringParser(this.state.state)+'&key=c94e6fbd30c540dba84374d9fc772e18&pretty=1')
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                console.log('provera validnosti', data)
                 if(data.status !== 200 && data.status.code == undefined) {
                     alert('THE ADDRESS IS NOT VALID./nPLEASE TRY AGAIN')
                     this.setState({errorBack: true, errorAddress: true})

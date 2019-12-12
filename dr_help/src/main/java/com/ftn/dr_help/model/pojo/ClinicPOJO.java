@@ -214,6 +214,12 @@ public class ClinicPOJO implements Serializable {
 		this.state = state;
 	}
 	
-	
+	public void addRoom(RoomPOJO room) {
+		this.roomList.add(room);
+	}
+		
+	public void deleteRoom(RoomPOJO room) {
+		this.roomList.remove(room);
+	}
 	
 }

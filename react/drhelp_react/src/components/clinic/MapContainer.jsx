@@ -20,8 +20,21 @@ export class MapContainer extends Component {
     activeMarker: {},
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.address !== this.props.address || prevProps.city !== this.props.city || prevProps.state !== this.props.state) {
+      this.setState({address: this.props.address, city: this.props.city, state: this.props.state}, () => {
+        this.handleMap();
+      });
+    } 
+  }
+
+  componentDidMount() {
+    this.handleMap();
+  }
+
   //stavlja + umesto space; bitno je da adresa nema space u sebi
   stringParser = (path) => {
+    console.log('path', path)
     var words = path.split(' ')
     var ret = words[0]
     var i
@@ -32,13 +45,13 @@ export class MapContainer extends Component {
     return ret
   }
 
-  componentDidMount() {
+  handleMap = () => {
     //url example: number address, city, state
     fetch('https://api.opencagedata.com/geocode/v1/json?q='+this.stringParser(this.state.address)+'%2c+'+this.stringParser(this.state.city)+'%2c+'+this.stringParser(this.state.state)+'&key=c94e6fbd30c540dba84374d9fc772e18&pretty=1')
       .then(response => response.json())
       .then(data => {
-        console.log(data)
-          if(data.status !== 200 && data.status.code == undefined) {
+        console.log('pravi poziv', data)
+          if(data.status.code !== 200) {
             this.setState({
               address: 'not available',
               state: 'not available',
