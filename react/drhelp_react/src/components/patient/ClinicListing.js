@@ -29,9 +29,9 @@ class ClinicListing extends Component {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell><p class='text-success'>Naziv klinike</p></TableCell>
-							<TableCell><p class='text-success'>Opis</p></TableCell>
-							<TableCell><p class='text-success'>Adresa</p></TableCell>
+							<TableCell><p class='text-success'>Clinic Name</p></TableCell>
+							<TableCell><p class='text-success'>Description</p></TableCell>
+							<TableCell><p class='text-success'>Address</p></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
