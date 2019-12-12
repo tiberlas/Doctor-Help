@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class NewRoomModal extends Component {
+class ChangeRoomModal extends Component {
     state = {
-        number: 0,
-        name: '',
-        errorNumber: true,
-        errorName: true,
+        id: this.props.id,
+        number: this.props.number,
+        name: this.props.name,
+        errorNumber: false,
+        errorName: false,
     }
     
     handleValidation = () => {
@@ -29,11 +30,12 @@ class NewRoomModal extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        axios.post('http://localhost:8080/api/rooms/new+room', {
+        axios.put('http://localhost:8080/api/rooms/change', {
+                    id: this.state.id,            
                     name: this.state.name,
                     number: parseInt(this.state.number)
         }).then( (response) => {
-            this.props.handleUpdate()
+            this.props.handleUpdate(response.data.name, response.data.number)
         })
     }
 
@@ -77,4 +79,4 @@ class NewRoomModal extends Component {
     }
 }
 
-export default NewRoomModal;
+export default ChangeRoomModal;

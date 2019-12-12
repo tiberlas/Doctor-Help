@@ -18,6 +18,7 @@ class HandlingRooms extends Component {
     }
 
     handleUpdate = () => {
+        alert("Update")
         this.setState({isOpen: false})
         axios.get('http://localhost:8080/api/rooms/clinic='+this.context.admin.clinicId+'/all')
         .then(response => {
@@ -38,11 +39,9 @@ class HandlingRooms extends Component {
         this.setState({isOpen: true})
     }
 
-    closeModal = () => {
-        this.setState({
-          isOpen: false
-        });
-    }
+    showModal = () => {
+        this.setState({isOpen: false})
+    };
 
     render() {
 
@@ -50,7 +49,7 @@ class HandlingRooms extends Component {
             <div>
                 <h2>{this.state.name}</h2>
                 <button onClick={this.onAdd} class='btn btn-success'>add</button>
-                <NewRoomModal handleUpdate={this.handleUpdate}/>
+                <NewRoomModal handleUpdate={this.handleUpdate} show={this.state.isOpen} close={this.showModal}/>
                 <div>
                     {this.state.rooms.map(c => (
                         <RoomItem key={c.Id} value={c} handleUpdate={this.handleUpdate} />

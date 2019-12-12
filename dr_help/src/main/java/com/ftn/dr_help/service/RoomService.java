@@ -118,4 +118,31 @@ public class RoomService {
 		repository.save(finded);
 	}
 	
+	public RoomDTO change(RoomDTO room, String email) {
+		if(email == null) {
+			return null;
+		}
+		
+		if(room == null || room.getId() == null) {
+			return null;
+		}
+		
+		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+		if(admin == null) {
+			return null;
+		}
+		
+		ClinicPOJO clinic = admin.getClinic();
+		RoomPOJO finded = repository.findByIdAndClinic_id(room.getId(), clinic.getId()).orElse(null);
+		if(finded == null) {
+			return null;			
+		}
+		
+		finded.setName(room.getName());
+		finded.setNumber(room.getNumber());
+		repository.save(finded);
+		
+		return new RoomDTO(finded);
+	}
+	
 }

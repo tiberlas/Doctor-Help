@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,6 +72,19 @@ public class RoomController {
 		service.delete(id, email);
 		
 		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/change", consumes = "application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<RoomDTO> changeRoom(@RequestBody RoomDTO room) {
+		String email = currentUser.getEmail();
+		RoomDTO ret = service.change(room, email);
+		
+		if(ret == null) {
+			return new ResponseEntity<RoomDTO>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		return new ResponseEntity<RoomDTO>(ret, HttpStatus.OK);
 	}
 	
 }
