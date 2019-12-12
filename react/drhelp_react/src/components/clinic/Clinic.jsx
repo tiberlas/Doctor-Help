@@ -6,9 +6,9 @@ class Clinic extends Component {
     state = { 
         name: "",
         address: "",
+        city: "",
+        state: "",
         description: "",
-        lat: 45.236476,
-        lng: 19.839958
      }
 
      componentDidMount() {
@@ -21,6 +21,8 @@ class Clinic extends Component {
             this.setState({
                 name: response.data.name,
                 address: response.data.address,
+                city: response.data.city,
+                state: response.data.state,
                 description: response.data.description
             })
         })
@@ -35,10 +37,10 @@ class Clinic extends Component {
             <div>
                 <div>
                     <h1>{this.state.name}</h1>
-                    <h3>location for healing: {this.state.address}</h3>
+                    <h3>location for healing: {this.state.address}, {this.state.city}, {this.state.state}</h3>
                 </div>
                 <div style={divMapStyle}>
-                    <MapContainer lat={this.state.lat} lng={this.state.lng} name={this.state.name} address={this.state.address} />
+                    <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
                 </div>
                 <div>
                     <p>{this.state.description}</p>

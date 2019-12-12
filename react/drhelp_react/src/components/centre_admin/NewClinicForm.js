@@ -11,6 +11,8 @@ class NewClinicForm extends React.Component {
         this.state = {
             clinicName: "",
             clinicAddress: "",
+            clinicCity: "",
+            clinicState: "",
             clinicDescription: ""
         }
         this.handleChange = this.handleChange.bind(this)
@@ -30,6 +32,8 @@ class NewClinicForm extends React.Component {
 
             name: this.state.clinicName,
             address: this.state.clinicAddress,
+            city: this.state.clinicCity,
+            state: this.state.clinicState,
             description: this.state.clinicDescription
         })
             .then(res => {
@@ -73,6 +77,17 @@ class NewClinicForm extends React.Component {
                 {/* <Form.Label>Password</Form.Label> */}
                 <Form.Control type="text" name = "clinicAddress" placeholder="Address" onChange = {this.handleChange}/>
             </Form.Group>
+
+            <Form.Group controlId="formClinicCity">
+                {/* <Form.Label>Password</Form.Label> */}
+                <Form.Control type="text" name = "clinicCity" placeholder="City" onChange = {this.handleChange}/>
+            </Form.Group>
+
+            <Form.Group controlId="formClinicState">
+                {/* <Form.Label>Password</Form.Label> */}
+                <Form.Control type="text" name = "clinicState" placeholder="State" onChange = {this.handleChange}/>
+            </Form.Group>
+
             <Form.Group controlId="formClinicDescription">
                 {/* <Form.Label>Password</Form.Label> */}
                 <Form.Control type="text" name = "clinicDescription" placeholder="Description" onChange = {this.handleChange} />

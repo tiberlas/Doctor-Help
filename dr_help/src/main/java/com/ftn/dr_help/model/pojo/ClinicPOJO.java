@@ -41,6 +41,11 @@ public class ClinicPOJO implements Serializable {
 	@Column(name = "address", nullable = false)
 	private String address;
 	
+	@Column(name = "city", nullable = false)
+	private String city;
+	
+	@Column(name = "state", nullable = false)
+	private String state;
 	
 	@Column(name = "description", nullable = false)
 	private String description;
@@ -191,6 +196,22 @@ public class ClinicPOJO implements Serializable {
 	public void setProcedureTypesList(
 			ArrayList<ProceduresTypePOJO> procedureTypesList) {
 		this.procedureTypesList = procedureTypesList;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 	
 	

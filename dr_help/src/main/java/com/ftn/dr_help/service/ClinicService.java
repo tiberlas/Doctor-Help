@@ -25,6 +25,9 @@ public class ClinicService {
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
 	
+	@Autowired
+	private ClinicValidation clinicValidation;
+	
 	public ClinicPOJO findOne(Long id) {
 		if(id == null) {
 			return null;
@@ -65,7 +68,7 @@ public class ClinicService {
 			return null;
 		}
 		
-		if(!ClinicValidation.isValid(clinic)) {
+		if(clinicValidation.isValid(clinic)) {
 			return null;
 		}
 		

@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
-import com.ftn.dr_help.dto.ClinicRoomListDTO;
-import com.ftn.dr_help.dto.MedicalStuffProfileDTO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
 
@@ -41,6 +39,8 @@ public class ClinicController {
 		ClinicPOJO clinic = new ClinicPOJO();
 		clinic.setName(clinicDTO.getName());
 		clinic.setAddress(clinicDTO.getAddress());
+		clinic.setCity(clinicDTO.getCity());
+		clinic.setState(clinicDTO.getState());
 		clinic.setDescription(clinicDTO.getDescription());
 
 		clinic = clinicService.save(clinic);
