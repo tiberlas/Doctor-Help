@@ -8,6 +8,8 @@ import axios from 'axios';
 import {Link} from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 
+
+
 class PatientList extends Component {
 
 	state = {
@@ -21,9 +23,23 @@ class PatientList extends Component {
 			this.setState ({
 				patients: response.data
 			})
-		})
+        })
+        
+        document.addEventListener('keydown', this.handleKeyPress);
     }
 
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyPress);
+        //alert("handled enter remove")
+     }
+
+     handleKeyPress(event) {
+        if (event.keyCode === 13) { //enter button keyCode
+            //this.filterSubmit()
+        }
+      }
+
+   
     handleChange = (event) => {
         this.setState( {
             [event.target.name]: event.target.value
@@ -34,7 +50,6 @@ class PatientList extends Component {
 
     filterSubmit = (event) => {
         event.preventDefault()
-
         axios.post('http://localhost:8080/api/nurses/filterPatients', {
             filterResults: this.state.filter
         }).then(response => {
@@ -43,6 +58,8 @@ class PatientList extends Component {
             })
         })
     }
+
+  
 
 
     
@@ -76,7 +93,7 @@ class PatientList extends Component {
 							<TableCell><p class='text-success'>First name</p></TableCell>
 							<TableCell><p class='text-success'>Last name</p></TableCell>
                             <TableCell><p class='text-success'>Mail</p></TableCell>
-                            <TableCell> <input type = "text" placeholder="Search by ..." name = "filter" onChange = {this.handleChange}/> <Button className="btn btn-success" onClick = {this.filterSubmit}>Search</Button></TableCell>
+                            <TableCell> <input type = "text" placeholder="Filter patients" name = "filter" onChange = {this.handleChange}/> <Button className="btn btn-success" onClick = {this.filterSubmit}>Search</Button></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>

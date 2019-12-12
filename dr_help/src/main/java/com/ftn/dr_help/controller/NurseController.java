@@ -102,6 +102,16 @@ public class NurseController {
 	@PostMapping(value = "/filterPatients", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<List<PatientDTO>> getFilteredPatients(@RequestBody PatientFilterDTO filterResults) {
 		
+		if(filterResults.getFilterResults().trim().equals("")) { //if search result is empty, return all
+			List<PatientPOJO> patients = patientService.findAll();
+			
+			List<PatientDTO> patientDTO = new ArrayList<>();
+			for (PatientPOJO p : patients) {
+				patientDTO.add(new PatientDTO(p));
+			}
+			return new ResponseEntity<>(patientDTO, HttpStatus.OK);
+		} 
+		
 		List<PatientPOJO> patients = patientService.singleFilterPatients(filterResults.getFilterResults());
 
 		List<PatientDTO> patientDTO = new ArrayList<>();
@@ -110,6 +120,7 @@ public class NurseController {
 		}
 		
 		return new ResponseEntity<>(patientDTO, HttpStatus.OK);
+		
 	}
 
 }

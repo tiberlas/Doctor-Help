@@ -58,7 +58,7 @@ class Nurse extends Component {
                             <Route exact path="/nurse/profile"> <NurseProfile /></Route>
                             <Route exact path="/nurse/profile/change"> <NurseChangeProfile handleUpdate={this.handleNurse}/></Route>
                             <Route exact path="/nurse/profile/change/password"> <NurseChangePassword /></Route>
-                            <Route exact path="/nurse/patientList"> <PatientList/> </Route>
+                            <Route exact path="/nurse/patient-list"> <PatientList/> </Route>
                         </Switch>
                     </div>
                 </NurseContextProvider>
