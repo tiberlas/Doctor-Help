@@ -88,6 +88,9 @@ class Patient extends Component {
                             <Route exact path="/patient/health-record">
                                 <HealthRecord />
                             </Route>
+                            <Route exact path="/patient/health-record">
+                                <HealthRecord />
+                            </Route>
                         </Switch>
                     </div>
                 </PatientContextProvider>

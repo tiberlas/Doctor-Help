@@ -24,6 +24,11 @@ class PatientProfile extends Component {
 							</NavLink>
 						</div>
 						<div>
+							<NavLink to = '/patient/history'>
+								Patient History
+							</NavLink>
+						</div>
+						<div>
 							<NavLink to = '/patient/profile/change'>
 								Change profile
 							</NavLink>

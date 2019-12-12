@@ -4,7 +4,8 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import TempHome from './components/TempHome.js';
 import {UserContext} from './context/UserContextProvider';
-import {Route, Switch} from 'react-router-dom';
+import {Route} from 'react-router-dom';
+import {Switch} from 'react-router-dom';
 import RegistrationPage from './components/RegistrationPage.js';
 import { Link } from 'react-router-dom';
 import FirstTimePasswordChange from './components/FirstTimePasswordChange'
