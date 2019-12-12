@@ -68,10 +68,6 @@ export class MapContainer extends Component {
         width: '80%',
         height: '400px',
     };
-    //neradi
-    const infoStyle = {
-        'background-color': 'black'
-    };
 
     if(this.state.lat === 0 && this.state.lng === 0) {
       return(
@@ -87,8 +83,7 @@ export class MapContainer extends Component {
 
                 <InfoWindow
                 marker={this.state.activeMarker}
-                visible={this.state.showingInfoWindow}
-                style={infoStyle}>
+                visible={this.state.showingInfoWindow}>
                     <div class="card border-secondary mb-3">
                     <div class="card-header">{this.state.name}</div>
                     <div class="card-body">
