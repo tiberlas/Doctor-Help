@@ -19,7 +19,7 @@ class NurseHeader extends Component {
                     </Nav.Link>
 
                     <Nav.Link>
-                            <Link exact to='/nurse/patient-list' class="nav-link">Patients</Link>
+                            <Link exact to='/nurse/patient-list' class="nav-link">Patient list</Link>
                     </Nav.Link>
                 </Nav>
                 <Nav className="justify-content-end" style={{ width: "100%" }}>

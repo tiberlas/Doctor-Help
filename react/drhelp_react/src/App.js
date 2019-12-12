@@ -26,8 +26,6 @@ class App extends Component {
       currentUrl: window.location.href.split('=')[0],
       passwordChange: false
     }
-
-    //this.confirmRegistration = this.confirmRegistration.bind(this)
   }
 
   setDoctor () {
@@ -83,7 +81,6 @@ class App extends Component {
   // }
 
   setPasswordChange(role) {
-    alert("passchange")
     this.setState({
       passwordChange: true,
       userRole: role
@@ -107,9 +104,13 @@ class App extends Component {
      }).then(console.log("done"))
         return (
           <div> 
-            
-            <h2> Your account has been confirmed. Click the <a href="http://localhost:3000/login"> link </a> 
-            to log in with your credentials. </h2>
+             <div class="row d-flex justify-content-center">
+                <div class='col-md-3'>
+                  <h2> Your account has been confirmed. <br/>Click the <a href="http://localhost:3000/login"> link </a> 
+                  to log in with your credentials. </h2>
+                  </div>
+              </div>
+
         </div>
         )
     }

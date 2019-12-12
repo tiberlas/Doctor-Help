@@ -73,18 +73,21 @@ class RegistrationPage extends React.Component {
 		return (
 			<div class='row d-flex justify-content-center'>
             <div class='col-md-3'> 
-				<form onSubmit={this.handleRegister}>
-					<FormControl required type="email" placeholder="Email" id="tb_email"/>
-					<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
-					<FormControl required type="password" placeholder="Repeat password" id="tb_pass2"/>
-					<FormControl required type="text" placeholder="First name" id="tb_name"/>
-					<FormControl required type="text" placeholder="Last name" id="tb_last_name"/>
-					<FormControl required type="text" placeholder="Address" id="tb_address"/>
-					<FormControl required type="text" placeholder="Town" id="tb_town"/>
-					<FormControl required type="text" placeholder="Country" id="tb_country"/>
-					<FormControl required type="text" placeholder="Phone number" id="tb_phone"/>
-					<FormControl required type="text" placeholder="Insurance number" id="tb_insurance"/>
-					<FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="tb_birthday"/>
+				<Form onSubmit={this.handleRegister}>
+					<br/>
+					<br/>
+					
+					<Form.Group> <FormControl required type="email" placeholder="Email" id="tb_email"/> </Form.Group>
+					<Form.Group> <FormControl required type="password" placeholder="Password" id="tb_pass1"/> </Form.Group>
+					<Form.Group> <FormControl required type="password" placeholder="Repeat password" id="tb_pass2"/> </Form.Group>
+					<Form.Group><FormControl required type="text" placeholder="First name" id="tb_name"/> </Form.Group>
+					<Form.Group> <FormControl required type="text" placeholder="Last name" id="tb_last_name"/> </Form.Group>
+					<Form.Group> <FormControl required type="text" placeholder="Address" id="tb_address"/> </Form.Group>
+					<Form.Group> <FormControl required type="text" placeholder="Town" id="tb_town"/> </Form.Group>
+					<Form.Group> <FormControl required type="text" placeholder="Country" id="tb_country"/> </Form.Group>
+					<Form.Group> <FormControl required type="text" placeholder="Phone number" id="tb_phone"/> </Form.Group>
+					<Form.Group><FormControl required type="text" placeholder="Insurance number" id="tb_insurance"/> </Form.Group>
+					<Form.Group> <FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="tb_birthday"/> </Form.Group>
 					
 					<div class="form-group row">
 						<div class='col-md text-left'>
@@ -96,7 +99,7 @@ class RegistrationPage extends React.Component {
 							</Link>
 						</div>
 					</div>
-				</form>
+				</Form>
 			</div>
 			</div>
 		)

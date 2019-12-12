@@ -162,7 +162,6 @@ class NewAdminForm extends React.Component {
                     : <div> <label>You must add at least 1 clinic. <Button variant="btn btn-success" type="submit" disabled> Submit </Button> </label> </div>}
                     
                     </Form>
-                    <h1> {this.state.email} {this.state.firstName} {this.state.lastName} {this.state.adminRole} {}</h1>
                 </div>
             </div>
             </div>
