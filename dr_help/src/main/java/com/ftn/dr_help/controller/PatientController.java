@@ -68,7 +68,7 @@ public class PatientController {
 	
 	@GetMapping(value = "/profile/{insuranceId}")
 	@PreAuthorize("hasAuthority('NURSE')")
-
+	
 	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("insuranceId") Long insuranceId ) {
 
 		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);

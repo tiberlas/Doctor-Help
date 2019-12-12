@@ -26,16 +26,16 @@ class PatientRequests extends Component {
         )
     }
 
-    componentDidUpdate = () => {
-        axios.get('http://localhost:8080/api/centreAdmins/requests',)
-        .then(res =>  {
-            const patientInfo = res.data
-            this.setState({patientInfo})
-        })
-        .catch(err => 
-            console.log(err)
-        )
-    }
+    // componentDidUpdate = () => {
+    //     axios.get('http://localhost:8080/api/centreAdmins/requests',)
+    //     .then(res =>  {
+    //         const patientInfo = res.data
+    //         this.setState({patientInfo})
+    //     })
+    //     .catch(err => 
+    //         console.log(err)
+    //     )
+    // }
 
     componentDidUnmount = () => {
         this._isMounted = false

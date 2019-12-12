@@ -29,7 +29,7 @@ class TempHome extends React.Component {
                 <br/>
                 <br/>
                 <br/>
-               <Footer />
+               {/* <Footer /> */}
             </div>
 
         )

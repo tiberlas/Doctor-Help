@@ -9,9 +9,9 @@ class ViewPatientProfile extends Component {
     }
 
     componentDidMount() {
-        let id = window.location.href.split('profile/')[1] //get the forwarded id
+        let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
         console.log("id is " + id)
-        let url = 'http://localhost:8080/api/patients/profile/' + id
+        let url = 'http://localhost:8080/api/patients/profile/' + id //append it to get url
         axios.get(url).then(response => {
            this.setState({
                patient: response.data

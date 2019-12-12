@@ -9,82 +9,95 @@ import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
 import {CentreAdminContext} from '../../context/CentreAdminContextProvider';
+import {DropdownItem} from  'react-bootstrap'
+import {DropdownToggle, DropdownMenu, NavbarToggler, Collapse,
+  UncontrolledDropdown, NavItem} from 'reactstrap'
+import { LinkContainer } from 'react-router-bootstrap';
 
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <a
-      href=""
-      ref={ref}
-      onClick={e => {
-        e.preventDefault();
-        onClick(e);
-      }}
-    >
-      {children}
-      &#x25bc;
-    </a>
-  ));
-  
-  // forwardRef again here!
-  // Dropdown needs access to the DOM of the Menu to measure it
-  const CustomMenu = React.forwardRef(
-    ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
-      const [value, setValue] = useState('');
-  
-      return (
-        <div
-          ref={ref}
-          style={style}
-          className={className}
-          aria-labelledby={labeledBy}
-        >
-          {/* <FormControl
-            autoFocus
-            className="mx-3 my-2 w-auto"
-            placeholder="Type to filter..."
-            onChange={e => setValue(e.target.value)}
-            value={value}
-          /> */}
-          <ul className="list-unstyled">
-            {React.Children.toArray(children).filter(
-              child =>
-                !value || child.props.children.toLowerCase().startsWith(value),
-            )}
-          </ul>
-        </div>
-      );
-    },
-  );
 
 class CentreAdminHeader extends Component {
   static contextType = CentreAdminContext;
     
+  state = {
+    showAdd: false,
+    dropdownAdd: false
+  }
+
+  toogle = () => {
+    this.setState({dropdownAdd:!this.state.dropdownAdd});
+  }
+
+
+  // menuAdd = (event) => {
+  //   event.preventDefault()
+
+  //   this.setState({showAdd: true}, () => {
+  //     document.addEventListener('click', this.closeAdd)
+  //   })
+  // }
+
+  // closeAdd = (event) => {
+  //   if(!this.dropdownMenu.contains(event.target)) {
+  //     this.setState({showAdd: false}, () => {
+  //       document.removeEventListener('click', this.closeAdd)
+  //     })
+  //   }
+  // }
+
+  
 
     render() { 
-        return ( 
-            <Navbar bg="light" expand="lg" id="navbarColor03">
-            <Navbar.Brand >
-              <Link exact to = '/centreAdministrator/profile' class="nav-link">
-                {this.context.admin.firstName}&nbsp;{this.context.admin.lastName}
-                </Link>
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-                <Nav.Link>
-                    <Link exact to = '/centreAdministrator/profile' class="nav-link">Profile</Link>
-                </Nav.Link>
-                <Nav.Link >
-                    <Link exact to = '/clinic/add' class="nav-link">New clinic</Link>
-                </Nav.Link>
-                <Nav.Link>
-                    <Link exact to = '/admin/add' class="nav-link">New admin</Link>
-                </Nav.Link>
 
+      
+        return ( 
+            <Navbar bg="light" expand="lg" id="navbarColor01">
+            <Navbar.Brand >
+              <Nav> 
+                  <Nav.Link>
+                    <Link exact to = '/home' class="nav-link">
+                      <strong> drHelp </strong>
+                    </Link>
+                  </Nav.Link>
+                </Nav>
+            </Navbar.Brand>
+            <NavbarToggler aria-controls="basic-navbar-nav"/>
+            <Collapse id="basic-navbar-nav" isOpen={this.state.dropdownAdd} navbar className="collapse">
+            <Nav className="mr-auto">
+              
+                <NavbarToggler onClick={this.toggle}/>
+                  <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
+                      <Nav className="mr-auto" navbar pullRight>
+                        <UncontrolledDropdown nav inNavbar>
+                          <DropdownToggle nav caret>
+                            Add
+                          </DropdownToggle>
+                          <DropdownMenu className='dropdown-menu'>
+                          <LinkContainer exact to="/clinic/add">
+                            <DropdownItem >New clinic</DropdownItem>
+                          </LinkContainer>
+
+                          <LinkContainer exact to="/admin/add">
+                            <DropdownItem >New administrator</DropdownItem>
+                          </LinkContainer>
+
+                          <LinkContainer exact to="/medication/new">
+                            <DropdownItem >New medication</DropdownItem>
+                          </LinkContainer>
+
+                          <LinkContainer exact to="/diagnosis/new">
+                            <DropdownItem >New diagnosis</DropdownItem>
+                          </LinkContainer>
+
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </Nav>
+            </Collapse>
+                
                 <Nav.Link>
                   <Link exact to = '/admin/requests' class="nav-link"> Patient requests </Link>
                 </Nav.Link>
 
-                <Nav.Link >
+                {/* <Nav.Link >
                   <Dropdown>
                       <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
                       Custom toggle
@@ -99,22 +112,29 @@ class CentreAdminHeader extends Component {
                       <Dropdown.Item eventKey="1">Red-Orange</Dropdown.Item>
                       </Dropdown.Menu>
                   </Dropdown>
-              </Nav.Link>
+              </Nav.Link> */}
   
-              <Nav.Link> 
+              {/* <Nav.Link> 
                   <Link exact to = '/medication/new' class="nav-link"> New medication </Link>
               </Nav.Link>
               <Nav.Link> 
                   <Link exact to = '/diagnosis/new' class="nav-link"> New diagnosis </Link>
-              </Nav.Link>
+              </Nav.Link> */}
 
             </Nav>
             <Nav className="justify-content-end" >
+
+                <Nav.Link>
+                        <Link exact to = '/centreAdministrator/profile' class="nav-link">
+                          {this.context.admin.firstName}&nbsp;{this.context.admin.lastName}
+                          </Link>
+                </Nav.Link>
+
                 <Nav.Link>
                     <Link exact to='/login' onClick={this.props.logout} class="nav-link">Logout</Link>
                 </Nav.Link>
             </Nav>
-        </Navbar.Collapse>
+        </Collapse>
         </Navbar>
          );
     }
