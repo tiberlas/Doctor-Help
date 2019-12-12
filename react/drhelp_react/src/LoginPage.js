@@ -38,37 +38,6 @@ class LoginPage extends React.Component {
 		let email = document.getElementById('tb_email');
 		let password = document.getElementById('tb_password');
 		
-		if ((email.value === 'doctor') && (password.value === 'doctor')) {
-			this.props.setLoginDoctor ();
-			this.setState ({
-				userRole: 'doctor'
-			});
-		}
-		else if ((email.value === 'nurse') && (password.value === 'nurse')) {
-			this.props.setLoginNurse ();
-			this.setState ({
-				userRole: 'nurse'
-			});
-		}
-		else if ((email.value === 'clinicAdmin') && (password.value === 'clinicAdmin')) {
-			this.props.setLoginClinicAdmin ();
-			this.setState ({
-				userRole: 'clinicAdmin'
-			});
-		}
-		else if ((email.value === 'centreAdmin') && (password.value === 'centreAdmin')) {
-			this.props.setLoginCentreAdmin ();
-			this.setState ({
-				userRole: 'centreAdmin'
-			});
-		}
-		else if ((email.value === 'patient') && (password.value === 'patient')) {
-			this.props.setLoginPatient ();
-			this.setState ({
-				userRole: 'patient'
-			});
-		}
-		
 		if (email.value.length > 3) {
 			if  (password.value.length > 3) {
 				fetch ('http://localhost:8080/api/login', {
@@ -87,11 +56,6 @@ class LoginPage extends React.Component {
 						alert ("An account with that email and password doesn't exist or isn't activated. ");
 						return;
 					}
-					if(response.status === 302) {
-						alert("moved")
-						//window
-					}
-					//return response.json()
 
 					localStorage.setItem('token', JSON.stringify(response.jwtToken));
 
@@ -165,11 +129,6 @@ class LoginPage extends React.Component {
 		return (
 			<div>
 
-				{/* <div class="alert alert-dismissible alert-success">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
-				</div> */}
-
 				<Switch>
 					<Route path = "/login">
 						<div class='row d-flex justify-content-center' >
@@ -199,7 +158,7 @@ class LoginPage extends React.Component {
 						</div>
 					</Route>
 					<Route path = "/register">
-						<RegistrationPage></RegistrationPage>
+						<RegistrationPage/>
 					</Route>
 				</Switch>
 			</div>

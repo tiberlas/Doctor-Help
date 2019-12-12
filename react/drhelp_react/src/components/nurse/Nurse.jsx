@@ -8,6 +8,9 @@ import NurseChangeProfile from './NurseChangeProfile.jsx';
 import NurseChangePassword from './NurseChangePassword.jsx';
 import axios from 'axios';
 import PatientList from './PatientList'
+import ViewPatientProfile from '../patient/ViewPatientProfile'
+
+
 
 class Nurse extends Component {
     state = { 
@@ -59,6 +62,7 @@ class Nurse extends Component {
                             <Route exact path="/nurse/profile/change"> <NurseChangeProfile handleUpdate={this.handleNurse}/></Route>
                             <Route exact path="/nurse/profile/change/password"> <NurseChangePassword /></Route>
                             <Route exact path="/nurse/patient-list"> <PatientList/> </Route>
+                            <Route path = "/profile/"> <ViewPatientProfile/> </Route>
                         </Switch>
                     </div>
                 </NurseContextProvider>

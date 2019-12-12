@@ -52,18 +52,35 @@ public class PatientController {
 		return new ResponseEntity<List<PatientNameDTO>>(ret, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/id={id}/profile")
-	@PreAuthorize("hasAuthority('DOCTOR')")
-	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("id") Long id ) {
+//	@GetMapping(value = "/id={id}/profile")
+//	@PreAuthorize("hasAuthority('DOCTOR')")
+//	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("id") Long id ) {
+//
+//		PatientDTO ret = patientService.findById(id);
+//		
+//		if(ret == null) {
+//			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
+//		}
+//		
+//		return new ResponseEntity<PatientDTO>(ret, HttpStatus.OK);
+//	}
+	
+	
+	@GetMapping(value = "/profile/{insuranceId}")
+	@PreAuthorize("hasAuthority('NURSE')")
 
-		PatientDTO ret = patientService.findById(id);
+	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("insuranceId") Long insuranceId ) {
+
+		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);
 		
 		if(ret == null) {
 			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<PatientDTO>(ret, HttpStatus.OK);
+		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
 	}
+	
+	
 	
 	
 	@GetMapping(value = "/all")

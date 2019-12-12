@@ -68,6 +68,11 @@ public class PatientService {
 	}
 	
 	
+	public PatientPOJO findByInsuranceNumber (Long insuranceNumber) {
+		return patientRepository.findByInsuranceNumber(insuranceNumber);
+	}
+	
+	
 	public void remove(UserRequestPOJO user) {
 		userRequestRepository.deleteById(user.getId());
 	}
@@ -142,6 +147,7 @@ public class PatientService {
 			}
 			
 			return filteredPatients;
+			
 		} else {
 			String search = "";
 			for (PatientPOJO patientPOJO : patientList) {
@@ -154,8 +160,6 @@ public class PatientService {
 			
 			return filteredPatients;
 		}
-		
-		//return patientList;
 	}
 	
 	

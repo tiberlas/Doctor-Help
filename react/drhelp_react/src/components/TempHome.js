@@ -27,6 +27,8 @@ class TempHome extends React.Component {
                 {this.props.role === 'patient' && <Patient logout={() => this.props.logout ()}/>}
                 {this.props.role === 'nurse' && <Nurse logout={() => this.props.logout ()}/>}
                 <br/>
+                <br/>
+                <br/>
                <Footer />
             </div>
 

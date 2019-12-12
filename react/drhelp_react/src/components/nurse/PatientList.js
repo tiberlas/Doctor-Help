@@ -65,16 +65,10 @@ class PatientList extends Component {
     
 
     generatePatientRows(row) {
-        // let items = []
-        // items.push(<TableCell><Link>{row.insuranceNumber}</Link></TableCell>)
-        // items.push(<TableCell><p class='text-white'>{row.firstName}</p></TableCell>)
-        // items.push(<TableCell><p class='text-white'>{row.lastName}</p></TableCell>)
-        // items.push(<TableCell><p class='text-white'>{row.email}</p></TableCell>)
-        // items.push(<TableCell></TableCell>)
-        // return items
+        let profileUrl = '/profile/' + row.insuranceNumber
         return (
             <Fragment>
-                <TableCell><Link>{row.insuranceNumber}</Link></TableCell>
+                <TableCell><Link exact to = {profileUrl} >{row.insuranceNumber}</Link></TableCell>
                 <TableCell><p class='text-white'>{row.firstName}</p></TableCell>
                 <TableCell><p class='text-white'>{row.lastName}</p></TableCell>
                 <TableCell><p class='text-white'>{row.email}</p></TableCell>
@@ -84,26 +78,32 @@ class PatientList extends Component {
     }
 
 	render () {
+
+        let size = this.state.patients.length
 		return (
 			<div>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell><p class='text-success'>Insurance number</p></TableCell>
-							<TableCell><p class='text-success'>First name</p></TableCell>
-							<TableCell><p class='text-success'>Last name</p></TableCell>
-                            <TableCell><p class='text-success'>Mail</p></TableCell>
-                            <TableCell> <input type = "text" placeholder="Filter patients" name = "filter" onChange = {this.handleChange}/> <Button className="btn btn-success" onClick = {this.filterSubmit}>Search</Button></TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{this.state.patients.map (row => (
-                             <TableRow key={row.id}>
-                                 {this.generatePatientRows(row)}
-                            </TableRow>
-						))}
-					</TableBody>
-				</Table>
+                <div class="row d-flex justify-content-center">
+                    <div class='col-md-5'>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell><p class='text-success'>Insurance number</p></TableCell>
+                                        <TableCell><p class='text-success'>First name</p></TableCell>
+                                        <TableCell><p class='text-success'>Last name</p></TableCell>
+                                        <TableCell><p class='text-success'>Mail</p></TableCell>
+                                        <TableCell> <input type = "text" placeholder="Filter patients..." name = "filter" onChange = {this.handleChange}/> <Button className="btn btn-success" onClick = {this.filterSubmit}>Search</Button></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {size > 0 ? this.state.patients.map (row => (
+                                        <TableRow key={row.id}>
+                                            {this.generatePatientRows(row)}
+                                        </TableRow>
+                                    )) : <h3> No results found. :( </h3> }
+                                </TableBody>
+                            </Table>
+                    </div>
+                </div>
 			</div>
 		);
 	}

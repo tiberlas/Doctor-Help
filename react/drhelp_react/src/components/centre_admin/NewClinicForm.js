@@ -58,31 +58,39 @@ class NewClinicForm extends React.Component {
 
     render() {
         return (
-            <div> 
-            <h1>>New clinic </h1>
-            <Form onSubmit = {this.handleSubmit}>
-            <Form.Group controlId="formClinicName">
-                {/* <Form.Label>Naziv klinike</Form.Label> */}
-                <Form.Control type="text" name = "clinicName" placeholder="Enter clinic name" onChange = {this.handleChange}/>
-                <Form.Text className="text-muted">
-                Clinic has to have a sensible name.
-                </Form.Text>
-            </Form.Group>
+            
+                <div class="row d-flex justify-content-center">
+                    <div class='col-md-3'>
+                    
+                    <h1>>New clinic </h1>
+                   
+                   
+                    <Form onSubmit = {this.handleSubmit}>
+                    <Form.Group controlId="formClinicName">
+                        {/* <Form.Label>Naziv klinike</Form.Label> */}
+                        <Form.Control type="text" name = "clinicName" placeholder="Enter clinic name" onChange = {this.handleChange}/>
+                        <Form.Text className="text-muted">
+                        Clinic has to have a sensible name.
+                        </Form.Text>
+                    </Form.Group>
 
-            <Form.Group controlId="formClinicAddress">
-                {/* <Form.Label>Password</Form.Label> */}
-                <Form.Control type="text" name = "clinicAddress" placeholder="Address" onChange = {this.handleChange}/>
-            </Form.Group>
-            <Form.Group controlId="formClinicDescription">
-                {/* <Form.Label>Password</Form.Label> */}
-                <Form.Control type="text" name = "clinicDescription" placeholder="Description" onChange = {this.handleChange} />
-            </Form.Group>
-            <Button variant="btn btn-success" type="submit">
-                Submit
-            </Button>
-            </Form>
-            <h1> {this.state.clinicName} {this.state.clinicAddress} {this.state.clinicDescription} </h1>
-            </div>
+                    <Form.Group controlId="formClinicAddress">
+                        {/* <Form.Label>Password</Form.Label> */}
+                        <Form.Control type="text" name = "clinicAddress" placeholder="Address" onChange = {this.handleChange}/>
+                    </Form.Group>
+                    <Form.Group controlId="formClinicDescription">
+                        {/* <Form.Label>Password</Form.Label> */}
+                        <Form.Control type="text" name = "clinicDescription" placeholder="Description" onChange = {this.handleChange} />
+                    </Form.Group>
+                    <Button variant="btn btn-success" type="submit">
+                        Submit
+                    </Button>
+                    </Form>
+                    {/* <h1> {this.state.clinicName} {this.state.clinicAddress} {this.state.clinicDescription} </h1> */}
+                    </div>
+                   
+                    </div>
+            
         )
     }
 }

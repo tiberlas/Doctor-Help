@@ -36,21 +36,24 @@ class NewMedicationForm extends React.Component {
     render() {
         return (
             <div> 
-            <h1>>New medication </h1>
-            <Form onSubmit = {this.handleSubmit}>
-            <Form.Group controlId="formMedicationName">
-                <Form.Control type="text" name = "medicationName" placeholder="Enter medication name" onChange = {this.handleChange}/>
-            </Form.Group>
+            <div class="row d-flex justify-content-center">
+                <div class='col-md-3'>
+                    <h1>>New medication </h1>
+                    <Form onSubmit = {this.handleSubmit}>
+                    <Form.Group controlId="formMedicationName">
+                        <Form.Control type="text" name = "medicationName" placeholder="Enter medication name" onChange = {this.handleChange}/>
+                    </Form.Group>
 
-          
-            <Form.Group controlId="formMedicationDescription">
-                <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Create
-            </Button>
-            </Form>
-            <h1> {this.state.medicationName} {this.state.medicationDescription}</h1>
+                
+                    <Form.Group controlId="formMedicationDescription">
+                        <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} />
+                    </Form.Group>
+                    <Button variant="btn btn-success" type="submit">
+                        Create
+                    </Button>
+                    </Form>
+                </div>
+             </div>
             </div>
         )
     }
