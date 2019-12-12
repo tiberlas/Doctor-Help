@@ -35,8 +35,12 @@ class NewRoom extends Component {
                     name: this.state.name,
                     number: parseInt(this.state.number)
         }).then( (response) => {
+
             this.setState({go_profile: true})
-        })
+        }).catch((error) => {
+            alert('ROOM WITH THAT NAME OR NUMBER ALREADY EXIST')
+            this.setState({errorName: true, errorNumber: true})
+        });
     }
 
     handleCancel = () => {

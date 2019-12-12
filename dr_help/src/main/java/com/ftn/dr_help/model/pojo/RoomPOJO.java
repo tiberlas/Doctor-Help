@@ -34,7 +34,7 @@ public class RoomPOJO implements Serializable{
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@Column(name = "number", nullable = false)
+	@Column(name = "number", nullable = false, unique = true)
 	private int number;
 	
 	@Column(name="deleted", nullable= false)

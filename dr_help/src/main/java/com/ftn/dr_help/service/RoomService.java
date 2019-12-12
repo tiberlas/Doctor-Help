@@ -74,6 +74,11 @@ public class RoomService {
 			return null;
 		}
 		
+		RoomPOJO exist = repository.findOneByNumber(newRoom.getNumber()).orElse(null);
+		if(exist != null) {
+			return null;
+		}
+		
 		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
 		if(admin == null) {
 			return null;

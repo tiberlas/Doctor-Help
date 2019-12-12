@@ -14,5 +14,7 @@ public interface RoomRepository extends JpaRepository <RoomPOJO, Long>{
 	List<RoomPOJO> findAllByClinic_id(Long id);
 	
 	Optional<RoomPOJO> findByIdAndClinic_id(Long id, Long clinic_id);
+	Optional<RoomPOJO> findOneByName(String name);
+	Optional<RoomPOJO> findOneByNumber(int number);
 
 }
