@@ -91,7 +91,8 @@ class PatientList extends Component {
                                         <TableCell><p class='text-success'>First name</p></TableCell>
                                         <TableCell><p class='text-success'>Last name</p></TableCell>
                                         <TableCell><p class='text-success'>Mail</p></TableCell>
-                                        <TableCell> <input type = "text" placeholder="Filter patients..." name = "filter" onChange = {this.handleChange}/> <Button className="btn btn-success" onClick = {this.filterSubmit}>Search</Button></TableCell>
+                                        <TableCell> <input type = "text" placeholder="Filter patients..." name = "filter" onChange = {this.handleChange}/> </TableCell>
+                                        <TableCell> <Button className="btn btn-success" onClick = {this.filterSubmit}>Search</Button> </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
