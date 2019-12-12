@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ChangeRoomModal from './ChangeRoomModal';
+import Button from 'react-bootstrap/Button'
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 
 class RoomItem extends Component {
     constructor(props) {
@@ -10,10 +12,9 @@ class RoomItem extends Component {
             id: this.props.value.id,
             name: this.props.value.name,
             number: this.props.value.number,
-            isOpen: false
+            modalShow: false
         }
     }
-
     
     onDelite = () => {
         axios.delete("http://localhost:8080/api/rooms/delete/id="+this.state.id)
@@ -22,27 +23,43 @@ class RoomItem extends Component {
         })
     };
 
-    onChange = () => {
-        this.setState({isOpen: true})
+    update = (rname, rnumber) => {
+        this.setState({modalShow: false, name: rname, number: rnumber})
     }
 
-    showModal = () => {
-        this.setState({isOpen: false})
-    };
+    setModalShow = () => {
+        this.setState({modalShow: true})
+    }
 
-    update = (rname, rnumber) => {
-        this.setState({isOpen: false, name: rname, number: rnumber})
+    setModalHide = () => {
+        this.setState({modalShow: false})
     }
 
     render() { 
+
         return ( 
-            <span>
-                <h3>{this.state.name}</h3>&nbsp;
-                number: {this.state.number}&nbsp;
-                <button onClick={this.onDelite} class='btn btn-danger'>delete</button>&nbsp;
-                <button onClick={this.onChange} class='btn btn-info'>change</button>
-                <ChangeRoomModal id={this.state.id} name={this.state.name} number={this.state.number} handleUpdate={(rname, rnumber) => this.update(rname, rnumber)} show={this.state.isOpen} close={this.showModal} />
-            </span>
+            <tr>
+                <td>{this.state.name}</td>
+                <td>{this.state.number}</td>
+                <td><button onClick={this.onDelite} class='btn btn-danger'>delete</button></td>
+                <td>
+                    <ButtonToolbar>
+                        <Button variant="primary" onClick={this.setModalShow}>
+                            change
+                        </Button>
+
+                        <ChangeRoomModal
+                            id={this.state.id} 
+                            name={this.state.name} 
+                            number={this.state.number} 
+                            handleUpdate={(rname, rnumber) => this.update(rname, rnumber)}
+                            show={this.state.modalShow}
+                            onHide={this.setModalHide}
+                        />
+                    </ButtonToolbar>
+                </td>
+
+            </tr>
          );
     }
 }

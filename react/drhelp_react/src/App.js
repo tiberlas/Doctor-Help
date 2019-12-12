@@ -123,7 +123,6 @@ class App extends Component {
         <div>
           <BrowserRouter >
             <Switch>
-
                 { this.state.passwordChange?
                  <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>:
 

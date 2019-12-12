@@ -27,6 +27,9 @@ class ClinicAdminHeader extends Component {
                     <Link exact to = '/clinic+administrator/rooms' class="nav-link">rooms</Link>
                 </Nav.Link>
                 <Nav.Link>
+                    <Link exact to = '/clinic+administrator/rooms/add' class="nav-link">add rooms</Link>
+                </Nav.Link>
+                <Nav.Link>
                     <Link exact to='/clinic+administrator/medical+staff' class="nav-link">medical staff</Link>
                 </Nav.Link>
             </Nav>

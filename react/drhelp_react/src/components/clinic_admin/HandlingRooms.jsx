@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import RoomItem from '../rooms/RoomItem';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import axios from 'axios';
-import NewRoomModal from '../rooms/NewRoomModal';
 
 class HandlingRooms extends Component {
     state = {
         rooms: [],
-        name: '',
-        isOpen: false
+        name: ''
     }
 
     static contextType = ClinicAdminContext
@@ -18,8 +16,6 @@ class HandlingRooms extends Component {
     }
 
     handleUpdate = () => {
-        alert("Update")
-        this.setState({isOpen: false})
         axios.get('http://localhost:8080/api/rooms/clinic='+this.context.admin.clinicId+'/all')
         .then(response => {
             this.setState({
@@ -35,26 +31,27 @@ class HandlingRooms extends Component {
         })
     }
 
-    onAdd = () => {
-        this.setState({isOpen: true})
-    }
-
-    showModal = () => {
-        this.setState({isOpen: false})
-    };
-
     render() {
 
         return ( 
-            <div>
-                <h2>{this.state.name}</h2>
-                <button onClick={this.onAdd} class='btn btn-success'>add</button>
-                <NewRoomModal handleUpdate={this.handleUpdate} show={this.state.isOpen} close={this.showModal}/>
-                <div>
-                    {this.state.rooms.map(c => (
-                        <RoomItem key={c.Id} value={c} handleUpdate={this.handleUpdate} />
-                    ))}
-                </div>
+            <div class='row d-flex justify-content-center'>
+            <div class='col-md-7'> 
+                <h2>Clinic {this.state.name}</h2>
+                <br/>
+                <table class="table table-hover ">
+                    <thead>
+                        <th class="text-success">name</th>
+                        <th class="text-success">number</th>
+                        <th></th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        {this.state.rooms.map(c => (
+                            <RoomItem key={c.Id} value={c} handleUpdate={this.handleUpdate} />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             </div>
          );
     }

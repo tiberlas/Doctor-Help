@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Modal from 'react-bootstrap/Modal'
 
 class ChangeRoomModal extends Component {
     state = {
@@ -17,7 +18,7 @@ class ChangeRoomModal extends Component {
             this.setState({errorName: true})
         }
 
-        if(this.state.number === 0) {
+        if(this.state.number == undefined || this.state.number == null) {
             this.setState({errorLast: true})
         }
     }
@@ -39,23 +40,19 @@ class ChangeRoomModal extends Component {
         })
     }
 
-    render() { 
-        if(!this.props.show){
-            return null;
-        }
-        return (  
-            <div>
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add new room</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onClick={() => this.props.close()}>
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form onSubmit={this.handleSubmit}> 
-                        <div class="modal-body">
-
+    render() {
+        return (
+            <Modal
+              size="sm"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={this.props.show}
+            >
+              <Modal.Header closeButton onClick={this.props.onHide}>
+                <Modal.Title id="contained-modal-title-vcenter">Change room</Modal.Title>
+              </Modal.Header>
+                <form onSubmit={this.handleSubmit}> 
+                    <Modal.Body>
                         <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                             <label class="form-control-label" for="name">name:</label>
                             <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': ''}`} value={this.state.name} onChange={this.handlerChange} />
@@ -66,16 +63,14 @@ class ChangeRoomModal extends Component {
                             <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': ''}`} value={this.state.number} onChange={this.handlerChange} />
                         </div>
 
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" class="btn btn-primary" disabled={this.state.errorName || this.state.errorNumber} value="submit"/>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={() => this.props.close()}>Close</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-                </div>
-        );
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <input type="submit" class="btn btn-primary" disabled={this.state.errorName || this.state.errorNumber} value="submit"/>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={this.props.onHide}>Close</button>
+                    </Modal.Footer>
+                </form>
+            </Modal>
+          );
     }
 }
 
