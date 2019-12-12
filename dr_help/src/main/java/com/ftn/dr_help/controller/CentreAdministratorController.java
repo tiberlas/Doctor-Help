@@ -65,6 +65,13 @@ public class CentreAdministratorController {
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<CentreAdminDTO> saveAdmin(@RequestBody CentreAdminDTO centreAdminDTO) {
 		
+		CentreAdministratorPOJO c = centreAdministratorService.findOneByEmail(centreAdminDTO.getEmail());
+		
+		if( c != null) 
+		{
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 		CentreAdministratorPOJO admin = new CentreAdministratorPOJO();
 		admin.setFirstName(centreAdminDTO.getFirstName());
 		admin.setLastName(centreAdminDTO.getLastName());

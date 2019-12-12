@@ -38,6 +38,14 @@ public class ClinicController {
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<ClinicDTO> saveClinic(@RequestBody ClinicDTO clinicDTO) {
+		
+		ClinicPOJO c = clinicService.findByName(clinicDTO.getName());
+		
+		if( c != null) 
+		{
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 		ClinicPOJO clinic = new ClinicPOJO();
 		clinic.setName(clinicDTO.getName());
 		clinic.setAddress(clinicDTO.getAddress());

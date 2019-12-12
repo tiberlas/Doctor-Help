@@ -12,7 +12,7 @@ import com.ftn.dr_help.model.convertor.ClinicUpdate;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
-import com.ftn.dr_help.repository.ClinicRepositorium;
+import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.validation.ClinicValidation;
 
 
@@ -20,7 +20,7 @@ import com.ftn.dr_help.validation.ClinicValidation;
 public class ClinicService {
 
 	@Autowired
-	private ClinicRepositorium repository;
+	private ClinicRepository repository;
 	
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
@@ -96,6 +96,10 @@ public class ClinicService {
 			return null;
 			
 		return new ClinicRoomListDTO(ret);
-		} 
+	}
+	
+	public ClinicPOJO findByName(String name) {
+		return repository.findByName(name);
+	}
 		
 }
