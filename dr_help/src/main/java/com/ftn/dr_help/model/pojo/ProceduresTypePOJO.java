@@ -21,7 +21,7 @@ import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "preceduresType")
+@Table(name = "proceduresType")
 public class ProceduresTypePOJO implements Serializable{
 	
 	/**

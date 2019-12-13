@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicRoomListDTO;
-import com.ftn.dr_help.dto.MedicalStuffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
 
@@ -90,6 +90,7 @@ public class ClinicController {
 	// Even though their code is identical at this point;
 	// In later sprints I intend to expand this one with filters
 	@GetMapping (value = "/listing")
+	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity <List<ClinicDTO>> getClinicListing () {
 		System.out.println("Patient listing says hi");
 		

@@ -2,6 +2,7 @@ package com.ftn.dr_help.dto;
 
 import java.util.Calendar;
 
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 
 public class PatientProfileDTO {
@@ -14,8 +15,10 @@ public class PatientProfileDTO {
 	private String city; 
 	private String state;
 	private String phoneNumber;
-	private Calendar birthday;
+	private String birthday;
 	private Long insuranceNumber;
+	
+	private DateConverter dateConverter = new DateConverter();
 	
 	public PatientProfileDTO () {}
 	
@@ -30,7 +33,7 @@ public class PatientProfileDTO {
 		this.city = city;
 		this.state = state;
 		this.phoneNumber = phoneNumber;
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 		this.insuranceNumber = insuranceNumber;
 	}
 	
@@ -44,7 +47,7 @@ public class PatientProfileDTO {
 		this.city = patient.getCity();
 		this.state = patient.getState();
 		this.phoneNumber = patient.getPhoneNumber();
-		this.birthday = patient.getBirthday();
+		this.birthday = dateConverter.toString(patient.getBirthday());
 		this.insuranceNumber = patient.getInsuranceNumber();
 	}
 	
@@ -96,11 +99,11 @@ public class PatientProfileDTO {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Calendar getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 	public void setBirthday(Calendar birthday) {
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 	}
 	public Long getInsuranceNumber() {
 		return insuranceNumber;

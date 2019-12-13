@@ -7,15 +7,26 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.dto.PatientProfileDTO;
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.HealthRecordDTO;
+import com.ftn.dr_help.dto.MedicationDisplayDTO;
 import com.ftn.dr_help.dto.PatientDTO;
+import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
+import com.ftn.dr_help.dto.PatientProfileDTO;
+import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
+import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
+import com.ftn.dr_help.model.pojo.ExaminationReportPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
+import com.ftn.dr_help.model.pojo.MedicationPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
+import com.ftn.dr_help.model.pojo.TherapyPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.AllergyRepository;
+import com.ftn.dr_help.repository.ExaminationReportRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.UserRequestRepository;
 
@@ -30,6 +41,9 @@ public class PatientService {
 	
 	@Autowired
 	private AllergyRepository allergyRepository;
+	
+	@Autowired
+	private ExaminationReportRepository examinationReportRepository;
 	
 	public List<PatientNameDTO> findAllNames() {
 		List<PatientPOJO> finded = patientRepository.findAll();
@@ -207,8 +221,78 @@ public class PatientService {
 		return retVal;
 	}
 	
-//	public UserRequestPOJO findByEmail(String email) {
-//		return userRequestRepository.findByEmail(email);
-//	}
+	public List<PatientHistoryDTO> getHistory (String email) {
+		PatientPOJO patient = patientRepository.findOneByEmail(email);
+		HealthRecordPOJO healthRecord = patient.getHealthRecord();
+		if (healthRecord == null) {
+			return null;
+		}
+		List<ExaminationReportPOJO> examinationReports = examinationReportRepository.findAllByHealthRecordId(patient.getHealthRecord().getId());
+		
+		DateConverter dateConverter = new DateConverter ();
+		
+		List<PatientHistoryDTO> retVal = new ArrayList<PatientHistoryDTO>();
+		for (ExaminationReportPOJO report : examinationReports) {
+			PatientHistoryDTO retValItem = new PatientHistoryDTO ();
+			AppointmentPOJO appointment = report.getAppointment();
+			retValItem.setExaminationReportId(report.getId());
+			
+			retValItem.setDate(dateConverter.toString(appointment.getDate()));
+			retValItem.setProcedureType(appointment.getProcedureType().getName());
+			retValItem.setDoctor(appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName());
+			retValItem.setNurse(appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName());
+			retValItem.setClinicName(report.getClinic().getName());
+			retVal.add(retValItem);
+		}
+		if (retVal.size() > 0) {
+			return retVal;
+		}
+		return null;
+	}
+	
+	public PerscriptionDisplayDTO getPerscription (Long examinationReportId) {
+		PerscriptionDisplayDTO retVal = new PerscriptionDisplayDTO ();
+		ExaminationReportPOJO examinationReport = examinationReportRepository.getOne(examinationReportId);
+		if (examinationReport == null) {
+			return null;
+		}
+		
+		PerscriptionPOJO perscription = examinationReport.getPerscription();
+		if (perscription == null) {
+			return null;
+		}
+		
+		DiagnosisPOJO diagnosis = perscription.getDiagnosis();
+		if (diagnosis != null) {
+			retVal.setDiagnosis(diagnosis.getDiagnosis());
+			retVal.setDescription(diagnosis.getDescription());
+		} else {
+			retVal.setDiagnosis("");
+			retVal.setDescription("");
+		}
+		
+		TherapyPOJO therapy = perscription.getTherapy();
+		if (therapy != null) {
+			retVal.setAdvice(therapy.getAdvice());
+		} else {
+			retVal.setAdvice("");
+		}
+		
+		List<MedicationPOJO> medicationList = perscription.getMedicationList();
+		List<MedicationDisplayDTO> medicationDto = new ArrayList<MedicationDisplayDTO> ();
+		for (MedicationPOJO temp : medicationList) {
+			MedicationDisplayDTO currentMedication = new MedicationDisplayDTO ();
+			currentMedication.setMedicationName(temp.getMedicationName());
+			currentMedication.setMedicationDescription(temp.getMedDescription());
+			medicationDto.add(currentMedication);
+		}
+		if (medicationDto.size() == 0) {
+			medicationDto.add(new MedicationDisplayDTO ("-", "-"));
+		}
+		retVal.setMedicationList(medicationDto);
+		
+		return retVal;
+	}
+	
 	
 }

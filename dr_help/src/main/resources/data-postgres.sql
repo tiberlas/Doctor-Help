@@ -79,9 +79,9 @@ insert into doctors(first_name, last_name, password, status, email, phone_number
 	);
 
 	
-insert into precedures_type(name, price, is_operation, duration, clinic_id) 
+insert into procedures_type(name, price, is_operation, duration, clinic_id) 
 	values('psiho analiza', 255, false, '02:00:00'::time, 1);
-insert into precedures_type(name, price, is_operation, duration, clinic_id) 
+insert into procedures_type(name, price, is_operation, duration, clinic_id) 
 	values('opsti pregled', 25, false, '00:30:00'::time, 1);
 
 	
@@ -114,4 +114,83 @@ insert into allergypojo (allergy, health_record_id)
 values ('Cats', 1);
 insert into allergypojo (allergy, health_record_id)
 values ('Pollen', 2);
+
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, null);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, null);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, null);
+
+insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
+values (3, 1, 1);
+insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
+values (1, 1, 1);
+insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
+values (2, 1, 1);
+
+update appointments 
+set examination_report_id = 1
+where id = 1;
+update appointments 
+set examination_report_id = 2
+where id = 2;
+update appointments 
+set examination_report_id = 3
+where id = 3;
+
+update examination_reportpojo
+set health_record_id = 1
+where id = 1;
+update examination_reportpojo
+set health_record_id = 1
+where id = 2;
+update examination_reportpojo
+set health_record_id = 1
+where id = 3;
+
+insert into diagnosispojo (description, diagnosis)
+values ('U are fine', 'Hypohondriac');
+insert into diagnosispojo (description, diagnosis)
+values ('What you get from too much reddit', 'Brain Cancer');
+insert into diagnosispojo (description, diagnosis)
+values ('Dubstep.', 'Ear Cancer');
+
+insert into therapypojo (advice, perscription_id)
+values ('Go out more', null);
+insert into therapypojo (advice, perscription_id)
+values ('Git gud, n00b', null);
+insert into therapypojo (advice, perscription_id)
+values ('Drugs are bad, mkay?', null);
+
+insert into medicationpojo (med_description, medication_name)
+values ('It makes you feel good', 'Cocain');
+insert into medicationpojo (med_description, medication_name)
+values ('Gives you wings', 'Reed bool');
+insert into medicationpojo (med_description, medication_name)
+values ('For the missus, wink wink nudge nudge', 'Vaseline');
+
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (1, 1, 1, 1);
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (2, 2, 1, 2);
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (3, 2, 1, null);
+
+update examination_reportpojo
+set perscription_id = 1
+where id = 1;
+update examination_reportpojo
+set perscription_id = 2
+where id = 2;
+update examination_reportpojo
+set perscription_id = 3
+where id = 3;
+
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (1, 1);
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (2, 1);
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (3, 1);
 

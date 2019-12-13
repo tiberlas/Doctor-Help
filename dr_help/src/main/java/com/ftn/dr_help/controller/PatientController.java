@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
+import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
+import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.PatientService;
 
@@ -124,6 +126,30 @@ public class PatientController {
 			return new ResponseEntity<HealthRecordDTO>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<HealthRecordDTO> (retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping (value="/history")
+	@PreAuthorize("hasAuthority('PATIENT')")	
+	public ResponseEntity<List<PatientHistoryDTO>> getHistory () {
+		List<PatientHistoryDTO> retVal = patientService.getHistory(currentUser.getEmail());
+		System.out.println("Zilav sam!!!1!");
+		if (retVal == null) {
+			retVal = new ArrayList<PatientHistoryDTO> ();
+			retVal.add(new PatientHistoryDTO ((long) 0, "", "", "", "", ""));
+		}
+		return new ResponseEntity<> (retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping (value = "/examinationReportId={examinationReportId}/perscription")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<PerscriptionDisplayDTO> getPerscription (@PathVariable("examinationReportId") Long examinationReportId) {
+		PerscriptionDisplayDTO retVal = patientService.getPerscription(examinationReportId);
+		
+		if (retVal == null) {
+			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
 }

@@ -93,7 +93,7 @@ class Patient extends Component {
                             <Route exact path="/patient/history">
                                 <PatientHistory />
                             </Route>
-                            <Route exact path="/patient/perscription">
+                            <Route path="/patient/perscription">
                                 <PerscriptionOverview />
                             </Route>
                         </Switch>

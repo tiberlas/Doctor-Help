@@ -2,6 +2,7 @@ package com.ftn.dr_help.dto;
 
 import java.util.Calendar;
 
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 
@@ -14,7 +15,9 @@ public class CentreAdminProfileDTO {
 	private String city;
 	private String state;
 	private String phoneNumber;
-	private Calendar birthday;
+	private String birthday;
+	
+	private DateConverter dateConverter = new DateConverter ();
 	
 	public CentreAdminProfileDTO() {
 		super();
@@ -32,7 +35,7 @@ public class CentreAdminProfileDTO {
 		this.city = city;
 		this.state = state;
 		this.phoneNumber = phoneNumber;
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 	}
 
 	public CentreAdminProfileDTO(ClinicAdministratorPOJO admin) {
@@ -44,7 +47,7 @@ public class CentreAdminProfileDTO {
 		this.city = admin.getCity();
 		this.state = admin.getState();
 		this.phoneNumber = admin.getPhoneNumber();
-		this.birthday = admin.getBirthday();
+		this.birthday = dateConverter.toString(admin.getBirthday());
 	}
 	
 	public CentreAdminProfileDTO(CentreAdministratorPOJO admin) {
@@ -57,7 +60,7 @@ public class CentreAdminProfileDTO {
 		this.city = admin.getCity();
 		this.state = admin.getState();
 		this.phoneNumber = admin.getPhoneNumber();
-		this.birthday = admin.getBirthday();
+		this.birthday = dateConverter.toString(admin.getBirthday());
 	}
 	
 	public Long getId() {
@@ -108,10 +111,10 @@ public class CentreAdminProfileDTO {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Calendar getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 	public void setBirthday(Calendar birthday) {
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 	}
 }

@@ -38,8 +38,8 @@ class ClinicListing extends Component {
 						{this.state.clinics.map (row => (
 							<TableRow key={row.id}>
 								<TableCell><Link>{row.name}</Link></TableCell>
-								<TableCell><p class='text-white'>{row.address}</p></TableCell>
-								<TableCell><p class='text-white'>{row.description}</p></TableCell>
+								<TableCell><p class='text-black'>{row.address}</p></TableCell>
+								<TableCell><p class='text-black'>{row.description}</p></TableCell>
 							</TableRow>
 						))}
 					</TableBody>

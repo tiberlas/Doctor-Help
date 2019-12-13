@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.dto.MedicalStuffDTO;
+import com.ftn.dr_help.dto.MedicalStaffDTO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.repository.DoctorRepository;
@@ -21,25 +21,25 @@ public class MedicalStuffService {
 	@Autowired
 	private DoctorRepository doctorRepository;
 
-	public List<MedicalStuffDTO> findAll(Long clinic_id) {
+	public List<MedicalStaffDTO> findAll(Long clinic_id) {
 		
 		if(clinic_id == null) {
 			return null;
 		}
 		
-		List<MedicalStuffDTO> ret = new ArrayList<MedicalStuffDTO>();
+		List<MedicalStaffDTO> ret = new ArrayList<MedicalStaffDTO>();
 		List<DoctorPOJO> findedDoctors = doctorRepository.findAllByClinic_id(clinic_id);
 		List<NursePOJO> findedNurses = nurseRepository.findAllByClinic_id(clinic_id);
 		
 		if(findedDoctors != null) {
 			for(DoctorPOJO doctor : findedDoctors) {
-				ret.add(new MedicalStuffDTO(doctor));
+				ret.add(new MedicalStaffDTO(doctor));
 			}
 		}
 		
 		if(findedNurses != null) {
 			for(NursePOJO nurse : findedNurses) {
-				ret.add(new MedicalStuffDTO(nurse));
+				ret.add(new MedicalStaffDTO(nurse));
 			}
 		}
 		
