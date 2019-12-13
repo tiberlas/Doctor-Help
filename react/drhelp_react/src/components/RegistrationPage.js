@@ -83,6 +83,12 @@ class RegistrationPage extends React.Component {
 				<div class='col-md-3'> 
 					<br/>
 					<form onSubmit={this.handleRegister}>
+						<br/>
+						<br/>
+						<br/>
+						<h2 class='text-success'>Register</h2>
+						<br/>
+						
 						<FormControl required type="email" placeholder="Email" id="tb_email"/>
 						<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
 						<FormControl required type="password" placeholder="Repeat password" id="tb_pass2" className={`form-control ${!this.state.same_password? 'is-invalid': ''}`}/>

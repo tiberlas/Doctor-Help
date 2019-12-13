@@ -59,8 +59,8 @@ class PerscriptionOverview extends Component {
 										<TableBody>
 											{this.state.medicationList.map (row => (
 												<TableRow key={row.medicationName}>
-													<TableCell align='center'><p class='text-black'>{row.medicationName}</p></TableCell>
-													<TableCell align='center'><p class='text-black'>{row.medicationDescription}</p></TableCell>
+													<TableCell align='center'><p class='text-white'>{row.medicationName}</p></TableCell>
+													<TableCell align='center'><p class='text-white'>{row.medicationDescription}</p></TableCell>
 												</TableRow>
 											))}
 										</TableBody>

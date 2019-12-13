@@ -6,10 +6,10 @@ class ViewProfile extends Component {
         return ( 
                 <div class="row d-flex justify-content-center">
                 <div class='col-md-7'>
+                <br/>
+                <br/>
                 <div >
 
-                    <br/>
-                    <br/>
                     <h1 >{this.props.profile.firstName}&nbsp;{this.props.profile.lastName}</h1>
 
                 </div>

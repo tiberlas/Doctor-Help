@@ -27,6 +27,9 @@ import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 
+import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
+import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
+
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.HealthRecordService;
 import com.ftn.dr_help.service.PatientService;

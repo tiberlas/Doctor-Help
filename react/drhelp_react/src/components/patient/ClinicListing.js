@@ -1,4 +1,4 @@
-import React, {Component}  from 'react';
+import React, {Component, Fragment}  from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -23,26 +23,39 @@ class ClinicListing extends Component {
 		})
 	}
 
+	generateClinicRows(row) {
+        let profileUrl = '/clinic/' + row.id
+        return (
+            <Fragment>
+                <TableCell><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
+				<TableCell><p class='text-white'>{row.address}</p></TableCell>
+				<TableCell><p class='text-white'>{row.description}</p></TableCell>
+             </Fragment>
+        )
+    }
+
 	render () {
+		let size = this.state.clinics.length
 		return (
 			<div>
 				<Table>
 					<TableHead>
 						<TableRow>
+
 							<TableCell><p class='text-success'>Clinic Name</p></TableCell>
 							<TableCell><p class='text-success'>Description</p></TableCell>
 							<TableCell><p class='text-success'>Address</p></TableCell>
 
+
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{this.state.clinics.map (row => (
+						{size > 0 ? this.state.clinics.map (row => (
 							<TableRow key={row.id}>
-								<TableCell><Link>{row.name}</Link></TableCell>
-								<TableCell><p class='text-black'>{row.address}</p></TableCell>
-								<TableCell><p class='text-black'>{row.description}</p></TableCell>
+								{this.generateClinicRows(row)}
 							</TableRow>
-						))}
+						)) : <h3> No results found. :( </h3> }
+
 					</TableBody>
 				</Table>
 			</div>

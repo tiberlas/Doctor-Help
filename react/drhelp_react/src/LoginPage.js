@@ -134,12 +134,16 @@ class LoginPage extends React.Component {
 		return (
 			<div>
 
+				<br/>
+				{/* <div class="alert alert-dismissible alert-success">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
+				</div> */}
 
 
 				<Switch>
 					<Route path = "/login">
 						<div class='row d-flex justify-content-center' >
-
 
 						<div class='col-sm-5'>
 							<br/>
@@ -152,9 +156,10 @@ class LoginPage extends React.Component {
 								<label for="exampleInputEmail1">Email address</label>
 								<FormControl type="email" id="tb_email"/>
 							</div>
-							<div class="form-group ">
-							<label for="exampleInputEmail1">Password</label>
-								<FormControl type="password" id='tb_password'/>
+							<div class={`form-group ${this.state.error? 'has-danger': ''}`}>
+								<label for="exampleInputEmail1">Password</label>
+								<FormControl type="password" placeholder="Password" id='tb_password' className={`form-control ${this.state.error? 'is-invalid': ''}`}/>
+								<div class="invalid-feedback">The user-password pair you entered matches no existing user. </div>
 							</div>
 							<div class="form-group row">
 								<div class='col-md text-left'>
