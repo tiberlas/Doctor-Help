@@ -59,6 +59,9 @@ public class ProceduresTypePOJO implements Serializable{
 	@JsonManagedReference
 	private ClinicPOJO clinic;
 	
+	@OneToMany(mappedBy = "procedureType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<DoctorPOJO> doctors;
+	
 	public ProceduresTypePOJO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -128,6 +131,30 @@ public class ProceduresTypePOJO implements Serializable{
 	
 	public void removeRoom(RoomPOJO room) {
 		this.roomList.remove(room);
+	}
+
+	public AppointmentPOJO getAppointment() {
+		return appointment;
+	}
+
+	public void setAppointment(AppointmentPOJO appointment) {
+		this.appointment = appointment;
+	}
+
+	public List<RoomPOJO> getRoomList() {
+		return roomList;
+	}
+
+	public void setRoomList(List<RoomPOJO> roomList) {
+		this.roomList = roomList;
+	}
+
+	public List<DoctorPOJO> getDoctors() {
+		return doctors;
+	}
+
+	public void setDoctors(List<DoctorPOJO> doctors) {
+		this.doctors = doctors;
 	}
 	
 	

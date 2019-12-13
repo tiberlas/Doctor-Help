@@ -204,6 +204,7 @@ class RegistrationPage extends React.Component {
 						<div>
 							<FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="tb_birthday" className={`form-control ${this.state.registration_valid? 'is-valid': ''}`}/>
 							<div class="valid-feedback">Registration request successfully sent. </div>
+							<div class="invalid-feedback">Date must be betweend today and 1.1.1990. </div>
 							<br></br>
 						</div>
 						<div class="form-group row" >
