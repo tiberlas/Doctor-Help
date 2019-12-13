@@ -5,8 +5,9 @@ import LoginPage from './LoginPage.js'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
-
 import {BrowserRouter, Switch, Redirect, Route} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootswatch/dist/darkly/bootstrap.css';
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
 import PatientProfile from './components/patient/PatientProfile';
@@ -70,15 +71,6 @@ class App extends Component {
     })
     localStorage.setItem('token', null);
   }
-
-  // confirmRegistration = () => {
-  //   console.log("bingo")
-  //   axios.put('http://localhost:8080/api/patients/confirmAccount', {
-  //     headers: {'Content-Type':'application/json'},
-  //         email: window.location.href.split('=')[1]
-  //    }).then(response => {console.log("done")})
-
-  // }
 
   setPasswordChange(role) {
     this.setState({

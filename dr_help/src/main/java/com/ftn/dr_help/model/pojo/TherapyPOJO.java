@@ -28,9 +28,6 @@ public class TherapyPOJO implements Serializable {
 	@OneToOne (fetch = FetchType.LAZY)
 	private PerscriptionPOJO perscription;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	private ExaminationReportPOJO examinationReport;
-	
 	public Long getId() {
 		return id;
 	}
@@ -53,12 +50,4 @@ public class TherapyPOJO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public ExaminationReportPOJO getExaminationReport() {
-		return examinationReport;
-	}
-	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
-		this.examinationReport = examinationReport;
-	}
-	
-
 }

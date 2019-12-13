@@ -2,10 +2,13 @@ package com.ftn.dr_help.dto;
 
 import java.util.Calendar;
 
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 
 public class ClinicAdminProfileDTO {
 
+	DateConverter dateConverter = new DateConverter ();
+	
 	private Long id;
 	private String email;
 	private String firstName;
@@ -14,7 +17,7 @@ public class ClinicAdminProfileDTO {
 	private String city;
 	private String state;
 	private String phoneNumber;
-	private Calendar birthday;
+	private String birthday;
 	private Long clinicId;
 	
 	public ClinicAdminProfileDTO() {
@@ -33,7 +36,7 @@ public class ClinicAdminProfileDTO {
 		this.city = city;
 		this.state = state;
 		this.phoneNumber = phoneNumber;
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 		this.clinicId = clinicId;
 	}
 
@@ -46,7 +49,7 @@ public class ClinicAdminProfileDTO {
 		this.city = admin.getCity();
 		this.state = admin.getState();
 		this.phoneNumber = admin.getPhoneNumber();
-		this.birthday = admin.getBirthday();
+		this.birthday = dateConverter.toString (admin.getBirthday());
 		this.clinicId = admin.getClinic().getId();
 	}
 	
@@ -98,11 +101,12 @@ public class ClinicAdminProfileDTO {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Calendar getBirthday() {
+	public String getBirthday() {
+		System.out.println("Siso, klinicki admin birthday je: " + birthday);
 		return birthday;
 	}
 	public void setBirthday(Calendar birthday) {
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 	}
 	public Long getClinicId() {
 		return clinicId;

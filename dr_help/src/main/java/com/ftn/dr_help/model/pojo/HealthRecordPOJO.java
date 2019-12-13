@@ -51,9 +51,8 @@ public class HealthRecordPOJO implements Serializable {
 	@Column(name = "bloodType", nullable = true)
 	private BloodTypeEnum bloodType;
 	
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private ExaminationReportPOJO examinationReport;
+	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ExaminationReportPOJO> examinationReport;
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -79,9 +78,7 @@ public class HealthRecordPOJO implements Serializable {
 		this.id = id;
 	}
 
-
-
-	public void setAllergyList(List<AllergyPOJO> alergyList) {
+	public void setAlergyList(List<AllergyPOJO> alergyList) {
 		this.allergyList = alergyList;
 	}
 	public Double getWeight() {
@@ -109,11 +106,11 @@ public class HealthRecordPOJO implements Serializable {
 		this.bloodType = bloodType;
 	}
 
-	public ExaminationReportPOJO getExaminationReport() {
+	public List<ExaminationReportPOJO> getExaminationReport() {
 		return examinationReport;
 	}
 
-	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
+	public void setExaminationReport(List<ExaminationReportPOJO> examinationReport) {
 		this.examinationReport = examinationReport;
 	}
 

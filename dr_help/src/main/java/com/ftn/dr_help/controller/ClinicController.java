@@ -98,6 +98,7 @@ public class ClinicController {
 	// Even though their code is identical at this point;
 	// In later sprints I intend to expand this one with filters
 	@GetMapping (value = "/listing")
+	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity <List<ClinicDTO>> getClinicListing () {
 		System.out.println("Patient listing says hi");
 		

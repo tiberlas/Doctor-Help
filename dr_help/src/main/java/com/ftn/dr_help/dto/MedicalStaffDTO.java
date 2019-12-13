@@ -6,7 +6,7 @@ import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 
-public class MedicalStuffDTO {
+public class MedicalStaffDTO {
 
 	private Long id;
 	private String email;
@@ -19,7 +19,7 @@ public class MedicalStuffDTO {
 	private Calendar birthday;
 	private RoleEnum role;
 	
-	public MedicalStuffDTO(NursePOJO nurse) {
+	public MedicalStaffDTO(NursePOJO nurse) {
 		super();
 		this.id = nurse.getId();
 		this.email = nurse.getEmail();
@@ -33,7 +33,7 @@ public class MedicalStuffDTO {
 		this.role = RoleEnum.NURSE;
 	}
 	
-	public MedicalStuffDTO(DoctorPOJO doctor) {
+	public MedicalStaffDTO(DoctorPOJO doctor) {
 		super();
 		this.id = doctor.getId();
 		this.email = doctor.getEmail();
@@ -47,12 +47,12 @@ public class MedicalStuffDTO {
 		this.role = RoleEnum.DOCTOR;
 	}
 	
-	public MedicalStuffDTO() {
+	public MedicalStaffDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public MedicalStuffDTO(Long id, String email, String firstName, String lastName, String address, String city,
+	public MedicalStaffDTO(Long id, String email, String firstName, String lastName, String address, String city,
 			String state, String phoneNumber, Calendar birthday, RoleEnum role) {
 		super();
 		this.id = id;
