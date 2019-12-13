@@ -8,4 +8,5 @@ import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
 @Repository
 public interface DiagnosisRepository extends JpaRepository<DiagnosisPOJO, Long> {
 
+	public DiagnosisPOJO findByDiagnosis(String name);
 }

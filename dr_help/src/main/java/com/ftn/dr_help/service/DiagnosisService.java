@@ -23,6 +23,11 @@ public class DiagnosisService {
 	public DiagnosisPOJO save(DiagnosisPOJO diag) {
 		return diagnosisRepository.save(diag); 
 	}
+	
+	
+	public DiagnosisPOJO findByDiagnosis(String name) {
+		return diagnosisRepository.findByDiagnosis(name);
+	}
 
 	
 	
