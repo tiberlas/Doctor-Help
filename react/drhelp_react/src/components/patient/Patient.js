@@ -11,6 +11,7 @@ import ClinicListing from './ClinicListing.js';
 import HealthRecord from './HealthRecord.js';
 import PatientHistory from './PatientHistory.js';
 import PerscriptionOverview from './PerscriptionOverview.js';
+import ViewClinic from './ViewClinic.jsx';
 
 class Patient extends Component {
     
@@ -95,6 +96,9 @@ class Patient extends Component {
                             </Route>
                             <Route path="/patient/perscription">
                                 <PerscriptionOverview />
+                            </Route>
+                            <Route path="/clinic/">
+                                <ViewClinic />
                             </Route>
                         </Switch>
                     </div>
