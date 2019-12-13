@@ -76,6 +76,9 @@ class RegistrationPage extends React.Component {
 				<Form onSubmit={this.handleRegister}>
 					<br/>
 					<br/>
+					<br/>
+					<h2 class='text-success'>Register</h2>
+					<br/>
 					
 					<Form.Group> <FormControl required type="email" placeholder="Email" id="tb_email"/> </Form.Group>
 					<Form.Group> <FormControl required type="password" placeholder="Password" id="tb_pass1"/> </Form.Group>
@@ -91,11 +94,11 @@ class RegistrationPage extends React.Component {
 					
 					<div class="form-group row">
 						<div class='col-md text-left'>
-							<input type="submit" value="Submit" class='btn btn-success'></input>
+							<input type="submit" value="Register" class='btn btn-success'></input>
 						</div>
 						<div class='col-md text-right'>
 							<Link to="/login">
-								<a href>Login</a>
+								<a href>Sign in</a>
 							</Link>
 						</div>
 					</div>

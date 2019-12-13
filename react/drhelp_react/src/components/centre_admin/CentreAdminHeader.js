@@ -19,32 +19,12 @@ class CentreAdminHeader extends Component {
   static contextType = CentreAdminContext;
     
   state = {
-    showAdd: false,
     dropdownAdd: false
   }
 
   toogle = () => {
     this.setState({dropdownAdd:!this.state.dropdownAdd});
   }
-
-
-  // menuAdd = (event) => {
-  //   event.preventDefault()
-
-  //   this.setState({showAdd: true}, () => {
-  //     document.addEventListener('click', this.closeAdd)
-  //   })
-  // }
-
-  // closeAdd = (event) => {
-  //   if(!this.dropdownMenu.contains(event.target)) {
-  //     this.setState({showAdd: false}, () => {
-  //       document.removeEventListener('click', this.closeAdd)
-  //     })
-  //   }
-  // }
-
-  
 
     render() { 
 
@@ -96,30 +76,6 @@ class CentreAdminHeader extends Component {
                 <Nav.Link>
                   <Link exact to = '/admin/requests' class="nav-link"> Patient requests </Link>
                 </Nav.Link>
-
-                {/* <Nav.Link >
-                  <Dropdown>
-                      <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                      Custom toggle
-                      </Dropdown.Toggle>
-
-                      <Dropdown.Menu as={CustomMenu}>
-                      <Dropdown.Item eventKey="1">Red</Dropdown.Item>
-                      <Dropdown.Item eventKey="2">Blue</Dropdown.Item>
-                      <Dropdown.Item eventKey="3" active>
-                          Orange
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey="1">Red-Orange</Dropdown.Item>
-                      </Dropdown.Menu>
-                  </Dropdown>
-              </Nav.Link> */}
-  
-              {/* <Nav.Link> 
-                  <Link exact to = '/medication/new' class="nav-link"> New medication </Link>
-              </Nav.Link>
-              <Nav.Link> 
-                  <Link exact to = '/diagnosis/new' class="nav-link"> New diagnosis </Link>
-              </Nav.Link> */}
 
             </Nav>
             <Nav className="justify-content-end" >

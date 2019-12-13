@@ -5,7 +5,7 @@ class ViewProfile extends Component {
     render() { 
         return ( 
                 <div class="row d-flex justify-content-center">
-                <div class='col-md-3'>
+                <div class='col-md-7'>
                 <div >
                     <br/>
                     <br/>

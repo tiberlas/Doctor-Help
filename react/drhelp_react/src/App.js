@@ -115,18 +115,10 @@ class App extends Component {
         )
     }
 
-
-      // if(this.state.passwordChange) {
-      //   return (
-      //     <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>
-      //   )
-      // }
-   
       return (
         <div>
           <BrowserRouter >
             <Switch>
-
                 { this.state.passwordChange?
                  <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>:
 

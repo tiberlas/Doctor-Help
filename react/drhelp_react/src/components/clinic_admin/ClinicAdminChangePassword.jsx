@@ -27,7 +27,7 @@ class ClinicAdminChangePassword extends Component {
 
     render() {
         if(this.state.go_profile === true)
-            return(<Redirect to='/clinic+administrator/'></Redirect> );
+            return(<Redirect to='/clinic-administrator/'></Redirect> );
         
         return ( 
             <ChangePassword handleSubmit={(data) => this.handleSubmit(data)} errorBack={this.state.errorBack}/>

@@ -25,6 +25,9 @@ public class ClinicService {
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
 	
+	@Autowired
+	private ClinicValidation clinicValidation;
+	
 	public ClinicPOJO findOne(Long id) {
 		if(id == null) {
 			return null;
@@ -65,7 +68,7 @@ public class ClinicService {
 			return null;
 		}
 		
-		if(!ClinicValidation.isValid(clinic)) {
+		if(clinicValidation.isValid(clinic)) {
 			return null;
 		}
 		
@@ -79,27 +82,20 @@ public class ClinicService {
 			return null;
 		}
 		
-		ClinicUpdate.update(oldClinic, clinic);
+		//ClinicUpdate.update(oldClinic, clinic);
+		oldClinic.setName(clinic.getName());
+		oldClinic.setAddress(clinic.getAddress());
+		oldClinic.setState(clinic.getState());
+		oldClinic.setCity(clinic.getCity());
+		oldClinic.setDescription(clinic.getDescription());
 		repository.save(oldClinic);
 		
 		return new ClinicDTO(oldClinic);
-	}
-		
-	public ClinicRoomListDTO getAllRooms(Long clinicId) {
-		if(clinicId == null) {
-			return null;
-		}
-		
-		ClinicPOJO ret = repository.findById(clinicId).orElse(null);
-			
-		if(ret == null)
-			return null;
-			
-		return new ClinicRoomListDTO(ret);
 	}
 	
 	public ClinicPOJO findByName(String name) {
 		return repository.findByName(name);
 	}
+
 		
 }

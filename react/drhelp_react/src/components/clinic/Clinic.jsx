@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import MapContainer from './MapContainer.jsx';
 
 class Clinic extends Component {
     state = { 
         name: "",
         address: "",
-        description: ""
+        city: "",
+        state: "",
+        description: "",
      }
 
      componentDidMount() {
@@ -18,17 +21,38 @@ class Clinic extends Component {
             this.setState({
                 name: response.data.name,
                 address: response.data.address,
+                city: response.data.city,
+                state: response.data.state,
                 description: response.data.description
             })
         })
      }
 
-    render() { 
+    render() {
+        const divMapStyle = {
+            'height': '400px',
+            'margin': 'auto'
+        }; 
         return ( 
-            <div>
-                <h1>{this.state.name}</h1>
-                <h3>location for healing: {this.state.address}</h3>
-                <p>{this.state.description}</p>
+            <div class="row d-flex justify-content-center">
+                <div class='col-md-10'>
+                <br/>
+                <br/>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{this.state.name}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">location for healing: {this.state.address}, {this.state.city}, {this.state.state}</h6>
+                        <p class="card-text">{this.state.description}</p>
+                        
+                        <div style={divMapStyle}>
+                            <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
+                        </div>
+                        
+
+                    </div>
+                    </div>
+                </div>
             </div>
          );
     }

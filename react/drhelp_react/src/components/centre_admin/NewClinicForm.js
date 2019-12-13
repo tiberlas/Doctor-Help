@@ -16,7 +16,9 @@ class NewClinicForm extends React.Component {
             errorName: false,
             errorAddress: false,
             errorDescription: false,
-            errorClinicName: false
+            errorClinicName: false,
+            clinicCity: "",
+            clinicState: ""
         }
        
     }
@@ -58,6 +60,8 @@ class NewClinicForm extends React.Component {
 
             name: this.state.clinicName,
             address: this.state.clinicAddress,
+            city: this.state.clinicCity,
+            state: this.state.clinicState,
             description: this.state.clinicDescription
         })
             .then(res => {
@@ -95,6 +99,14 @@ class NewClinicForm extends React.Component {
                         {this.state.errorAddress &&  <div class="invalid-feedback"> Invalid address format </div>}
                     </Form.Group>
                     </div>
+
+                    <Form.Group controlId="formClinicCity">
+                        <Form.Control type="text" name = "clinicCity" placeholder="City" onChange = {this.handleChange}/>
+                    </Form.Group>
+
+                    <Form.Group controlId="formClinicState">
+                        <Form.Control type="text" name = "clinicState" placeholder="State" onChange = {this.handleChange}/>
+                    </Form.Group>
 
                     <div className={`form-group ${this.state.errorDescription? 'has-danger': ''}`}>
                     <Form.Group controlId="formClinicDescription">

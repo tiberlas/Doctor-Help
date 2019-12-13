@@ -133,23 +133,27 @@ class LoginPage extends React.Component {
 					<Route path = "/login">
 						<div class='row d-flex justify-content-center' >
 						<div class='col-sm-5'>
-
+							<br/>
+							<br/>
+							<br/>
+							<h2 class='text-success'>Sign in, get help</h2>
+							<br/>
 							<form onSubmit={this.handleSubmit}>
 							<div class="form-group ">
 								<label for="exampleInputEmail1">Email address</label>
-								<FormControl type="email" placeholder="Email" id="tb_email"/>
+								<FormControl type="email" id="tb_email"/>
 							</div>
 							<div class="form-group ">
 							<label for="exampleInputEmail1">Password</label>
-								<FormControl type="password" placeholder="Password" id='tb_password'/>
+								<FormControl type="password" id='tb_password'/>
 							</div>
 							<div class="form-group row">
 								<div class='col-md text-left'>
-									<input type="submit" value="Submit" class="btn btn-outline-success" />
+									<input type="submit" value="Sign in" class="btn btn-outline-success" />
 								</div>
 								<div class='col-md text-right'>
 									<Link to="/register">
-										<a href>need account?</a>
+										<a href>request an account</a>
 									</Link>
 								</div>
 							</div>

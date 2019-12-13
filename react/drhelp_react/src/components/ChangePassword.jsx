@@ -17,19 +17,11 @@ class ChangePassword extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        if(this.state.error === true) {
-            return;
+        var data = {
+            oldPassword: this.state.oldPassword,
+            newPassword: this.state.newPassword,
         }
-        this.setState({error: false})
-
-        if( this.state.error === false ) {
-
-            var data = {
-                oldPassword: this.state.oldPassword,
-                newPassword: this.state.newPassword,
-            }
-            this.props.handleSubmit(data)
-        }
+        this.props.handleSubmit(data)
 
     }
 
@@ -69,7 +61,7 @@ class ChangePassword extends Component {
                     <div class="invalid-feedback">Passwords did not match</div>
                 </div>
                 <div>
-                    <input type='submit' value='submit' className={`btn btn-success ${this.state.error? 'disabled': ''}`}/>
+                    <input type='submit' value='submit' class='btn btn-success' disabled={this.state.error}/>
                 </div>
                 </form>
             </div>
