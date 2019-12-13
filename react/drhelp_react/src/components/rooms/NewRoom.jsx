@@ -39,15 +39,10 @@ class NewRoom extends Component {
                     name: this.state.name,
                     number: parseInt(this.state.number)
         }).then( (response) => {
-
             this.setState({go_profile: true})
         }).catch((error) => {
-            this.setState({
-                errorName: true, 
-                errorNumber: true, 
-                messageShow: true,
-                message: 'Could not creste room becouse number is taken. Please try again with a diferent room number!',
-                title: 'Some error has occured'
+            this.setState({ 
+                errorNumber: true
             })
         });
     }
@@ -72,12 +67,13 @@ class NewRoom extends Component {
                 <form onSubmit={this.handleSubmit}> 
                     <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                         <label class="form-control-label" for="name">name:</label>
-                        <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': ''}`} value={this.state.name} onChange={this.handlerChange} />
+                        <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
                     </div>
 
                     <div className={`form-group ${this.state.errorNumber? 'has-danger': ''}`}>
                         <label class="form-control-label" for="number">number:</label>
-                        <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': ''}`} value={this.state.number} onChange={this.handlerChange} />
+                        <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': 'is-valid'}`} value={this.state.number} onChange={this.handlerChange} />
+                        {(this.state.errorNumber) && <div class="invalid-feedback"> Room number already exists. </div>}
                     </div>
                     <div class="form-group row">
                         <div class='col-md text-left'>
@@ -88,12 +84,6 @@ class NewRoom extends Component {
                         </div>
                     </div>
                 </form>
-
-                <ModalMessage
-                        title={this.state.title}
-                        message={this.state.message} 
-                        show={this.state.messageShow}
-                        onHide={this.setMessageHide}/>
                 
             </div>
             </div>

@@ -21,7 +21,7 @@ export class MapContainer extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.address !== this.props.address || prevProps.city !== this.props.city || prevProps.state !== this.props.state) {
+    if (prevProps.address !== this.state.address || prevProps.city !== this.state.city || prevProps.state !== this.state.state) {
       this.setState({address: this.props.address, city: this.props.city, state: this.props.state}, () => {
         this.handleMap();
       });

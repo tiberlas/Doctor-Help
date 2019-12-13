@@ -34,22 +34,7 @@ class RoomItem extends Component {
     };
 
     update = (rname, rnumber) => {
-        
-
-        axios.put("http://localhost:8080/api/rooms/change", {
-            id: this.state.id,
-            name: rname,
-            number: rnumber
-        })
-        .then(response => {
-            this.setState({name: response.data.name, number: response.data.number, modalShow: false})
-        }).catch((error) => {
-            this.setState({
-                messageShow: true,
-                message: 'Could not update room becouse room number is taken. Please try with a diferent room number!',
-                title: 'Some error has occured'
-            })
-        })
+        this.setState({name: rname, number: rnumber, modalShow: false})
     }
 
     setModalShow = () => {
