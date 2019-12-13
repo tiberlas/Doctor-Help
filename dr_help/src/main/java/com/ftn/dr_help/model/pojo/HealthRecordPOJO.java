@@ -82,7 +82,7 @@ public class HealthRecordPOJO implements Serializable {
 
 
 	public void setAlergyList(List<AllergyPOJO> alergyList) {
-		this.alergyList = alergyList;
+		this.allergyList = alergyList;
 
 	}
 	public Double getWeight() {

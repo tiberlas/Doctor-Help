@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
-import com.ftn.dr_help.dto.MedicalStuffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
