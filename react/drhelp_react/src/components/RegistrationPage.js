@@ -18,7 +18,8 @@ class RegistrationPage extends React.Component {
 			addres_length: true, 
 			town_length: true, 
 			country_lenght: true, 
-			phone_length: true
+			phone_length: true, 
+			valid_date: true
 		}
   	}
 
@@ -35,7 +36,8 @@ class RegistrationPage extends React.Component {
 			addres_length: true, 
 			town_length: true, 
 			country_lenght: true, 
-			phone_length: true
+			phone_length: true, 
+			valid_date: true
 		})
 		event.preventDefault();
 
@@ -104,6 +106,18 @@ class RegistrationPage extends React.Component {
 			return;
 		}
 
+		let parts = birthday.split('-');
+		let year = parts[0];
+		let mon = parts[1];
+		let day = parts[2];
+		var now = new Date();
+		if ((year < 1900) || (year > now.getFullYear())) {
+			this.setState ({
+				valid_date: false
+			})
+			return;
+		}
+
 		fetch ('http://localhost:8080/api/register', {
 			method: 'post', 
 			headers: {'Content-Type' : 'application/json'}, 
@@ -168,39 +182,51 @@ class RegistrationPage extends React.Component {
 							<FormControl required type="email" placeholder="Email" id="tb_email" className={`form-control ${this.state.original_mail? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">An account with that email address already exists. </div>
 						</div>
-						<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
+						<br/>
+						<div>
+							<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
+						</div>
+						<br/>
 						<div>
 							<FormControl required type="password" placeholder="Repeat password" id="tb_pass2" className={`form-control ${!this.state.same_password? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">Both instances of the password must be same. </div>
 						</div>
+						<br/>
 						<div>
 							<FormControl required type="text" placeholder="First name" id="tb_name" className={`form-control ${!this.state.name_length? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">Name length must be between 2 and 30 characters. </div>
 						</div>
+						<br/>
 						<div>
 							<FormControl required type="text" placeholder="Last name" id="tb_last_name" className={`form-control ${!this.state.last_name_length? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">Last name length must be between 2 and 30 characters. </div>
 						</div>
+						<br/>
 						<div>
 							<FormControl required type="text" placeholder="Address" id="tb_address" className={`form-control ${!this.state.addres_length? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">Address length must be between 2 and 30 characters. </div>
 						</div>
+						<br/>
 						<div>
 							<FormControl required type="text" placeholder="Town" id="tb_town" className={`form-control ${!this.state.town_length? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">Town name length must be between 2 and 30 characters. </div>
 						</div>
+						<br/>
 						<div>
 							<FormControl required type="text" placeholder="Country" id="tb_country" className={`form-control ${!this.state.country_lenght? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">Country name length must be between 2 and 30 characters. </div>
 						</div>
+						<br/>
 						<div>
 						    <FormControl required type="number" placeholder="Phone number" id="tb_phone" className={`form-control ${!this.state.phone_length? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">Phone number length must be between 5 and 13 digits. </div>
 						</div>
+						<br/>
 						<div>
 							<FormControl required type="number" placeholder="Insurance number" id="tb_insurance" className={`form-control ${(!this.state.insurance_valid || this.state.unique_insurence)? 'is-invalid': ''}`}/>
 							<div class="invalid-feedback">{(this.state.unique_insurence) ? ("An account with that insurence number already exists.") : ("Insurance number must be positive with no more than 18 digits.")}</div>
 						</div>
+						<br/>
 						<div>
 							<FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="tb_birthday" className={`form-control ${this.state.registration_valid? 'is-valid': ''}`}/>
 							<div class="valid-feedback">Registration request successfully sent. </div>
