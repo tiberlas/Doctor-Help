@@ -1,0 +1,405 @@
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 92c959c..52b174c 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -31,6 +31,8 @@[m [mdr_help/target/m2e-wtp/web-resources/META-INF/maven/com.ftn/dr_help/pom.properti[m
+ # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml[m
+ hs_err_pid*[m
+ [m
+[32m+[m[32mdr_help/.classpath[m
+[32m+[m
+ #react ignore[m
+ react/drhelp_react/node_modues/*[m
+ react/drhelp_react/package.json[m
+[1mdiff --git a/dr_help/.classpath b/dr_help/.classpath[m
+[1mindex 027be0a..febbb3f 100644[m
+[1m--- a/dr_help/.classpath[m
+[1m+++ b/dr_help/.classpath[m
+[36m@@ -17,7 +17,7 @@[m
+ 			<attribute name="maven.pomderived" value="true"/>[m
+ 		</attributes>[m
+ 	</classpathentry>[m
+[31m-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">[m
+[32m+[m	[32m<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_191">[m
+ 		<attributes>[m
+ 			<attribute name="maven.pomderived" value="true"/>[m
+ 		</attributes>[m
+[1mdiff --git a/dr_help/src/main/java/com/ftn/dr_help/controller/DiagnosisController.java b/dr_help/src/main/java/com/ftn/dr_help/controller/DiagnosisController.java[m
+[1mindex 2e70344..6780e08 100644[m
+[1m--- a/dr_help/src/main/java/com/ftn/dr_help/controller/DiagnosisController.java[m
+[1m+++ b/dr_help/src/main/java/com/ftn/dr_help/controller/DiagnosisController.java[m
+[36m@@ -32,6 +32,13 @@[m [mpublic class DiagnosisController {[m
+ 	@PostMapping(value = "/new", consumes = "application/json")[m
+ 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")[m
+ 	public ResponseEntity<DiagnosisDTO> newMedication(@RequestBody DiagnosisDTO diagnosis) {[m
+[32m+[m[41m		[m
+[32m+[m		[32mDiagnosisPOJO test = diagnosisService.findByDiagnosis(diagnosis.getName());[m
+[32m+[m[41m		[m
+[32m+[m		[32mif(test != null) {[m
+[32m+[m			[32mreturn new ResponseEntity<>(HttpStatus.BAD_REQUEST);[m
+[32m+[m		[32m}[m
+[32m+[m[41m		[m
+ 		DiagnosisPOJO d = new DiagnosisPOJO();[m
+ 		d.setDiagnosis(diagnosis.getName());[m
+ 		d.setDescription(diagnosis.getDescription());[m
+[1mdiff --git a/dr_help/src/main/java/com/ftn/dr_help/controller/MedicationController.java b/dr_help/src/main/java/com/ftn/dr_help/controller/MedicationController.java[m
+[1mindex 9a2ca90..9edbfe0 100644[m
+[1m--- a/dr_help/src/main/java/com/ftn/dr_help/controller/MedicationController.java[m
+[1m+++ b/dr_help/src/main/java/com/ftn/dr_help/controller/MedicationController.java[m
+[36m@@ -30,11 +30,21 @@[m [mpublic class MedicationController {[m
+ 	@PostMapping(value = "/new", consumes = "application/json")[m
+ 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")[m
+ 	public ResponseEntity<MedicationDTO> newMedication(@RequestBody MedicationDTO medication) {[m
+[32m+[m[41m		[m
+[32m+[m		[32mMedicationPOJO m = medicationService.findByName(medication.getName());[m
+[32m+[m[41m		[m
+[32m+[m		[32mif(m != null) {[m
+[32m+[m			[32mreturn new ResponseEntity<>(HttpStatus.BAD_REQUEST);[m
+[32m+[m		[32m}[m
+[32m+[m[41m		[m
+ 		MedicationPOJO med = new MedicationPOJO();[m
+ 		med.setMedicationName(medication.getName());[m
+ 		med.setMedDescription(medication.getDescription());[m
+ 	[m
+ 		med = medicationService.save(med);[m
+[32m+[m[41m		[m
+[32m+[m[41m		[m
+[32m+[m[41m		[m
+ 		return new ResponseEntity<>(new MedicationDTO(med) , HttpStatus.CREATED);[m
+ 	}[m
+ 	[m
+[1mdiff --git a/dr_help/src/main/java/com/ftn/dr_help/model/pojo/MedicationPOJO.java b/dr_help/src/main/java/com/ftn/dr_help/model/pojo/MedicationPOJO.java[m
+[1mindex 105b489..e23ceee 100644[m
+[1m--- a/dr_help/src/main/java/com/ftn/dr_help/model/pojo/MedicationPOJO.java[m
+[1m+++ b/dr_help/src/main/java/com/ftn/dr_help/model/pojo/MedicationPOJO.java[m
+[36m@@ -21,7 +21,7 @@[m [mpublic class MedicationPOJO implements Serializable{[m
+ 	 */[m
+ 	private static final long serialVersionUID = 1L;[m
+ 	[m
+[31m-	@Column (name = "medicationName", nullable = false)[m
+[32m+[m	[32m@Column (name = "medicationName", nullable = false, unique = true)[m
+ 	private String medicationName;[m
+ 	[m
+ 	@Id[m
+[1mdiff --git a/dr_help/src/main/java/com/ftn/dr_help/repository/DiagnosisRepository.java b/dr_help/src/main/java/com/ftn/dr_help/repository/DiagnosisRepository.java[m
+[1mindex 5f9546d..ceb25b2 100644[m
+[1m--- a/dr_help/src/main/java/com/ftn/dr_help/repository/DiagnosisRepository.java[m
+[1m+++ b/dr_help/src/main/java/com/ftn/dr_help/repository/DiagnosisRepository.java[m
+[36m@@ -8,4 +8,5 @@[m [mimport com.ftn.dr_help.model.pojo.DiagnosisPOJO;[m
+ @Repository[m
+ public interface DiagnosisRepository extends JpaRepository<DiagnosisPOJO, Long> {[m
+ [m
+[32m+[m	[32mpublic DiagnosisPOJO findByDiagnosis(String name);[m
+ }[m
+[1mdiff --git a/dr_help/src/main/java/com/ftn/dr_help/repository/MedicationRepository.java b/dr_help/src/main/java/com/ftn/dr_help/repository/MedicationRepository.java[m
+[1mindex 13a71ea..19a8592 100644[m
+[1m--- a/dr_help/src/main/java/com/ftn/dr_help/repository/MedicationRepository.java[m
+[1m+++ b/dr_help/src/main/java/com/ftn/dr_help/repository/MedicationRepository.java[m
+[36m@@ -8,4 +8,5 @@[m [mimport com.ftn.dr_help.model.pojo.MedicationPOJO;[m
+ @Repository[m
+ public interface MedicationRepository extends JpaRepository<MedicationPOJO, Long>{[m
+ 	[m
+[32m+[m	[32mpublic MedicationPOJO findByMedicationName(String name);[m
+ }[m
+[1mdiff --git a/dr_help/src/main/java/com/ftn/dr_help/service/DiagnosisService.java b/dr_help/src/main/java/com/ftn/dr_help/service/DiagnosisService.java[m
+[1mindex 76a8f0d..7f05a7d 100644[m
+[1m--- a/dr_help/src/main/java/com/ftn/dr_help/service/DiagnosisService.java[m
+[1m+++ b/dr_help/src/main/java/com/ftn/dr_help/service/DiagnosisService.java[m
+[36m@@ -23,6 +23,11 @@[m [mpublic class DiagnosisService {[m
+ 	public DiagnosisPOJO save(DiagnosisPOJO diag) {[m
+ 		return diagnosisRepository.save(diag); [m
+ 	}[m
+[32m+[m[41m	[m
+[32m+[m[41m	[m
+[32m+[m	[32mpublic DiagnosisPOJO findByDiagnosis(String name) {[m
+[32m+[m		[32mreturn diagnosisRepository.findByDiagnosis(name);[m
+[32m+[m	[32m}[m
+ [m
+ 	[m
+ 	[m
+[1mdiff --git a/dr_help/src/main/java/com/ftn/dr_help/service/MedicationService.java b/dr_help/src/main/java/com/ftn/dr_help/service/MedicationService.java[m
+[1mindex 9afcbcc..d983875 100644[m
+[1m--- a/dr_help/src/main/java/com/ftn/dr_help/service/MedicationService.java[m
+[1m+++ b/dr_help/src/main/java/com/ftn/dr_help/service/MedicationService.java[m
+[36m@@ -24,6 +24,11 @@[m [mpublic class MedicationService {[m
+ 	public MedicationPOJO save(MedicationPOJO med) {[m
+ 		return medicationRepository.save(med); [m
+ 	}[m
+[32m+[m[41m	[m
+[32m+[m	[32mpublic MedicationPOJO findByName(String name) {[m
+[32m+[m[41m		[m
+[32m+[m		[32mreturn medicationRepository.findByMedicationName(name);[m
+[32m+[m	[32m}[m
+ [m
+ 	[m
+ }[m
+[1mdiff --git a/react/drhelp_react/src/components/centre_admin/NewAdminForm.js b/react/drhelp_react/src/components/centre_admin/NewAdminForm.js[m
+[1mindex 50f5eb1..7547afa 100644[m
+[1m--- a/react/drhelp_react/src/components/centre_admin/NewAdminForm.js[m
+[1m+++ b/react/drhelp_react/src/components/centre_admin/NewAdminForm.js[m
+[36m@@ -14,16 +14,38 @@[m [mclass NewAdminForm extends React.Component {[m
+             adminRole: "centre",[m
+             clinicList: {},[m
+             id: "",[m
+[31m-            clinic_numbers: 0[m
+[32m+[m[32m            clinic_numbers: 0,[m
+[32m+[m[32m            error: false,[m
+[32m+[m[32m            errorMail: false,[m
+[32m+[m[32m            errorMailResponse: false,[m
+[32m+[m[32m            errorFirstName: false,[m
+[32m+[m[32m            errorLastName: false[m
+[32m+[m
+[32m+[m[32m        }[m
+[32m+[m[41m        [m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    validate = () => {[m
+[32m+[m[32m        this.setState({error: false, errorMail: false, errorMailResponse: false, errorFirstName: false, errorLastName: false})[m
+[32m+[m[32m        if(!this.state.email.trim() || this.state.email.length < 3) {[m
+[32m+[m[32m            this.setState({error: true, errorMail: true})[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if(!this.state.firstName.trim() || this.state.firstName.length < 3) {[m
+[32m+[m[32m            this.setState({error: true, errorFirstName: true})[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if(!this.state.lastName.trim() || this.state.lastName.length < 3) {[m
+[32m+[m[41m            [m
+[32m+[m[32m            this.setState({error: true, errorLastName: true})[m
+         }[m
+[31m-        this.handleChange = this.handleChange.bind(this)[m
+[31m-        this.componentDidMount= this.componentDidMount.bind(this)[m
+     }[m
+ [m
+     handleChange = (event) => {[m
+         this.setState( {[m
+             [event.target.name]: event.target.value[m
+[31m-        })[m
+[32m+[m[32m        }, () => {this.validate()})[m
+     }[m
+ [m
+ [m
+[36m@@ -33,9 +55,7 @@[m [mclass NewAdminForm extends React.Component {[m
+       .then(res => {[m
+         const clinicList = res.data[m
+         this.setState({ clinicList })[m
+[31m-        //const items = clinicList.map(item => )[m
+[31m-        // console.log(res.data[0].address)[m
+[31m-        // console.log(this.state.clinicList[0].name)[m
+[32m+[m[41m      [m
+ [m
+         this.state.clinic_numbers = Object.keys(this.state.clinicList).length;[m
+         console.log("size is " + this.state.clinic_numbers)[m
+[36m@@ -73,11 +93,13 @@[m [mclass NewAdminForm extends React.Component {[m
+                     lastName: this.state.lastName,[m
+                     id: this.state.id[m
+ [m
+[31m-                 })[m
+[31m-                    .then(res => {[m
+[32m+[m[32m                 }).then(res => {[m
+                     console.log(data);[m
+                     alert("Successfully added new clinic administrator.")[m
+[31m-                    })[m
+[32m+[m[32m                }).catch(error => {[m
+[32m+[m[32m                    this.setState({errorMailResponse: true})[m
+[32m+[m[32m                })[m
+[32m+[m
+         } else {[m
+             axios.post('http://localhost:8080/api/centreAdmins/newAdmin', {  email: this.state.email,[m
+             firstName: this.state.firstName,[m
+[36m@@ -85,6 +107,8 @@[m [mclass NewAdminForm extends React.Component {[m
+             .then(res => {[m
+             console.log(data);[m
+                 alert("Successfully added new centre administrator.")[m
+[32m+[m[32m            }).catch(error => {[m
+[32m+[m[32m                this.setState({errorMailResponse: true})[m
+             })[m
+         }[m
+     }[m
+[36m@@ -119,16 +143,24 @@[m [mclass NewAdminForm extends React.Component {[m
+             [m
+                     <h1>>New administrator </h1>[m
+                     <Form onSubmit = {this.handleSubmit}>[m
+[32m+[m[32m                    <div className={`form-group ${(this.state.errorMail || this.state.errorMailResponse)? 'has-danger': ''}`}>[m
+                     <Form.Group controlId="formAdminEmail">[m
+[31m-                        <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange}/>[m
+[32m+[m[32m                        <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange} className={`form-control ${(this.state.errorMail || this.state.errorMailResponse) ? 'is-invalid': ''}`}/>[m
+[32m+[m[32m                        {this.state.errorMailResponse && <div class="invalid-feedback"> Admin with given mail already registered. </div>}[m
+                     </Form.Group>[m
+[32m+[m[32m                    </div>[m
+ [m
+[32m+[m[32m                    <div className={`form-group ${this.state.errorFirstName ? 'has-danger': ''}`}>[m
+                     <Form.Group controlId="formAdminFirstName">[m
+[31m-                        <Form.Control type="text" name = "firstName" placeholder="first name" onChange = {this.handleChange}/>[m
+[32m+[m[32m                        <Form.Control type="text" name = "firstName" placeholder="first name" onChange = {this.handleChange} className={`form-control ${(this.state.errorFirstName) ? 'is-invalid': ''}`}/>[m
+                     </Form.Group>[m
+[32m+[m[32m                    </div>[m
+[32m+[m
+[32m+[m[32m                    <div className={`form-group ${this.state.errorLastName ? 'has-danger': ''}`}>[m
+                     <Form.Group controlId="formAdminLastName">[m
+[31m-                        <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} />[m
+[32m+[m[32m                        <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} className={`form-control ${(this.state.errorLastName) ? 'is-invalid': ''}`}/>[m
+                     </Form.Group>[m
+[32m+[m[32m                    </div>[m
+ [m
+                     <Form.Group controlId="formAdminRole">[m
+ [m
+[1mdiff --git a/react/drhelp_react/src/components/diagnoses/NewDiagnosisForm.js b/react/drhelp_react/src/components/diagnoses/NewDiagnosisForm.js[m
+[1mindex 337d6e3..23a4275 100644[m
+[1m--- a/react/drhelp_react/src/components/diagnoses/NewDiagnosisForm.js[m
+[1m+++ b/react/drhelp_react/src/components/diagnoses/NewDiagnosisForm.js[m
+[36m@@ -10,15 +10,31 @@[m [mclass NewDiagnosisForm extends React.Component {[m
+         this.state = {[m
+             [m
+             diagnosisName: "",[m
+[31m-            diagnosisDescription: ""[m
+[32m+[m[32m            diagnosisDescription: "",[m
+[32m+[m[32m            error: false,[m
+[32m+[m[32m            errorDiagnosisName: false,[m
+[32m+[m[32m            errorDiagnosisResponse: false,[m
+[32m+[m[32m            errorDescription: false[m
+         }[m
+       [m
+     }[m
+ [m
+[32m+[m[32m    validate = () => {[m
+[32m+[m[32m        this.setState({error: false, errorDiagnosisName: false, errorDiagnosisResponse: false, errorDescription: false})[m
+[32m+[m[32m        if(!this.state.diagnosisName.trim() || this.state.diagnosisName.length < 3) {[m
+[32m+[m[32m            this.setState({error: true, errorDiagnosisName: true})[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if(!this.state.diagnosisDescription.trim() || this.state.diagnosisDescription.length < 3) {[m
+[32m+[m[32m            this.setState({error: true, errorDescription: true})[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+     handleChange = (event) => {[m
+         this.setState( {[m
+             [event.target.name]: event.target.value[m
+[31m-        })[m
+[32m+[m[32m        }, ()=> {this.validate()})[m
+     }[m
+ [m
+     handleSubmit = (event) => {[m
+[36m@@ -31,6 +47,10 @@[m [mclass NewDiagnosisForm extends React.Component {[m
+         })[m
+             .then(res => {[m
+                 alert("Successfully added new diagnosis.");[m
+[32m+[m[32m            }).catch(error => {[m
+[32m+[m[32m                this.setState({[m
+[32m+[m[32m                    errorDiagnosisResponse: true[m
+[32m+[m[32m                })[m
+             })[m
+     }[m
+ [m
+[36m@@ -41,14 +61,18 @@[m [mclass NewDiagnosisForm extends React.Component {[m
+                 <div class='col-md-3'>[m
+                 <h1>>New diagnosis </h1>[m
+                 <Form onSubmit = {this.handleSubmit}>[m
+[32m+[m[32m                <div className={`form-group ${(this.state.errorDiagnosisName || this.state.errorDiagnosisResponse)? 'has-danger': ''}`}>[m
+                 <Form.Group controlId="formDiagnosisName">[m
+[31m-                    <Form.Control type="text" name = "diagnosisName" placeholder="Enter diagnosis name" onChange = {this.handleChange}/>[m
+[32m+[m[32m                    <Form.Control type="text" name = "diagnosisName" placeholder="Enter diagnosis name" onChange = {this.handleChange} className={`form-control ${(this.state.errorDiagnosisName || this.state.errorDiagnosisResponse) ? 'is-invalid': ''}`}/>[m
+[32m+[m[32m                    {this.state.errorDiagnosisResponse && <div class="invalid-feedback"> Diagnosis already exists. </div>}[m
+                 </Form.Group>[m
+[32m+[m[32m                </div>[m
+ [m
+[31m-            [m
+[32m+[m[32m                <div className={`form-group ${(this.state.errorDescription)? 'has-danger': ''}`}>[m
+                 <Form.Group controlId="formDiagnosisDescription">[m
+[31m-                    <Form.Control type="text" name = "diagnosisDescription" placeholder="Description" onChange = {this.handleChange} />[m
+[32m+[m[32m                    <Form.Control type="text" name = "diagnosisDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': ''}`}/>[m
+                 </Form.Group>[m
+[32m+[m[32m                </div>[m
+                 <Button variant="btn btn-success" type="submit">[m
+                     Create[m
+                 </Button>[m
+[1mdiff --git a/react/drhelp_react/src/components/medication/NewMedicationForm.js b/react/drhelp_react/src/components/medication/NewMedicationForm.js[m
+[1mindex 45a45dd..a922615 100644[m
+[1m--- a/react/drhelp_react/src/components/medication/NewMedicationForm.js[m
+[1m+++ b/react/drhelp_react/src/components/medication/NewMedicationForm.js[m
+[36m@@ -9,15 +9,32 @@[m [mclass NewMedicationForm extends React.Component {[m
+         super()[m
+         this.state = {[m
+             medicationName: "",[m
+[31m-            medicationDescription: ""[m
+[32m+[m[32m            medicationDescription: "",[m
+[32m+[m[32m            error: false,[m
+[32m+[m[32m            errorMedicationName: false,[m
+[32m+[m[32m            errorMedicationResponse: false,[m
+[32m+[m[32m            errorDescription: false[m
+         }[m
+       [m
+     }[m
+ [m
+[32m+[m
+[32m+[m[32m    validate = () => {[m
+[32m+[m[32m        this.setState({error: false, errorMedicationResponse: false, errorDescription: false, errorMedicationName: false})[m
+[32m+[m[32m        if(!this.state.medicationName.trim() || this.state.medicationName.length < 3) {[m
+[32m+[m[32m            this.setState({error: true, errorMedicationName: true})[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if(!this.state.medicationDescription.trim() || this.state.medicationDescription.length < 3) {[m
+[32m+[m[32m            this.setState({error: true, errorDescription: true})[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+     handleChange = (event) => {[m
+         this.setState( {[m
+             [event.target.name]: event.target.value[m
+[31m-        })[m
+[32m+[m[32m        }, () => {this.validate()})[m
+     }[m
+ [m
+     handleSubmit = (event) => {[m
+[36m@@ -30,6 +47,10 @@[m [mclass NewMedicationForm extends React.Component {[m
+         })[m
+             .then(res => {[m
+                 alert("Successfully added new medication.");[m
+[32m+[m[32m            }).catch(error => {[m
+[32m+[m[32m                this.setState({[m
+[32m+[m[32m                    errorMedicationResponse: true[m
+[32m+[m[32m                })[m
+             })[m
+     }[m
+ [m
+[36m@@ -39,15 +60,21 @@[m [mclass NewMedicationForm extends React.Component {[m
+             <div class="row d-flex justify-content-center">[m
+                 <div class='col-md-3'>[m
+                     <h1>>New medication </h1>[m
+[32m+[m[41m                   [m
+                     <Form onSubmit = {this.handleSubmit}>[m
+[32m+[m[32m                    <div className={`form-group ${(this.state.errorMedicationName || this.state.errorMedicationResponse)? 'has-danger': ''}`}>[m
+                     <Form.Group controlId="formMedicationName">[m
+[31m-                        <Form.Control type="text" name = "medicationName" placeholder="Enter medication name" onChange = {this.handleChange}/>[m
+[32m+[m[32m                        <Form.Control type="text" name = "medicationName" placeholder="Enter medication name" onChange = {this.handleChange} className={`form-control ${(this.state.errorMedicationName || this.state.errorMedicationResponse) ? 'is-invalid': ''}`}/>[m
+[32m+[m[32m                        {this.state.errorMedicationResponse && <div class="invalid-feedback"> Medication already exists. </div>}[m
+                     </Form.Group>[m
+[32m+[m[32m                    </div>[m
+ [m
+                 [m
+[32m+[m[32m                    <div className={`form-group ${(this.state.errorDescription)? 'has-danger': ''}`}>[m
+                     <Form.Group controlId="formMedicationDescription">[m
+[31m-                        <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} />[m
+[32m+[m[32m                        <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': ''}`}/>[m
+                     </Form.Group>[m
+[32m+[m[32m                    </div>[m
+                     <Button variant="btn btn-success" type="submit">[m
+                         Create[m
+                     </Button>[m
+[1mdiff --git a/react/drhelp_react/src/components/nurse/PatientList.js b/react/drhelp_react/src/components/nurse/PatientList.js[m
+[1mindex c2a2289..1ca21ac 100644[m
+[1m--- a/react/drhelp_react/src/components/nurse/PatientList.js[m
+[1m+++ b/react/drhelp_react/src/components/nurse/PatientList.js[m
+[36m@@ -83,7 +83,7 @@[m [mclass PatientList extends Component {[m
+ 		return ([m
+ 			<div>[m
+                 <div class="row d-flex justify-content-center">[m
+[31m-                    <div class='col-md-5'>[m
+[32m+[m[32m                    <div class='col-md-8'>[m
+                             <Table>[m
+                                 <TableHead>[m
+                                     <TableRow>[m

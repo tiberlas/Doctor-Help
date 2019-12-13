@@ -4,13 +4,17 @@ import {Row, Col} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios';
+
+import { Redirect } from 'react-router-dom';
+
 class PatientRegistrationInformation extends Component {
 
     constructor(props)
     {
         super(props)
         this.state = {
-            declined: false
+            declined: false,
+            refreshPage: false
         }
     }
 
@@ -50,6 +54,9 @@ class PatientRegistrationInformation extends Component {
                         email: this.props.data[i].email
              }).then( response => {
                        alert("Successfully accepted.")
+                       this.setState({
+                           refreshPage: true
+                       })
              })
             }
             
@@ -59,8 +66,6 @@ class PatientRegistrationInformation extends Component {
 
     handleDecline = (event) => {
         event.preventDefault()
-
-        console.log("great failure")
         this.setState({
             declined: true
         })
@@ -94,9 +99,11 @@ class PatientRegistrationInformation extends Component {
                    
                         email: this.props.data[i].email,
                         declinedDescription: declineDescription
-                   }).then(
+                   }).then( response => {
                        alert("Successfully declined.")
-                   )
+                       this.setState({
+                        refreshPage: true
+                    })})
 
                 //JSON.stringify(this.props.data[i]) //glupav nacin ali radi :D
                 let evenNewerObj = JSON.parse(patientInfo)
@@ -174,11 +181,10 @@ class PatientRegistrationInformation extends Component {
     }
 
     render() {
-        // console.log("props mail" + this.props.data.patientInfo[0])
-
-
         var size = Object.keys(this.props.data).length;
-
+        // if(this.state.refreshPage) {
+        //     return (<Redirect to='/admin/requests'></Redirect>)
+        // }
         return(
             <div>
                  {size > 0 ? this.generatePage() : <div> <h2> No requests at the moment :) </h2></div>}

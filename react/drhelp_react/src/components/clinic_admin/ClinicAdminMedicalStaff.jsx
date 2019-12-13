@@ -37,16 +37,19 @@ class ClinicAdminMedicalStaff extends Component {
     render() { 
         var i = 0;
         return ( 
-            <div>
-                <h3>list of emploies in {this.state.clinicName}</h3>
-                <ol>
-                    {this.state.medicalStuff.map(c => (
-                        <li>
-                            <MedicalStuffItem key={i++} value={c} />
-                        </li>
-                    ))}
-                </ol>
-                
+            <div class='row d-flex justify-content-center'>
+            <div class='col-md-8'>
+                <br/>
+                <br/>
+                <h3>List of employees in {this.state.clinicName}</h3>
+                <table class="table table-hover">
+                    <tbody>
+                        {this.state.medicalStuff.map(c => (
+                                <MedicalStuffItem key={i++} value={c} />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             </div>
          );
     }

@@ -14,7 +14,9 @@ public class RoomDTO {
 		this.id = room.getId();
 		this.name = room.getName();
 		this.number = room.getNumber();
-		this.procedureTypeName = room.getProcedurasTypes().getName();
+		if(room.getProcedurasTypes() != null) {
+			this.procedureTypeName = room.getProcedurasTypes().getName();		
+		}
 	}	
 	
 	public RoomDTO() {

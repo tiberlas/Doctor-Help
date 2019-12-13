@@ -26,14 +26,14 @@ public class Mail {
 
         msg.setSubject("DrHelp account registration");
         String text = "Dear " + firstName + " " + lastName + ","+'\n';
-        text += "An account has been linked to this email address. Your login credentials are: ";
+        text += "An account has been linked to this email address. Your sign in credentials are: ";
         text += "\n\n\nEmail:\t" + sendTo;
         text += "\nPassword:\t" + password;
         
         if(role.equals(RoleEnum.CENTRE_ADMINISTRATOR)) {
-        	text += "\nYour role:\tCentre administrator";
+        	text += "\nAppointed role:\tCentre administrator";
         } else if(role.equals(RoleEnum.CLINICAL_ADMINISTRATOR)) {
-        	text += "\nYourRole:\tClinic administrator";
+        	text += "\nAppointed role:\tClinic administrator";
         }
         
         text += "\nPlease, change your password after logging in. \n" + "Forever helping, drHelp.";
@@ -52,7 +52,7 @@ public class Mail {
         helper.setTo(sendTo);
 
         helper.setSubject("DrHelp account registration");
-        String text = "Dear sir/madam, " + '\n';
+        String text = "Dear " + firstName + " " + lastName + "," + '\n';
         text += "your account request has been reviewed and accepted by our administrator staff. \n Please follow the link below to activate your account.";
         text += "http://localhost:3000/activate=" + sendTo + "\n\n\n" + "Forever helping, drHelp.";
         helper.setText(text);
@@ -68,7 +68,7 @@ public class Mail {
 	    msg.setTo(sendTo);
 	
 	    msg.setSubject("DrHelp account registration");
-	    String text = "Dear sir/madam, " + '\n';
+	    String text = "Dear " + firstName + " " + lastName + "," + '\n';
 	    text += "your account request has been reviewed. Unfortunately, it has been declined, with an administrator message attached:";
 	    text += "\n\n\n" + description;
 	    text += "\n\n\n" + "Forever helping, drHelp.";

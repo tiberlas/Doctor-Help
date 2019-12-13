@@ -3,7 +3,8 @@ import DoctorHeader from './DoctorHeader.jsx'
 import DoctorProfile from './DoctorProfile.jsx'
 import { UserContext } from '../../context/UserContextProvider'
 import DoctorContextProvider from '../../context/DoctorContextProvider';
-import {Route, Switch, Redirect} from "react-router-dom";
+import {Route, Redirect} from "react-router-dom";
+import {Switch} from "react-router-dom";
 import DoctorChangeProfile from './DoctorChangeProfile.jsx';
 import DoctorChangePassword from './DoctorChangePassword.jsx';
 import axios from 'axios';

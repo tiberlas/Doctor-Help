@@ -32,6 +32,13 @@ public class DiagnosisController {
 	@PostMapping(value = "/new", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<DiagnosisDTO> newMedication(@RequestBody DiagnosisDTO diagnosis) {
+		
+		DiagnosisPOJO test = diagnosisService.findByDiagnosis(diagnosis.getName());
+		
+		if(test != null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 		DiagnosisPOJO d = new DiagnosisPOJO();
 		d.setDiagnosis(diagnosis.getName());
 		d.setDescription(diagnosis.getDescription());

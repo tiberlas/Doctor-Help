@@ -1,6 +1,7 @@
 package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -21,7 +22,7 @@ public class MedicationPOJO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Column (name = "medicationName", nullable = false)
+	@Column (name = "medicationName", nullable = false, unique = true)
 	private String medicationName;
 	
 	@Id
@@ -32,8 +33,8 @@ public class MedicationPOJO implements Serializable{
 	private String medDescription;
 	
 	@JsonManagedReference
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private PerscriptionPOJO perscription;
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	private List<PerscriptionPOJO> perscription;
 	
 	public MedicationPOJO () {
 		
@@ -58,12 +59,14 @@ public class MedicationPOJO implements Serializable{
 		this.medDescription = medDescription;
 	}
 
-	public PerscriptionPOJO getPerscription() {
+	public List<PerscriptionPOJO> getPerscription() {
 		return perscription;
 	}
 
-	public void setPerscription(PerscriptionPOJO perscription) {
+	public void setPerscription(List<PerscriptionPOJO> perscription) {
 		this.perscription = perscription;
 	}
+
+	
 	
 }

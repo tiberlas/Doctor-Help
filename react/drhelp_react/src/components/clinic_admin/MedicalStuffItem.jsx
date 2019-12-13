@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 class MedicalStuffItem extends Component {
     render() { 
         return ( 
-            <span>
-                {this.props.value.firstName}&nbsp;{this.props.value.lastName}&nbsp;{this.props.value.role}
-            </span>
+            <tr>
+                <td>{this.props.value.firstName}</td>
+                <td>{this.props.value.lastName}</td>
+                <td>{this.props.value.role}</td>
+            </tr>
          );
     }
 }

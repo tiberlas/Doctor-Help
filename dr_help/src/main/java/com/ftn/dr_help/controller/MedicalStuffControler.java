@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ftn.dr_help.dto.MedicalStuffDTO;
+import com.ftn.dr_help.dto.MedicalStaffDTO;
 import com.ftn.dr_help.service.MedicalStuffService;
 
 @RestController
@@ -23,13 +23,13 @@ public class MedicalStuffControler {
 	private MedicalStuffService service;
 	
 	@GetMapping(value = "/clinic={clinic_id}/all")
-	public ResponseEntity<List<MedicalStuffDTO>> getAll(@PathVariable("clinic_id") Long clinicId) {
-		List<MedicalStuffDTO> finded = service.findAll(clinicId);
+	public ResponseEntity<List<MedicalStaffDTO>> getAll(@PathVariable("clinic_id") Long clinicId) {
+		List<MedicalStaffDTO> finded = service.findAll(clinicId);
 		
 		if(finded == null || finded.isEmpty())
-			return new ResponseEntity<List<MedicalStuffDTO>>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<MedicalStaffDTO>>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<List<MedicalStuffDTO>>(finded,  HttpStatus.OK);
+		return new ResponseEntity<List<MedicalStaffDTO>>(finded,  HttpStatus.OK);
 		
 	}
 
