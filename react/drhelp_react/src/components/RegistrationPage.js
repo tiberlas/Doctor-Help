@@ -9,20 +9,28 @@ class RegistrationPage extends React.Component {
 
 	constructor () {
     	super()
-    	this.state = { iHaveWaited: false }
+    	this.state = { 
+			iHaveWaited: false, 
+			same_password: true 
+		}
   	}
 
 
 	handleRegister = async (event) => {
+		this.setState ({
+			same_password: true
+		})
 		event.preventDefault();
 
 		let pass1 = document.getElementById ('tb_pass1').value;
 		let pass2 = document.getElementById ('tb_pass2').value;
 		if (pass1 !== pass2) {
-			alert ("Both instances of the password must be the same");
+			this.setState ({
+				same_password: false
+			})
+			//alert ("Both instances of the password must be the same");
 			return;
 		}
-
 
 							
 		let email = document.getElementById ('tb_email').value;
@@ -72,32 +80,34 @@ class RegistrationPage extends React.Component {
 	render () {
 		return (
 			<div class='row d-flex justify-content-center'>
-            <div class='col-md-3'> 
-				<form onSubmit={this.handleRegister}>
-					<FormControl required type="email" placeholder="Email" id="tb_email"/>
-					<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
-					<FormControl required type="password" placeholder="Repeat password" id="tb_pass2"/>
-					<FormControl required type="text" placeholder="First name" id="tb_name"/>
-					<FormControl required type="text" placeholder="Last name" id="tb_last_name"/>
-					<FormControl required type="text" placeholder="Address" id="tb_address"/>
-					<FormControl required type="text" placeholder="Town" id="tb_town"/>
-					<FormControl required type="text" placeholder="Country" id="tb_country"/>
-					<FormControl required type="text" placeholder="Phone number" id="tb_phone"/>
-					<FormControl required type="text" placeholder="Insurance number" id="tb_insurance"/>
-					<FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="tb_birthday"/>
-					
-					<div class="form-group row">
-						<div class='col-md text-left'>
-							<input type="submit" value="Submit" class='btn btn-success'></input>
+				<div class='col-md-3'> 
+					<br/>
+					<form onSubmit={this.handleRegister}>
+						<FormControl required type="email" placeholder="Email" id="tb_email"/>
+						<FormControl required type="password" placeholder="Password" id="tb_pass1"/>
+						<FormControl required type="password" placeholder="Repeat password" id="tb_pass2" className={`form-control ${!this.state.same_password? 'is-invalid': ''}`}/>
+						<div class="invalid-feedback">Both instances of the password must be same. </div>
+						<FormControl required type="text" placeholder="First name" id="tb_name"/>
+						<FormControl required type="text" placeholder="Last name" id="tb_last_name"/>
+						<FormControl required type="text" placeholder="Address" id="tb_address"/>
+						<FormControl required type="text" placeholder="Town" id="tb_town"/>
+						<FormControl required type="text" placeholder="Country" id="tb_country"/>
+						<FormControl required type="text" placeholder="Phone number" id="tb_phone"/>
+						<FormControl required type="text" placeholder="Insurance number" id="tb_insurance"/>
+						<FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="tb_birthday"/>
+						
+						<div class="form-group row">
+							<div class='col-md text-left'>
+								<input type="submit" value="Submit" class='btn btn-success'></input>
+							</div>
+							<div class='col-md text-right'>
+								<Link to="/login">
+									<a href>Login</a>
+								</Link>
+							</div>
 						</div>
-						<div class='col-md text-right'>
-							<Link to="/login">
-								<a href>Login</a>
-							</Link>
-						</div>
-					</div>
-				</form>
-			</div>
+					</form>
+				</div>
 			</div>
 		)
 	}

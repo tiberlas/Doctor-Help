@@ -27,32 +27,32 @@ class PatientHistory extends Component {
 			<div>
 				<div class='row d-flex justify-content-center'>
 					<div class='col-md-11'>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell><p class='text-success'>Date</p></TableCell>
-							<TableCell><p class='text-success'>Procedure Type</p></TableCell>
-							<TableCell><p class='text-success'>Doctor</p></TableCell>
-							<TableCell><p class='text-success'>Nurse</p></TableCell>
-							<TableCell><p class='text-success'>Perscription</p></TableCell>
-							<TableCell><p class='text-success'>Clinic</p></TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{this.state.reports.map (row => (
-							<TableRow key={row.examinationReportId}>
-								<TableCell><p class='text-black'>{row.date}</p></TableCell>
-								<TableCell><p class='text-black'>{row.procedureType}</p></TableCell>
-								<TableCell><p class='text-black'>{row.doctor}</p></TableCell>
-								<TableCell><p class='text-black'>{row.nurse}</p></TableCell>
-								<TableCell><p class='text-black'>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
-								<TableCell><p class='text-black'>{row.clinicName}</p></TableCell>
-							</TableRow>
-						))}		
-					</TableBody>
-				</Table>
-			</div>
-			</div>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell><p class='text-success'>Date</p></TableCell>
+									<TableCell><p class='text-success'>Procedure Type</p></TableCell>
+									<TableCell><p class='text-success'>Doctor</p></TableCell>
+									<TableCell><p class='text-success'>Nurse</p></TableCell>
+									<TableCell><p class='text-success'>Perscription</p></TableCell>
+									<TableCell><p class='text-success'>Clinic</p></TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{this.state.reports.map (row => (
+									<TableRow key={row.examinationReportId}>
+										<TableCell><p class='text-black'>{row.date}</p></TableCell>
+										<TableCell><p class='text-black'>{row.procedureType}</p></TableCell>
+										<TableCell><p class='text-black'>{row.doctor}</p></TableCell>
+										<TableCell><p class='text-black'>{row.nurse}</p></TableCell>
+										<TableCell><p class='text-black'>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
+										<TableCell><p class='text-black'>{row.clinicName}</p></TableCell>
+									</TableRow>
+								))}		
+							</TableBody>
+						</Table>
+					</div>
+				</div>
 			</div>
 		);
 	}

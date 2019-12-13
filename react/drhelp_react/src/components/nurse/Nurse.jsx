@@ -3,7 +3,8 @@ import NurseHeader from './NurseHeader.jsx'
 import NurseProfile from './NurseProfile.jsx'
 import { UserContext } from '../../context/UserContextProvider'
 import NurseContextProvider from '../../context/NurseContextProvider';
-import {Route, Switch, Redirect} from "react-router-dom";
+import {Route, Redirect} from "react-router-dom";
+import {Switch} from "react-router-dom";
 import NurseChangeProfile from './NurseChangeProfile.jsx';
 import NurseChangePassword from './NurseChangePassword.jsx';
 import axios from 'axios';

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PatientHeader from './PatientHeader.js';
 import { Route } from 'react-router-dom';
-import { Switch } from 'react-router-dom';
+import {Switch} from 'react-router-dom';
 import PatientProfile from './PatientProfile.js';
 import { UserContext } from '../../context/UserContextProvider.js';
 import PatientContextProvider from '../../context/PatientContextProvider.js';

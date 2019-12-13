@@ -22,7 +22,8 @@ class LoginPage extends React.Component {
 		super(props)
 		this.state = {
 			loggedIn: false,
-			userRole: 'guest'
+			userRole: 'guest', 
+			error: false
 		}
 
 	}
@@ -85,7 +86,10 @@ class LoginPage extends React.Component {
 
 
 					if (response.status === 401) {
-						alert ("An account with that email and password doesn't exist or isn't activated. ");
+						//alert ("An account with that email and password doesn't exist or isn't activated. ");
+						this.setState ({
+							error: true
+						});
 						return;
 					}
 					if(response.status === 302) {
@@ -165,7 +169,7 @@ class LoginPage extends React.Component {
 
 		return (
 			<div>
-
+				<br/>
 				{/* <div class="alert alert-dismissible alert-success">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
@@ -174,28 +178,28 @@ class LoginPage extends React.Component {
 				<Switch>
 					<Route path = "/login">
 						<div class='row d-flex justify-content-center' >
-						<div class='col-sm-5'>
-
-							<form onSubmit={this.handleSubmit}>
-							<div class="form-group ">
-								<label for="exampleInputEmail1">Email address</label>
-								<FormControl type="email" placeholder="Email" id="tb_email"/>
-							</div>
-							<div class="form-group ">
-							<label for="exampleInputEmail1">Password</label>
-								<FormControl type="password" placeholder="Password" id='tb_password'/>
-							</div>
-							<div class="form-group row">
-								<div class='col-md text-left'>
-									<input type="submit" value="Submit" class="btn btn-outline-success" />
-								</div>
-								<div class='col-md text-right'>
-									<Link to="/register">
-										<a href>need account?</a>
-									</Link>
-								</div>
-							</div>
-							</form>
+							<div class='col-sm-5'>
+								<form onSubmit={this.handleSubmit}>
+									<div class={`form-group ${this.state.error? 'has-danger': ''}`}>
+										<label for="exampleInputEmail1">Email address</label>
+										<FormControl type="email" placeholder="Email" id="tb_email"/>
+									</div>
+									<div class={`form-group ${this.state.error? 'has-danger': ''}`}>
+										<label for="exampleInputEmail1">Password</label>
+										<FormControl type="password" placeholder="Password" id='tb_password' className={`form-control ${this.state.error? 'is-invalid': ''}`}/>
+										<div class="invalid-feedback">The user-password pair you entered matches no existing user. </div>
+									</div>
+									<div class="form-group row">
+										<div class='col-md text-left'>
+											<input type="submit" value="Submit" class="btn btn-outline-success" />
+										</div>
+										<div class='col-md text-right'>
+											<Link to="/register">
+												<a href>need account?</a>
+											</Link>
+										</div>
+									</div>
+								</form>
 							</div>
 						</div>
 					</Route>
