@@ -30,11 +30,21 @@ public class MedicationController {
 	@PostMapping(value = "/new", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<MedicationDTO> newMedication(@RequestBody MedicationDTO medication) {
+		
+		MedicationPOJO m = medicationService.findByName(medication.getName());
+		
+		if(m != null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 		MedicationPOJO med = new MedicationPOJO();
 		med.setMedicationName(medication.getName());
 		med.setMedDescription(medication.getDescription());
 	
 		med = medicationService.save(med);
+		
+		
+		
 		return new ResponseEntity<>(new MedicationDTO(med) , HttpStatus.CREATED);
 	}
 	

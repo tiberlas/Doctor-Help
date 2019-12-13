@@ -22,7 +22,7 @@ public class MedicationPOJO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Column (name = "medicationName", nullable = false)
+	@Column (name = "medicationName", nullable = false, unique = true)
 	private String medicationName;
 	
 	@Id

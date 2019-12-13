@@ -83,7 +83,7 @@ class PatientList extends Component {
 		return (
 			<div>
                 <div class="row d-flex justify-content-center">
-                    <div class='col-md-5'>
+                    <div class='col-md-8'>
                             <Table>
                                 <TableHead>
                                     <TableRow>
