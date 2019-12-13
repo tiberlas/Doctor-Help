@@ -6,23 +6,23 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
-
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
-
 import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
+import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
 import com.ftn.dr_help.model.pojo.ExaminationReportPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.MedicationPOJO;
-
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.model.pojo.TherapyPOJO;
@@ -31,6 +31,7 @@ import com.ftn.dr_help.repository.AllergyRepository;
 import com.ftn.dr_help.repository.ExaminationReportRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.UserRequestRepository;
+import com.ftn.dr_help.validation.PasswordValidate;
 
 @Service
 public class PatientService {
@@ -46,6 +47,13 @@ public class PatientService {
 	
 	@Autowired
 	private ExaminationReportRepository examinationReportRepository;
+	
+	@Autowired
+	private PasswordValidate passwordValidate;
+	
+	@Autowired
+	private AppPasswordEncoder encoder;
+	
 	
 	public List<PatientNameDTO> findAllNames() {
 		List<PatientPOJO> finded = patientRepository.findAll();
@@ -251,6 +259,7 @@ public class PatientService {
 			retValItem.setDoctor(appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName());
 			retValItem.setNurse(appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName());
 			retValItem.setClinicName(report.getClinic().getName());
+			retValItem.setClinicId(report.getClinic().getId());
 			retVal.add(retValItem);
 		}
 		if (retVal.size() > 0) {
@@ -287,6 +296,11 @@ public class PatientService {
 			retVal.setAdvice("");
 		}
 		
+		ClinicPOJO clinic = examinationReport.getClinic();
+		if (clinic != null) {
+			retVal.setClinicId(clinic.getId());
+		}
+		
 		List<MedicationPOJO> medicationList = perscription.getMedicationList();
 		List<MedicationDisplayDTO> medicationDto = new ArrayList<MedicationDisplayDTO> ();
 		for (MedicationPOJO temp : medicationList) {
@@ -301,6 +315,29 @@ public class PatientService {
 		retVal.setMedicationList(medicationDto);
 		
 		return retVal;
+	}
+
+	public boolean changePassword(ChangePasswordDTO password, String email) {
+		if(password == null) {
+			return false;
+		}
+		
+		PatientPOJO finded = patientRepository.findOneByEmail(email);
+		if(finded == null)
+			return false;
+		
+		//PasswordValidateInterface validate = new PasswordValidate();
+		
+		if(passwordValidate.isValid(password, finded.getPassword())) {
+
+			String encoded = encoder.getEncoder().encode(password.getNewPassword());
+
+			finded.setPassword(encoded);
+			patientRepository.save(finded);
+			return true;
+		}
+		
+		return false;
 	}
 
 	

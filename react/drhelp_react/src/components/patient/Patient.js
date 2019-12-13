@@ -12,6 +12,7 @@ import HealthRecord from './HealthRecord.js';
 import PatientHistory from './PatientHistory.js';
 import PerscriptionOverview from './PerscriptionOverview.js';
 import ViewClinic from './ViewClinic.jsx';
+import PatientChangePassword from './PatientChangePassword.js';
 
 class Patient extends Component {
     
@@ -87,6 +88,9 @@ class Patient extends Component {
                             </Route>
                             <Route exact path="/patient/profile/change">
                                 <PatientChangeProfile updateData={() => this.handlePatient()}/>
+                            </Route>
+                            <Route exact path="/patient/password/change">
+                                <PatientChangePassword />
                             </Route>
                             <Route exact path="/patient/health-record">
                                 <HealthRecord />
