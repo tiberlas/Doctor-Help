@@ -37,7 +37,8 @@ class ClinicListing extends Component {
 	render () {
 		let size = this.state.clinics.length
 		return (
-			<div>
+			<div class="row d-flex justify-content-center">
+                <div class='col-md-10'>
 				<Table>
 					<TableHead>
 						<TableRow>
@@ -55,6 +56,7 @@ class ClinicListing extends Component {
 
 					</TableBody>
 				</Table>
+			</div>
 			</div>
 		);
 	}

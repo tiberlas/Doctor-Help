@@ -27,8 +27,6 @@ class HealthRecord extends Component {
 
 			}
             this.setState ({
-                firstName: response.data.firstName, 
-				lastName: response.data.lastName, 
 				weight: response.data.weight, 
 				height: response.data.height, 
 				birthday: response.data.birthday, 
