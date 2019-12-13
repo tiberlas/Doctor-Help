@@ -12,7 +12,7 @@ import com.ftn.dr_help.model.convertor.ClinicUpdate;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
-import com.ftn.dr_help.repository.ClinicRepositorium;
+import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.validation.ClinicValidation;
 
 
@@ -20,10 +20,13 @@ import com.ftn.dr_help.validation.ClinicValidation;
 public class ClinicService {
 
 	@Autowired
-	private ClinicRepositorium repository;
+	private ClinicRepository repository;
 	
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
+	
+	@Autowired
+	private ClinicValidation clinicValidation;
 	
 	public ClinicPOJO findOne(Long id) {
 		if(id == null) {
@@ -65,7 +68,7 @@ public class ClinicService {
 			return null;
 		}
 		
-		if(!ClinicValidation.isValid(clinic)) {
+		if(clinicValidation.isValid(clinic)) {
 			return null;
 		}
 		
@@ -79,23 +82,20 @@ public class ClinicService {
 			return null;
 		}
 		
-		ClinicUpdate.update(oldClinic, clinic);
+		//ClinicUpdate.update(oldClinic, clinic);
+		oldClinic.setName(clinic.getName());
+		oldClinic.setAddress(clinic.getAddress());
+		oldClinic.setState(clinic.getState());
+		oldClinic.setCity(clinic.getCity());
+		oldClinic.setDescription(clinic.getDescription());
 		repository.save(oldClinic);
 		
 		return new ClinicDTO(oldClinic);
 	}
-		
-	public ClinicRoomListDTO getAllRooms(Long clinicId) {
-		if(clinicId == null) {
-			return null;
-		}
-		
-		ClinicPOJO ret = repository.findById(clinicId).orElse(null);
-			
-		if(ret == null)
-			return null;
-			
-		return new ClinicRoomListDTO(ret);
-		} 
+	
+	public ClinicPOJO findByName(String name) {
+		return repository.findByName(name);
+	}
+
 		
 }

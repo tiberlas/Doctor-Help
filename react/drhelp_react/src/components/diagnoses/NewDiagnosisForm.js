@@ -37,21 +37,24 @@ class NewDiagnosisForm extends React.Component {
     render() {
         return (
             <div> 
-            <h1>>New diagnosis </h1>
-            <Form onSubmit = {this.handleSubmit}>
-            <Form.Group controlId="formDiagnosisName">
-                <Form.Control type="text" name = "diagnosisName" placeholder="Enter diagnosis name" onChange = {this.handleChange}/>
-            </Form.Group>
+            <div class="row d-flex justify-content-center">
+                <div class='col-md-3'>
+                <h1>>New diagnosis </h1>
+                <Form onSubmit = {this.handleSubmit}>
+                <Form.Group controlId="formDiagnosisName">
+                    <Form.Control type="text" name = "diagnosisName" placeholder="Enter diagnosis name" onChange = {this.handleChange}/>
+                </Form.Group>
 
-          
-            <Form.Group controlId="formDiagnosisDescription">
-                <Form.Control type="text" name = "diagnosisDescription" placeholder="Description" onChange = {this.handleChange} />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Create
-            </Button>
-            </Form>
-            <h1> {this.state.diagnosisName} {this.state.diagnosisDescription}</h1>
+            
+                <Form.Group controlId="formDiagnosisDescription">
+                    <Form.Control type="text" name = "diagnosisDescription" placeholder="Description" onChange = {this.handleChange} />
+                </Form.Group>
+                <Button variant="btn btn-success" type="submit">
+                    Create
+                </Button>
+                </Form>
+               </div>
+            </div>
             </div>
         )
     }

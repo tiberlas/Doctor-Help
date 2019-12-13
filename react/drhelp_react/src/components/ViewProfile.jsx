@@ -5,15 +5,13 @@ class ViewProfile extends Component {
     render() { 
         return ( 
                 <div class="row d-flex justify-content-center">
-                <div class='col-md-3'>
+                <div class='col-md-7'>
                 <div >
-                    <label class="badge badge-success text-right">First Name:</label>&nbsp;&nbsp;&nbsp;
-                    <label >{this.props.profile.firstName}</label>
-                </div>
-                
-                <div>
-                    <label class="badge badge-success text-right">Last Name:</label>&nbsp;&nbsp;&nbsp;
-                    <label>{this.props.profile.lastName}</label>
+
+                    <br/>
+                    <br/>
+                    <h1 >{this.props.profile.firstName}&nbsp;{this.props.profile.lastName}</h1>
+
                 </div>
                 
                 <div >

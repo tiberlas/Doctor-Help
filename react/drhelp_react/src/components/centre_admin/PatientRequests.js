@@ -16,12 +16,9 @@ class PatientRequests extends Component {
     componentDidMount = () => {
         this._isMounted = true
 
-        var token = JSON.parse(localStorage.getItem('token'));
-        console.log("token is" + token)
         axios.get('http://localhost:8080/api/centreAdmins/requests',)
         .then(res =>  {
             const patientInfo = res.data
-            console.log("patient info from fetch", patientInfo[0])
             this.setState({patientInfo})
         })
         .catch(err => 
@@ -29,17 +26,32 @@ class PatientRequests extends Component {
         )
     }
 
+    // componentDidUpdate = () => {
+    //     axios.get('http://localhost:8080/api/centreAdmins/requests',)
+    //     .then(res =>  {
+    //         const patientInfo = res.data
+    //         this.setState({patientInfo})
+    //     })
+    //     .catch(err => 
+    //         console.log(err)
+    //     )
+    // }
+
     componentDidUnmount = () => {
         this._isMounted = false
     }
 
     render() {
+
+        var size = Object.keys(this.state.patientInfo).length
+
         if(this._isMounted)
             return(
                 <div>
                     <h1>>Registration requests</h1>
-                    <PatientRegistrationInformation data = {{...this.state.patientInfo}}/>
 
+                    {size > 0 ? <PatientRegistrationInformation data = {{...this.state.patientInfo}}/> 
+                                : <div> <h2> No requests at the moment :) </h2></div>}
                 
                 </div>
             )

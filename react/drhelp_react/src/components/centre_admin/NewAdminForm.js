@@ -21,8 +21,6 @@ class NewAdminForm extends React.Component {
     }
 
     handleChange = (event) => {
-        console.log("THE EV VAL", event.target.value);
-        console.log("THE EV NAME", event.target.name);
         this.setState( {
             [event.target.name]: event.target.value
         })
@@ -66,8 +64,6 @@ class NewAdminForm extends React.Component {
             id: this.state.id
           };
 
-        console.log("THE ID IS" + this.state.id)
-        console.log(data)
       
         if(this.state.adminRole === "clinic") {
                 axios.post('http://localhost:8080/api/clinicAdmins/newAdmin', { 
@@ -118,52 +114,56 @@ class NewAdminForm extends React.Component {
     render() {
         return (
             <div> 
-            <h1>>New administrator </h1>
-            <Form onSubmit = {this.handleSubmit}>
-            <Form.Group controlId="formAdminEmail">
-                <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange}/>
-            </Form.Group>
+            <div class="row d-flex justify-content-center">
+                <div class='col-md-3'>
+            
+                    <h1>>New administrator </h1>
+                    <Form onSubmit = {this.handleSubmit}>
+                    <Form.Group controlId="formAdminEmail">
+                        <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange}/>
+                    </Form.Group>
 
-            <Form.Group controlId="formAdminFirstName">
-                <Form.Control type="text" name = "firstName" placeholder="first name" onChange = {this.handleChange}/>
-            </Form.Group>
-            <Form.Group controlId="formAdminLastName">
-                <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} />
-            </Form.Group>
+                    <Form.Group controlId="formAdminFirstName">
+                        <Form.Control type="text" name = "firstName" placeholder="first name" onChange = {this.handleChange}/>
+                    </Form.Group>
+                    <Form.Group controlId="formAdminLastName">
+                        <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} />
+                    </Form.Group>
 
-            <Form.Group controlId="formAdminRole">
+                    <Form.Group controlId="formAdminRole">
 
 
-            <label>
-                    <input required
-                        type="radio" 
-                        name="adminRole"
-                        value="clinic"
-                        checked={this.state.adminRole === "clinic"}
-                        onChange={this.handleChange}
-                    /> Clinic
-                </label> &nbsp;
-                <label>
-                    <input required
-                        type="radio" 
-                        name="adminRole"
-                        value="centre"
-                        checked={this.state.adminRole === "centre"}
-                        onChange={this.handleChange}
-                    /> Clinical centre
-                </label>
-                <Form.Group controlId="formSelectClinic">
-                {this.state.adminRole==="clinic" && <select name = "id" onChange={this.handleChange} label="Multiple Select">
-       {this.createSelectItems()}
-  </select>}
-                </Form.Group>
-            </Form.Group>
+                    <label>
+                            <input required
+                                type="radio" 
+                                name="adminRole"
+                                value="clinic"
+                                checked={this.state.adminRole === "clinic"}
+                                onChange={this.handleChange}
+                            /> Clinic
+                        </label> &nbsp;
+                        <label>
+                            <input required
+                                type="radio" 
+                                name="adminRole"
+                                value="centre"
+                                checked={this.state.adminRole === "centre"}
+                                onChange={this.handleChange}
+                            /> Clinical centre
+                        </label>
+                        <Form.Group controlId="formSelectClinic">
+                        {this.state.adminRole==="clinic" && <select name = "id" onChange={this.handleChange} label="Multiple Select">
+            {this.createSelectItems()}
+        </select>}
+                        </Form.Group>
+                    </Form.Group>
 
-            { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="success" type="submit"> Submit </Button> 
-            : <div> <label>You must add at least 1 clinic. <Button variant="btn btn-success" type="submit" disabled> Submit </Button> </label> </div>}
-               
-            </Form>
-            <h1> {this.state.email} {this.state.firstName} {this.state.lastName} {this.state.adminRole} {}</h1>
+                    { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="success" type="submit"> Submit </Button> 
+                    : <div> <label>You must add at least 1 clinic. <Button variant="btn btn-success" type="submit" disabled> Submit </Button> </label> </div>}
+                    
+                    </Form>
+                </div>
+            </div>
             </div>
         )
     }

@@ -108,6 +108,7 @@ class RegistrationPage extends React.Component {
 						</div>
 					</form>
 				</div>
+
 			</div>
 		)
 	}

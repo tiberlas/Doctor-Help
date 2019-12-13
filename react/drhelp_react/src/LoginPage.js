@@ -40,37 +40,6 @@ class LoginPage extends React.Component {
 		let email = document.getElementById('tb_email');
 		let password = document.getElementById('tb_password');
 		
-		if ((email.value === 'doctor') && (password.value === 'doctor')) {
-			this.props.setLoginDoctor ();
-			this.setState ({
-				userRole: 'doctor'
-			});
-		}
-		else if ((email.value === 'nurse') && (password.value === 'nurse')) {
-			this.props.setLoginNurse ();
-			this.setState ({
-				userRole: 'nurse'
-			});
-		}
-		else if ((email.value === 'clinicAdmin') && (password.value === 'clinicAdmin')) {
-			this.props.setLoginClinicAdmin ();
-			this.setState ({
-				userRole: 'clinicAdmin'
-			});
-		}
-		else if ((email.value === 'centreAdmin') && (password.value === 'centreAdmin')) {
-			this.props.setLoginCentreAdmin ();
-			this.setState ({
-				userRole: 'centreAdmin'
-			});
-		}
-		else if ((email.value === 'patient') && (password.value === 'patient')) {
-			this.props.setLoginPatient ();
-			this.setState ({
-				userRole: 'patient'
-			});
-		}
-		
 		if (email.value.length > 3) {
 			if  (password.value.length > 3) {
 				fetch ('http://localhost:8080/api/login', {
@@ -92,11 +61,6 @@ class LoginPage extends React.Component {
 						});
 						return;
 					}
-					if(response.status === 302) {
-						alert("moved")
-						//window
-					}
-					//return response.json()
 
 					localStorage.setItem('token', JSON.stringify(response.jwtToken));
 
@@ -169,42 +133,46 @@ class LoginPage extends React.Component {
 
 		return (
 			<div>
-				<br/>
-				{/* <div class="alert alert-dismissible alert-success">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
-				</div> */}
+
+
 
 				<Switch>
 					<Route path = "/login">
 						<div class='row d-flex justify-content-center' >
-							<div class='col-sm-5'>
-								<form onSubmit={this.handleSubmit}>
-									<div class={`form-group ${this.state.error? 'has-danger': ''}`}>
-										<label for="exampleInputEmail1">Email address</label>
-										<FormControl type="email" placeholder="Email" id="tb_email"/>
-									</div>
-									<div class={`form-group ${this.state.error? 'has-danger': ''}`}>
-										<label for="exampleInputEmail1">Password</label>
-										<FormControl type="password" placeholder="Password" id='tb_password' className={`form-control ${this.state.error? 'is-invalid': ''}`}/>
-										<div class="invalid-feedback">The user-password pair you entered matches no existing user. </div>
-									</div>
-									<div class="form-group row">
-										<div class='col-md text-left'>
-											<input type="submit" value="Submit" class="btn btn-outline-success" />
-										</div>
-										<div class='col-md text-right'>
-											<Link to="/register">
-												<a href>need account?</a>
-											</Link>
-										</div>
-									</div>
-								</form>
+
+
+						<div class='col-sm-5'>
+							<br/>
+							<br/>
+							<br/>
+							<h2 class='text-success'>Sign in, get help</h2>
+							<br/>
+							<form onSubmit={this.handleSubmit}>
+							<div class="form-group ">
+								<label for="exampleInputEmail1">Email address</label>
+								<FormControl type="email" id="tb_email"/>
+							</div>
+							<div class="form-group ">
+							<label for="exampleInputEmail1">Password</label>
+								<FormControl type="password" id='tb_password'/>
+							</div>
+							<div class="form-group row">
+								<div class='col-md text-left'>
+									<input type="submit" value="Sign in" class="btn btn-outline-success" />
+								</div>
+								<div class='col-md text-right'>
+									<Link to="/register">
+										<a href>request an account</a>
+									</Link>
+								</div>
+							</div>
+							</form>
+
 							</div>
 						</div>
 					</Route>
 					<Route path = "/register">
-						<RegistrationPage></RegistrationPage>
+						<RegistrationPage/>
 					</Route>
 				</Switch>
 			</div>
