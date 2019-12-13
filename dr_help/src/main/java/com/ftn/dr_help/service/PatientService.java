@@ -305,35 +305,7 @@ public class PatientService {
 
 	
 	
-	public List<PatientPOJO> singleFilterPatients(String filter) {
-		List<PatientPOJO> patientList = patientRepository.findAll();
-		
-		//masan filter algorithm incoming
-		ArrayList<PatientPOJO> filteredPatients = new ArrayList<PatientPOJO>();
-		if (filter.matches("[0-9]+")) { //IS THE FILTER A NUMBER ONLY STRING ----> insurance search
-			for (PatientPOJO patientPOJO : patientList) {
-				if(patientPOJO.getInsuranceNumber().toString().contains(filter)) {
-					filteredPatients.add(patientPOJO);				
-				}
-			}
-			
-			return filteredPatients;
-			
-		} else {
-			String search = "";
-			for (PatientPOJO patientPOJO : patientList) {
-				search = patientPOJO.getFirstName().toLowerCase() + patientPOJO.getLastName().toLowerCase() + patientPOJO.getEmail().toLowerCase();
-				if(search.contains(filter.toLowerCase())) {
-					System.out.println("SEARCH IS: " + search);
-					filteredPatients.add(patientPOJO);				
-				}
-			}
-			
-			return filteredPatients;
-		}
-	}
 	
-
 	
 	
 }

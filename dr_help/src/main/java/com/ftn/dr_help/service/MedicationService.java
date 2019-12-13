@@ -22,12 +22,15 @@ public class MedicationService {
 	
 	
 	public MedicationPOJO save(MedicationPOJO med) {
-		return medicationRepository.save(med); 
+		MedicationPOJO finded = medicationRepository.findOneByMedicationName(med.getMedicationName()).orElse(null);
+		if(finded == null)
+			return medicationRepository.save(med);
+		return null;
 	}
 	
 	public MedicationPOJO findByName(String name) {
 		
-		return medicationRepository.findOneByMedicationName(name);
+		return medicationRepository.findOneByMedicationName(name).orElse(null);
 	}
 
 	
