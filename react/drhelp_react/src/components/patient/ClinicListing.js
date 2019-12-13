@@ -23,6 +23,19 @@ class ClinicListing extends Component {
 		})
 	}
 
+	generatePatientRows(row) {
+        let profileUrl = '/profile/' + row.insuranceNumber
+        return (
+            <Fragment>
+                <TableCell><Link exact to = {profileUrl} >{row.insuranceNumber}</Link></TableCell>
+                <TableCell><p class='text-white'>{row.firstName}</p></TableCell>
+                <TableCell><p class='text-white'>{row.lastName}</p></TableCell>
+                <TableCell><p class='text-white'>{row.email}</p></TableCell>
+                <TableCell></TableCell>
+             </Fragment>
+        )
+    }
+
 	render () {
 		return (
 			<div>
@@ -37,7 +50,7 @@ class ClinicListing extends Component {
 					<TableBody>
 						{this.state.clinics.map (row => (
 							<TableRow key={row.id}>
-								<TableCell><Link>{row.name}</Link></TableCell>
+								<TableCell><Link >{row.name}</Link></TableCell>
 								<TableCell><p class='text-white'>{row.address}</p></TableCell>
 								<TableCell><p class='text-white'>{row.description}</p></TableCell>
 							</TableRow>

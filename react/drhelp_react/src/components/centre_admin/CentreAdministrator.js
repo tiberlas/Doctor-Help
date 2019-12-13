@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import CentreAdminHeader from './CentreAdminHeader'
-import {Route, Switch} from 'react-router-dom'
+import {Route} from 'react-router-dom'
+import {Switch} from 'react-router-dom'
 import NewClinicForm from './NewClinicForm'
 import NewAdminForm from './NewAdminForm'
 import PatientRequests from './PatientRequests';
