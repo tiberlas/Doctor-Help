@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import ModalMessage from '../ModalMessage';
 
 class NewRoom extends Component {
     state = {
@@ -8,7 +9,10 @@ class NewRoom extends Component {
         name: '',
         errorNumber: true,
         errorName: true,
-        go_profile: false
+        go_profile: false,
+        messageShow: false,
+        message: '',
+        title: '' 
     }
     
     handleValidation = () => {
@@ -38,13 +42,22 @@ class NewRoom extends Component {
 
             this.setState({go_profile: true})
         }).catch((error) => {
-            alert('ROOM WITH THAT NAME OR NUMBER ALREADY EXIST')
-            this.setState({errorName: true, errorNumber: true})
+            this.setState({
+                errorName: true, 
+                errorNumber: true, 
+                messageShow: true,
+                message: 'Could not creste room becouse number is taken. Please try again with a diferent room number!',
+                title: 'Some error has occured'
+            })
         });
     }
 
     handleCancel = () => {
         this.setState({go_profile: true})
+    }
+
+    setMessageHide= () => {
+        this.setState({messageShow: false})
     }
 
     render() {
@@ -75,6 +88,12 @@ class NewRoom extends Component {
                         </div>
                     </div>
                 </form>
+
+                <ModalMessage
+                        title={this.state.title}
+                        message={this.state.message} 
+                        show={this.state.messageShow}
+                        onHide={this.setMessageHide}/>
                 
             </div>
             </div>

@@ -6,9 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.RoomDTO;
-import com.ftn.dr_help.model.convertor.ClinicUpdate;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
@@ -75,7 +73,7 @@ public class RoomService {
 		}
 		
 		RoomPOJO exist = repository.findOneByNumber(newRoom.getNumber()).orElse(null);
-		if(exist != null && exist.isDeleted()==false) {
+		if(exist != null) {
 			return null;
 		}
 		
@@ -128,7 +126,7 @@ public class RoomService {
 			return null;
 		}
 		
-		if(room == null || room.getId() == null) {
+		if(room == null || room.getId() == null || room.getNumber() == 0 || room.getName() == null) {
 			return null;
 		}
 		
@@ -142,6 +140,12 @@ public class RoomService {
 		if(finded == null) {
 			return null;			
 		}
+		
+		RoomPOJO exist = repository.findOneByNumber(room.getNumber()).orElse(null);
+		if(exist!= null && exist.getNumber() != finded.getNumber()) {
+			return null;
+		}
+		
 		
 		finded.setName(room.getName());
 		finded.setNumber(room.getNumber());
