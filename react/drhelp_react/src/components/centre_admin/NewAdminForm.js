@@ -2,6 +2,7 @@ import React from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
+import FormControl from 'react-bootstrap/FormControl';
 
 
 class NewAdminForm extends React.Component {
@@ -78,11 +79,14 @@ class NewAdminForm extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault()
 
+        let birthdayForm = document.getElementById('ad_birthday').value;
+
         const data = {
             email: this.state.email,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
-            id: this.state.id
+            id: this.state.id,
+            birthday: birthdayForm
           };
 
         if(this.state.error)
@@ -95,7 +99,8 @@ class NewAdminForm extends React.Component {
                     email: this.state.email,
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
-                    id: this.state.id
+                    id: this.state.id,
+                    birthday: birthdayForm
 
                  }).then(res => {
                     console.log(data);
@@ -106,9 +111,12 @@ class NewAdminForm extends React.Component {
         })
 
         } else {
-            axios.post('http://localhost:8080/api/centreAdmins/newAdmin', {  email: this.state.email,
-            firstName: this.state.firstName,
-            lastName: this.state.lastName })
+            axios.post('http://localhost:8080/api/centreAdmins/newAdmin', { 
+                    email: this.state.email,
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    birthday: birthdayForm
+         })
             .then(res => {
             console.log(data);
                 // alert("Successfully added new centre administrator.")
@@ -162,6 +170,9 @@ class NewAdminForm extends React.Component {
                     </Form.Group>
                     </div>
 
+                    <Form.Group controlId="formAdminBirthday">
+                    <FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="ad_birthday"/>
+                    </Form.Group>
                     <div className={`form-group ${this.state.errorLastName ? 'has-danger': ''}`}>
                     <Form.Group controlId="formAdminLastName">
                         <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} className={`form-control ${(this.state.errorLastName) ? 'is-invalid': 'is-valid'}`}/>

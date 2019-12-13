@@ -126,6 +126,7 @@ public class ClinicAdministratorService {
 			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 
 			finded.setPassword(encoded);
+			finded.setMustChangePassword(false);
 			clinicAdministratorRepository.save(finded);
 			return true;
 		}

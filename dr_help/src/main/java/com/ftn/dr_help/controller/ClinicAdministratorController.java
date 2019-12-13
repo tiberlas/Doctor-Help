@@ -71,7 +71,9 @@ public class ClinicAdministratorController {
 			admin.setLastName(clinicAdminDTO.getLastName());
 			admin.setEmail(clinicAdminDTO.getEmail());
 			admin.setAddress("...");
-			admin.setBirthday(Calendar.getInstance());
+			Calendar birthday = Calendar.getInstance();
+			birthday.setTime(clinicAdminDTO.getBirthday());
+			admin.setBirthday(birthday);
 			admin.setCity("...");
 			admin.setPhoneNumber("...");
 			admin.setState("...");
@@ -84,6 +86,7 @@ public class ClinicAdministratorController {
 			mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CLINICAL_ADMINISTRATOR);
 			System.out.println("Successfully sent account info email.");
 			
+			admin.setMustChangePassword(true);
 			
 			admin = clinicAdministratorService.save(admin);
 			return new ResponseEntity<>(new ClinicAdminDTO(admin), HttpStatus.CREATED);
