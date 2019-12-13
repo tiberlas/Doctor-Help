@@ -66,6 +66,11 @@ public class ClinicAdministratorService {
 		return ret;
 	}
 	
+	
+	public ClinicAdministratorPOJO findOneByEmail(String mail) {
+		return clinicAdministratorRepository.findOneByEmail(mail);
+	}
+	
 	public List<ClinicAdministratorPOJO> findAll() {
 		return clinicAdministratorRepository.findAll();
 	}

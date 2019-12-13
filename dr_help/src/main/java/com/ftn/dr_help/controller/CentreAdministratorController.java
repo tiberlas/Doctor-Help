@@ -77,7 +77,7 @@ public class CentreAdministratorController {
 		admin.setLastName(centreAdminDTO.getLastName());
 		admin.setEmail(centreAdminDTO.getEmail());
 		
-		String password = "fakultet";
+		String password = "coolpassword";
 		
 		String encoded = encoder.getEncoder().encode(password);
 		//p.setPassword(encoded);

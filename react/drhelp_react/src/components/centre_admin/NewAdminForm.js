@@ -16,10 +16,11 @@ class NewAdminForm extends React.Component {
             id: "",
             clinic_numbers: 0,
             error: false,
-            errorMail: false,
+            errorMail: true,
             errorMailResponse: false,
-            errorFirstName: false,
-            errorLastName: false
+            errorFirstName: true,
+            errorLastName: true,
+            success: false
 
         }
         
@@ -27,7 +28,7 @@ class NewAdminForm extends React.Component {
 
 
     validate = () => {
-        this.setState({error: false, errorMail: false, errorMailResponse: false, errorFirstName: false, errorLastName: false})
+        this.setState({error: false, errorMail: false, errorMailResponse: false, errorFirstName: false, errorLastName: false, success: false})
         if(!this.state.email.trim() || this.state.email.length < 3) {
             this.setState({error: true, errorMail: true})
         }
@@ -84,6 +85,9 @@ class NewAdminForm extends React.Component {
             id: this.state.id
           };
 
+        if(this.state.error)
+          return
+
       
         if(this.state.adminRole === "clinic") {
                 axios.post('http://localhost:8080/api/clinicAdmins/newAdmin', { 
@@ -95,10 +99,11 @@ class NewAdminForm extends React.Component {
 
                  }).then(res => {
                     console.log(data);
-                    alert("Successfully added new clinic administrator.")
+                    // alert("Successfully added new clinic administrator.")
+                    this.setState({success: true, error: false, errorMailResponse: false})
                 }).catch(error => {
-                    this.setState({errorMailResponse: true})
-                })
+                    this.setState({errorMailResponse: true, success: false, error: true})
+        })
 
         } else {
             axios.post('http://localhost:8080/api/centreAdmins/newAdmin', {  email: this.state.email,
@@ -106,9 +111,10 @@ class NewAdminForm extends React.Component {
             lastName: this.state.lastName })
             .then(res => {
             console.log(data);
-                alert("Successfully added new centre administrator.")
+                // alert("Successfully added new centre administrator.")
+                this.setState({success: true, error: false, errorMailResponse: false})
             }).catch(error => {
-                this.setState({errorMailResponse: true})
+                this.setState({errorMailResponse: true, success: false, error: true})
             })
         }
     }
@@ -139,26 +145,29 @@ class NewAdminForm extends React.Component {
         return (
             <div> 
             <div class="row d-flex justify-content-center">
-                <div class='col-md-3'>
+                <div class='col-md-4'>
             
                     <h1>>New administrator </h1>
                     <Form onSubmit = {this.handleSubmit}>
                     <div className={`form-group ${(this.state.errorMail || this.state.errorMailResponse)? 'has-danger': ''}`}>
                     <Form.Group controlId="formAdminEmail">
-                        <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange} className={`form-control ${(this.state.errorMail || this.state.errorMailResponse) ? 'is-invalid': ''}`}/>
+                        <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange} className={`form-control ${(this.state.errorMailResponse) ? 'is-invalid': ''}`}/>
                         {this.state.errorMailResponse && <div class="invalid-feedback"> Admin with given mail already registered. </div>}
                     </Form.Group>
                     </div>
 
                     <div className={`form-group ${this.state.errorFirstName ? 'has-danger': ''}`}>
                     <Form.Group controlId="formAdminFirstName">
-                        <Form.Control type="text" name = "firstName" placeholder="first name" onChange = {this.handleChange} className={`form-control ${(this.state.errorFirstName) ? 'is-invalid': ''}`}/>
+                        <Form.Control type="text" name = "firstName" placeholder="first name" onChange = {this.handleChange} className={`form-control ${(this.state.errorFirstName) ? 'is-invalid': 'is-valid'}`}/>
                     </Form.Group>
                     </div>
 
                     <div className={`form-group ${this.state.errorLastName ? 'has-danger': ''}`}>
                     <Form.Group controlId="formAdminLastName">
-                        <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} className={`form-control ${(this.state.errorLastName) ? 'is-invalid': ''}`}/>
+                        <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} className={`form-control ${(this.state.errorLastName) ? 'is-invalid': 'is-valid'}`}/>
+                        {this.state.success && 
+                             <div class="valid-feedback"> Great success, added new administrator! </div>
+                             }
                     </Form.Group>
                     </div>
 
@@ -190,7 +199,8 @@ class NewAdminForm extends React.Component {
                         </Form.Group>
                     </Form.Group>
 
-                    { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") ? <Button variant="success" type="submit"> Submit </Button> 
+                    { ((this.state.clinic_numbers > 0 && this.state.adminRole === "clinic") || this.state.adminRole === "centre") 
+                    ? <input type='submit' value='Create' className={`btn btn-success ${(this.state.error) ? 'disabled': 'enabled'}`}/> 
                     : <div> <label>You must add at least 1 clinic. <Button variant="btn btn-success" type="submit" disabled> Submit </Button> </label> </div>}
                     
                     </Form>

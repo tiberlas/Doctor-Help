@@ -55,11 +55,17 @@ public class ClinicAdministratorController {
 		@PostMapping(value = "/newAdmin", consumes = "application/json")
 		@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 		public ResponseEntity<ClinicAdminDTO> saveAdmin(@RequestBody ClinicAdminDTO clinicAdminDTO) {
-			System.out.println("works" + clinicAdminDTO.getId() + " " +  clinicAdminDTO.getFirstName() + " " + clinicAdminDTO.getLastName() + " " + clinicAdminDTO.getEmail());
+			
+			ClinicAdministratorPOJO a = clinicAdministratorService.findOneByEmail(clinicAdminDTO.getEmail());
+			
+			if(a != null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			
 			ClinicAdministratorPOJO admin = new ClinicAdministratorPOJO();
 			
-			//TODO: find the clinic that is sent via DTO:
 			ClinicPOJO c = clinicService.findOne(clinicAdminDTO.getId());
+			
 			if(c != null) admin.setClinic(c);
 			admin.setFirstName(clinicAdminDTO.getFirstName());
 			admin.setLastName(clinicAdminDTO.getLastName());
@@ -70,7 +76,7 @@ public class ClinicAdministratorController {
 			admin.setPhoneNumber("...");
 			admin.setState("...");
 			
-			String password = "fakultet";
+			String password = "verycoolpassword";
 			
 			String encoded = encoder.getEncoder().encode(password);
 			//p.setPassword(encoded);
