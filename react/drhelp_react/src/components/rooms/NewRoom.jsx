@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import ModalMessage from '../ModalMessage';
 
 class NewRoom extends Component {
     state = {
@@ -8,7 +9,10 @@ class NewRoom extends Component {
         name: '',
         errorNumber: true,
         errorName: true,
-        go_profile: false
+        go_profile: false,
+        messageShow: false,
+        message: '',
+        title: '' 
     }
     
     handleValidation = () => {
@@ -35,16 +39,20 @@ class NewRoom extends Component {
                     name: this.state.name,
                     number: parseInt(this.state.number)
         }).then( (response) => {
-
             this.setState({go_profile: true})
         }).catch((error) => {
-            alert('ROOM WITH THAT NAME OR NUMBER ALREADY EXIST')
-            this.setState({errorName: true, errorNumber: true})
+            this.setState({ 
+                errorNumber: true
+            })
         });
     }
 
     handleCancel = () => {
         this.setState({go_profile: true})
+    }
+
+    setMessageHide= () => {
+        this.setState({messageShow: false})
     }
 
     render() {
@@ -59,12 +67,13 @@ class NewRoom extends Component {
                 <form onSubmit={this.handleSubmit}> 
                     <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                         <label class="form-control-label" for="name">name:</label>
-                        <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': ''}`} value={this.state.name} onChange={this.handlerChange} />
+                        <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
                     </div>
 
                     <div className={`form-group ${this.state.errorNumber? 'has-danger': ''}`}>
                         <label class="form-control-label" for="number">number:</label>
-                        <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': ''}`} value={this.state.number} onChange={this.handlerChange} />
+                        <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': 'is-valid'}`} value={this.state.number} onChange={this.handlerChange} />
+                        {(this.state.errorNumber) && <div class="invalid-feedback"> Room number already exists. </div>}
                     </div>
                     <div class="form-group row">
                         <div class='col-md text-left'>

@@ -37,13 +37,17 @@ class ChangeRoomModal extends Component {
                     number: parseInt(this.state.number)
         }).then( (response) => {
             this.props.handleUpdate(response.data.name, response.data.number)
-        })
+        }).catch((error) => {
+            this.setState({ 
+                errorNumber: true
+            })
+        });
     }
 
     render() {
         return (
             <Modal
-              size="sm"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered
               show={this.props.show}
@@ -55,12 +59,13 @@ class ChangeRoomModal extends Component {
                     <Modal.Body>
                         <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                             <label class="form-control-label" for="name">name:</label>
-                            <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': ''}`} value={this.state.name} onChange={this.handlerChange} />
+                            <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
                         </div>
 
                         <div className={`form-group ${this.state.errorNumber? 'has-danger': ''}`}>
                             <label class="form-control-label" for="number">number:</label>
-                            <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': ''}`} value={this.state.number} onChange={this.handlerChange} />
+                            <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': 'is-valid'}`} value={this.state.number} onChange={this.handlerChange} />
+                            {(this.state.errorNumber) && <div class="invalid-feedback"> Room number already exists. </div>}
                         </div>
 
                     </Modal.Body>
