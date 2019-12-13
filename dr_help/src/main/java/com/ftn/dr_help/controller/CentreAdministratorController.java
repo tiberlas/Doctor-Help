@@ -2,6 +2,7 @@ package com.ftn.dr_help.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -76,8 +77,14 @@ public class CentreAdministratorController {
 		admin.setFirstName(centreAdminDTO.getFirstName());
 		admin.setLastName(centreAdminDTO.getLastName());
 		admin.setEmail(centreAdminDTO.getEmail());
-		
-		String password = "fakultet";
+		admin.setAddress("...");
+		admin.setCity("...");
+		admin.setPhoneNumber("...");
+		admin.setState("...");
+		Calendar birthday = Calendar.getInstance();
+		birthday.setTime(centreAdminDTO.getBirthday());
+		admin.setBirthday(birthday);
+		String password = "coolpassword";
 		
 		String encoded = encoder.getEncoder().encode(password);
 		//p.setPassword(encoded);

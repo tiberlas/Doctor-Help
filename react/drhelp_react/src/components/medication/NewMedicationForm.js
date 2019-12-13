@@ -10,17 +10,18 @@ class NewMedicationForm extends React.Component {
         this.state = {
             medicationName: "",
             medicationDescription: "",
-            error: false,
-            errorMedicationName: false,
+            error: true,
+            errorMedicationName: true,
             errorMedicationResponse: false,
-            errorDescription: false
+            errorDescription: true,
+            success: false
         }
       
     }
 
 
     validate = () => {
-        this.setState({error: false, errorMedicationResponse: false, errorDescription: false, errorMedicationName: false})
+        this.setState({error: false, errorMedicationResponse: false, errorDescription: false, errorMedicationName: false, success: false})
         if(!this.state.medicationName.trim() || this.state.medicationName.length < 3) {
             this.setState({error: true, errorMedicationName: true})
         }
@@ -40,16 +41,22 @@ class NewMedicationForm extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault()
 
+        if(this.state.error)
+            return
+
         axios.post('http://localhost:8080/api/medication/new', { 
 
             name: this.state.medicationName,
             description: this.state.medicationDescription
         })
             .then(res => {
-                alert("Successfully added new medication.");
+                // alert("Successfully added new medication.");
+                this.setState({success: true, error: false, errorMedicationResponse: false})
             }).catch(error => {
                 this.setState({
-                    errorMedicationResponse: true
+                    errorMedicationResponse: true,
+                    success: false,
+                    error: true
                 })
             })
     }
@@ -64,20 +71,24 @@ class NewMedicationForm extends React.Component {
                     <Form onSubmit = {this.handleSubmit}>
                     <div className={`form-group ${(this.state.errorMedicationName || this.state.errorMedicationResponse)? 'has-danger': ''}`}>
                     <Form.Group controlId="formMedicationName">
-                        <Form.Control type="text" name = "medicationName" placeholder="Enter medication name" onChange = {this.handleChange} className={`form-control ${(this.state.errorMedicationName || this.state.errorMedicationResponse) ? 'is-invalid': ''}`}/>
-                        {this.state.errorMedicationResponse && <div class="invalid-feedback"> Medication already exists. </div>}
+                        <Form.Control type="text" name = "medicationName" placeholder="Enter medication name" onChange = {this.handleChange} className={`form-control ${(this.state.errorMedicationName || this.state.errorMedicationResponse) ? 'is-invalid': 'is-valid'}`}/>
+                        {(this.state.errorMedicationResponse) && <div class="invalid-feedback"> Medication already exists. </div>}
                     </Form.Group>
                     </div>
 
                 
                     <div className={`form-group ${(this.state.errorDescription)? 'has-danger': ''}`}>
                     <Form.Group controlId="formMedicationDescription">
-                        <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': ''}`}/>
+                        <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': 'is-valid'}`}/>
+                        {this.state.success && 
+                             <div class="valid-feedback"> Ultra success, added new medication! </div>
+                             
+                            }
                     </Form.Group>
                     </div>
-                    <Button variant="btn btn-success" type="submit">
-                        Create
-                    </Button>
+
+                    <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
+
                     </Form>
                 </div>
              </div>
