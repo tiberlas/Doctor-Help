@@ -24,6 +24,11 @@ public class MedicationService {
 	public MedicationPOJO save(MedicationPOJO med) {
 		return medicationRepository.save(med); 
 	}
+	
+	public MedicationPOJO findByName(String name) {
+		
+		return medicationRepository.findOneByMedicationName(name);
+	}
 
 	
 }

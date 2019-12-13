@@ -14,12 +14,12 @@ class ClinicAdminProfile extends Component {
                 <ViewProfile profile={this.context.admin}/>
 
                 <div>
-                    <NavLink to = '/clinic+administrator/profile/change'>
+                    <NavLink to = '/clinic-administrator/profile/change'>
                         change profile
                     </NavLink>
                 </div>
                 <div>
-                    <NavLink to = '/clinic+administrator/profile/change/password'>
+                    <NavLink to = '/clinic-administrator/profile/change/password'>
                         change password
                     </NavLink>
                 </div>

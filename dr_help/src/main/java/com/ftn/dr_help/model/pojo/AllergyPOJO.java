@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class AllergyPOJO implements Serializable{
 
@@ -27,6 +29,7 @@ public class AllergyPOJO implements Serializable{
 	private String allergy;
 	
 	
+	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private HealthRecordPOJO healthRecord;
 	
@@ -53,6 +56,16 @@ public class AllergyPOJO implements Serializable{
 
 	public void setHealthRecord(HealthRecordPOJO healthRecord) {
 		this.healthRecord = healthRecord;
+	}
+
+
+	public String getAllergy() {
+		return allergy;
+	}
+
+
+	public void setAllergy(String allergy) {
+		this.allergy = allergy;
 	}
 
 }

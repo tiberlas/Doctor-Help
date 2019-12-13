@@ -1,16 +1,22 @@
 package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
+@Table(name = "diagnosispojo")
 public class DiagnosisPOJO implements Serializable {
 
 	/**
@@ -28,8 +34,9 @@ public class DiagnosisPOJO implements Serializable {
 	@Column(name = "description", nullable = false)
 	private String description;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	private PerscriptionPOJO perscription;
+	@JsonBackReference
+	@OneToMany(mappedBy = "diagnosis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<PerscriptionPOJO> perscription;
 	
 	public DiagnosisPOJO() {
 		
@@ -54,11 +61,11 @@ public class DiagnosisPOJO implements Serializable {
 		this.description = description;
 	}
 
-	public PerscriptionPOJO getPerscription() {
+	public List<PerscriptionPOJO> getPerscription() {
 		return perscription;
 	}
 
-	public void setPerscription(PerscriptionPOJO perscription) {
+	public void setPerscription(List<PerscriptionPOJO> perscription) {
 		this.perscription = perscription;
 	}
 	

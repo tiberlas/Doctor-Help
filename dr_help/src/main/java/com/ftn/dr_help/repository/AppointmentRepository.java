@@ -9,4 +9,6 @@ import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 @Repository
 public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Long>{
 
+	AppointmentPOJO findOneByExaminationReportId (Long examinationReportId);
+	
 }

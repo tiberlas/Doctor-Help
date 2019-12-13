@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
-import com.ftn.dr_help.dto.MedicalStuffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
@@ -27,7 +27,7 @@ public class DoctorService {
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
 	
-	public MedicalStuffProfileDTO findByEmail(String email) {
+	public MedicalStaffProfileDTO findByEmail(String email) {
 		if(email == null) {
 			return null;
 		}
@@ -38,7 +38,7 @@ public class DoctorService {
 			return null;
 		}
 		
-		return new MedicalStuffProfileDTO(finded);		
+		return new MedicalStaffProfileDTO(finded);		
 	}
 	
 	public DoctorPOJO findOne(Long id) {
@@ -51,7 +51,7 @@ public class DoctorService {
 		return ret;
 	}
 	
-	public MedicalStuffProfileDTO save(UserDetailDTO doctor, String email) {
+	public MedicalStaffProfileDTO save(UserDetailDTO doctor, String email) {
 		if(doctor == null) {
 			return null;
 		}
@@ -66,7 +66,7 @@ public class DoctorService {
 		convertor.changeTo(current, doctor);
 		repository.save(current);
 				
-		return new MedicalStuffProfileDTO(current);
+		return new MedicalStaffProfileDTO(current);
 	}
 	
 	public boolean changePassword(ChangePasswordDTO password, String email) {

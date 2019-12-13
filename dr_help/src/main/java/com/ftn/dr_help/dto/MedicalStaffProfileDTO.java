@@ -2,11 +2,18 @@ package com.ftn.dr_help.dto;
 
 import java.util.Calendar;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 
-public class MedicalStuffProfileDTO {
 
+public class MedicalStaffProfileDTO {
+
+	
+	DateConverter dateConverter = new DateConverter();
+	
 	//private Long id;
 	private String firstName;
 	private String lastName;
@@ -15,18 +22,20 @@ public class MedicalStuffProfileDTO {
 	private String state;
 	private String address;
 	private String phoneNumber;
-	private Calendar birthday;
+	private String birthday;
 	private Long clinicId;
 	
 	
 	
-	public MedicalStuffProfileDTO() {
+	public MedicalStaffProfileDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public MedicalStuffProfileDTO(DoctorPOJO doctor) {
+	@Autowired
+	public MedicalStaffProfileDTO(DoctorPOJO doctor) {
 		super();
+		//dateConverter = null;
 		this.firstName = doctor.getFirstName();
 		this.lastName = doctor.getLastName();
 		this.email = doctor.getEmail();
@@ -34,11 +43,11 @@ public class MedicalStuffProfileDTO {
 		this.state = doctor.getState();
 		this.address = doctor.getAddress();
 		this.phoneNumber = doctor.getPhoneNumber();
-		this.birthday = doctor.getBirthday();
+		this.birthday = dateConverter.toString(doctor.getBirthday());
 		this.clinicId = doctor.getClinic().getId();
 	}
 	
-	public MedicalStuffProfileDTO(NursePOJO nurse) {
+	public MedicalStaffProfileDTO(NursePOJO nurse) {
 		super();
 		this.firstName = nurse.getFirstName();
 		this.lastName = nurse.getLastName();
@@ -47,11 +56,11 @@ public class MedicalStuffProfileDTO {
 		this.state = nurse.getState();
 		this.address = nurse.getAddress();
 		this.phoneNumber = nurse.getPhoneNumber();
-		this.birthday = nurse.getBirthday();
+		this.birthday = dateConverter.toString(nurse.getBirthday());
 		this.clinicId = nurse.getClinic().getId();
 	}
 	
-	public MedicalStuffProfileDTO(String firstName, String lastName, String email, String city, String state,
+	public MedicalStaffProfileDTO(String firstName, String lastName, String email, String city, String state,
 			String address, String phoneNumber, Calendar birthday, Long clinicId) {
 		super();
 		this.firstName = firstName;
@@ -61,7 +70,7 @@ public class MedicalStuffProfileDTO {
 		this.state = state;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 		this.clinicId = clinicId;
 	}
 	
@@ -108,11 +117,11 @@ public class MedicalStuffProfileDTO {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Calendar getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 	public void setBirthday(Calendar birthday) {
-		this.birthday = birthday;
+		this.birthday = dateConverter.toString(birthday);
 	}
 	public Long getClinicId() {
 		return clinicId;

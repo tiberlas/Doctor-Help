@@ -43,7 +43,7 @@ class ClinicAdminChangeProfile extends Component {
 
     render() { 
         if(this.state.go_profile == true)
-            return (<Redirect to='/clinic+administrator/'></Redirect>);
+            return (<Redirect to='/clinic-administrator/'></Redirect>);
         return (  
             <ChangeProfile user={this.state} handleSubmit={(user) => this.handleSubmit(user)} errorBack={this.state.errorBack}/>
         );

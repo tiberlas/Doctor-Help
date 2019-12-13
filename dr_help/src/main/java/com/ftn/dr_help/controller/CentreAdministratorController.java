@@ -64,7 +64,14 @@ public class CentreAdministratorController {
 	@PostMapping(value = "/newAdmin", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<CentreAdminDTO> saveAdmin(@RequestBody CentreAdminDTO centreAdminDTO) {
-		System.out.println("works");
+		
+		CentreAdministratorPOJO c = centreAdministratorService.findOneByEmail(centreAdminDTO.getEmail());
+		
+		if( c != null) 
+		{
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 		CentreAdministratorPOJO admin = new CentreAdministratorPOJO();
 		admin.setFirstName(centreAdminDTO.getFirstName());
 		admin.setLastName(centreAdminDTO.getLastName());
@@ -156,12 +163,6 @@ public class CentreAdministratorController {
 		
 	}  
 	
-
-	
-	@GetMapping(value = "/createRequests")
-	public void createRequests() {
-		patientService.createAllRequests();
-	}
 	
 	@PostMapping(value = "/declineRequest", consumes = "application/json")
 	public ResponseEntity<UserRequestPOJO> declineUserRequest(@RequestBody PatientRequestDTO patientDTO){
@@ -199,9 +200,9 @@ public class CentreAdministratorController {
 		System.out.println(p);
 		
 		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
-			System.out.println("Password is " + requested.getPassword());
-			String encoded = encoder.getEncoder().encode(requested.getPassword());
-			p.setPassword(encoded);
+		System.out.println("Password is " + requested.getPassword());
+		String encoded = encoder.getEncoder().encode(requested.getPassword());
+		p.setPassword(encoded);
 
 		
 	/*	PasswordValidateInterface validate = new PasswordValidate();

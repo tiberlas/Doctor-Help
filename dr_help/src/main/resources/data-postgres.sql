@@ -1,10 +1,10 @@
 --SQL skripta koja se pokrece sa Spring boot app i daje dummy podatke
 -- enkripcija sa sajta: https://bcrypt-generator.com/
 
-insert into clinic(address, name, description) values('gospodnja 11', 'KLINIKA ZDRAVOG UMA', 'KLINIKA JE NAMENJENA ZA ...');
-insert into clinic(address, name, description) values('22 Dunnich Lane', 'Arkham', 'Assylum for the criminally insane');
-insert into clinic(address, name, description) values('24 Plainsburrough', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic');
-insert into clinic(address, name, description) values('Ulica gradska', 'Nasa Mala Klinika', 'Mali svet pun radosti');
+insert into clinic(address, city, state, name, description) values('7A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'KLINIKA ZDRAVOG UMA', 'KLINIKA JE NAMENJENA ZA ...');
+insert into clinic(address, city, state, name, description) values('7 Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Arkham', 'Assylum for the criminally insane');
+insert into clinic(address, city, state, name, description) values('5A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic');
+insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Nasa Mala Klinika', 'Mali svet pun radosti');
 
 --password: sifra
 insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday) 
@@ -31,18 +31,30 @@ insert into clinic_administrator (address, birthday, city, email, first_name, la
 
 --password: whoppa42
 insert into patiens (
-	address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
-	) values (
-		'Bajic i Vlahovic soba 11', '1998-07-21', 'Novi Sad', 'happymeal@gmail.com', 'Tanja', 434, true, 'Blejic', 
-		'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '06216684654', 'PATIENT', 'Serbia', null
-	);
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+) values (
+	'Bajic i Vlahovic soba 11', '1998-07-21', 'Novi Sad', 'happymeal@gmail.com', 'Tanja', 434, true, 'Blejic', 
+	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '06216684654', 'PATIENT', 'Serbia', null
+);
+insert into patiens (
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+) values (
+	'Grobljanska 5', '1983-11-12', 'Beograd', 'gmail@gmail.com', 'Borislav', 433, true, 'Rašeta', 
+	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '0656152164', 'PATIENT', 'Serbia', null
+);
+insert into patiens (
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+) values (
+	'Brace Ribnikar 16a', '1987-01-23', 'Novi Sad', 'digimon@gmail.com', 'Milivoje', 43223, true, 'Radulovic', 
+	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '0656152164', 'PATIENT', 'Serbia', null
+);
 --password: imejl
 insert into patiens (
-	address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
-	) values (
-		'Stevana Milovanova 17', '1985-03-29', 'Novi Sad', 'enekadresa@gmail.com', 'Jovan', 123321, false, 'Matic', 
-		'$2y$10$vjb/stdBU46vh74lsuHoWuIjYcDCwqpESS3I2ukf0C07p6AfNcvl2', '860484061105', 'PATIENT', 'Serbia', null
-	);
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+) values (
+	'Stevana Milovanova 17', '1985-03-29', 'Novi Sad', 'enekadresa@gmail.com', 'Jovan', 123321, false, 'Matic', 
+	'$2y$10$vjb/stdBU46vh74lsuHoWuIjYcDCwqpESS3I2ukf0C07p6AfNcvl2', '860484061105', 'PATIENT', 'Serbia', null
+);
 
 	
 	
@@ -67,9 +79,9 @@ insert into doctors(first_name, last_name, password, status, email, phone_number
 	);
 
 	
-insert into precedures_type(name, price, is_operation, duration, clinic_id) 
+insert into procedures_type(name, price, is_operation, duration, clinic_id) 
 	values('psiho analiza', 255, false, '02:00:00'::time, 1);
-insert into precedures_type(name, price, is_operation, duration, clinic_id) 
+insert into procedures_type(name, price, is_operation, duration, clinic_id) 
 	values('opsti pregled', 25, false, '00:30:00'::time, 1);
 
 	
@@ -79,3 +91,106 @@ insert into room(name, number, deleted, clinic_id, proceduras_types_id)
 	values('OPSTA A', 30, false, 1, 2);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('OPSTA B', 31, false, 1, 2);
+
+insert into healthrecord (blood_type, diopter, height, weight)
+values (
+	'A_NEGATIVE', 1.15, 1.75, 73
+);
+update patiens 
+set health_record_id = 1
+where patiens.id = 1;
+
+insert into healthrecord (blood_type, diopter, height, weight)
+values (
+	'O_POSITIVE', -3.2, 1.83, 86
+);
+update patiens 
+set health_record_id = 2
+where patiens.id = 2;
+
+insert into allergypojo (allergy, health_record_id)
+values ('Nuts', 1);
+insert into allergypojo (allergy, health_record_id)
+values ('Cats', 1);
+insert into allergypojo (allergy, health_record_id)
+values ('Pollen', 2);
+
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, null);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, null);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, null);
+
+insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
+values (3, 1, 1);
+insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
+values (1, 1, 1);
+insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
+values (2, 1, 1);
+
+update appointments 
+set examination_report_id = 1
+where id = 1;
+update appointments 
+set examination_report_id = 2
+where id = 2;
+update appointments 
+set examination_report_id = 3
+where id = 3;
+
+update examination_reportpojo
+set health_record_id = 1
+where id = 1;
+update examination_reportpojo
+set health_record_id = 1
+where id = 2;
+update examination_reportpojo
+set health_record_id = 1
+where id = 3;
+
+insert into diagnosispojo (description, diagnosis)
+values ('U are fine', 'Hypohondriac');
+insert into diagnosispojo (description, diagnosis)
+values ('What you get from too much reddit', 'Brain Cancer');
+insert into diagnosispojo (description, diagnosis)
+values ('Dubstep.', 'Ear Cancer');
+
+insert into therapypojo (advice, perscription_id)
+values ('Go out more', null);
+insert into therapypojo (advice, perscription_id)
+values ('Git gud, n00b', null);
+insert into therapypojo (advice, perscription_id)
+values ('Drugs are bad, mkay?', null);
+
+insert into medicationpojo (med_description, medication_name)
+values ('It makes you feel good', 'Cocain');
+insert into medicationpojo (med_description, medication_name)
+values ('Gives you wings', 'Reed bool');
+insert into medicationpojo (med_description, medication_name)
+values ('For the missus, wink wink nudge nudge', 'Vaseline');
+
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (1, 1, 1, 1);
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (2, 2, 1, 2);
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (3, 2, 1, null);
+
+update examination_reportpojo
+set perscription_id = 1
+where id = 1;
+update examination_reportpojo
+set perscription_id = 2
+where id = 2;
+update examination_reportpojo
+set perscription_id = 3
+where id = 3;
+
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (1, 1);
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (2, 1);
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (3, 1);
+

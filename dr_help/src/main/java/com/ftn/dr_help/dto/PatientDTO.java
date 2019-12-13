@@ -4,6 +4,7 @@ import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 
 public class PatientDTO {
+	
 	private String email;
 	private String firstName;
 	private String lastName;

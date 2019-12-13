@@ -3,8 +3,11 @@ import './App.css';
 import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
 import {BrowserRouter, Switch, Redirect, Route} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootswatch/dist/darkly/bootstrap.css';
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
 import PatientProfile from './components/patient/PatientProfile';
@@ -24,8 +27,6 @@ class App extends Component {
       currentUrl: window.location.href.split('=')[0],
       passwordChange: false
     }
-
-    this.confirmRegistration = this.confirmRegistration.bind(this)
   }
 
   setDoctor () {
@@ -71,17 +72,7 @@ class App extends Component {
     localStorage.setItem('token', null);
   }
 
-  confirmRegistration = () => {
-    console.log("bingo")
-    axios.put('http://localhost:8080/api/patients/confirmAccount', {
-      headers: {'Content-Type':'application/json'},
-          email: window.location.href.split('=')[1]
-     }).then(response => {console.log("done")})
-
-  }
-
   setPasswordChange(role) {
-    alert("passchange")
     this.setState({
       passwordChange: true,
       userRole: role
@@ -93,7 +84,7 @@ class App extends Component {
 
     console.log("href " + this.state.currentUrl)
     if(this.state.currentUrl === 'http://localhost:3000/activate') {
-      console.log("bingo")
+      console.log("bingo" + window.location.href.split('=')[1] )
       fetch('http://localhost:8080/api/patients/confirmAccount', {
             method: 'put',
             headers: {
@@ -105,25 +96,21 @@ class App extends Component {
      }).then(console.log("done"))
         return (
           <div> 
-            
-            <h2> Your account has been confirmed. Click the <a href="http://localhost:3000/login"> link </a> 
-            to log in with your credentials. </h2>
+             <div class="row d-flex justify-content-center">
+                <div class='col-md-3'>
+                  <h2> Your account has been confirmed. <br/>Click the <a href="http://localhost:3000/login"> link </a> 
+                  to log in with your credentials. </h2>
+                  </div>
+              </div>
+
         </div>
         )
     }
 
-
-      // if(this.state.passwordChange) {
-      //   return (
-      //     <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>
-      //   )
-      // }
-   
       return (
         <div>
           <BrowserRouter >
             <Switch>
-
                 { this.state.passwordChange?
                  <div> <FirstTimePasswordChange role = {this.state.userRole}/>  </div>:
 
