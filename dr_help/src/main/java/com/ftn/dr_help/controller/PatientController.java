@@ -80,9 +80,17 @@ public class PatientController {
 
 		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);
 		
+		
+		
 		if(ret == null) {
 			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
 		}
+		
+		System.out.println("BIRTHDAY IS: " + ret.getBirthday());
+		
+		PatientDTO dt = new PatientDTO(ret);
+		
+		System.out.println("DTO SHIT IS: "+ dt.getBirthday());
 		
 		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
 	}
