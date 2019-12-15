@@ -5,7 +5,7 @@ import LoginPage from './LoginPage.js'
 import './App.css';
 
 import {BrowserRouter, Redirect, Route} from "react-router-dom";
-import {Switch} from "react-router-dom";
+import {Switch} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootswatch/dist/darkly/bootstrap.css';

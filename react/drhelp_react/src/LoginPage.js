@@ -114,10 +114,8 @@ class LoginPage extends React.Component {
 			this.setState (() => ({
 					loggedIn: false
 			}))
-		}
-		
+		}	
 	}
-
 
 	handleLogIn = () => {
 		this.setState ({

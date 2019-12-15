@@ -44,8 +44,8 @@ class ClinicListing extends Component {
 						<TableRow>
 
 							<TableCell><p class='text-success'>Clinic Name</p></TableCell>
-							<TableCell><p class='text-success'>Description</p></TableCell>
 							<TableCell><p class='text-success'>Address</p></TableCell>
+							<TableCell><p class='text-success'>Description</p></TableCell>
 
 
 						</TableRow>

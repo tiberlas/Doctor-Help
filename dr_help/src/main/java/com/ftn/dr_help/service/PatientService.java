@@ -54,6 +54,8 @@ public class PatientService {
 	@Autowired
 	private AppPasswordEncoder encoder;
 	
+	private DateConverter dateConverter = new DateConverter ();
+	
 	
 	public List<PatientNameDTO> findAllNames() {
 		List<PatientPOJO> finded = patientRepository.findAll();
@@ -226,7 +228,7 @@ public class PatientService {
 		
 		HealthRecordDTO retVal = new HealthRecordDTO ();
 		
-		retVal.setBirthday(patient.getBirthday());
+		retVal.setBirthday(dateConverter.toString(patient.getBirthday()));
 		retVal.setBloodType(healthRecord.getBloodType());
 		retVal.setDiopter(healthRecord.getDiopter());
 		retVal.setFirstName(patient.getFirstName());
