@@ -1,7 +1,5 @@
 package com.ftn.dr_help.dto;
 
-import java.util.Calendar;
-
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
 public class HealthRecordDTO {
@@ -10,7 +8,7 @@ public class HealthRecordDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public HealthRecordDTO(String firstName, String lastName, double weight, double height, Calendar birthday,
+	public HealthRecordDTO(String firstName, String lastName, double weight, double height, String birthday,
 			double diopter, BloodTypeEnum bloodType, String allergyList) {
 		super();
 		this.firstName = firstName;
@@ -26,7 +24,7 @@ public class HealthRecordDTO {
 	private String lastName;
 	private double weight;
 	private double height;
-	private Calendar birthday;
+	private String birthday;
 	private double diopter;
 	private BloodTypeEnum bloodType;
 	private String allergyList;
@@ -54,10 +52,10 @@ public class HealthRecordDTO {
 	public void setHeight(double height) {
 		this.height = height;
 	}
-	public Calendar getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Calendar birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 	public double getDiopter() {

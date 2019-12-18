@@ -26,6 +26,16 @@ class PatientRequests extends Component {
         )
     }
 
+
+    handleUpdate = (key) => {
+
+        const items = this.state.patientInfo.filter(item => item.email !== key)
+        
+        console.log('items', items)
+        this.setState({ patientInfo: items});
+        console.log("state", items)
+    }
+
     // componentDidUpdate = () => {
     //     axios.get('http://localhost:8080/api/centreAdmins/requests',)
     //     .then(res =>  {
@@ -50,7 +60,7 @@ class PatientRequests extends Component {
                 <div>
                     <h1>>Registration requests</h1>
 
-                    {size > 0 ? <PatientRegistrationInformation data = {{...this.state.patientInfo}}/> 
+                    {size > 0 ? <PatientRegistrationInformation data = {{...this.state.patientInfo}} handleUpdate={this.handleUpdate}/> 
                                 : <div> <h2> No requests at the moment :) </h2></div>}
                 
                 </div>

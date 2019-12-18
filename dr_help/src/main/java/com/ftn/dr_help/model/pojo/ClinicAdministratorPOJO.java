@@ -68,6 +68,10 @@ public class ClinicAdministratorPOJO implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ClinicPOJO clinic;
 	
+	@Column(name = "mustChangePassword", nullable = true)
+	private Boolean mustChangePassword = false;
+	
+	
 	
 	public ClinicAdministratorPOJO() {
 		super();
@@ -169,6 +173,15 @@ public class ClinicAdministratorPOJO implements Serializable{
 	@Autowired
 	public void setClinic(ClinicPOJO clinic) {
 		this.clinic = clinic;
+	}
+	
+	
+	public Boolean getMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(Boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
 	}
 	
 	

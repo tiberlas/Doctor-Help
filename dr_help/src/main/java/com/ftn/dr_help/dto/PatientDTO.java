@@ -1,9 +1,14 @@
 package com.ftn.dr_help.dto;
 
+import java.util.Calendar;
+
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 
 public class PatientDTO {
+	
+	private DateConverter dateConverter = new DateConverter();
 	
 	private String email;
 	private String firstName;
@@ -16,10 +21,12 @@ public class PatientDTO {
 	private String declinedDescription;
 	private String password;
 	private boolean isActivated;
+	private String birthday;
+	
 	
 	
 	public PatientDTO(String email, String firstName, String lastName, String city, String address, String phoneNumber,
-			Long insuranceNumber, String state, String password, boolean isActivated) {
+			Long insuranceNumber, String state, String password, boolean isActivated, Calendar birthday) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
@@ -31,6 +38,8 @@ public class PatientDTO {
 		this.state = state;
 		this.password = password;
 		this.isActivated = isActivated;
+		this.birthday = dateConverter.toString(birthday);
+		
 	}
 	
 	public PatientDTO(PatientPOJO p) {
@@ -45,6 +54,7 @@ public class PatientDTO {
 		this.state = p.getState();
 		this.password = p.getPassword();
 		this.isActivated = p.isActivated();
+		this.birthday = dateConverter.toString(p.getBirthday());
 	}
 	
 	public PatientDTO(String email, String declinedDescription) {
@@ -80,8 +90,17 @@ public class PatientDTO {
 	public PatientDTO(UserRequestPOJO userRequest) {
 		this(userRequest.getEmail(), userRequest.getFirstName(), userRequest.getLastName(),
 				userRequest.getCity(), userRequest.getAddress(), userRequest.getPhoneNumber(), userRequest.getInsuranceNumber(), 
-				userRequest.getState(), userRequest.getPassword(), false);
+				userRequest.getState(), userRequest.getPassword(), false, userRequest.getBirthday());
 	}
+	
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Calendar birthday) {
+		this.birthday = dateConverter.toString(birthday);
+	}
+
 
 	public String getEmail() {
 		return email;

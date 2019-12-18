@@ -46,7 +46,7 @@ class PatientHistory extends Component {
 								<TableCell><p class='text-white'>{row.doctor}</p></TableCell>
 								<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 								<TableCell><p class='text-white'>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
-								<TableCell><p class='text-white'>{row.clinicName}</p></TableCell>
+								<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
 							</TableRow>
 						))}		
 					</TableBody>

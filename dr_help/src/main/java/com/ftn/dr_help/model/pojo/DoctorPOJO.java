@@ -83,6 +83,8 @@ public class DoctorPOJO implements Serializable{
 	@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"))
 	private List<OperationPOJO> operationList;
 
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private ProceduresTypePOJO procedureType;
 	
 	public DoctorPOJO() {
 		super();
@@ -178,6 +180,14 @@ public class DoctorPOJO implements Serializable{
 	public void setOperationList(List<OperationPOJO> operationList) {
 		this.operationList = operationList;
 
+	}
+
+	public ProceduresTypePOJO getProcedureType() {
+		return procedureType;
+	}
+
+	public void setProcedureType(ProceduresTypePOJO procedureType) {
+		this.procedureType = procedureType;
 	}
 	
 }

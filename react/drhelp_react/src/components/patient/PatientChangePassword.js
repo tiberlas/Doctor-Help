@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import ChangePassword from '../ChangePassword';
 
-class ClinicAdminChangePassword extends Component {
+class PatientChangePassword extends Component {
     static contextType = ClinicAdminContext
 
     state = {
@@ -15,7 +15,7 @@ class ClinicAdminChangePassword extends Component {
     handleSubmit = (data) => {
         this.setState({errorBack: false})
 
-        axios.put('http://localhost:8080/api/clinicAdmins/change/password', {
+        axios.put('http://localhost:8080/api/patients/change/password', {
                     oldPassword: data.oldPassword,
                     newPassword: data.newPassword
         }).then((responce) => {
@@ -26,12 +26,8 @@ class ClinicAdminChangePassword extends Component {
     }
 
     render() {
-        if(this.state.go_profile === true) {
-            if(this.props.first === true) {
-                window.location.href='/login'
-            }
-            return(<Redirect to='/clinic-administrator/'></Redirect> );
-        }
+        if(this.state.go_profile === true)
+            return(<Redirect to='/patient/'></Redirect> );
         
         return ( 
             <ChangePassword handleSubmit={(data) => this.handleSubmit(data)} errorBack={this.state.errorBack}/>
@@ -39,5 +35,5 @@ class ClinicAdminChangePassword extends Component {
     }
 }
  
-export default ClinicAdminChangePassword;
+export default PatientChangePassword;
 

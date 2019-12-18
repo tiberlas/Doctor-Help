@@ -1,5 +1,7 @@
 package com.ftn.dr_help.dto;
 
+import java.util.Date;
+
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 
 public class ClinicAdminDTO {
@@ -9,9 +11,20 @@ public class ClinicAdminDTO {
 	private String lastName;
 	private Long id;
 	
+	private Date birthday;
+	
 	public ClinicAdminDTO() {
 		
 	}
+	
+	public ClinicAdminDTO(String email, String firstName, String lastName, Date birthday) {
+		super();
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthday = birthday;
+	}
+	
 	
 	public ClinicAdminDTO(String email, String firstName, String lastName, Long id) {
 		super();
@@ -55,5 +68,13 @@ public class ClinicAdminDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 }

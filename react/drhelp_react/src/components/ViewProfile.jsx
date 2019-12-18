@@ -9,7 +9,9 @@ class ViewProfile extends Component {
                 <br/>
                 <br/>
                 <div >
+
                     <h1 >{this.props.profile.firstName}&nbsp;{this.props.profile.lastName}</h1>
+
                 </div>
                 
                 <div >

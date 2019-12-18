@@ -42,9 +42,12 @@ class ClinicListing extends Component {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell><p class='text-success'>Clinic name</p></TableCell>
-							<TableCell><p class='text-success'>Adress</p></TableCell>
+
+							<TableCell><p class='text-success'>Clinic Name</p></TableCell>
+							<TableCell><p class='text-success'>Address</p></TableCell>
 							<TableCell><p class='text-success'>Description</p></TableCell>
+
+
 						</TableRow>
 					</TableHead>
 					<TableBody>

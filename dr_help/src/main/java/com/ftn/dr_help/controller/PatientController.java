@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
+
 import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
+
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
+
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.HealthRecordService;
 import com.ftn.dr_help.service.PatientService;
@@ -75,9 +80,17 @@ public class PatientController {
 
 		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);
 		
+		
+		
 		if(ret == null) {
 			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
 		}
+		
+		System.out.println("BIRTHDAY IS: " + ret.getBirthday());
+		
+		PatientDTO dt = new PatientDTO(ret);
+		
+		System.out.println("DTO SHIT IS: "+ dt.getBirthday());
 		
 		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
 	}
@@ -187,7 +200,7 @@ public class PatientController {
 		System.out.println("Zilav sam!!!1!");
 		if (retVal == null) {
 			retVal = new ArrayList<PatientHistoryDTO> ();
-			retVal.add(new PatientHistoryDTO ((long) 0, "", "", "", "", ""));
+			retVal.add(new PatientHistoryDTO ((long) 0, "", "", "", "", "", (long) 0));
 		}
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
@@ -203,5 +216,20 @@ public class PatientController {
 		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
+	
+	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> putPatientPassword(@RequestBody ChangePasswordDTO passwords) {
+		String email = currentUser.getEmail();
+
+		boolean ret = patientService.changePassword(passwords, email);
+		
+		if(ret) {
+			return new ResponseEntity<String>("changed", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("not changed", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+	}  
 	
 }

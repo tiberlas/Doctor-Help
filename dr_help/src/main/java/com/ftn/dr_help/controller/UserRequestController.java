@@ -25,41 +25,49 @@ public class UserRequestController {
 	private UserRequestService userRequestService;
 	
 	@PostMapping (value = "/register", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<UserResponseDTO> login (@RequestBody UserRequestDTO userRequest) {
-
+	public ResponseEntity<UserResponseDTO> register (@RequestBody UserRequestDTO userRequest) {
+		System.out.println("asda");
 		UserResponseDTO retVal = new UserResponseDTO ();
 
 		if (userRequestService.patientExists(userRequest.getEmail()) ) {
 			retVal.setResponse("An account under this email address already exists. ");
+			System.out.println("1");
 			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
 		}
 		else if (userRequestService.insuranceNumberExists(userRequest.getInsuranceNumber())) {
-			retVal.setResponse("An account with this insurance number already exists. ");
-			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
+			retVal.setResponse("An account with this insurance number already exists.1 ");
+			System.out.println("2");
+			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.NOT_ACCEPTABLE);
 		}
 		else if (userRequestService.doctorExists(userRequest.getEmail())) {
 			retVal.setResponse("An account with this insurance number already exists. ");
+			System.out.println("3");
 			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
 		}
 		else if (userRequestService.nurseExists(userRequest.getEmail())) {
 			retVal.setResponse("An account under this email address already exists. ");
+			System.out.println("4");
 			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
 		}
 		else if (userRequestService.clinicalAdminExists(userRequest.getEmail())) {
 			retVal.setResponse("An account under this email address already exists. ");
+			System.out.println("5");
 			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
 		}
 		else if (userRequestService.centreAdministratorExists(userRequest.getEmail())) {
 			retVal.setResponse("An account under this email address already exists. ");
+			System.out.println("6");
 			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
 		}
 		else if (userRequestService.requestEmailExists(userRequest.getEmail())) {
 			retVal.setResponse("A request with this email address already exists. ");
+			System.out.println("7");
 			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
 		}
 		else if (userRequestService.requestInsuranceNumberExists(userRequest.getInsuranceNumber())) {
-			retVal.setResponse("A request with this insurance number already exists. ");
-			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.CONFLICT);
+			retVal.setResponse("A request with this insurance number already exists.2 ");
+			System.out.println("8");
+			return new ResponseEntity<UserResponseDTO> (retVal, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		Calendar birthday = Calendar.getInstance();

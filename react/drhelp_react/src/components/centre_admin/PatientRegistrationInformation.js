@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import Tab from 'react-bootstrap/Tab'
 import {Row, Col} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -14,12 +14,13 @@ class PatientRegistrationInformation extends Component {
         super(props)
         this.state = {
             declined: false,
-            refreshPage: false
+            refreshPage: false,
+            sending: false
         }
     }
 
-
     generateListGroup = () => {
+
         let items = []; 
         var size = Object.keys(this.props.data).length;
         console.log('SIZE IS' + size)
@@ -34,34 +35,24 @@ class PatientRegistrationInformation extends Component {
     }
 
     handleAccept = (event) => {
-        
-        console.log("great success")
-        console.log("event value" + event.target.value)
+        this.setState({sending: true, declined: false})
 
-        //TODO: find the appropriate request based on insuranceID.
-        let  patientInfo = {}
         var size = Object.keys(this.props.data).length;
         for( let i = 0; i < size; i++) {
             if(event.target.value == this.props.data[i].insuranceNumber) {
-                console.log("bingo on " + this.props.data[i].insuranceNumber)
-
-                patientInfo = JSON.stringify(this.props.data[i]) //glupav nacin ali radi :D
-                let evenNewerObj = JSON.parse(patientInfo)
-                console.log("patient info " + patientInfo)
-
-
+              
                 axios.post('http://localhost:8080/api/centreAdmins/acceptRequest', {
                         email: this.props.data[i].email
              }).then( response => {
-                       alert("Successfully accepted.")
+                    this.props.handleUpdate(this.props.data[i].email);
                        this.setState({
-                           refreshPage: true
+                           refreshPage: true,
+                           sending: false
                        })
              })
             }
             
         }
-
     }
 
     handleDecline = (event) => {
@@ -74,41 +65,33 @@ class PatientRegistrationInformation extends Component {
 
     goBack = () => {
         this.setState({declined: false})
+        // this.forceUpdate()
     }
 
     sendDecline = (event) => {
-        console.log("sending decline")
-        let declineDescription = document.getElementById("declinationDescription").value
-        console.log("Desc" + declineDescription)
 
-        console.log("event value" + event.target.value)
+        this.setState({sending: true, declined: false})
+        let declineDescription = document.getElementById("declinationDescription").value
 
         //TODO: find the appropriate request based on insuranceID.
-        let  patientInfo = {}
+       
         var size = Object.keys(this.props.data).length;
         for( let i = 0; i < size; i++) {
             if(event.target.value == this.props.data[i].insuranceNumber) {
-                console.log("bingo on " + this.props.data[i].insuranceNumber)
-
-                // let patientInfo = {
-                  
-                // }
-                patientInfo = JSON.stringify(patientInfo) 
+            
                 
                 axios.post('http://localhost:8080/api/centreAdmins/declineRequest', {
                    
                         email: this.props.data[i].email,
                         declinedDescription: declineDescription
                    }).then( response => {
-                       alert("Successfully declined.")
+                    //    alert("Successfully declined.")
+                    this.props.handleUpdate(this.props.data[i].email);
                        this.setState({
-                        refreshPage: true
+                        refreshPage: true, 
+                        sending: false
                     })})
 
-                //JSON.stringify(this.props.data[i]) //glupav nacin ali radi :D
-                let evenNewerObj = JSON.parse(patientInfo)
-                console.log("patient info " + patientInfo)
-                
             }
 
             
@@ -141,20 +124,25 @@ class PatientRegistrationInformation extends Component {
                    <br/>
                    <br/>
 
-    
-                    {this.state.declined == false ? <div>
-                           <Button variant="outline-success" value = {this.props.data[i].insuranceNumber} onClick = {this.handleAccept}>Accept</Button> &nbsp;&nbsp;&nbsp;
-                           <Button variant="outline-danger" value = {this.props.data[i]} onClick = {this.handleDecline}>Decline</Button>
-                    </div> : 
-                    <div> 
-                        <textarea id = "declinationDescription" onChange = {this.updateTextArea}> Reasons for declining: </textarea>
-                        <br/>
-                        <br/>
-                        <Button variant="outline-secondary" onClick = {this.goBack}>Back</Button> &nbsp;&nbsp;&nbsp;
-                        <Button variant="outline-primary" value = {this.props.data[i].insuranceNumber} onClick = {this.sendDecline}>Send</Button>
-                    </div>
-                    }
-                   </Tab.Pane>)
+                {this.state.sending  ? <div> <p class="text-info">Loading... </p> </div> : <Fragment> 
+                    
+
+                {(!this.state.declined) ? <div>
+
+                        <Button variant="outline-success" value = {this.props.data[i].insuranceNumber} onClick = {this.handleAccept}>Accept</Button> &nbsp;&nbsp;&nbsp;
+                        <Button variant="outline-danger" value = {this.props.data[i]} onClick = {this.handleDecline}>Decline</Button>
+                </div> : 
+                <div> 
+                    <textarea id = "declinationDescription" onChange = {this.updateTextArea}> Reasons for declining: </textarea>
+                    <br/>
+                    <br/>
+                    <Button variant="outline-secondary" onClick = {this.goBack}>Back</Button> &nbsp;&nbsp;&nbsp;
+                    <Button variant="outline-primary" value = {this.props.data[i].insuranceNumber} onClick = {this.sendDecline}>Send</Button>
+                </div>
+                }
+
+            </Fragment>}
+                </Tab.Pane>)
         }
 
         return items
@@ -181,10 +169,8 @@ class PatientRegistrationInformation extends Component {
     }
 
     render() {
+
         var size = Object.keys(this.props.data).length;
-        // if(this.state.refreshPage) {
-        //     return (<Redirect to='/admin/requests'></Redirect>)
-        // }
         return(
             <div>
                  {size > 0 ? this.generatePage() : <div> <h2> No requests at the moment :) </h2></div>}

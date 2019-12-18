@@ -34,7 +34,7 @@ class PatientProfile extends Component {
 							</NavLink>
 						</div>
 						<div>
-							<NavLink to = '/clinic+administrator/profile/change'>
+							<NavLink to = '/patient/password/change'>
 								Change password
 							</NavLink>
 						</div>

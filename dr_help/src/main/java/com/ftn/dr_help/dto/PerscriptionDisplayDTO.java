@@ -4,22 +4,26 @@ import java.util.List;
 
 public class PerscriptionDisplayDTO {
 
+	private String Diagnosis;
+	private String Description;
+	private String Advice;
+	private List<MedicationDisplayDTO> medicationList;
+	private Long clinicId;
+	
 	public PerscriptionDisplayDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public PerscriptionDisplayDTO(String diagnosis, String description, String advice,
-			List<MedicationDisplayDTO> medicationList) {
+			List<MedicationDisplayDTO> medicationList, Long clinicId) {
 		super();
 		Diagnosis = diagnosis;
 		Description = description;
 		Advice = advice;
 		this.medicationList = medicationList;
+		this.clinicId = clinicId;
 	}
-	private String Diagnosis;
-	private String Description;
-	private String Advice;
-	private List<MedicationDisplayDTO> medicationList;
+	
 	public String getDiagnosis() {
 		return Diagnosis;
 	}
@@ -43,6 +47,12 @@ public class PerscriptionDisplayDTO {
 	}
 	public void setMedicationList(List<MedicationDisplayDTO> medicationList) {
 		this.medicationList = medicationList;
+	}
+	public Long getClinicId() {
+		return clinicId;
+	}
+	public void setClinicId(Long clinicId) {
+		this.clinicId = clinicId;
 	}
 	
 }
