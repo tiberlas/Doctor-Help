@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
-
-import com.ftn.dr_help.dto.ClinicRoomListDTO;
-import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
-
+import com.ftn.dr_help.dto.ClinicListingDTO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
+import com.ftn.dr_help.service.ProcedureTypeService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -36,6 +34,9 @@ public class ClinicController {
 	
 	@Autowired
 	private CurrentUser currentUser;
+	
+	@Autowired
+	private ProcedureTypeService procedureTypeService;
 	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
@@ -103,7 +104,7 @@ public class ClinicController {
 	// In later sprints I intend to expand this one with filters
 	@GetMapping (value = "/listing")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity <List<ClinicDTO>> getClinicListing () {
+	public ResponseEntity <ClinicListingDTO> getClinicListing () {
 		System.out.println("Patient listing says hi");
 		
 		List<ClinicPOJO> clinics = clinicService.findAll();
@@ -113,7 +114,23 @@ public class ClinicController {
 			clinicDTO.add(new ClinicDTO(c));
 		} 
 		
-		return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
+		List<String> procedureTypes = procedureTypeService.getProcedureTypes();
+
+		System.out.println("***********************************************************************");
+		System.out.println("Izlistavam klinike");
+		if (procedureTypes == null) {
+			System.out.println("Nisam nista ucitao :P");
+		} else {
+			for (String s : procedureTypes) {
+				System.out.println(s);
+			}
+		}
+		System.out.println("Sada sve spojeno");
+		System.out.println("***********************************************************************");
+		
+		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes);
+		
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
 }

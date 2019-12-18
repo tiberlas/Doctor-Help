@@ -6,7 +6,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-//import Dropdown from 'react-dropdown'; 
+import { Dropdown } from 'react-bootstrap';
+import DropdownMenu from 'react-bootstrap/DropdownMenu';
+import DropdownToggle from 'react-bootstrap/DropdownToggle';
+import DropdownItem from 'react-bootstrap/DropdownItem';
+
 
 class ClinicListing extends Component {
 
@@ -18,7 +22,7 @@ class ClinicListing extends Component {
 		axios.get ('http://localhost:8080/api/clinics/listing')
 		.then (response => {
 			this.setState ({
-				clinics: response.data
+				clinics: response.data.clinicList
 			})
 		})
 	}
@@ -39,6 +43,30 @@ class ClinicListing extends Component {
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
+				
+  
+
+
+
+               <Dropdown>
+
+					<DropdownToggle>
+						Glavni tekst
+					</DropdownToggle>
+
+				   <DropdownMenu>
+					   <DropdownItem>
+						   Tekst 1
+					   </DropdownItem>
+					   <DropdownItem>
+						   Tekst 2
+					   </DropdownItem>
+					   <DropdownItem>
+						   Tekst 3
+					   </DropdownItem>
+				   </DropdownMenu>
+			   </Dropdown>
+
 				<Table>
 					<TableHead>
 						<TableRow>
