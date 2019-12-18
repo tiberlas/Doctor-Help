@@ -1,8 +1,9 @@
 package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,7 +37,7 @@ public class ProceduresTypePOJO implements Serializable{
 	private Long id;
 	
 	@NotBlank
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 	
 	@Column(name = "price", nullable = false)
@@ -43,15 +46,14 @@ public class ProceduresTypePOJO implements Serializable{
 	@Column(name = "isOperation", nullable = false)
 	private boolean isOperation;
 	
-	//@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIME)
 	@Column(name = "duration", nullable = false)
-	private LocalTime duration;
+	private  Date duration;
 	
-	// Ovo je sranje
-	// Treba ga obrisati
 	@OneToOne(fetch = FetchType.LAZY)
 	private AppointmentPOJO appointment;
 	
+	//treba razmisliti
 	@OneToMany(mappedBy = "procedurasTypes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<RoomPOJO> roomList;
 	
@@ -67,7 +69,7 @@ public class ProceduresTypePOJO implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public ProceduresTypePOJO(Long id, @NotBlank String name, double price, boolean isOperation, LocalTime duration,
+	public ProceduresTypePOJO(Long id, @NotBlank String name, double price, boolean isOperation, Date duration,
 			AppointmentPOJO appointment, ClinicPOJO clinic) {
 		super();
 		this.id = id;
@@ -104,10 +106,10 @@ public class ProceduresTypePOJO implements Serializable{
 	public void setOperation(boolean isOperation) {
 		this.isOperation = isOperation;
 	}
-	public LocalTime getDuration() {
+	public Date getDuration() {
 		return duration;
 	}
-	public void setDuration(LocalTime duration) {
+	public void setDuration(Date duration) {
 		this.duration = duration;
 	}
 	public ClinicPOJO getClinic() {

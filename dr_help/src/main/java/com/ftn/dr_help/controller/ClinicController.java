@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
 
-import com.ftn.dr_help.dto.ClinicRoomListDTO;
-import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
-
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
 
