@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import ChangeProcedureTypeModal from './ChangeProcedureTypeModal';
 import Button from 'react-bootstrap/Button'
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import ModalMessage from '../ModalMessage';
 import Checkbox from '@material-ui/core/Checkbox';
+import TableCell from '@material-ui/core/TableCell';
+
 
 class ProcedureTypeItem extends Component {
     state = {
@@ -51,13 +53,13 @@ class ProcedureTypeItem extends Component {
     render() { 
 
         return ( 
-            <tr>
-                <td>{this.state.name}</td>
-                <td>{this.state.duration}</td>
-                <td><Checkbox checked={this.state.operation} name='operation' value='operation' disabled/></td>
-                <td>{this.state.price}</td>
-                <td><button onClick={this.onDelite} class='btn btn-danger'>delete</button></td>
-                <td>
+            <Fragment>
+                <TableCell class="text-white">{this.state.name}</TableCell>
+                <TableCell class="text-white">{this.state.duration}</TableCell>
+                <TableCell class="text-white"><Checkbox checked={this.state.operation} name='operation' value='operation' disabled/></TableCell>
+                <TableCell class="text-white">{this.state.price}</TableCell>
+                <TableCell class="text-white"><button onClick={this.onDelite} class='btn btn-danger'>delete</button></TableCell>
+                <TableCell>
                     <ButtonToolbar>
                         <Button variant="primary" onClick={this.setModalShow}>
                             change
@@ -80,9 +82,8 @@ class ProcedureTypeItem extends Component {
                         message={this.state.message} 
                         show={this.state.messageShow}
                         onHide={this.setMessageHide}/>
-                </td>
-
-            </tr>
+                </TableCell>
+            </Fragment>
          );
     }
 }

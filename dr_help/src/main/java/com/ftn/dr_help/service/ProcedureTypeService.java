@@ -190,15 +190,12 @@ public class ProcedureTypeService {
 		}
 		
 		List<ProcedureTypeDTO> ret = new ArrayList<ProcedureTypeDTO>();
+		String search = "";
 		for(ProcedureTypeDTO item : finded) {
-			if(filter.getString().contains(item.getName())) {
-				ret.add(item);
-				continue;
-			} else if(filter.getString().contains( String.valueOf(item.getPrice()) )) {
-				ret.add(item);
-				continue;
-			} else if(filter.getString().contains( String.valueOf(item.getDuration()) )) {
-				ret.add(item);
+			search = item.getName().toLowerCase() + String.valueOf(item.getPrice()) + String.valueOf(item.getDuration());
+			System.out.println(search);
+			if(search.contains(filter.getString().toLowerCase())) {
+				ret.add(item);			
 			}
 		}
 		
