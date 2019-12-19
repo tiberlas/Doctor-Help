@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.ProcedureTypeDTO;
+import com.ftn.dr_help.dto.ProcedureTypeFilterDTO;
+import com.ftn.dr_help.model.enums.FilterOperationEnum;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
@@ -163,7 +165,6 @@ public class ProcedureTypeService {
 			}
 		}
 		
-		System.out.println("duration is" + procedure.getDuration());
 		finded.setPrice(procedure.getPrice());
 		finded.setName(procedure.getName());
 		finded.setDuration(procedure.getDuration());
@@ -173,5 +174,56 @@ public class ProcedureTypeService {
 		repository.save(finded);
 		
 		return new ProcedureTypeDTO(finded);
+	}
+	
+	public List<ProcedureTypeDTO> filter (ProcedureTypeFilterDTO filter, String email) {
+		
+		List<ProcedureTypeDTO> finded = getAll(email);
+		if(filter.getString().isEmpty()) {
+			if(filter.getOperation() == FilterOperationEnum.NOT_DEFINED) {
+				return finded;				
+			} else if(filter.getOperation() == FilterOperationEnum.OPERATION) {
+				return operationsOrNot(finded, true);
+			} else {
+				return operationsOrNot(finded, false);
+			}
+		}
+		
+		List<ProcedureTypeDTO> ret = new ArrayList<ProcedureTypeDTO>();
+		for(ProcedureTypeDTO item : finded) {
+			if(filter.getString().contains(item.getName())) {
+				ret.add(item);
+				continue;
+			} else if(filter.getString().contains( String.valueOf(item.getPrice()) )) {
+				ret.add(item);
+				continue;
+			} else if(filter.getString().contains( String.valueOf(item.getDuration()) )) {
+				ret.add(item);
+			}
+		}
+		
+		if(ret.isEmpty()) {
+			return ret;
+		}
+		
+		if(filter.getOperation() == FilterOperationEnum.NOT_DEFINED) {
+			return ret;				
+		} else if(filter.getOperation() == FilterOperationEnum.OPERATION) {
+			return operationsOrNot(ret, true);
+		} else {
+			return operationsOrNot(ret, false);
+		}
+	}
+	
+	private List<ProcedureTypeDTO> operationsOrNot(List<ProcedureTypeDTO> procedures, boolean isOperation) {
+		List<ProcedureTypeDTO> ret = new ArrayList<>();
+		
+		for(ProcedureTypeDTO procedure : procedures) {
+			if(procedure.isOperation() == isOperation) {
+				ret.add(procedure);
+			}
+		}
+		
+		return ret;
 	}
 }

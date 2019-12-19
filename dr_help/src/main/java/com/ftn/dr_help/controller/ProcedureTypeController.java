@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ProcedureTypeDTO;
+import com.ftn.dr_help.dto.ProcedureTypeFilterDTO;
 import com.ftn.dr_help.service.ProcedureTypeService;
 
 @RestController
@@ -89,4 +90,18 @@ public class ProcedureTypeController {
 		return new ResponseEntity<ProcedureTypeDTO>(ret, HttpStatus.CREATED);
 	}
 
+	@PostMapping(value = "/filter", consumes = "application/json", produces = "application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<ProcedureTypeDTO>> filter(@RequestBody ProcedureTypeFilterDTO filter) {
+		if(filter == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		String email = currentUser.getEmail();
+		List<ProcedureTypeDTO> ret = procedureTypeService.filter(filter, email);
+		
+		return new ResponseEntity<>(ret, HttpStatus.OK);
+	}
+	
+	
 }
