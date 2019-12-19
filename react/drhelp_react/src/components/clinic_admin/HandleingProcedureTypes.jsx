@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import ProcedureTypeItem from '../procedureType/ProcedureTypeItem';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import axios from 'axios';

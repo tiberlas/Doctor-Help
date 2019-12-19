@@ -47,22 +47,12 @@ public class ProcedureTypeService {
         return ret;
     }
 
-    public ProcedureTypeDTO getOne(Long id, String email) {
-    	ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
-    	if( admin == null) {
-    		return null;
-    	}
-    	
-    	ClinicPOJO clinic = admin.getClinic();
-    	if(clinic == null) {
+    public ProcedureTypeDTO getOne(Long id) {
+    	if( id == null) {
     		return null;
     	}
     	
         ProceduresTypePOJO finded = repository.findById(id).orElse(null);
-
-        if(finded == null || !finded.getClinic().equals(clinic) || finded.isDeleted()==true) {
-            return null;
-        }
 
         ProcedureTypeDTO ret = new ProcedureTypeDTO(finded);
         return ret;

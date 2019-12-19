@@ -34,7 +34,7 @@ public class AppointmentPOJO implements Serializable{
 	@Column (name = "date", nullable = false)
 	private Calendar date;
 
-	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	private DoctorPOJO doctor;
 	
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -47,17 +47,20 @@ public class AppointmentPOJO implements Serializable{
 	@Column (name = "status", nullable = false)
 	private AppointmentStateEnum status;
 	
-	@Column (name = "discount", nullable = true)
+	@Column (name = "discount")
 	private double discount;
 	
-	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	private ProceduresTypePOJO procedureType;
 	
-	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
 	private RoomPOJO room;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private ExaminationReportPOJO examinationReport;
+	
+	@Column (nullable = false)
+	private boolean deleted;
 	
 	public AppointmentPOJO() {
 		super();
@@ -116,6 +119,18 @@ public class AppointmentPOJO implements Serializable{
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public ExaminationReportPOJO getExaminationReport() {
+		return examinationReport;
+	}
+	public void setExaminationReport(ExaminationReportPOJO examinationReport) {
+		this.examinationReport = examinationReport;
+	}
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	

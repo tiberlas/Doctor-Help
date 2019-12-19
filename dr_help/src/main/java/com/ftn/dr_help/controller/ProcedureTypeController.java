@@ -41,13 +41,12 @@ public class ProcedureTypeController {
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
+    //every one can access this
     @GetMapping(value = "/id={id}")
-    @PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
     public ResponseEntity<ProcedureTypeDTO> getOne(@PathVariable("id") Long id) {
-    	String email = currentUser.getEmail();
     	ProcedureTypeDTO ret = null;
 
-        ret = procedureTypeService.getOne(id, email);
+        ret = procedureTypeService.getOne(id);
 
         if(ret == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

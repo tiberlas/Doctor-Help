@@ -72,10 +72,10 @@ insert into nurse(first_name, last_name, password, status, email, phone_number, 
 	);
 	
 --password: doca 	
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, deleted) 
 	values(
 		'Pera', 'Perić', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'pera@gmail', '555555', 
-		'Serbia', 'Novi Sad', 'Pap Pavla 3', '2003-2-1'::timestamp, 1
+		'Serbia', 'Novi Sad', 'Pap Pavla 3', '2003-2-1'::timestamp, 1, false
 	);
 
 	
@@ -118,12 +118,12 @@ values ('Cats', 1);
 insert into allergypojo (allergy, health_record_id)
 values ('Pollen', 2);
 
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
-values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, null);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
-values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, null);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
-values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, null);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
 
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (3, 1, 1);
