@@ -102,10 +102,7 @@ class Patient extends Component {
                             <Route path="/patient/perscription">
                                 <PerscriptionOverview />
                             </Route>
-                            <Route path="/clinic">
-                                <ViewClinic />
-                            </Route>
-                            <Route path="/{id}/doctors/{filter}">
+                            <Route path="/clinic/">
                                 <DoctorListing />
                             </Route>
                         </Switch>

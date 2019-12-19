@@ -34,7 +34,7 @@ class ClinicListing extends Component {
 	generateClinicRows(row) {
 		let profileUrl;
 		if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
-			profileUrl = 'patients/' + row.id + '/doctors/' + this.state.activeFilter;
+			profileUrl = '/clinic/' + row.id + '/' + this.state.activeFilter;
 		} else {
 			profileUrl = '/clinic/' + row.id;
 		}
