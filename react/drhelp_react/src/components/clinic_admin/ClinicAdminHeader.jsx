@@ -76,6 +76,27 @@ class ClinicAdminHeader extends Component {
                 </Nav>
             </Collapse>
 
+            <NavbarToggler onClick={this.toggle}/>
+            <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
+                <Nav className="mr-auto" navbar pullRight>
+                <UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                    Procedure type
+                    </DropdownToggle>
+                    <DropdownMenu className='dropdown-menu'>
+                    <LinkContainer exact to = '/clinic-administrator/procedure-types'>
+                    <DropdownItem >List</DropdownItem>
+                    </LinkContainer>
+                    
+                    <LinkContainer exact to='/clinic-administrator/procedure-types/add'>
+                    <DropdownItem >Add</DropdownItem>
+                    </LinkContainer>
+
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+                </Nav>
+            </Collapse>
+
             <Nav.Link>
                     <Link exact to='/clinic-administrator/medical-staff' class="nav-link">Medical staff</Link>
             </Nav.Link>

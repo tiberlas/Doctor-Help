@@ -79,10 +79,10 @@ insert into doctors(first_name, last_name, password, status, email, phone_number
 	);
 
 	
-insert into procedures_type(name, price, is_operation, duration, clinic_id) 
-	values('psiho analiza', 255, false, '02:00:00'::time, 1);
-insert into procedures_type(name, price, is_operation, duration, clinic_id) 
-	values('opsti pregled', 25, false, '00:30:00'::time, 1);
+insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
+	values('psiho analiza', 255, false, '02:00:00'::time, 1, false);
+insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
+	values('opsti pregled', 25, false, '00:30:00'::time, 1, false);
 
 	
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 

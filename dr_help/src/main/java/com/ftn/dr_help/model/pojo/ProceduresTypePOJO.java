@@ -2,7 +2,6 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +51,9 @@ public class ProceduresTypePOJO implements Serializable{
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private AppointmentPOJO appointment;
+	
+	@Column(name="deleted", nullable= false)
+	private boolean deleted;
 	
 	//treba razmisliti
 	@OneToMany(mappedBy = "procedurasTypes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -158,8 +160,14 @@ public class ProceduresTypePOJO implements Serializable{
 	public void setDoctors(List<DoctorPOJO> doctors) {
 		this.doctors = doctors;
 	}
-	
-	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 	
 
 }

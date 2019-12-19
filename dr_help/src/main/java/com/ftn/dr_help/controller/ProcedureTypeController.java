@@ -1,18 +1,20 @@
 package com.ftn.dr_help.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ProcedureTypeDTO;
@@ -30,17 +32,21 @@ public class ProcedureTypeController {
     private CurrentUser currentUser;
     
     @GetMapping(value = "/all")
+    @PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
     public ResponseEntity<List<ProcedureTypeDTO>> getAll() {
-        List<ProcedureTypeDTO> ret = procedureTypeService.getAll();
+    	String email = currentUser.getEmail();
+        List<ProcedureTypeDTO> ret = procedureTypeService.getAll(email);
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
     @GetMapping(value = "/id={id}")
+    @PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
     public ResponseEntity<ProcedureTypeDTO> getOne(@PathVariable("id") Long id) {
-        ProcedureTypeDTO ret = null;
+    	String email = currentUser.getEmail();
+    	ProcedureTypeDTO ret = null;
 
-        ret = procedureTypeService.getOne(id);
+        ret = procedureTypeService.getOne(id, email);
 
         if(ret == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -53,13 +59,34 @@ public class ProcedureTypeController {
     public ResponseEntity<ProcedureTypeDTO> save(@RequestBody ProcedureTypeDTO newProcedureType) {
         String email = currentUser.getEmail();
 		
-		ProcedureTypeDTO saved = procedureTypeService.saveNew(newProcedureType, email);
+		ProcedureTypeDTO saved = procedureTypeService.save(newProcedureType, email);
 		
 		if(saved == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    @DeleteMapping(value="/delete/id={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> deleteProcedure(@PathVariable("id") Long id) {
+		String email = currentUser.getEmail();
+		procedureTypeService.delete(id, email);
+		
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/change", consumes = "application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<ProcedureTypeDTO> changeRoom(@RequestBody ProcedureTypeDTO procedure) {
+		String email = currentUser.getEmail();
+		ProcedureTypeDTO ret = procedureTypeService.change(procedure, email);
+		
+		if(ret == null) {
+			return new ResponseEntity<ProcedureTypeDTO>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		return new ResponseEntity<ProcedureTypeDTO>(ret, HttpStatus.CREATED);
+	}
 
 }
