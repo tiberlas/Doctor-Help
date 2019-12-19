@@ -60,10 +60,6 @@ class PatientList extends Component {
     }
 
   
-
-
-    
-
     generatePatientRows(row) {
         let profileUrl = '/profile/' + row.insuranceNumber
         return (

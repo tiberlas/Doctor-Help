@@ -15,10 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
@@ -67,7 +69,7 @@ public class NursePOJO implements Serializable{
 	@Column(name = "birthday", nullable = false)
 	private Calendar birthday;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonManagedReference
 	private ClinicPOJO clinic;
 	
@@ -76,6 +78,10 @@ public class NursePOJO implements Serializable{
 	
 	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<AppointmentPOJO> appointments;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private PerscriptionPOJO perscription;
 	
 	public NursePOJO() {
 		super();
@@ -171,6 +177,16 @@ public class NursePOJO implements Serializable{
 	public void setAppointments(List<AppointmentPOJO> appointments) {
 		this.appointments = appointments;
 	}
+
+	public PerscriptionPOJO getPerscription() {
+		return perscription;
+	}
+
+	public void setPerscription(PerscriptionPOJO perscription) {
+		this.perscription = perscription;
+	}
+
+	
 
 
 	

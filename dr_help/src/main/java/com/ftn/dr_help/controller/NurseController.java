@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,10 +22,13 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientFilterDTO;
+import com.ftn.dr_help.dto.SignOffDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.service.NurseService;
 import com.ftn.dr_help.service.PatientService;
+import com.ftn.dr_help.service.PerscriptionService;
 
 @RestController
 @RequestMapping(value = "api/nurses")
@@ -39,6 +43,9 @@ public class NurseController {
 	
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private PerscriptionService perscriptionService;
 	
 	
 	@GetMapping(value = "/profile")
@@ -122,5 +129,32 @@ public class NurseController {
 		return new ResponseEntity<>(patientDTO, HttpStatus.OK);
 		
 	}
+	
+	
+	@GetMapping(value = "/pendingPerscriptions")
+	public ResponseEntity<List<SignOffDTO>> listPendingPerscriptions() {
+		List<SignOffDTO> dtoList = perscriptionService.findAllPendingPerscriptions();
+		
+		return new ResponseEntity<>(dtoList, HttpStatus.OK);
+		
+	}
+	
+	@PutMapping(value = "/signOff/{nurseId}/{perscriptionId}")
+	@PreAuthorize("hasAuthority('NURSE')")
+	public ResponseEntity<PerscriptionPOJO> 
+	putAdminProfile (@PathVariable("nurseId") Long nurseId, @PathVariable("perscriptionId") Long perscriptionId) {
+		System.out.println("NURSE ID: "+nurseId + " PERSCR" + perscriptionId);
+		
+		PerscriptionPOJO updated = perscriptionService.signPerscription(nurseId, perscriptionId);
+		
+		return new ResponseEntity<>(updated, HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }

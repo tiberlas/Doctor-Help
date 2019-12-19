@@ -120,7 +120,7 @@ values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, null);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
 values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, null);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
-values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, null);
+values ('2013-11-24', 1, 'DONE', 1, null, 1, 2, 1, null);
 
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (3, 1, 1);
@@ -156,12 +156,12 @@ values ('What you get from too much reddit', 'Brain Cancer');
 insert into diagnosispojo (description, diagnosis)
 values ('Dubstep.', 'Ear Cancer');
 
-insert into therapypojo (advice, perscription_id)
-values ('Go out more', null);
-insert into therapypojo (advice, perscription_id)
-values ('Git gud, n00b', null);
-insert into therapypojo (advice, perscription_id)
-values ('Drugs are bad, mkay?', null);
+insert into therapypojo (advice)
+values ('Go out more');
+insert into therapypojo (advice)
+values ('Git gud, n00b');
+insert into therapypojo (advice)
+values ('Drugs are bad, mkay?');
 
 insert into medicationpojo (med_description, medication_name)
 values ('It makes you feel good', 'Cocain');
@@ -176,6 +176,16 @@ insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse
 values (2, 2, 1, 2);
 insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
 values (3, 2, 1, null);
+
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (2, 1, null, null);
+
+
+
+insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
+values (3, 2, null, 2);
+
+
 
 update examination_reportpojo
 set perscription_id = 1
@@ -193,4 +203,17 @@ insert into medicationpojo_perscription (medication_list_id, perscription_id)
 values (2, 1);
 insert into medicationpojo_perscription (medication_list_id, perscription_id)
 values (3, 1);
+
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (1, 4);
+
+
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (2, 5);
+
+
+insert into medicationpojo_perscription (medication_list_id, perscription_id)
+values (1, 5);
+
+
 

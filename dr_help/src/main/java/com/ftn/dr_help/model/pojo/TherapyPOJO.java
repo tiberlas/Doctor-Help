@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class TherapyPOJO implements Serializable {
 
@@ -26,6 +28,7 @@ public class TherapyPOJO implements Serializable {
 	private String advice;
 	
 	@OneToOne (fetch = FetchType.LAZY)
+	@JsonBackReference
 	private PerscriptionPOJO perscription;
 	
 	public Long getId() {
@@ -41,12 +44,12 @@ public class TherapyPOJO implements Serializable {
 	public void setAdvice(String advice) {
 		this.advice = advice;
 	}
-	public PerscriptionPOJO getPerscription() {
-		return perscription;
-	}
-	public void setPerscription(PerscriptionPOJO perscription) {
-		this.perscription = perscription;
-	}
+//	public PerscriptionPOJO getPerscription() {
+//		return perscription;
+//	}
+//	public void setPerscription(PerscriptionPOJO perscription) {
+//		this.perscription = perscription;
+//	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
