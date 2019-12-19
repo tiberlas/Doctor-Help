@@ -19,15 +19,15 @@ class ChangeProcedureTypeModal extends Component {
     handleValidation = () => {
         this.setState({errorName: false, errorPrice: false, errorDuration: false})
 
-        if(this.state.name == undefined || this.state.name == null || !this.state.name.trim() || this.state.name.length < 3) {
+        if(this.state.name === undefined || this.state.name === null || !this.state.name.trim() || this.state.name.length < 3) {
             this.setState({errorName: true});
         }
 
-        if(this.state.price == undefined || this.state.price == null || this.state.price <1) {
-            this.setState({errorLast: true});
+        if(this.state.price === undefined || this.state.price === null || this.state.price === "" || this.state.price < 1) {
+            this.setState({errorPrice: true});
         }
 
-        if(this.state.duration == undefined || this.state.duration == null) {
+        if(this.state.duration === undefined || this.state.duration === null || this.state.duration === "") {
             this.setState({errorDuration: true});
         }
     }
@@ -87,7 +87,7 @@ class ChangeProcedureTypeModal extends Component {
 
                         <div className={`form-group ${this.state.errorPrice? 'has-danger': ''}`}>
                             <label class="form-control-label" for="price">price:</label>
-                            <input type='price' name='price' id='price' className={`form-control ${this.state.errorPrice? 'is-invalid': 'is-valid'}`} value={this.state.price} onChange={this.handlerChange} />
+                            <input type='number' min="1" name='price' id='price' className={`form-control ${this.state.errorPrice? 'is-invalid': 'is-valid'}`} value={this.state.price} onChange={this.handlerChange} />
                         </div>
 
                         <div className={`form-group ${this.state.errorDuration? 'has-danger': ''}`}>
@@ -96,7 +96,7 @@ class ChangeProcedureTypeModal extends Component {
                         </div>
 
                         <div>
-                            <label class="form-control-label" for="operation">is ooperation:</label>
+                            <label class="form-control-label" for="operation">is operation:</label>
                             <Checkbox checked={this.state.operation} name='operation' value='operation' onChange={this.handleChecked} />
                         </div>
 
