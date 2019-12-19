@@ -103,17 +103,25 @@ public class ClinicController {
 	// Displaying a list of clinics to a patient using this method instead of get all,
 	// Even though their code is identical at this point;
 	// In later sprints I intend to expand this one with filters
-	@GetMapping (value = "/listing")
+	@GetMapping (value = "/listing/{filter}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity <ClinicListingDTO> getClinicListing () {
+	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter) {
 		System.out.println("Patient listing says hi");
 		
-		List<ClinicPOJO> clinics = clinicService.findAll();
-
 		List<ClinicPreviewDTO> clinicDTO = new ArrayList<>();
-		for (ClinicPOJO c : clinics) {
-			clinicDTO.add(new ClinicPreviewDTO(c));
-		} 
+		
+		if (filter.equals("unfiltered")) {
+			List<ClinicPOJO> clinics = clinicService.findAll();
+			for (ClinicPOJO c : clinics) {
+				clinicDTO.add(new ClinicPreviewDTO(c));
+			} 
+		} else {
+			filter = filter.replace('_', ' ');
+			List<ClinicPOJO> clinics = clinicService.filterByProcedureType (filter);
+			for (ClinicPOJO c : clinics) {
+				clinicDTO.add(new ClinicPreviewDTO(c));
+			} 
+		}
 		
 		List<String> procedureTypes = procedureTypeService.getProcedureTypes();
 
@@ -127,11 +135,13 @@ public class ClinicController {
 			}
 		}
 		System.out.println("Sada sve spojeno");
+		System.out.println("Filter: {" + filter + "}");
 		System.out.println("***********************************************************************");
 		
 		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes);
 		
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
+	//@PathVariable("id") Long id
 	
 }

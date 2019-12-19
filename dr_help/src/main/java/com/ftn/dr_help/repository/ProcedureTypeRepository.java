@@ -10,10 +10,7 @@ import com.ftn.dr_help.model.pojo.PatientPOJO;
 
 @Repository
 public interface ProcedureTypeRepository extends JpaRepository<PatientPOJO, Long>{
-	
-//	@Query (value = "SELECT DISTINCT name FROM procedures_type", nativeQuery=true)
-//	public List<String> getProcedureTypes ();
 
-	@Query (value = "select distinct pt.name from procedures_type pt inner join doctors d on pt.id = d.procedure_type_id", nativeQuery=true)
+	@Query (value = "select distinct pt.name from procedures_type pt inner join doctors d on pt.id = d.procedure_type_id", nativeQuery = true)
 	public List<String> getProcedureTypes ();
 }
