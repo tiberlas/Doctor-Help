@@ -76,14 +76,14 @@ insert into procedures_type(name, price, is_operation, duration, clinic_id)
 values('psiho analiza', 255, false, '02:00:00'::time, 1);
 insert into procedures_type(name, price, is_operation, duration, clinic_id) 
 values('opsti pregled', 25, false, '00:30:00'::time, 1);
-insert into procedures_type(duration, is_operation, "name", price, appointment_id, clinic_id) 
-values ('01:00:00', false, 'Pregled opste prakse', 330, null, 3);
-insert into procedures_type(duration, is_operation, "name", price, appointment_id, clinic_id) 
-values ('01:00:00', false, 'Pregled opste prakse', 350, null, 2);
-insert into procedures_type(duration, is_operation, "name", price, appointment_id, clinic_id) 
-values ('01:15:00', false, 'Pregled opste prakse', 250, null, 1);
-insert into procedures_type(duration, is_operation, "name", price, appointment_id, clinic_id) 
-values ('02:00:00', false, 'Pregled dermatologa', 630, null, 2);
+insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
+values ('01:00:00', false, 'Pregled opste prakse', 330, 3);
+insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
+values ('01:00:00', false, 'Pregled opste prakse', 350, 2);
+insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
+values ('01:15:00', false, 'Pregled opste prakse', 250, 1);
+insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
+values ('02:00:00', false, 'Pregled dermatologa', 630, 2);
 
 	
 --password: doca 	

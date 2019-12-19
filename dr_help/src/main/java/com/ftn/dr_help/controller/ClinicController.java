@@ -119,29 +119,19 @@ public class ClinicController {
 			filter = filter.replace('_', ' ');
 			List<ClinicPOJO> clinics = clinicService.filterByProcedureType (filter);
 			for (ClinicPOJO c : clinics) {
-				clinicDTO.add(new ClinicPreviewDTO(c));
+				ClinicPreviewDTO newPreview = new ClinicPreviewDTO(c);
+				newPreview.setPrice(Double.toString(procedureTypeService.getPrice(c.getId(), filter)) + " rsd");
+				clinicDTO.add(newPreview);
 			} 
 		}
 		
 		List<String> procedureTypes = procedureTypeService.getProcedureTypes();
-
-		System.out.println("***********************************************************************");
-		System.out.println("Izlistavam klinike");
-		if (procedureTypes == null) {
-			System.out.println("Nisam nista ucitao :P");
-		} else {
-			for (String s : procedureTypes) {
-				System.out.println(s);
-			}
-		}
-		System.out.println("Sada sve spojeno");
-		System.out.println("Filter: {" + filter + "}");
-		System.out.println("***********************************************************************");
 		
 		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes);
 		
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
-	//@PathVariable("id") Long id
+	
+	
 	
 }

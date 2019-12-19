@@ -13,6 +13,7 @@ import PatientHistory from './PatientHistory.js';
 import PerscriptionOverview from './PerscriptionOverview.js';
 import ViewClinic from './ViewClinic.jsx';
 import PatientChangePassword from './PatientChangePassword.js';
+import DoctorListing from './DoctorListing.js';
 
 class Patient extends Component {
     
@@ -101,8 +102,11 @@ class Patient extends Component {
                             <Route path="/patient/perscription">
                                 <PerscriptionOverview />
                             </Route>
-                            <Route path="/clinic/">
+                            <Route path="/clinic">
                                 <ViewClinic />
+                            </Route>
+                            <Route path="/{id}/doctors/{filter}">
+                                <DoctorListing />
                             </Route>
                         </Switch>
                     </div>

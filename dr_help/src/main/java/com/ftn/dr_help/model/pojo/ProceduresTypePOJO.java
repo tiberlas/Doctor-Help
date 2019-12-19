@@ -47,10 +47,8 @@ public class ProceduresTypePOJO implements Serializable{
 	@Column(name = "duration", nullable = false)
 	private LocalTime duration;
 	
-	// Ovo je sranje
-	// Treba ga obrisati
-	@OneToOne(fetch = FetchType.LAZY)
-	private AppointmentPOJO appointment;
+	@OneToMany(mappedBy = "procedureType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AppointmentPOJO> appointment;
 	
 	@OneToMany(mappedBy = "procedurasTypes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<RoomPOJO> roomList;
@@ -68,7 +66,7 @@ public class ProceduresTypePOJO implements Serializable{
 	}
 	
 	public ProceduresTypePOJO(Long id, @NotBlank String name, double price, boolean isOperation, LocalTime duration,
-			AppointmentPOJO appointment, ClinicPOJO clinic) {
+			List<AppointmentPOJO> appointment, ClinicPOJO clinic) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -133,11 +131,11 @@ public class ProceduresTypePOJO implements Serializable{
 		this.roomList.remove(room);
 	}
 
-	public AppointmentPOJO getAppointment() {
+	public List<AppointmentPOJO> getAppointment() {
 		return appointment;
 	}
 
-	public void setAppointment(AppointmentPOJO appointment) {
+	public void setAppointment(List<AppointmentPOJO> appointment) {
 		this.appointment = appointment;
 	}
 

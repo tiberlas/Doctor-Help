@@ -18,4 +18,8 @@ public class ProcedureTypeService {
 		return procedureTypeRepository.getProcedureTypes();
 	}
 	
+	public double getPrice (Long clinicId, String procedureName) {
+		return procedureTypeRepository.getPrice(clinicId, procedureName);
+	}
+	
 }

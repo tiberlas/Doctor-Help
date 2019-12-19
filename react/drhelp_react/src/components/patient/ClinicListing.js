@@ -17,7 +17,7 @@ class ClinicListing extends Component {
 
 	state = {
 		clinics: [], 
-		isFiltered: false, 
+		activeFilter: '', 
 		appointmentTypes: []
 	}
 
@@ -32,8 +32,13 @@ class ClinicListing extends Component {
 	}
 
 	generateClinicRows(row) {
-        let profileUrl = '/clinic/' + row.id
-        return (
+		let profileUrl;
+		if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
+			profileUrl = 'patients/' + row.id + '/doctors/' + this.state.activeFilter;
+		} else {
+			profileUrl = '/clinic/' + row.id;
+		}
+		return (
             <Fragment>
                 <TableCell><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
 				<TableCell><p class='text-white'>{row.address}</p></TableCell>
@@ -47,19 +52,19 @@ class ClinicListing extends Component {
 
 	handleFilter (text) {
 		text = text.replace (' ', '_');
-		//alert ("Filter handle: " + text);
 		axios.get ('http://localhost:8080/api/clinics/listing/' + text)
 		.then (response => {
 			this.setState ({
 				clinics: response.data.clinicList, 
-				appointmentTypes: response.data.procedureType
+				appointmentTypes: response.data.procedureType, 
+				activeFilter: text
 			})
+			if (this.state.activeFilter === 'unfiltered') {
+				this.setState ({
+					activeFilter: ''
+				})
+			}
 		})
-		var dd = document.getElementById ('dropdown_id') ;
-		//alert (dd);
-		//dd.render();
-		//dd.closest();
-		//dd.append(<div><p>PROBA</p></div>);
 	}
 
 	render () {
@@ -69,7 +74,7 @@ class ClinicListing extends Component {
                 <div class='col-md-10'>
 					<Dropdown id = "dropdown_id">
 							<DropdownToggle id="dropdown-basic">
-								Glavni tekst
+								Appointment types
 							</DropdownToggle>
 							<DropdownMenu>
 								<MenuItem onClick={() => this.handleFilter ('unfiltered')}>-</MenuItem>

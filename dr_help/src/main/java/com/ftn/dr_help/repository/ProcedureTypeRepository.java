@@ -13,4 +13,8 @@ public interface ProcedureTypeRepository extends JpaRepository<PatientPOJO, Long
 
 	@Query (value = "select distinct pt.name from procedures_type pt inner join doctors d on pt.id = d.procedure_type_id", nativeQuery = true)
 	public List<String> getProcedureTypes ();
+	
+	@Query (value = "select price from procedures_type pt where clinic_id = ?1 and name = ?2", nativeQuery = true)
+	public double getPrice (Long clinicId, String procedureName);
+	
 }
