@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicListingDTO;
+import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
 import com.ftn.dr_help.service.ProcedureTypeService;
@@ -109,9 +110,9 @@ public class ClinicController {
 		
 		List<ClinicPOJO> clinics = clinicService.findAll();
 
-		List<ClinicDTO> clinicDTO = new ArrayList<>();
+		List<ClinicPreviewDTO> clinicDTO = new ArrayList<>();
 		for (ClinicPOJO c : clinics) {
-			clinicDTO.add(new ClinicDTO(c));
+			clinicDTO.add(new ClinicPreviewDTO(c));
 		} 
 		
 		List<String> procedureTypes = procedureTypeService.getProcedureTypes();

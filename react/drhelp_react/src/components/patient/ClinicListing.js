@@ -10,19 +10,23 @@ import { Dropdown } from 'react-bootstrap';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownItem from 'react-bootstrap/DropdownItem';
+import { MenuItem, Menu } from '@material-ui/core';
 
 
 class ClinicListing extends Component {
 
 	state = {
-		clinics: []
+		clinics: [], 
+		isFiltered: false, 
+		appointmentTypes: []
 	}
 
 	componentDidMount () {
 		axios.get ('http://localhost:8080/api/clinics/listing')
 		.then (response => {
 			this.setState ({
-				clinics: response.data.clinicList
+				clinics: response.data.clinicList, 
+				appointmentTypes: response.data.procedureType
 			})
 		})
 	}
@@ -33,7 +37,10 @@ class ClinicListing extends Component {
             <Fragment>
                 <TableCell><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
 				<TableCell><p class='text-white'>{row.address}</p></TableCell>
-				<TableCell><p class='text-white'>{row.description}</p></TableCell>
+				<TableCell><p class='text-white'>{row.city}</p></TableCell>
+				<TableCell><p class='text-white'>{row.state}</p></TableCell>
+				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
+				<TableCell><p class='text-white'>{row.price}</p></TableCell>
              </Fragment>
         )
     }
@@ -43,51 +50,41 @@ class ClinicListing extends Component {
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-				
-  
-
-
-
-               <Dropdown>
-
-					<DropdownToggle>
-						Glavni tekst
-					</DropdownToggle>
-
-				   <DropdownMenu>
-					   <DropdownItem>
-						   Tekst 1
-					   </DropdownItem>
-					   <DropdownItem>
-						   Tekst 2
-					   </DropdownItem>
-					   <DropdownItem>
-						   Tekst 3
-					   </DropdownItem>
-				   </DropdownMenu>
-			   </Dropdown>
-
-				<Table>
-					<TableHead>
-						<TableRow>
-
-							<TableCell><p class='text-success'>Clinic Name</p></TableCell>
-							<TableCell><p class='text-success'>Address</p></TableCell>
-							<TableCell><p class='text-success'>Description</p></TableCell>
-
-
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{size > 0 ? this.state.clinics.map (row => (
-							<TableRow key={row.id}>
-								{this.generateClinicRows(row)}
+					<Dropdown>
+							<DropdownToggle>
+								Glavni tekst
+							</DropdownToggle>
+							<DropdownMenu>
+								<MenuItem>-</MenuItem>
+								{
+									size > 0 ? this.state.appointmentTypes.map (row => (
+										<MenuItem>{row}</MenuItem>
+									)) : null
+								}
+							</DropdownMenu>
+					</Dropdown>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell><p class='text-success'>Clinic Name</p></TableCell>
+								<TableCell><p class='text-success'>Address</p></TableCell>
+								<TableCell><p class='text-success'>City</p></TableCell>
+								<TableCell><p class='text-success'>State</p></TableCell>
+								<TableCell><p class='text-success'>Rating</p></TableCell>
+								<TableCell><p class='text-success'>Price</p></TableCell>
 							</TableRow>
-						)) : <h3> No results found. :( </h3> }
-
-					</TableBody>
-				</Table>
-			</div>
+						</TableHead>
+						<TableBody>
+							{
+								size > 0 ? this.state.clinics.map (row => (
+									<TableRow key={row.id}>
+										{this.generateClinicRows(row)}
+									</TableRow>
+								)) : <h3> No results found. :( </h3> 
+							}
+						</TableBody>
+					</Table>
+				</div>
 			</div>
 		);
 	}

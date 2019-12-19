@@ -7,25 +7,25 @@ public class ClinicListingDTO {
 
 	
 
-	private List<ClinicDTO> clinicList;
+	private List<ClinicPreviewDTO> clinicList;
 	private List<String> procedureType;
 	
 	public ClinicListingDTO () {
-		clinicList = new ArrayList<ClinicDTO> ();
+		clinicList = new ArrayList<ClinicPreviewDTO> ();
 		procedureType = new ArrayList<String> ();
 	}
 	
-	public ClinicListingDTO(List<ClinicDTO> clinicList, List<String> procedureType) {
+	public ClinicListingDTO(List<ClinicPreviewDTO> clinicList, List<String> procedureType) {
 		super();
 		this.clinicList = clinicList;
 		this.procedureType = procedureType;
 	}
 
-	public List<ClinicDTO> getClinicList() {
+	public List<ClinicPreviewDTO> getClinicList() {
 		return clinicList;
 	}
 
-	public void setClinicList(List<ClinicDTO> clinicList) {
+	public void setClinicList(List<ClinicPreviewDTO> clinicList) {
 		this.clinicList = clinicList;
 	}
 
