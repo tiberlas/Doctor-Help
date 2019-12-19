@@ -22,7 +22,7 @@ class ClinicListing extends Component {
 	}
 
 	componentDidMount () {
-		axios.get ('http://localhost:8080/api/clinics/listing/opsti_pregled')
+		axios.get ('http://localhost:8080/api/clinics/listing/unfiltered')
 		.then (response => {
 			this.setState ({
 				clinics: response.data.clinicList, 
@@ -45,20 +45,37 @@ class ClinicListing extends Component {
         )
     }
 
+	handleFilter (text) {
+		text = text.replace (' ', '_');
+		//alert ("Filter handle: " + text);
+		axios.get ('http://localhost:8080/api/clinics/listing/' + text)
+		.then (response => {
+			this.setState ({
+				clinics: response.data.clinicList, 
+				appointmentTypes: response.data.procedureType
+			})
+		})
+		var dd = document.getElementById ('dropdown_id') ;
+		//alert (dd);
+		//dd.render();
+		//dd.closest();
+		//dd.append(<div><p>PROBA</p></div>);
+	}
+
 	render () {
 		let size = this.state.clinics.length
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-					<Dropdown>
-							<DropdownToggle>
+					<Dropdown id = "dropdown_id">
+							<DropdownToggle id="dropdown-basic">
 								Glavni tekst
 							</DropdownToggle>
 							<DropdownMenu>
-								<MenuItem>-</MenuItem>
+								<MenuItem onClick={() => this.handleFilter ('unfiltered')}>-</MenuItem>
 								{
 									size > 0 ? this.state.appointmentTypes.map (row => (
-										<MenuItem>{row}</MenuItem>
+										<MenuItem onClick={() => this.handleFilter (row)}>{row}</MenuItem>
 									)) : null
 								}
 							</DropdownMenu>
