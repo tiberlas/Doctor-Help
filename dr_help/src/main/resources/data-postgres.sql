@@ -83,7 +83,10 @@ insert into procedures_type(name, price, is_operation, duration, clinic_id, dele
 	values('psiho analiza', 255, false, '02:00:00'::time, 1, false);
 insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
 	values('opsti pregled', 25, false, '00:30:00'::time, 1, false);
-
+insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
+	values('otpetljavanje creva', 2500, true, '05:30:00'::time, 1, false);
+insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
+	values('obrisano', 30, false, '00:30:00'::time, 1, true);
 	
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Psihoterapija', 25, false, 1, 1);

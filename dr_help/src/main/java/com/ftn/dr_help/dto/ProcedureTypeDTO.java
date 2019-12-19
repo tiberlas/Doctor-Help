@@ -1,8 +1,8 @@
 package com.ftn.dr_help.dto;
 
-import java.util.Calendar;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
 public class ProcedureTypeDTO {
@@ -10,6 +10,7 @@ public class ProcedureTypeDTO {
 	private Long id;
 	private String name;
 	private double price;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
 	private Date duration;
 	private boolean operation;
 

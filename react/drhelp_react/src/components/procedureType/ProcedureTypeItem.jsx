@@ -4,6 +4,7 @@ import ChangeProcedureTypeModal from './ChangeProcedureTypeModal';
 import Button from 'react-bootstrap/Button'
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import ModalMessage from '../ModalMessage';
+import Checkbox from '@material-ui/core/Checkbox';
 
 class ProcedureTypeItem extends Component {
     state = {
@@ -53,7 +54,7 @@ class ProcedureTypeItem extends Component {
             <tr>
                 <td>{this.state.name}</td>
                 <td>{this.state.duration}</td>
-                <td><input type='checkbox' value={this.state.operation} disabled/></td>
+                <td><Checkbox checked={this.state.operation} name='operation' value='operation' disabled/></td>
                 <td>{this.state.price}</td>
                 <td><button onClick={this.onDelite} class='btn btn-danger'>delete</button></td>
                 <td>
@@ -65,8 +66,10 @@ class ProcedureTypeItem extends Component {
                         <ChangeProcedureTypeModal
                             id={this.state.id} 
                             name={this.state.name} 
-                            number={this.state.number} 
-                            handleUpdate={(rname, rnumber) => this.update(rname, rnumber)}
+                            price={this.state.price}
+                            duration={this.state.duration}
+                            operation={this.state.operation} 
+                            handleUpdate={(rname, rprice, roperation, rduration) => this.update(rname, rprice, roperation, rduration)}
                             show={this.state.modalShow}
                             onHide={this.setModalHide}
                         />
