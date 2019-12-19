@@ -163,6 +163,7 @@ public class ProcedureTypeService {
 			}
 		}
 		
+		System.out.println("duration is" + procedure.getDuration());
 		finded.setPrice(procedure.getPrice());
 		finded.setName(procedure.getName());
 		finded.setDuration(procedure.getDuration());

@@ -10,7 +10,7 @@ public class ProcedureTypeDTO {
 	private Long id;
 	private String name;
 	private double price;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", locale = "en", timezone = "CET")
 	private Date duration;
 	private boolean operation;
 

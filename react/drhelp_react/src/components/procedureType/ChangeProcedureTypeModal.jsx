@@ -37,13 +37,12 @@ class ChangeProcedureTypeModal extends Component {
         let nam = event.target.name
         let val = event.target.value
         console.log(nam, val );
-        this.setState({[nam]: val}
-            //, () => { this.handleValidation()}
-        )
+        this.setState({[nam]: val}, () => { this.handleValidation()})
     }
 
     handleChangeTime = (time) => {
-        this.setState({duration: time})
+
+        this.setState({duration: time}, () => { this.handleValidation()})
     }
 
     handleChecked = (event) => {
@@ -93,7 +92,7 @@ class ChangeProcedureTypeModal extends Component {
 
                         <div className={`form-group ${this.state.errorDuration? 'has-danger': ''}`}>
                             <label class="form-control-label" for="duration">duration:</label>
-                            <TimePicker name='duration' id='duration' onChange={this.handleChangeTime} value={this.state.duration} className={`form-control ${this.state.errorDuration? 'is-invalid': 'is-valid'}`}/>
+                            <TimePicker name='duration' id='duration' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.duration} className={`form-control ${this.state.errorDuration? 'is-invalid': 'is-valid'}`}/>
                         </div>
 
                         <div>
@@ -104,7 +103,7 @@ class ChangeProcedureTypeModal extends Component {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <input type="submit" class="btn btn-primary" disabled={this.state.errorName || this.state.errorNumber} value="submit"/>
+                        <input type="submit" class="btn btn-primary" disabled={this.state.errorName || this.state.errorPrice || this.state.errorDuration} value="submit"/>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={this.props.onHide}>Close</button>
                     </Modal.Footer>
                 </form>
