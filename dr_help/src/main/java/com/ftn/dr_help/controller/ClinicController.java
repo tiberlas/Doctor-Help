@@ -100,9 +100,6 @@ public class ClinicController {
 		return new ResponseEntity<ClinicDTO>(ret, HttpStatus.OK);
 	}
 
-	// Displaying a list of clinics to a patient using this method instead of get all,
-	// Even though their code is identical at this point;
-	// In later sprints I intend to expand this one with filters
 	@GetMapping (value = "/listing/{filter}")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter) {

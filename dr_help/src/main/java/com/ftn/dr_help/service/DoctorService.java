@@ -1,10 +1,14 @@
 package com.ftn.dr_help.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
+import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
@@ -86,6 +90,33 @@ public class DoctorService {
 		}
 		
 		return false;
+	}
+	
+	public List<DoctorListingDTO> filterByClinicAndProcedureType (Long clinicId, String procedureType) {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		List<DoctorPOJO> doctors =  repository.filterByClinicAndProcedureType(clinicId, procedureType);
+		for (DoctorPOJO d : doctors) {
+			retVal.add (new DoctorListingDTO (d));
+		}
+		return retVal;
+	}
+	
+	public List<DoctorListingDTO> getAllUnfiltered () {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		List<DoctorPOJO> doctors = repository.findAll();
+		for (DoctorPOJO d : doctors) {
+			retVal.add (new DoctorListingDTO (d));
+		}
+		return retVal;
+	}
+	
+	public List<DoctorListingDTO> filterByClinic (Long clinicId) {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		List<DoctorPOJO> doctors =  repository.findAllByClinic_id(clinicId);
+		for (DoctorPOJO d : doctors) {
+			retVal.add(new DoctorListingDTO (d));
+		}
+		return retVal;
 	}
 	
 }

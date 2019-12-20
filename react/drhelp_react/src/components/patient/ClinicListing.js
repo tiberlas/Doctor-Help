@@ -68,7 +68,8 @@ class ClinicListing extends Component {
 	}
 
 	render () {
-		let size = this.state.clinics.length
+		let size = this.state.clinics.length;
+		let numberOfTypes = this.state.appointmentTypes.length;
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
@@ -79,7 +80,7 @@ class ClinicListing extends Component {
 							<DropdownMenu>
 								<MenuItem onClick={() => this.handleFilter ('unfiltered')}>-</MenuItem>
 								{
-									size > 0 ? this.state.appointmentTypes.map (row => (
+									numberOfTypes > 0 ? this.state.appointmentTypes.map (row => (
 										<MenuItem onClick={() => this.handleFilter (row)}>{row}</MenuItem>
 									)) : null
 								}
