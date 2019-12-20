@@ -77,6 +77,7 @@ class NewPredefinedAppointment extends Component {
                             items.push(this.state.doctorList[i]) 
                         }
                     }
+
                     this.setState({doctorListRender: items})
             }
             
@@ -119,6 +120,11 @@ class NewPredefinedAppointment extends Component {
         this.setState({[nam]: val}, () => { this.handleValidation()})
     }
 
+    handlerChangeProcedureType = (event) => {
+        let val = event.target.value.split("-")
+        this.setState({procedureTypeId: parseInt(val[0]), price: parseInt(val[1])}, () => { this.handleValidation()})
+    }
+
     handleChangeTime = (time) => {
         this.setState({time: time}, () => { this.handleValidationTimeAndDate()})
     }
@@ -158,7 +164,7 @@ class NewPredefinedAppointment extends Component {
         var size = Object.keys(this.state.procedureList).length;
         items.push(<option key={size} name='procedureTypeId' value="" selected="selected"> ---- </option>);
         for (let i = 0; i < size; i++) {             
-             items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id} >{this.state.procedureList[i].name}</option>);   
+             items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);   
              //here I will be creating my options dynamically based on
              //what props are currently passed to the parent component
         }
@@ -200,7 +206,7 @@ class NewPredefinedAppointment extends Component {
 
                     <div class="form-group">
                         <label for="procedureTypeId">appointment type</label>
-                        <select multiple="" class="form-control" id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChange} >
+                        <select multiple="" class="form-control" id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
                             {this.createProcedureItems()}
                         </select>
                     </div>
@@ -228,18 +234,23 @@ class NewPredefinedAppointment extends Component {
                         <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`}/>
                     </div>
 
-                    <div className={`form-group ${this.state.errorPrice? 'has-danger': ''}`}>
+                    <div class='form-group'>
                         <label class="form-control-label" for="price">price:</label>
-                        <input type='number' min="1" name='price' id='price' className={`form-control ${this.state.errorPrice? 'is-invalid': 'is-valid'}`} value={this.state.price} onChange={this.handlerChange} />
+                        <input type='number' name='price' id='price' class='form-control' value={this.state.price} disabled />
                     </div>
 
                     <div className={`form-group ${this.state.errorDisscount? 'has-danger': ''}`}>
                         <label class="form-control-label" for="price">disscount:</label>
-                        <input type='number' min="0" max="100" name='disscount' id='disscount' className={`form-control ${this.state.errorDisscount? 'is-invalid': 'is-valid'}`} value={this.state.disscount} onChange={this.handlerChange} />
+                        <div class='input-group'>
+                            <input type='number' min="0" max="100" name='disscount' id='disscount' className={`form-control ${this.state.errorDisscount? 'is-invalid': 'is-valid'}`} value={this.state.disscount} onChange={this.handlerChange} />
+                            <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group row">
                         <div class='col-md text-left'>
-                            <input type="submit" class="btn btn-success" disabled={this.state.errorPrice || this.state.errorDisscount || this.state.errorTimeAndDate || this.state.errorRoom} value="submit"/>
+                            <input type="submit" class="btn btn-success" disabled={ this.state.errorDisscount || this.state.errorTimeAndDate || this.state.errorRoom} value="submit"/>
                         </div>
                         <div class='col-md text-right'>
                             <button type="button" class="btn btn-danger" onClick={this.handleCancel}>Cancel</button>
