@@ -16,4 +16,6 @@ public interface ClinicRepository extends JpaRepository<ClinicPOJO, Long>{
 	@Query (value="select distinct c.* from (clinic c inner join doctors d on c.id = d.clinic_id) inner join procedures_type pt on d.procedure_type_id = pt.id where pt.\"name\" = ?1", nativeQuery = true)
 	public List<ClinicPOJO> getClinicsByProcedureType (String procedureType);
 	
+	
 }
+ 
