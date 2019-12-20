@@ -5,7 +5,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 import {NurseContext} from '../../context/NurseContextProvider';
 
@@ -31,14 +30,12 @@ class PerscriptionList extends Component {
         alert(url)
         axios.put (url)
 		.then (response => {
-            alert("Response + " + response.data.id)
             console.log("response data" + response.data)
 			this.handleUpdate(response.data.id)
         })
     }
 
     handleUpdate = (key) => {
-        alert("key is " + key)
         const items = this.state.perscriptions.filter(item => item.perscriptionId !== key);
         console.log('items', items)
         this.setState({ perscriptions: items});

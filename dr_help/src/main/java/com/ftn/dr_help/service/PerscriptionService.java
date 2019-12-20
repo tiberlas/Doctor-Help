@@ -105,16 +105,11 @@ public class PerscriptionService {
 	public PerscriptionPOJO signPerscription(Long nurseId, Long perscriptionId) {
 		
 		PerscriptionPOJO perscription = perscriptionRepository.findOneById(perscriptionId);
-		System.out.println("blabla perscription is + " + perscription.getId());
 		NursePOJO nurse = nurseRepository.findOneById(nurseId);
-		System.out.println("NURSE IS: " + nurse.getId());
 		perscription.setSigningNurse(nurse);
 		
-		System.out.println("NOW THE NURSE IS " + perscription.getSigningNurse().getLastName());
-		System.out.println("good boya");
 		perscriptionRepository.save(perscription);
-		System.out.println("extremely good boy");
-//		
+		
 		return perscription;
 		
 	}
