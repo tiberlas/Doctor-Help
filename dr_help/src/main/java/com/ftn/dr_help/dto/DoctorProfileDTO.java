@@ -5,6 +5,7 @@ import com.ftn.dr_help.model.pojo.DoctorPOJO;
 public class DoctorProfileDTO {
 	
 	private Long id;
+	private Long procedureTypeId;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -22,15 +23,17 @@ public class DoctorProfileDTO {
 		this.lastName = pojo.getLastName();
 		this.email = pojo.getEmail();
 		this.deleted = pojo.isDeleted();
+		this.procedureTypeId = pojo.getProcedureType().getId();
 	}
 	
-	public DoctorProfileDTO(Long id, String firstName, String lastName, String email, boolean deleted) {
+	public DoctorProfileDTO(Long id, String firstName, String lastName, String email, boolean deleted, Long procedureTypeId) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.deleted = deleted;
+		this.procedureTypeId = procedureTypeId;
 	}
 	
 	public Long getId() {
@@ -63,5 +66,15 @@ public class DoctorProfileDTO {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+
+	public Long getProcedureTypeId() {
+		return procedureTypeId;
+	}
+
+	public void setProcedureTypeId(Long procedureTypeId) {
+		this.procedureTypeId = procedureTypeId;
+	}
+	
+	
 
 }

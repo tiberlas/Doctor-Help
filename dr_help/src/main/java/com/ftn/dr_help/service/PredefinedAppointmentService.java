@@ -94,7 +94,7 @@ public class PredefinedAppointmentService {
     	
     	AppointmentPOJO appointment = new AppointmentPOJO();
     	Calendar cal = Calendar.getInstance();
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
     	try {
 			cal.setTime(sdf.parse(newPredefined.getDateAndTime()));
 		} catch (ParseException e) {
