@@ -59,7 +59,7 @@ class HandleingPredefinedAppointments extends Component {
                     <TableBody>
                         {this.state.predefined.map (c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <PredefinedAppointmentItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate} />
+                                <PredefinedAppointmentItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate}/>
                             </TableRow>
                         ))  }
 

@@ -15,4 +15,13 @@ public class DateConverter {
 				+ String.valueOf(date.get(Calendar.YEAR)) + ".";
 		return retVal;
 	}
+	
+	public String dateAndTimeToString (Calendar date) {
+		String retVal =  String.valueOf(date.get(Calendar.DAY_OF_MONTH)) + "." 
+				+ String.valueOf(date.get(Calendar.MONTH) + 1) + "." 
+				+ String.valueOf(date.get(Calendar.YEAR)) + ". "
+				+ String.valueOf(date.get(Calendar.HOUR)) + ":"
+				+ String.valueOf(date.get(Calendar.MINUTE));
+		return retVal;
+	}
 }

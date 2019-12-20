@@ -1,16 +1,20 @@
 package com.ftn.dr_help.dto;
 
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
 public class PredefinedAppointmentDTO {
 
+	DateConverter dateConverter = new DateConverter ();
+	
 	private Long id;
 	private String dateAndTime;
-	private Long proceduretypeId;
+	private Long procedureTypeId;
 	private Long roomId;
 	private Long doctorId;
 	private double price;
 	private double disscount;
+	private Long clinicId;
 	
 	
 	public PredefinedAppointmentDTO() {
@@ -19,26 +23,28 @@ public class PredefinedAppointmentDTO {
 	}
 
 	public PredefinedAppointmentDTO(Long id, String dateAndTime, Long proceduretypeId, Long roomId, Long doctorId, double price,
-			double disscount) {
+			double disscount, Long clinicId) {
 		super();
 		this.id = id;
 		this.dateAndTime = dateAndTime;
-		this.proceduretypeId = proceduretypeId;
+		this.procedureTypeId = proceduretypeId;
 		this.roomId = roomId;
 		this.doctorId = doctorId;
 		this.price = price;
 		this.disscount = disscount;
+		this.clinicId = clinicId;
 	}
 	
 	public PredefinedAppointmentDTO(AppointmentPOJO pojo) {
 		super();
 		this.id = pojo.getId();
-		this.dateAndTime = pojo.getDate().toString();
-		this.proceduretypeId = pojo.getProcedureType().getId();
+		this.dateAndTime = dateConverter.dateAndTimeToString(pojo.getDate());
+		this.procedureTypeId = pojo.getProcedureType().getId();
 		this.roomId = pojo.getRoom().getId();
 		this.doctorId = pojo.getDoctor().getId();
 		this.price = pojo.getProcedureType().getPrice();
 		this.disscount = pojo.getDiscount();
+		this.clinicId = pojo.getRoom().getClinic().getId();
 	}
 
 	public String getDateAndTime() {
@@ -49,12 +55,12 @@ public class PredefinedAppointmentDTO {
 		this.dateAndTime = dateAndTime;
 	}
 
-	public Long getProceduretypeId() {
-		return proceduretypeId;
+	public Long getProcedureTypeId() {
+		return procedureTypeId;
 	}
 
-	public void setProceduretypeId(Long proceduretypeId) {
-		this.proceduretypeId = proceduretypeId;
+	public void setProcedureTypeId(Long proceduretypeId) {
+		this.procedureTypeId = proceduretypeId;
 	}
 
 	public Long getRoomId() {
@@ -96,5 +102,12 @@ public class PredefinedAppointmentDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
+	public Long getClinicId() {
+		return clinicId;
+	}
+
+	public void setClinicId(Long clinicId) {
+		this.clinicId = clinicId;
+	}
 }

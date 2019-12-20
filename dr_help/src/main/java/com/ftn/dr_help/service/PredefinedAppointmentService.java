@@ -51,7 +51,7 @@ public class PredefinedAppointmentService {
 		List<AppointmentPOJO> all = repository.findAll();
 		
 		for(AppointmentPOJO appointment : all) {
-			if(appointment.getRoom().getClinic().getId().equals(id)) {
+			if(appointment.getRoom().getClinic().getId().equals(id) && appointment.isDeleted()==false) {
 				ret.add(new PredefinedAppointmentDTO(appointment));
 			}
 		}
@@ -62,7 +62,7 @@ public class PredefinedAppointmentService {
 	public PredefinedAppointmentDTO save(PredefinedAppointmentDTO newPredefined, String email) {
 		if(newPredefined == null || 
 				newPredefined.getDoctorId() == null ||
-				newPredefined.getProceduretypeId() == null ||
+				newPredefined.getProcedureTypeId() == null ||
 				newPredefined.getRoomId() == null ||
 				newPredefined.getDateAndTime() == null ||
 				newPredefined.getDateAndTime().isEmpty() ||
@@ -86,7 +86,7 @@ public class PredefinedAppointmentService {
     		return null;
     	}
     	
-    	ProceduresTypePOJO procedureType = procedureRepository.findById(newPredefined.getProceduretypeId()).orElse(null);
+    	ProceduresTypePOJO procedureType = procedureRepository.findById(newPredefined.getProcedureTypeId()).orElse(null);
     	if(procedureType == null || !procedureType.getClinic().getId().equals(clinic.getId())) {
     		return null;
     	}
@@ -106,7 +106,18 @@ public class PredefinedAppointmentService {
     	appointment.setProcedureType(procedureType);
     	appointment.setDiscount(newPredefined.getDisscount());
     	appointment.setStatus(AppointmentStateEnum.AVAIlABLE);
+    	appointment.setDeleted(false);
 		repository.save(appointment);
 		return newPredefined;
+	}
+	
+	public void delete(Long id) {
+		AppointmentPOJO finded = repository.findById(id).orElse(null);
+		if(finded == null) {
+			return;
+		}
+		
+		finded.setDeleted(true);
+		repository.save(finded);
 	}
 }

@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
+import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
-import com.ftn.dr_help.dto.RoomDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
-import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
@@ -32,20 +31,19 @@ public class DoctorService {
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
 	
-	public List<MedicalStaffProfileDTO> findAll(Long clinicID) {
+	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
 			return null;
 		}
 		
-		List<MedicalStaffProfileDTO> finded = repository.findAllByClinic_id(clinicID);
-		
+		List<DoctorPOJO> finded = repository.findAllByClinic_id(clinicID);
 		if(finded == null)
 			return null;
 		
-		List<MedicalStaffProfileDTO> ret = new ArrayList<MedicalStaffProfileDTO>();
-		for(MedicalStaffProfileDTO room : finded) {
-			if(!room.isDeleted()) {
-				ret.add(new MedicalStaffProfileDTO(room));				
+		List<DoctorProfileDTO> ret = new ArrayList<DoctorProfileDTO>();
+		for(DoctorPOJO doctor : finded) {
+			if(!doctor.isDeleted()) {
+				ret.add(new DoctorProfileDTO(doctor));				
 			}
 		}
 		
@@ -56,17 +54,17 @@ public class DoctorService {
 		return ret;
 	}
 	
-	public RoomDTO findOne(Long clinicID, Long roomID) {
-		if(clinicID == null || roomID == null) {
+	public DoctorProfileDTO findOne(Long clinicID, Long doctorID) {
+		if(clinicID == null || doctorID == null) {
 			return null;
 		}
 		
-		RoomPOJO finded = repository.findByIdAndClinic_id(roomID, clinicID).orElse(null);
-		
-		if(finded == null || finded.isDeleted())
+		DoctorPOJO finded = repository.findById(doctorID).orElse(null);
+		if(finded == null || finded.isDeleted() || !finded.getClinic().getId().equals(clinicID)) {
 			return null;
+		}
 		
-		return new RoomDTO(finded);
+		return new DoctorProfileDTO(finded);
 	}
 	
 	public MedicalStaffProfileDTO findByEmail(String email) {

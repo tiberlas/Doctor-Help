@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
+import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
-import com.ftn.dr_help.dto.RoomDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -34,23 +34,23 @@ public class DoctorController {
 	private CurrentUser currentUser;
 	
 	@GetMapping(value = "/clinic={clinic_id}/all")
-	public ResponseEntity<List<MedicalStaffProfileDTO>> getAllRooms(@PathVariable("clinic_id") Long clinic_id) {
-		List<MedicalStaffProfileDTO> finded = service.findAll(clinic_id);
+	public ResponseEntity<List<DoctorProfileDTO>> getAllRooms(@PathVariable("clinic_id") Long clinic_id) {
+		List<DoctorProfileDTO> finded = service.findAll(clinic_id);
 		
 		if(finded == null || finded.isEmpty())
-			return new ResponseEntity<List<MedicalStaffProfileDTO>>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<DoctorProfileDTO>>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<List<MedicalStaffProfileDTO>>(finded,  HttpStatus.OK);
+		return new ResponseEntity<List<DoctorProfileDTO>>(finded,  HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/clinic={clinic_id}/one/doctor={doctor_id}")
-	public ResponseEntity<MedicalStaffProfileDTO> getOneRooms(@PathVariable("clinic_id") Long clinic_id, @PathVariable("doctor_id") Long doctor_id) {
-		MedicalStaffProfileDTO finded = service.findOne(clinic_id, doctor_id);
+	public ResponseEntity<DoctorProfileDTO> getOneRooms(@PathVariable("clinic_id") Long clinic_id, @PathVariable("doctor_id") Long doctor_id) {
+		DoctorProfileDTO finded = service.findOne(clinic_id, doctor_id);
 		
 		if(finded == null)
-			return new ResponseEntity<MedicalStaffProfileDTO>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<DoctorProfileDTO>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<MedicalStaffProfileDTO>(finded,  HttpStatus.OK);
+		return new ResponseEntity<DoctorProfileDTO>(finded,  HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/profile")
