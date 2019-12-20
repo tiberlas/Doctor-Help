@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
+import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
@@ -96,6 +97,7 @@ public class DoctorService {
 		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
 		List<DoctorPOJO> doctors =  repository.filterByClinicAndProcedureType(clinicId, procedureType);
 		for (DoctorPOJO d : doctors) {
+			System.out.println("For petlja u filteru po oba");
 			retVal.add (new DoctorListingDTO (d));
 		}
 		return retVal;
@@ -116,6 +118,15 @@ public class DoctorService {
 		for (DoctorPOJO d : doctors) {
 			retVal.add(new DoctorListingDTO (d));
 		}
+		return retVal;
+	}
+	
+	public DoctorProfilePreviewDTO getProfilePreview (Long id) {
+		DoctorPOJO doctor = repository.getOne(id);
+		if (doctor == null) {
+			return null;
+		}
+		DoctorProfilePreviewDTO retVal = new DoctorProfilePreviewDTO (doctor);
 		return retVal;
 	}
 	

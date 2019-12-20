@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import { TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 
 class DoctorListing extends Component {
@@ -25,7 +26,7 @@ class DoctorListing extends Component {
 				fintered: false
 			})
 		}
-		alert (request);
+		//alert (request);
 		axios.get (request)
 		.then (response => {
 			this.setState ({
@@ -35,9 +36,11 @@ class DoctorListing extends Component {
 	}
 
 	generateDoctorRows (row) {
+		let profileUrl = '/doctor/profile/'
+
 		return (
 			<Fragment>
-				<TableCell><p class='text-white'>{row.firstName}</p></TableCell>
+				<TableCell><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
 				<TableCell><p class='text-white'>{row.lastName}</p></TableCell>
 				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
 			</Fragment>
@@ -51,7 +54,7 @@ class DoctorListing extends Component {
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-				<h3>{(this.state.filtered) ? ("Izabrani lekari") : ("Svi lekari")}</h3>
+				<h3>{(this.state.filtered) ? ("Filtered doctors") : ("All doctors")}</h3>
 					<Table>
 						<TableHead>
 							<TableRow>

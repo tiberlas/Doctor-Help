@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
+import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.service.DoctorService;
@@ -83,10 +84,23 @@ public class DoctorController {
 
 		System.out.println("Appointment type: " + appointmentType);
 		System.out.println("Clinic id: " + clinicId);
+		
 		if (appointmentType.equals("unfiltered")) {
 			return new ResponseEntity<> (service.filterByClinic(clinicId), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<> (service.filterByClinicAndProcedureType(clinicId, appointmentType), HttpStatus.OK);
+			return new ResponseEntity<> (service.filterByClinicAndProcedureType(clinicId, appointmentType.replace('_', ' ')), HttpStatus.OK);
 		}
 	}
+	
+	@GetMapping (value = "/preview/{id}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long id) {
+		DoctorProfilePreviewDTO retVal = service.getProfilePreview(id);
+		if (retVal == null) {
+			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+		} 
+		
+		return new ResponseEntity<> (retVal, HttpStatus.OK);
+	}
+	
 }

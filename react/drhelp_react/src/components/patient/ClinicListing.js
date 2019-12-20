@@ -73,8 +73,8 @@ class ClinicListing extends Component {
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-					<Dropdown id = "dropdown_id">
-							<DropdownToggle id="dropdown-basic">
+					<Dropdown id = "dropdown_id" class='success'>
+							<DropdownToggle id="dropdown-basic" >
 								Appointment types
 							</DropdownToggle>
 							<DropdownMenu>
