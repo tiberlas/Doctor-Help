@@ -110,8 +110,10 @@ public class PerscriptionService {
 		System.out.println("NURSE IS: " + nurse.getId());
 		perscription.setSigningNurse(nurse);
 		
-		System.out.println("NOW THE NURSE IS " + perscription.getSigningNurse());
-//		perscriptionRepository.save(perscription);
+		System.out.println("NOW THE NURSE IS " + perscription.getSigningNurse().getLastName());
+		System.out.println("good boya");
+		perscriptionRepository.save(perscription);
+		System.out.println("extremely good boy");
 //		
 		return perscription;
 		

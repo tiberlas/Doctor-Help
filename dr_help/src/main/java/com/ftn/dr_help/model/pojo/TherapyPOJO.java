@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class TherapyPOJO implements Serializable {
@@ -28,7 +28,7 @@ public class TherapyPOJO implements Serializable {
 	private String advice;
 	
 	@OneToOne (fetch = FetchType.LAZY)
-	@JsonBackReference
+	@JsonIgnore
 	private PerscriptionPOJO perscription;
 	
 	public Long getId() {

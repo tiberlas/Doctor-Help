@@ -147,7 +147,9 @@ public class NurseController {
 		
 		PerscriptionPOJO updated = perscriptionService.signPerscription(nurseId, perscriptionId);
 		
-		return new ResponseEntity<>(updated, HttpStatus.OK);
+		System.out.println("bad boy" + updated.getId() + " " + updated.getSigningNurse().getFirstName());
+		
+		return new ResponseEntity<PerscriptionPOJO>(updated, HttpStatus.OK);
 	}
 	
 	

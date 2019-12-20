@@ -127,7 +127,7 @@ values (3, 1, 1);
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (1, 1, 1);
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
-values (2, 1, 1);
+values (2, 1, 2);
 
 update appointments 
 set examination_report_id = 1
@@ -178,10 +178,7 @@ insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse
 values (3, 2, 1, null);
 
 insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
-values (2, 1, null, null);
-
-
-
+values (2, 1, null, 1);
 insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
 values (3, 2, null, 2);
 

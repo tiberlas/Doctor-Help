@@ -12,10 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -38,15 +38,16 @@ public class PerscriptionPOJO implements Serializable {
 	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="perscription")
 	private List<MedicationPOJO> medicationList;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private NursePOJO signingNurse;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JsonManagedReference
 	private TherapyPOJO therapy;
 	
 	@OneToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	private ExaminationReportPOJO examinationReport;
 	
 	public DiagnosisPOJO getDiagnosis() {

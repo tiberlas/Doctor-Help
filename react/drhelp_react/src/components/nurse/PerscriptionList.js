@@ -31,15 +31,18 @@ class PerscriptionList extends Component {
         alert(url)
         axios.put (url)
 		.then (response => {
-			this.handleUpdate(response.id)
+            alert("Response + " + response.data.id)
+            console.log("response data" + response.data)
+			this.handleUpdate(response.data.id)
         })
     }
 
     handleUpdate = (key) => {
-        const items = this.state.perscriptions.filter(item => item.id !== key);
+        alert("key is " + key)
+        const items = this.state.perscriptions.filter(item => item.perscriptionId !== key);
         console.log('items', items)
         this.setState({ perscriptions: items});
-        console.log("state", items)
+        console.log("state", this.state.perscriptions)
     }
 
     generatePerscriptionRows(row) {

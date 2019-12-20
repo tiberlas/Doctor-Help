@@ -15,12 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
@@ -74,14 +73,16 @@ public class NursePOJO implements Serializable{
 	private ClinicPOJO clinic;
 	
 	@OneToMany (mappedBy = "nurse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<AppointmentPOJO> operationList;
 	
 	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<AppointmentPOJO> appointments;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	private PerscriptionPOJO perscription;
+	@OneToMany(mappedBy = "signingNurse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
+	private List<PerscriptionPOJO> perscription;
 	
 	public NursePOJO() {
 		super();
@@ -178,11 +179,11 @@ public class NursePOJO implements Serializable{
 		this.appointments = appointments;
 	}
 
-	public PerscriptionPOJO getPerscription() {
+	public List<PerscriptionPOJO> getPerscription() {
 		return perscription;
 	}
 
-	public void setPerscription(PerscriptionPOJO perscription) {
+	public void setPerscription(List<PerscriptionPOJO> perscription) {
 		this.perscription = perscription;
 	}
 
