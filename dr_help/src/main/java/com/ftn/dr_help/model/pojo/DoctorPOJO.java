@@ -86,6 +86,9 @@ public class DoctorPOJO implements Serializable{
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private ProceduresTypePOJO procedureType;
 	
+	@Column (nullable = false)
+	private boolean deleted;
+	
 	public DoctorPOJO() {
 		super();
 	}
@@ -155,6 +158,14 @@ public class DoctorPOJO implements Serializable{
 	}
 	public void setBirthday(Calendar birthday) {
 		this.birthday = birthday;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public ClinicPOJO getClinic() {

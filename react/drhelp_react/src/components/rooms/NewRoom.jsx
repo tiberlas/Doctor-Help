@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import ModalMessage from '../ModalMessage';
 
 class NewRoom extends Component {
     state = {
