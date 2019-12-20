@@ -94,21 +94,21 @@ public class ProcedureTypeService {
 		return new ProcedureTypeDTO(procedure);
     }
     
-    public void delete(Long id, String email) {
+    public boolean delete(Long id, String email) {
 		
 		if(id == null) {
-			return;
+			return false;
 		}
 		
 		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
 		if(admin == null) {
-			return;
+			return false;
 		}
 		
 		ClinicPOJO clinic = admin.getClinic();
 		List<ProceduresTypePOJO> findedList = clinic.getProcedureTypesList();
 		if(findedList == null || findedList.isEmpty()) {
-			return;
+			return false;
 		}
 		
 		ProceduresTypePOJO finded = null;
@@ -120,10 +120,18 @@ public class ProcedureTypeService {
 		}
 		
 		if(finded == null) {
-			return;
+			return false;
 		}
-		finded.setDeleted(true);
-		procedureTypeRepository.save(finded);
+		
+		//ako postoji appointment sa ovim tipom ne moze obrisati
+		if(finded.getAppointment().isEmpty()) {
+			finded.setDeleted(true);
+			procedureTypeRepository.save(finded);
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public ProcedureTypeDTO change(ProcedureTypeDTO procedure, String email) {
@@ -160,6 +168,11 @@ public class ProcedureTypeService {
 			if(exist != null) {
 				return null;
 			}
+		}
+		
+		//ako postoji appointment sa ovim tipom ne moze se menjati
+		if(!finded.getAppointment().isEmpty()) {
+			return null;
 		}
 		
 		finded.setPrice(procedure.getPrice());

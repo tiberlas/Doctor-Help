@@ -15,6 +15,7 @@ class ProcedureTypeItem extends Component {
         price: this.props.value.price,
         operation: this.props.value.operation,
         duration: this.props.value.duration,
+        canChange: this.props.value.inUse,
         modalShow: false,
         messageShow: false,
         message: '',
@@ -28,7 +29,7 @@ class ProcedureTypeItem extends Component {
         }).catch(error => {
             this.setState({
                 messageShow: true,
-                message: 'Could not delete room. Please reload page and try again!',
+                message: 'Could not delete procedure type becouse it is in use in a appointment type!',
                 title: 'Some error has occured'
             })
         })
@@ -58,10 +59,10 @@ class ProcedureTypeItem extends Component {
                 <TableCell class="text-white">{this.state.duration}</TableCell>
                 <TableCell class="text-white"><Checkbox checked={this.state.operation} name='operation' value='operation' disabled/></TableCell>
                 <TableCell class="text-white">{this.state.price}</TableCell>
-                <TableCell class="text-white"><button onClick={this.onDelite} class='btn btn-danger'>delete</button></TableCell>
+                <TableCell class="text-white"><button onClick={this.onDelite} class='btn btn-danger' disabled={this.state.canChange}>delete</button></TableCell>
                 <TableCell>
                     <ButtonToolbar>
-                        <Button variant="primary" onClick={this.setModalShow}>
+                        <Button variant="primary" onClick={this.setModalShow} disabled={this.state.canChange}>
                             change
                         </Button>
 
