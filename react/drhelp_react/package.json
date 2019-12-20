@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fullcalendar/bootstrap": "^4.3.0",
     "@fullcalendar/core": "^4.3.1",
     "@fullcalendar/daygrid": "^4.3.0",
     "@fullcalendar/react": "^4.3.0",
@@ -50,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "css-loader": "^3.4.0",
     "node-sass": "^4.13.0",
     "sass-loader": "^8.0.0"
   }

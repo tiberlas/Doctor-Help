@@ -45,10 +45,8 @@ class PerscriptionList extends Component {
     generatePerscriptionRows(row) {
         console.log("rowmeds" + row.medicationList)
                 const meds = row.medicationList.map(item => item.medicationName)
-                console.log("meds are " + meds)
                 let medString = ""
                 for(let i = 0; i < meds.length; i++) {
-                    console.log("med is:" + meds[i])
                     medString += meds[i] + ","
                 }
                 medString = medString.substring(0, medString.length - 1)
