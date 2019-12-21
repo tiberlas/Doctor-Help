@@ -16,7 +16,7 @@ class PerscriptionList extends Component {
     static contextType = NurseContext
 
     componentDidMount () {
-		axios.get ('http://localhost:8080/api/nurses/pendingPerscriptions')
+		axios.get('http://localhost:8080/api/nurses/pendingPerscriptions')
 		.then (response => {
 			this.setState ({
 				perscriptions: response.data
