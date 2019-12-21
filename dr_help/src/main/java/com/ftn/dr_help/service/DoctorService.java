@@ -1,10 +1,16 @@
 package com.ftn.dr_help.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
+import com.ftn.dr_help.dto.DoctorListingDTO;
+import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
+import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
@@ -26,6 +32,42 @@ public class DoctorService {
 	
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
+	
+	public List<DoctorProfileDTO> findAll(Long clinicID) {
+		if(clinicID == null) {
+			return null;
+		}
+		
+		List<DoctorPOJO> finded = repository.findAllByClinic_id(clinicID);
+		if(finded == null)
+			return null;
+		
+		List<DoctorProfileDTO> ret = new ArrayList<DoctorProfileDTO>();
+		for(DoctorPOJO doctor : finded) {
+			if(!doctor.isDeleted()) {
+				ret.add(new DoctorProfileDTO(doctor));				
+			}
+		}
+		
+		if(ret.isEmpty()) {
+			return null;
+		}
+		
+		return ret;
+	}
+	
+	public DoctorProfileDTO findOne(Long clinicID, Long doctorID) {
+		if(clinicID == null || doctorID == null) {
+			return null;
+		}
+		
+		DoctorPOJO finded = repository.findById(doctorID).orElse(null);
+		if(finded == null || finded.isDeleted() || !finded.getClinic().getId().equals(clinicID)) {
+			return null;
+		}
+		
+		return new DoctorProfileDTO(finded);
+	}
 	
 	public MedicalStaffProfileDTO findByEmail(String email) {
 		if(email == null) {
@@ -86,6 +128,43 @@ public class DoctorService {
 		}
 		
 		return false;
+	}
+	
+	public List<DoctorListingDTO> filterByClinicAndProcedureType (Long clinicId, String procedureType) {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		List<DoctorPOJO> doctors =  repository.filterByClinicAndProcedureType(clinicId, procedureType);
+		for (DoctorPOJO d : doctors) {
+			System.out.println("For petlja u filteru po oba");
+			retVal.add (new DoctorListingDTO (d));
+		}
+		return retVal;
+	}
+	
+	public List<DoctorListingDTO> getAllUnfiltered () {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		List<DoctorPOJO> doctors = repository.findAll();
+		for (DoctorPOJO d : doctors) {
+			retVal.add (new DoctorListingDTO (d));
+		}
+		return retVal;
+	}
+	
+	public List<DoctorListingDTO> filterByClinic (Long clinicId) {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		List<DoctorPOJO> doctors =  repository.findAllByClinic_id(clinicId);
+		for (DoctorPOJO d : doctors) {
+			retVal.add(new DoctorListingDTO (d));
+		}
+		return retVal;
+	}
+	
+	public DoctorProfilePreviewDTO getProfilePreview (Long id) {
+		DoctorPOJO doctor = repository.getOne(id);
+		if (doctor == null) {
+			return null;
+		}
+		DoctorProfilePreviewDTO retVal = new DoctorProfilePreviewDTO (doctor);
+		return retVal;
 	}
 	
 }

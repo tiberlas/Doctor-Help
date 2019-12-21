@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.ClinicDTO;
-import com.ftn.dr_help.dto.ClinicRoomListDTO;
-import com.ftn.dr_help.model.convertor.ClinicUpdate;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
@@ -96,6 +94,9 @@ public class ClinicService {
 	public ClinicPOJO findByName(String name) {
 		return repository.findByName(name);
 	}
-
+	
+	public List<ClinicPOJO> filterByProcedureType (String procedureType) {
+		return repository.getClinicsByProcedureType(procedureType);
+	}
 		
 }

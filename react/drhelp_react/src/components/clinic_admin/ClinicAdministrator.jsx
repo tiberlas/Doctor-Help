@@ -13,6 +13,10 @@ import axios from 'axios';
 import Clinic from '../clinic/Clinic';
 import ClinicChangeProfile from './ClinicChangeProfile';
 import NewRoom from '../rooms/NewRoom.jsx';
+import HandleingProcedureTypes from './HandleingProcedureTypes';
+import NewProcedureType from '../procedureType/NewProcedureType';
+import HandleingPredefinedAppointments from './HandleingPredefinedAppointments';
+import NewPredefinedAppointment from '../predefined_appointments/NewPredefinedAppointment';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -69,6 +73,10 @@ class ClinicAdministrator extends Component {
                     <Route exact path="/clinic-administrator/profile/change" ><ClinicAdminChangeProfile  handleUpdate={this.handleClinicAdmin}/> </Route>
                     <Route exact path="/clinic-administrator/rooms" ><HandlingRooms /> </Route>
                     <Route exact path='/clinic-administrator/rooms/add'> <NewRoom /> </Route>
+                    <Route exact path="/clinic-administrator/procedure-types" ><HandleingProcedureTypes /> </Route>
+                    <Route exact path='/clinic-administrator/procedure-types/add'> <NewProcedureType /> </Route>
+                    <Route exact path='/clinic-administrator/predefined-appointments'> <HandleingPredefinedAppointments /> </Route>
+                    <Route exact path='/clinic-administrator/predefined-appointments/add'> <NewPredefinedAppointment /> </Route>
                     <Route exact path='/clinic-administrator/medical-staff'> <ClinicAdminMedicalStaff /> </Route>
                     <Route exact path='/clinic-administrator/profile/change/password'> <ClinicAdminChangePassword /> </Route>
                 </Switch>

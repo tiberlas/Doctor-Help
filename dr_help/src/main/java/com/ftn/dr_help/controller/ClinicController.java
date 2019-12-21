@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
-
-import com.ftn.dr_help.dto.ClinicRoomListDTO;
-import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
-
+import com.ftn.dr_help.dto.ClinicListingDTO;
+import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.service.ClinicService;
+import com.ftn.dr_help.service.ProcedureTypeService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -36,6 +35,9 @@ public class ClinicController {
 	
 	@Autowired
 	private CurrentUser currentUser;
+	
+	@Autowired
+	private ProcedureTypeService procedureTypeService;
 	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
@@ -98,22 +100,35 @@ public class ClinicController {
 		return new ResponseEntity<ClinicDTO>(ret, HttpStatus.OK);
 	}
 
-	// Displaying a list of clinics to a patient using this method instead of get all,
-	// Even though their code is identical at this point;
-	// In later sprints I intend to expand this one with filters
-	@GetMapping (value = "/listing")
+	@GetMapping (value = "/listing/{filter}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity <List<ClinicDTO>> getClinicListing () {
+	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter) {
 		System.out.println("Patient listing says hi");
 		
-		List<ClinicPOJO> clinics = clinicService.findAll();
-
-		List<ClinicDTO> clinicDTO = new ArrayList<>();
-		for (ClinicPOJO c : clinics) {
-			clinicDTO.add(new ClinicDTO(c));
-		} 
+		List<ClinicPreviewDTO> clinicDTO = new ArrayList<>();
 		
-		return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
+		if (filter.equals("unfiltered")) {
+			List<ClinicPOJO> clinics = clinicService.findAll();
+			for (ClinicPOJO c : clinics) {
+				clinicDTO.add(new ClinicPreviewDTO(c));
+			} 
+		} else {
+			filter = filter.replace('_', ' ');
+			List<ClinicPOJO> clinics = clinicService.filterByProcedureType (filter);
+			for (ClinicPOJO c : clinics) {
+				ClinicPreviewDTO newPreview = new ClinicPreviewDTO(c);
+				newPreview.setPrice(Double.toString(procedureTypeService.getPrice(c.getId(), filter)) + " rsd");
+				clinicDTO.add(newPreview);
+			} 
+		}
+		
+		List<String> procedureTypes = procedureTypeService.getProcedureTypes();
+		
+		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes);
+		
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
+	
+	
 	
 }
