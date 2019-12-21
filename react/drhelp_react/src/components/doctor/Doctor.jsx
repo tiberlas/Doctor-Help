@@ -8,6 +8,7 @@ import {Switch} from "react-router-dom";
 import DoctorChangeProfile from './DoctorChangeProfile.jsx';
 import DoctorChangePassword from './DoctorChangePassword.jsx';
 import axios from 'axios';
+import Calendar from '../Calendar'
 
 class Doctor extends Component {
     state = { 
@@ -58,6 +59,7 @@ class Doctor extends Component {
                             <Route exact path="/doctor/profile"> <DoctorProfile /></Route>
                             <Route exact path="/doctor/profile/change"> <DoctorChangeProfile handleUpdate={this.handleDoctor}/></Route>
                             <Route exact path="/doctor/profile/change/password"> <DoctorChangePassword /></Route>
+                            <Route exact path = "/doctor/schedule"><Calendar role = 'doctor'/></Route> 
                         </Switch>
                     </div>
                 </DoctorContextProvider>
