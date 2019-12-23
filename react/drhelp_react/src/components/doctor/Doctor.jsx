@@ -12,6 +12,7 @@ import Calendar from '../Calendar'
 
 class Doctor extends Component {
     state = { 
+        id: 0,
         email: "",
         firstName: "",
         lastName: "",
@@ -33,6 +34,7 @@ class Doctor extends Component {
         axios.get("http://localhost:8080/api/doctors/profile")
             .then(response =>  {
                 this.setState({
+                    id: response.data.id,
                     email: response.data.email,
                     firstName: response.data.firstName,
                     lastName: response.data.lastName,
@@ -47,7 +49,7 @@ class Doctor extends Component {
     }
 
     render() { 
-        var doctor = {firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId} 
+        var doctor = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId, role:'doctor'} 
         return ( 
             <div>
                 <DoctorContextProvider doctor={doctor} >
@@ -59,7 +61,7 @@ class Doctor extends Component {
                             <Route exact path="/doctor/profile"> <DoctorProfile /></Route>
                             <Route exact path="/doctor/profile/change"> <DoctorChangeProfile handleUpdate={this.handleDoctor}/></Route>
                             <Route exact path="/doctor/profile/change/password"> <DoctorChangePassword /></Route>
-                            <Route exact path = "/doctor/schedule"><Calendar role = 'doctor'/></Route> 
+                            <Route exact path = "/doctor/schedule"><Calendar medical_staff = {doctor} /></Route> 
                         </Switch>
                     </div>
                 </DoctorContextProvider>

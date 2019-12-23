@@ -45,6 +45,7 @@ public class MedicalStaffProfileDTO {
 		this.phoneNumber = doctor.getPhoneNumber();
 		this.birthday = dateConverter.toString(doctor.getBirthday());
 		this.clinicId = doctor.getClinic().getId();
+		this.id = doctor.getId();
 	}
 	
 	public MedicalStaffProfileDTO(NursePOJO nurse) {

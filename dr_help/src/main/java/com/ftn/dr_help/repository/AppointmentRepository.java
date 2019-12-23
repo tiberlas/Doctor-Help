@@ -13,7 +13,7 @@ import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Long>{
 
 	AppointmentPOJO findOneByExaminationReportId (Long examinationReportId);
-//	
-//	@Query(value = "select a from appointments a where a.status = 'DONE' and a.nurse_id = ?1")
-//	public List<AppointmentPOJO> findDoneAppointmentsByNurseId(Long nurseId);
+	
+	@Query(value = "select distinct a.* from appointments a inner join doctors d on a.doctor_id = ?1", nativeQuery = true)
+	public List<AppointmentPOJO> findDoctorAppointments(Long doctor_id);
 }

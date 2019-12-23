@@ -108,10 +108,20 @@ public class PredefinedAppointmentService {
     	appointment.setStatus(AppointmentStateEnum.AVAILABLE);
     	appointment.setDeleted(false);
 		repository.save(appointment);
+		
+		doctor.getAppointmentList().add(appointment);
+		doctorRepository.save(doctor);
+		
+		DoctorPOJO doc = doctorRepository.findOneByEmail(doctor.getEmail());
+		System.out.println("DOCTOR APPOINTMENTS ARE:");
+		for (AppointmentPOJO app : doc.getAppointmentList()) {
+			System.out.println(app.getDoctor().getFirstName());
+		}
+		
 		return newPredefined;
 	}
 	
-	public void delete(Long id) {
+	public void delete(Long id) { 
 		AppointmentPOJO finded = repository.findById(id).orElse(null);
 		if(finded == null) {
 			return;

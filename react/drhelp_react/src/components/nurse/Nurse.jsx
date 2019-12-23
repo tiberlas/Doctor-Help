@@ -53,7 +53,7 @@ class Nurse extends Component {
     }
 
     render() { 
-        var nurse = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId} 
+        var nurse = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId, role: 'nurse'} 
         return ( 
             <div>
                 <NurseContextProvider nurse={nurse} >
@@ -68,7 +68,7 @@ class Nurse extends Component {
                             <Route exact path="/nurse/patient-list"> <PatientList/> </Route>
                             <Route exact path="/nurse/perscription-list"> <PerscriptionList/> </Route>
                             <Route path = "/profile/"> <ViewPatientProfile/> </Route>
-                            <Route exact path = "/nurse/schedule"><Calendar role = 'nurse'/></Route> 
+                            <Route exact path = "/nurse/schedule"><Calendar medical_staff = {nurse} /></Route> 
                         </Switch>
                     </div>
                 </NurseContextProvider>
