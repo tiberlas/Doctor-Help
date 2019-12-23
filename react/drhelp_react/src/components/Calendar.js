@@ -121,23 +121,6 @@ class Calendar extends React.Component {
           eventLimit = {true}
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}
-          // eventRender = {(info) => {
-          //   let information = 'Patient: ' + info.event.extendedProps.patient
-          //   information += '\nProcedure: ' + info.event.extendedProps.procedure
-          //   information += '\nPrice: ' + info.event.extendedProps.price
-          //   information += '\nStatus: '+ info.event.extendedProps.status
-
-
-          //   var tooltip = new Tooltip(info.el, {
-          //     title: information,
-          //     placement: 'top',
-          //     trigger: 'hover',
-          //     container: 'body'
-          //   })
-          // } }
-          // eventClick = { function(calEvent, jsEvent, view, resourceObj) {
-          //   alert(calEvent.title + ' ' + calEvent.id)
-          // }}
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
           themeSystem = 'bootstrap' />
 
