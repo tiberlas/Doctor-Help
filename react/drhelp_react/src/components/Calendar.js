@@ -3,10 +3,11 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from "@fullcalendar/timegrid"
 import bootstrapPlugin from '@fullcalendar/bootstrap'
-import interaction from "@fullcalendar/interaction";
+import interaction from "@fullcalendar/interaction"
+//import listPlugin from '@fullcalendar/list'
+import DisplayDoctorModals from './doctor/DisplayDoctorModals'
 import axios from 'axios'
-import '../main.scss' // webpack must be configured to do this
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
+import '../main.scss' //webpack must be configured to do this
 
 class Calendar extends React.Component {
 
@@ -28,6 +29,7 @@ class Calendar extends React.Component {
   toggle = () => {
     this.setState({ modal: !this.state.modal });
   };
+
 
   handleEventClick = ({ event, el }) => {
     this.toggle();
@@ -110,12 +112,12 @@ class Calendar extends React.Component {
 
       return (
         <div className='demo-app-calendar'>
-          <FullCalendar defaultView="dayGridMonth" 
+          <FullCalendar defaultView="dayGridMonth"
           header={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay"
-          }}
+            right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
+          }}  
           selectable={true}
           events = {this.generateEventList()}
           eventLimit = {true}
@@ -124,28 +126,7 @@ class Calendar extends React.Component {
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
           themeSystem = 'bootstrap' />
 
-                <Modal
-                    isOpen={this.state.modal}
-                    toggle={this.toggle}
-                    className={this.props.className} >
-                    <ModalHeader toggle={this.toggle}>
-                      {this.state.event.title}
-                    </ModalHeader>
-                    <ModalBody>
-                      <div>
-                        <p>Patient: {this.state.event.patient}</p>
-                        <p>Status: {this.state.event.status}</p>
-                        <p>Procedure: {this.state.event.procedure}</p>
-                        <p>Price with discount: {this.state.event.price}</p>
-                      </div>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="primary">Do Something</Button>{" "}
-                      <Button color="secondary" onClick={this.toggle}>
-                        Cancel
-                      </Button>
-                    </ModalFooter>
-                  </Modal>
+          <DisplayDoctorModals event = {this.state.event} modal = {this.state.modal} toggle = {this.toggle} />
 
         </div>
       )

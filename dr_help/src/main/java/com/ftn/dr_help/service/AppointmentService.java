@@ -89,6 +89,10 @@ public class AppointmentService {
 		
 		dto.setAppointment_id(appointment.getId());
 		
+		
+		//moze li doca? 
+			//conditions: 
+		
 		return dto;
 		
 	}

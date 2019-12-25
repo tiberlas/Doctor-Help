@@ -144,11 +144,12 @@ insert into allergypojo (allergy, health_record_id)
 values ('Pollen', 2);
 
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
+values ('2019-11-11', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
+values ('2019-11-01', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+values ('2019-11-24', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+
 
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (3, 1, 1);
