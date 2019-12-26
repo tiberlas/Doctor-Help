@@ -115,7 +115,8 @@ public class NurseService {
 			newNurse.setSunday(newNurseDTO.getSunday());
 			newNurse.setDeleted(false);
 			
-			newNurse.setPassword("DoctorHelp");
+			String encoded = encoder.getEncoder().encode("DoctorHelp");
+			newNurse.setPassword(encoded);
 	
 			repository.save(newNurse);
 		} catch (Exception e) {

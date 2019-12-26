@@ -60,7 +60,7 @@ class ClinicAdminMedicalStaff extends Component {
                     <TableBody>
                         {this.state.medicalStuff.map(c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <MedicalStuffItem key={i++} value={c} />
+                                <MedicalStuffItem key={i} value={c} />
                             </TableRow>
                         ))}
                     </TableBody>

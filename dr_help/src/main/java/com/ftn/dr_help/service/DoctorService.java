@@ -197,7 +197,8 @@ public class DoctorService {
 			newDoctor.setSunday(newDoctorDTO.getSunday());
 			newDoctor.setDeleted(false);
 			
-			newDoctor.setPassword("DoctorHelp");
+			String encoded = encoder.getEncoder().encode("DoctorHelp");
+			newDoctor.setPassword(encoded);
 	
 			repository.save(newDoctor);
 		} catch (Exception e) {
