@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, FormControl } from 'react-bootstrap';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownItem from 'react-bootstrap/DropdownItem';
@@ -67,6 +67,10 @@ class ClinicListing extends Component {
 		})
 	}
 
+	handleFiltering () {
+		alert ("Filtering")
+	}
+
 	render () {
 		let size = this.state.clinics.length;
 		let numberOfTypes = this.state.appointmentTypes.length;
@@ -86,6 +90,11 @@ class ClinicListing extends Component {
 								}
 							</DropdownMenu>
 					</Dropdown>
+
+					<form>
+						<FormControl type="date" onChange={() => this.handleFiltering ()}></FormControl>
+					</form>
+
 					<Table>
 						<TableHead>
 							<TableRow>
