@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
+import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
+import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.NurseRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
@@ -26,6 +30,9 @@ public class NurseService {
 	
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
+	
+	@Autowired
+	private ClinicAdministratorRepository administatorRepository;
 	
 	public MedicalStaffProfileDTO findByEmail(String email) {
 		if(email == null) {
@@ -83,5 +90,38 @@ public class NurseService {
 		}
 		
 		return false;
+	}
+	
+	public boolean save(MedicalStaffSaveingDTO newNurseDTO, String email) {
+		try {
+			ClinicAdministratorPOJO admin = administatorRepository.findOneByEmail(email);
+			ClinicPOJO clinic = admin.getClinic();
+			
+			NursePOJO newNurse = new NursePOJO();
+			newNurse.setFirstName(newNurseDTO.getFirstName());
+			newNurse.setLastName(newNurseDTO.getLastName());
+			newNurse.setEmail(newNurseDTO.getEmail());
+			newNurse.setAddress("...");
+			newNurse.setCity("...");
+			newNurse.setState("...");
+			newNurse.setPhoneNumber("...");
+			newNurse.setClinic(clinic);
+			newNurse.setMonday(newNurseDTO.getMonday());
+			newNurse.setTuesday(newNurseDTO.getTuesday());
+			newNurse.setWednesday(newNurseDTO.getWednesday());
+			newNurse.setThursday(newNurseDTO.getThursday());
+			newNurse.setFriday(newNurseDTO.getFriday());
+			newNurse.setSaturday(newNurseDTO.getSaturday());
+			newNurse.setSunday(newNurseDTO.getSunday());
+			newNurse.setDeleted(false);
+			
+			newNurse.setPassword("DoctorHelp");
+	
+			repository.save(newNurse);
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return true;
 	}
 }

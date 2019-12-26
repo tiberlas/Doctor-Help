@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
-import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
+import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
+import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
@@ -32,6 +36,9 @@ public class DoctorService {
 	
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
+	
+	@Autowired
+	private ClinicAdministratorRepository adminRepository;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -165,6 +172,39 @@ public class DoctorService {
 		}
 		DoctorProfilePreviewDTO retVal = new DoctorProfilePreviewDTO (doctor);
 		return retVal;
+	}
+	
+	public boolean save(MedicalStaffSaveingDTO newDoctorDTO, String email) {
+		try {
+			ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+			ClinicPOJO clinic = admin.getClinic();
+			
+			DoctorPOJO newDoctor = new DoctorPOJO();
+			newDoctor.setFirstName(newDoctorDTO.getFirstName());
+			newDoctor.setLastName(newDoctorDTO.getLastName());
+			newDoctor.setEmail(newDoctorDTO.getEmail());
+			newDoctor.setAddress("...");
+			newDoctor.setCity("...");
+			newDoctor.setState("...");
+			newDoctor.setPhoneNumber("...");
+			newDoctor.setClinic(clinic);
+			newDoctor.setMonday(newDoctorDTO.getMonday());
+			newDoctor.setTuesday(newDoctorDTO.getTuesday());
+			newDoctor.setWednesday(newDoctorDTO.getWednesday());
+			newDoctor.setThursday(newDoctorDTO.getThursday());
+			newDoctor.setFriday(newDoctorDTO.getFriday());
+			newDoctor.setSaturday(newDoctorDTO.getSaturday());
+			newDoctor.setSunday(newDoctorDTO.getSunday());
+			newDoctor.setDeleted(false);
+			
+			newDoctor.setPassword("DoctorHelp");
+	
+			repository.save(newDoctor);
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 }

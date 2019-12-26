@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.SignOffDTO;
@@ -153,20 +154,20 @@ public class NurseController {
 	}
 	
 
-//	@PutMapping(value = "/new+nurse", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-//	public ResponseEntity<String> createNurse(@RequestBody  newNurse) {
-//		String email = currentUser.getEmail();
-//		
-//		boolean ret = service.save(newNurse, email);
-//		
-//		if(ret) {
-//			return new ResponseEntity<String>("created", HttpStatus.CREATED);
-//		} else {
-//			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
-//		}
-//		
-//	} 
+	@PostMapping(value = "/new+nurse", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> createNurse(@RequestBody MedicalStaffSaveingDTO newNurse) {
+		String email = currentUser.getEmail();
+		
+		boolean ret = service.save(newNurse, email);
+		
+		if(ret) {
+			return new ResponseEntity<String>("created", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+	} 
 	
 	
 

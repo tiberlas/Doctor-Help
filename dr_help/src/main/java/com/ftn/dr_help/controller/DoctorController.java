@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -123,5 +125,20 @@ public class DoctorController {
 		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
+	
+	@PostMapping(value = "/new+doctor", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> createNurse(@RequestBody MedicalStaffSaveingDTO newDoctor) {
+		String email = currentUser.getEmail();
+		
+		boolean ret = service.save(newDoctor, email);
+		
+		if(ret) {
+			return new ResponseEntity<String>("created", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+	} 
 	
 }

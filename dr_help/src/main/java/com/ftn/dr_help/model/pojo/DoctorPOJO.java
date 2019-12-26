@@ -69,7 +69,7 @@ public class DoctorPOJO implements Serializable{
 	private String phoneNumber;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "birthday", nullable = false)
+	@Column(name = "birthday")
 	private Calendar birthday;
 	
 	@JsonManagedReference
