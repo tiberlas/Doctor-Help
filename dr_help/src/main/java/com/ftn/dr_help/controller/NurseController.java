@@ -152,10 +152,21 @@ public class NurseController {
 		return new ResponseEntity<PerscriptionPOJO>(updated, HttpStatus.OK);
 	}
 	
-	
-	
-	
-	
+
+//	@PutMapping(value = "/new+nurse", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+//	public ResponseEntity<String> createNurse(@RequestBody  newNurse) {
+//		String email = currentUser.getEmail();
+//		
+//		boolean ret = service.save(newNurse, email);
+//		
+//		if(ret) {
+//			return new ResponseEntity<String>("created", HttpStatus.CREATED);
+//		} else {
+//			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
+//		}
+//		
+//	} 
 	
 	
 
