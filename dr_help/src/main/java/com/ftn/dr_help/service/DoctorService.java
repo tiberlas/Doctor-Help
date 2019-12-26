@@ -10,6 +10,7 @@ import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
+import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
@@ -31,6 +32,42 @@ public class DoctorService {
 	
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
+	
+	public List<DoctorProfileDTO> findAll(Long clinicID) {
+		if(clinicID == null) {
+			return null;
+		}
+		
+		List<DoctorPOJO> finded = repository.findAllByClinic_id(clinicID);
+		if(finded == null)
+			return null;
+		
+		List<DoctorProfileDTO> ret = new ArrayList<DoctorProfileDTO>();
+		for(DoctorPOJO doctor : finded) {
+			if(!doctor.isDeleted()) {
+				ret.add(new DoctorProfileDTO(doctor));				
+			}
+		}
+		
+		if(ret.isEmpty()) {
+			return null;
+		}
+		
+		return ret;
+	}
+	
+	public DoctorProfileDTO findOne(Long clinicID, Long doctorID) {
+		if(clinicID == null || doctorID == null) {
+			return null;
+		}
+		
+		DoctorPOJO finded = repository.findById(doctorID).orElse(null);
+		if(finded == null || finded.isDeleted() || !finded.getClinic().getId().equals(clinicID)) {
+			return null;
+		}
+		
+		return new DoctorProfileDTO(finded);
+	}
 	
 	public MedicalStaffProfileDTO findByEmail(String email) {
 		if(email == null) {

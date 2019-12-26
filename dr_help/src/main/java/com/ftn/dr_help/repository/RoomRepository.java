@@ -11,7 +11,7 @@ import com.ftn.dr_help.model.pojo.RoomPOJO;
 @Repository
 public interface RoomRepository extends JpaRepository <RoomPOJO, Long>{ 
 
-	List<RoomPOJO> findAllByClinic_id(Long id);
+	List<RoomPOJO> findAllByClinic_id(Long id);// nepotrebno namesti join
 	
 	Optional<RoomPOJO> findByIdAndClinic_id(Long id, Long clinic_id);
 	Optional<RoomPOJO> findOneByName(String name);

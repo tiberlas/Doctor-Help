@@ -1,42 +1,79 @@
 package com.ftn.dr_help.dto;
 
-import java.time.LocalTime;
-import java.util.List;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ftn.dr_help.model.pojo.AppointmentPOJO;
-import com.ftn.dr_help.model.pojo.ClinicPOJO;
-import com.ftn.dr_help.model.pojo.RoomPOJO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
 public class ProcedureTypeDTO {
 
 	private Long id;
 	private String name;
 	private double price;
-	
-	@Column(name = "isOperation", nullable = false)
-	private boolean isOperation;
-	
-	//@Temporal(TemporalType.TIME)
-	@Column(name = "duration", nullable = false)
-	private LocalTime duration;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	private AppointmentPOJO appointment;
-	
-	@OneToMany(mappedBy = "procedurasTypes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<RoomPOJO> roomList;
-	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonManagedReference
-	private ClinicPOJO clinic;
-	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", locale = "en", timezone = "CET")
+	private Date duration;
+	private boolean operation;
+
+	public ProcedureTypeDTO() {
+		super();
+	}
+
+	public ProcedureTypeDTO( Long id, String name, double price, Date duration, boolean operation) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.duration = duration;
+		this.operation = operation;
+	}
+
+	public ProcedureTypeDTO(ProceduresTypePOJO procedure) {
+		super();
+		this.id = procedure.getId();
+		this.name = procedure.getName();
+		this.price = procedure.getPrice();
+		this.duration = procedure.getDuration();
+		this.operation = procedure.isOperation();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public Date getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Date duration) {
+		this.duration = duration;
+	}
+
+	public boolean isOperation() {
+		return operation;
+	}
+
+	public void setOperation(boolean operation) {
+		this.operation = operation;
+	}
+
 }

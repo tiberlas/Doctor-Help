@@ -33,6 +33,8 @@ hs_err_pid*
 
 #.classpath
 dr_help/.classpath
+dr_help/.settings/org.eclipse.jdt.apt.core.prefs
+dr_help/.vscode/
 
 #react ignore
 react/drhelp_react/node_modues/*

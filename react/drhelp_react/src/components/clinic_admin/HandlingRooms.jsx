@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import RoomItem from '../rooms/RoomItem';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
 
 class HandlingRooms extends Component {
     state = {

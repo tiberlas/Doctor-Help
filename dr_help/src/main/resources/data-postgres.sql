@@ -72,49 +72,46 @@ values(
 );
 
 
-insert into procedures_type(name, price, is_operation, duration, clinic_id) 
-values('psiho analiza', 255, false, '02:00:00'::time, 1);
-insert into procedures_type(name, price, is_operation, duration, clinic_id) 
-values('opsti pregled', 25, false, '00:30:00'::time, 1);
-insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
-values ('01:00:00', false, 'Pregled opste prakse', 330, 3);
-insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
-values ('01:00:00', false, 'Pregled opste prakse', 350, 2);
-insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
-values ('01:15:00', false, 'Pregled opste prakse', 250, 1);
-insert into procedures_type(duration, is_operation, "name", price, clinic_id) 
-values ('02:00:00', false, 'Pregled dermatologa', 630, 2);
+insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
+values('psiho analiza', 255, false, '02:00:00'::time, 1, false);
+insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
+values('opsti pregled', 25, false, '00:30:00'::time, 1, false);
+insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
+values ('01:00:00', false, 'Pregled opste prakse1', 330, 3, false);
+insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
+values ('01:00:00', false, 'Pregled opste prakse2', 350, 2, false);
+insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
+values ('01:15:00', false, 'Pregled opste prakse3', 250, 1, false);
+insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
+values ('02:00:00', false, 'Pregled dermatologa', 630, 2, false);
 
 	
 --password: doca 	
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id) 
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted) 
 values(
 	'Pera', 'Perić', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'pera@gmail', '555555', 
-	'Serbia', 'Novi Sad', 'Pap Pavla 3', '2003-2-1'::timestamp, 1, 1
+	'Serbia', 'Novi Sad', 'Pap Pavla 3', '2003-2-1'::timestamp, 1, 1, false
 );
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id) 
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted) 
 values(
 	'Jovan', 'Milinković', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'j.milinkovic@gmail', '555556', 
-	'Serbia', 'Novi Sad', 'Pere Milića 3', '2001-3-15'::timestamp, 1, 2
+	'Serbia', 'Novi Sad', 'Pere Milića 3', '2001-3-15'::timestamp, 1, 2, false
 );
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id) 
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted) 
 values(
 	'Đorđe', 'Bogdanović', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'djokica@gmail', '555557', 
-	'Serbia', 'Novi Sad', 'Narodnih heroja 13', '1994-7-19'::timestamp, 1, 1
+	'Serbia', 'Novi Sad', 'Narodnih heroja 13', '1994-7-19'::timestamp, 1, 1, false
 );
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id) 
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted) 
 values(
 	'Relja', 'Đurić', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'rekulj@gmail', '555558', 
-	'Serbia', 'Novi Sad', 'Gundulićeva 23', '1997-6-3'::timestamp, 2, 4
+	'Serbia', 'Novi Sad', 'Gundulićeva 23', '1997-6-3'::timestamp, 2, 4, false
 );
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id) 
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted) 
 values(
 	'Dušan', 'Glamočanin', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'malimocha@gmail', '555559', 
-	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 3, 3
+	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 3, 3, false
 );
-
-	
-
 	
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Psihoterapija', 25, false, 1, 1);
@@ -146,12 +143,12 @@ values ('Cats', 1);
 insert into allergypojo (allergy, health_record_id)
 values ('Pollen', 2);
 
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
-values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, null);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
-values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, null);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
-values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, null);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2011-05-11', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2011-07-01', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2013-11-24', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
 
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (3, 1, 1);
