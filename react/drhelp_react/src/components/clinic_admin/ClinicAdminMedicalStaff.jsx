@@ -14,7 +14,8 @@ class ClinicAdminMedicalStaff extends Component {
 
     state = { 
         medicalStuff: [],
-        clinicName: ''
+        clinicName: '',
+        filterString: ''
     }
     
     componentDidMount() {
@@ -45,6 +46,18 @@ class ClinicAdminMedicalStaff extends Component {
         this.setState({ medicalStuff: items});
     }
 
+    handleFilter = () => {
+        axios.post('http://localhost:8080/api/procedure+types/filter', 
+            {
+                string: this.state.filterString,
+                operation: this.state.filterOperationDTO
+            }).then(response => {
+                this.setState({procedures: response.data});
+            }).catch(error => {
+                console.log('error in filter of procedure types')
+            })
+    }
+
     render() { 
         let i = 0;
         return ( 
@@ -56,8 +69,35 @@ class ClinicAdminMedicalStaff extends Component {
                 <Table class="table table-hover">
                     <TableHead class="table-active">
                         <TableRow class="table-active">
+                            <TableCell>
+                                <span class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="filterRole" />
+                                    <label class="custom-control-label" for="filterRole">filter by role:</label>
+                                </span>
+                            </TableCell>
+                            <TableCell>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" />
+                                    <label class="custom-control-label" for="customRadio1">nurses</label>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input"/>
+                                    <label class="custom-control-label" for="customRadio2">doctors</label>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/>
+                            </TableCell>
+                            <TableCell>
+                                <Button class="btn btn-success" onClick = {this.handleFilter}>Search</Button> 
+                            </TableCell>
+                        </TableRow>
+                        <TableRow class="table-active">
                             <TableCell class="text-success">first name</TableCell>
                             <TableCell class="text-success">last name</TableCell>
+                            <TableCell class="text-success">email</TableCell>
                             <TableCell class="text-success">role</TableCell>
                             <TableCell class="text-success"></TableCell>
                         </TableRow>

@@ -30,6 +30,7 @@ class MedicalStuffItem extends Component {
             <Fragment>
                 <TableCell class="text-white">{this.props.value.firstName}</TableCell>
                 <TableCell class="text-white">{this.props.value.lastName}</TableCell>
+                <TableCell class="text-white">{this.props.value.email}</TableCell>
                 <TableCell class="text-white">{this.props.value.role}</TableCell>
                 <TableCell>
                     <Button variant="danger" onClick={this.onDelite}>
