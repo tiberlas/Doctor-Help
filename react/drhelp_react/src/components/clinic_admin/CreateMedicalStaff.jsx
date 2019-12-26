@@ -110,7 +110,7 @@ class CreateMedicalStaff extends Component {
 
     createShift() {
         let items = []; 
-        items.push(<option key='1' value="NONE" selected="selected"> free day </option>);
+        items.push(<option key='1' value="NONE" selected="selected" class='text-muted'> free day </option>);
         items.push(<option key='2' value="FIRST" > first shift </option>);
         items.push(<option key='3' value="SECOND" > second shift </option>);
         items.push(<option key='4' value="THIRD" > third shift </option>);
@@ -160,7 +160,7 @@ class CreateMedicalStaff extends Component {
 
                     <div class='form-group'>
                         <label class="form-control-label" for="monday">Monday</label>
-                        <select multiple="" class="form-control" id="monday" name='monday' onChange={this.handlerChange}>
+                        <select multiple="" class="form-control" id="monday" name='monday' onChange={this.handlerChange} >
                             {this.createShift()}
                         </select>
                     </div>

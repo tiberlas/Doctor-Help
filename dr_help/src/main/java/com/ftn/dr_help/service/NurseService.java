@@ -1,9 +1,12 @@
 package com.ftn.dr_help.service;
 
+import java.util.Calendar;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
+import com.ftn.dr_help.comon.EmailCheck;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
@@ -34,6 +37,9 @@ public class NurseService {
 	@Autowired
 	private ClinicAdministratorRepository administatorRepository;
 	
+	@Autowired
+	private EmailCheck check;
+	
 	public MedicalStaffProfileDTO findByEmail(String email) {
 		if(email == null) {
 			return null;
@@ -42,6 +48,11 @@ public class NurseService {
 		NursePOJO finded = repository.findOneByEmail(email);
 		
 		if(finded == null) {
+			return null;
+		}
+		
+		//logic delete
+		if(finded.isDeleted()) {
 			return null;
 		}
 		
@@ -55,6 +66,11 @@ public class NurseService {
 		
 		NursePOJO ret = repository.findById(id).orElse(null);
 		
+		//logic delete
+		if(ret.isDeleted()) {
+			return null;
+		}
+		
 		return ret;
 	}
 	
@@ -66,6 +82,11 @@ public class NurseService {
 		NursePOJO current = repository.findOneByEmail(email);
 		if(current == null)
 			return null;
+		
+		//logic delete
+		if(current.isDeleted()) {
+		return null;
+		}
 		
 		convertor.changeTo(current, nurse);
 		repository.save(current);
@@ -82,6 +103,11 @@ public class NurseService {
 		if(finded == null)
 			return false;
 				
+		//logic delete
+		if(finded.isDeleted()) {
+			return false;
+		}
+		
 		if(passwordValidate.isValid(password, finded.getPassword())) {
 			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 			finded.setPassword(encoded);
@@ -97,6 +123,10 @@ public class NurseService {
 			ClinicAdministratorPOJO admin = administatorRepository.findOneByEmail(email);
 			ClinicPOJO clinic = admin.getClinic();
 			
+			if(!check.checkIfValid(newNurseDTO.getEmail())) {
+				return false;
+			}
+			
 			NursePOJO newNurse = new NursePOJO();
 			newNurse.setFirstName(newNurseDTO.getFirstName());
 			newNurse.setLastName(newNurseDTO.getLastName());
@@ -105,6 +135,8 @@ public class NurseService {
 			newNurse.setCity("...");
 			newNurse.setState("...");
 			newNurse.setPhoneNumber("...");
+			Calendar birthday = Calendar.getInstance();
+			newNurse.setBirthday(birthday);
 			newNurse.setClinic(clinic);
 			newNurse.setMonday(newNurseDTO.getMonday());
 			newNurse.setTuesday(newNurseDTO.getTuesday());
@@ -120,6 +152,21 @@ public class NurseService {
 	
 			repository.save(newNurse);
 		} catch (Exception e) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean delete(Long id) {
+		try {
+			
+			NursePOJO nurse = repository.findById(id).orElse(null);
+			
+			nurse.setDeleted(true);
+			repository.save(nurse);
+			
+		} catch(Exception e) {
 			return false;
 		}
 		

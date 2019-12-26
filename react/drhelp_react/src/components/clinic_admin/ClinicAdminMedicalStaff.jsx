@@ -40,6 +40,11 @@ class ClinicAdminMedicalStaff extends Component {
             })
     }
 
+    handleUpdate = (key, role) => {
+        const items = this.state.medicalStuff.filter(item => (item.id !== key || item.role !== role));
+        this.setState({ medicalStuff: items});
+    }
+
     render() { 
         let i = 0;
         return ( 
@@ -60,7 +65,7 @@ class ClinicAdminMedicalStaff extends Component {
                     <TableBody>
                         {this.state.medicalStuff.map(c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <MedicalStuffItem key={i} value={c} />
+                                <MedicalStuffItem key={i} value={c} handleUpdate={this.handleUpdate}/>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -33,12 +33,22 @@ public class MedicalStuffService {
 		
 		if(findedDoctors != null) {
 			for(DoctorPOJO doctor : findedDoctors) {
+				//logic delete
+				if(doctor.isDeleted()) {
+					continue;
+				}
+				
 				ret.add(new MedicalStaffDTO(doctor));
 			}
 		}
 		
 		if(findedNurses != null) {
 			for(NursePOJO nurse : findedNurses) {
+				//logic delete
+				if(nurse.isDeleted()) {
+					continue;
+				}
+				
 				ret.add(new MedicalStaffDTO(nurse));
 			}
 		}
