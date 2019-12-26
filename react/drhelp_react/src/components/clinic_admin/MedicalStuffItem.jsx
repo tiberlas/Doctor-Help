@@ -1,13 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import TableCell from '@material-ui/core/TableCell';
+import Button from 'react-bootstrap/Button';
 
 class MedicalStuffItem extends Component {
     render() { 
         return ( 
-            <tr>
-                <td>{this.props.value.firstName}</td>
-                <td>{this.props.value.lastName}</td>
-                <td>{this.props.value.role}</td>
-            </tr>
+            <Fragment>
+                <TableCell class="text-white">{this.props.value.firstName}</TableCell>
+                <TableCell class="text-white">{this.props.value.lastName}</TableCell>
+                <TableCell class="text-white">{this.props.value.role}</TableCell>
+                <TableCell>
+                    <Button variant="danger">
+                        delete
+                    </Button>
+                </TableCell>
+            </Fragment>
          );
     }
 }
