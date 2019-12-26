@@ -93,9 +93,9 @@ class ClinicAdminMedicalStaff extends Component {
         return ( 
             <div class='row d-flex justify-content-center'>
             <div class='col-md-8'>
-                <br/>
-                <br/>
                 <h3>List of employees in {this.state.clinicName}</h3>
+                <br/>
+                <br/>
                 <Table class="table table-hover">
                     <TableHead class="table-active">
                         <TableRow class="table-active">
