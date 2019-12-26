@@ -15,7 +15,10 @@ class ClinicAdminMedicalStaff extends Component {
     state = { 
         medicalStuff: [],
         clinicName: '',
-        filterString: ''
+        filterString: '',
+        isFilterRoleActive: false,
+        checkedMedicalStaff: 'NURSES',
+        filterRoleEnum: 'DISABLED'
     }
     
     componentDidMount() {
@@ -41,18 +44,45 @@ class ClinicAdminMedicalStaff extends Component {
             })
     }
 
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value})
+    }
+
     handleUpdate = (key, role) => {
         const items = this.state.medicalStuff.filter(item => (item.id !== key || item.role !== role));
         this.setState({ medicalStuff: items});
     }
 
+    handleFilterRole = () => {
+        if(this.state.isFilterRoleActive === true) {
+            this.setState({filterRoleEnum: this.state.checkedMedicalStaff})
+        } else {
+            this.setState({filterRoleEnum: 'DISABLED'})
+        }
+    }
+
+    handleActivateFilter = () => {
+        this.setState({isFilterRoleActive: !this.state.isFilterRoleActive},
+            () => {
+                this.handleFilterRole()
+            })
+    }
+
+    handleOptionChange = (changeEvent) => {
+        this.setState({
+          checkedMedicalStaff: changeEvent.target.value
+        }, () => {
+            this.handleFilterRole()
+        });
+    }
+
     handleFilter = () => {
-        axios.post('http://localhost:8080/api/procedure+types/filter', 
+        axios.post('http://localhost:8080/api/medical+stuff/filter', 
             {
                 string: this.state.filterString,
-                operation: this.state.filterOperationDTO
+                role: this.state.filterRoleEnum
             }).then(response => {
-                this.setState({procedures: response.data});
+                this.setState({medicalStuff: response.data});
             }).catch(error => {
                 console.log('error in filter of procedure types')
             })
@@ -71,20 +101,20 @@ class ClinicAdminMedicalStaff extends Component {
                         <TableRow class="table-active">
                             <TableCell>
                                 <span class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="filterRole" />
-                                    <label class="custom-control-label" for="filterRole">filter by role:</label>
+                                    <input type="checkbox" class="custom-control-input" id="filterRole" onChange={this.handleActivateFilter} checked={this.state.isFilterRoleActive}/>
+                                    <label class="custom-control-label text-white" for="filterRole">filter by role:</label>
                                 </span>
                             </TableCell>
                             <TableCell>
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" />
-                                    <label class="custom-control-label" for="customRadio1">nurses</label>
+                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="NURSES" checked={this.state.checkedMedicalStaff === 'NURSES'} onChange={this.handleOptionChange} disabled={!this.state.isFilterRoleActive} />
+                                    <label className={`custom-control-label ${this.state.isFilterRoleActive? 'text-white': 'text-muted'} `} for="customRadio1">nurses</label>
                                 </div>
                             </TableCell>
                             <TableCell>
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input"/>
-                                    <label class="custom-control-label" for="customRadio2">doctors</label>
+                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="DOCTORS" checked={this.state.checkedMedicalStaff === 'DOCTORS'} onChange={this.handleOptionChange} disabled={!this.state.isFilterRoleActive}/>
+                                    <label className={`custom-control-label ${this.state.isFilterRoleActive? 'text-white': 'text-muted'} `} for="customRadio2">doctors</label>
                                 </div>
                             </TableCell>
                             <TableCell>

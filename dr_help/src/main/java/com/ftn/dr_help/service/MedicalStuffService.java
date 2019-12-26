@@ -120,6 +120,9 @@ public class MedicalStuffService {
 	
 	public List<MedicalStaffDTO> filter(MedicalStaffFilterDTO filter, String email) {
 		
+		System.out.println("role" + filter.getRole());
+		System.out.println( filter.getRole() == FilterMedicalStaffEnum.DOCTORS);
+		
 		Long clinicId = adminRepository.findOneByEmail(email).getClinic().getId();
 		try {
 			
