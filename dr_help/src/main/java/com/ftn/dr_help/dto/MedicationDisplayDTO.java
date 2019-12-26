@@ -13,6 +13,8 @@ public class MedicationDisplayDTO {
 	}
 	private String medicationName;
 	private String medicationDescription;
+	
+	
 	public String getMedicationName() {
 		return medicationName;
 	}

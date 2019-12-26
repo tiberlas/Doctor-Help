@@ -2,6 +2,9 @@ package com.ftn.dr_help.dto;
 
 import java.util.List;
 
+import com.ftn.dr_help.model.pojo.MedicationPOJO;
+import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
+
 public class PerscriptionDisplayDTO {
 
 	private String Diagnosis;
@@ -14,6 +17,27 @@ public class PerscriptionDisplayDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	public PerscriptionDisplayDTO(PerscriptionPOJO per) {
+		
+		System.out.println("PERSCRIPTION: " + per.getDiagnosis().getDiagnosis() + " " + per.getDiagnosis().getPerscription());
+		
+		this.Diagnosis = per.getDiagnosis().getDiagnosis();
+		this.Description = per.getDiagnosis().getDescription();
+		
+		for (MedicationPOJO m : per.getMedicationList()) {
+			MedicationDisplayDTO mdDTO = new MedicationDisplayDTO();
+			mdDTO.setMedicationName(m.getMedicationName());
+			mdDTO.setMedicationDescription(m.getMedDescription());
+			medicationList.add(mdDTO);
+		}
+		
+		this.Advice = per.getTherapy().getAdvice();
+		
+		this.clinicId = per.getExaminationReport().getClinic().getId(); //irrelevant info for me right now
+	}
+	
 	public PerscriptionDisplayDTO(String diagnosis, String description, String advice,
 			List<MedicationDisplayDTO> medicationList, Long clinicId) {
 		super();

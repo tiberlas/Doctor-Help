@@ -71,9 +71,13 @@ public class ProcedureTypeController {
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> deleteProcedure(@PathVariable("id") Long id) {
 		String email = currentUser.getEmail();
-		procedureTypeService.delete(id, email);
+		boolean ret = procedureTypeService.delete(id, email);
 		
-		return new ResponseEntity<String>(HttpStatus.OK);
+		if(ret) {
+			return new ResponseEntity<String>(HttpStatus.OK);			
+		} else {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@PutMapping(value="/change", consumes = "application/json")

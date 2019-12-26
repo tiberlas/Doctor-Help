@@ -73,7 +73,7 @@ class NewProcedureType extends Component {
             <div class='row d-flex justify-content-center'>
             <div class='col-md-3'> 
                 <div>
-                    <h5>Add new room</h5>
+                    <h5>Create a procedure type</h5>
                 </div>
                 <form onSubmit={this.handleSubmit}> 
                 <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>

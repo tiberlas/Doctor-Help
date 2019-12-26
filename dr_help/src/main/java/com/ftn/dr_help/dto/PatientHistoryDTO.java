@@ -23,6 +23,7 @@ public class PatientHistoryDTO {
 	String Nurse;
 	String ClinicName;
 	Long ClinicId;
+	
 	public Long getExaminationReportId() {
 		return examinationReportId;
 	}

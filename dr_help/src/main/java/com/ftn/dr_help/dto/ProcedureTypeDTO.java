@@ -13,18 +13,20 @@ public class ProcedureTypeDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", locale = "en", timezone = "CET")
 	private Date duration;
 	private boolean operation;
+	private boolean inUse;
 
 	public ProcedureTypeDTO() {
 		super();
 	}
 
-	public ProcedureTypeDTO( Long id, String name, double price, Date duration, boolean operation) {
+	public ProcedureTypeDTO( Long id, String name, double price, Date duration, boolean operation, boolean inUse) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.duration = duration;
 		this.operation = operation;
+		this.inUse = inUse;
 	}
 
 	public ProcedureTypeDTO(ProceduresTypePOJO procedure) {
@@ -34,6 +36,7 @@ public class ProcedureTypeDTO {
 		this.price = procedure.getPrice();
 		this.duration = procedure.getDuration();
 		this.operation = procedure.isOperation();
+		this.inUse = !procedure.getAppointment().isEmpty();
 	}
 
 	public Long getId() {
@@ -75,5 +78,14 @@ public class ProcedureTypeDTO {
 	public void setOperation(boolean operation) {
 		this.operation = operation;
 	}
+
+	public boolean isInUse() {
+		return inUse;
+	}
+
+	public void setInUse(boolean inUse) {
+		this.inUse = inUse;
+	}
+
 
 }

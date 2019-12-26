@@ -94,7 +94,7 @@ public class PredefinedAppointmentService {
     	
     	AppointmentPOJO appointment = new AppointmentPOJO();
     	Calendar cal = Calendar.getInstance();
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
     	try {
 			cal.setTime(sdf.parse(newPredefined.getDateAndTime()));
 		} catch (ParseException e) {
@@ -105,7 +105,7 @@ public class PredefinedAppointmentService {
     	appointment.setDoctor(doctor);
     	appointment.setProcedureType(procedureType);
     	appointment.setDiscount(newPredefined.getDisscount());
-    	appointment.setStatus(AppointmentStateEnum.AVAIlABLE);
+    	appointment.setStatus(AppointmentStateEnum.AVAILABLE);
     	appointment.setDeleted(false);
 		repository.save(appointment);
 		return newPredefined;

@@ -17,7 +17,7 @@ class HandleingProcedureTypes extends Component {
         refresh: false,
         filterString: '',
         isFilterOperationActive: false,
-        filterOperation: false,
+        checkFilter: "NOT_OPERATION",
         filterOperationDTO: 'NOT_DEFINED'
     }
 
@@ -49,19 +49,27 @@ class HandleingProcedureTypes extends Component {
         this.setState({[event.target.name]: event.target.value})
     }
 
+    handleFilterRole = () => {
+        if(this.state.isFilterOperationActive === true) {
+            this.setState({filterOperationDTO: this.state.checkFilter})
+        } else {
+            this.setState({filterOperationDTO: 'NOT_DEFINED'})
+        }
+    }
+
     handleActivateFilter = () => {
         this.setState({isFilterOperationActive: !this.state.isFilterOperationActive},
             () => {
-                if(this.state.isFilterOperationActive === true) {
-                    if(this.state.filterOperation === true) {
-                        this.setState({filterOperationDTO: 'OPERATION'})
-                    } else {
-                        this.setState({filterOperationDTO: 'NOT_OPERATION'})
-                    }
-                } else {
-                    this.setState({filterOperationDTO: 'NOT_DEFINED'})
-                }
+                this.handleFilterRole()
             })
+    }
+
+    handleOptionChange = (changeEvent) => {
+        this.setState({
+            checkFilter: changeEvent.target.value
+        }, () => {
+            this.handleFilterRole()
+        });
     }
 
     handleFilter = () => {
@@ -76,20 +84,6 @@ class HandleingProcedureTypes extends Component {
             })
         
     }
-
-    handleFilterOperation = () => {
-        this.setState({filterOperation: !this.state.filterOperation}, 
-            () => {
-                if(this.state.isFilterOperationActive === true) {
-                    if(this.state.filterOperation === true) {
-                        this.setState({filterOperationDTO: 'OPERATION'})
-                    } else {
-                        this.setState({filterOperationDTO: 'NOT_OPERATION'})
-                    }
-                }
-            })
-
-    }
     
     render() {
         let i = 0;
@@ -100,24 +94,39 @@ class HandleingProcedureTypes extends Component {
                 <br/>
                 <Table class="table table-hover ">
                     <TableHead class="table-active">
+                    <TableRow class="table-active">
+                            <TableCell colSpan='2'>
+                                <span class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="filterRole" onChange={this.handleActivateFilter} checked={this.state.isFilterOperationActive}/>
+                                    <label class="custom-control-label text-white" for="filterRole">filter by examination:</label>
+                                </span>
+                            </TableCell>
+                            <TableCell>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="NOT_OPERATION" checked={this.state.checkFilter === 'NOT_OPERATION'} onChange={this.handleOptionChange} disabled={!this.state.isFilterOperationActive} />
+                                    <label className={`custom-control-label ${this.state.isFilterOperationActive? 'text-white': 'text-muted'} `} for="customRadio1">appointment</label>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="OPERATION" checked={this.state.checkFilter === 'OPERATION'} onChange={this.handleOptionChange} disabled={!this.state.isFilterOperationActive}/>
+                                    <label className={`custom-control-label ${this.state.isFilterOperationActive? 'text-white': 'text-muted'} `} for="customRadio2">operation</label>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/>
+                            </TableCell>
+                            <TableCell>
+                                <Button class="btn btn-success" onClick = {this.handleFilter}>Search</Button> 
+                            </TableCell>
+                        </TableRow>
                         <TableRow class="table-active">
                             <TableCell class="text-success">name</TableCell>
                             <TableCell class="text-success">duration</TableCell>
                             <TableCell class="text-success">is operation</TableCell>
                             <TableCell class="text-success">price</TableCell>
-                            <TableCell class="text-success">
-                                    <div>
-                                        <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/> 
-                                    </div>
-                                    <div>
-                                        <Checkbox checked={this.state.isFilterOperationActive} onChange={this.handleActivateFilter}/>
-                                        <label className={this.state.isFilterOperationActive? `text-success`:`text-muted` }>filter by operation: </label>
-                                    </div> 
-                            </TableCell>
-                            <TableCell> 
-                                <Button class="btn btn-success" onClick = {this.handleFilter}>Search</Button> 
-                                <Checkbox checked={this.state.filterOperation} onChange={this.handleFilterOperation} disabled={!this.state.isFilterOperationActive}/>
-                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

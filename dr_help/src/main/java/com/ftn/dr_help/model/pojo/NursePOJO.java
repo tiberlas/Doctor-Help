@@ -19,8 +19,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.enums.Shift;
 
 @Entity
 @Table(name = "nurse")
@@ -48,7 +50,7 @@ public class NursePOJO implements Serializable{
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 	
 	@Column(name = "state", nullable = false)
@@ -64,18 +66,56 @@ public class NursePOJO implements Serializable{
 	private String phoneNumber;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "birthday", nullable = false)
+	@Column(name = "birthday")
 	private Calendar birthday;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonManagedReference
 	private ClinicPOJO clinic;
 	
 	@OneToMany (mappedBy = "nurse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<AppointmentPOJO> operationList;
 	
 	@OneToMany (mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<AppointmentPOJO> appointments;
+	
+	@OneToMany(mappedBy = "signingNurse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
+	private List<PerscriptionPOJO> perscription;
+	
+	@Column (name = "deleted", nullable = false)
+	private boolean deleted;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "monday", nullable = false)
+	public Shift monday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "tuesday", nullable = false)
+	public Shift tuesday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "wednesday", nullable = false)
+	public Shift wednesday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "thursday", nullable = false)
+	public Shift thursday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "friday", nullable = false)
+	public Shift friday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "saturday", nullable = false)
+	public Shift saturday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "sunday", nullable = false)
+	public Shift sunday;
+	
 	
 	public NursePOJO() {
 		super();
@@ -172,7 +212,76 @@ public class NursePOJO implements Serializable{
 		this.appointments = appointments;
 	}
 
+	public List<PerscriptionPOJO> getPerscription() {
+		return perscription;
+	}
 
-	
+	public void setPerscription(List<PerscriptionPOJO> perscription) {
+		this.perscription = perscription;
+	}
+
+	public Shift getMonday() {
+		return monday;
+	}
+
+	public void setMonday(Shift monday) {
+		this.monday = monday;
+	}
+
+	public Shift getTuesday() {
+		return tuesday;
+	}
+
+	public void setTuesday(Shift tuesday) {
+		this.tuesday = tuesday;
+	}
+
+	public Shift getWednesday() {
+		return wednesday;
+	}
+
+	public void setWednesday(Shift wednesday) {
+		this.wednesday = wednesday;
+	}
+
+	public Shift getThursday() {
+		return thursday;
+	}
+
+	public void setThursday(Shift thursday) {
+		this.thursday = thursday;
+	}
+
+	public Shift getFriday() {
+		return friday;
+	}
+
+	public void setFriday(Shift friday) {
+		this.friday = friday;
+	}
+
+	public Shift getSaturday() {
+		return saturday;
+	}
+
+	public void setSaturday(Shift saturday) {
+		this.saturday = saturday;
+	}
+
+	public Shift getSunday() {
+		return sunday;
+	}
+
+	public void setSunday(Shift sunday) {
+		this.sunday = sunday;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 	
 }

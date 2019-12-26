@@ -15,7 +15,7 @@ class DrHelpApplicationTests {
 		NursePOJO nurse = new NursePOJO();
 		nurse.setFirstName("ANA");
 
-		assertEquals("EVA", nurse.getFirstName());
+		assertEquals("ANA", nurse.getFirstName());
 	}
 
 	@Test

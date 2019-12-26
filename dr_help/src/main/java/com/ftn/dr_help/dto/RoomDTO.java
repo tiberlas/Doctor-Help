@@ -8,6 +8,7 @@ public class RoomDTO {
 	private String name;
 	private int number;
 	private String procedureTypeName;
+	private Long procedureTypeId;
 	
 	public RoomDTO(RoomPOJO room) {
 		super();
@@ -16,6 +17,7 @@ public class RoomDTO {
 		this.number = room.getNumber();
 		if(room.getProcedurasTypes() != null) {
 			this.procedureTypeName = room.getProcedurasTypes().getName();		
+			this.procedureTypeId = room.getProcedurasTypes().getId();
 		}
 	}	
 	
@@ -24,12 +26,13 @@ public class RoomDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RoomDTO(Long id, String name, int number, String procedureTypeName) {
+	public RoomDTO(Long id, String name, int number, String procedureTypeName, Long procedureTypeId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.number = number;
 		this.procedureTypeName = procedureTypeName;
+		this.procedureTypeId = procedureTypeId;
 	}
 
 	public Long getId() {
@@ -56,7 +59,10 @@ public class RoomDTO {
 	public void setProcedureTypeName(String procedureTypeName) {
 		this.procedureTypeName = procedureTypeName;
 	}
-	
-	
-	
+	public Long getProcedureTypeId() {
+		return procedureTypeId;
+	}
+	public void setProcedureTypeId(Long procedureTypeId) {
+		this.procedureTypeId = procedureTypeId;
+	}
 }
