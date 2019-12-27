@@ -165,6 +165,7 @@ public class DoctorService {
 		if(passwordValidate.isValid(password, finded.getPassword())) {
 			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 			finded.setPassword(encoded);
+			finded.setMustChangePassword(false);
 			repository.save(finded);
 			return true;
 		}
@@ -244,6 +245,7 @@ public class DoctorService {
 			newDoctor.setState("...");
 			newDoctor.setPhoneNumber("...");
 			Calendar birthday = Calendar.getInstance();
+			birthday.setTime(newDoctorDTO.getBirthday());
 			newDoctor.setBirthday(birthday);
 			newDoctor.setClinic(clinic);
 			newDoctor.setMonday(newDoctorDTO.getMonday());
@@ -254,6 +256,7 @@ public class DoctorService {
 			newDoctor.setSaturday(newDoctorDTO.getSaturday());
 			newDoctor.setSunday(newDoctorDTO.getSunday());
 			newDoctor.setDeleted(false);
+			newDoctor.setMustChangePassword(true);
 			
 			String encoded = encoder.getEncoder().encode("DoctorHelp");
 			newDoctor.setPassword(encoded);

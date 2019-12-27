@@ -1,5 +1,7 @@
 package com.ftn.dr_help.dto;
 
+import java.util.Date;
+
 import com.ftn.dr_help.model.enums.Shift;
 
 public class MedicalStaffSaveingDTO {
@@ -7,6 +9,7 @@ public class MedicalStaffSaveingDTO {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private Date birthday; 
 	private Shift monday;
 	private Shift tuesday;
 	private Shift wednesday;
@@ -20,12 +23,13 @@ public class MedicalStaffSaveingDTO {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public MedicalStaffSaveingDTO(String firstName, String lastName, String email, Shift monday,
+	public MedicalStaffSaveingDTO(String firstName, String lastName, String email, Date birthday, Shift monday,
 			Shift tuesday, Shift wednesday, Shift thursday, Shift friday, Shift saturday, Shift sunday) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.birthday = birthday;
 		this.monday = monday;
 		this.tuesday = tuesday;
 		this.wednesday = wednesday;
@@ -94,6 +98,12 @@ public class MedicalStaffSaveingDTO {
 	}
 	public void setSunday(Shift sunday) {
 		this.sunday = sunday;
+	}
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 	
 	

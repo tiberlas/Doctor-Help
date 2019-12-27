@@ -26,9 +26,13 @@ class DoctorChangePassword extends Component {
     }
 
     render() {
-        if(this.state.go_profile === true)
+        if(this.state.go_profile === true) {
+            if(this.props.first === true) {
+                window.location.href='/login'
+            }
             return(<Redirect to='/doctor/'></Redirect> );
-        
+        }
+
         return ( 
             <ChangePassword handleSubmit={(data) => this.handleSubmit(data)} errorBack={this.state.errorBack}/>
          );

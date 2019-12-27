@@ -111,6 +111,7 @@ public class NurseService {
 		if(passwordValidate.isValid(password, finded.getPassword())) {
 			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 			finded.setPassword(encoded);
+			finded.setMustChangePassword(false);
 			repository.save(finded);
 			return true;
 		}
@@ -136,6 +137,7 @@ public class NurseService {
 			newNurse.setState("...");
 			newNurse.setPhoneNumber("...");
 			Calendar birthday = Calendar.getInstance();
+			birthday.setTime(newNurseDTO.getBirthday());
 			newNurse.setBirthday(birthday);
 			newNurse.setClinic(clinic);
 			newNurse.setMonday(newNurseDTO.getMonday());
@@ -146,6 +148,7 @@ public class NurseService {
 			newNurse.setSaturday(newNurseDTO.getSaturday());
 			newNurse.setSunday(newNurseDTO.getSunday());
 			newNurse.setDeleted(false);
+			newNurse.setMustChangePassword(true);
 			
 			String encoded = encoder.getEncoder().encode("DoctorHelp");
 			newNurse.setPassword(encoded);

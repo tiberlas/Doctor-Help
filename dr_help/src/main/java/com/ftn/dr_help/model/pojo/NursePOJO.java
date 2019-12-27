@@ -116,6 +116,8 @@ public class NursePOJO implements Serializable{
 	@Column (name = "sunday", nullable = false)
 	public Shift sunday;
 	
+	@Column(name = "mustChangePassword", nullable = true)
+	private Boolean mustChangePassword = false;
 	
 	public NursePOJO() {
 		super();
@@ -283,5 +285,12 @@ public class NursePOJO implements Serializable{
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
+
+	public Boolean getMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(Boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
+	}
 }

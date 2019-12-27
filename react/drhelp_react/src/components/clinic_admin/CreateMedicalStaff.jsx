@@ -8,6 +8,7 @@ class CreateMedicalStaff extends Component {
         firstName: '',
         lastName: '',
         email: '',
+        birthday: '',
         monday: 'NONE',
         tuesday: 'NONE',
         wednesday: 'NONE',
@@ -21,6 +22,7 @@ class CreateMedicalStaff extends Component {
         errorFirstName: true,
         errorLastName: true,
         errorEmail: true,
+        errorBirthday: true,
         errorShift: true,
 
         typeDoctor: true,
@@ -44,6 +46,12 @@ class CreateMedicalStaff extends Component {
             this.setState({errorEmail: false})
         } else {
             this.setState({errorEmail: true})
+        }
+
+        if(this.state.birthday !== null && this.state.birthday !== '') {
+            this.setState({errorBirthday: false})
+        } else {
+            this.setState({errorBirthday: true})
         }
 
         let workingDays = 0
@@ -84,6 +92,7 @@ class CreateMedicalStaff extends Component {
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     email: this.state.email,
+                    birthday: this.state.birthday,
                     monday: this.state.monday,
                     tuesday: this.state.tuesday,
                     wednesday: this.state.wednesday,
@@ -154,6 +163,11 @@ class CreateMedicalStaff extends Component {
                         <input type='email' name='email' id='email' className={`form-control ${this.state.errorEmail? 'is-invalid': 'is-valid'}`} value={this.state.email} onChange={this.handlerChange} />
                     </div>
 
+                    <div class='form-group'>
+                        <label class="form-control-label" for="birthday">Birthday:</label>
+                        <input type='date' name='birthday' id='birthday' className={`form-control ${this.state.errorBirthday? 'is-invalid': 'is-valid'}`} value={this.state.birthday} onChange={this.handlerChange} />
+                    </div>
+
                     <br/>
                     <h5>Work shift</h5>
                     <br/>
@@ -213,7 +227,7 @@ class CreateMedicalStaff extends Component {
 
                     <div class="form-group row">
                         <div class='col-md text-left'>
-                            <input type="submit" class="btn btn-success" disabled={ this.state.errorFirstName || this.state.errorLastName || this.state.errorEmail || this.state.errorShift} value="submit"/>
+                            <input type="submit" class="btn btn-success" disabled={ this.state.errorFirstName || this.state.errorLastName || this.state.errorEmail || this.state.errorBirthday || this.state.errorShift} value="submit"/>
                         </div>
                         <div class='col-md text-right'>
                             <button type="button" class="btn btn-danger" onClick={this.handleCancel}>Cancel</button>
