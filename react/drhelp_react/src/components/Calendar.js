@@ -5,7 +5,8 @@ import timeGridPlugin from "@fullcalendar/timegrid"
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import interaction from "@fullcalendar/interaction"
 //import listPlugin from '@fullcalendar/list'
-import DisplayDoctorModals from './doctor/DisplayDoctorModals'
+import AppointmentInfoModal from './appointment/AppointmentInfoModal'
+import AppointmentModal from './appointment/AppointmentModal'
 import axios from 'axios'
 import '../main.scss' //webpack must be configured to do this
 
@@ -13,7 +14,9 @@ class Calendar extends React.Component {
 
   state = {
     appointments: [],
-    modal: false,
+    infoModal: false,
+    appointmentModal: false,
+    showConfirmModal: false,
     event: {
       id: 0,
       title: "",
@@ -27,8 +30,12 @@ class Calendar extends React.Component {
   }
 
   toggle = () => {
-    this.setState({ modal: !this.state.modal });
-  };
+    this.setState({ infoModal: !this.state.infoModal, showConfirmModal: false});
+  }
+
+  toggleAppointment = () => {
+    this.setState({infoModal: false, appointmentModal: !this.state.appointmentModal, showConfirmModal: false})
+  }
 
 
   handleEventClick = ({ event, el }) => {
@@ -105,11 +112,7 @@ class Calendar extends React.Component {
     return events
   }
 
- 
-
   render() {
-
-
       return (
         <div className='demo-app-calendar'>
           <FullCalendar defaultView="dayGridMonth"
@@ -126,7 +129,8 @@ class Calendar extends React.Component {
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
           themeSystem = 'bootstrap' />
 
-          <DisplayDoctorModals event = {this.state.event} modal = {this.state.modal} toggle = {this.toggle} />
+          <AppointmentInfoModal event = {this.state.event} confirmModal = {this.state.confirmModal} modal = {this.state.infoModal} toggle = {this.toggle} toggleAppointment = {this.toggleAppointment}/>
+          <AppointmentModal event = {this.state.event} modal = {this.state.appointmentModal} toggleAppointment = {this.toggleAppointment}/>
 
         </div>
       )
