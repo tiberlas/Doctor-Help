@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
@@ -25,6 +26,7 @@ import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.service.DoctorService;
 
 @RestController
@@ -37,6 +39,9 @@ public class DoctorController {
 	
 	@Autowired
 	private CurrentUser currentUser;
+	
+	@Autowired
+	private Mail mailSender;
 	
 	@GetMapping(value = "/clinic={clinic_id}/all")
 	public ResponseEntity<List<DoctorProfileDTO>> getAllRooms(@PathVariable("clinic_id") Long clinic_id) {
@@ -135,6 +140,7 @@ public class DoctorController {
 		boolean ret = service.save(newDoctor, email);
 		
 		if(ret) {
+			mailSender.sendAccountInfoEmail(newDoctor.getEmail(), "DoctorHelp", newDoctor.getFirstName(), newDoctor.getLastName(), RoleEnum.DOCTOR);
 			return new ResponseEntity<String>("created", HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);

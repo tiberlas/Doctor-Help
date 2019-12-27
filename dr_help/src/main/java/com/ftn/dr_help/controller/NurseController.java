@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
@@ -26,6 +27,7 @@ import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.SignOffDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.service.NurseService;
@@ -48,6 +50,9 @@ public class NurseController {
 	
 	@Autowired
 	private PerscriptionService perscriptionService;
+	
+	@Autowired
+	private Mail mailSender;
 	
 	
 	@GetMapping(value = "/profile")
@@ -163,6 +168,7 @@ public class NurseController {
 		boolean ret = service.save(newNurse, email);
 		
 		if(ret) {
+			mailSender.sendAccountInfoEmail(newNurse.getEmail(), "DoctorHelp", newNurse.getFirstName(), newNurse.getLastName(), RoleEnum.NURSE);
 			return new ResponseEntity<String>("created", HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
