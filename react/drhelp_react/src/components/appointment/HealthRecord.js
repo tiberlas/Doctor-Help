@@ -64,6 +64,14 @@ class HealthRecord extends React.Component {
         return age + ' - (born ' + born + ')'
     }
 
+    bloodTypeDisplay = () => {
+        let bloodType = ""
+
+        bloodType = this.state.health_record.bloodType.replace('_', ' ')
+        bloodType = bloodType.substr(0, 1) + bloodType.substr(1, bloodType.length).toLowerCase()
+        return bloodType
+    }
+
     render() {
         return (
             <div class="row d-flex justify-content-center">
@@ -78,11 +86,11 @@ class HealthRecord extends React.Component {
                         </tr>
                         <tr>
                             <th scope="row">Height: </th>
-                            <td>{this.state.health_record.height} </td>
+                            <td>{this.state.health_record.height} m</td>
                         </tr>
                         <tr>
                             <th scope="row">Weight:</th>
-                                <td>{this.state.health_record.weight}</td>
+                                <td>{this.state.health_record.weight} kg</td>
                         </tr>
                         <tr>
                             <th scope="row">Diopter:</th>
@@ -93,6 +101,10 @@ class HealthRecord extends React.Component {
                                 <td>{this.allergyDisplay()}</td>
                         </tr>
 
+                        <tr>
+                            <th scope="row">Blood type:</th>
+                                <td>{this.bloodTypeDisplay()}</td>
+                        </tr>
                         
                     </tbody>
                 </table>

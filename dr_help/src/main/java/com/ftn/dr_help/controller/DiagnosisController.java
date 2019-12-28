@@ -50,7 +50,7 @@ public class DiagnosisController {
 	
 	
 	@GetMapping(value = "/all")
-	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR') or hasAuthority('DOCTOR')")
 	public ResponseEntity<List<DiagnosisDTO>> getAllDiagnoses() {
 
 		List<DiagnosisPOJO> meds = diagnosisService.findAll();

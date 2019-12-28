@@ -4,8 +4,8 @@ import Nav from 'react-bootstrap/Nav'
 import {Row, Col} from 'react-bootstrap'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import OverviewTable from './OverviewTable'
-import axios from 'axios'
 import HealthRecord from './HealthRecord'
+import ExaminationReport from './ExaminationReport'
 
 class AppointmentModal extends React.Component {
     
@@ -62,6 +62,11 @@ class AppointmentModal extends React.Component {
                                 <Tab.Pane eventKey="second">
                                 <ModalBody>
                                    <HealthRecord data = {this.props.event} />
+                                 </ModalBody>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="third">
+                                <ModalBody>
+                                   <ExaminationReport data = {this.props.event} />
                                  </ModalBody>
                                 </Tab.Pane>
                             </Tab.Content>
