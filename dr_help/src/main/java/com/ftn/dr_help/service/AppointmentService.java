@@ -80,7 +80,11 @@ public class AppointmentService {
 		
 		
 		dto.setProcedureName(pt.getName());
-		dto.setPrice(String.valueOf(appointment.getDiscount()));
+		
+		dto.setPrice(String.valueOf(appointment.getProcedureType().getPrice()));
+		System.out.println("PRICE IS: " + dto.getPrice());
+		dto.setDiscount(String.valueOf(appointment.getDiscount()));
+		System.out.println("DISCOUNT IS: " + dto.getDiscount());
 		dto.setStatus(String.valueOf(appointment.getStatus()));
 		
 		dto.setIsOperation(pt.isOperation());
@@ -88,10 +92,6 @@ public class AppointmentService {
 		dto.setRoomNumber(String.valueOf(appointment.getRoom().getNumber()));
 		
 		dto.setAppointment_id(appointment.getId());
-		
-		
-		//moze li doca? 
-			//conditions: 
 		
 		return dto;
 		

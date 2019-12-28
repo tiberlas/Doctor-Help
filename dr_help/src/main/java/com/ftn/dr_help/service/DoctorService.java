@@ -9,12 +9,18 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
-import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
+import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
+import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.pojo.AllergyPOJO;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
+import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
@@ -32,6 +38,10 @@ public class DoctorService {
 	
 	@Autowired
 	private ConcreteUserDetailInterface convertor;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
+	
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -165,6 +175,63 @@ public class DoctorService {
 		}
 		DoctorProfilePreviewDTO retVal = new DoctorProfilePreviewDTO (doctor);
 		return retVal;
+	}
+	
+	public PatientHealthRecordDTO findPatientHealthRecord(Long appointmentId) {
+		
+		AppointmentPOJO app = appointmentRepository.findOneById(appointmentId);
+		
+		if(app == null) {
+			System.out.println("Appointment with id: " + appointmentId+ " not found.");
+			return null;
+		}
+		
+		PatientPOJO patient = app.getPatient();
+		
+		if(patient == null) {
+			System.out.println("Patient from appointment with id: " + appointmentId + " not found");
+			return null;
+		}
+		
+		HealthRecordPOJO healthRecord = patient.getHealthRecord();
+		
+//		String allergyList = "";
+		List<AllergyPOJO> allergies= healthRecord.getAllergyList();
+		
+		ArrayList<String> list = new ArrayList<String>();
+		
+		for (AllergyPOJO allergy : allergies) {
+			list.add(allergy.getAllergy());
+		}
+//		int i = 0;
+//		for (; i < allergies.size() - 1; ++i) {
+//			allergyList += allergies.get(i).getAllergy() + ", ";
+//		}
+//		if (i > 0) {
+//			allergyList += allergies.get(i).getAllergy();
+//		} else if ((i == 0) && (allergies.size() == 1)) {
+//			allergyList = allergies.get(i).getAllergy();
+//		}
+//		if (allergyList.equals ("")) {
+//			allergyList = "/";
+//		}
+//		
+		
+		PatientHealthRecordDTO retVal = new PatientHealthRecordDTO();
+		
+		retVal.setBirthday(patient.getBirthday().getTime());
+		retVal.setBloodType(healthRecord.getBloodType());
+		retVal.setDiopter(healthRecord.getDiopter());
+		retVal.setFirstName(patient.getFirstName());
+		retVal.setHeight(healthRecord.getHeight());
+		retVal.setLastName(patient.getLastName());
+		retVal.setWeight(healthRecord.getWeight());
+		retVal.setAllergyList(list);
+		
+		System.out.println("FIRSTNAME: " + retVal.getFirstName() + "BIRTHDAY: " + retVal.getBirthday() + " BLOODTYPE: " + retVal.getBloodType() + "ALLERGYLIST: " + retVal.getAllergyList());
+		
+		return retVal;
+		
 	}
 	
 }

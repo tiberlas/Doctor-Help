@@ -39,7 +39,9 @@ class AppointmentInfoModal extends React.Component {
                     <p>Patient: {this.props.event.patient}</p>
                     <p>Status: {this.props.event.status}</p>
                     <p>Procedure: {this.props.event.procedure}</p>
-                    <p>Price with discount: {this.props.event.price}</p>
+                    <p>Price: {this.props.event.price}</p>
+                    <p>Discount: {this.props.event.discount}% </p>
+                    <p>Total: {this.props.event.price * (1 - (this.props.event.discount / 100))} </p>
                 </div>
                 </ModalBody>
                 <ModalFooter>

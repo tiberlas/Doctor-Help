@@ -14,6 +14,8 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 
 	AppointmentPOJO findOneByExaminationReportId (Long examinationReportId);
 	
+	AppointmentPOJO findOneById(Long id);
+	
 	@Query(value = "select distinct a.* from appointments a inner join doctors d on a.doctor_id = ?1", nativeQuery = true)
 	public List<AppointmentPOJO> findDoctorAppointments(Long doctor_id);
 }

@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
-import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
+import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
+import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
+import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -122,6 +124,16 @@ public class DoctorController {
 		} 
 		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/appointment={id}/health_record") 
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<PatientHealthRecordDTO> findPatientHealthRecord(@PathVariable("id") Long id) {
+		
+		PatientHealthRecordDTO record = service.findPatientHealthRecord(id);
+		System.out.println("record basic info" + record.getLastName());
+		
+		return new ResponseEntity<PatientHealthRecordDTO> (record, HttpStatus.OK);
 	}
 	
 }

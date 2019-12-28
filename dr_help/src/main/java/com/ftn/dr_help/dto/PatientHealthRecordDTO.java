@@ -1,34 +1,26 @@
 package com.ftn.dr_help.dto;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
-public class HealthRecordDTO {
+public class PatientHealthRecordDTO {
 
-	public HealthRecordDTO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public HealthRecordDTO(String firstName, String lastName, double weight, double height, String birthday,
-			double diopter, BloodTypeEnum bloodType, String allergyList) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.weight = weight;
-		this.height = height;
-		this.birthday = birthday;
-		this.diopter = diopter;
-		this.bloodType = bloodType;
-		this.allergyList = allergyList;
-	}
 	
 	private String firstName;
 	private String lastName;
 	private double weight;
 	private double height;
-	private String birthday;
+	private Date birthday;
 	private double diopter;
 	private BloodTypeEnum bloodType;
-	private String allergyList;
+	private ArrayList<String> allergyList;
+	
+	public PatientHealthRecordDTO() {
+		
+	}
+	
 	
 	public String getFirstName() {
 		return firstName;
@@ -54,10 +46,10 @@ public class HealthRecordDTO {
 	public void setHeight(double height) {
 		this.height = height;
 	}
-	public String getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(String birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 	public double getDiopter() {
@@ -72,14 +64,12 @@ public class HealthRecordDTO {
 	public void setBloodType(BloodTypeEnum bloodType) {
 		this.bloodType = bloodType;
 	}
-	public String getAllergyList() {
+	public ArrayList<String> getAllergyList() {
 		return allergyList;
 	}
-	public void setAllergyList(String allergyList) {
+	public void setAllergyList(ArrayList<String> allergyList) {
 		this.allergyList = allergyList;
 	}
-	
-	
 	
 	
 }

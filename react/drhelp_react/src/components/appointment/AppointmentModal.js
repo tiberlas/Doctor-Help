@@ -1,27 +1,76 @@
 import React, {Fragment} from 'react'
+import Tab from 'react-bootstrap/Tab'
+import Nav from 'react-bootstrap/Nav'
+import {Row, Col} from 'react-bootstrap'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
+import OverviewTable from './OverviewTable'
+import axios from 'axios'
+import HealthRecord from './HealthRecord'
 
 class AppointmentModal extends React.Component {
-
+    
+  
     render() {
         return (
             <Fragment> 
                 <Modal
                 isOpen={this.props.modal}
                 toggle={this.props.toggle}
-                className={this.props.className} >
-                    <ModalHeader toggle={this.props.toggle}>
-                    {this.props.event.title}
+                className={this.props.className + " modal-lg"} 
+                >
+                    <ModalHeader className = "text-align:center">
+                    Appointment
                     </ModalHeader>
-                    <ModalBody>
-                    <div>
-                        <p> Development: Appointment ID - {this.props.event.id} </p> 
-                        <p>Patient: {this.props.event.patient}</p>
-                        <p>Status: {this.props.event.status}</p>
-                        <p>Procedure: {this.props.event.procedure}</p>
-                        <p>Price with discount: {this.props.event.price}</p>
-                    </div>
-                    </ModalBody>
+
+                    <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                        <Row>
+                            <Col sm={3}>
+                            <Nav variant="pills" className="flex-column">
+                                <Nav.Item>
+                                <Nav.Link eventKey="first">Overview</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                <Nav.Link eventKey="second">Health record</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                <Nav.Link eventKey="third">Examination report</Nav.Link>
+                                </Nav.Item>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </Nav>
+                            </Col>
+                            <Col sm={9}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="first">
+                                    <ModalBody>
+                                        <OverviewTable data = {this.props.event}/>
+                                    </ModalBody>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="second">
+                                <ModalBody>
+                                   <HealthRecord data = {this.props.event} />
+                                 </ModalBody>
+                                </Tab.Pane>
+                            </Tab.Content>
+                            </Col>
+                        </Row>
+                    </Tab.Container>
+
+
+                 
                     <ModalFooter>
                     <Button color="secondary" onClick={() => {this.props.toggleAppointment()}}> Finish </Button> 
                     </ModalFooter>

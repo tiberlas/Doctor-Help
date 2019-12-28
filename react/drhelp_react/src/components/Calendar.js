@@ -25,6 +25,7 @@ class Calendar extends React.Component {
       patient: "",
       procedure: "",
       price: "",
+      discount: "",
       status: ""
     }
   }
@@ -49,6 +50,7 @@ class Calendar extends React.Component {
           patient: event.extendedProps.patient,
           procedure: event.extendedProps.procedure,
           price: event.extendedProps.price,
+          discount: event.extendedProps.discount,
           status: event.extendedProps.status
         }
      });
@@ -94,6 +96,7 @@ class Calendar extends React.Component {
         let statusInfo = appointment.status
         let procedureInfo = appointment.procedureName
         let priceInfo = appointment.price
+        let discountInfo = appointment.discount
 
         let event = 
         { 
@@ -104,7 +107,8 @@ class Calendar extends React.Component {
           patient: patientInfo,
           status: statusInfo,
           procedure: procedureInfo,
-          price: priceInfo
+          price: priceInfo,
+          discount: discountInfo
         }
 
         events.push(event)

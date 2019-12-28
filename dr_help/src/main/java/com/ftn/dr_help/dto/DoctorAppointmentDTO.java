@@ -19,6 +19,7 @@ public class DoctorAppointmentDTO {
 	
 	private String procedureName;
 	private String price;
+	private String discount;
 	
 	private String status;
 	
@@ -118,6 +119,14 @@ public class DoctorAppointmentDTO {
 
 	public void setAppointment_id(Long appointment_id) {
 		this.appointment_id = appointment_id;
+	}
+
+	public String getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(String discount) {
+		this.discount = discount;
 	}
 	
 	
