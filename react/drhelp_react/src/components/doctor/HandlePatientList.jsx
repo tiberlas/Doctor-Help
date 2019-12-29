@@ -23,6 +23,22 @@ class HandlePatientList extends Component {
     }
 
     render() {
+        const sortTypes = {
+            up: {
+                class: 'sort-up',
+                fn: (a, b) => a.firstName - b.firstName
+            },
+            down: {
+                class: 'sort-down',
+                fn: (a, b) => b.firstName - a.firstName
+            },
+            default: {
+                class: 'sort',
+                fn: (a, b) => a
+            }
+        };
+
+
         let i = 0; 
         return (
             <div class='row d-flex justify-content-center'>
