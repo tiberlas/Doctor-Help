@@ -1,11 +1,30 @@
 import React from 'react'
 import axios from 'axios'
+import Select from 'react-select'
+
+const fontStyles = {
+    option: provided => ({
+    ...provided,
+    color: 'black'
+    }),
+    control: provided => ({
+    ...provided,
+    color: 'black'
+    }),
+    singleValue: provided => ({
+    ...provided,
+    color: 'black'
+    })
+}
 
 class ExaminationReport extends React.Component {
 
     state = {
         diagnosisList: {},
-        medicationList: {}
+        medicationList: {},
+        diagnosisOptions: [],
+        medicationOptions: [],
+        
     }
 
     componentDidMount() {
@@ -13,33 +32,83 @@ class ExaminationReport extends React.Component {
             this.setState({
                 diagnosisList: response.data
             })
-            console.log("list", this.state.diagnosisList)
+            let items = []; 
+            var size = Object.keys(this.state.diagnosisList).length;
+    
+            items.push({
+                label: 'No diagnosis',
+                value: 'No diagnosis'
+            })
+            for (let i = 0; i < size; i++) {
+                 let option = {
+                     label: this.state.diagnosisList[i].name,
+                     value: this.state.diagnosisList[i].name
+                 }             
+                 items.push(option);
+            }
+
+            console.log("items: ", items)
+            this.setState({
+                diagnosisOptions: items
+            })
+        })
+
+        axios.get('http://localhost:8080/api/medication/all').then(response => {
+            this.setState({medicationList: response.data})
+
+            let items = []; 
+            var size = Object.keys(this.state.medicationList).length;
+
+            for (let i = 0; i < size; i++) {
+                 let option = {
+                     label: this.state.medicationList[i].name,
+                     value: this.state.medicationList[i].name
+                 }             
+                 items.push(option);
+            }
+
+            console.log("items: ", items)
+            this.setState({
+                medicationOptions: items
+            })
         })
     }
 
-    createDiagnosisSelectItems() {
-        let items = []; 
-        var size = Object.keys(this.state.diagnosisList).length;
-
-        items.push(<option class = "form-control selectpicker" data-live-search = "true" 
-                        key={size} name='doctorId' value="" selected="selected"> No diagnosis </option>);
-        for (let i = 0; i < size; i++) {             
-             items.push(<option key={i} data-tokens={this.state.diagnosisList[i].name} name = "id" 
-             value={this.state.diagnosisList[i].id}> {this.state.diagnosisList[i].name} </option>);   
-        }
-        return items;
-    }  
 
     render() {
         return (
             <div> 
                 <form>
                 <div class="form-group row">
-                    <label for="" class="col-sm-2 form-control-label">Diagnosis</label>
                     <div class="col-sm-10">
-                    <select class="form-control selectpicker" id="select-diagnosis" data-live-search="true">
-                        {this.createDiagnosisSelectItems()}
-                    </select>
+                    <label for="diagnosisSelect">Diagnosis</label>
+                    <Select 
+                        id="diagnosisSelect" 
+                        styles={fontStyles} 
+                        className="basic-single" 
+                        classNamePrefix="select" 
+                        name="diagnosis" 
+                        options={this.state.diagnosisOptions} 
+                        defaultValue={this.state.diagnosisOptions[0]} 
+                        onChange = {this.props.handleDiagnosisChange}
+                    />
+                    <br/>
+                    <label for="medicationSelect"> Medication </label>
+                    <Select
+                        id="medicationSelect"
+                        isMulti
+                        name="medication"
+                        options={this.state.medicationOptions}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        onChange={this.props.handleMedicationChange}
+                        styles={fontStyles}
+                    />
+
+                    <br/>   
+                    <label for="doctorNotes"> Additional notes </label>
+                    <br/>
+                    <textarea id="doctorNotes" placeholder="Write any appointment notes here..." onChange={this.props.handleNotesChange}/>
                     </div>
                 </div>
                 </form>

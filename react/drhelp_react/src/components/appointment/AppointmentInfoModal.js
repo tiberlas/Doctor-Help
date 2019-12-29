@@ -22,8 +22,7 @@ class AppointmentInfoModal extends React.Component {
 
 
     render() {
-        console.log("showModaL: ", this.state.showConfirmModal)
-       let today = new Date()
+       let appStart = new Date(this.props.event.start).toLocaleDateString("en-US")
         return (
             <Fragment> 
                 <Modal
@@ -56,7 +55,7 @@ class AppointmentInfoModal extends React.Component {
          this.props.event.status === 'APPROVED' && 
          <Fragment> 
          <Button disabled>Start</Button>
-         <p> You can only start the appointment on {today.toLocaleDateString("en-US")}</p> 
+         <p> You can only start the appointment on {appStart}</p> 
          </Fragment> } </Fragment> :  <Fragment>
               <p> You are about to generate the big dick energy and start the appointment.
              Should you proceed? </p> 

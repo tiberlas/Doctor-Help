@@ -9,6 +9,49 @@ import ExaminationReport from './ExaminationReport'
 
 class AppointmentModal extends React.Component {
     
+    state = {
+        selectedDiagnosis: "",
+        selectedMedication: [],
+        note: "",
+        confirmFinish: false
+    }
+
+    handleDiagnosisChange = (option) => {
+        console.log("diagnosis", option.label)
+        this.setState({selectedDiagnosis: option.label})
+    }
+
+    handleMedicationChange = (options) => {
+        if(options === null) {
+            this.setState({selectedMedication: []})
+            return
+        }
+        let medication = []
+        for(let i=0; i<options.length; i++) {
+            medication.push(options[i].label)
+        }
+        console.log("BOG:", medication)
+        console.log("STATE:", medication)
+        this.setState({selectedMedication: medication})
+    }
+
+    handleNotesChange = (e) => {
+        console.log("owowo", e.target.value)
+        this.setState({note: e.target.value})
+    }
+
+    componentWillReceiveProps(props) {
+        this.setState({ confirmFinish: props.showConfirmAppointment})
+        console.log("props", props.showConfirmAppointment)
+    }
+
+
+    handleFinish = () => {
+        this.props.toggleAppointment()
+        console.log("so far diagnosis:", this.state.selectedDiagnosis)
+        console.log("so far medication:", this.state.selectedMedication)
+        console.log("so far note:", this.state.note)
+    }
   
     render() {
         return (
@@ -32,8 +75,13 @@ class AppointmentModal extends React.Component {
                                 <Nav.Item>
                                 <Nav.Link eventKey="second">Health record</Nav.Link>
                                 </Nav.Item>
+
                                 <Nav.Item>
                                 <Nav.Link eventKey="third">Examination report</Nav.Link>
+                                </Nav.Item>
+
+                                <Nav.Item>
+                                <Nav.Link eventKey="fourth">Schedule another</Nav.Link>
                                 </Nav.Item>
                                 <br/>
                                 <br/>
@@ -66,7 +114,11 @@ class AppointmentModal extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="third">
                                 <ModalBody>
-                                   <ExaminationReport data = {this.props.event} />
+                                   <ExaminationReport 
+                                    data={this.props.event}
+                                    handleDiagnosisChange={this.handleDiagnosisChange}
+                                    handleMedicationChange={this.handleMedicationChange}
+                                    handleNotesChange={this.handleNotesChange} />
                                  </ModalBody>
                                 </Tab.Pane>
                             </Tab.Content>
@@ -77,7 +129,14 @@ class AppointmentModal extends React.Component {
 
                  
                     <ModalFooter>
-                    <Button color="secondary" onClick={() => {this.props.toggleAppointment()}}> Finish </Button> 
+                    {!this.state.confirmFinish && <Button color="secondary" onClick={() => {this.setState({confirmFinish: true})}}> Finish </Button>}
+                    {this.state.confirmFinish &&  <Fragment>
+                        <p> You are about to finish the appointment.
+                        Should you proceed? </p><br/>
+                        <Button color = "secondary" onClick = {() => {this.setState({confirmFinish: false})}}> Back</Button> 
+                        <Button color = "primary" onClick = {this.handleFinish}>Yes</Button> 
+                    </Fragment>}
+                   
                     </ModalFooter>
                 </Modal>
             </Fragment>

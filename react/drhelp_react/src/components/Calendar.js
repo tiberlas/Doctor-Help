@@ -17,6 +17,7 @@ class Calendar extends React.Component {
     infoModal: false,
     appointmentModal: false,
     showConfirmModal: false,
+    showConfirmAppointment: false,
     event: {
       id: 0,
       title: "",
@@ -31,11 +32,11 @@ class Calendar extends React.Component {
   }
 
   toggle = () => {
-    this.setState({ infoModal: !this.state.infoModal, showConfirmModal: false});
+    this.setState({ infoModal: !this.state.infoModal, showConfirmModal: false, showConfirmAppointment: false});
   }
 
   toggleAppointment = () => {
-    this.setState({infoModal: false, appointmentModal: !this.state.appointmentModal, showConfirmModal: false})
+    this.setState({infoModal: false, appointmentModal: !this.state.appointmentModal, showConfirmModal: false, showConfirmAppointment: false})
   }
 
 
@@ -133,8 +134,19 @@ class Calendar extends React.Component {
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
           themeSystem = 'bootstrap' />
 
-          <AppointmentInfoModal event = {this.state.event} confirmModal = {this.state.confirmModal} modal = {this.state.infoModal} toggle = {this.toggle} toggleAppointment = {this.toggleAppointment}/>
-          <AppointmentModal event = {this.state.event} modal = {this.state.appointmentModal} toggleAppointment = {this.toggleAppointment}/>
+          <AppointmentInfoModal 
+            event = {this.state.event} 
+            confirmModal = {this.state.confirmModal}
+            modal = {this.state.infoModal} 
+            toggle = {this.toggle} 
+            toggleAppointment = {this.toggleAppointment}
+           />
+          <AppointmentModal 
+            event = {this.state.event} 
+            showConfirmAppointment = {this.state.showConfirmAppointment} 
+            modal = {this.state.appointmentModal} 
+            toggleAppointment = {this.toggleAppointment}
+          />
 
         </div>
       )

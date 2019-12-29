@@ -56,7 +56,7 @@ public class MedicationController {
 	
 	
 	@GetMapping(value = "/all")
-	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR') or hasAuthority('DOCTOR')")
 	public ResponseEntity<List<MedicationDTO>> getAllMedication() {
 
 		List<MedicationPOJO> meds = medicationService.findAll();
