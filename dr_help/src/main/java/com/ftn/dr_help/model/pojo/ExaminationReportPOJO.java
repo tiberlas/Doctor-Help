@@ -25,7 +25,7 @@ public class ExaminationReportPOJO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private PerscriptionPOJO perscription;
 	
 	@OneToOne(fetch = FetchType.LAZY)

@@ -11,4 +11,6 @@ import com.ftn.dr_help.model.pojo.MedicationPOJO;
 public interface MedicationRepository extends JpaRepository<MedicationPOJO, Long>{
 	
 	Optional<MedicationPOJO> findOneByMedicationName(String name);
+	
+
 }

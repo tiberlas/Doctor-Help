@@ -303,7 +303,10 @@ public class PatientService {
 			retVal.setClinicId(clinic.getId());
 		}
 		
-		List<MedicationPOJO> medicationList = perscription.getMedicationList();
+		List<MedicationPOJO> medicationList = perscription.getMedicationList(); //izdebagovao sam ti liste lekova, zamenio si u modelu mappedBy redosled
+			//perscription je owner veza, a ne medicationPOJO, pa je obrnut mappedBy u manytomany vezi. sad ti nece trenutno raditi
+			//ovaj tvoj sql za prvi examination report
+		
 		List<MedicationDisplayDTO> medicationDto = new ArrayList<MedicationDisplayDTO> ();
 		for (MedicationPOJO temp : medicationList) {
 			MedicationDisplayDTO currentMedication = new MedicationDisplayDTO ();
@@ -327,8 +330,6 @@ public class PatientService {
 		PatientPOJO finded = patientRepository.findOneByEmail(email);
 		if(finded == null)
 			return false;
-		
-		//PasswordValidateInterface validate = new PasswordValidate();
 		
 		if(passwordValidate.isValid(password, finded.getPassword())) {
 

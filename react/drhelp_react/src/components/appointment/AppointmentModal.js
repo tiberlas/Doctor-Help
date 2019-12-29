@@ -6,6 +6,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import OverviewTable from './OverviewTable'
 import HealthRecord from './HealthRecord'
 import ExaminationReport from './ExaminationReport'
+import axios from 'axios'
 
 class AppointmentModal extends React.Component {
     
@@ -13,7 +14,8 @@ class AppointmentModal extends React.Component {
         selectedDiagnosis: "",
         selectedMedication: [],
         note: "",
-        confirmFinish: false
+        confirmFinish: false,
+        startAppointment: new Date() //rewrite the appointment date with the date when the doctor clicked on it
     }
 
     handleDiagnosisChange = (option) => {
@@ -47,10 +49,21 @@ class AppointmentModal extends React.Component {
 
 
     handleFinish = () => {
+
         this.props.toggleAppointment()
-        console.log("so far diagnosis:", this.state.selectedDiagnosis)
-        console.log("so far medication:", this.state.selectedMedication)
-        console.log("so far note:", this.state.note)
+        
+        
+        let url = 'http://localhost:8080/api/appointments/done=' + this.props.event.id
+        axios.put(url, {
+            diagnosis: this.state.selectedDiagnosis,
+            medicationList: this.state.selectedMedication,
+            note: this.state.note,
+            dateStart: this.state.startAppointment
+        }).then(response => {
+            alert("ya boy.")
+        })
+
+        
     }
   
     render() {

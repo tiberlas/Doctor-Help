@@ -33,7 +33,7 @@ public class MedicationPOJO implements Serializable{
 	private String medDescription;
 	
 	@JsonManagedReference
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "medicationList")
 	private List<PerscriptionPOJO> perscription;
 	
 	public MedicationPOJO () {

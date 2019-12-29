@@ -35,7 +35,7 @@ public class PerscriptionPOJO implements Serializable {
 	private DiagnosisPOJO diagnosis;
 	
 	@JsonBackReference
-	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="perscription")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MedicationPOJO> medicationList;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -67,9 +67,6 @@ public class PerscriptionPOJO implements Serializable {
 	}
 	public NursePOJO getSigningNurse () {
 		return this.signingNurse;
-	}
-	public void setigningNurse (NursePOJO signingNurse) {
-		this.signingNurse = signingNurse;
 	}
 	public Long getId() {
 		return id;
