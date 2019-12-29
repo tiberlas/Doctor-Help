@@ -31,6 +31,14 @@ class DoctorHeader extends Component {
                           <Link exact to='/doctor/patients' class="nav-link">Patients</Link>
                   </Nav.Link>
 
+                  <Nav.Link>
+                          <Link exact to='/doctor/start+appointment' class="nav-link">Start an appointment</Link>
+                  </Nav.Link>
+
+                  <Nav.Link>
+                          <Link exact to='/doctor/vacation' class="nav-link">Request vacation</Link>
+                  </Nav.Link>
+
                 </Nav>
                 <Nav className="justify-content-end" style={{ width: "100%" }}>
 

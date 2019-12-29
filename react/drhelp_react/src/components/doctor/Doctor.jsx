@@ -10,6 +10,8 @@ import DoctorChangePassword from './DoctorChangePassword.jsx';
 import axios from 'axios';
 import Calendar from '../Calendar'
 import HandlePatientList from './HandlePatientList.jsx';
+import DoctorVacation from './DoctorVacation.jsx';
+import StartAppointment from './StartAppointmnet.jsx';
 
 class Doctor extends Component {
     state = { 
@@ -62,6 +64,8 @@ class Doctor extends Component {
                             <Route exact path="/doctor/profile/change/password"> <DoctorChangePassword /></Route>
                             <Route exact path = "/doctor/schedule"><Calendar role = 'doctor'/></Route> 
                             <Route exact path = "/doctor/patients"><HandlePatientList /></Route>
+                            <Route exact path = "/doctor/vacation"><DoctorVacation /> </Route>
+                            <Route exact path = "/doctor/start+appointment"> <StartAppointment /> </Route>
                         </Switch>
                     </div>
                 </DoctorContextProvider>
