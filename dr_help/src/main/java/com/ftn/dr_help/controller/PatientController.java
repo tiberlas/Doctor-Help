@@ -23,11 +23,8 @@ import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
-
 import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
-
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
-
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.HealthRecordService;
 import com.ftn.dr_help.service.PatientService;
@@ -59,28 +56,11 @@ public class PatientController {
 		return new ResponseEntity<List<PatientNameDTO>>(ret, HttpStatus.OK);
 	}
 	
-//	@GetMapping(value = "/id={id}/profile")
-//	@PreAuthorize("hasAuthority('DOCTOR')")
-//	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("id") Long id ) {
-//
-//		PatientDTO ret = patientService.findById(id);
-//		
-//		if(ret == null) {
-//			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
-//		}
-//		
-//		return new ResponseEntity<PatientDTO>(ret, HttpStatus.OK);
-//	}
-	
-	
 	@GetMapping(value = "/profile/{insuranceId}")
-	@PreAuthorize("hasAuthority('NURSE')")
-	
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
 	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("insuranceId") Long insuranceId ) {
 
 		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);
-		
-		
 		
 		if(ret == null) {
 			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
@@ -95,10 +75,8 @@ public class PatientController {
 		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
 	}
 	
-	
-	
-	
 	@GetMapping(value = "/all")
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
 	public ResponseEntity<List<PatientDTO>> getAllPatients() {
 
 		List<PatientPOJO> patients = patientService.findAll();
