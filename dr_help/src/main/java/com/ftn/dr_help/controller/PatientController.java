@@ -59,22 +59,9 @@ public class PatientController {
 		return new ResponseEntity<List<PatientNameDTO>>(ret, HttpStatus.OK);
 	}
 	
-//	@GetMapping(value = "/id={id}/profile")
-//	@PreAuthorize("hasAuthority('DOCTOR')")
-//	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("id") Long id ) {
-//
-//		PatientDTO ret = patientService.findById(id);
-//		
-//		if(ret == null) {
-//			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
-//		}
-//		
-//		return new ResponseEntity<PatientDTO>(ret, HttpStatus.OK);
-//	}
-	
 	
 	@GetMapping(value = "/profile/{insuranceId}")
-	@PreAuthorize("hasAuthority('NURSE')")
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
 	
 	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("insuranceId") Long insuranceId ) {
 
@@ -86,12 +73,7 @@ public class PatientController {
 			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
 		}
 		
-		System.out.println("BIRTHDAY IS: " + ret.getBirthday());
-		
 		PatientDTO dt = new PatientDTO(ret);
-		
-		System.out.println("DTO SHIT IS: "+ dt.getBirthday());
-		
 		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
 	}
 	

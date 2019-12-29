@@ -23,6 +23,8 @@ public class DoctorAppointmentDTO {
 	
 	private String status;
 	
+	private String insuranceNumber;
+	
 	public DoctorAppointmentDTO() {
 		
 	}
@@ -127,6 +129,14 @@ public class DoctorAppointmentDTO {
 
 	public void setDiscount(String discount) {
 		this.discount = discount;
+	}
+
+	public String getInsuranceNumber() {
+		return insuranceNumber;
+	}
+
+	public void setInsuranceNumber(String insuranceNumber) {
+		this.insuranceNumber = insuranceNumber;
 	}
 	
 	

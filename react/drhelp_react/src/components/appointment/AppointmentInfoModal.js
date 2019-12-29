@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
+import {Link} from 'react-router-dom'
 
 class AppointmentInfoModal extends React.Component {
 
@@ -23,6 +24,7 @@ class AppointmentInfoModal extends React.Component {
 
     render() {
        let appStart = new Date(this.props.event.start).toLocaleDateString("en-US")
+       let profileUrl = '/profile/' + this.props.event.patientInsurance
         return (
             <Fragment> 
                 <Modal
@@ -35,7 +37,7 @@ class AppointmentInfoModal extends React.Component {
                 <ModalBody>
                 <div>
                     <p> Development: Appointment ID - {this.props.event.id} </p> 
-                    <p>Patient: {this.props.event.patient}</p>
+                    <Link to = {profileUrl}> Patient: {this.props.event.patient} </Link>
                     <p>Status: {this.props.event.status}</p>
                     <p>Procedure: {this.props.event.procedure}</p>
                     <p>Price: {this.props.event.price}</p>

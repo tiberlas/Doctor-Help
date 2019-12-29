@@ -27,7 +27,8 @@ class Calendar extends React.Component {
       procedure: "",
       price: "",
       discount: "",
-      status: ""
+      status: "",
+      patientInsurance: ""
     }
   }
 
@@ -52,7 +53,8 @@ class Calendar extends React.Component {
           procedure: event.extendedProps.procedure,
           price: event.extendedProps.price,
           discount: event.extendedProps.discount,
-          status: event.extendedProps.status
+          status: event.extendedProps.status,
+          patientInsurance: event.extendedProps.patientInsurance
         }
      });
   };
@@ -98,6 +100,7 @@ class Calendar extends React.Component {
         let procedureInfo = appointment.procedureName
         let priceInfo = appointment.price
         let discountInfo = appointment.discount
+        let insuranceInfo = appointment.insuranceNumber
 
         let event = 
         { 
@@ -109,7 +112,8 @@ class Calendar extends React.Component {
           status: statusInfo,
           procedure: procedureInfo,
           price: priceInfo,
-          discount: discountInfo
+          discount: discountInfo,
+          patientInsurance: insuranceInfo
         }
 
         events.push(event)

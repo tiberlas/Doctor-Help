@@ -176,6 +176,8 @@ public class AppointmentService {
 		
 		dto.setAppointment_id(appointment.getId());
 		
+		dto.setInsuranceNumber(String.valueOf(patient.getInsuranceNumber()));
+		
 		return dto;
 		
 	}

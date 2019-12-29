@@ -194,8 +194,6 @@ public class DoctorService {
 		}
 		
 		HealthRecordPOJO healthRecord = patient.getHealthRecord();
-		
-//		String allergyList = "";
 		List<AllergyPOJO> allergies= healthRecord.getAllergyList();
 		
 		ArrayList<String> list = new ArrayList<String>();
@@ -203,19 +201,7 @@ public class DoctorService {
 		for (AllergyPOJO allergy : allergies) {
 			list.add(allergy.getAllergy());
 		}
-//		int i = 0;
-//		for (; i < allergies.size() - 1; ++i) {
-//			allergyList += allergies.get(i).getAllergy() + ", ";
-//		}
-//		if (i > 0) {
-//			allergyList += allergies.get(i).getAllergy();
-//		} else if ((i == 0) && (allergies.size() == 1)) {
-//			allergyList = allergies.get(i).getAllergy();
-//		}
-//		if (allergyList.equals ("")) {
-//			allergyList = "/";
-//		}
-//		
+
 		
 		PatientHealthRecordDTO retVal = new PatientHealthRecordDTO();
 		
