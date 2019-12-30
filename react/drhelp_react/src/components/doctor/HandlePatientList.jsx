@@ -6,6 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import PatientItem from './PatientItem';
+import Button from 'react-bootstrap/Button';
 import '../../index.css';
 
 const sortTypes = {
@@ -41,7 +42,8 @@ const sortTypes = {
 class HandlePatientList extends Component {
     state = { 
         patients: [],
-        currentSort: 'default'
+        currentSort: 'default',
+        filterString: ''
     }
 
     componentDidMount () {
@@ -126,6 +128,21 @@ class HandlePatientList extends Component {
         }
     }
 
+    handleChange = (event) => {
+        this.setState({filterString: event.target.value})
+    }
+
+    handleFilter = () => {
+        axios.post('http://localhost:8080/api/patients/filter', 
+            {
+                filterResults: this.state.filterString
+            }).then(response => {
+                this.setState({patients: response.data});
+            }).catch(error => {
+                console.log('error in filter of procedure types')
+            })
+    }
+
     render() {
         let i = 0; 
         return (
@@ -136,6 +153,16 @@ class HandlePatientList extends Component {
                 <br/>
                 <Table class="table table-hover ">
                     <TableHead class="table-active">
+                        <TableRow class="table-active">
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>
+                                <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/>
+                            </TableCell>
+                            <TableCell>
+                                <Button class="btn btn-success" onClick = {this.handleFilter}>Search</Button>
+                            </TableCell>
+                        </TableRow>
                         <TableRow class="table-active">
                             <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('firstName')}>first name{this.renderArrowFirst()}</TableCell>
                             <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('lastName')}>last name{this.renderArrowLast()}</TableCell>

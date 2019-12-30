@@ -12,6 +12,7 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
 import com.ftn.dr_help.dto.PatientDTO;
+import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
@@ -342,7 +343,35 @@ public class PatientService {
 		return false;
 	}
 
-	
+	public List<PatientDTO> findAllfilter(PatientFilterDTO filter) {
+		
+		try {
+			
+			List<PatientPOJO> findedPOJO = findAll();
+			List<PatientDTO> finded = new ArrayList<>();
+			for(PatientPOJO patient : findedPOJO) {
+				finded.add(new PatientDTO(patient));
+			}
+			
+			if(filter.getFilterResults().isEmpty()) {
+				return finded;
+			}
+			
+			List<PatientDTO> ret = new ArrayList<PatientDTO>();
+			
+			String search = "";
+			for(PatientDTO patient : finded) {
+				search = patient.getFirstName().toLowerCase() + patient.getLastName().toLowerCase() + patient.getEmail().toLowerCase() + String.valueOf(patient.getInsuranceNumber());
+				if(search.contains(filter.getFilterResults().toLowerCase())) {
+					ret.add(patient);
+				}
+			}
+			
+			return ret;
+		} catch(Exception e) {
+			return null;
+		}
+	}
 	
 	
 	
