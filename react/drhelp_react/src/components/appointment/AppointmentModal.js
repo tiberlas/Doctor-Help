@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav'
 import {Row, Col} from 'react-bootstrap'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import OverviewTable from './OverviewTable'
-import HealthRecord from './HealthRecord'
+import HealthRecord from '../health_record/HealthRecord'
 import ExaminationReport from './ExaminationReport'
 import axios from 'axios'
 

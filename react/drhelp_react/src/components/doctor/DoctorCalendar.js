@@ -5,12 +5,12 @@ import timeGridPlugin from "@fullcalendar/timegrid"
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import interaction from "@fullcalendar/interaction"
 //import listPlugin from '@fullcalendar/list'
-import AppointmentInfoModal from './appointment/AppointmentInfoModal'
-import AppointmentModal from './appointment/AppointmentModal'
+import AppointmentInfoModal from '../appointment/AppointmentInfoModal'
+import AppointmentModal from '../appointment/AppointmentModal'
 import axios from 'axios'
-import '../main.scss' //webpack must be configured to do this
+import '../../main.scss' //webpack must be configured to do this
 
-class Calendar extends React.Component {
+class DoctorCalendar extends React.Component {
 
   state = {
     appointments: [],
@@ -60,16 +60,12 @@ class Calendar extends React.Component {
   };
 
   componentDidMount() {
-    if(this.props.medical_staff.role === 'nurse') {
-        alert('im a nurse' + this.props.medical_staff.id)
-    } else {
       let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.props.medical_staff.id 
       axios.get(url).then((response) => {
           this.setState({
             appointments: response.data
           })
       })
-    }
   }
 
 
@@ -102,8 +98,7 @@ class Calendar extends React.Component {
         let discountInfo = appointment.discount
         let insuranceInfo = appointment.insuranceNumber
 
-        let event = 
-        { 
+        let event = { 
           id: appointment.appointment_id,
           title: info, 
           start: start,
@@ -157,4 +152,4 @@ class Calendar extends React.Component {
   }
 
 }
-export default Calendar
+export default DoctorCalendar

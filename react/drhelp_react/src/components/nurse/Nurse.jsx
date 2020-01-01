@@ -11,7 +11,6 @@ import axios from 'axios';
 import PatientList from './PatientList'
 import ViewPatientProfile from '../patient/ViewPatientProfile'
 import PerscriptionList from './PerscriptionList.js';
-import Calendar from '../Calendar.js'
 
 
 class Nurse extends Component {
@@ -68,7 +67,7 @@ class Nurse extends Component {
                             <Route exact path="/nurse/patient-list"> <PatientList/> </Route>
                             <Route exact path="/nurse/perscription-list"> <PerscriptionList/> </Route>
                             <Route path = "/profile/"> <ViewPatientProfile/> </Route>
-                            <Route exact path = "/nurse/schedule"><Calendar medical_staff = {nurse} /></Route> 
+                            {/* <Route exact path = "/nurse/schedule"><Calendar medical_staff = {nurse} /></Route>  */}
                         </Switch>
                     </div>
                 </NurseContextProvider>

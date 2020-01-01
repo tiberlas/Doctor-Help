@@ -1,10 +1,12 @@
 import React from 'react'
 import axios from 'axios'
-import Button from 'react-bootstrap/Button'
+import ShowHealthRecord from './ShowHealthRecord'
+import UpdateHealthRecord from './UpdateHealthRecord'
 
 class HealthRecord extends React.Component {
 
     state = {
+        updating: false,
         health_record: {
             firstName: "",
             lastName: "",
@@ -37,6 +39,18 @@ class HealthRecord extends React.Component {
         })
     }
 
+    heightDisplay = () => {
+        return this.state.health_record.height
+    }
+
+    weightDisplay = () => {
+        return this.state.health_record.weight
+    }
+
+    diopterDisplay = () => {
+        return this.state.health_record.diopter
+    }
+
     allergyDisplay = () => {
 
         let allergies = ""
@@ -47,7 +61,6 @@ class HealthRecord extends React.Component {
             }
             
         }
-        console.log("allergies: ", allergies)
         return allergies
     }
 
@@ -72,45 +85,29 @@ class HealthRecord extends React.Component {
         return bloodType
     }
 
+    toggleUpdate = () => {
+        this.setState({updating: !this.state.updating})
+    }
+
     render() {
         return (
-            <div class="row d-flex justify-content-center">
-                <div class='col-md-11'>
-                <h2> {this.props.data.patient} </h2>
-                <br/>
-                <table class="table table-hover">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Age:</th>
-                                <td>{this.ageDisplay()}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Height: </th>
-                            <td>{this.state.health_record.height} m</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Weight:</th>
-                                <td>{this.state.health_record.weight} kg</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Diopter:</th>
-                                <td>{this.state.health_record.diopter}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Allergies:</th>
-                                <td>{this.allergyDisplay()}</td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">Blood type:</th>
-                                <td>{this.bloodTypeDisplay()}</td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-                <Button className = "btn btn-success"> Update</Button> 
-                </div>
-            </div>
+            !this.state.updating ?  <ShowHealthRecord data = {this.props.data} 
+                                        bloodTypeDisplay = {this.bloodTypeDisplay}
+                                        ageDisplay = {this.ageDisplay}
+                                        allergyDisplay = {this.allergyDisplay}
+                                        weightDisplay = {this.weightDisplay}
+                                        heightDisplay = {this.heightDisplay}
+                                        diopterDisplay = {this.diopterDisplay}
+                                        toggleUpdate = {this.toggleUpdate}
+                                    /> : <UpdateHealthRecord data = {this.props.data}
+                                        bloodTypeDisplay = {this.bloodTypeDisplay}
+                                        ageDisplay = {this.ageDisplay}
+                                        allergyDisplay = {this.allergyDisplay}
+                                        weightDisplay = {this.weightDisplay}
+                                        heightDisplay = {this.heightDisplay}
+                                        diopterDisplay = {this.diopterDisplay}
+                                        toggleUpdate = {this.toggleUpdate} />
+           
         )
     }
 

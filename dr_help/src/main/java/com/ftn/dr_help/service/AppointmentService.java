@@ -143,6 +143,7 @@ public class AppointmentService {
 			System.out.println("PACIJENT JE:" + patient.getFirstName());
 			dto.setPatientFirstName(patient.getFirstName());
 			dto.setPatientLastName(patient.getLastName());
+			dto.setInsuranceNumber(String.valueOf(patient.getInsuranceNumber()));
 		}
 		
 		ProceduresTypePOJO pt = appointment.getProcedureType();
@@ -175,8 +176,6 @@ public class AppointmentService {
 		dto.setRoomNumber(String.valueOf(appointment.getRoom().getNumber()));
 		
 		dto.setAppointment_id(appointment.getId());
-		
-		dto.setInsuranceNumber(String.valueOf(patient.getInsuranceNumber()));
 		
 		return dto;
 		
