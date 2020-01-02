@@ -7,10 +7,35 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+const sortTypes = {
+    name_up: {
+        fn: (a, b) => b.name.localeCompare(a.name)
+    },
+    name_down: {
+        fn: (a, b) => a.name.localeCompare(b.name)
+    },
+    type_up: {
+        fn: (a, b) => b.procedureTypeName.localeCompare(a.procedureTypeName)
+    },
+    type_down: {
+        fn: (a, b) => a.procedureTypeName.localeCompare(b.procedureTypeName)
+    },
+    number_up: {
+        fn: (a, b) => a.number - b.number
+    },
+    number_down: {
+        fn: (a, b) => b.number - a.number
+    },
+    default: {
+        fn: (a, b) => a
+    }
+}
+
 class HandlingRooms extends Component {
     state = {
         rooms: [],
-        refresh: false
+        refresh: false,
+        currentSort: 'default'
     }
 
     componentDidMount() {
@@ -29,7 +54,64 @@ class HandlingRooms extends Component {
         this.setState({ rooms: items, refresh: true });
         console.log("state", items)
     }
-    
+
+    onSortChange = (name) => {
+		const { currentSort } = this.state;
+        let nextSort;
+
+        if(name === 'name') {
+            if (currentSort === 'name_down') nextSort = 'name_up';
+            else if (currentSort === 'name_up') nextSort = 'default';
+            else nextSort = 'name_down';
+        } else if(name === 'type') {
+            if (currentSort === 'type_down') nextSort = 'type_up';
+            else if (currentSort === 'type_up') nextSort = 'default';
+            else nextSort = 'type_down';
+        } else {
+            if (currentSort === 'number_down') nextSort = 'number_up';
+            else if (currentSort === 'number_up') nextSort = 'default';
+            else nextSort = 'number_down';
+        }
+
+		this.setState({
+			currentSort: nextSort
+		}, () => {
+            this.renderArrowName()
+            this.renderArrowNumber()
+            this.renderArrowType()
+        });
+    };
+
+    renderArrowName = () => {
+        if(this.state.currentSort === 'name_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'name_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowType = () => {
+        if(this.state.currentSort === 'type_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'type_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowNumber = () => {
+        if(this.state.currentSort === 'number_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'number_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
     render() {
         let i = 0;
         return (
@@ -41,15 +123,16 @@ class HandlingRooms extends Component {
                 <Table class="table table-hover ">
                     <TableHead class="table-active">
                         <TableRow class="table-active">
-                            <TableCell class="text-success">room name</TableCell>
-                            <TableCell class="text-success">number</TableCell>
-                            <TableCell class="text-success">procedure name</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('name')}>room name{this.renderArrowName()}</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('number')}>number{this.renderArrowNumber()}</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('type')}>procedure name{this.renderArrowType()}</TableCell>
+                            <TableCell class="text-success">first free date</TableCell>
                             <TableCell class="text-success"></TableCell>
                             <TableCell class="text-success"></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {this.state.rooms.map (c => (
+                        {this.state.rooms.sort(sortTypes[this.state.currentSort].fn).map (c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
                                 <RoomItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate} />
                             </TableRow>
