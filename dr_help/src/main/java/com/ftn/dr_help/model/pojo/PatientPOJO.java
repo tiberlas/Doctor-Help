@@ -74,7 +74,6 @@ public class PatientPOJO implements Serializable{
 	private Long insuranceNumber;
 	
 	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private HealthRecordPOJO healthRecord;
 

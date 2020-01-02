@@ -12,6 +12,7 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
 import com.ftn.dr_help.dto.PatientDTO;
+import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
@@ -29,6 +30,7 @@ import com.ftn.dr_help.model.pojo.TherapyPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.AllergyRepository;
 import com.ftn.dr_help.repository.ExaminationReportRepository;
+import com.ftn.dr_help.repository.HealthRecordRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.UserRequestRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
@@ -47,6 +49,10 @@ public class PatientService {
 	
 	@Autowired
 	private ExaminationReportRepository examinationReportRepository;
+	
+	
+	@Autowired
+	private HealthRecordRepository healthRecordRepository;
 	
 	@Autowired
 	private PasswordValidate passwordValidate;
@@ -342,7 +348,52 @@ public class PatientService {
 		
 		return false;
 	}
+	
+	public PatientHealthRecordDTO findHealthRecordByInsuranceNumber(Long insuranceNumber, PatientHealthRecordDTO dto) {
+		PatientPOJO patient = patientRepository.findByInsuranceNumber(insuranceNumber);
+		HealthRecordPOJO recordPOJO = patient.getHealthRecord();
+		
+		
+		System.out.println("karton:" + patient.getHealthRecord().getBloodType());
+		System.out.println("dto:" + dto.getAllergyList());
+		
+		
+		List<AllergyPOJO> existingAllergies = allergyRepository.findAllByHealthRecordId(recordPOJO.getId());
+		if(!existingAllergies.isEmpty()) //ako su vec postojale alergije za tog pacijenta, obrisi ih
+			allergyRepository.deleteInBatch(existingAllergies);
+		
+		ArrayList<AllergyPOJO> list = new ArrayList<AllergyPOJO>(); //dodaj nove alergije, koje je doca prosledio
+		for(String a : dto.getAllergyList()) {
+				AllergyPOJO new_allergy = new AllergyPOJO();
+				new_allergy.setAllergy(a.trim());
+				new_allergy.setHealthRecord(recordPOJO);
+				allergyRepository.save(new_allergy);
+				System.out.println("saved allergy" + new_allergy.getAllergy());
+				list.add(new_allergy);
+		}
+		
+		recordPOJO.setAlergyList(list);
+		
+		System.out.println("blood type:"+ dto.getBloodType());
+		recordPOJO.setBloodType(dto.getBloodType());
+		recordPOJO.setDiopter(dto.getDiopter());
+		recordPOJO.setHeight(dto.getHeight());
+		recordPOJO.setWeight(dto.getWeight());
+		
+		patient.setHealthRecord(recordPOJO);
+		healthRecordRepository.save(recordPOJO);
+		patientRepository.save(patient);
+		
+		
+		return dto;
+		
+		
+		
+	}
+	
+	
 
+	
 	
 	
 	

@@ -23,11 +23,10 @@ import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
-
 import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
-
+import com.ftn.dr_help.model.enums.BloodTypeEnum;
+import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
-
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.HealthRecordService;
 import com.ftn.dr_help.service.PatientService;
@@ -121,10 +120,11 @@ public class PatientController {
 		
 		
 		HealthRecordPOJO healthRecord = new HealthRecordPOJO();
-		healthRecord.setDiopter(null); //generic health record
-		healthRecord.setHeight(null);
-		healthRecord.setWeight(null);
-		healthRecord.setBloodType(null);
+		healthRecord.setDiopter(0); //generic health record
+		healthRecord.setHeight(0);
+		healthRecord.setWeight(0);
+		healthRecord.setBloodType(BloodTypeEnum.O_POSITIVE);
+		healthRecord.setAlergyList(new ArrayList<AllergyPOJO>());
 		
 		p.setActivated(true);
 		p.setHealthRecord(healthRecord);

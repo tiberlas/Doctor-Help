@@ -12,4 +12,6 @@ public interface AllergyRepository extends JpaRepository<AllergyPOJO, Long> {
 
 	List<AllergyPOJO> findAllByHealthRecordId (Long id);
 	
+	AllergyPOJO findOneByAllergy(String allergy);
+	
 }

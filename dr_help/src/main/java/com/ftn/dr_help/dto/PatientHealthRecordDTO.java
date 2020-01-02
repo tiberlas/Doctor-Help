@@ -15,13 +15,42 @@ public class PatientHealthRecordDTO {
 	private Date birthday;
 	private double diopter;
 	private BloodTypeEnum bloodType;
+	private String bloodTypeString;
 	private ArrayList<String> allergyList;
 	
 	public PatientHealthRecordDTO() {
 		
 	}
 	
+	public PatientHealthRecordDTO(String firstName, String lastName,
+			double weight, double height, double diopter,
+			String bloodTypeString, ArrayList<String> allergyList) {
+		super();
+		this.weight = weight;
+		this.height = height;
+		this.diopter = diopter;
+		this.bloodType = BloodTypeEnum.valueOf(bloodTypeString);
+		this.allergyList = allergyList;
+	}
+
+
 	
+	
+	public PatientHealthRecordDTO(String firstName, String lastName,
+			double weight, double height, Date birthday, double diopter,
+			BloodTypeEnum bloodType, ArrayList<String> allergyList) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.weight = weight;
+		this.height = height;
+		this.birthday = birthday;
+		this.diopter = diopter;
+		this.bloodType = bloodType;
+		this.allergyList = allergyList;
+	}
+
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -69,6 +98,14 @@ public class PatientHealthRecordDTO {
 	}
 	public void setAllergyList(ArrayList<String> allergyList) {
 		this.allergyList = allergyList;
+	}
+
+	public String getBloodTypeString() {
+		return bloodTypeString;
+	}
+
+	public void setBloodTypeString(String bloodTypeString) {
+		this.bloodTypeString = bloodTypeString;
 	}
 	
 	
