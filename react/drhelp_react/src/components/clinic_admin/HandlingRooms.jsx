@@ -1,12 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import RoomItem from '../rooms/RoomItem';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import axios from 'axios';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 class HandlingRooms extends Component {
     state = {
         rooms: [],
-        name: '',
         refresh: false
     }
 
@@ -20,13 +24,6 @@ class HandlingRooms extends Component {
                 refresh: false
             })
         })
-
-        axios.get('http://localhost:8080/api/clinics/id='+this.context.admin.clinicId)
-        .then(response => {
-            this.setState({
-                name: response.data.name
-            })
-        })
     }
 
     handleUpdate = (key) => {
@@ -37,27 +34,32 @@ class HandlingRooms extends Component {
     }
     
     render() {
-        return ( 
+        let i = 0;
+        return (
             <div class='row d-flex justify-content-center'>
             <div class='col-md-7'> 
-                <h2>Clinic {this.state.name}</h2>
+                <h2>Room list</h2>
                 <br/>
-                <table class="table table-hover ">
-                    <thead>
-                        <th class="text-success">name</th>
-                        <th class="text-success">number</th>
-                        <th></th>
-                        <th></th>
-                    </thead>
-                    <tbody>
+                <br/>
+                <Table class="table table-hover ">
+                    <TableHead class="table-active">
+                        <TableRow class="table-active">
+                            <TableCell class="text-success">room name</TableCell>
+                            <TableCell class="text-success">number</TableCell>
+                            <TableCell class="text-success">procedure name</TableCell>
+                            <TableCell class="text-success"></TableCell>
+                            <TableCell class="text-success"></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         {this.state.rooms.map (c => (
-                            <Fragment>
+                            <TableRow className={(++i)%2? `table-dark` : ``} >
                                 <RoomItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate} />
-                            </Fragment>
+                            </TableRow>
                         ))  }
 
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
             </div>
          );

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import ChangeRoomModal from './ChangeRoomModal';
 import Button from 'react-bootstrap/Button'
@@ -52,7 +52,7 @@ class RoomItem extends Component {
     render() { 
 
         return ( 
-            <tr>
+            <Fragment>
                 <td>{this.state.name}</td>
                 <td>{this.state.number}</td>
                 <td><button onClick={this.onDelite} class='btn btn-danger'>delete</button></td>
@@ -79,7 +79,7 @@ class RoomItem extends Component {
                         onHide={this.setMessageHide}/>
                 </td>
 
-            </tr>
+                </Fragment>
          );
     }
 }

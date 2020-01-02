@@ -31,32 +31,33 @@ public class RoomService {
 	@Autowired
 	private ProcedureTypeRepository procedureTypeRepository;
 	
-	public List<RoomDTO> findAll(Long clinicID) {
-		if(clinicID == null) {
-			return null;
-		}
+	public List<RoomDTO> findAll(String email) {
 		
-		List<RoomPOJO> finded = repository.findAllByClinic_id(clinicID);
-		
-		if(finded == null)
-			return null;
-		
-		List<RoomDTO> ret = new ArrayList<RoomDTO>();
-		for(RoomPOJO room : finded) {
-			if(!room.isDeleted()) {
-				ret.add(new RoomDTO(room));				
+		try {
+			List<RoomPOJO> finded = adminRepository.findOneByEmail(email).getClinic().getRoomList();
+			
+			if(finded == null)
+				return null;
+			
+			List<RoomDTO> ret = new ArrayList<RoomDTO>();
+			for(RoomPOJO room : finded) {
+				if(!room.isDeleted()) {
+					ret.add(new RoomDTO(room));				
+				}
 			}
-		}
-		
-		if(ret.isEmpty()) {
+			
+			if(ret.isEmpty()) {
+				return null;
+			}
+			
+			return ret;
+		} catch(Exception e) {
 			return null;
 		}
-		
-		return ret;
 	}
 	
-	public RoomDTO findOne(Long clinicID, Long roomID) {
-		if(clinicID == null || roomID == null) {
+	public RoomDTO findOne(Long roomID, String email) {
+		if(roomID == null) {
 			return null;
 		}
 		

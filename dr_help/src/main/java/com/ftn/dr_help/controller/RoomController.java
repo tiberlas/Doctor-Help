@@ -31,9 +31,11 @@ public class RoomController {
 	@Autowired
 	private CurrentUser currentUser;
 	
-	@GetMapping(value = "/clinic={clinic_id}/all")
-	public ResponseEntity<List<RoomDTO>> getAllRooms(@PathVariable("clinic_id") Long clinic_id) {
-		List<RoomDTO> finded = service.findAll(clinic_id);
+	@GetMapping(value = "/all")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RoomDTO>> getAllRooms() {
+		String email = currentUser.getEmail();
+		List<RoomDTO> finded = service.findAll(email);
 		
 		if(finded == null || finded.isEmpty())
 			return new ResponseEntity<List<RoomDTO>>(HttpStatus.NOT_FOUND);
@@ -41,9 +43,12 @@ public class RoomController {
 		return new ResponseEntity<List<RoomDTO>>(finded,  HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/clinic={clinic_id}/one/room={room_id}")
-	public ResponseEntity<RoomDTO> getOneRooms(@PathVariable("clinic_id") Long clinic_id, @PathVariable("room_id") Long room_id) {
-		RoomDTO finded = service.findOne(clinic_id, room_id);
+	@GetMapping(value = "/one/room={room_id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<RoomDTO> getOneRooms(@PathVariable("room_id") Long room_id) {
+		
+		String email = currentUser.getEmail();
+		RoomDTO finded = service.findOne(room_id, email);
 		
 		if(finded == null)
 			return new ResponseEntity<RoomDTO>(HttpStatus.NOT_FOUND);
