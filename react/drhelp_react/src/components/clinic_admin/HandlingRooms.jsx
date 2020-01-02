@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import RoomItem from '../rooms/RoomItem';
-import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import axios from 'axios';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,10 +13,8 @@ class HandlingRooms extends Component {
         refresh: false
     }
 
-    static contextType = ClinicAdminContext
-
     componentDidMount() {
-        axios.get('http://localhost:8080/api/rooms/clinic='+this.context.admin.clinicId+'/all')
+        axios.get('http://localhost:8080/api/rooms/all')
         .then(response => {
             this.setState({
                 rooms: response.data,
@@ -38,8 +35,8 @@ class HandlingRooms extends Component {
         return (
             <div class='row d-flex justify-content-center'>
             <div class='col-md-7'> 
-                <h2>Room list</h2>
                 <br/>
+                <h2>List of rooms</h2>
                 <br/>
                 <Table class="table table-hover ">
                     <TableHead class="table-active">

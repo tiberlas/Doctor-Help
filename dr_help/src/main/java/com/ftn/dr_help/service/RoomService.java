@@ -57,6 +57,9 @@ public class RoomService {
 	}
 	
 	public RoomDTO findOne(Long roomID, String email) {
+		
+		Long clinicID = adminRepository.findOneByEmail(email).getClinic().getId();
+		
 		if(roomID == null) {
 			return null;
 		}
@@ -130,36 +133,35 @@ public class RoomService {
 	}
 	
 	public RoomDTO change(RoomDTO room, String email) {
-		if(email == null) {
+		
+		try {
+			ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+			
+			ClinicPOJO clinic = admin.getClinic();
+			RoomPOJO finded = repository.findByIdAndClinic_id(room.getId(), clinic.getId()).orElse(null);
+			if(finded == null) {
+				return null;			
+			}
+			
+			RoomPOJO exist = repository.findOneByNumber(room.getNumber()).orElse(null);
+			if(exist!= null && exist.getNumber() != finded.getNumber()) {
+				return null;
+			}
+			
+			ProceduresTypePOJO procedurasTypes = procedureTypeRepository.findById(room.getProcedureTypeId()).orElse(null);
+			if(procedurasTypes == null) {
+				return null;
+			}
+			
+			finded.setName(room.getName());
+			finded.setNumber(room.getNumber());
+			finded.setProcedurasTypes(procedurasTypes);
+			repository.save(finded);
+			
+			return new RoomDTO(finded);
+		} catch(Exception e) {
 			return null;
 		}
-		
-		if(room == null || room.getId() == null || room.getNumber() == 0 || room.getName() == null) {
-			return null;
-		}
-		
-		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
-		if(admin == null) {
-			return null;
-		}
-		
-		ClinicPOJO clinic = admin.getClinic();
-		RoomPOJO finded = repository.findByIdAndClinic_id(room.getId(), clinic.getId()).orElse(null);
-		if(finded == null) {
-			return null;			
-		}
-		
-		RoomPOJO exist = repository.findOneByNumber(room.getNumber()).orElse(null);
-		if(exist!= null && exist.getNumber() != finded.getNumber()) {
-			return null;
-		}
-		
-		
-		finded.setName(room.getName());
-		finded.setNumber(room.getNumber());
-		repository.save(finded);
-		
-		return new RoomDTO(finded);
 	}
 	
 }

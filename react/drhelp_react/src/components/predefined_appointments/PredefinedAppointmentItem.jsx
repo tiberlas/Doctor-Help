@@ -40,7 +40,7 @@ class PredefinedAppointmentItem extends Component {
                 this.setState({globalError: true})
             })
         
-        axios.get("http://localhost:8080/api/rooms/clinic="+this.state.clinicID+"/one/room="+this.state.roomID)
+        axios.get("http://localhost:8080/api/rooms/one/room="+this.state.roomID)
             .then(response => {
                 this.setState({roomName: response.data.name+' '+response.data.number})
             }).catch(error => {
