@@ -1,12 +1,16 @@
 package com.ftn.dr_help.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
@@ -30,6 +34,9 @@ public class RoomService {
 	
 	@Autowired
 	private ProcedureTypeRepository procedureTypeRepository;
+	
+	@Autowired
+	private DateConverter dateConvertor;
 	
 	public List<RoomDTO> findAll(String email) {
 		
@@ -162,6 +169,38 @@ public class RoomService {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+	
+	public List<RoomCalendarDTO> getSchedule(Long roomId) throws NullPointerException{
+		
+			RoomPOJO room = repository.findById(roomId).orElse(null);
+			
+			String begining;
+			if(room.getProcedurasTypes().isOperation()) {
+				begining = "Operation with dr ";
+			} else {
+				begining = "Appointment with dr ";
+			}
+			
+			Calendar durationDate = Calendar.getInstance(); 
+			durationDate.setTime(room.getProcedurasTypes().getDuration());
+			String duration = dateConvertor.timeToString(durationDate);
+			
+			List<RoomCalendarDTO> ret = new ArrayList<>();
+			for(AppointmentPOJO appointment : room.getAppointments()) {
+				if(!appointment.isDeleted()) {
+					RoomCalendarDTO scheduledAppointment = new RoomCalendarDTO();
+					scheduledAppointment.setAppointmentId(appointment.getId());
+					scheduledAppointment.setTitle(begining+appointment.getDoctor().getFirstName()+" "+appointment.getDoctor().getLastName());
+					scheduledAppointment.setDate(dateConvertor.toString(appointment.getDate()));
+					scheduledAppointment.setStartTime(dateConvertor.timeToString(appointment.getDate()));
+					scheduledAppointment.setDuration(duration);
+					
+					ret.add(scheduledAppointment);
+				}
+			}
+			
+			return ret;
 	}
 	
 }

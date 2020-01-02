@@ -2,12 +2,10 @@ package com.ftn.dr_help.comon;
 
 import java.util.Calendar;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class DateConverter {
-
-	public DateConverter () {}
 	
 	public String toString (Calendar date) {
 		String retVal =  String.valueOf(date.get(Calendar.DAY_OF_MONTH)) + "." 
@@ -22,6 +20,13 @@ public class DateConverter {
 				+ String.valueOf(date.get(Calendar.YEAR)) + ". "
 				+ String.valueOf(date.get(Calendar.HOUR)) + ":"
 				+ String.valueOf(date.get(Calendar.MINUTE));
+		return retVal;
+	}
+	
+	public String timeToString(Calendar time) {
+		String retVal = String.valueOf(time.get(Calendar.HOUR)) + ":"
+				+ String.valueOf(time.get(Calendar.MINUTE));
+		
 		return retVal;
 	}
 }

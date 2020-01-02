@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
 import com.ftn.dr_help.service.RoomService;
 
@@ -90,6 +91,21 @@ public class RoomController {
 		}
 		
 		return new ResponseEntity<RoomDTO>(ret, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="room={id}/schedule", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RoomCalendarDTO>> getSchedule(@PathVariable("id") Long roomId) {
+		
+		try {
+			List<RoomCalendarDTO> ret = service.getSchedule(roomId);
+		
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		} catch (NullPointerException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);			
+		}			
 	}
 	
 }
