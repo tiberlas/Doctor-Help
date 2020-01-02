@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import axios from 'axios'
 import ShowHealthRecord from './ShowHealthRecord'
 import UpdateHealthRecord from './UpdateHealthRecord'
@@ -37,6 +37,25 @@ class HealthRecord extends React.Component {
             }))
             console.log("health: ", this.state.health_record)
         })
+    }
+
+    update = (record) => {
+        console.log('passed record', record)
+            this.setState( prevState => ({
+                health_record: {
+                    ...prevState.health_record,
+                    height: record.height,
+                    weight: record.weight,
+                    diopter: record.diopter,
+                    bloodType: record.bloodType,
+                    allergyList: record.allergyList
+                }
+            }))
+        this.toggleUpdate()
+    }
+
+    toggleUpdate = () => {
+        this.setState({updating: !this.state.updating})
     }
 
     heightDisplay = () => {
@@ -85,13 +104,12 @@ class HealthRecord extends React.Component {
         return bloodType
     }
 
-    toggleUpdate = () => {
-        this.setState({updating: !this.state.updating})
-    }
+    
 
     render() {
         return (
-            !this.state.updating ?  <ShowHealthRecord data = {this.props.data} 
+            <Fragment> 
+            {!this.state.updating ?  <ShowHealthRecord data = {this.props.data} 
                                         bloodTypeDisplay = {this.bloodTypeDisplay}
                                         ageDisplay = {this.ageDisplay}
                                         allergyDisplay = {this.allergyDisplay}
@@ -106,8 +124,9 @@ class HealthRecord extends React.Component {
                                         weightDisplay = {this.weightDisplay}
                                         heightDisplay = {this.heightDisplay}
                                         diopterDisplay = {this.diopterDisplay}
-                                        toggleUpdate = {this.toggleUpdate} />
-           
+                                        update = {this.update}
+                                        toggleUpdate = {this.toggleUpdate} />}
+            </Fragment>
         )
     }
 
