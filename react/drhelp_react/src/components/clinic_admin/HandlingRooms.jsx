@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { Redirect } from 'react-router-dom';
 
 const sortTypes = {
     name_up: {
@@ -35,7 +36,9 @@ class HandlingRooms extends Component {
     state = {
         rooms: [],
         refresh: false,
-        currentSort: 'default'
+        currentSort: 'default',
+        roomId: 0,
+        goto_schedule: false
     }
 
     componentDidMount() {
@@ -112,7 +115,17 @@ class HandlingRooms extends Component {
         }
     }
 
+    handleRoomClick = (id)  => {
+        this.setState({goto_schedule: true, roomId: id})
+    }
+
     render() {
+        if(this.state.goto_schedule==true) {
+            return(
+                <Redirect exact to={`/schedule/${this.state.roomId}`} ></Redirect>
+            );
+        }
+
         let i = 0;
         return (
             <div class='row d-flex justify-content-center'>
@@ -133,7 +146,7 @@ class HandlingRooms extends Component {
                     </TableHead>
                     <TableBody>
                         {this.state.rooms.sort(sortTypes[this.state.currentSort].fn).map (c => (
-                            <TableRow className={(++i)%2? `table-dark` : ``} >
+                            <TableRow className={(++i)%2? `table-dark` : ``} onClick={() => this.handleRoomClick(c.id)} >
                                 <RoomItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate} />
                             </TableRow>
                         ))  }

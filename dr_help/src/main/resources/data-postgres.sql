@@ -157,9 +157,9 @@ values ('2020-1-22 08:00:00', 0, 'APPROVED', 2, null, 1, 2, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-1-22 09:00:00', 0, 'APPROVED', 2, null, 1, 3, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 09:03:00', 20, 'APPROVED', 2, null, 1, 4, 2, 2, false);
+values ('2020-1-22 09:30:00', 20, 'APPROVED', 2, null, 1, 4, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 10:03:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
+values ('2020-1-22 10:30:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
 
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (3, 1, 1);

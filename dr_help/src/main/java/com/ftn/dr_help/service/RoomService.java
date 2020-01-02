@@ -184,7 +184,6 @@ public class RoomService {
 			
 			Calendar durationDate = Calendar.getInstance(); 
 			durationDate.setTime(room.getProcedurasTypes().getDuration());
-			String duration = dateConvertor.timeToString(durationDate);
 			
 			List<RoomCalendarDTO> ret = new ArrayList<>();
 			for(AppointmentPOJO appointment : room.getAppointments()) {
@@ -192,9 +191,14 @@ public class RoomService {
 					RoomCalendarDTO scheduledAppointment = new RoomCalendarDTO();
 					scheduledAppointment.setAppointmentId(appointment.getId());
 					scheduledAppointment.setTitle(begining+appointment.getDoctor().getFirstName()+" "+appointment.getDoctor().getLastName());
-					scheduledAppointment.setDate(dateConvertor.toString(appointment.getDate()));
+					scheduledAppointment.setDate(dateConvertor.americanDateToString(appointment.getDate()));
 					scheduledAppointment.setStartTime(dateConvertor.timeToString(appointment.getDate()));
-					scheduledAppointment.setDuration(duration);
+					
+					Calendar endTimeDate = appointment.getDate();
+					endTimeDate.add(Calendar.HOUR, durationDate.get(Calendar.HOUR));
+					endTimeDate.add(Calendar.MINUTE, durationDate.get(Calendar.MINUTE));
+					String endTime = dateConvertor.timeToString(endTimeDate);
+					scheduledAppointment.setEndTime(endTime);
 					
 					ret.add(scheduledAppointment);
 				}

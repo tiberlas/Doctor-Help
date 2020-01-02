@@ -5,8 +5,8 @@ public class RoomCalendarDTO {
 	private Long appointmentId;
 	private String title;
 	private String date;
-	private String StartTime;
-	private String duration;
+	private String startTime;
+	private String endTime;
 	
 	public RoomCalendarDTO() {
 		super();
@@ -17,8 +17,8 @@ public class RoomCalendarDTO {
 		this.appointmentId = appointmentId;
 		this.title = title;
 		this.date = date;
-		this.StartTime = time;
-		this.duration = duration;
+		this.startTime = time;
+		this.endTime = duration;
 	}
 	
 	public Long getAppointmentId() {
@@ -40,16 +40,16 @@ public class RoomCalendarDTO {
 		this.date = date;
 	}
 	public String getStartTime() {
-		return StartTime;
+		return startTime;
 	}
 	public void setStartTime(String time) {
-		this.StartTime = time;
+		this.startTime = time;
 	}
-	public String getDuration() {
-		return duration;
+	public String getEndTime() {
+		return endTime;
 	}
-	public void setDuration(String duration) {
-		this.duration = duration;
+	public void setEndTime(String duration) {
+		this.endTime = duration;
 	}
 
 }
