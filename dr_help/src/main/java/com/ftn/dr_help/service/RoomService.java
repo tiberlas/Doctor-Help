@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.dto.RoomDTO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.ClinicRepository;
+import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.repository.RoomRepository;
 
 @Service
@@ -25,6 +27,9 @@ public class RoomService {
 	
 	@Autowired
 	private ClinicRepository clinicRepository;
+	
+	@Autowired
+	private ProcedureTypeRepository procedureTypeRepository;
 	
 	public List<RoomDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -64,36 +69,38 @@ public class RoomService {
 	}
 	
 	public RoomDTO save(RoomDTO newRoom, String email) {
-		if(email == null) {
+
+		try {
+			
+			RoomPOJO exist = repository.findOneByNumber(newRoom.getNumber()).orElse(null);
+			if(exist != null) {
+				return null;
+			}
+			
+			ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+			
+			ClinicPOJO clinic = admin.getClinic();
+			RoomPOJO room = new RoomPOJO();
+			room.setName(newRoom.getName());
+			room.setNumber(newRoom.getNumber());
+			room.setClinic(clinic);
+			
+			ProceduresTypePOJO procedure = procedureTypeRepository.findById(newRoom.getProcedureTypeId()).orElse(null);
+			if(procedure == null) {
+				return null;
+			}
+			room.setProcedurasTypes(procedure);
+			
+			repository.save(room);
+			
+			clinic.addRoom(room);
+			clinicRepository.save(clinic);
+			
+			return new RoomDTO(room);
+			
+		} catch(Exception e) {
 			return null;
 		}
-		
-		if(newRoom == null) {
-			return null;
-		}
-		
-		RoomPOJO exist = repository.findOneByNumber(newRoom.getNumber()).orElse(null);
-		if(exist != null) {
-			return null;
-		}
-		
-		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
-		if(admin == null) {
-			return null;
-		}
-		
-		ClinicPOJO clinic = admin.getClinic();
-		RoomPOJO room = new RoomPOJO();
-		room.setName(newRoom.getName());
-		room.setNumber(newRoom.getNumber());
-		room.setClinic(clinic);
-		//fali za procedure type
-		repository.save(room);
-		
-		clinic.addRoom(room);
-		clinicRepository.save(clinic);
-		
-		return new RoomDTO(room);
 	}
 	
 	public void delete(Long id, String email) {
