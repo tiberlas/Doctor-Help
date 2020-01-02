@@ -12,6 +12,7 @@ import Calendar from '../Calendar'
 import HandlePatientList from './HandlePatientList.jsx';
 import DoctorVacation from './DoctorVacation.jsx';
 import StartAppointment from './StartAppointmnet.jsx';
+import ViewPatientProfile from '../patient/ViewPatientProfile';
 
 class Doctor extends Component {
     state = { 
@@ -66,6 +67,7 @@ class Doctor extends Component {
                             <Route exact path = "/doctor/patients"><HandlePatientList /></Route>
                             <Route exact path = "/doctor/vacation"><DoctorVacation /> </Route>
                             <Route exact path = "/doctor/start+appointment"> <StartAppointment /> </Route>
+                            <Route path = "/profile/"> <ViewPatientProfile/> </Route>
                         </Switch>
                     </div>
                 </DoctorContextProvider>

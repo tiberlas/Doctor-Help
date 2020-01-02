@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import PatientItem from './PatientItem';
 import Button from 'react-bootstrap/Button';
+import { Redirect } from 'react-router-dom';
 import '../../index.css';
 
 const sortTypes = {
@@ -43,7 +44,9 @@ class HandlePatientList extends Component {
     state = { 
         patients: [],
         currentSort: 'default',
-        filterString: ''
+        filterString: '',
+        url: '',
+        goto_profile: false
     }
 
     componentDidMount () {
@@ -143,7 +146,17 @@ class HandlePatientList extends Component {
             })
     }
 
+    handleClick = (insurance) => {
+        this.setState({url: insurance, goto_profile: true})
+    }
+
     render() {
+        if(this.state.goto_profile==true) {
+            return (
+                <Redirect exact to={`/profile/${this.state.url}`} ></Redirect>
+            );
+        }
+
         let i = 0; 
         return (
             <div class='row d-flex justify-content-center'>
@@ -172,7 +185,7 @@ class HandlePatientList extends Component {
                     </TableHead>
                     <TableBody>
                         {[...this.state.patients].sort(sortTypes[this.state.currentSort].fn).map(patient => (
-                            <TableRow className={(++i)%2? `table-dark`: ``}>
+                            <TableRow className={`${(++i)%2? 'table-dark': ''} `} onClick={() => this.handleClick(patient.insuranceNumber)}>
                                 <PatientItem key={patient.id} id={patient.id} value={patient} />
                             </TableRow>
                         ))}
