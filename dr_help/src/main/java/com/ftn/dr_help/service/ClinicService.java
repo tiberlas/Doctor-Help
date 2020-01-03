@@ -21,7 +21,6 @@ import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
-import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.validation.ClinicValidation;
 
 
@@ -43,8 +42,6 @@ public class ClinicService {
 	@Autowired
 	private DoctorRepository doctorRepository;
 	
-	@Autowired
-	private ProcedureTypeRepository procedureTypeRepository;
 	
 	public ClinicPOJO findOne(Long id) {
 		if(id == null) {
@@ -179,37 +176,6 @@ public class ClinicService {
 				}
 			}
 		}
-		
-//		List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments((long)1, calendarMin, calendarMax);
-//		
-//		DailySchedule schedule = new DailySchedule (calendarMin, Shift.SECOND);
-//		for (AppointmentPOJO a : appointments) {
-//			schedule.addAppointment(a);
-//		}
-		// Debug
-//		System.out.println("");
-//		System.out.println("AKTIVIRAN: ClinicService.filterByDate");
-//		System.out.println("[");
-//		for (AppointmentPOJO a : appointments) {
-//			System.out.println(a.getId());
-//		}
-//		System.out.println("]");
-//		System.out.println("[");
-//		for (ClinicPOJO c : inputList) {
-//			System.out.println(c.getName());
-//		}
-//		System.out.println("]");
-//		System.out.println("");
-		
-//		List<Term> availableTerms = schedule.getAvaliableTerms(appointments.get(0).getProcedureType());
-		
-//		for (Term t : availableTerms) {
-//			System.out.println("Slobodan sam u: " + t.getTime().get(Calendar.YEAR)
-//						+ "-" + t.getTime().get(Calendar.MONTH)
-//						+ "-" + t.getTime().get(Calendar.DAY_OF_MONTH)
-//						+ " " + t.getTime().get(Calendar.HOUR)
-//						+ ":" + t.getTime().get(Calendar.MINUTE));
-//		}
 		
 		return retVal;
 	}

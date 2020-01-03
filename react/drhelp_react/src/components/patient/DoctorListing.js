@@ -1,8 +1,11 @@
 import React, {Component, Fragment} from 'react';
-import { TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { TableHead, TableBody, TableRow, TableCell, MenuItem } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
+import { Dropdown, Button } from 'react-bootstrap';
+import DropdownToggle from 'react-bootstrap/DropdownToggle';
+import DropdownMenu from 'react-bootstrap/DropdownMenu';
 
 
 class DoctorListing extends Component {
@@ -43,6 +46,24 @@ class DoctorListing extends Component {
 				<TableCell><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
 				<TableCell><p class='text-white'>{row.lastName}</p></TableCell>
 				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
+				<TableCell>
+					<Dropdown>
+						<DropdownToggle>
+							Meni
+						</DropdownToggle>
+						<DropdownMenu>
+							<MenuItem>1</MenuItem>
+							<MenuItem>2</MenuItem>
+							<MenuItem>3</MenuItem>
+							<MenuItem>4</MenuItem>
+						</DropdownMenu>
+					</Dropdown>
+				</TableCell>
+				<TableCell>
+					<Button>
+						Potvrdi
+					</Button>
+				</TableCell>
 			</Fragment>
 		)
 	}

@@ -129,6 +129,7 @@ public class ClinicController {
 		List<ClinicPOJO> clinicList = new ArrayList<ClinicPOJO>();
 		
 		if (filter.equals("unfiltered")) {
+			System.out.println("NEFILTRIRANE KLINIKE!!!1!");
 			List<ClinicPOJO> clinics = clinicService.findAll();
 			for (ClinicPOJO c : clinics) {
 				clinicList.add(c);
