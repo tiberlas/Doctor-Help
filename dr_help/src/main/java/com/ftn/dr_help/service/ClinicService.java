@@ -124,8 +124,8 @@ public class ClinicService {
 		String dateMaxString = dateString + " 23:59:59";
 		
 		
-		System.out.println("Date min string: " + dateMinString);
-		System.out.println("Date max string: " + dateMaxString);
+//		System.out.println("Date min string: " + dateMinString);
+//		System.out.println("Date max string: " + dateMaxString);
 		
 		Date dateMin = sdf.parse (dateMinString);
 		Date dateMax = sdf.parse (dateMaxString);
@@ -137,14 +137,23 @@ public class ClinicService {
 		calendarMax.setTime(dateMax);
 		
 		List<ClinicPOJO> retVal = new ArrayList<ClinicPOJO> ();
- 		List<ClinicPOJO> clinics = repository.filterByAppointmentType (procedureType);
+// 		List<ClinicPOJO> clinics = repository.filterByAppointmentType (procedureType);
 //		if (clinics.size() == 0) {
 //			System.out.println("Nisam nasao appointment");
 //			//clinics = repository.fliterByProcedure();
 //			return inputList;
 //		}
- 		for (ClinicPOJO c : clinics) {
-			List<DoctorPOJO> doctors = doctorRepository.filterByClinicAndProcedureType (c.getId(), procedureType);
+		System.out.println("Input list size: " + inputList.size());
+ 		for (ClinicPOJO c : inputList) {
+			List<DoctorPOJO> doctors;
+			if (procedureType.equals("unfiltered")) {
+				doctors = doctorRepository.findAllByClinic_id(c.getId());
+			}
+			else {
+				doctors = doctorRepository.filterByClinicAndProcedureType (c.getId(), procedureType);
+			}
+			System.out.println("Doctor list size: " + doctors.size());
+			System.out.println("Clinic id: " + c.getId() + "; Procedure type: " + procedureType);
 			for (DoctorPOJO d : doctors) {
 				DailySchedule schedule;
 				switch (calendarMin.get(Calendar.DAY_OF_WEEK)) {

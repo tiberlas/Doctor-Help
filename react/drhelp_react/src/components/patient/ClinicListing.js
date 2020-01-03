@@ -39,8 +39,9 @@ class ClinicListing extends Component {
 		if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
 			profileUrl = '/clinic/' + row.id + '/' + this.state.activeFilter;
 		} else {
-			profileUrl = '/clinic/' + row.id + '/unf';
+			profileUrl = '/clinic/' + row.id + '/unfiltered';
 		}
+		profileUrl += '/' + this.state.selectedDate;
 		return (
             <Fragment>
                 <TableCell><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
