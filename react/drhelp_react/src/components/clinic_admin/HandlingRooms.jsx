@@ -36,25 +36,18 @@ const sortTypes = {
 class HandlingRooms extends Component {
     state = {
         rooms: [],
-        refresh: false,
         currentSort: 'default',
         modalShow: false
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/rooms/all')
-        .then(response => {
-            this.setState({
-                rooms: response.data,
-                refresh: false
-            })
-        })
+        this.handleShowAll()
     }
 
     handleUpdate = (key) => {
         const items = this.state.rooms.filter(item => item.id !== key);
         console.log('items', items)
-        this.setState({ rooms: items, refresh: true });
+        this.setState({ rooms: items });
         console.log("state", items)
     }
 
@@ -123,6 +116,15 @@ class HandlingRooms extends Component {
         this.setState({modalShow: false})
     }
 
+    handleShowAll = () => {
+        axios.get('http://localhost:8080/api/rooms/all')
+        .then(response => {
+            this.setState({
+                rooms: response.data
+            })
+        })
+    }
+
     handleRoomSearch = (name, number, typeId, date, time) => {
         this.setState({modalShow: false})
         let rname = null
@@ -171,7 +173,7 @@ class HandlingRooms extends Component {
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('number')}>number{this.renderArrowNumber()}</TableCell>
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('type')}>procedure name{this.renderArrowType()}</TableCell>
                             <TableCell class="text-success">first free date</TableCell>
-                            <TableCell class="text-success"></TableCell>
+                            <TableCell class="text-success"><Button class="btn btn-success" onClick={this.handleShowAll} >show all</Button></TableCell>
                             <TableCell class="text-success"><Button class='btn btn-success' onClick={this.handleSearchClick}>search</Button></TableCell>
                         </TableRow>
                     </TableHead>

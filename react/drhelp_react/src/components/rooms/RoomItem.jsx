@@ -17,6 +17,7 @@ class RoomItem extends Component {
             number: this.props.value.number,
             type: this.props.value.procedureTypeName,
             typeId: this.props.value.procedureTypeId,
+            reserved: this.props.value.reserved,
             modalShow: false,
             messageShow: false,
             message: '',
@@ -64,10 +65,10 @@ class RoomItem extends Component {
                 </TableCell>
                 <TableCell class='text text-white'>{this.state.number}</TableCell>
                 <TableCell class='text text-white'>{this.state.type}</TableCell>
-                <TableCell><button onClick={this.onDelite} class='btn btn-danger'>delete</button></TableCell>
+                <TableCell><button onClick={this.onDelite} class='btn btn-danger' disabled={this.state.reserved}>delete</button></TableCell>
                 <TableCell>
                     <ButtonToolbar>
-                        <Button variant="primary" onClick={this.setModalShow}>
+                        <Button variant="primary" onClick={this.setModalShow} disabled={this.state.reserved}>
                             change
                         </Button>
 

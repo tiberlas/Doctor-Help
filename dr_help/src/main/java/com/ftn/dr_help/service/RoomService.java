@@ -22,6 +22,8 @@ import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.repository.RoomRepository;
 
+import ch.qos.logback.classic.net.SyslogAppender;
+
 @Service
 public class RoomService {
 
@@ -47,20 +49,29 @@ public class RoomService {
 			
 			if(finded == null)
 				return null;
+
+			List<RoomPOJO> reservedRooms = repository.getAllReservedRooms();
 			
 			List<RoomDTO> ret = new ArrayList<RoomDTO>();
 			for(RoomPOJO room : finded) {
 				if(!room.isDeleted()) {
-					ret.add(new RoomDTO(room));				
+					if(reservedRooms.contains(room)) {
+						RoomDTO roomDTO = new RoomDTO(room);
+						roomDTO.setReserved(true);
+						ret.add(roomDTO);
+					} else {
+						ret.add(new RoomDTO(room));
+					}
 				}
 			}
-			
+		
 			if(ret.isEmpty()) {
 				return null;
 			}
 			
 			return ret;
 		} catch(Exception e) {
+			System.out.println("EXCEPTION "+e.getMessage() +" CAUSE:" + e.getCause());
 			return null;
 		}
 	}
@@ -116,29 +127,40 @@ public class RoomService {
 		}
 	}
 	
-	public void delete(Long id, String email) {
-		if(email == null) {
-			return;
+	public boolean delete(Long id, String email) {
+		try {
+			if(email == null) {
+				return false;
+			}
+			
+			if(id == null) {
+				return false;
+			}
+			
+			ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+			if(admin == null) {
+				return false;
+			}
+			
+			ClinicPOJO clinic = admin.getClinic();
+			RoomPOJO finded = repository.findByIdAndClinic_id(id, clinic.getId()).orElse(null);
+			if(finded == null)
+				return false;
+			
+			List<RoomPOJO> reservedRooms = repository.getAllReservedRooms();
+			if(reservedRooms.contains(finded)) {
+				System.out.println("reserved");
+				return false;
+			}
+			
+			clinic.deleteRoom(finded);
+			clinicRepository.save(clinic);
+			finded.setDeleted(true);
+			repository.save(finded);
+			return true;
+		} catch(Exception e) {
+			return false;
 		}
-		
-		if(id == null) {
-			return;
-		}
-		
-		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
-		if(admin == null) {
-			return;
-		}
-		
-		ClinicPOJO clinic = admin.getClinic();
-		RoomPOJO finded = repository.findByIdAndClinic_id(id, clinic.getId()).orElse(null);
-		if(finded == null)
-			return;
-		
-		clinic.deleteRoom(finded);
-		clinicRepository.save(clinic);
-		finded.setDeleted(true);
-		repository.save(finded);
 	}
 	
 	public RoomDTO change(RoomDTO room, String email) {
@@ -150,6 +172,11 @@ public class RoomService {
 			RoomPOJO finded = repository.findByIdAndClinic_id(room.getId(), clinic.getId()).orElse(null);
 			if(finded == null) {
 				return null;			
+			}
+			
+			List<RoomPOJO> reservedRooms = repository.getAllReservedRooms();
+			if(reservedRooms.contains(finded)) {
+				return null;
 			}
 			
 			RoomPOJO exist = repository.findOneByNumber(room.getNumber()).orElse(null);

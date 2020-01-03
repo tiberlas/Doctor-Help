@@ -63,9 +63,9 @@ class RoomModalSearch extends Component {
     createProcedureItems() {
         let items = []; 
         var size = Object.keys(this.state.procedureList).length;
-        items.push(<option key={size+1} name='procedureTypeId' value="" selected="selected"> ---- </option>);
+        items.push(<option key={size+1} name='procedureTypeId' value="" selected={this.state.procedureTypeId === ""? 'selected': ''}> ---- </option>);
         for (let i = 0; i < size; i++) {
-             items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);
+             items.push(<option key={i} name = "procedureTypeId" selected={this.state.procedureTypeId === this.state.procedureList[i].id? 'selected': ''} value={this.state.procedureList[i].id} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);
         }
         return items;
     }

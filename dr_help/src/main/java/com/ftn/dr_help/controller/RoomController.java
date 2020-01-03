@@ -76,9 +76,13 @@ public class RoomController {
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> deleteRoom(@PathVariable("id") Long id) {
 		String email = currentUser.getEmail();
-		service.delete(id, email);
+		boolean retVal = service.delete(id, email);
 		
-		return new ResponseEntity<String>(HttpStatus.OK);
+		if(retVal) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@PutMapping(value="/change", consumes = "application/json")
