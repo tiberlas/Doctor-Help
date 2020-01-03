@@ -137,8 +137,13 @@ public class ClinicService {
 		calendarMax.setTime(dateMax);
 		
 		List<ClinicPOJO> retVal = new ArrayList<ClinicPOJO> ();
- 		List<ClinicPOJO> clinics = repository.filterByAppointmentDateAndType (procedureType, dateMin, dateMax);
-		for (ClinicPOJO c : clinics) {
+ 		List<ClinicPOJO> clinics = repository.filterByAppointmentType (procedureType);
+//		if (clinics.size() == 0) {
+//			System.out.println("Nisam nasao appointment");
+//			//clinics = repository.fliterByProcedure();
+//			return inputList;
+//		}
+ 		for (ClinicPOJO c : clinics) {
 			List<DoctorPOJO> doctors = doctorRepository.filterByClinicAndProcedureType (c.getId(), procedureType);
 			for (DoctorPOJO d : doctors) {
 				DailySchedule schedule;

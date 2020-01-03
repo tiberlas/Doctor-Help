@@ -150,7 +150,8 @@ public class ClinicController {
 		for (ClinicPOJO c : clinicList) {
 			ClinicPreviewDTO temp = new ClinicPreviewDTO (c);
 			if (!filter.equals ("unfiltered")) {
-				temp.setPrice(Double.toString(procedureTypeService.getPrice(c.getId(), filter)) + " rsd");
+				Double price = procedureTypeService.getPrice(c.getId(), filter);
+				temp.setPrice((price == null) ? ("-") : (Double.toString(price) + " rsd"));
 			}
 			clinicDTO.add(temp);
 		}
