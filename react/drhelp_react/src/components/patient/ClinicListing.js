@@ -17,16 +17,19 @@ class ClinicListing extends Component {
 
 	state = {
 		clinics: [], 
-		activeFilter: '', 
-		appointmentTypes: []
+		activeFilter: 'unfiltered', 
+		appointmentTypes: [],
+		selectedDate: 'unfiltered'
 	}
 
 	componentDidMount () {
-		axios.get ('http://localhost:8080/api/clinics/listing/unfiltered')
+		axios.get ('http://localhost:8080/api/clinics/listing/unfiltered/unfiltered')
 		.then (response => {
 			this.setState ({
-				clinics: response.data.clinicList, 
-				appointmentTypes: response.data.procedureType
+				clinics : response.data.clinicList, 
+				appointmentTypes : response.data.procedureType, 
+				activeFilter  : response.data.procedureTypeString, 
+				selectedDate : response.data.dateString
 			})
 		})
 	}
@@ -36,7 +39,7 @@ class ClinicListing extends Component {
 		if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
 			profileUrl = '/clinic/' + row.id + '/' + this.state.activeFilter;
 		} else {
-			profileUrl = '/clinic/' + row.id;
+			profileUrl = '/clinic/' + row.id + '/unf';
 		}
 		return (
             <Fragment>
@@ -50,25 +53,69 @@ class ClinicListing extends Component {
         )
     }
 
-	handleFilter (text) {
+	handleFilterType (text) {
 		text = text.replace (' ', '_');
-		axios.get ('http://localhost:8080/api/clinics/listing/' + text)
+		let element = document.getElementById ("picker");
+		let value = element.value;
+		if (value === "") {
+			value = 'unfiltered'
+		}
+
+		this.setState ({
+			selectedDate : value,
+			activeFilter : text
+		})
+
+		// alert ("Filter date: " + value + "; Filter type: " + text);
+
+		this.fetchData (text, value);
+
+		// axios.get ('http://localhost:8080/api/clinics/listing/' + text)
+		// .then (response => {
+		// 	this.setState ({
+		// 		clinics: response.data.clinicList, 
+		// 		appointmentTypes: response.data.procedureType, 
+		// 		activeFilter: text
+		// 	})
+		// 	if (this.state.activeFilter === 'unfiltered') {
+		// 		this.setState ({
+		// 			activeFilter: ''
+		// 		})
+		// 	}
+		// })
+	}
+
+	handleFilterDate () {
+		let element = document.getElementById ("picker");
+		let value = element.value;
+		let text = this.state.activeFilter;
+		// text = text.replace (' ', '_');
+		
+		// alert ("Filter date: " + value + "; Filter type: " + text);
+		
+		this.setState ({
+			selectedDate : value,
+			activeFilter : text
+		})
+
+		this.fetchData(text, value)
+	}
+
+	fetchData (dil, dat) {
+		let text = this.state.activeFilter;
+		let date = this.state.selectedDate;
+		let requestPartOne = 'http://localhost:8080/api/clinics/listing/';
+		let requestPartTwo = dil + '/' + dat;
+		let wholeRequest = requestPartOne + requestPartTwo;
+		// alert (requestPartOne + requestPartTwo);
+		axios.get (wholeRequest)
 		.then (response => {
 			this.setState ({
 				clinics: response.data.clinicList, 
 				appointmentTypes: response.data.procedureType, 
-				activeFilter: text
+				// activeFilter: text
 			})
-			if (this.state.activeFilter === 'unfiltered') {
-				this.setState ({
-					activeFilter: ''
-				})
-			}
 		})
-	}
-
-	handleFiltering () {
-		alert ("Filtering")
 	}
 
 	render () {
@@ -82,17 +129,17 @@ class ClinicListing extends Component {
 								Appointment types
 							</DropdownToggle>
 							<DropdownMenu>
-								<MenuItem onClick={() => this.handleFilter ('unfiltered')}>-</MenuItem>
+								<MenuItem onClick={() => this.handleFilterType ('unfiltered')}>-</MenuItem>
 								{
 									numberOfTypes > 0 ? this.state.appointmentTypes.map (row => (
-										<MenuItem onClick={() => this.handleFilter (row)}>{row}</MenuItem>
+										<MenuItem onClick={() => this.handleFilterType (row)}>{row}</MenuItem>
 									)) : null
 								}
 							</DropdownMenu>
 					</Dropdown>
 
 					<form>
-						<FormControl type="date" onChange={() => this.handleFiltering ()}></FormControl>
+						<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
 					</form>
 
 					<Table>

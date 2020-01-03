@@ -1,11 +1,13 @@
 package com.ftn.dr_help.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 
 @Repository
@@ -16,5 +18,6 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 
 	@Query (value = "select d.* from doctors d inner join procedures_type pt on d.procedure_type_id = pt.id where d.clinic_id = ?1 and pt.\"name\" = ?2", nativeQuery = true)
 	public List<DoctorPOJO> filterByClinicAndProcedureType (Long clinicId, String procedureType);
+
 	
 }

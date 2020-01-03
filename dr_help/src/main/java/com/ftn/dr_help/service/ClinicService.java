@@ -1,16 +1,27 @@
 package com.ftn.dr_help.service;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.dto.ClinicDTO;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.ClinicRepository;
+import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.validation.ClinicValidation;
 
 
@@ -25,6 +36,15 @@ public class ClinicService {
 	
 	@Autowired
 	private ClinicValidation clinicValidation;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private DoctorRepository doctorRepository;
+	
+	@Autowired
+	private ProcedureTypeRepository procedureTypeRepository;
 	
 	public ClinicPOJO findOne(Long id) {
 		if(id == null) {
@@ -98,5 +118,100 @@ public class ClinicService {
 	public List<ClinicPOJO> filterByProcedureType (String procedureType) {
 		return repository.getClinicsByProcedureType(procedureType);
 	}
+
+	public List<ClinicPOJO> filterByDate (List<ClinicPOJO> inputList, String procedureType, String dateString) throws ParseException {
+		System.out.println("filter: " + procedureType);
+		System.out.println("date: " + dateString);
+		SimpleDateFormat sdf = new SimpleDateFormat ("yyyyy-MM-dd hh:mm:ss");
+		String dateMinString = dateString + " 00:00:00";
+		String dateMaxString = dateString + " 23:59:59";
 		
+		
+		System.out.println("Date min string: " + dateMinString);
+		System.out.println("Date max string: " + dateMaxString);
+		
+		Date dateMin = sdf.parse (dateMinString);
+		Date dateMax = sdf.parse (dateMaxString);
+		
+		Calendar calendarMin = Calendar.getInstance ();
+		Calendar calendarMax = Calendar.getInstance ();
+		
+		calendarMin.setTime(dateMin);
+		calendarMax.setTime(dateMax);
+		
+		List<ClinicPOJO> retVal = new ArrayList<ClinicPOJO> ();
+ 		List<ClinicPOJO> clinics = repository.filterByAppointmentDateAndType (procedureType, dateMin, dateMax);
+		for (ClinicPOJO c : clinics) {
+			List<DoctorPOJO> doctors = doctorRepository.filterByClinicAndProcedureType (c.getId(), procedureType);
+			for (DoctorPOJO d : doctors) {
+				DailySchedule schedule;
+				switch (calendarMin.get(Calendar.DAY_OF_WEEK)) {
+					case Calendar.MONDAY:
+						schedule = new DailySchedule (calendarMin, d.getMonday());
+						break;
+					case Calendar.TUESDAY:
+						schedule = new DailySchedule (calendarMin, d.getTuesday());
+						break;
+					case Calendar.WEDNESDAY:
+						schedule = new DailySchedule (calendarMin, d.getWednesday());
+						break;
+					case Calendar.THURSDAY:
+						schedule = new DailySchedule (calendarMin, d.getThursday());
+						break;
+					case Calendar.FRIDAY:
+						schedule = new DailySchedule (calendarMin, d.getFriday());
+						break;
+					case Calendar.SATURDAY:
+						schedule = new DailySchedule (calendarMin, d.getSaturday());
+						break;
+					default:
+						schedule = new DailySchedule (calendarMin, d.getSunday());
+						break;
+				}
+				List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments (d.getId(), calendarMin, calendarMax);
+				for (AppointmentPOJO a : appointments) {
+					schedule.addAppointment(a);
+				}
+				if (schedule.getAvaliableTerms(d.getProcedureType()).size() > 0) {
+					if (!retVal.contains(c)) {
+						retVal.add(c);
+					}
+				}
+			}
+		}
+		
+//		List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments((long)1, calendarMin, calendarMax);
+//		
+//		DailySchedule schedule = new DailySchedule (calendarMin, Shift.SECOND);
+//		for (AppointmentPOJO a : appointments) {
+//			schedule.addAppointment(a);
+//		}
+		// Debug
+//		System.out.println("");
+//		System.out.println("AKTIVIRAN: ClinicService.filterByDate");
+//		System.out.println("[");
+//		for (AppointmentPOJO a : appointments) {
+//			System.out.println(a.getId());
+//		}
+//		System.out.println("]");
+//		System.out.println("[");
+//		for (ClinicPOJO c : inputList) {
+//			System.out.println(c.getName());
+//		}
+//		System.out.println("]");
+//		System.out.println("");
+		
+//		List<Term> availableTerms = schedule.getAvaliableTerms(appointments.get(0).getProcedureType());
+		
+//		for (Term t : availableTerms) {
+//			System.out.println("Slobodan sam u: " + t.getTime().get(Calendar.YEAR)
+//						+ "-" + t.getTime().get(Calendar.MONTH)
+//						+ "-" + t.getTime().get(Calendar.DAY_OF_MONTH)
+//						+ " " + t.getTime().get(Calendar.HOUR)
+//						+ ":" + t.getTime().get(Calendar.MINUTE));
+//		}
+		
+		return retVal;
+	}
+	
 }
