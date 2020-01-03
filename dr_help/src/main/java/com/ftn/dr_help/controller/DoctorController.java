@@ -1,5 +1,6 @@
 package com.ftn.dr_help.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
-import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
+import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.service.DoctorService;
 
 @RestController
@@ -101,18 +104,21 @@ public class DoctorController {
 		
 	} 
 	
-	@GetMapping (value = "/listing/{clinic_id}/{appointment_type}")
+	@GetMapping (value = "/listing/{clinic_id}/{appointment_type}/{appointment_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<List<DoctorListingDTO>> getDoctorListing (@PathVariable("clinic_id") Long clinicId, 
-				@PathVariable("appointment_type") String appointmentType) {
+				@PathVariable("appointment_type") String appointmentType, @PathVariable("appointment_date") String appointmentDate) throws ParseException {
 
 		System.out.println("Appointment type: " + appointmentType);
 		System.out.println("Clinic id: " + clinicId);
+		System.out.println("Date: " + appointmentDate);
 		
-		if (appointmentType.equals("unfiltered")) {
+		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
 			return new ResponseEntity<> (service.filterByClinic(clinicId), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<> (service.filterByClinicAndProcedureType(clinicId, appointmentType.replace('_', ' ')), HttpStatus.OK);
+			List<DoctorListingDTO> doctors = service.filterByClinicDateProcedureType(clinicId, appointmentType.replace('_', ' '), appointmentDate);
+			
+			return new ResponseEntity<> (doctors, HttpStatus.OK);
 		}
 	}
 	

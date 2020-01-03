@@ -287,7 +287,7 @@ public class DailySchedule {
 				temp.set(Calendar.YEAR, fakeAppointment.getDate().get(Calendar.YEAR));
 				temp.set(Calendar.MONTH, fakeAppointment.getDate().get(Calendar.MONTH));
 				temp.set(Calendar.DAY_OF_MONTH, fakeAppointment.getDate().get(Calendar.DAY_OF_MONTH));
-				temp.set(Calendar.HOUR, fakeAppointment.getDate().get(Calendar.HOUR));
+				temp.set(Calendar.HOUR_OF_DAY, fakeAppointment.getDate().get(Calendar.HOUR));
 				temp.set(Calendar.MINUTE, fakeAppointment.getDate().get(Calendar.MINUTE));
 				temp.set(Calendar.SECOND, fakeAppointment.getDate().get(Calendar.SECOND));
 				retVal.add(new Term (temp, false));

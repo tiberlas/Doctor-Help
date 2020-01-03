@@ -20,5 +20,5 @@ public interface ProcedureTypeRepository extends JpaRepository<ProceduresTypePOJ
 	Optional<ProceduresTypePOJO> findOneByName(String name);
     Optional<ProceduresTypePOJO> findByIdAndClinic_id(Long id, Long clinic_id);
 	
-       
+    
 }

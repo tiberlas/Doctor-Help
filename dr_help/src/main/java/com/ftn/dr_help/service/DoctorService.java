@@ -1,14 +1,19 @@
 package com.ftn.dr_help.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
+import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.comon.EmailCheck;
+import com.ftn.dr_help.comon.Term;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
@@ -17,11 +22,14 @@ import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
 @Service
@@ -44,6 +52,12 @@ public class DoctorService {
 	
 	@Autowired
 	private EmailCheck check;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private ProcedureTypeRepository procedureTypeRepository;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -279,6 +293,74 @@ public class DoctorService {
 		}
 		
 		return true;
+	}
+	
+	public List<DoctorListingDTO> filterByClinicDateProcedureType (Long clinicId, String procedureType, String dateString) throws ParseException {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat ("yyyyy-MM-dd hh:mm:ss");
+		String dateMinString = dateString + " 00:00:00";
+		String dateMaxString = dateString + " 23:59:59";
+		Date dateMin = sdf.parse (dateMinString);
+		Date dateMax = sdf.parse (dateMaxString);
+		
+		Calendar calendarMin = Calendar.getInstance ();
+		Calendar calendarMax = Calendar.getInstance ();
+		
+		calendarMin.setTime(dateMin);
+		calendarMax.setTime(dateMax);
+		
+		
+		
+		List<DoctorPOJO> doctors = repository.filterByClinicAndProcedureType(clinicId, procedureType);
+		for (DoctorPOJO d : doctors) {
+			DailySchedule schedule;
+			switch (calendarMin.get(Calendar.DAY_OF_WEEK)) {
+				case Calendar.MONDAY:
+					schedule = new DailySchedule (calendarMin, d.getMonday());
+					break;
+				case Calendar.TUESDAY:
+					schedule = new DailySchedule (calendarMin, d.getTuesday());
+					break;
+				case Calendar.WEDNESDAY:
+					schedule = new DailySchedule (calendarMin, d.getWednesday());
+					break;
+				case Calendar.THURSDAY:
+					schedule = new DailySchedule (calendarMin, d.getThursday());
+					break;
+				case Calendar.FRIDAY:
+					schedule = new DailySchedule (calendarMin, d.getFriday());
+					break;
+				case Calendar.SATURDAY:
+					schedule = new DailySchedule (calendarMin, d.getSaturday());
+					break;
+				default:
+					schedule = new DailySchedule (calendarMin, d.getSunday());
+					break;
+			}
+			List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(d.getId(), calendarMin, calendarMax);
+			for (AppointmentPOJO a : appointments) {
+				schedule.addAppointment(a);
+			}
+			DoctorListingDTO temp = new DoctorListingDTO (d);
+			List<Term> terms = schedule.getAvaliableTerms(d.getProcedureType());
+			List<String> times = new ArrayList<String> ();
+			for (Term t : terms) {
+				String tempTime = "";
+				tempTime += t.getTime().get(Calendar.HOUR_OF_DAY);
+				tempTime += ":";
+				tempTime += t.getTime().get(Calendar.MINUTE);
+				times.add(tempTime);
+			}
+			
+			temp.setTerms(times);
+			
+			retVal.add(temp);
+		}
+		
+		
+		
+		return retVal;
 	}
 	
 }
