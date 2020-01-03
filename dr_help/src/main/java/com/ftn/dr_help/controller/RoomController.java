@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
+import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.service.RoomService;
 
 @RestController
@@ -106,6 +107,19 @@ public class RoomController {
 		} catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);			
 		}			
+	}
+	
+	@PostMapping(value="search", consumes="application/json", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RoomDTO>> search(@RequestBody RoomSearchDTO searchingParameters) {
+		String email = currentUser.getEmail();
+		List<RoomDTO> retVal = service.search(searchingParameters, email);
+		
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		}
 	}
 	
 }

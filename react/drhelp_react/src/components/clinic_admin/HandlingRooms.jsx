@@ -6,7 +6,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Redirect } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import RoomModalSearch from '../rooms/RoomModalSearch';
 
 const sortTypes = {
     name_up: {
@@ -37,8 +38,7 @@ class HandlingRooms extends Component {
         rooms: [],
         refresh: false,
         currentSort: 'default',
-        roomId: 0,
-        goto_schedule: false
+        modalShow: false
     }
 
     componentDidMount() {
@@ -115,17 +115,48 @@ class HandlingRooms extends Component {
         }
     }
 
-    handleRoomClick = (id)  => {
-        this.setState({goto_schedule: true, roomId: id})
+    handleSearchClick = () => {
+        this.setState({modalShow: !this.state.modalShow})
+    }
+
+    handleHideModal = () => {
+        this.setState({modalShow: false})
+    }
+
+    handleRoomSearch = (name, number, typeId, date, time) => {
+        this.setState({modalShow: false})
+        let rname = null
+        let rnumber = null
+        let rtype = null
+        let rdate = null 
+        
+        if(name !== "" && name !== null) {
+            rname = name
+        }
+        if(number !== "" && number !== null) {
+            rnumber = number
+        }
+        if(typeId !== "" && typeId !== null) {
+            rtype = typeId
+        }
+        if(date !== "" && date !== null && time !== "" && time !== null) {
+            rdate = date + " " + time;
+        }
+
+        console.log(rname, rnumber, rtype, rdate)
+
+        axios.post('http://localhost:8080/api/rooms/search', {
+            name: rname,
+            number: rnumber,
+            typeId: rtype,
+            date: rdate
+        }).then((response) => {
+            this.setState({rooms: response.data})
+        })
+
     }
 
     render() {
-        if(this.state.goto_schedule==true) {
-            return(
-                <Redirect exact to={`/schedule/${this.state.roomId}`} ></Redirect>
-            );
-        }
-
         let i = 0;
         return (
             <div class='row d-flex justify-content-center'>
@@ -141,18 +172,25 @@ class HandlingRooms extends Component {
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('type')}>procedure name{this.renderArrowType()}</TableCell>
                             <TableCell class="text-success">first free date</TableCell>
                             <TableCell class="text-success"></TableCell>
-                            <TableCell class="text-success"></TableCell>
+                            <TableCell class="text-success"><Button class='btn btn-success' onClick={this.handleSearchClick}>search</Button></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {this.state.rooms.sort(sortTypes[this.state.currentSort].fn).map (c => (
-                            <TableRow className={(++i)%2? `table-dark` : ``} onClick={() => this.handleRoomClick(c.id)} >
+                            <TableRow className={(++i)%2? `table-dark` : ``} >
                                 <RoomItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate} />
                             </TableRow>
                         ))  }
 
                     </TableBody>
                 </Table>
+
+                <RoomModalSearch 
+                    show={this.state.modalShow}
+                    onHide={this.handleHideModal}
+                    handleSearch={(name, number, typeId, date, time) => this.handleRoomSearch(name, number, typeId, date, time)}
+                />
+
             </div>
             </div>
          );

@@ -1,5 +1,7 @@
 package com.ftn.dr_help.comon;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
@@ -57,5 +59,13 @@ public class DateConverter {
 		}
 		
 		return retVal;
+	}
+	
+	public Calendar stringToDate(String stringDate)  throws ParseException{
+		Calendar date = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		date.setTime(sdf.parse(stringDate));
+		
+		return date;
 	}
 }

@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ModalMessage from '../ModalMessage';
 import TableCell from '@material-ui/core/TableCell';
+import {Link} from 'react-router-dom';
 
 class RoomItem extends Component {
     constructor(props) {
@@ -56,7 +57,11 @@ class RoomItem extends Component {
 
         return ( 
             <Fragment>
-                <TableCell class='text text-white'>{this.state.name}</TableCell>
+                <TableCell class='text text-white'>
+                    <Link exact to={`/schedule/${this.state.id}`}>
+                        {this.state.name}
+                     </Link>
+                </TableCell>
                 <TableCell class='text text-white'>{this.state.number}</TableCell>
                 <TableCell class='text text-white'>{this.state.type}</TableCell>
                 <TableCell><button onClick={this.onDelite} class='btn btn-danger'>delete</button></TableCell>

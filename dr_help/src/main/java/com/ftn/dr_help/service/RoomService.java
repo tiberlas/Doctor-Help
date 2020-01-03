@@ -2,6 +2,7 @@ package com.ftn.dr_help.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
+import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
@@ -205,6 +207,131 @@ public class RoomService {
 			}
 			
 			return ret;
+	}
+	
+	public List<RoomDTO> search(RoomSearchDTO searchParameters, String email) {
+		/*
+		 * searchParameter if a field is not in use for search the it must be null;
+		 * searchParameter.getDate must be in format yyyy-MM-dd HH:mm; 
+		 * Calendar is singleton!!! 
+		 * */
+		try {
+			List<RoomPOJO> allRooms = adminRepository.findOneByEmail(email).getClinic().getRoomList();
+			
+			if(searchParameters.getName() == null && 
+					searchParameters.getNumber() == null &&
+					searchParameters.getTypeId() == null &&
+					searchParameters.getDate() == null) {
+				
+				List<RoomDTO> retVal = new ArrayList<RoomDTO>();
+				for(RoomPOJO room : allRooms) {
+					retVal.add(new RoomDTO(room));
+				}
+				
+				return retVal;
+			}
+			
+			List<RoomDTO> roomsFilteredDate = new ArrayList<>();
+			if(searchParameters.getDate() == null) {
+				for(RoomPOJO room : allRooms) {
+					roomsFilteredDate.add(new RoomDTO(room));
+				}				
+			} else {
+				Calendar searchedDate = dateConvertor.stringToDate(searchParameters.getDate());
+				
+				for(RoomPOJO room : allRooms) {
+					Date duration = room.getProcedurasTypes().getDuration();
+					boolean flagReserved = false;
+				
+					List<AppointmentPOJO> appointments = room.getAppointments();
+					for(AppointmentPOJO appointment : appointments) {
+						if(appointment.isDeleted()) {
+							continue;
+						}
+						
+						Calendar endDate = Calendar.getInstance();
+						endDate.setTime(appointment.getDate().getTime());
+						@SuppressWarnings("deprecation")
+						int hours = duration.getHours();
+						@SuppressWarnings("deprecation")
+						int minutes = duration.getMinutes();
+						endDate.add(Calendar.HOUR, hours);
+						endDate.add(Calendar.MINUTE, minutes);
+						
+//						System.out.println(appointment.getId());
+//						System.out.println(dateConvertor.dateAndTimeToString(searchedDate));
+//						System.out.println(dateConvertor.dateAndTimeToString(appointment.getDate()));
+//						System.out.println(dateConvertor.dateAndTimeToString(endDate));
+//						
+//						System.out.println(searchedDate.after(appointment.getDate()));
+//						System.out.println(searchedDate.equals(appointment.getDate()));
+//						System.out.println(searchedDate.before(endDate));
+//						System.out.println(searchedDate.equals(endDate));
+						
+						if(searchedDate.compareTo(appointment.getDate()) >= 0 && searchedDate.compareTo(endDate) <= 0) {
+							flagReserved = true;
+							break;
+						}
+					}
+
+					if(!flagReserved) {
+						roomsFilteredDate.add(new RoomDTO(room));						
+					}
+				}
+			}
+			
+			if(roomsFilteredDate.isEmpty()) {
+				return roomsFilteredDate;
+			}
+			
+			List<RoomDTO> roomsFilteredName;
+			if(searchParameters.getName() == null) {
+				roomsFilteredName = roomsFilteredDate;
+			} else {
+				roomsFilteredName = new ArrayList<>();
+				for(RoomDTO room : roomsFilteredDate) {
+					if(room.getName().toLowerCase().contains(searchParameters.getName().toLowerCase())) {
+						roomsFilteredName.add(room);
+					}
+				}
+			}
+			
+			if(roomsFilteredName.isEmpty()) {
+				return roomsFilteredName;
+			}
+			
+			List<RoomDTO> roomsFilteredNumber;
+			if(searchParameters.getNumber() == null) {
+				roomsFilteredNumber = roomsFilteredName;
+			} else {
+				roomsFilteredNumber = new ArrayList<>();
+				for(RoomDTO room : roomsFilteredName) {
+					if(room.getNumber() == searchParameters.getNumber()) {
+						roomsFilteredNumber.add(room);
+					}
+				}
+			}
+			
+			if(roomsFilteredNumber.isEmpty()) {
+				return roomsFilteredNumber;
+			}
+			
+			List<RoomDTO> roomsFilteredType;
+			if(searchParameters.getTypeId() == null) {
+				roomsFilteredType = roomsFilteredNumber;
+			} else {
+				roomsFilteredType = new ArrayList<>();
+				for(RoomDTO room : roomsFilteredNumber) {
+					if(room.getProcedureTypeId() == searchParameters.getTypeId()) {
+						roomsFilteredType.add(room);
+					}
+				}
+			}
+			
+			return roomsFilteredType;
+		} catch(Exception e) {
+			return null;
+		}
 	}
 	
 }
