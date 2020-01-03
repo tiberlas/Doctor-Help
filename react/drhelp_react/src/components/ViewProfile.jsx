@@ -1,13 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 class ViewProfile extends Component {
 
     render() { 
         return ( 
-                <div class="row d-flex justify-content-center">
-                <div class='col-md-7'>
-                <br/>
-                <br/>
+                <Fragment>
                 <div >
 
                     <h1 >{this.props.profile.firstName}&nbsp;{this.props.profile.lastName}</h1>
@@ -43,9 +40,7 @@ class ViewProfile extends Component {
                     <label class="badge badge-success text-right">Birthday:</label>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.birthday}</label>
                 </div>
-                </div>
-                
-            </div>
+                </Fragment>
          );
     }
 }

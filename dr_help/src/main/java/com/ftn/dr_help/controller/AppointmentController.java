@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
-import com.ftn.dr_help.model.pojo.MedicationPOJO;
+import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.AppointmentService;
+import com.ftn.dr_help.service.PatientService;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -29,6 +30,9 @@ public class AppointmentController {
 
 	@Autowired
 	private AppointmentService appointmentService;
+	
+	@Autowired
+	private PatientService patientService;
 	
 	
 	
@@ -48,6 +52,16 @@ public class AppointmentController {
 		AppointmentPOJO app = appointmentService.finishAppointment(appointmentId, report);
 		System.out.println("Appointment with ID: " + app.getId() + "switched to status DONE.");
 		return new ResponseEntity<ExaminationReportDTO>(report, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/approved_appointments/doctor={doctor_id}/patient={insuranceNumber}")
+	public ResponseEntity<List<DoctorAppointmentDTO>> 
+		getAllApprovedDoctorAppointmentsForPatientWithId(@PathVariable("doctor_id") Long doctor_id, 
+			@PathVariable("insuranceNumber") Long insuranceNumber) {
+		PatientPOJO patient = patientService.findByInsuranceNumber(insuranceNumber);
+		List<DoctorAppointmentDTO> appointments = appointmentService.findApprovedDoctorAppointmentsWithPatientId(patient.getId(), doctor_id);
+		
+		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
 	}
 	
 	

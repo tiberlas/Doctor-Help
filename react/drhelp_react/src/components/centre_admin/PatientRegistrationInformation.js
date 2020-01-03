@@ -5,8 +5,6 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios';
 
-import { Redirect } from 'react-router-dom';
-
 class PatientRegistrationInformation extends Component {
 
     constructor(props)

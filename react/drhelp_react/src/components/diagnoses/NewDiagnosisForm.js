@@ -91,7 +91,6 @@ class NewDiagnosisForm extends React.Component {
                 </div>
 
                 <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
-
                 </Form>
                </div>
             </div>

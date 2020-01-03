@@ -62,7 +62,7 @@ class Doctor extends Component {
                             <Route exact path="/doctor/profile"> <DoctorProfile /></Route>
                             <Route exact path="/doctor/profile/change"> <DoctorChangeProfile handleUpdate={this.handleDoctor}/></Route>
                             <Route exact path="/doctor/profile/change/password"> <DoctorChangePassword /></Route>
-                            <Route exact path = "/doctor/schedule"><DoctorCalendar medical_staff = {doctor} /></Route> 
+                            <Route exact path = "/doctor/schedule"><DoctorCalendar medical_staff = {doctor} regime='schedule'/></Route> 
                             <Route path="/profile/"> <ViewPatientProfile medical_staff = {doctor}/></Route>
                         </Switch>
                     </div>

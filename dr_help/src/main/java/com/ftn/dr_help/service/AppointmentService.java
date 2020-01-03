@@ -68,6 +68,25 @@ public class AppointmentService {
 		return appointments;
 	}
 	
+	public List<DoctorAppointmentDTO> findApprovedDoctorAppointmentsWithPatientId(Long patient_id, Long doctor_id) {
+		
+		List<AppointmentPOJO> list = appointmentRepository.findApprovedDoctorAppointmentsForPatientWithId(doctor_id, patient_id);
+		
+		List<DoctorAppointmentDTO> appointments = new ArrayList<DoctorAppointmentDTO>();
+		
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+			if(!appointmentPOJO.isDeleted()) {
+				System.out.println("-------------------" + i);
+				DoctorAppointmentDTO dto = convertAppointmentToDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+			}
+		}
+		
+		return appointments;
+	}
+	
 	
 	public AppointmentPOJO finishAppointment(Long appointmentId, ExaminationReportDTO dto) {
 		

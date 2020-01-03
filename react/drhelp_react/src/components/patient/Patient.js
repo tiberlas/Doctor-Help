@@ -46,10 +46,6 @@ class Patient extends Component {
         let path = "http://localhost:8080/api/patients/profile";
         axios.get (path)
         .then (response => {
-            // if(response.status === 401) {
-            //     window.location.href='/login';
-            // }
-
             this.setState ({
                 email: response.data.email, 
                 firstName: response.data.firstName, 

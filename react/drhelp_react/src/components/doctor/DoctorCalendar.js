@@ -4,11 +4,12 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from "@fullcalendar/timegrid"
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import interaction from "@fullcalendar/interaction"
-//import listPlugin from '@fullcalendar/list'
+import listPlugin from '@fullcalendar/list'
 import AppointmentInfoModal from '../appointment/AppointmentInfoModal'
 import AppointmentModal from '../appointment/AppointmentModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
+import DoctorContext from '../../context/DoctorContextProvider'
 
 class DoctorCalendar extends React.Component {
 
@@ -60,12 +61,28 @@ class DoctorCalendar extends React.Component {
   };
 
   componentDidMount() {
-      let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.props.medical_staff.id 
+    if(this.props.regime === 'schedule') {
+        let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.props.medical_staff.id 
+        axios.get(url).then((response) => {
+            this.setState({
+              appointments: response.data
+            })
+        })
+      }
+
+     
+  }
+
+  componentWillReceiveProps(props){
+    if(this.props.regime === 'profile') {
+      let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
+      let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+props.medical_staff.id+'/patient='+id
       axios.get(url).then((response) => {
-          this.setState({
-            appointments: response.data
-          })
+        this.setState({
+          appointments: response.data
+        })
       })
+    }
   }
 
 
@@ -119,7 +136,7 @@ class DoctorCalendar extends React.Component {
   render() {
       return (
         <div className='demo-app-calendar'>
-          <FullCalendar defaultView="dayGridMonth"
+          {this.props.regime==='schedule' &&  <FullCalendar defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
           header={{
             left: "prev,next today",
             center: "title",
@@ -131,7 +148,22 @@ class DoctorCalendar extends React.Component {
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
-          themeSystem = 'bootstrap' />
+          themeSystem = 'bootstrap' />} 
+
+        {this.props.regime==='profile' &&  <FullCalendar defaultView="listWeek" //ako si na stranici pacijenta, list view
+          header={{
+            left: "title",
+            center: "Upcoming appointments",
+            right: ""
+          }}
+          selectable={true}
+          events = {this.generateEventList()}
+          eventLimit = {true}
+          eventRender={this.handleEventRender}
+          eventClick={this.handleEventClick}
+          plugins={[ listPlugin, bootstrapPlugin, interaction]} 
+          themeSystem = 'bootstrap' />} 
+         
 
           <AppointmentInfoModal 
             event = {this.state.event} 
