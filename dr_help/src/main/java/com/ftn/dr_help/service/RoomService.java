@@ -250,24 +250,24 @@ public class RoomService {
 		try {
 			List<RoomPOJO> allRooms = adminRepository.findOneByEmail(email).getClinic().getRoomList();
 			
+			List<RoomDTO> retVal = new ArrayList<RoomDTO>();
+			for(RoomPOJO room : allRooms) {
+				RoomDTO newRoom = new RoomDTO(room);
+				newRoom.setFirstFreeSchedule(findFirstFreeSchedule(room));
+				retVal.add(newRoom);
+			}
+			
 			if(searchParameters.getName() == null && 
 					searchParameters.getNumber() == null &&
 					searchParameters.getTypeId() == null &&
 					searchParameters.getDate() == null) {
-				
-				List<RoomDTO> retVal = new ArrayList<RoomDTO>();
-				for(RoomPOJO room : allRooms) {
-					retVal.add(new RoomDTO(room));
-				}
 				
 				return retVal;
 			}
 			
 			List<RoomDTO> roomsFilteredDate = new ArrayList<>();
 			if(searchParameters.getDate() == null) {
-				for(RoomPOJO room : allRooms) {
-					roomsFilteredDate.add(new RoomDTO(room));
-				}				
+				roomsFilteredDate = retVal;
 			} else {
 				Calendar searchedDate = dateConvertor.stringToDate(searchParameters.getDate());
 				
@@ -290,15 +290,15 @@ public class RoomService {
 						endDate.add(Calendar.HOUR, hours);
 						endDate.add(Calendar.MINUTE, minutes);
 						
-//						System.out.println(appointment.getId());
-//						System.out.println(dateConvertor.dateAndTimeToString(searchedDate));
-//						System.out.println(dateConvertor.dateAndTimeToString(appointment.getDate()));
-//						System.out.println(dateConvertor.dateAndTimeToString(endDate));
-//						
-//						System.out.println(searchedDate.after(appointment.getDate()));
-//						System.out.println(searchedDate.equals(appointment.getDate()));
-//						System.out.println(searchedDate.before(endDate));
-//						System.out.println(searchedDate.equals(endDate));
+						//System.out.println(appointment.getId());
+						//System.out.println(dateConvertor.dateAndTimeToString(searchedDate));
+						//System.out.println(dateConvertor.dateAndTimeToString(appointment.getDate()));
+						//System.out.println(dateConvertor.dateAndTimeToString(endDate));
+						
+						//System.out.println(searchedDate.after(appointment.getDate()));
+						//System.out.println(searchedDate.equals(appointment.getDate()));
+						//System.out.println(searchedDate.before(endDate));
+						//System.out.println(searchedDate.equals(endDate));
 						
 						if(searchedDate.compareTo(appointment.getDate()) >= 0 && searchedDate.compareTo(endDate) <= 0) {
 							flagReserved = true;
@@ -307,7 +307,9 @@ public class RoomService {
 					}
 
 					if(!flagReserved) {
-						roomsFilteredDate.add(new RoomDTO(room));						
+						RoomDTO newRoom = new RoomDTO(room);
+						newRoom.setFirstFreeSchedule(findFirstFreeSchedule(room));
+						roomsFilteredDate.add(newRoom);						
 					}
 				}
 			}

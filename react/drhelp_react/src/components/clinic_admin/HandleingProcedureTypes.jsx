@@ -10,6 +10,30 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 
+const sortTypes = {
+    name_up: {
+        fn: (a, b) => b.name.localeCompare(a.name)
+    },
+    name_down: {
+        fn: (a, b) => a.name.localeCompare(b.name)
+    },
+    duration_up: {
+        fn: (a, b) => b.duration.localeCompare(a.duration)
+    },
+    duration_down: {
+        fn: (a, b) => a.duration.localeCompare(b.duration)
+    },
+    price_up: {
+        fn: (a, b) => a.price - b.price
+    },
+    price_down: {
+        fn: (a, b) => b.price - a.price
+    },
+    default: {
+        fn: (a, b) => a
+    }
+}
+
 class HandleingProcedureTypes extends Component {
     state = {
         procedures: [],
@@ -17,6 +41,7 @@ class HandleingProcedureTypes extends Component {
         refresh: false,
         filterString: '',
         isFilterOperationActive: false,
+        currentSort: 'default',
         checkFilter: "NOT_OPERATION",
         filterOperationDTO: 'NOT_DEFINED'
     }
@@ -38,6 +63,63 @@ class HandleingProcedureTypes extends Component {
                 name: response.data.name
             })
         })
+    }
+
+    onSortChange = (name) => {
+		const { currentSort } = this.state;
+        let nextSort;
+
+        if(name === 'name') {
+            if (currentSort === 'name_down') nextSort = 'name_up';
+            else if (currentSort === 'name_up') nextSort = 'default';
+            else nextSort = 'name_down';
+        } else if(name === 'duration') {
+            if (currentSort === 'duration_down') nextSort = 'duration_up';
+            else if (currentSort === 'duration_up') nextSort = 'default';
+            else nextSort = 'duration_down';
+        } else {
+            if (currentSort === 'price_down') nextSort = 'price_up';
+            else if (currentSort === 'price_up') nextSort = 'default';
+            else nextSort = 'price_down';
+        }
+
+		this.setState({
+			currentSort: nextSort
+		}, () => {
+            this.renderArrowName()
+            this.renderArrowDuration()
+            this.renderArrowPrice()
+        });
+    };
+
+    renderArrowName = () => {
+        if(this.state.currentSort === 'name_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'name_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowDuration = () => {
+        if(this.state.currentSort === 'duration_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'duration_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowPrice = () => {
+        if(this.state.currentSort === 'price_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'price_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
     }
 
     handleUpdate = (key) => {
@@ -90,7 +172,9 @@ class HandleingProcedureTypes extends Component {
         return ( 
             <div class='row d-flex justify-content-center'>
             <div class='col-md-7'> 
-                <h2>Clinic {this.state.name}</h2>
+                <br/>
+                <h3>Clinic {this.state.name}</h3>
+                <h4>List of procedure types</h4>
                 <br/>
                 <Table class="table table-hover ">
                     <TableHead class="table-active">
@@ -121,16 +205,16 @@ class HandleingProcedureTypes extends Component {
                             </TableCell>
                         </TableRow>
                         <TableRow class="table-active">
-                            <TableCell class="text-success">name</TableCell>
-                            <TableCell class="text-success">duration</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('name')}>name{this.renderArrowName()}</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('duration')}>duration{this.renderArrowDuration()}</TableCell>
                             <TableCell class="text-success">is operation</TableCell>
-                            <TableCell class="text-success">price</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('price')}>price{this.renderArrowPrice()}</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {this.state.procedures.map (c => (
+                        {this.state.procedures.sort(sortTypes[this.state.currentSort].fn).map (c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
                                 <ProcedureTypeItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate} />
                             </TableRow>

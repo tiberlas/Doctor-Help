@@ -17,6 +17,7 @@ class RoomItem extends Component {
             number: this.props.value.number,
             type: this.props.value.procedureTypeName,
             typeId: this.props.value.procedureTypeId,
+            firstFreeSchedule: this.props.value.firstFreeSchedule,
             reserved: this.props.value.reserved,
             modalShow: false,
             messageShow: false,
@@ -65,6 +66,7 @@ class RoomItem extends Component {
                 </TableCell>
                 <TableCell class='text text-white'>{this.state.number}</TableCell>
                 <TableCell class='text text-white'>{this.state.type}</TableCell>
+                <TableCell class='text text-white'>{this.state.firstFreeSchedule}</TableCell>
                 <TableCell><button onClick={this.onDelite} class='btn btn-danger' disabled={this.state.reserved}>delete</button></TableCell>
                 <TableCell>
                     <ButtonToolbar>

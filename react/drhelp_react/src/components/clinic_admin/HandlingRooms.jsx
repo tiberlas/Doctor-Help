@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import RoomItem from '../rooms/RoomItem';
 import axios from 'axios';
 import Table from '@material-ui/core/Table';
@@ -28,6 +29,12 @@ const sortTypes = {
     number_down: {
         fn: (a, b) => b.number - a.number
     },
+    date_up: {
+        fn: (a, b) => b.firstFreeSchedule.localeCompare(a.firstFreeSchedule)
+    },
+    date_down: {
+        fn: (a, b) => a.firstFreeSchedule.localeCompare(b.firstFreeSchedule)
+    },
     default: {
         fn: (a, b) => a
     }
@@ -37,11 +44,21 @@ class HandlingRooms extends Component {
     state = {
         rooms: [],
         currentSort: 'default',
-        modalShow: false
+        modalShow: false,
+        name: ''
     }
+
+    static contextType = ClinicAdminContext
 
     componentDidMount() {
         this.handleShowAll()
+
+        axios.get('http://localhost:8080/api/clinics/id='+this.context.admin.clinicId)
+        .then(response => {
+            this.setState({
+                name: response.data.name
+            })
+        })
     }
 
     handleUpdate = (key) => {
@@ -63,6 +80,10 @@ class HandlingRooms extends Component {
             if (currentSort === 'type_down') nextSort = 'type_up';
             else if (currentSort === 'type_up') nextSort = 'default';
             else nextSort = 'type_down';
+        } else if(name === 'date') {
+            if (currentSort === 'date_down') nextSort = 'date_up';
+            else if (currentSort === 'date_up') nextSort = 'default';
+            else nextSort = 'date_down';
         } else {
             if (currentSort === 'number_down') nextSort = 'number_up';
             else if (currentSort === 'number_up') nextSort = 'default';
@@ -75,6 +96,7 @@ class HandlingRooms extends Component {
             this.renderArrowName()
             this.renderArrowNumber()
             this.renderArrowType()
+            this.renderArrowDate()
         });
     };
 
@@ -102,6 +124,16 @@ class HandlingRooms extends Component {
         if(this.state.currentSort === 'number_up') {
             return '\u2191'
         } else if(this.state.currentSort === 'number_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowDate = () => {
+        if(this.state.currentSort === 'date_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'date_down') {
             return '\u2193'
         } else {
             return ''
@@ -164,7 +196,8 @@ class HandlingRooms extends Component {
             <div class='row d-flex justify-content-center'>
             <div class='col-md-7'> 
                 <br/>
-                <h2>List of rooms</h2>
+                <h3>Clinic {this.state.name}</h3>
+                <h4>List of rooms</h4>
                 <br/>
                 <Table class="table table-hover ">
                     <TableHead class="table-active">
@@ -172,7 +205,7 @@ class HandlingRooms extends Component {
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('name')}>room name{this.renderArrowName()}</TableCell>
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('number')}>number{this.renderArrowNumber()}</TableCell>
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('type')}>procedure name{this.renderArrowType()}</TableCell>
-                            <TableCell class="text-success">first free date</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('date')}>first free date{this.renderArrowDate()}</TableCell>
                             <TableCell class="text-success"><Button class="btn btn-success" onClick={this.handleShowAll} >show all</Button></TableCell>
                             <TableCell class="text-success"><Button class='btn btn-success' onClick={this.handleSearchClick}>search</Button></TableCell>
                         </TableRow>
