@@ -10,6 +10,7 @@ public class RoomDTO {
 	private String procedureTypeName;
 	private Long procedureTypeId;
 	private boolean reserved;
+	private String firstFreeSchedule;
 	
 	public RoomDTO(RoomPOJO room) {
 		super();
@@ -28,7 +29,7 @@ public class RoomDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RoomDTO(Long id, String name, int number, String procedureTypeName, Long procedureTypeId, boolean reserved) {
+	public RoomDTO(Long id, String name, int number, String procedureTypeName, Long procedureTypeId, boolean reserved, String firstFree) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -36,6 +37,7 @@ public class RoomDTO {
 		this.procedureTypeName = procedureTypeName;
 		this.procedureTypeId = procedureTypeId;
 		this.reserved = reserved;
+		this.firstFreeSchedule = firstFree;
 	}
 
 	public Long getId() {
@@ -73,6 +75,12 @@ public class RoomDTO {
 	}
 	public void setReserved(boolean reserved) {
 		this.reserved = reserved;
+	}
+	public String getFirstFreeSchedule() {
+		return firstFreeSchedule;
+	}
+	public void setFirstFreeSchedule(String firstFreeSchedule) {
+		this.firstFreeSchedule = firstFreeSchedule;
 	}
 	
 }
