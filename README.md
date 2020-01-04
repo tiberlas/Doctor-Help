@@ -1,3 +1,4 @@
+
 installs:
 
 time picker: npm install --save react-time-picker 
@@ -10,5 +11,7 @@ za kalendar:
 	npm install --save @fullcalendar/timegrid 
 	npm install --save @fullcalendar/bootstrap 
 	npm install --save @fullcalendar/react
+	npm install --save @fullcalendar/list
+	npm install --save @fullcalendar/interaction
 select-picker:
 	npm install --save react-select

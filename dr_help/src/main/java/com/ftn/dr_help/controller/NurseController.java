@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
+import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.SignOffDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.service.NurseService;
@@ -46,6 +50,9 @@ public class NurseController {
 	
 	@Autowired
 	private PerscriptionService perscriptionService;
+	
+	@Autowired
+	private Mail mailSender;
 	
 	
 	@GetMapping(value = "/profile")
@@ -152,11 +159,36 @@ public class NurseController {
 		return new ResponseEntity<PerscriptionPOJO>(updated, HttpStatus.OK);
 	}
 	
+
+	@PostMapping(value = "/new+nurse", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> createNurse(@RequestBody MedicalStaffSaveingDTO newNurse) {
+		String email = currentUser.getEmail();
+		
+		boolean ret = service.save(newNurse, email);
+		
+		if(ret) {
+			mailSender.sendAccountInfoEmail(newNurse.getEmail(), "DoctorHelp", newNurse.getFirstName(), newNurse.getLastName(), RoleEnum.NURSE);
+			return new ResponseEntity<String>("created", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+	}
 	
-	
-	
-	
-	
+	@DeleteMapping(value = "/delete/id={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> deleteNurse(@PathVariable("id") Long id) {
+		
+		boolean ret = service.delete(id);
+		
+		if(ret) {
+			return new ResponseEntity<String>("deleted", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+	}
 	
 
 }

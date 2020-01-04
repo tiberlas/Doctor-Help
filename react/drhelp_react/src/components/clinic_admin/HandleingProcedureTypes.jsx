@@ -10,6 +10,30 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 
+const sortTypes = {
+    name_up: {
+        fn: (a, b) => b.name.localeCompare(a.name)
+    },
+    name_down: {
+        fn: (a, b) => a.name.localeCompare(b.name)
+    },
+    duration_up: {
+        fn: (a, b) => b.duration.localeCompare(a.duration)
+    },
+    duration_down: {
+        fn: (a, b) => a.duration.localeCompare(b.duration)
+    },
+    price_up: {
+        fn: (a, b) => a.price - b.price
+    },
+    price_down: {
+        fn: (a, b) => b.price - a.price
+    },
+    default: {
+        fn: (a, b) => a
+    }
+}
+
 class HandleingProcedureTypes extends Component {
     state = {
         procedures: [],
@@ -17,7 +41,8 @@ class HandleingProcedureTypes extends Component {
         refresh: false,
         filterString: '',
         isFilterOperationActive: false,
-        filterOperation: false,
+        currentSort: 'default',
+        checkFilter: "NOT_OPERATION",
         filterOperationDTO: 'NOT_DEFINED'
     }
 
@@ -40,6 +65,63 @@ class HandleingProcedureTypes extends Component {
         })
     }
 
+    onSortChange = (name) => {
+		const { currentSort } = this.state;
+        let nextSort;
+
+        if(name === 'name') {
+            if (currentSort === 'name_down') nextSort = 'name_up';
+            else if (currentSort === 'name_up') nextSort = 'default';
+            else nextSort = 'name_down';
+        } else if(name === 'duration') {
+            if (currentSort === 'duration_down') nextSort = 'duration_up';
+            else if (currentSort === 'duration_up') nextSort = 'default';
+            else nextSort = 'duration_down';
+        } else {
+            if (currentSort === 'price_down') nextSort = 'price_up';
+            else if (currentSort === 'price_up') nextSort = 'default';
+            else nextSort = 'price_down';
+        }
+
+		this.setState({
+			currentSort: nextSort
+		}, () => {
+            this.renderArrowName()
+            this.renderArrowDuration()
+            this.renderArrowPrice()
+        });
+    };
+
+    renderArrowName = () => {
+        if(this.state.currentSort === 'name_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'name_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowDuration = () => {
+        if(this.state.currentSort === 'duration_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'duration_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowPrice = () => {
+        if(this.state.currentSort === 'price_up') {
+            return '\u2191'
+        } else if(this.state.currentSort === 'price_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
     handleUpdate = (key) => {
         const items = this.state.procedures.filter(item => item.id !== key);
         this.setState({ procedures: items, refresh: true });
@@ -49,19 +131,27 @@ class HandleingProcedureTypes extends Component {
         this.setState({[event.target.name]: event.target.value})
     }
 
+    handleFilterRole = () => {
+        if(this.state.isFilterOperationActive === true) {
+            this.setState({filterOperationDTO: this.state.checkFilter})
+        } else {
+            this.setState({filterOperationDTO: 'NOT_DEFINED'})
+        }
+    }
+
     handleActivateFilter = () => {
         this.setState({isFilterOperationActive: !this.state.isFilterOperationActive},
             () => {
-                if(this.state.isFilterOperationActive === true) {
-                    if(this.state.filterOperation === true) {
-                        this.setState({filterOperationDTO: 'OPERATION'})
-                    } else {
-                        this.setState({filterOperationDTO: 'NOT_OPERATION'})
-                    }
-                } else {
-                    this.setState({filterOperationDTO: 'NOT_DEFINED'})
-                }
+                this.handleFilterRole()
             })
+    }
+
+    handleOptionChange = (changeEvent) => {
+        this.setState({
+            checkFilter: changeEvent.target.value
+        }, () => {
+            this.handleFilterRole()
+        });
     }
 
     handleFilter = () => {
@@ -76,52 +166,55 @@ class HandleingProcedureTypes extends Component {
             })
         
     }
-
-    handleFilterOperation = () => {
-        this.setState({filterOperation: !this.state.filterOperation}, 
-            () => {
-                if(this.state.isFilterOperationActive === true) {
-                    if(this.state.filterOperation === true) {
-                        this.setState({filterOperationDTO: 'OPERATION'})
-                    } else {
-                        this.setState({filterOperationDTO: 'NOT_OPERATION'})
-                    }
-                }
-            })
-
-    }
     
     render() {
         let i = 0;
         return ( 
             <div class='row d-flex justify-content-center'>
             <div class='col-md-7'> 
-                <h2>Clinic {this.state.name}</h2>
+                <br/>
+                <h3>Clinic {this.state.name}</h3>
+                <h4>List of procedure types</h4>
                 <br/>
                 <Table class="table table-hover ">
                     <TableHead class="table-active">
-                        <TableRow class="table-active">
-                            <TableCell class="text-success">name</TableCell>
-                            <TableCell class="text-success">duration</TableCell>
-                            <TableCell class="text-success">is operation</TableCell>
-                            <TableCell class="text-success">price</TableCell>
-                            <TableCell class="text-success">
-                                    <div>
-                                        <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/> 
-                                    </div>
-                                    <div>
-                                        <Checkbox checked={this.state.isFilterOperationActive} onChange={this.handleActivateFilter}/>
-                                        <label className={this.state.isFilterOperationActive? `text-success`:`text-muted` }>filter by operation: </label>
-                                    </div> 
+                    <TableRow class="table-active">
+                            <TableCell colSpan='2'>
+                                <span class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="filterRole" onChange={this.handleActivateFilter} checked={this.state.isFilterOperationActive}/>
+                                    <label class="custom-control-label text-white" for="filterRole">filter by examination:</label>
+                                </span>
                             </TableCell>
-                            <TableCell> 
+                            <TableCell>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="NOT_OPERATION" checked={this.state.checkFilter === 'NOT_OPERATION'} onChange={this.handleOptionChange} disabled={!this.state.isFilterOperationActive} />
+                                    <label className={`custom-control-label ${this.state.isFilterOperationActive? 'text-white': 'text-muted'} `} for="customRadio1">appointment</label>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="OPERATION" checked={this.state.checkFilter === 'OPERATION'} onChange={this.handleOptionChange} disabled={!this.state.isFilterOperationActive}/>
+                                    <label className={`custom-control-label ${this.state.isFilterOperationActive? 'text-white': 'text-muted'} `} for="customRadio2">operation</label>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/>
+                            </TableCell>
+                            <TableCell>
                                 <Button class="btn btn-success" onClick = {this.handleFilter}>Search</Button> 
-                                <Checkbox checked={this.state.filterOperation} onChange={this.handleFilterOperation} disabled={!this.state.isFilterOperationActive}/>
                             </TableCell>
+                        </TableRow>
+                        <TableRow class="table-active">
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('name')}>name{this.renderArrowName()}</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('duration')}>duration{this.renderArrowDuration()}</TableCell>
+                            <TableCell class="text-success">is operation</TableCell>
+                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('price')}>price{this.renderArrowPrice()}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {this.state.procedures.map (c => (
+                        {this.state.procedures.sort(sortTypes[this.state.currentSort].fn).map (c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
                                 <ProcedureTypeItem key={c.id} id={c.id} value={c} handleUpdate={this.handleUpdate} />
                             </TableRow>

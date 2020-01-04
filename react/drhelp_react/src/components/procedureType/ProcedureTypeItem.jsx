@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import ChangeProcedureTypeModal from './ChangeProcedureTypeModal';
-import Button from 'react-bootstrap/Button'
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
+import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ModalMessage from '../ModalMessage';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableCell from '@material-ui/core/TableCell';

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
+import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.service.RoomService;
 
 @RestController
@@ -31,9 +33,11 @@ public class RoomController {
 	@Autowired
 	private CurrentUser currentUser;
 	
-	@GetMapping(value = "/clinic={clinic_id}/all")
-	public ResponseEntity<List<RoomDTO>> getAllRooms(@PathVariable("clinic_id") Long clinic_id) {
-		List<RoomDTO> finded = service.findAll(clinic_id);
+	@GetMapping(value = "/all")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RoomDTO>> getAllRooms() {
+		String email = currentUser.getEmail();
+		List<RoomDTO> finded = service.findAll(email);
 		
 		if(finded == null || finded.isEmpty())
 			return new ResponseEntity<List<RoomDTO>>(HttpStatus.NOT_FOUND);
@@ -41,9 +45,12 @@ public class RoomController {
 		return new ResponseEntity<List<RoomDTO>>(finded,  HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/clinic={clinic_id}/one/room={room_id}")
-	public ResponseEntity<RoomDTO> getOneRooms(@PathVariable("clinic_id") Long clinic_id, @PathVariable("room_id") Long room_id) {
-		RoomDTO finded = service.findOne(clinic_id, room_id);
+	@GetMapping(value = "/one/room={room_id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<RoomDTO> getOneRooms(@PathVariable("room_id") Long room_id) {
+		
+		String email = currentUser.getEmail();
+		RoomDTO finded = service.findOne(room_id, email);
 		
 		if(finded == null)
 			return new ResponseEntity<RoomDTO>(HttpStatus.NOT_FOUND);
@@ -69,9 +76,13 @@ public class RoomController {
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> deleteRoom(@PathVariable("id") Long id) {
 		String email = currentUser.getEmail();
-		service.delete(id, email);
+		boolean retVal = service.delete(id, email);
 		
-		return new ResponseEntity<String>(HttpStatus.OK);
+		if(retVal) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@PutMapping(value="/change", consumes = "application/json")
@@ -85,6 +96,34 @@ public class RoomController {
 		}
 		
 		return new ResponseEntity<RoomDTO>(ret, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="room={id}/schedule", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RoomCalendarDTO>> getSchedule(@PathVariable("id") Long roomId) {
+		
+		try {
+			List<RoomCalendarDTO> ret = service.getSchedule(roomId);
+		
+			return new ResponseEntity<>(ret, HttpStatus.OK);
+		} catch (NullPointerException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);			
+		}			
+	}
+	
+	@PostMapping(value="search", consumes="application/json", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RoomDTO>> search(@RequestBody RoomSearchDTO searchingParameters) {
+		String email = currentUser.getEmail();
+		List<RoomDTO> retVal = service.search(searchingParameters, email);
+		
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		}
 	}
 	
 }

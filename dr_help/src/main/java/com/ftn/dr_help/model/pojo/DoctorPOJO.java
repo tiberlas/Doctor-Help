@@ -24,6 +24,7 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.enums.Shift;
 
 @Entity
 @Table(name = "doctors")
@@ -52,7 +53,7 @@ public class DoctorPOJO implements Serializable{
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 	
 	@Column(name = "state", nullable = false)
@@ -68,7 +69,7 @@ public class DoctorPOJO implements Serializable{
 	private String phoneNumber;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "birthday", nullable = false)
+	@Column(name = "birthday")
 	private Calendar birthday;
 	
 	@JsonManagedReference
@@ -88,6 +89,37 @@ public class DoctorPOJO implements Serializable{
 	
 	@Column (nullable = false)
 	private boolean deleted;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "monday", nullable = false)
+	public Shift monday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "tuesday", nullable = false)
+	public Shift tuesday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "wednesday", nullable = false)
+	public Shift wednesday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "thursday", nullable = false)
+	public Shift thursday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "friday", nullable = false)
+	public Shift friday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "saturday", nullable = false)
+	public Shift saturday;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "sunday", nullable = false)
+	public Shift sunday;
+	
+	@Column(name = "mustChangePassword", nullable = true)
+	private Boolean mustChangePassword = false;
 	
 	public DoctorPOJO() {
 		super();
@@ -199,6 +231,70 @@ public class DoctorPOJO implements Serializable{
 
 	public void setProcedureType(ProceduresTypePOJO procedureType) {
 		this.procedureType = procedureType;
+	}
+
+	public Shift getMonday() {
+		return monday;
+	}
+
+	public void setMonday(Shift monday) {
+		this.monday = monday;
+	}
+
+	public Shift getTuesday() {
+		return tuesday;
+	}
+
+	public void setTuesday(Shift tuesday) {
+		this.tuesday = tuesday;
+	}
+
+	public Shift getWednesday() {
+		return wednesday;
+	}
+
+	public void setWednesday(Shift wednesday) {
+		this.wednesday = wednesday;
+	}
+
+	public Shift getThursday() {
+		return thursday;
+	}
+
+	public void setThursday(Shift thursday) {
+		this.thursday = thursday;
+	}
+
+	public Shift getFriday() {
+		return friday;
+	}
+
+	public void setFriday(Shift friday) {
+		this.friday = friday;
+	}
+
+	public Shift getSaturday() {
+		return saturday;
+	}
+
+	public void setSaturday(Shift saturday) {
+		this.saturday = saturday;
+	}
+
+	public Shift getSunday() {
+		return sunday;
+	}
+
+	public void setSunday(Shift sunday) {
+		this.sunday = sunday;
+	}
+
+	public Boolean getMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(Boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
 	}
 	
 }

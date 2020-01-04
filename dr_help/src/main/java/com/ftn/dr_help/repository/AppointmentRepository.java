@@ -1,6 +1,6 @@
 package com.ftn.dr_help.repository;
 
-
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,7 +19,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query(value = "select distinct a.* from appointments a inner join doctors d on a.doctor_id = ?1", nativeQuery = true)
 	public List<AppointmentPOJO> findDoctorAppointments(Long doctor_id);
 	
-	
 	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.patient_id = ?2 and a.status = 'APPROVED'", nativeQuery = true)
 	public List<AppointmentPOJO> findApprovedDoctorAppointmentsForPatientWithId(Long doctor_id, Long patient_id);
+	
+	@Query(value = "select a.date from appointments a where a.deleted = FALSE and a.room_id = ?1 order by a.date", nativeQuery = true)
+	public List<Date> findScheduledDatesOfRoom(Long roomId);
+
 }

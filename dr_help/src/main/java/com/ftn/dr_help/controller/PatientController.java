@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
+import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
@@ -58,28 +60,21 @@ public class PatientController {
 		return new ResponseEntity<List<PatientNameDTO>>(ret, HttpStatus.OK);
 	}
 	
-	
 	@GetMapping(value = "/profile/{insuranceId}")
 	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
-	
 	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("insuranceId") Long insuranceId ) {
 
 		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);
-		
-		
 		
 		if(ret == null) {
 			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
 		}
 		
-		PatientDTO dt = new PatientDTO(ret);
 		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
 	}
 	
-	
-	
-	
 	@GetMapping(value = "/all")
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
 	public ResponseEntity<List<PatientDTO>> getAllPatients() {
 
 		List<PatientPOJO> patients = patientService.findAll();
@@ -212,6 +207,17 @@ public class PatientController {
 			return new ResponseEntity<String>("not changed", HttpStatus.NOT_ACCEPTABLE);
 		}
 		
-	}  
+	} 
+	
+	@PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
+	public ResponseEntity<List<PatientDTO>> filter(@RequestBody PatientFilterDTO filter){
+		List<PatientDTO> patients = patientService.findAllfilter(filter);
+
+		if(patients == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(patients, HttpStatus.OK);
+	}
 	
 }
