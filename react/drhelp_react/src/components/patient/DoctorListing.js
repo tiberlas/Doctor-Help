@@ -6,14 +6,18 @@ import {Link} from 'react-router-dom';
 import { Dropdown, Button } from 'react-bootstrap';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
+import { UserContext } from '../../context/UserContextProvider';
 
 
 class DoctorListing extends Component {
 
 	state = {
 		filtered: false, 
-		doctors: []
+		doctors: [], 
+		
 	}
+
+	static contextType = UserContext;
 
 	componentDidMount () {
 		let url = window.location.href.split ('/');
@@ -35,6 +39,25 @@ class DoctorListing extends Component {
 		})
 	}
 
+	handleSubmit (row) {
+		if (row.selectedTime === undefined) {
+			alert ("Please specify a timepoint")
+		} 
+		else {
+			// alert ("Rezervisem kod " + row.firstName + " u " + row.selectedTime)
+			axios.post ('http://localhost:8080/api/appointments/add', {
+				doctorId : row.id, 
+				date: window.location.href.split('/')[6], 
+				time: row.selectedTime, 
+				patientId : this.context.user.id
+			}) 
+		}
+	}
+
+	handleSelect (row, time) {
+		row.selectedTime = time;
+	}
+
 	generateDoctorRows (row) {
 		let profileUrl = '/doctor/profile/'
 
@@ -46,19 +69,19 @@ class DoctorListing extends Component {
 				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
 					<Dropdown>
 						<DropdownToggle >
-							Meni
+							Termini
 						</DropdownToggle>
 						<DropdownMenu>
 							{
-								row.terms.map (row => (
-									<MenuItem>{row}</MenuItem>
+								row.terms.map (term => (
+									<MenuItem onClick={() => this.handleSelect(row, term)}>{term}</MenuItem>
 								))
 							}
 						</DropdownMenu>
 					</Dropdown>
 				</TableCell>
-				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
-					<Button>
+				<TableCell hidden={(this.state.filtered) ? (false) : (true)} >
+					<Button onClick={() => this.handleSubmit(row)}>
 						Potvrdi
 					</Button>
 				</TableCell>

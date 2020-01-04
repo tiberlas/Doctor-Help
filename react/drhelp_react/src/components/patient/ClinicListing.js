@@ -67,23 +67,7 @@ class ClinicListing extends Component {
 			activeFilter : text
 		})
 
-		// alert ("Filter date: " + value + "; Filter type: " + text);
-
 		this.fetchData (text, value);
-
-		// axios.get ('http://localhost:8080/api/clinics/listing/' + text)
-		// .then (response => {
-		// 	this.setState ({
-		// 		clinics: response.data.clinicList, 
-		// 		appointmentTypes: response.data.procedureType, 
-		// 		activeFilter: text
-		// 	})
-		// 	if (this.state.activeFilter === 'unfiltered') {
-		// 		this.setState ({
-		// 			activeFilter: ''
-		// 		})
-		// 	}
-		// })
 	}
 
 	handleFilterDate () {

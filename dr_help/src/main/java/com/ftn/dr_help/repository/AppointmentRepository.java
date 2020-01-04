@@ -22,6 +22,6 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	List<AppointmentPOJO> getClinicsAppointments (Long clinicId, Calendar calendarMin, Calendar calendarMax, String procedureName);
 	
 	@Query (value = "select * from appointments a where doctor_id = ?1 and deleted = false and date between ?2 and ?3", nativeQuery = true)
-	List<AppointmentPOJO> getDoctorsAppointments (Long doctorId, Calendar calendarMin, Calendar calendarMax);
+	List<AppointmentPOJO> getDoctorsAppointments (Long doctorId, Calendar calendarMin, Calendar calendarMax); 
 	
 }
