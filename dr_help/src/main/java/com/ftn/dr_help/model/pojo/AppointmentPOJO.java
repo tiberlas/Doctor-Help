@@ -53,7 +53,7 @@ public class AppointmentPOJO implements Serializable{
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	private ProceduresTypePOJO procedureType;
 	
-	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true)
 	private RoomPOJO room;
 	
 	@OneToOne(fetch = FetchType.LAZY)

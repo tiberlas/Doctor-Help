@@ -1,5 +1,6 @@
 package com.ftn.dr_help.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,31 +101,64 @@ public class ClinicController {
 		return new ResponseEntity<ClinicDTO>(ret, HttpStatus.OK);
 	}
 
-	@GetMapping (value = "/listing/{filter}")
+	@GetMapping (value = "/listing/{filter}/{date_string}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter) {
-		System.out.println("Patient listing says hi");
-		
-		List<ClinicPreviewDTO> clinicDTO = new ArrayList<>();
+	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter, @PathVariable("date_string") String dateString) throws ParseException {
+//		System.out.println("");
+//		System.out.println("XOXOXOXOXO");
+//		System.out.println("Filter: " + filter);
+//		System.out.println("Date string: " + dateString);
+//		System.out.println("XOXOXOXOXO");
+//		System.out.println("");
+//		List<ClinicPreviewDTO> clinicDTO = new ArrayList<>();
+//		
+//		if (filter.equals("unfiltered")) {
+//			List<ClinicPOJO> clinics = clinicService.findAll();
+//			for (ClinicPOJO c : clinics) {
+//				clinicDTO.add(new ClinicPreviewDTO(c));
+//			} 
+//		} else {
+//			filter = filter.replace('_', ' ');
+//			List<ClinicPOJO> clinics = clinicService.filterByProcedureType (filter);
+//			for (ClinicPOJO c : clinics) {
+//				ClinicPreviewDTO newPreview = new ClinicPreviewDTO(c);
+//				newPreview.setPrice(Double.toString(procedureTypeService.getPrice(c.getId(), filter)) + " rsd");
+//				clinicDTO.add(newPreview);
+//			} 
+//		}
+		List<ClinicPOJO> clinicList = new ArrayList<ClinicPOJO>();
 		
 		if (filter.equals("unfiltered")) {
+//			System.out.println("NEFILTRIRANE KLINIKE!!!1!");
 			List<ClinicPOJO> clinics = clinicService.findAll();
 			for (ClinicPOJO c : clinics) {
-				clinicDTO.add(new ClinicPreviewDTO(c));
+				clinicList.add(c);
 			} 
 		} else {
 			filter = filter.replace('_', ' ');
 			List<ClinicPOJO> clinics = clinicService.filterByProcedureType (filter);
 			for (ClinicPOJO c : clinics) {
-				ClinicPreviewDTO newPreview = new ClinicPreviewDTO(c);
-				newPreview.setPrice(Double.toString(procedureTypeService.getPrice(c.getId(), filter)) + " rsd");
-				clinicDTO.add(newPreview);
+				clinicList.add(c);
 			} 
+		}
+		
+		if (!dateString.equals("unfiltered")) {
+			clinicList = clinicService.filterByDate(clinicList, filter, dateString);
+		}
+		
+		List<ClinicPreviewDTO> clinicDTO = new ArrayList<>();
+		for (ClinicPOJO c : clinicList) {
+			ClinicPreviewDTO temp = new ClinicPreviewDTO (c);
+			if (!filter.equals ("unfiltered")) {
+				Double price = procedureTypeService.getPrice(c.getId(), filter);
+				temp.setPrice((price == null) ? ("-") : (Double.toString(price) + " rsd"));
+			}
+			clinicDTO.add(temp);
 		}
 		
 		List<String> procedureTypes = procedureTypeService.getProcedureTypes();
 		
-		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes);
+		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes, filter, dateString);
 		
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
