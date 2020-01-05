@@ -27,8 +27,11 @@ public class ProcedureTypeService {
 		return procedureTypeRepository.getProcedureTypes();
 	}
 	
-	public double getPrice (Long clinicId, String procedureName) {
-		return procedureTypeRepository.getPrice(clinicId, procedureName);
+	public Double getPrice (Long clinicId, String procedureName) {
+		System.out.println("PROCEDURE TYPE, get price, clinic id: " + clinicId + "; Procedure name: " + procedureName);
+		Double retVal = procedureTypeRepository.getPrice(clinicId, procedureName);
+		System.out.println("Procedure type service, evo sta sam iskopao iz baze: " + retVal);
+		return retVal;
 	}
 	
     public List<ProcedureTypeDTO> getAll(String email) {

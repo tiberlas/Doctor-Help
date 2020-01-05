@@ -1,7 +1,11 @@
 package com.ftn.dr_help.service;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +26,10 @@ import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.model.pojo.TherapyPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.DiagnosisRepository;
+import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.ExaminationReportRepository;
 import com.ftn.dr_help.repository.MedicationRepository;
+import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.PerscriptionRepository;
 import com.ftn.dr_help.repository.TherapyRepository;
 
@@ -48,6 +54,13 @@ public class AppointmentService {
 	@Autowired
 	private TherapyRepository therapyRepository;
 
+	@Autowired
+	private DoctorRepository doctorRepository;
+	
+	@Autowired
+	private PatientRepository patientRepository;
+	
+	
 	public List<DoctorAppointmentDTO> findDoctorAppointments(Long doctor_id) {
 		
 		List<AppointmentPOJO> list = appointmentRepository.findDoctorAppointments(doctor_id);
@@ -116,7 +129,6 @@ public class AppointmentService {
 		}
 		
 		perscription.setMedicationList(medicationList);
-		//perscription.setMedicationList(medicationList);
 		
 		for (MedicationPOJO medicationPOJO : medicationList) {
 			System.out.println("THE MEDS ARE: " + medicationPOJO.getMedicationName());
@@ -215,6 +227,30 @@ public class AppointmentService {
 		
 		
 		return dto;
+	}
+	
+	
+	
+	public boolean addAppointment (Long doctorId, String dateString, Long patientId) throws ParseException {
+		AppointmentPOJO newAppointment = new AppointmentPOJO ();
+		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+		Date date = sdf.parse(dateString);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		newAppointment.setDate(calendar);
+		newAppointment.setDeleted(false);
+		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
+		newAppointment.setDoctor(doctor);
+		newAppointment.setPatient(patientRepository.getOne(patientId));
+		newAppointment.setStatus(AppointmentStateEnum.REQUESTED);
+		newAppointment.setProcedureType(doctor.getProcedureType());
+		newAppointment.setRoom(null);
+		newAppointment.setNurse(null);
+		newAppointment.setDiscount(1);
+		newAppointment.setExaminationReport(null);
+		appointmentRepository.save(newAppointment);
+		
+		return false;
 	}
 	
 	
