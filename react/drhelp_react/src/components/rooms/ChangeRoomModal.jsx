@@ -7,10 +7,20 @@ class ChangeRoomModal extends Component {
         id: this.props.id,
         number: this.props.number,
         name: this.props.name,
+        type: this.props.type,
+        typeId: this.props.typeId,
+        procedureList: {},
         errorNumber: false,
         errorName: false,
     }
-    
+
+    componentDidMount() {
+        axios.get('http://localhost:8080/api/procedure+types/all')
+        .then(response => {
+            this.setState({procedureList: response.data})
+        })
+    }
+
     handleValidation = () => {
         this.setState({errorName: false, errorNumber: false})
 
@@ -34,16 +44,40 @@ class ChangeRoomModal extends Component {
         axios.put('http://localhost:8080/api/rooms/change', {
                     id: this.state.id,            
                     name: this.state.name,
-                    number: parseInt(this.state.number)
+                    number: parseInt(this.state.number),
+                    procedureTypeId: this.state.typeId,
+                    procedureTypeName: this.state.type
         }).then( (response) => {
-            this.props.handleUpdate(response.data.name, response.data.number)
-        })
+            this.props.handleUpdate(response.data.name, response.data.number, response.data.procedureTypeName, response.data.procedureTypeId)
+        }).catch((error) => {
+            this.setState({ 
+                errorNumber: true
+            })
+        });
+    }
+
+    handlerChangeProcedureType = (event) => {
+        let val = event.target.value.split("-")
+        this.setState({typeId: parseInt(val[0]), type: val[1]})
+    }
+
+    createProcedureItems() {
+        let items = []; 
+        var size = Object.keys(this.state.procedureList).length;
+        for (let i = 0; i < size; i++) {
+            if(this.state.typeId === this.state.procedureList[i].id) {
+                items.push(<option key={i} name = "procedureTypeId" selected="selected" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);
+            } else {
+                items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].name} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);
+            }
+        }
+        return items;
     }
 
     render() {
         return (
             <Modal
-              size="sm"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered
               show={this.props.show}
@@ -55,13 +89,21 @@ class ChangeRoomModal extends Component {
                     <Modal.Body>
                         <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                             <label class="form-control-label" for="name">name:</label>
-                            <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': ''}`} value={this.state.name} onChange={this.handlerChange} />
+                            <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
                         </div>
 
                         <div className={`form-group ${this.state.errorNumber? 'has-danger': ''}`}>
                             <label class="form-control-label" for="number">number:</label>
-                            <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': ''}`} value={this.state.number} onChange={this.handlerChange} />
+                            <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': 'is-valid'}`} value={this.state.number} onChange={this.handlerChange} />
+                            {(this.state.errorNumber) && <div class="invalid-feedback"> Room number already exists. </div>}
                         </div>
+
+                        <div class='form-group'>
+                        <label for="procedureTypeId">appointment type</label>
+                        <select multiple="" class='form-control' id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
+                            {this.createProcedureItems()}
+                        </select>
+                    </div>
 
                     </Modal.Body>
                     <Modal.Footer>

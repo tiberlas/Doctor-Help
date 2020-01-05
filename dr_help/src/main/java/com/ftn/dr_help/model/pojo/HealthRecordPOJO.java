@@ -34,7 +34,7 @@ public class HealthRecordPOJO implements Serializable {
 	private Long id;
 	
 	@JsonBackReference
-	@OneToMany(mappedBy = "healthRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="healthRecord")
 	private List<AllergyPOJO> allergyList;
 
 	
@@ -51,10 +51,12 @@ public class HealthRecordPOJO implements Serializable {
 	@Column(name = "bloodType", nullable = true)
 	private BloodTypeEnum bloodType;
 	
+
+
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ExaminationReportPOJO> examinationReport;
-	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+
 	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private PatientPOJO patient;
 	
@@ -78,8 +80,12 @@ public class HealthRecordPOJO implements Serializable {
 		this.id = id;
 	}
 
+
+
 	public void setAlergyList(List<AllergyPOJO> alergyList) {
 		this.allergyList = alergyList;
+
+
 	}
 	public Double getWeight() {
 		return weight;

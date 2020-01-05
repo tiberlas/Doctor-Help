@@ -40,8 +40,8 @@ class LoginPage extends React.Component {
 		let email = document.getElementById('tb_email');
 		let password = document.getElementById('tb_password');
 		
-		if (email.value.length > 3) {
-			if  (password.value.length > 3) {
+		if (email.value.length >= 3) {
+			if  (password.value.length >= 3) {
 				fetch ('http://localhost:8080/api/login', {
 					method: 'post',
 					headers: {'Content-Type' : 'application/json'},
@@ -67,13 +67,9 @@ class LoginPage extends React.Component {
 					var token = JSON.parse(localStorage.getItem('token'));
 					console.log(`Authorization=Bearer ${token}`)
 
-					console.log("must change password, ", response.mustChangePassword)
-
 					if(response.mustChangePassword === true) {
 						let role = response.userRole
-						alert('role here' + role)
 						this.props.setPasswordChange(response.userRole)
-						alert(" dolby" + role)
 					}
 					
 					if (response.userRole === "PATIENT") {
@@ -118,10 +114,8 @@ class LoginPage extends React.Component {
 			this.setState (() => ({
 					loggedIn: false
 			}))
-		}
-		
+		}	
 	}
-
 
 	handleLogIn = () => {
 		this.setState ({
@@ -133,15 +127,14 @@ class LoginPage extends React.Component {
 
 		return (
 			<div>
+
 				<br/>
-				{/* <div class="alert alert-dismissible alert-success">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
-				</div> */}
+
 
 				<Switch>
 					<Route path = "/login">
 						<div class='row d-flex justify-content-center' >
+
 						<div class='col-sm-5'>
 							<br/>
 							<br/>
@@ -155,7 +148,7 @@ class LoginPage extends React.Component {
 							</div>
 							<div class={`form-group ${this.state.error? 'has-danger': ''}`}>
 								<label for="exampleInputEmail1">Password</label>
-								<FormControl type="password" placeholder="Password" id='tb_password' className={`form-control ${this.state.error? 'is-invalid': ''}`}/>
+								<FormControl type="password" id='tb_password' className={`form-control ${this.state.error? 'is-invalid': ''}`}/>
 								<div class="invalid-feedback">The user-password pair you entered matches no existing user. </div>
 							</div>
 							<div class="form-group row">
@@ -169,6 +162,7 @@ class LoginPage extends React.Component {
 								</div>
 							</div>
 							</form>
+
 							</div>
 						</div>
 					</Route>

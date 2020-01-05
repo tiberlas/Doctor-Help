@@ -40,6 +40,7 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
 				pojo.getRole(),
+				pojo.getMustChangePassword(),
 				true);
 	}
 
@@ -56,6 +57,7 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
 				pojo.getRole(),
+				pojo.getMustChangePassword(),
 				true);				
 	}
 
@@ -72,6 +74,7 @@ public class EncapsulateUserDetails implements EncapsulateUserDetailsInterface {
 				pojo.getPhoneNumber(),
 				pojo.getBirthday(),
 				pojo.getRole(),
+				pojo.getMustChangePassword(),
 				true);
 	}
 

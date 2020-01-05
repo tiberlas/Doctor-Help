@@ -35,7 +35,7 @@ public class ClinicAdministratorPOJO implements Serializable{
 	@Column(name = "password", nullable = false)
 	private String password;
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 	
 	@Column(name = "firstName", nullable = false)
@@ -67,6 +67,10 @@ public class ClinicAdministratorPOJO implements Serializable{
 	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ClinicPOJO clinic;
+	
+	@Column(name = "mustChangePassword", nullable = true)
+	private Boolean mustChangePassword = false;
+	
 	
 	
 	public ClinicAdministratorPOJO() {
@@ -169,6 +173,15 @@ public class ClinicAdministratorPOJO implements Serializable{
 	@Autowired
 	public void setClinic(ClinicPOJO clinic) {
 		this.clinic = clinic;
+	}
+	
+	
+	public Boolean getMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(Boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
 	}
 	
 	

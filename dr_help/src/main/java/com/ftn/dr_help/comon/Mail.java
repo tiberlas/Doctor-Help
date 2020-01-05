@@ -34,6 +34,10 @@ public class Mail {
         	text += "\nAppointed role:\tCentre administrator";
         } else if(role.equals(RoleEnum.CLINICAL_ADMINISTRATOR)) {
         	text += "\nAppointed role:\tClinic administrator";
+        } else if(role.equals(RoleEnum.DOCTOR)) {
+        	text += "\nAppointed role:\tDoctor";
+        } else if(role.equals(RoleEnum.NURSE)) {
+        	text += "\nAppointed role:\tNurse";
         }
         
         text += "\nPlease, change your password after logging in. \n" + "Forever helping, drHelp.";

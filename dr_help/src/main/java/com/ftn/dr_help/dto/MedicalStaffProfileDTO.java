@@ -14,7 +14,7 @@ public class MedicalStaffProfileDTO {
 	
 	DateConverter dateConverter = new DateConverter();
 	
-	//private Long id;
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -45,6 +45,7 @@ public class MedicalStaffProfileDTO {
 		this.phoneNumber = doctor.getPhoneNumber();
 		this.birthday = dateConverter.toString(doctor.getBirthday());
 		this.clinicId = doctor.getClinic().getId();
+		this.id = doctor.getId();
 	}
 	
 	public MedicalStaffProfileDTO(NursePOJO nurse) {
@@ -58,6 +59,7 @@ public class MedicalStaffProfileDTO {
 		this.phoneNumber = nurse.getPhoneNumber();
 		this.birthday = dateConverter.toString(nurse.getBirthday());
 		this.clinicId = nurse.getClinic().getId();
+		this.id = nurse.getId();
 	}
 	
 	public MedicalStaffProfileDTO(String firstName, String lastName, String email, String city, String state,
@@ -128,6 +130,14 @@ public class MedicalStaffProfileDTO {
 	}
 	public void setClinicId(Long clinicId) {
 		this.clinicId = clinicId;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
@@ -35,7 +34,7 @@ public class PatientPOJO implements Serializable{
 	@Column (name = "password", nullable = false)
 	private String password;
 	
-	@Column (name = "email", nullable = false)
+	@Column (name = "email", nullable = false, unique = true)
 	private String email;
 	
 	@Column (name = "firstName", nullable = false)
@@ -75,7 +74,6 @@ public class PatientPOJO implements Serializable{
 	private Long insuranceNumber;
 	
 	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private HealthRecordPOJO healthRecord;
 

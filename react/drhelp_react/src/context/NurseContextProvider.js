@@ -5,6 +5,7 @@ export const NurseContext = createContext();
 class NurseContextProvider extends Component {
     state = { 
         nurse: {
+            id: this.props.nurse.id,
             email: this.props.nurse.email,
             firstName: this.props.nurse.firstName,
             lastName: this.props.nurse.lastName,
@@ -21,6 +22,7 @@ class NurseContextProvider extends Component {
         if (prevProps.nurse !== this.props.nurse) {
             this.setState({
                 nurse:{ 
+                    id: this.props.nurse.id,
                     email: this.props.nurse.email,
                     firstName: this.props.nurse.firstName,
                     lastName: this.props.nurse.lastName,

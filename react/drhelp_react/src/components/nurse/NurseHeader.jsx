@@ -14,7 +14,7 @@ class NurseHeader extends Component {
               <Nav> 
                   <Nav.Link>
                     <Link exact to = '/home' class="nav-link">
-                      <strong> drHelp </strong>
+                      <strong> drHelp++ </strong>
                     </Link>
                   </Nav.Link>
                 </Nav>
@@ -23,14 +23,23 @@ class NurseHeader extends Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     
-
                     <Nav.Link>
                             <Link exact to='/nurse/patient-list' class="nav-link">Patient&nbsp;list</Link>
                     </Nav.Link>
-                </Nav>
-                <Nav className="justify-content-end" style={{ width: "100%" }}>
-                    
 
+                    <Nav.Link>
+                            <Link exact to='/nurse/perscription-list' class="nav-link">Pending&nbsp;perscriptions</Link>
+                    </Nav.Link>
+
+                    <Nav.Link>
+                            <Link exact to='/nurse/schedule' class="nav-link">Schedule</Link>
+                    </Nav.Link>
+                </Nav>
+
+
+
+
+                <Nav className="justify-content-end" style={{ width: "100%" }}>
                     <Nav.Link>
                     <Link exact to = '/nurse/profile' class="nav-link">
                           {this.context.nurse.firstName}&nbsp;{this.context.nurse.lastName}

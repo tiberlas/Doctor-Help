@@ -14,7 +14,7 @@ class DoctorHeader extends Component {
               <Nav> 
                   <Nav.Link>
                     <Link exact to = '/home' class="nav-link">
-                      <strong> drHelp </strong>
+                      <strong> drHelp++ </strong>
                     </Link>
                   </Nav.Link>
                 </Nav>
@@ -22,6 +22,15 @@ class DoctorHeader extends Component {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
+
+                  <Nav.Link>
+                          <Link exact to='/doctor/schedule' class="nav-link">Schedule</Link>
+                  </Nav.Link>
+
+                  <Nav.Link>
+                          <Link exact to='/doctor/patients' class="nav-link">Patients</Link>
+                  </Nav.Link>
+
                 </Nav>
                 <Nav className="justify-content-end" style={{ width: "100%" }}>
 

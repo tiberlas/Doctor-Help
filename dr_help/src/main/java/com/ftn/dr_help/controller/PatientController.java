@@ -5,23 +5,29 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
+import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
 import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
+import com.ftn.dr_help.model.enums.BloodTypeEnum;
+import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.HealthRecordService;
@@ -54,23 +60,8 @@ public class PatientController {
 		return new ResponseEntity<List<PatientNameDTO>>(ret, HttpStatus.OK);
 	}
 	
-//	@GetMapping(value = "/id={id}/profile")
-//	@PreAuthorize("hasAuthority('DOCTOR')")
-//	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("id") Long id ) {
-//
-//		PatientDTO ret = patientService.findById(id);
-//		
-//		if(ret == null) {
-//			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
-//		}
-//		
-//		return new ResponseEntity<PatientDTO>(ret, HttpStatus.OK);
-//	}
-	
-	
 	@GetMapping(value = "/profile/{insuranceId}")
-	@PreAuthorize("hasAuthority('NURSE')")
-	
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
 	public ResponseEntity<PatientDTO> getPatientProfile(@PathVariable("insuranceId") Long insuranceId ) {
 
 		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);
@@ -82,10 +73,8 @@ public class PatientController {
 		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
 	}
 	
-	
-	
-	
 	@GetMapping(value = "/all")
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
 	public ResponseEntity<List<PatientDTO>> getAllPatients() {
 
 		List<PatientPOJO> patients = patientService.findAll();
@@ -126,10 +115,11 @@ public class PatientController {
 		
 		
 		HealthRecordPOJO healthRecord = new HealthRecordPOJO();
-		healthRecord.setDiopter(null); //generic health record
-		healthRecord.setHeight(null);
-		healthRecord.setWeight(null);
-		healthRecord.setBloodType(null);
+		healthRecord.setDiopter(0); //generic health record
+		healthRecord.setHeight(0);
+		healthRecord.setWeight(0);
+		healthRecord.setBloodType(BloodTypeEnum.O_POSITIVE);
+		healthRecord.setAlergyList(new ArrayList<AllergyPOJO>());
 		
 		p.setActivated(true);
 		p.setHealthRecord(healthRecord);
@@ -187,7 +177,7 @@ public class PatientController {
 		System.out.println("Zilav sam!!!1!");
 		if (retVal == null) {
 			retVal = new ArrayList<PatientHistoryDTO> ();
-			retVal.add(new PatientHistoryDTO ((long) 0, "", "", "", "", ""));
+			retVal.add(new PatientHistoryDTO ((long) 0, "", "", "", "", "", (long) 0));
 		}
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
@@ -202,6 +192,32 @@ public class PatientController {
 		}
 		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> putPatientPassword(@RequestBody ChangePasswordDTO passwords) {
+		String email = currentUser.getEmail();
+
+		boolean ret = patientService.changePassword(passwords, email);
+		
+		if(ret) {
+			return new ResponseEntity<String>("changed", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("not changed", HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+	} 
+	
+	@PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('NURSE') or hasAuthority('DOCTOR')")
+	public ResponseEntity<List<PatientDTO>> filter(@RequestBody PatientFilterDTO filter){
+		List<PatientDTO> patients = patientService.findAllfilter(filter);
+
+		if(patients == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(patients, HttpStatus.OK);
 	}
 	
 }

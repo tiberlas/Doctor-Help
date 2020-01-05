@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -34,16 +35,19 @@ public class PerscriptionPOJO implements Serializable {
 	private DiagnosisPOJO diagnosis;
 	
 	@JsonBackReference
-	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="perscription")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MedicationPOJO> medicationList;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private NursePOJO signingNurse;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JsonManagedReference
 	private TherapyPOJO therapy;
 	
 	@OneToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	private ExaminationReportPOJO examinationReport;
 	
 	public DiagnosisPOJO getDiagnosis() {
@@ -63,9 +67,6 @@ public class PerscriptionPOJO implements Serializable {
 	}
 	public NursePOJO getSigningNurse () {
 		return this.signingNurse;
-	}
-	public void setigningNurse (NursePOJO signingNurse) {
-		this.signingNurse = signingNurse;
 	}
 	public Long getId() {
 		return id;

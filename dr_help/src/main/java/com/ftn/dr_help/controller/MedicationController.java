@@ -30,10 +30,14 @@ public class MedicationController {
 	@PostMapping(value = "/new", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public ResponseEntity<MedicationDTO> newMedication(@RequestBody MedicationDTO medication) {
-		
+		System.out.println("nesto us put" + medication.getName());
 		MedicationPOJO m = medicationService.findByName(medication.getName());
-		
+		if (m != null) {
+			System.out.println(m.getMedicationName());
+		}
+		System.out.println(medication.getName());
 		if(m != null) {
+			System.out.println("KURVA");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
@@ -43,7 +47,8 @@ public class MedicationController {
 	
 		med = medicationService.save(med);
 		
-		
+		if(med == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		return new ResponseEntity<>(new MedicationDTO(med) , HttpStatus.CREATED);
 	}
@@ -51,7 +56,7 @@ public class MedicationController {
 	
 	
 	@GetMapping(value = "/all")
-	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR') or hasAuthority('DOCTOR')")
 	public ResponseEntity<List<MedicationDTO>> getAllMedication() {
 
 		List<MedicationPOJO> meds = medicationService.findAll();

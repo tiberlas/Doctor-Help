@@ -35,7 +35,7 @@ class CentreAdminHeader extends Component {
               <Nav> 
                   <Nav.Link>
                     <Link exact to = '/home' class="nav-link">
-                      <strong> drHelp </strong>
+                      <strong> drHelp++ </strong>
                     </Link>
                   </Nav.Link>
                 </Nav>

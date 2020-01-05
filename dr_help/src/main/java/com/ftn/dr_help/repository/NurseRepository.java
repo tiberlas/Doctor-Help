@@ -11,5 +11,7 @@ public interface NurseRepository extends JpaRepository<NursePOJO, Long>{
 	
 	List<NursePOJO> findAllByClinic_id(Long id);
 	NursePOJO findOneByEmail (String email);
+	
+	NursePOJO findOneById(Long id);
 
 }

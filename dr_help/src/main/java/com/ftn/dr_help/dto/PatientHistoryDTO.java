@@ -1,14 +1,12 @@
 package com.ftn.dr_help.dto;
 
-import java.util.Calendar;
-
 public class PatientHistoryDTO {
 
 	public PatientHistoryDTO() {
 		super();
 	}
 	public PatientHistoryDTO(Long examinationReportId, String date, String procedureType, String doctor, String nurse,
-			String clinicName) {
+			String clinicName, Long clinicId) {
 		super();
 		this.examinationReportId = examinationReportId;
 		this.date = date;
@@ -16,6 +14,7 @@ public class PatientHistoryDTO {
 		this.doctor = doctor;
 		Nurse = nurse;
 		ClinicName = clinicName;
+		this.ClinicId = clinicId;
 	}
 	Long examinationReportId;
 	String date;
@@ -23,6 +22,8 @@ public class PatientHistoryDTO {
 	String doctor;
 	String Nurse;
 	String ClinicName;
+	Long ClinicId;
+	
 	public Long getExaminationReportId() {
 		return examinationReportId;
 	}
@@ -58,6 +59,12 @@ public class PatientHistoryDTO {
 	}
 	public void setClinicName(String clinicName) {
 		ClinicName = clinicName;
+	}
+	public Long getClinicId() {
+		return ClinicId;
+	}
+	public void setClinicId(Long clinicId) {
+		ClinicId = clinicId;
 	}
 	
 }

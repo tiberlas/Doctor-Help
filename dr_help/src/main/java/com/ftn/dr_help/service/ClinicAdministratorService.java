@@ -66,6 +66,11 @@ public class ClinicAdministratorService {
 		return ret;
 	}
 	
+	
+	public ClinicAdministratorPOJO findOneByEmail(String mail) {
+		return clinicAdministratorRepository.findOneByEmail(mail);
+	}
+	
 	public List<ClinicAdministratorPOJO> findAll() {
 		return clinicAdministratorRepository.findAll();
 	}
@@ -121,6 +126,7 @@ public class ClinicAdministratorService {
 			String encoded = encoder.getEncoder().encode(password.getNewPassword());
 
 			finded.setPassword(encoded);
+			finded.setMustChangePassword(false);
 			clinicAdministratorRepository.save(finded);
 			return true;
 		}
