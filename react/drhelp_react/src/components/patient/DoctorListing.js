@@ -57,7 +57,7 @@ class DoctorListing extends Component {
 	handleSelect (row, time) {
 		row.selectedTime = time;
 		let tekst = document.getElementById (row.id);
-		tekst.setValue("row.selectedTime")
+		//tekst.setValue("row.selectedTime")
 	}
 
 	generateDoctorRows (row) {
@@ -71,7 +71,8 @@ class DoctorListing extends Component {
 				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
 					<Dropdown>
 						<DropdownToggle >
-							Termini
+							{(row.selectedTime === 'undefined') ? ('Terms') : (row.selectedTime)}
+							Tekst
 						</DropdownToggle>
 						<DropdownMenu>
 							{
@@ -89,7 +90,7 @@ class DoctorListing extends Component {
 				</TableCell>
 				<TableCell hidden={(this.state.filtered) ? (false) : (true)} >
 					<Button onClick={() => this.handleSubmit(row)}>
-						Potvrdi
+						Confirm
 					</Button>
 				</TableCell>
 			</Fragment>
@@ -110,9 +111,9 @@ class DoctorListing extends Component {
 								<TableCell><p class='text-success'>First Name</p></TableCell>
 								<TableCell><p class='text-success'>Last Name</p></TableCell>
 								<TableCell><p class='text-success'>Rating</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Termini</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Odabran termin</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Potvrda</p></TableCell>
+								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Terms</p></TableCell>
+								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Selected term</p></TableCell>
+								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Confirm</p></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

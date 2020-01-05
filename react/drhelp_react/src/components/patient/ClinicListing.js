@@ -128,7 +128,7 @@ class ClinicListing extends Component {
 								<TableCell>
 									<Dropdown id = "dropdown_id" class='success'>
 										<DropdownToggle id="dropdown-basic" >
-											Appointment types
+											{(this.state.activeFilter === 'unfiltered') ? ("Procedure types"): (this.state.activeFilter.replace('_', ' '))}
 										</DropdownToggle>
 										<DropdownMenu>
 											<MenuItem onClick={() => this.handleFilterType ('unfiltered')}>-</MenuItem>
