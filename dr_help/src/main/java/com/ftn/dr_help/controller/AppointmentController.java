@@ -57,7 +57,7 @@ public class AppointmentController {
 //		System.out.println("Date: " + dto.getDate());
 //		System.out.println("Time: " + dto.getTime());
 		String dateString = dto.getDate() + " " + dto.getTime() + ":00";
-//		System.out.println("Date string: " + dateString);
+		System.out.println("Date string: " + dateString);
 //		System.out.println("Patient id: " + dto.getPatientId());
 		
 		appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));

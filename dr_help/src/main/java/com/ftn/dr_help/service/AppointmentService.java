@@ -29,7 +29,7 @@ public class AppointmentService {
 	
 	public boolean addAppointment (Long doctorId, String dateString, Long patientId) throws ParseException {
 		AppointmentPOJO newAppointment = new AppointmentPOJO ();
-		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd dd:hh:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
 		Date date = sdf.parse(dateString);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
