@@ -3,7 +3,7 @@ import { TableHead, TableBody, TableRow, TableCell, MenuItem } from '@material-u
 import Table from '@material-ui/core/Table';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import { Dropdown, Button } from 'react-bootstrap';
+import { Dropdown, Button, Row } from 'react-bootstrap';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import { UserContext } from '../../context/UserContextProvider';
@@ -56,6 +56,8 @@ class DoctorListing extends Component {
 
 	handleSelect (row, time) {
 		row.selectedTime = time;
+		let tekst = document.getElementById (row.id);
+		tekst.setValue("row.selectedTime")
 	}
 
 	generateDoctorRows (row) {
@@ -79,6 +81,11 @@ class DoctorListing extends Component {
 							}
 						</DropdownMenu>
 					</Dropdown>
+				</TableCell>
+				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
+					<p class='text-white' id={row.id} >
+						{(row.selectedTime === undefined) ? ("--:--") : (row.selectedTime)}
+					</p>
 				</TableCell>
 				<TableCell hidden={(this.state.filtered) ? (false) : (true)} >
 					<Button onClick={() => this.handleSubmit(row)}>
@@ -104,6 +111,7 @@ class DoctorListing extends Component {
 								<TableCell><p class='text-success'>Last Name</p></TableCell>
 								<TableCell><p class='text-success'>Rating</p></TableCell>
 								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Termini</p></TableCell>
+								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Odabran termin</p></TableCell>
 								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Potvrda</p></TableCell>
 							</TableRow>
 						</TableHead>

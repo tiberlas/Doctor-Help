@@ -109,26 +109,38 @@ class ClinicListing extends Component {
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-					<Dropdown id = "dropdown_id" class='success'>
-							<DropdownToggle id="dropdown-basic" >
-								Appointment types
-							</DropdownToggle>
-							<DropdownMenu>
-								<MenuItem onClick={() => this.handleFilterType ('unfiltered')}>-</MenuItem>
-								{
-									numberOfTypes > 0 ? this.state.appointmentTypes.map (row => (
-										<MenuItem onClick={() => this.handleFilterType (row)}>{row}</MenuItem>
-									)) : null
-								}
-							</DropdownMenu>
-					</Dropdown>
+					
 
-					<form>
-						<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
-					</form>
+					
 
 					<Table>
 						<TableHead>
+							<TableRow>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell>
+									<form>
+										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
+									</form>
+								</TableCell>
+								<TableCell>
+									<Dropdown id = "dropdown_id" class='success'>
+										<DropdownToggle id="dropdown-basic" >
+											Appointment types
+										</DropdownToggle>
+										<DropdownMenu>
+											<MenuItem onClick={() => this.handleFilterType ('unfiltered')}>-</MenuItem>
+											{
+												numberOfTypes > 0 ? this.state.appointmentTypes.map (row => (
+													<MenuItem onClick={() => this.handleFilterType (row)}>{row}</MenuItem>
+												)) : null
+											}
+										</DropdownMenu>
+									</Dropdown>
+								</TableCell>
+							</TableRow>
 							<TableRow>
 								<TableCell><p class='text-success'>Clinic Name</p></TableCell>
 								<TableCell><p class='text-success'>Address</p></TableCell>
