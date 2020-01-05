@@ -9,7 +9,6 @@ import AppointmentInfoModal from '../appointment/AppointmentInfoModal'
 import AppointmentModal from '../appointment/AppointmentModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
-import DoctorContext from '../../context/DoctorContextProvider'
 
 class DoctorCalendar extends React.Component {
 
@@ -69,8 +68,6 @@ class DoctorCalendar extends React.Component {
             })
         })
       }
-
-     
   }
 
   componentWillReceiveProps(props){

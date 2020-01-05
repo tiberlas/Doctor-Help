@@ -53,7 +53,7 @@ class Doctor extends Component {
     }
 
     render() { 
-        var doctor = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId, role:'doctor'} 
+        var doctor = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId, role: 'doctor'} 
         return ( 
             <div>
                 <DoctorContextProvider doctor={doctor} >

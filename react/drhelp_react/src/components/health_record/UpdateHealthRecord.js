@@ -29,7 +29,7 @@ class UpdateHealthRecord extends React.Component {
             this.setState({error: true, errorAllergy: true})
         } else {
             let allergyList = []
-            let regex = new RegExp("[^a-zA-Z0-9\s:]$")
+            let regex = new RegExp("[^a-zA-Z0-9\s:]$") //glupav regex koji proverava da li ima upitnika ili nesto u sebi sto nisu cifre i karakteri
             allergyList = this.state.allergy.trim().split(',')
             for(let i=0; i < allergyList.length; i++) {
                 if(allergyList[i].trim() === "" || regex.test(allergyList[i])) {

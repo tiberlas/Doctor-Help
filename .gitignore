@@ -31,8 +31,9 @@ dr_help/target/m2e-wtp/web-resources/META-INF/maven/com.ftn/dr_help/pom.properti
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-#.classpath
+#classpath
 dr_help/.classpath
+
 dr_help/.settings/org.eclipse.jdt.apt.core.prefs
 dr_help/.vscode/
 

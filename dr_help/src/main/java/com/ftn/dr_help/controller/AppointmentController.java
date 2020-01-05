@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
+import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.AppointmentService;
@@ -42,6 +43,14 @@ public class AppointmentController {
 		List<DoctorAppointmentDTO> appointments = appointmentService.findDoctorAppointments(doctor_id);
 		
 		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/all_appointments/nurse={nurse_id}")
+	public ResponseEntity<List<NurseAppointmentDTO>> getAllNurseAppointments(@PathVariable("nurse_id") Long nurse_id) {
+		
+		List<NurseAppointmentDTO> appointments = appointmentService.findNurseAppointments(nurse_id);
+		
+		return new ResponseEntity<List<NurseAppointmentDTO>>(appointments, HttpStatus.OK);
 	}
 	
 	
