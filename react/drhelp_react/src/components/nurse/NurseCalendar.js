@@ -4,9 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from "@fullcalendar/timegrid"
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import interaction from "@fullcalendar/interaction"
-import listPlugin from '@fullcalendar/list'
-import AppointmentInfoModal from '../appointment/AppointmentInfoModal'
-import AppointmentModal from '../appointment/AppointmentModal'
+import NurseAppointmentInfoModal from '../appointment/NurseAppointmentInfoModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
 
@@ -124,6 +122,10 @@ class NurseCalendar extends React.Component {
             eventClick={this.handleEventClick}
             plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
             themeSystem = 'bootstrap' />
+            <NurseAppointmentInfoModal
+              event = {this.state.event}
+              toggle = {this.toggle}
+            />
           </div>
         )
     }
