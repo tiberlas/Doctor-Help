@@ -146,6 +146,20 @@ public class NurseController {
 		
 	}
 	
+	@GetMapping(value="/perscription/appointment={id}")
+	public ResponseEntity<SignOffDTO> getPerscriptionForAppointment(@PathVariable("id") Long id) {
+		
+		SignOffDTO dto = perscriptionService.findPerscriptionFromAppointment(id);
+		return new ResponseEntity<SignOffDTO>(dto, HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/signOff/appointment={id}")
+	public ResponseEntity<SignOffDTO> signOffPerscriptions(@PathVariable("id") Long id) {
+		perscriptionService.signAppointmentPerscription(id);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	@PutMapping(value = "/signOff/{nurseId}/{perscriptionId}")
 	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<PerscriptionPOJO> 

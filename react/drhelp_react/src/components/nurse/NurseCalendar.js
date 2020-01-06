@@ -124,6 +124,7 @@ class NurseCalendar extends React.Component {
             themeSystem = 'bootstrap' />
             <NurseAppointmentInfoModal
               event = {this.state.event}
+              modal = {this.state.infoModal}
               toggle = {this.toggle}
             />
           </div>

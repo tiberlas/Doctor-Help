@@ -21,7 +21,6 @@ class PatientRegistrationInformation extends Component {
 
         let items = []; 
         var size = Object.keys(this.props.data).length;
-        console.log('SIZE IS' + size)
         for( let i = 0; i < size; i++) {
             let action_href = '#' + this.props.data[i].insuranceNumber
             items.push(<ListGroup.Item key={i} action href = {action_href}>
