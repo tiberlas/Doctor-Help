@@ -133,6 +133,7 @@ class HandleingPredefinedAppointments extends Component {
                         <TableRow class="table-active">
                             <TableCell class="text-success">procedure</TableCell>
                             <TableCell class="text-success">doctor</TableCell>
+                            <TableCell class="text-success">nurse</TableCell>
                             <TableCell class="text-success">room</TableCell>
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('date')}>date and timer{this.renderArrowDate()}</TableCell>
                             <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('price')}>price with disscount{this.renderArrowPrice()}</TableCell>

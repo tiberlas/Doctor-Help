@@ -1,6 +1,8 @@
 package com.ftn.dr_help.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,37 @@ public class NurseService {
 	
 	@Autowired
 	private EmailCheck check;
+	
+	public List<MedicalStaffProfileDTO> getAll(String email) {
+		
+		try {
+			List<MedicalStaffProfileDTO> nurseList = new ArrayList<MedicalStaffProfileDTO>();
+			
+			List<NursePOJO> nurses = administatorRepository.findOneByEmail(email).getClinic().getNurseList();
+			for(NursePOJO nurse : nurses) {
+				if(!nurse.isDeleted()) {
+					nurseList.add(new MedicalStaffProfileDTO(nurse));
+				}
+			}
+			
+			return nurseList;
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public MedicalStaffProfileDTO findById(Long id) {
+		
+		try {
+			NursePOJO finded = repository.findOneById(id);
+			
+			MedicalStaffProfileDTO nurse = new MedicalStaffProfileDTO(finded);
+			
+			return nurse;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	
 	public MedicalStaffProfileDTO findByEmail(String email) {
 		if(email == null) {

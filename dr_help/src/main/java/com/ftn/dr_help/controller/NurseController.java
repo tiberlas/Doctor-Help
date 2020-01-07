@@ -190,5 +190,30 @@ public class NurseController {
 		
 	}
 	
-
+	@GetMapping(value = "/all", produces = "application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<MedicalStaffProfileDTO>> getAll() {
+		String email = currentUser.getEmail();
+		
+		List<MedicalStaffProfileDTO> retVal = service.getAll(email);
+		
+		if(retVal != null) {
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping(value = "/nurse={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<MedicalStaffProfileDTO> findOne(@PathVariable("id") Long id) {
+		
+		MedicalStaffProfileDTO ret = service.findById(id);
+		
+		if(ret == null) {
+			return new ResponseEntity<MedicalStaffProfileDTO>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<MedicalStaffProfileDTO>(ret, HttpStatus.OK);
+	}
 }

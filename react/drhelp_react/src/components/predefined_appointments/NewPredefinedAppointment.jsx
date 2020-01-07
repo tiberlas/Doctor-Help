@@ -12,6 +12,7 @@ class NewPredefinedAppointment extends Component {
         procedureTypeId: '',
         roomId: '', 
         doctorId: '',
+        nurseId: '',
         price: 0,
         disscount: 0,
         time: '',
@@ -22,10 +23,12 @@ class NewPredefinedAppointment extends Component {
 
         roomList: {},
         doctorList: {},
+        nurseList: {},
         procedureList: {},
 
         doctorDisabled: true,
         roomDisabled: true,
+        errorNurse: true,
         errorRoom: true,
         errorDisscount: true,
         errorTime: true,
@@ -53,7 +56,10 @@ class NewPredefinedAppointment extends Component {
                 this.setState({procedureList: response.data})
             })
 
-            
+        axios.get('http://localhost:8080/api/nurses/all')
+            .then(response => {
+                this.setState({nurseList: response.data})
+            })
     }
     
     handleValidation = () => {
@@ -67,8 +73,8 @@ class NewPredefinedAppointment extends Component {
                 this.setState({errorDisscount: true});
             }
 
-            if(this.state.procedureTypeId === null || this.state.procedureTypeId === "") {
-                this.setState({doctorDisabled: true, roomDisabled: true, errorRoom: true})
+            if(this.state.procedureTypeId === null || this.state.procedureTypeId === "" || this.state.procedureTypeId === NaN) {
+                this.setState({doctorDisabled: true, roomDisabled: true, errorRoom: true, doctorId: ""})
             } else {
                     var size = Object.keys(this.state.doctorList).length;
                     let items = []
@@ -82,7 +88,7 @@ class NewPredefinedAppointment extends Component {
             }
             
             if(this.state.doctorId === null || this.state.doctorId === "") {
-                this.setState({roomDisabled: true, errorRoom: true})
+                this.setState({roomDisabled: true, errorRoom: true, roomId: ""})
             } else {
                 var size = Object.keys(this.state.roomList).length;
                     let items = []
@@ -96,6 +102,12 @@ class NewPredefinedAppointment extends Component {
 
             if(this.state.roomId === null || this.state.roomId === "") {
                 this.setState({errorRoom: true})
+            }
+
+            if(this.state.nurseId === null || this.state.nurseId === "") {
+                this.setState({errorNurse: true})
+            } else {
+                this.setState({errorNurse: false})
             }
 
         })
@@ -122,7 +134,11 @@ class NewPredefinedAppointment extends Component {
 
     handlerChangeProcedureType = (event) => {
         let val = event.target.value.split("-")
-        this.setState({procedureTypeId: parseInt(val[0]), price: parseInt(val[1])}, () => { this.handleValidation()})
+        if(val[0] === '') {
+            this.setState({procedureTypeId: ''}, () => { this.handleValidation()})
+        } else {
+            this.setState({procedureTypeId: parseInt(val[0]), price: parseInt(val[1])}, () => { this.handleValidation()})
+        }
     }
 
     handleChangeTime = (time) => {
@@ -145,7 +161,17 @@ class NewPredefinedAppointment extends Component {
              //what props are currently passed to the parent component
         }
         return items;
-    }  
+    }
+
+    createNurseItems() {
+        let items = []; 
+        var size = Object.keys(this.state.nurseList).length;
+        items.push(<option key={size} name='nurseId' value="" selected="selected"> ---- </option>);
+        for (let i = 0; i < size; ++i) {             
+             items.push(<option key={i} name='nurseId' value={this.state.nurseList[i].id}>{this.state.nurseList[i].lasttName} {this.state.nurseList[i].firstName} </option>);   
+        }
+        return items;
+    }
 
     createRoomItems() {
         let items = []; 
@@ -162,7 +188,7 @@ class NewPredefinedAppointment extends Component {
     createProcedureItems() {
         let items = []; 
         var size = Object.keys(this.state.procedureList).length;
-        items.push(<option key={size} name='procedureTypeId' value="" selected="selected"> ---- </option>);
+        items.push(<option key={size} name='procedureTypeId' value="-" selected="selected"> ---- </option>);
         for (let i = 0; i < size; i++) {             
              items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);   
              //here I will be creating my options dynamically based on
@@ -177,7 +203,8 @@ class NewPredefinedAppointment extends Component {
             dateAndTime: this.state.dateAndTime,
 	        procedureTypeId: this.state.procedureTypeId,
             roomId: this.state.roomId,
-	        doctorId: this.state.doctorId,
+            doctorId: this.state.doctorId,
+            nurseId: this.state.nurseId,
 	        price: this.state.price,
 	        disscount: this.state.disscount
         }).then( (response) => {
@@ -200,27 +227,36 @@ class NewPredefinedAppointment extends Component {
             <div class='row d-flex justify-content-center'>
             <div class='col-md-3'> 
                 <div>
-                    <h5>Create a predefined appointment</h5>
+                    <br/>
+                    <h4>Create a predefined appointment</h4>
+                    <br/>
                 </div>
                 <form onSubmit={this.handleSubmit}> 
 
-                    <div class="form-group">
+                    <div className={`form-group ${this.state.doctorDisabled? 'has-danger': ''}`} >
                         <label for="procedureTypeId">appointment type</label>
-                        <select multiple="" class="form-control" id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
+                        <select multiple="" className={`form-control ${this.state.doctorDisabled? 'is-invalid': 'is-valid'}`} id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
                             {this.createProcedureItems()}
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div className={`form-group ${this.state.roomDisabled? 'has-danger': ''}`}>
                         <label for="doctor">doctor</label>
-                        <select multiple="" class="form-control" id="doctor" name='doctorId' onChange={this.handlerChange} disabled={this.state.doctorDisabled}>
+                        <select multiple="" className={`form-control ${this.state.roomDisabled? 'is-invalid': 'is-valid'}`} id="doctor" name='doctorId' onChange={this.handlerChange} disabled={this.state.doctorDisabled}>
                             {this.createDoctorItems()}
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div className={`form-group ${this.state.errorNurse? 'has-danger': ''}`}>
+                        <label for="nurse">nurse</label>
+                        <select multiple="" className={`form-control ${this.state.errorNurse? 'is-invalid': 'is-valid'}`} id="nurse" name='nurseId' onChange={this.handlerChange}>
+                            {this.createNurseItems()}
+                        </select>
+                    </div>
+
+                    <div className={`form-group ${this.state.errorRoom? 'has-danger': ''}`}>
                         <label for="room">room</label>
-                        <select multiple="" class="form-control" id="room" name='roomId' onChange={this.handlerChange} disabled={this.state.roomDisabled}>
+                        <select multiple="" className={`form-control ${this.state.errorRoom? 'is-invalid': 'is-valid'}`} id="room" name='roomId' onChange={this.handlerChange} disabled={this.state.roomDisabled}>
                             {this.createRoomItems()}
                         </select>
                     </div>
@@ -250,7 +286,7 @@ class NewPredefinedAppointment extends Component {
                     </div>
                     <div class="form-group row">
                         <div class='col-md text-left'>
-                            <input type="submit" class="btn btn-success" disabled={ this.state.errorDisscount || this.state.errorTimeAndDate || this.state.errorRoom} value="submit"/>
+                            <input type="submit" class="btn btn-success" disabled={ this.state.errorDisscount || this.state.errorTimeAndDate || this.state.errorRoom || this.state.errorNurse} value="submit"/>
                         </div>
                         <div class='col-md text-right'>
                             <button type="button" class="btn btn-danger" onClick={this.handleCancel}>Cancel</button>

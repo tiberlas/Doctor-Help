@@ -16,11 +16,13 @@ import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.NurseRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.repository.RoomRepository;
 
@@ -35,6 +37,9 @@ public class PredefinedAppointmentService {
 	
 	@Autowired
 	private DoctorRepository doctorRepository;
+	
+	@Autowired
+	private NurseRepository nurseRepository;
 	
 	@Autowired
 	private ProcedureTypeRepository procedureRepository;
@@ -86,6 +91,11 @@ public class PredefinedAppointmentService {
     		return null;
     	}
     	
+    	NursePOJO nurse = nurseRepository.findById(newPredefined.getNurseId()).orElse(null);
+    	if(nurse == null || !nurse.getClinic().getId().equals(clinic.getId())) {
+    		return null;
+    	}
+    	
     	ProceduresTypePOJO procedureType = procedureRepository.findById(newPredefined.getProcedureTypeId()).orElse(null);
     	if(procedureType == null || !procedureType.getClinic().getId().equals(clinic.getId())) {
     		return null;
@@ -103,6 +113,7 @@ public class PredefinedAppointmentService {
     	appointment.setDate(cal);
     	appointment.setRoom(room);
     	appointment.setDoctor(doctor);
+    	appointment.setNurse(nurse);
     	appointment.setProcedureType(procedureType);
     	appointment.setDiscount(newPredefined.getDisscount());
     	appointment.setStatus(AppointmentStateEnum.AVAILABLE);
