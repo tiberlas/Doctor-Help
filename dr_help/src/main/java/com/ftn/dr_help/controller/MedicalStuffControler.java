@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
-import com.ftn.dr_help.dto.MedicalStaffDTO;
 import com.ftn.dr_help.dto.MedicalStaffFilterDTO;
+import com.ftn.dr_help.dto.MedicalStaffInfoDTO;
 import com.ftn.dr_help.service.MedicalStuffService;
 
 @RestController
@@ -31,25 +31,25 @@ public class MedicalStuffControler {
 	private CurrentUser currentUser;
 	
 	@GetMapping(value = "/clinic={clinic_id}/all")
-	public ResponseEntity<List<MedicalStaffDTO>> getAll(@PathVariable("clinic_id") Long clinicId) {
-		List<MedicalStaffDTO> finded = service.findAll(clinicId);
+	public ResponseEntity<List<MedicalStaffInfoDTO>> getAll(@PathVariable("clinic_id") Long clinicId) {
+		List<MedicalStaffInfoDTO> finded = service.findAll(clinicId);
 		
 		if(finded == null || finded.isEmpty())
-			return new ResponseEntity<List<MedicalStaffDTO>>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<MedicalStaffInfoDTO>>(HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity<List<MedicalStaffDTO>>(finded,  HttpStatus.OK);
+		return new ResponseEntity<List<MedicalStaffInfoDTO>>(finded, HttpStatus.OK);
 		
 	}
 	
 	@PostMapping(value = "/filter", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<List<MedicalStaffDTO>> filter(@RequestBody MedicalStaffFilterDTO filter) {
+	public ResponseEntity<List<MedicalStaffInfoDTO>> filter(@RequestBody MedicalStaffFilterDTO filter) {
 		if(filter == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		String email = currentUser.getEmail();
-		List<MedicalStaffDTO> ret = service.filter(filter, email);
+		List<MedicalStaffInfoDTO> ret = service.filter(filter, email);
 		
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}

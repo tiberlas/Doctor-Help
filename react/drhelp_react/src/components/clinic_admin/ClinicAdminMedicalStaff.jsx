@@ -61,7 +61,7 @@ class ClinicAdminMedicalStaff extends Component {
         axios.get("http://localhost:8080/api/clinics/id="+ this.context.admin.clinicId)
             .then(response => {
                 this.setState({
-                    clinicName: response.data.name        
+                    clinicName: response.data.name
                 })
             })
     }
@@ -70,7 +70,7 @@ class ClinicAdminMedicalStaff extends Component {
         axios.get("http://localhost:8080/api/medical+stuff/clinic="+ this.context.admin.clinicId + "/all")
             .then(response => {
                 this.setState({
-                    medicalStuff: response.data        
+                    medicalStuff: response.data
                 })
             })
     }

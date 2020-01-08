@@ -33,7 +33,7 @@ class MedicalStuffItem extends Component {
                 <TableCell class="text-white">{this.props.value.email}</TableCell>
                 <TableCell class="text-white">{this.props.value.role}</TableCell>
                 <TableCell>
-                    <Button variant="danger" onClick={this.onDelite}>
+                    <Button variant="danger" onClick={this.onDelite} disabled={!this.props.value.canDelete}>
                         delete
                     </Button>
                 </TableCell>
