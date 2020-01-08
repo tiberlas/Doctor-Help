@@ -9,6 +9,7 @@ public class MedicalStaffSaveingDTO {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private Long procedureId;
 	private Date birthday; 
 	private Shift monday;
 	private Shift tuesday;
@@ -23,12 +24,13 @@ public class MedicalStaffSaveingDTO {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public MedicalStaffSaveingDTO(String firstName, String lastName, String email, Date birthday, Shift monday,
+	public MedicalStaffSaveingDTO(String firstName, String lastName, String email, Long procedure, Date birthday, Shift monday,
 			Shift tuesday, Shift wednesday, Shift thursday, Shift friday, Shift saturday, Shift sunday) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.procedureId = procedure;
 		this.birthday = birthday;
 		this.monday = monday;
 		this.tuesday = tuesday;
@@ -105,6 +107,11 @@ public class MedicalStaffSaveingDTO {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	
+	public Long getProcedureId() {
+		return procedureId;
+	}
+	public void setProcedureId(Long procedureId) {
+		this.procedureId = procedureId;
+	}
 	
 }

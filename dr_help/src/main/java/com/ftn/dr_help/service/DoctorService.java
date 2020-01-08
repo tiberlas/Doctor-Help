@@ -30,9 +30,11 @@ import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
 @Service
@@ -55,6 +57,9 @@ public class DoctorService {
 	
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
+	
+	@Autowired
+	private ProcedureTypeRepository procedureRepository;
 	
 	@Autowired
 	private EmailCheck check;
@@ -292,6 +297,12 @@ public class DoctorService {
 				return false;
 			}
 			
+			ProceduresTypePOJO procedureType = procedureRepository.getOne(newDoctorDTO.getProcedureId());
+			
+			if(!clinic.getProcedureTypesList().contains(procedureType)) {
+				return false;
+			}
+			
 			DoctorPOJO newDoctor = new DoctorPOJO();
 			newDoctor.setFirstName(newDoctorDTO.getFirstName());
 			newDoctor.setLastName(newDoctorDTO.getLastName());
@@ -304,6 +315,7 @@ public class DoctorService {
 			birthday.setTime(newDoctorDTO.getBirthday());
 			newDoctor.setBirthday(birthday);
 			newDoctor.setClinic(clinic);
+			newDoctor.setProcedureType(procedureType);
 			newDoctor.setMonday(newDoctorDTO.getMonday());
 			newDoctor.setTuesday(newDoctorDTO.getTuesday());
 			newDoctor.setWednesday(newDoctorDTO.getWednesday());
