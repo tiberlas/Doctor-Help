@@ -134,6 +134,11 @@ class AppointmentModal extends React.Component {
                                     handleNotesChange={this.handleNotesChange} />
                                  </ModalBody>
                                 </Tab.Pane>
+                                <Tab.Pane eventKey="fourth" >
+                                    <ModalBody>
+                                        
+                                    </ModalBody>
+                                </Tab.Pane>
                             </Tab.Content>
                             </Col>
                         </Row>
