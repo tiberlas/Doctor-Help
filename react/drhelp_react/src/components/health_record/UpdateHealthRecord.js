@@ -5,13 +5,27 @@ import axios from 'axios'
 class UpdateHealthRecord extends React.Component {
 
     state = { //predefinisan state je ono sto je i bilo ranije u health recordu
-        height: this.props.heightDisplay(),
-        weight: this.props.weightDisplay(),
-        diopter: this.props.diopterDisplay(),
-        allergy: this.props.allergyDisplay(),
-        bloodType: this.props.bloodTypeDisplay(),
+       
+        height: "",
+        weight: "",
+        diopter: "",
+        bloodType: "",
+        allergy: "",
+        allergyList: [],
         error: false,
         errorAllergy: false
+    }
+
+
+    componentWillReceiveProps(props) {
+        this.setState({
+                height: props.health_record.height,
+                weight: props.health_record.weight,
+                diopter: props.health_record.diopter,
+                bloodType: props.health_record.bloodType,
+                allergyList: props.health_record.allergyList,
+                allergy: props.health_record.allergyList.join(',')
+        })
     }
 
     handleChange = (e) => {
@@ -22,20 +36,15 @@ class UpdateHealthRecord extends React.Component {
     }
 
 
-    validate = () => {
+    validate = () => { //validira unos alergija
         this.setState({error: false, errorAllergy: false})
-
-        if(!this.state.allergy.trim()) {
-            this.setState({error: true, errorAllergy: true})
-        } else {
-            let allergyList = []
-            let regex = new RegExp("[^a-zA-Z0-9\s:]$") //glupav regex koji proverava da li ima upitnika ili nesto u sebi sto nisu cifre i karakteri
-            allergyList = this.state.allergy.trim().split(',')
-            for(let i=0; i < allergyList.length; i++) {
-                if(allergyList[i].trim() === "" || regex.test(allergyList[i])) {
-                    this.setState({error: true, errorAllergy: true})
-                    break
-                }
+        let allergyList = []
+        let regex = new RegExp("[^a-zA-Z0-9\s:]$") //glupav regex koji proverava da li ima upitnika ili nesto u sebi sto nisu cifre i karakteri
+        allergyList = this.state.allergy.trim().split(',')
+        for(let i=0; i < allergyList.length; i++) {
+            if(allergyList[i].trim() === "" || regex.test(allergyList[i])) {
+                this.setState({error: true, errorAllergy: true})
+                break
             }
         }
 
@@ -83,6 +92,40 @@ class UpdateHealthRecord extends React.Component {
         return items
     }
 
+
+    heightDisplay = () => {
+        return this.state.height
+    }
+
+    weightDisplay = () => {
+        return this.state.weight
+    }
+
+    diopterDisplay = () => {
+        return this.state.diopter
+    }
+
+    allergyDisplay = () => {
+
+        let allergies = ""
+        for(let i = 0; i < this.state.allergyList.length; i++) {
+            allergies += this.state.allergyList[i]
+            if(i !== this.state.allergyList.length - 1) {
+                allergies += ', '
+            }
+            
+        }
+        return allergies
+    }
+
+    bloodTypeDisplay = () => {
+        let bloodType = ""
+
+        bloodType = this.state.bloodType.replace('_', ' ')
+        bloodType = bloodType.substr(0, 1) + bloodType.substr(1, bloodType.length).toLowerCase()
+        return bloodType
+    }
+
     render() {
         return (
             <div>
@@ -93,30 +136,25 @@ class UpdateHealthRecord extends React.Component {
                 <table class="table table-hover">
                     <tbody>
                         <tr>
-                            <th scope="row">Age:</th>
-                                <td><input type="text" defaultValue = {this.props.ageDisplay()} disabled/></td>
-                        </tr>
-                        <tr>
                             <th scope="row">Height: </th>
-                            <td><input name="height" type="number" step="any" defaultValue = {this.props.heightDisplay()} onChange={this.handleChange}/></td>
+                            <td><input name="height" type="number" step="any" defaultValue = {this.heightDisplay()} onChange={this.handleChange}/></td>
                         </tr>
                         <tr>
                             <th scope="row">Weight:</th>
-                                <td><input name="weight" type="number" step="any" defaultValue={this.props.weightDisplay()} onChange={this.handleChange}/></td>
+                                <td><input name="weight" type="number" step="any" defaultValue={this.weightDisplay()} onChange={this.handleChange}/></td>
                         </tr>
                         <tr>
                             <th scope="row">Diopter:</th>
-                                <td><input name="diopter" type="number" step="any" defaultValue={this.props.diopterDisplay()} onChange={this.handleChange}/></td>
+                                <td><input name="diopter" type="number" step="any" defaultValue={this.diopterDisplay()} onChange={this.handleChange}/></td>
                         </tr>
                         <tr>
                             <th scope="row">Allergies:</th>
                                 <td>
                                     <input id="allergyInput" name="allergy" type="text" 
-                                defaultValue={this.props.allergyDisplay()} 
+                                defaultValue={this.allergyDisplay()} 
                                 onChange={this.handleChange}/>
-                                {this.state.errorAllergy &&
-                                    // <div class="text-muted"> Allergies are seperated by a comma </div>
-                                      <div class="invalid-feedback d-block"> Invalid allergy format. <br/>Allergies are seperated by a comma.</div>}
+                                {!this.state.errorAllergy ? <div> <br/><br/> </div>
+                                     :  <div class="invalid-feedback d-block"> Invalid allergy format. <br/>Allergies are seperated by a comma.</div>}
                                 </td>
                                
                         </tr>
@@ -133,9 +171,11 @@ class UpdateHealthRecord extends React.Component {
                     </tbody>
                 </table>
                 </div>
+                <div>
                 <Button className = "btn" onClick = {this.props.toggleUpdate}> Back</Button>
                 &nbsp;&nbsp;
                 <input type = "submit" value = "Confirm" className = "btn btn-success" className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
+                </div>
                 </form>
                 </div>
         )

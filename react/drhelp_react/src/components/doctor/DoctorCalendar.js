@@ -9,8 +9,12 @@ import AppointmentInfoModal from '../appointment/AppointmentInfoModal'
 import AppointmentModal from '../appointment/AppointmentModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
-
+import {DoctorContext} from '../../context/DoctorContextProvider'
 class DoctorCalendar extends React.Component {
+
+
+
+  static contextType = DoctorContext
 
   state = {
     appointments: [],
@@ -61,6 +65,7 @@ class DoctorCalendar extends React.Component {
 
   componentDidMount() {
     if(this.props.regime === 'schedule') {
+      console.log('doca', this.context.doctor.firstName)
         let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.props.medical_staff.id 
         axios.get(url).then((response) => {
             this.setState({

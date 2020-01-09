@@ -1,62 +1,55 @@
 import React, {Fragment} from 'react'
-import axios from 'axios'
-import ShowHealthRecord from './ShowHealthRecord'
-import UpdateHealthRecord from './UpdateHealthRecord'
 
 class HealthRecord extends React.Component {
 
-    state = {
-        updating: false,
-        health_record: {
-            firstName: "",
-            lastName: "",
-            height: "",
-            weight: "", 
-            diopter: "",
-            bloodType: "",
-            birthday: "",
-            allergyList: []
-        }
+   
+    state = { //komponenta health-record koja kao props prima PatientHealthRecordDTO sa beka
+            health_record: {
+                firstName: "",
+                lastName: "",
+                height: "",
+                weight: "", 
+                diopter: "",
+                bloodType: "",
+                birthday: "",
+                allergyList: [] 
+            },
+            loading: true
     }
+   
 
-    componentDidMount() {
-        let url = 'http://localhost:8080/api/doctors/appointment='+this.props.data.id+'/health_record'
-        axios.get(url).then(response => {
-            this.setState( prevState => ({
-                health_record: {
-                    ...prevState.health_record,
-                    firstName: response.data.firstName,
-                    lastName: response.data.lastName,
-                    height: response.data.height,
-                    weight: response.data.weight,
-                    diopter: response.data.diopter,
-                    bloodType: response.data.bloodType,
-                    birthday: new Date(response.data.birthday),
-                    allergyList: response.data.allergyList
-                }
-            }))
-            console.log("health: ", this.state.health_record)
+    componentWillReceiveProps(props) {
+        this.setState({
+            health_record: {
+                firstName: props.health_record.firstName,
+                lastName: props.health_record.lastName,
+                height: props.health_record.height,
+                weight: props.health_record.weight,
+                diopter: props.health_record.diopter,
+                bloodType: props.health_record.bloodType,
+                birthday: new Date(props.health_record.birthday),
+                allergyList: props.health_record.allergyList
+            }
+        }, ()=>{
+            this.setState({loading: false})
         })
     }
 
-    update = (record) => {
-        console.log('passed record', record)
-            this.setState( prevState => ({
+    componentWillUpdate(prevProps, prevState) {
+        if(prevProps.health_record !== this.props.health_record) {
+            this.setState({
                 health_record: {
-                    ...prevState.health_record,
-                    height: record.height,
-                    weight: record.weight,
-                    diopter: record.diopter,
-                    bloodType: record.bloodType,
-                    allergyList: record.allergyList
+                    height: prevProps.health_record.height,
+                    weight: prevProps.health_record.weight,
+                    diopter: prevProps.health_record.diopter,
+                    bloodType: prevProps.health_record.bloodType,
+                    birthday: new Date(prevProps.health_record.birthday),
+                    allergyList: prevProps.health_record.allergyList
                 }
-            }))
-        this.toggleUpdate()
+            })
+         }
     }
 
-    toggleUpdate = () => {
-        this.setState({updating: !this.state.updating})
-    }
 
     heightDisplay = () => {
         return this.state.health_record.height
@@ -90,7 +83,6 @@ class HealthRecord extends React.Component {
         let bornYear = new Date(this.state.health_record.birthday).getFullYear()
 
         let age = Math.abs(thisYear - bornYear).toString()
-
         let born = new Date(this.state.health_record.birthday).toLocaleDateString("en-US")
 
         return age + ' - (born ' + born + ')'
@@ -104,37 +96,45 @@ class HealthRecord extends React.Component {
         return bloodType
     }
 
-    
 
     render() {
         return (
-            <Fragment>
-                  <div class="row d-flex justify-content-center">
-                    <div class='col-md-11'>
-            {!this.state.updating ?  <ShowHealthRecord data = {this.props.data} 
-                                        bloodTypeDisplay = {this.bloodTypeDisplay}
-                                        ageDisplay = {this.ageDisplay}
-                                        allergyDisplay = {this.allergyDisplay}
-                                        weightDisplay = {this.weightDisplay}
-                                        heightDisplay = {this.heightDisplay}
-                                        diopterDisplay = {this.diopterDisplay}
-                                        toggleUpdate = {this.toggleUpdate}
-                                    /> : <UpdateHealthRecord data = {this.props.data}
-                                        bloodTypeDisplay = {this.bloodTypeDisplay}
-                                        ageDisplay = {this.ageDisplay}
-                                        allergyDisplay = {this.allergyDisplay}
-                                        weightDisplay = {this.weightDisplay}
-                                        heightDisplay = {this.heightDisplay}
-                                        diopterDisplay = {this.diopterDisplay}
-                                        update = {this.update}
-                                        toggleUpdate = {this.toggleUpdate} />}
-                        </div>
-                    </div>
-            </Fragment>
+            <Fragment> 
+                {this.state.loading ? <div> Loading... </div> : 
+                <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th scope="row">Age:</th>
+                            <td>{this.ageDisplay()}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Height: </th>
+                        <td>{this.heightDisplay()} m</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Weight:</th>
+                            <td>{this.weightDisplay()} kg</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Diopter:</th>
+                            <td>{this.diopterDisplay()}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Allergies:</th>
+                            <td>{this.allergyDisplay()}</td>
+                    </tr>
+    
+                    <tr>
+                        <th scope="row">Blood type:</th>
+                            <td>{this.bloodTypeDisplay()}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>}
+            
+        </Fragment>
         )
     }
-
 }
-
 
 export default HealthRecord
