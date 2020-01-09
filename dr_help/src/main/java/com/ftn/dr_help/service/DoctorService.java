@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.DailySchedule;
@@ -28,11 +29,14 @@ import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.DoctorReviewPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.DoctorReviewRepository;
+import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
 @Service
@@ -58,6 +62,12 @@ public class DoctorService {
 	
 	@Autowired
 	private EmailCheck check;
+	
+	@Autowired
+	private DoctorReviewRepository doctorReviewRepository;
+	
+	@Autowired
+	private PatientRepository patientRepository;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -196,7 +206,15 @@ public class DoctorService {
 			if(d.isDeleted()) {
 				continue;
 			}
-			retVal.add (new DoctorListingDTO (d));
+			Float averageReview = doctorReviewRepository.getAverageReview(d.getId());
+			DoctorListingDTO dl = new DoctorListingDTO (d);
+			if (averageReview != null) {
+				dl.setRating(averageReview.toString());
+			}
+			else {
+				dl.setRating("/");
+			}
+			retVal.add(dl);
 		}
 		return retVal;
 	}
@@ -209,7 +227,15 @@ public class DoctorService {
 			if(d.isDeleted()) {
 				continue;
 			}
-			retVal.add (new DoctorListingDTO (d));
+			Float averageReview = doctorReviewRepository.getAverageReview(d.getId());
+			DoctorListingDTO dl = new DoctorListingDTO (d);
+			if (averageReview != null) {
+				dl.setRating(averageReview.toString());
+			}
+			else {
+				dl.setRating("/");
+			}
+			retVal.add(dl);
 		}
 		return retVal;
 	}
@@ -222,13 +248,21 @@ public class DoctorService {
 			if(d.isDeleted()) {
 				continue;
 			}
-			retVal.add(new DoctorListingDTO (d));
+			Float averageReview = doctorReviewRepository.getAverageReview(d.getId());
+			DoctorListingDTO dl = new DoctorListingDTO (d);
+			if (averageReview != null) {
+				dl.setRating(averageReview.toString());
+			}
+			else {
+				dl.setRating("/");
+			}
+			retVal.add(dl);
 		}
 		return retVal;
 	}
 	
-	public DoctorProfilePreviewDTO getProfilePreview (Long id) {
-		DoctorPOJO doctor = repository.getOne(id);
+	public DoctorProfilePreviewDTO getProfilePreview (Long doctorId, Long patientId) {
+		DoctorPOJO doctor = repository.getOne(doctorId);
 		if (doctor == null) {
 			return null;
 		}
@@ -238,6 +272,22 @@ public class DoctorService {
 		}
 		
 		DoctorProfilePreviewDTO retVal = new DoctorProfilePreviewDTO (doctor);
+		List<AppointmentPOJO> appointments = appointmentRepository.getPatientsPastAppointments(patientId, doctorId);
+//		System.out.println("DoctorId: " + doctorId);
+//		System.out.println("PatientId: " + patientId);
+		if (appointments.size() > 0) {
+			retVal.setHaveInteracted(true);
+//			System.out.println("Intereagovali su ranije");
+			DoctorReviewPOJO djp = doctorReviewRepository.getPatientsReview(patientId, doctorId);
+			if (djp != null) {
+				retVal.setMyRating(djp.getRating().toString());
+			}
+		}
+		Float rating = doctorReviewRepository.getAverageReview(doctorId);
+		if (rating != null) {
+			retVal.setRating(rating.toString());
+		}
+//		System.out.println("Nisu imali interakcije");
 		return retVal;
 	}
 	
@@ -359,6 +409,9 @@ public class DoctorService {
 		
 		List<DoctorPOJO> doctors = repository.filterByClinicAndProcedureType(clinicId, procedureType);
 		for (DoctorPOJO d : doctors) {
+			if (d.isDeleted()) {
+				continue;
+			}
 			DailySchedule schedule;
 			switch (calendarMin.get(Calendar.DAY_OF_WEEK)) {
 				case Calendar.MONDAY:
@@ -388,6 +441,13 @@ public class DoctorService {
 				schedule.addAppointment(a);
 			}
 			DoctorListingDTO temp = new DoctorListingDTO (d);
+			Float averageRating = doctorReviewRepository.getAverageReview (d.getId());
+			if (averageRating != null) {
+				temp.setRating(averageRating.toString());
+			}
+			else {
+				temp.setRating ("/");
+			}
 			List<Term> terms = schedule.getAvaliableTerms(d.getProcedureType());
 			List<String> times = new ArrayList<String> ();
 			for (Term t : terms) {
@@ -406,6 +466,23 @@ public class DoctorService {
 		
 		
 		return retVal;
+	}
+	
+	@Transactional
+	public void addReview (Long doctorId, Long patientId, Integer review) {
+		DoctorReviewPOJO newReview = new DoctorReviewPOJO(repository.getOne(doctorId), patientRepository.getOne(patientId), review);
+		DoctorReviewPOJO oldReview = doctorReviewRepository.getPatientsReview(patientId, doctorId);
+		if (review == 0) {
+			doctorReviewRepository.delete(oldReview);
+			return;
+		}
+		else if (oldReview == null) {
+			System.out.println("Dodajem novi review");
+			doctorReviewRepository.save(newReview);
+		}
+		else {
+			doctorReviewRepository.updateReview(review, patientId, doctorId);
+		}
 	}
 	
 }

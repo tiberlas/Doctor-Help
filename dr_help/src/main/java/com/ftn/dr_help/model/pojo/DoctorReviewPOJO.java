@@ -13,6 +13,13 @@ import javax.persistence.OneToOne;
 @Entity
 public class DoctorReviewPOJO implements Serializable {
 
+	public DoctorReviewPOJO(DoctorPOJO doctor, PatientPOJO patient, Integer rating) {
+		super();
+		this.doctor = doctor;
+		this.patient = patient;
+		this.rating = rating;
+	}
+
 	/**
 	 * 
 	 */

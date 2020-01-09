@@ -118,7 +118,8 @@ public class DoctorController {
 		System.out.println("Date: " + appointmentDate);
 		
 		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
-			return new ResponseEntity<> (service.filterByClinic(clinicId), HttpStatus.OK);
+			List<DoctorListingDTO> doctors = service.filterByClinic(clinicId);
+			return new ResponseEntity<> (doctors, HttpStatus.OK);
 		} else {
 			List<DoctorListingDTO> doctors = service.filterByClinicDateProcedureType(clinicId, appointmentType.replace('_', ' '), appointmentDate);
 			
@@ -126,10 +127,10 @@ public class DoctorController {
 		}
 	}
 	
-	@GetMapping (value = "/preview/{id}")
+	@GetMapping (value = "/preview/{id}/{patient}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long id) {
-		DoctorProfilePreviewDTO retVal = service.getProfilePreview(id);
+	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long doctorId, @PathVariable("patient") Long patientId) {
+		DoctorProfilePreviewDTO retVal = service.getProfilePreview(doctorId, patientId);
 		if (retVal == null) {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		} 
@@ -175,6 +176,16 @@ public class DoctorController {
 			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+	}
+	
+	@PostMapping (value="/review/{patient}/{doctor}/{rating}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
+				@PathVariable("doctor") Long doctorId, @PathVariable("rating") Integer rating) {
+		
+		service.addReview(doctorId, patientId, rating);
+		
+		return new ResponseEntity<String> ("All is well", HttpStatus.OK);
 	}
 	
 }

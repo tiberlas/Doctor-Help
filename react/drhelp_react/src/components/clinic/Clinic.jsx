@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import MapContainer from './MapContainer.jsx';
+import StarRatingComponent from 'react-star-rating-component';
+import { Button } from '@material-ui/core';
 
 class Clinic extends Component {
     state = { 
@@ -36,21 +38,19 @@ class Clinic extends Component {
         return ( 
             <div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-                <br/>
-                <br/>
+                    <br/>
+                    <br/>
 
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">{this.state.name}</h4>
-                        <h6 class="card-subtitle mb-2 text-muted">location for healing: {this.state.address}, {this.state.city}, {this.state.state}</h6>
-                        <p class="card-text">{this.state.description}</p>
-                        
-                        <div style={divMapStyle}>
-                            <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">{this.state.name}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">location for healing: {this.state.address}, {this.state.city}, {this.state.state}</h6>
+                            <p class="card-text">{this.state.description}</p>
+                            
+                            <div style={divMapStyle}>
+                                <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
+                            </div>
                         </div>
-                        
-
-                    </div>
                     </div>
                 </div>
             </div>
