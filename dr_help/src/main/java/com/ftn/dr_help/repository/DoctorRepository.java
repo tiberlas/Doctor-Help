@@ -1,5 +1,6 @@
 package com.ftn.dr_help.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,7 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 
 	@Query(value = "select count(a.doctor_id) from appointments a where a.status <> 'DONE' and a.deleted = false and a.doctor_id = ?1 group by a.doctor_id", nativeQuery = true)
 	public Long getDoctorsAppointmentsCount(Long doctorId);
+	
+	@Query(value = "select a.date from appointments a where a.deleted = FALSE and a.status <> 'DONE' and a.doctor_id = ?1 order by a.date", nativeQuery = true)
+	public List<Date> findAllReservedAppointments(Long doctorId);
 }

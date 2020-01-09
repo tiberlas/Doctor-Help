@@ -266,7 +266,7 @@ class NewPredefinedAppointment extends Component {
                         <FormControl type="date" id='date' placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} className={`form-control ${this.state.errorDate? 'is-invalid': 'is-valid'}`}/>
                     </div>
                     <div>
-                        <label for='time'>date</label>
+                        <label for='time'>time</label>
                         <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`}/>
                     </div>
 

@@ -7,6 +7,7 @@ import OverviewTable from './OverviewTable'
 import HealthRecord from '../health_record/HealthRecord'
 import ExaminationReport from './ExaminationReport'
 import axios from 'axios'
+import ScheduleAnother from './ScheduleAnother'
 
 class AppointmentModal extends React.Component {
     
@@ -136,7 +137,7 @@ class AppointmentModal extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="fourth" >
                                     <ModalBody>
-                                        
+                                        <ScheduleAnother />
                                     </ModalBody>
                                 </Tab.Pane>
                             </Tab.Content>

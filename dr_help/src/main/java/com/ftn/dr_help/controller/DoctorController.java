@@ -177,4 +177,18 @@ public class DoctorController {
 		
 	}
 	
+	@GetMapping(value = "/schedules/first_free", produces = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> getFirstFreeSchedule() {
+		String email = currentUser.getEmail();
+		
+		String date = service.findFirstFreeSchedue(email);
+		
+		if(date == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(date, HttpStatus.OK);
+	}
+	
 }

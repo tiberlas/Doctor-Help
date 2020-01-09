@@ -420,4 +420,17 @@ public class DoctorService {
 		return retVal;
 	}
 	
+	public String findFirstFreeSchedue(String email) {
+		
+		try {
+			
+			DoctorPOJO doctor = repository.findOneByEmail(email);
+			//?
+			return null;
+			
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 }
