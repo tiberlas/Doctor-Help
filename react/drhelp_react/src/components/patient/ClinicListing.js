@@ -54,7 +54,7 @@ class ClinicListing extends Component {
         )
     }
 
-	handleFilterType (text) {
+	handleFilterType (text)  {
 		text = text.replace (' ', '_');
 		let element = document.getElementById ("picker");
 		let value = element.value;
@@ -70,7 +70,16 @@ class ClinicListing extends Component {
 		this.fetchData (text, value);
 	}
 
+	toggleMenu = () => {
+		if(!this.state.visible){
+		  this.setState({ visible: true, hide: true });
+		} else {
+		  this.setState({ visible: false, hide: false});
+		}
+	  }
+
 	handleFilterDate () {
+		this.toggleMenu();
 		let element = document.getElementById ("picker");
 		let value = element.value;
 		let text = this.state.activeFilter;
@@ -84,6 +93,7 @@ class ClinicListing extends Component {
 		})
 
 		this.fetchData(text, value)
+
 	}
 
 	fetchData (dil, dat) {
@@ -102,6 +112,8 @@ class ClinicListing extends Component {
 			})
 		})
 	}
+
+	
 
 	render () {
 		let size = this.state.clinics.length;
@@ -126,7 +138,7 @@ class ClinicListing extends Component {
 									</form>
 								</TableCell>
 								<TableCell>
-									<Dropdown id = "dropdown_id" class='success'>
+									<Dropdown id = "dropdown_id" class='success' onFocus='this.toggleMenu' >
 										<DropdownToggle id="dropdown-basic" >
 											{(this.state.activeFilter === 'unfiltered') ? ("Procedure types"): (this.state.activeFilter.replace('_', ' '))}
 										</DropdownToggle>
