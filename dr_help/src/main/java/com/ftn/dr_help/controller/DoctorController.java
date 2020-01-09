@@ -126,10 +126,10 @@ public class DoctorController {
 		}
 	}
 	
-	@GetMapping (value = "/preview/{id}")
+	@GetMapping (value = "/preview/{id}/{patient}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long id) {
-		DoctorProfilePreviewDTO retVal = service.getProfilePreview(id);
+	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long doctorId, @PathVariable("patient") Long patientId) {
+		DoctorProfilePreviewDTO retVal = service.getProfilePreview(doctorId, patientId);
 		if (retVal == null) {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		} 
@@ -175,6 +175,20 @@ public class DoctorController {
 			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+	}
+	
+	@PostMapping (value="/review/{patient}/{doctor}/{rating}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
+				@PathVariable("doctor") Long doctorId, @PathVariable("rating") Integer rating) {
+		
+		System.out.println("Patient id: " + patientId);
+		System.out.println("Doctor id: " + doctorId);
+		System.out.println("Rating: " + rating);
+		
+		service.addReview(doctorId, patientId, rating);
+		
+		return new ResponseEntity<String> ("All is well", HttpStatus.OK);
 	}
 	
 }

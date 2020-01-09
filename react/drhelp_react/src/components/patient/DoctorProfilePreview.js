@@ -1,22 +1,29 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import StarRatingComponent from 'react-star-rating-component';
+import { Button } from '@material-ui/core';
+import { UserContext } from '../../context/UserContextProvider'
 
 
 class DoctorProfilePreview extends Component {
 
+	static contextType = UserContext;
+
 	state = {
-		firstName: "", 
-		lastName: "", 
-		clinic: "", 
-		specialization: "", 
-		rating: "", 
-		id: ""
+		firstName : "", 
+		lastName : "", 
+		clinic : "", 
+		specialization : "", 
+		rating : "", 
+		id : "", 
+		myRating : 0, 
+		haveInteracted : false
 	}
 
 	componentDidMount () {
 		let parts = window.location.href.split ('/');
 		let tempId = parts[parts.length - 1];
-		axios.get ("http://localhost:8080/api/doctors/preview/" + tempId)
+		axios.get ("http://localhost:8080/api/doctors/preview/" + tempId + "/" + this.context.user.id)
 		.then (response => {
 			this.setState ({
 				firstName: response.data.firstName, 
@@ -24,12 +31,31 @@ class DoctorProfilePreview extends Component {
 				clinic: response.data.clinic, 
 				specialization: response.data.specialization, 
 				rating: response.data.rating, 
-				id: tempId
+				id: tempId, 
+				haveInteracted : response.data.haveInteracted
 			})
 		});
 	}
 
+	handleClick (nextValue) {
+		// alert ("Star click: " + nextValue)
+		this.setState ({
+			myRating : nextValue
+		})
+		axios.post ("http://localhost:8080/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + nextValue)
+
+	}
+
+	clear () {
+		this.setState ({
+			myRating : 0
+		})
+		axios.post ("http://localhost:8080/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + 0)
+	}
+
 	render () {
+
+		const {myRating} = this.state.myRating;
 
 		return (
 			<div class="row d-flex justify-content-center">
@@ -49,6 +75,14 @@ class DoctorProfilePreview extends Component {
                     		<label class="badge badge-success text-right">Rating:</label>&nbsp;&nbsp;&nbsp;
                     		<label >{this.state.rating}</label>
                 	</div>
+					<div hidden={!this.state.haveInteracted}>
+						<StarRatingComponent name="imja" starCount={5} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
+					</div>
+					<div hidden={!this.state.haveInteracted}>
+						<Button class="badge badge-success text-right" onClick = {() => this.clear()}>
+							Clear rating
+						</Button>
+					</div>
 				</div>
 			</div>
 		)
