@@ -158,7 +158,7 @@ public class ClinicController {
 //		System.out.println("Rating: " + rating);
 		clinicService.addReview(patientId, clinicId, rating);
 		
-		return null;
+		return null; 
 	}
 	
 }
