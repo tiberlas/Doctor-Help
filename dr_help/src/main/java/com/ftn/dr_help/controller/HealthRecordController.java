@@ -39,7 +39,7 @@ public class HealthRecordController {
 	}
 	
 	@GetMapping(value="/get/patient={insurance}")
-	@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('NURSE')")
+	@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('NURSE') or hasAuthority('PATIENT')")
 	public ResponseEntity<PatientHealthRecordDTO> findPatientHealthRecord(@PathVariable("insurance") Long insurance) {
 		
 		PatientHealthRecordDTO record = patientService.getPatientHealthRecordForMedicalStaff(insurance);
