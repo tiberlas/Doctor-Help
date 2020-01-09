@@ -33,12 +33,10 @@ class ShowMedicalStaffHealthRecord extends React.Component {
                     allergyList: response.data.allergyList
                 }
             }))
-            console.log("health: ", this.state.health_record)
         })
     }
 
     render() {
-        console.log('medical staff record', this.state.health_record)
         return (
             <Fragment>
             <h1> Record overview </h1>

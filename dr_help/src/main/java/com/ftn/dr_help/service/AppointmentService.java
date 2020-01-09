@@ -85,17 +85,47 @@ public class AppointmentService {
 		
 		int i = 0;
 		for (AppointmentPOJO appointmentPOJO : list) {
-			if(!appointmentPOJO.isDeleted()) {
 				System.out.println("-------------------" + i);
 				DoctorAppointmentDTO dto = convertAppointmentToDoctorDTO(appointmentPOJO);
 				appointments.add(dto);
 				i++;
-			}
 		}
 		
 		return appointments;
 	}
 	
+public List<DoctorAppointmentDTO> findDoctorDoneAppointmentsForPatientWithId(Long patient_id) { //forDoctor je za doktora, if false, za medicinsku sestru
+		
+		List<AppointmentPOJO> list = appointmentRepository.findDoneAppointmentsForPatientWithId(patient_id);
+		
+		System.out.println("Done appointments za doktora");
+		List<DoctorAppointmentDTO> appointments = new ArrayList<DoctorAppointmentDTO>();
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+				System.out.println("-------------------" + i);
+				DoctorAppointmentDTO dto = convertAppointmentToDoctorDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+		}
+		
+		return appointments;
+}
+//			System.out.println("Done appointments za nurse");
+//			
+//			List<NurseAppointmentDTO> appointments = new ArrayList<NurseAppointmentDTO>();
+//			int i = 0;
+//			for (AppointmentPOJO appointmentPOJO : list) {
+//					System.out.println("-------------------" + i);
+//					NurseAppointmentDTO dto = convertAppointmentToNurseDTO(appointmentPOJO);
+//					appointments.add(dto);
+//					i++;
+//
+//			}
+//			
+//			return appointments;
+//		}
+		
+		
 	public List<NurseAppointmentDTO> findNurseAppointments(Long nurse_id) {
 		
 		List<AppointmentPOJO> list = appointmentRepository.findNurseAppointments(nurse_id);

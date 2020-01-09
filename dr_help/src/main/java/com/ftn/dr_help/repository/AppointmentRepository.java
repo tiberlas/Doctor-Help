@@ -22,8 +22,11 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query(value = "select distinct a.* from appointments a inner join doctors d on a.doctor_id = ?1 and a.deleted=false", nativeQuery = true)
 	public List<AppointmentPOJO> findDoctorAppointments(Long doctor_id);
 	
-	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.patient_id = ?2 and a.status = 'APPROVED'", nativeQuery = true)
+	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.patient_id = ?2 and a.status = 'APPROVED' and a.deleted=false", nativeQuery = true)
 	public List<AppointmentPOJO> findApprovedDoctorAppointmentsForPatientWithId(Long doctor_id, Long patient_id);
+	
+	@Query(value="select distinct a.* from appointments a where a.patient_id = ?1 and a.status = 'DONE' and a.deleted=false", nativeQuery=true)
+	List<AppointmentPOJO> findDoneAppointmentsForPatientWithId(Long patient_id);
 	
 	@Query(value = "select a.date from appointments a where a.deleted = FALSE and a.room_id = ?1 order by a.date", nativeQuery = true)
 	public List<Date> findScheduledDatesOfRoom(Long roomId);

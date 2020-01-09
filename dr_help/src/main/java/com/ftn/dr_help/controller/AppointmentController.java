@@ -90,5 +90,14 @@ public class AppointmentController {
 		return null;
 	}
 	
+	@GetMapping(value="/done_appointments/doctor/patient={insuranceNumber}")
+	public ResponseEntity<List<DoctorAppointmentDTO>> 
+		getAllDoneAppointmentsForPatientWithId(@PathVariable("insuranceNumber") Long insuranceNumber) {
+		PatientPOJO patient = patientService.findByInsuranceNumber(insuranceNumber);
+		List<DoctorAppointmentDTO> appointments = appointmentService.findDoctorDoneAppointmentsForPatientWithId(patient.getId());
+		
+		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
+	}
+	
 	
 }

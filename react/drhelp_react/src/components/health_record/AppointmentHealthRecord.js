@@ -35,8 +35,6 @@ class AppointmentHealthRecord extends React.Component {
                     allergyList: response.data.allergyList
                 }
             }))
-            console.log("health: ", this.state.health_record)
-
         })
     }
 

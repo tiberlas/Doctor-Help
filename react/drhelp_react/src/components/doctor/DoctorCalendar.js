@@ -10,6 +10,8 @@ import AppointmentModal from '../appointment/AppointmentModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
 import {DoctorContext} from '../../context/DoctorContextProvider'
+import equal from 'fast-deep-equal'
+
 class DoctorCalendar extends React.Component {
 
 
@@ -66,6 +68,7 @@ class DoctorCalendar extends React.Component {
   componentDidMount() {
     if(this.props.regime === 'schedule') {
       console.log('doca', this.context.doctor.firstName)
+        this.setState({regime: 'schedule'})
         let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.props.medical_staff.id 
         axios.get(url).then((response) => {
             this.setState({
@@ -77,6 +80,7 @@ class DoctorCalendar extends React.Component {
 
   componentWillReceiveProps(props){
     if(this.props.regime === 'profile') {
+      this.setState({regime: 'profile'})
       let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
       let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+props.medical_staff.id+'/patient='+id
       axios.get(url).then((response) => {
@@ -85,8 +89,27 @@ class DoctorCalendar extends React.Component {
         })
       })
     }
+    
+    if(this.props.regime === 'history') {
+      let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
+      let url = 'http://localhost:8080/api/appointments/done_appointments/doctor/patient='+id
+      axios.get(url).then((response) => {
+        this.setState({
+          appointments: response.data
+        })
+      })
+    }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log("prevprops", prevProps)
+    console.log('this props', this.props)
+    // if(this.props.regime === 'history')
+       console.log('ohboy')
+    if(this.props.regime !== prevProps.regime) {
+      
+    }
+  }
 
   generateEventList = () => {
     let events = []
@@ -164,6 +187,21 @@ class DoctorCalendar extends React.Component {
             center: "Upcoming appointments",
             right: ""
           }}
+          selectable={true}
+          events = {this.generateEventList()}
+          eventLimit = {true}
+          eventRender={this.handleEventRender}
+          eventClick={this.handleEventClick}
+          plugins={[ listPlugin, bootstrapPlugin, interaction]} 
+          themeSystem = 'bootstrap' />}
+
+          {this.props.regime==='history' &&  <FullCalendar defaultView="listYear" //ako si na stranici pacijenta za history, list view
+          header={{
+            left: "title",
+            center: "",
+            right: "next, prev"
+          }}
+          
           selectable={true}
           events = {this.generateEventList()}
           eventLimit = {true}

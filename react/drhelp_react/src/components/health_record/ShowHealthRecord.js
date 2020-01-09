@@ -5,7 +5,6 @@ import HealthRecord from './HealthRecord'
 class ShowHealthRecord extends React.Component {
 
     render() {
-        console.log('show record data', this.props.health_record)
         return(
             <div> 
                     <h2> {this.props.data.patient} </h2>
