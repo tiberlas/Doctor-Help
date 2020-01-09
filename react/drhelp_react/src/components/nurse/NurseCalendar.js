@@ -111,10 +111,16 @@ class NurseCalendar extends React.Component {
             <div className='demo-app-calendar'> 
                 <FullCalendar defaultView="dayGridMonth" 
             header={{
-                left: "prev,next today",
+                left: "prev,next, today",
                 center: "title",
                 right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
-            }}  
+            }}
+            buttonText={
+              {
+                prev: '<',
+                next: '>'
+              }
+            }
             selectable={true}
             events = {this.generateEventList()}
             eventLimit = {true}

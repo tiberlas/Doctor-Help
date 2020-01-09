@@ -23,6 +23,8 @@ public class PatientDTO {
 	private boolean isActivated;
 	private String birthday;
 	
+	private boolean showHealthRecord;
+	
 	
 	
 	public PatientDTO(String email, String firstName, String lastName, String city, String address, String phoneNumber,
@@ -188,5 +190,17 @@ public class PatientDTO {
 
 	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
+	}
+
+	public boolean isShowHealthRecord() {
+		return showHealthRecord;
+	}
+
+	public void setShowHealthRecord(boolean showHealthRecord) {
+		this.showHealthRecord = showHealthRecord;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 }

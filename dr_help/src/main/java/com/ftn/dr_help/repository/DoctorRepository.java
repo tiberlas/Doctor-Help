@@ -17,5 +17,11 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 
 	@Query (value = "select d.* from doctors d inner join procedures_type pt on d.procedure_type_id = pt.id where d.clinic_id = ?1 and pt.\"name\" = ?2", nativeQuery = true)
 	public List<DoctorPOJO> filterByClinicAndProcedureType (Long clinicId, String procedureType);
+	
+	
+	//ovaj query je za ispitivanje istorije pregleda kod prosledjenog lekara i prosledjenog pacijenta, 
+	//sluzi za prikaz health-recorda na front endu
+	@Query(value="select distinct count(a.*) from appointments a where a.doctor_id = ?1 and a.patient_id = ?2 and a.status = 'DONE' and deleted = false", nativeQuery=true)
+	public Integer findDoneAppointmentForDoctorCount(Long doctor_id, Long patient_id);
 
 }

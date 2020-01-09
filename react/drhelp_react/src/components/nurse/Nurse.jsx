@@ -12,6 +12,7 @@ import PatientList from './PatientList'
 import ViewPatientProfile from '../patient/ViewPatientProfile'
 import PerscriptionList from './PerscriptionList.js';
 import NurseCalendar from './NurseCalendar.js';
+import ViewPatientHealthRecord from '../view_profile/ViewPatientHealthRecord'
 
 
 class Nurse extends Component {
@@ -69,6 +70,7 @@ class Nurse extends Component {
                             <Route exact path="/nurse/perscription-list"> <PerscriptionList/> </Route>
                             <Route exact path="/nurse/schedule"> <NurseCalendar medical_staff = {nurse}/> </Route>
                             <Route path = "/profile/"> <ViewPatientProfile medical_staff = {nurse}/> </Route> {/*prosledi "context" nurse-a jer nzm kako da drzim dva konteksta u isto vreme u jednoj klasi*/}
+                            <Route path="/health-record/"><ViewPatientHealthRecord medical_staff={nurse}/></Route>
                         </Switch>
                     </div>
                 </NurseContextProvider>

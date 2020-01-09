@@ -85,8 +85,7 @@ class UpdateHealthRecord extends React.Component {
 
     render() {
         return (
-            <div class="row d-flex justify-content-center">
-                <div class='col-md-11'>
+            <div>
                 <h2> {this.props.data.patient} </h2>
                 <br/>
                 <form onSubmit = {this.handleSubmit}>
@@ -138,8 +137,7 @@ class UpdateHealthRecord extends React.Component {
                 &nbsp;&nbsp;
                 <input type = "submit" value = "Confirm" className = "btn btn-success" className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
                 </form>
-            </div> 
-        </div>
+                </div>
         )
     }
 }

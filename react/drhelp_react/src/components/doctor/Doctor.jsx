@@ -11,8 +11,8 @@ import axios from 'axios';
 import ViewPatientProfile from '../patient/ViewPatientProfile';
 import DoctorCalendar from './DoctorCalendar'
 import HandlePatientList from './HandlePatientList.jsx';
-import DoctorVacation from './DoctorVacation.jsx';
-import StartAppointment from './StartAppointmnet.jsx';
+import ViewPatientHealthRecord from '../view_profile/ViewPatientHealthRecord.js';
+
 
 class Doctor extends Component {
     state = { 
@@ -68,6 +68,7 @@ class Doctor extends Component {
                             <Route exact path = "/doctor/schedule"><DoctorCalendar medical_staff = {doctor} regime='schedule'/></Route> 
                             <Route path="/profile/"> <ViewPatientProfile medical_staff = {doctor}/></Route>
                             <Route exact path = "/doctor/patients"><HandlePatientList /></Route>
+                            <Route path='health-record'><ViewPatientHealthRecord medical_staff={doctor}/></Route>
 
                         </Switch>
                     </div>

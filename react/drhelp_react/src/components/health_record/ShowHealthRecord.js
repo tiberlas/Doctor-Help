@@ -5,8 +5,7 @@ class ShowHealthRecord extends React.Component {
 
     render() {
         return(
-            <div class="row d-flex justify-content-center">
-                    <div class='col-md-11'>
+            <div> 
                     <h2> {this.props.data.patient} </h2>
                     <br/>
                     
@@ -40,9 +39,8 @@ class ShowHealthRecord extends React.Component {
                             
                         </tbody>
                     </table>
-                    <Button className = "btn btn-success" onClick = {this.props.toggleUpdate}> Update</Button> 
-                    </div> 
-                </div>
+                    <Button className = "btn btn-success" onClick = {this.props.toggleUpdate}> Update</Button>
+                    </div>
         )
     }
 }

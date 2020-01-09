@@ -108,7 +108,9 @@ class HealthRecord extends React.Component {
 
     render() {
         return (
-            <Fragment> 
+            <Fragment>
+                  <div class="row d-flex justify-content-center">
+                    <div class='col-md-11'>
             {!this.state.updating ?  <ShowHealthRecord data = {this.props.data} 
                                         bloodTypeDisplay = {this.bloodTypeDisplay}
                                         ageDisplay = {this.ageDisplay}
@@ -126,6 +128,8 @@ class HealthRecord extends React.Component {
                                         diopterDisplay = {this.diopterDisplay}
                                         update = {this.update}
                                         toggleUpdate = {this.toggleUpdate} />}
+                        </div>
+                    </div>
             </Fragment>
         )
     }

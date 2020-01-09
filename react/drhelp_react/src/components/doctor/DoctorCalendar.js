@@ -138,7 +138,13 @@ class DoctorCalendar extends React.Component {
             left: "prev,next today",
             center: "title",
             right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
-          }}  
+          }}
+          buttonText={
+            {
+              prev: '<',
+              next: '>'
+            }
+          }  
           selectable={true}
           events = {this.generateEventList()}
           eventLimit = {true}
