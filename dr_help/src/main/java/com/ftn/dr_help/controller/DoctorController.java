@@ -1,6 +1,7 @@
 package com.ftn.dr_help.controller;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
+import com.ftn.dr_help.dto.DateAndTimeDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
@@ -44,6 +47,9 @@ public class DoctorController {
 	
 	@Autowired
 	private Mail mailSender;
+	
+	@Autowired
+	private DateConverter dateConvertor;
 	
 	@GetMapping(value = "/clinic={clinic_id}/all")
 	public ResponseEntity<List<DoctorProfileDTO>> getAllRooms(@PathVariable("clinic_id") Long clinic_id) {
@@ -189,6 +195,27 @@ public class DoctorController {
 		}
 		
 		return new ResponseEntity<>(date, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> checkSchedule(@RequestBody DateAndTimeDTO dateAndTime) {
+		try {
+			String email = currentUser.getEmail();
+			Calendar requestedSchedule = dateConvertor.stringToDate(dateAndTime.getDateAndTimeString());
+			
+			Calendar schedule = service.checkSchedue(email, requestedSchedule);
+			
+			if(requestedSchedule.compareTo(schedule) == 0) {
+				return new ResponseEntity<>("OK", HttpStatus.OK);
+			} else {
+				String date = dateConvertor.dateForFrontEndString(schedule);
+				return new ResponseEntity<>(date, HttpStatus.CREATED);//201
+			}
+			
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 }

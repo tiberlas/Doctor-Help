@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.DailySchedule;
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.EmailCheck;
 import com.ftn.dr_help.comon.Term;
+import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
@@ -60,6 +62,12 @@ public class DoctorService {
 	
 	@Autowired
 	private ProcedureTypeRepository procedureRepository;
+	
+	@Autowired
+	private CalculateFirstFreeSchedule calculate;
+	
+	@Autowired
+	private DateConverter dateConvertor;
 	
 	@Autowired
 	private EmailCheck check;
@@ -425,12 +433,26 @@ public class DoctorService {
 		try {
 			
 			DoctorPOJO doctor = repository.findOneByEmail(email);
-			//?
-			return null;
+			List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
+			Calendar begin = Calendar.getInstance();
+			begin.add(Calendar.DAY_OF_MONTH, 1);
+			begin.clear(Calendar.SECOND);
+			begin.clear(Calendar.MILLISECOND);
 			
+			Calendar firstFree = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+			
+			return dateConvertor.dateForFrontEndString(firstFree);
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public Calendar checkSchedue(String email, Calendar requestedSchedule) {
+		
+		DoctorPOJO doctor = repository.findOneByEmail(email);
+		List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
+		
+		return calculate.checkScheduleOrFindFirstFree(doctor, requestedSchedule, dates);
 	}
 	
 }

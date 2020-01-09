@@ -163,7 +163,7 @@ values ('2020-1-22 10:30:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
 
 --for requesting a new appointment as doctor
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-9 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-1-10 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 
 
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)

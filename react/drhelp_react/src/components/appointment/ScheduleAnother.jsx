@@ -22,8 +22,11 @@ const fontStyles = {
 class ScheduleAnother extends Component {
     state = { 
         firstFreeDate: '01.09.2020 90:30',
+        recomended: '',
         date: '',
         time: '',
+        isAppointment: true,
+        isOperation: false,
         doctors: {},
         errorDate: true,
         errorTime: true,
@@ -31,21 +34,40 @@ class ScheduleAnother extends Component {
     }
 
     componentDidMount() {
-
+        axios.get("http://localhost:8080/api/doctors/schedules/first_free")
+            .then(response => {
+                this.setState({firstFreeDate: response.data})
+            })
     }
 
     handleValidationTimeAndDate = () => {
-        this.setState({errorDate: false, errorTime: false, errorTimeAndDate: false}, () => {
+        this.setState({errorDate: false, errorTime: false}, () => {
             if(this.state.date === null || this.state.date === "") {
-                this.setState({errorDate: true, errorTimeAndDate: true})
+                this.setState({errorDate: true})
             } else if(this.state.time === null || this.state.time === "") {
-                this.setState({errorTime: true, errorTimeAndDate: true})
+                this.setState({errorTime: true})
             } else {
-                this.setState({dateAndTime: this.state.date+' '+this.state.time})
+                //provera izabranog datuma
+                let dateAndTime = this.state.date + " " + this.state.time;
+                axios.post("http://localhost:8080/api/doctors/schedules/check", {
+                    dateAndTimeString: dateAndTime,
+                }).then(response => {
+                    if(response.status === 201) {
+                        //trazeni termin je zauzet i predlozen je drugi
+                        this.setState({errorInUse: true, errorDate: true, errorTime: true, recomended: response.data})
+                    } else {
+                        this.setState({errorInUse: false, errorDate: false, errorTime: false})
+                    }
+                }).catch(error => {
+                    this.setState({errorInUse: true, errorDate: true, errorTime: true})
+                })
             }
         })
+    }
 
-        //uputi axios i proveri da li valja termin
+    handlerChange = (event) => {
+        this.setState({isAppointment: this.state.isAppointment})
+    
     }
 
     handleChangeTime = (time) => {
@@ -77,29 +99,31 @@ class ScheduleAnother extends Component {
                             <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`}/>
                         </div>
                         {this.state.errorInUse && <p class="text-danger">The selected day and tyme are already reserved. Please try reserving an another day or time.</p>}
+                        {this.state.errorInUse && this.state.recomended != "" && <p class="text-success">Recomended schedule is {this.state.recomended}</p>}
 
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" />
+                                <input type="radio" id="customRadio1" name="isAppointment" class="custom-control-input" onChange={this.handleChange} checked={this.state.isAppointment}/>
                                 <label class="custom-control-label" for="customRadio1">appointment</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" />
+                                <input type="radio" id="customRadio2" name="isOperation" class="custom-control-input" onChange={this.handleChange} checked={!this.state.isAppointment}/>
                                 <label class="custom-control-label" for="customRadio2">operation</label>
                             </div>
                         </div>
 
-                        <Select 
-                        id="doctorsSelect" 
-                        styles={fontStyles} 
-                        className="basic-single" 
-                        classNamePrefix="select" 
-                        name="doctors" 
-                        options={this.state.doctors} 
-                        defaultValue={this.state.doctors[0]} 
-                        onChange = {this.props.handleDoctorsChange}
-                            />
-
+                        {!this.state.isAppointment &&
+                            <Select 
+                            id="doctorsSelect" 
+                            styles={fontStyles} 
+                            className="basic-single" 
+                            classNamePrefix="select" 
+                            name="doctors" 
+                            options={this.state.doctors} 
+                            defaultValue={this.state.doctors[0]} 
+                            onChange = {this.props.handleDoctorsChange}
+                                />
+                        }
                     </div>
                 </div>
                 </form>
