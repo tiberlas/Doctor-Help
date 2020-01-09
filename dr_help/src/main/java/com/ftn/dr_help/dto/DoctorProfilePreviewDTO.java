@@ -10,6 +10,7 @@ public class DoctorProfilePreviewDTO {
 	private String clinic;
 	private String specialization;
 	private String rating = "/";
+	private String myRating = "/";
 	private boolean haveInteracted = false;
 	
 	public DoctorProfilePreviewDTO() {
@@ -17,13 +18,14 @@ public class DoctorProfilePreviewDTO {
 	}
 	
 	public DoctorProfilePreviewDTO(String firstName, String lastName, String clinic, String specialization,
-			String rating, boolean haveInteracted) {
+			String rating, String myRating, boolean haveInteracted) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.clinic = clinic;
 		this.specialization = specialization;
 		this.rating = rating;
+		this.myRating = myRating;
 		this.haveInteracted = haveInteracted;
 	}
 	
@@ -71,6 +73,14 @@ public class DoctorProfilePreviewDTO {
 
 	public void setHaveInteracted(boolean haveInteracted) {
 		this.haveInteracted = haveInteracted;
+	}
+
+	public String getMyRating() {
+		return myRating;
+	}
+
+	public void setMyRating(String myRating) {
+		this.myRating = myRating;
 	}
 	
 }

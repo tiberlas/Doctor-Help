@@ -118,7 +118,8 @@ public class DoctorController {
 		System.out.println("Date: " + appointmentDate);
 		
 		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
-			return new ResponseEntity<> (service.filterByClinic(clinicId), HttpStatus.OK);
+			List<DoctorListingDTO> doctors = service.filterByClinic(clinicId);
+			return new ResponseEntity<> (doctors, HttpStatus.OK);
 		} else {
 			List<DoctorListingDTO> doctors = service.filterByClinicDateProcedureType(clinicId, appointmentType.replace('_', ' '), appointmentDate);
 			

@@ -26,12 +26,13 @@ class DoctorProfilePreview extends Component {
 		axios.get ("http://localhost:8080/api/doctors/preview/" + tempId + "/" + this.context.user.id)
 		.then (response => {
 			this.setState ({
-				firstName: response.data.firstName, 
-				lastName: response.data.lastName, 
-				clinic: response.data.clinic, 
-				specialization: response.data.specialization, 
-				rating: response.data.rating, 
-				id: tempId, 
+				firstName : response.data.firstName, 
+				lastName : response.data.lastName, 
+				clinic : response.data.clinic, 
+				specialization : response.data.specialization, 
+				rating : response.data.rating, 
+				id : tempId, 
+				myRating : response.data.myRating,
 				haveInteracted : response.data.haveInteracted
 			})
 		});
