@@ -7,6 +7,7 @@ import { Dropdown, Button, Row } from 'react-bootstrap';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import { UserContext } from '../../context/UserContextProvider';
+import ViewClinic from './ViewClinic';
 
 
 class DoctorListing extends Component {
@@ -104,6 +105,9 @@ class DoctorListing extends Component {
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
+
+				<ViewClinic ></ViewClinic>
+
 				<h3>{(this.state.filtered) ? ("Filtered doctors") : ("All doctors")}</h3>
 					<Table>
 						<TableHead>

@@ -183,10 +183,6 @@ public class DoctorController {
 	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
 				@PathVariable("doctor") Long doctorId, @PathVariable("rating") Integer rating) {
 		
-		System.out.println("Patient id: " + patientId);
-		System.out.println("Doctor id: " + doctorId);
-		System.out.println("Rating: " + rating);
-		
 		service.addReview(doctorId, patientId, rating);
 		
 		return new ResponseEntity<String> ("All is well", HttpStatus.OK);

@@ -122,7 +122,7 @@ class ClinicListing extends Component {
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
 					
-
+					
 					
 
 					<Table>

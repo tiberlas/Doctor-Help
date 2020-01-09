@@ -65,7 +65,7 @@ class DoctorProfilePreview extends Component {
 		this.componentDidUpdate();
 	}
 
-	clear () {
+	handleClear () {
 		this.setState ({
 			myRating : 0
 		})
@@ -98,7 +98,7 @@ class DoctorProfilePreview extends Component {
 						<StarRatingComponent name="imja" starCount={5} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
 					</div>
 					<div hidden={!this.state.haveInteracted}>
-						<Button class="badge badge-success text-right" onClick = {() => this.clear()}>
+						<Button class="badge badge-success text-right" onClick = {() => this.handleClear()}>
 							Clear rating
 						</Button>
 					</div>

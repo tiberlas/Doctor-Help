@@ -14,7 +14,7 @@ public interface DoctorReviewRepository extends JpaRepository<DoctorReviewPOJO, 
 	public DoctorReviewPOJO getPatientsReview (Long patientId, Long doctorId);
 	
 	@Modifying
-	@Query (value = "update doctor_reviewpojo set rating = ?1 where doctor_id = ?2 and patient_id = ?3", nativeQuery = true)
+	@Query (value = "update doctor_reviewpojo set rating = ?1 where doctor_id = ?3 and patient_id = ?2", nativeQuery = true)
 	public int updateReview (Integer newRating, Long patientId, Long doctorId);
 	
 	@Query (value = "select avg(rating) from doctor_reviewpojo dr where dr.doctor_id = ?1", nativeQuery = true)
