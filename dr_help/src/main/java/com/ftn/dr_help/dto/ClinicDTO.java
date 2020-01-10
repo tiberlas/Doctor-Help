@@ -11,6 +11,7 @@ public class ClinicDTO {
 	private String state;
 	private String description;
 	private boolean haveInteracted = false;
+	private String rating;
 	public ClinicDTO() {
 		
 	}
@@ -78,6 +79,14 @@ public class ClinicDTO {
 
 	public void setHaveInteracted(boolean haveInteracted) {
 		this.haveInteracted = haveInteracted;
+	}
+
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
 	}
 
 }

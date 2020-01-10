@@ -91,10 +91,11 @@ public class ClinicController {
 	@GetMapping(value = "/id={id}")
 	public ResponseEntity<ClinicDTO> getOneCLinic(@PathVariable("id") Long id) {
 		ClinicDTO finded = clinicService.findOneDTO(id);
-		
+
 		if(finded == null)
 			return new ResponseEntity<ClinicDTO>(HttpStatus.NOT_FOUND);
 		
+		finded.setRating(clinicReviewRepository.getAverageReview(finded.getId()).toString());
 		return new ResponseEntity<ClinicDTO>(finded,  HttpStatus.OK);
 	} 
 
