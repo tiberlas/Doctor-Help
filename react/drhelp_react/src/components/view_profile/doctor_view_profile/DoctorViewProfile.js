@@ -21,7 +21,6 @@ class DoctorViewProfile extends React.Component {
 
     handleDisplay = () => {
         if(this.state.displayMedicalHistory && !this.state.displayHealthRecord) {
-            console.log('clicked medical history')
             this.setState({display: true, regime: 'history'}, ()=>{this.forceUpdate()})
         } else if(this.state.displayHealthRecord && !this.state.displayMedicalHistory) {
             this.setState({display: false, regime: 'profile'}, ()=>{this.forceUpdate()})

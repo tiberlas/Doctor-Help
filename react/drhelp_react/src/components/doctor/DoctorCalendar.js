@@ -34,7 +34,9 @@ class DoctorCalendar extends React.Component {
       price: "",
       discount: "",
       status: "",
-      patientInsurance: ""
+      patientInsurance: "",
+      doctorId: "",
+      doctor: ""
     }
   }
 
@@ -56,11 +58,13 @@ class DoctorCalendar extends React.Component {
           start: event.start,
           end: event.end,
           patient: event.extendedProps.patient,
+          doctor: event.extendedProps.doctor,
           procedure: event.extendedProps.procedure,
           price: event.extendedProps.price,
           discount: event.extendedProps.discount,
           status: event.extendedProps.status,
-          patientInsurance: event.extendedProps.patientInsurance
+          patientInsurance: event.extendedProps.patientInsurance,
+          doctorId: event.extendedProps.doctorId
         }
      });
   };
@@ -101,16 +105,6 @@ class DoctorCalendar extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log("prevprops", prevProps)
-    console.log('this props', this.props)
-    // if(this.props.regime === 'history')
-       console.log('ohboy')
-    if(this.props.regime !== prevProps.regime) {
-      
-    }
-  }
-
   generateEventList = () => {
     let events = []
     let info = ''
@@ -139,6 +133,8 @@ class DoctorCalendar extends React.Component {
         let priceInfo = appointment.price
         let discountInfo = appointment.discount
         let insuranceInfo = appointment.insuranceNumber
+        let doctorIdInfo = appointment.doctorId
+        let doctorInfo = appointment.doctorFirstName + ' ' + appointment.doctorLastName
 
         let event = { 
           id: appointment.appointment_id,
@@ -150,7 +146,9 @@ class DoctorCalendar extends React.Component {
           procedure: procedureInfo,
           price: priceInfo,
           discount: discountInfo,
-          patientInsurance: insuranceInfo
+          patientInsurance: insuranceInfo,
+          doctorId: doctorIdInfo,
+          doctor: doctorInfo
         }
 
         events.push(event)
@@ -199,7 +197,7 @@ class DoctorCalendar extends React.Component {
           header={{
             left: "title",
             center: "",
-            right: "next, prev"
+            right: "prev, next"
           }}
           
           selectable={true}

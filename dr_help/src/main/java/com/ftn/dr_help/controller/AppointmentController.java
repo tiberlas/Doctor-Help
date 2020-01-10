@@ -92,12 +92,28 @@ public class AppointmentController {
 	
 	@GetMapping(value="/done_appointments/doctor/patient={insuranceNumber}")
 	public ResponseEntity<List<DoctorAppointmentDTO>> 
-		getAllDoneAppointmentsForPatientWithId(@PathVariable("insuranceNumber") Long insuranceNumber) {
+		getAllDoctorDoneAppointmentsForPatientWithId(@PathVariable("insuranceNumber") Long insuranceNumber) {
 		PatientPOJO patient = patientService.findByInsuranceNumber(insuranceNumber);
 		List<DoctorAppointmentDTO> appointments = appointmentService.findDoctorDoneAppointmentsForPatientWithId(patient.getId());
 		
 		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
 	}
 	
+	@GetMapping(value="/done_appointments/nurse/patient={insuranceNumber}")
+	public ResponseEntity<List<NurseAppointmentDTO>> 
+		getAllNurseDoneAppointmentsForPatientWithId(@PathVariable("insuranceNumber") Long insuranceNumber) {
+		PatientPOJO patient = patientService.findByInsuranceNumber(insuranceNumber);
+		List<NurseAppointmentDTO> appointments = appointmentService.findNurseDoneAppointmentsForPatientWithId(patient.getId());
+		
+		return new ResponseEntity<List<NurseAppointmentDTO>>(appointments, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/get-examination-report/appointment={id}/doctor={doctor_id}")
+	public ResponseEntity<ExaminationReportDTO> getExaminationReportForDoneAppointment(@PathVariable("id") Long appointmentId,
+			@PathVariable("doctor_id") Long doctor_id) {
+		
+		ExaminationReportDTO dto = appointmentService.findExaminationReportForDoneAppointment(appointmentId, doctor_id);
+		return new ResponseEntity<ExaminationReportDTO>(dto, HttpStatus.OK);
+	}
 	
 }

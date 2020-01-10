@@ -1,24 +1,39 @@
 import React, {Fragment} from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import {Link} from 'react-router-dom'
+import axios from 'axios'
+import {DoctorContext} from '../../context/DoctorContextProvider'
+import DoctorShowExaminationReport from './DoctorShowExaminationReport'
 
 class AppointmentInfoModal extends React.Component {
 
+    static contextType = DoctorContext
+
     state = {
-        showConfirmModal: false
+        showConfirmModal: false, 
+        showReport: false,
+        report: {}
     }
 
-    checkCurrentDate = () => {
+    checkCurrentDate = () => { //proverava da li se prosledjeni appointment slaze sa tekucim danom
 
         let today = new Date();
         let isToday = (today.toDateString() == this.props.event.start.toDateString());
-        console.log('is it today?', isToday)
         return isToday
     }
 
 
     componentWillReceiveProps(props) {
-        this.setState({ showConfirmModal: props.showConfirmModal})
+        this.setState({ showConfirmModal: props.showConfirmModal}, ()=>{
+            if(props.event.status === 'DONE') {
+                axios.get('http://localhost:8080/api/appointments/get-examination-report/appointment='+props.event.id+'/doctor='+this.context.doctor.id).then(response => {
+                    this.setState({report: response.data, showReport: true})
+                })
+            } else {
+                this.setState({showReport: false})
+            }
+
+        })
     }
 
 
@@ -36,14 +51,20 @@ class AppointmentInfoModal extends React.Component {
                 </ModalHeader>
                 <ModalBody>
                 <div>
-                    <p> Development: Appointment ID - {this.props.event.id} </p> 
-                    <Link to = {profileUrl}> Patient: {this.props.event.patient} </Link>
-                    <p>Status: {this.props.event.status}</p>
-                    <p>Procedure: {this.props.event.procedure}</p>
-                    <p>Price: {this.props.event.price}</p>
-                    <p>Discount: {this.props.event.discount}% </p>
-                    <p>Total: {this.props.event.price * (1 - (this.props.event.discount / 100))} </p>
+                    <br/>
+                    Patient:  <Link to = {profileUrl}> {this.props.event.patient} </Link> <br/>
+                    Status: {this.props.event.status}<br/>
+                    Procedure: {this.props.event.procedure}<br/>
+                    Price: {this.props.event.price}<br/>
+                    Discount: {this.props.event.discount}% <br/>
+                    Total: {this.props.event.price * (1 - (this.props.event.discount / 100))}<br/>
                 </div>
+                <div>
+                {this.state.showReport && <DoctorShowExaminationReport
+                                                event = {this.props.event} 
+                                                report = {this.state.report}/>}
+                </div>
+
                 </ModalBody>
                 <ModalFooter>
 
