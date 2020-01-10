@@ -36,6 +36,15 @@ class AppointmentInfoModal extends React.Component {
         })
     }
 
+    updateReport = (note) => {
+        this.setState( prevState => ({
+            report: {
+                ...prevState.report,
+                note: note
+            }
+        }), ()=>{this.forceUpdate()})
+    }
+
 
     render() {
        let appStart = new Date(this.props.event.start).toLocaleDateString("en-US")
@@ -62,7 +71,8 @@ class AppointmentInfoModal extends React.Component {
                 <div>
                 {this.state.showReport && <DoctorShowExaminationReport
                                                 event = {this.props.event} 
-                                                report = {this.state.report}/>}
+                                                report = {this.state.report}
+                                                updateReport={this.updateReport}/>}
                 </div>
 
                 </ModalBody>

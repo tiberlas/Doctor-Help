@@ -39,7 +39,6 @@ class AppointmentHealthRecord extends React.Component {
     }
 
     update = (record) => {
-        console.log('passed record', record)
             this.setState({
                 health_record: {
                     height: record.height,

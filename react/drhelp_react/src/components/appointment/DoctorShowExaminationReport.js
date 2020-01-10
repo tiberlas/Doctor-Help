@@ -1,5 +1,6 @@
 import React,{Fragment} from 'react'
 import Button from 'react-bootstrap/Button'
+import axios from 'axios'
 
 const completedStyle = {
     fontStyle: "italic",
@@ -7,8 +8,13 @@ const completedStyle = {
     textDecoration: "line-through"
 }
 
-
 class DoctorShowExaminationReport extends React.Component {
+
+    state = {
+        showUpdate: false,
+        note: "",
+        loading: true
+    }
 
     generateMedicationArray = () => {
         let items = []
@@ -19,10 +25,32 @@ class DoctorShowExaminationReport extends React.Component {
         return items
     }
 
+    componentDidMount() {
+        this.setState({loading: false})
+    }
+
+    handleUpdate = () => {
+        this.setState({showUpdate: false}, ()=> {
+            axios.put('http://localhost:8080/api/appointments/update/appointment='+this.props.event.id,
+                {
+                    note: this.state.note
+                }
+            ).then(this.props.updateReport(this.state.note))
+        })
+    }
+
+    handleChange = (e) => {
+        this.setState({[e.target.name]: e.target.value})
+    }
+
     render() {
 
         if(this.props.event.status !== 'DONE')
-        return null //problem sa renderovanjem modala nakon klika na DONE modal gde u APPROVED ili AVAILABLE modalu takodje ispisuje ove podatke (a ne bi smeo)
+            return null //problem sa renderovanjem modala nakon klika na DONE modal gde u APPROVED ili AVAILABLE modalu takodje ispisuje ove podatke (a ne bi smeo)
+
+        if(this.state.loading) {
+            return(<div> Loading... </div>)
+        }
 
         return(
             <Fragment>
@@ -38,11 +66,21 @@ class DoctorShowExaminationReport extends React.Component {
                 :  <div class="text-muted"style={{fontStyle: 'italic'}}><br/>Not yet signed off</div>}
 
                 <div class="text-muted" style={{fontStyle: 'italic'}}>Examined by {this.props.event.doctor}</div>
-
-                Additional doctor notes: {this.props.report.note}
                 <br/>
-                {this.props.report.myExamination && <Button className="btn btn-success">Update</Button>}
+                {!this.state.showUpdate && <Fragment>Doctor notes: {this.props.report.note} </Fragment>}
+                <br/>
 
+                {this.state.showUpdate 
+                ? <Fragment> 
+                    Doctor notes: <br/>
+                    <textarea name="note" defaultValue={this.props.report.note} onChange={this.handleChange}/>
+                    <br/>
+                    <Button className="btn" onClick={()=>{this.setState({showUpdate: false})}}>Cancel</Button> &nbsp;&nbsp;
+                    <Button className="btn btn-success" onClick={this.handleUpdate}>Confirm</Button>
+                   </Fragment> 
+                   : <Fragment> 
+                       {this.props.report.myExamination && <Button className="btn btn-success" onClick={()=>{this.setState({showUpdate: true})}}>Update</Button>} 
+                    </Fragment>}
                 <hr/>
             </Fragment>
         )

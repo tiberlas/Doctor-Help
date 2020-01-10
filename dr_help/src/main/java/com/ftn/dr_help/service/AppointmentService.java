@@ -409,8 +409,25 @@ public class AppointmentService {
 		}
 		
 		return dto;
+	}
+	
+	public boolean updateExaminationReportDTO(Long appointment_id, ExaminationReportDTO dto) {
+		AppointmentPOJO appointment = appointmentRepository.findOneById(appointment_id);
 		
+		if(appointment.isDeleted()) {
+			System.out.println("Appointment is deleted");
+			return false;
+		}
 		
+		PerscriptionPOJO perscription = appointment.getExaminationReport().getPerscription();
+		if(perscription == null) {
+			return false;
+		}
+		System.out.println("Note is: " + dto.getNote());
+		perscription.getTherapy().setAdvice(dto.getNote()); //set the advice
+		perscriptionRepository.save(perscription);
+		
+		return true;
 		
 	}
 	

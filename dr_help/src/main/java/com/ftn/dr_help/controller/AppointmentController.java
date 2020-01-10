@@ -24,6 +24,7 @@ import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.service.AppointmentService;
 import com.ftn.dr_help.service.PatientService;
 
@@ -114,6 +115,18 @@ public class AppointmentController {
 		
 		ExaminationReportDTO dto = appointmentService.findExaminationReportForDoneAppointment(appointmentId, doctor_id);
 		return new ResponseEntity<ExaminationReportDTO>(dto, HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/update/appointment={id}")
+	public ResponseEntity<ExaminationReportDTO> updateExaminationReport(@PathVariable("id") Long appointment_id, 
+			@RequestBody ExaminationReportDTO ex ) {
+		
+		boolean ret = appointmentService.updateExaminationReportDTO(appointment_id, ex);
+		if(ret) {
+			return new ResponseEntity<ExaminationReportDTO>(ex, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 	}
 	
 }
