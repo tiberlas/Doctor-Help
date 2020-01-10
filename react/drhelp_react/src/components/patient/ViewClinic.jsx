@@ -10,10 +10,20 @@ class ViewClinic extends Component {
     state = {
         rating : "/", 
         myRating : 0, 
-        haveInteracted : true
+        haveInteracted : false
     }
 
     static contextType = UserContext;
+
+    componentDidMount () {
+        Axios.get ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4])
+        .then (response => {
+            this.setState ({
+                haveInteracted : response.data.haveInteracted, 
+                myRating : response.data.myRating
+            })
+        })
+    }
 
     handleClick (nextValue) {
         // alert ("Star click: " + nextValue);

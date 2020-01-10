@@ -10,7 +10,7 @@ public class ClinicDTO {
 	private String city;
 	private String state;
 	private String description;
-	
+	private boolean haveInteracted = false;
 	public ClinicDTO() {
 		
 	}
@@ -70,6 +70,14 @@ public class ClinicDTO {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public boolean isHaveInteracted() {
+		return haveInteracted;
+	}
+
+	public void setHaveInteracted(boolean haveInteracted) {
+		this.haveInteracted = haveInteracted;
 	}
 
 }

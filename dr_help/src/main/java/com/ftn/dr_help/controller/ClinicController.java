@@ -22,7 +22,11 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicListingDTO;
 import com.ftn.dr_help.dto.ClinicPreviewDTO;
+import com.ftn.dr_help.dto.ClinicRatingDTO;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.model.pojo.ClinicReviewPOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicReviewRepository;
 import com.ftn.dr_help.service.ClinicService;
 import com.ftn.dr_help.service.ProcedureTypeService;
@@ -43,6 +47,9 @@ public class ClinicController {
 	
 	@Autowired
 	private ClinicReviewRepository clinicReviewRepository;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
 	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
@@ -150,6 +157,7 @@ public class ClinicController {
 	}
 	
 	@PostMapping (value="/review/{patient}/{clinic}/{rating}")
+	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
 				@PathVariable("clinic") Long clinicId, @PathVariable("rating") Integer rating) {
 		
@@ -158,7 +166,29 @@ public class ClinicController {
 //		System.out.println("Rating: " + rating);
 		clinicService.addReview(patientId, clinicId, rating);
 		
-		return null; 
+		return new ResponseEntity<> ("All is swell, gentlmen", HttpStatus.OK); 
+	}
+	
+	@GetMapping (value="/review/{patient}/{clinic}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<ClinicRatingDTO> haveInteracted (@PathVariable("patient") Long patientId, 
+				@PathVariable("clinic") Long clinicId) {
+		
+		ClinicRatingDTO retVal = new ClinicRatingDTO();
+//		System.out.println("Patient id: " + patientId);
+//		System.out.println("Clinic id: " + clinicId);
+		List<AppointmentPOJO> appointments = appointmentRepository.getPatientsPastAppointmentsForClinic(patientId, clinicId);
+		if (appointments.size() > 0) {
+			retVal.setHaveInteracted(true);;
+		}
+		ClinicReviewPOJO crp = clinicReviewRepository.getClinicReview(patientId, clinicId);
+		if (crp != null) {
+			retVal.setMyRating(crp.getRating());
+		}
+		
+		
+		
+		return new ResponseEntity<> (retVal, HttpStatus.OK); 
 	}
 	
 }

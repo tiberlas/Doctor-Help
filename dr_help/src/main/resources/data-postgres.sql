@@ -258,4 +258,22 @@ insert into perscriptionpojo_medication_list (medication_list_id, perscription_i
 values (1, 5);
 
 
+insert into doctor_reviewpojo (rating, doctor_id, patient_id)
+values (2, 2, 2);
+insert into doctor_reviewpojo (rating, doctor_id, patient_id)
+values (3, 2, 2);
+insert into doctor_reviewpojo (rating, doctor_id, patient_id)
+values (4, 2, 3);
+insert into doctor_reviewpojo (rating, doctor_id, patient_id)
+values (1, 2, 4);
+insert into doctor_reviewpojo (rating, doctor_id, patient_id)
+values (1, 1, 2);
 
+insert into clinic_rewiew (rating, clinic_id, patient_id)
+values (3, 1, 1);
+insert into clinic_rewiew (rating, clinic_id, patient_id)
+values (5, 1, 2);
+insert into clinic_rewiew (rating, clinic_id, patient_id)
+values (4, 1, 3);
+insert into clinic_rewiew (rating, clinic_id, patient_id)
+values (3, 1, 4);

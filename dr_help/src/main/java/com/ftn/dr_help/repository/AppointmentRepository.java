@@ -35,6 +35,9 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	List<AppointmentPOJO> getDoctorsAppointments (Long doctorId, Calendar calendarMin, Calendar calendarMax); 
 
 	@Query (value = "select * from appointments a where patient_id = ?1 and status = 'DONE' and deleted = false and doctor_id = ?2", nativeQuery = true)
-	List<AppointmentPOJO> getPatientsPastAppointments (Long patientId, Long doctorId);
+	public List<AppointmentPOJO> getPatientsPastAppointments (Long patientId, Long doctorId);
+	
+	@Query (value = "select a.* from appointments a inner join room r on a.room_id = r.id where a.deleted = false and status = 'DONE' and a.patient_id = ?1 and r.clinic_id = ?2", nativeQuery = true)
+	public List<AppointmentPOJO> getPatientsPastAppointmentsForClinic (Long patientId, Long clinicId);
 	
 }
