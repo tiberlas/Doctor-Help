@@ -2,15 +2,19 @@ package com.ftn.dr_help.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ftn.dr_help.dto.ProcedureTypeDTO;
 import com.ftn.dr_help.dto.ProcedureTypeFilterDTO;
+import com.ftn.dr_help.dto.ProcedureTypeInfoDTO;
 import com.ftn.dr_help.model.enums.FilterOperationEnum;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
+import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
 
 @Service
@@ -21,6 +25,9 @@ public class ProcedureTypeService {
 	
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
+	
+	@Autowired
+	private DoctorRepository doctorRepository;
 	
 	
 	public List<String> getProcedureTypes () {
@@ -235,5 +242,30 @@ public class ProcedureTypeService {
 		}
 		
 		return ret;
+	}
+	
+	public List<ProcedureTypeInfoDTO> allOperation(String email) {
+		try {
+			Long clinicId = doctorRepository.findOneByEmail(email).getClinic().getId();
+
+			List<ProceduresTypePOJO> findedOperations = procedureTypeRepository.findAllOperations(clinicId);
+			List<ProcedureTypeInfoDTO> operations = new ArrayList<>();
+
+			if(findedOperations.isEmpty()) {
+				return operations;
+			}
+			
+			for(ProceduresTypePOJO procedure : findedOperations) {
+				operations.add(new ProcedureTypeInfoDTO(
+							procedure.getId(),
+							procedure.getName(),
+							procedure.getPrice()
+						));
+			}
+			
+			return operations;
+		} catch(Exception e) {
+			return null;
+		}
 	}
 }

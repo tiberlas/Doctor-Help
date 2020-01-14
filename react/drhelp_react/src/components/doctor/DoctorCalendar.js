@@ -43,7 +43,6 @@ class DoctorCalendar extends React.Component {
 
 
   handleEventClick = ({ event, el }) => {
-    this.toggle();
     this.setState({ 
         event: {
           id: event.id,
@@ -55,8 +54,10 @@ class DoctorCalendar extends React.Component {
           price: event.extendedProps.price,
           discount: event.extendedProps.discount,
           status: event.extendedProps.status,
-          patientInsurance: event.extendedProps.patientInsurance
+          patientInsurance: event.extendedProps.patientInsurance,
         }
+     }, () => {
+      this.toggle();
      });
   };
 
@@ -91,6 +92,7 @@ class DoctorCalendar extends React.Component {
     let info = ''
     for(let i = 0; i < this.state.appointments.length; i++) {
         let appointment = this.state.appointments[i]
+
         if (appointment.isOperation) {
           info = 'Operation\n'
         } else {

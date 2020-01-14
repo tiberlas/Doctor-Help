@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
+import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
@@ -37,8 +38,6 @@ public class AppointmentController {
 	
 	@Autowired
 	private PatientService patientService;
-	
-	
 	
 	@GetMapping(value = "/all_appointments/doctor={doctor_id}")
 	public ResponseEntity<List<DoctorAppointmentDTO>> getAllDoctorAppointments(@PathVariable("doctor_id") Long doctor_id) {
@@ -81,5 +80,14 @@ public class AppointmentController {
 		return null;
 	}
 	
+	@PostMapping(value = "/request/doctor", consumes = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> createDoctorRequestedAppointment(@RequestBody DoctorRequestAppointmentDTO requestedAppointment) {
+		boolean success = appointmentService.doctorRequestAppointment(requestedAppointment);
+		
+		if(!success)
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<String>(HttpStatus.CREATED);
+	}
 	
 }

@@ -27,9 +27,12 @@ import com.ftn.dr_help.dto.DateAndTimeDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
+import com.ftn.dr_help.dto.MedicalStaffNameDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
+import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
+import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.service.DoctorService;
@@ -197,6 +200,19 @@ public class DoctorController {
 		return new ResponseEntity<>(date, HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/schedules/first_free", produces = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> getFirstFreeScheduleForThreeDoctors(@RequestBody ThreeDoctorsIdDTO doctors) {
+		
+		String date = service.findFirstFreeSchedueForOperation(doctors);
+		
+		if(date == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(date, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> checkSchedule(@RequestBody DateAndTimeDTO dateAndTime) {
@@ -218,4 +234,32 @@ public class DoctorController {
 		}
 	}
 	
+	@GetMapping(value = "/all/specialization={id}", produces="application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<MedicalStaffNameDTO>> getSpecializedDoctors(@PathVariable("id") Long id) {
+		List<MedicalStaffNameDTO> doctors = service.getSpecializedDoctors(id);
+		
+		if(doctors == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(doctors, HttpStatus.OK);
+		}
+	}
+	
+	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> checkOperationSchedule(@RequestBody OperationRequestDTO request) {
+			
+		String schedule = service.checkOperationSchedue(request);
+		if(schedule == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if(schedule.equals(request.getDateAndTimeString())) {
+			return new ResponseEntity<>("OK", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(schedule, HttpStatus.CREATED);//201
+		}
+		
+	}
 }

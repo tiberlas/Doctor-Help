@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ProcedureTypeDTO;
 import com.ftn.dr_help.dto.ProcedureTypeFilterDTO;
+import com.ftn.dr_help.dto.ProcedureTypeInfoDTO;
 import com.ftn.dr_help.service.ProcedureTypeService;
 
 @RestController
@@ -106,5 +107,17 @@ public class ProcedureTypeController {
 		return new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 	
-	
+	@GetMapping(value = "/operation/all", produces="application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<ProcedureTypeInfoDTO>> getAllOperations() {
+		String email = currentUser.getEmail();
+		
+		List<ProcedureTypeInfoDTO> operations = procedureTypeService.allOperation(email);
+		
+		if(operations == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(operations, HttpStatus.OK);
+		}
+	}
 }

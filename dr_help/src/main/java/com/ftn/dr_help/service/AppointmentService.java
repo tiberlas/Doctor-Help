@@ -11,7 +11,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
+import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -58,6 +61,12 @@ public class AppointmentService {
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired
+	private DateConverter dateConverter;
+	
+	@Autowired
+	private CalculateFirstFreeSchedule calculateSchedule;
 	
 	
 	public List<DoctorAppointmentDTO> findDoctorAppointments(Long doctor_id) {
@@ -235,5 +244,40 @@ public class AppointmentService {
 		
 	}
 	
+	public boolean doctorRequestAppointment(DoctorRequestAppointmentDTO request) {
+		try {
+			
+			AppointmentPOJO old = appointmentRepository.findOneById(request.getOldAppointmentID());
+			System.out.println("KILLING");
+			System.out.println(request.getOldAppointmentID());
+			System.out.println(old == null);
+			System.out.println(old.getId());
+			AppointmentPOJO newRequested = new AppointmentPOJO();
+			
+			Calendar date = dateConverter.stringToDate(request.getDateAndTime());
+			
+			//provera da li je doca slobodan
+			List<Date> dates = doctorRepository.findAllReservedAppointments(old.getDoctor().getId());
+			Calendar retVal = calculateSchedule.checkScheduleOrFindFirstFree(old.getDoctor(), date, dates);
+			if(!retVal.equals(date)) {
+				return false;
+			}
+			
+			newRequested.setDate(date);
+			newRequested.setDeleted(false);
+			newRequested.setDiscount(0);
+			newRequested.setDoctor(old.getDoctor());
+			newRequested.setPatient(old.getPatient());
+			newRequested.setProcedureType(old.getProcedureType());
+			newRequested.setStatus(AppointmentStateEnum.DOCTOR_REQUESTED_APPOINTMENT);
+			
+			appointmentRepository.save(newRequested);
+			return true;
+		} catch(Exception e) {
+			System.out.println("WAKE UP");
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }

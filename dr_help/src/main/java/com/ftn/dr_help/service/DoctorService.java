@@ -20,9 +20,12 @@ import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
+import com.ftn.dr_help.dto.MedicalStaffNameDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
+import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
+import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
@@ -447,12 +450,124 @@ public class DoctorService {
 		}
 	}
 	
+	public String findFirstFreeSchedueForOperation(ThreeDoctorsIdDTO doctors) {
+		try {
+			
+			Calendar begin0 = Calendar.getInstance();
+			begin0.add(Calendar.DAY_OF_MONTH, 1);
+			
+			Calendar free = findFirstOperationSchedule(doctors.getDoctor0(), doctors.getDoctor1(), doctors.getDoctor2(), begin0);
+			//sva tri datuma su ista
+			return dateConvertor.dateForFrontEndString(free);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	public Calendar checkSchedue(String email, Calendar requestedSchedule) {
 		
 		DoctorPOJO doctor = repository.findOneByEmail(email);
 		List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
 		
 		return calculate.checkScheduleOrFindFirstFree(doctor, requestedSchedule, dates);
+	}
+	
+	public String checkOperationSchedue(OperationRequestDTO request) {
+		
+		try {
+			Calendar begin0 = dateConvertor.stringToDate(request.getDateAndTimeString());
+			
+			Calendar free = findFirstOperationSchedule(request.getDoctor0(), request.getDoctor1(), request.getDoctor2(), begin0);
+			//sva tri datuma su ista
+			
+			if(free.equals(begin0)) {
+				return request.getDateAndTimeString();
+			} else {
+				return dateConvertor.dateForFrontEndString(free);
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public List<MedicalStaffNameDTO> getSpecializedDoctors(Long procedureTypeId) {
+		try {
+			
+			List<DoctorPOJO> finded = repository.findAllDoctorsWihtSpetialization(procedureTypeId);
+			List<MedicalStaffNameDTO> doctors = new ArrayList<>();
+			
+			if(finded == null) {
+				return doctors;
+			}
+			
+			for(DoctorPOJO doctor : finded) {
+				doctors.add(new MedicalStaffNameDTO(
+							doctor.getId(),
+							doctor.getFirstName(),
+							doctor.getLastName()
+						));
+			}
+			
+			return doctors;
+		} catch(Exception e) {
+			System.out.println("ZASTO");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private Calendar findFirstOperationSchedule(Long drId0, Long drId1, Long drId2, Calendar begin) throws Exception {
+		DoctorPOJO dr0 = repository.findById(drId0).orElse(null);
+		DoctorPOJO dr1 = repository.findById(drId1).orElse(null);
+		DoctorPOJO dr2 = repository.findById(drId2).orElse(null);
+		if(dr0 == null || dr1 == null || dr2 == null) {
+			return null;
+		}
+		
+		List<Date> dates0 = repository.findAllReservedAppointments(dr0.getId());
+		List<Date> dates1 = repository.findAllReservedAppointments(dr1.getId());
+		List<Date> dates2 = repository.findAllReservedAppointments(dr2.getId());
+		Calendar begin0 = (Calendar) begin.clone();
+		begin0.clear(Calendar.SECOND);
+		begin0.clear(Calendar.MILLISECOND);
+		
+		Calendar begin1 = (Calendar) begin0.clone();
+		Calendar begin2 = (Calendar) begin0.clone();
+		
+		Calendar free0 = null;
+		Calendar free1 = null;
+		Calendar free2 = null;
+		
+		//nadji privi slobodan termin koji odgovara svim doctorima
+		do {
+			
+			if(free0 != null) {
+				//znaci da je jedna iteracija prosla; sad treba samo begin da se pomeri za najveci nadjeni datum
+				
+				if(free0.after(free1) && free0.after(free2)) {
+					begin0 = (Calendar) free0.clone();
+				} else if(free1.after(free2)) {
+					begin0 = (Calendar) free1.clone();
+				} else {
+					begin0 = (Calendar) free2.clone();
+				}
+				
+				begin0.add(Calendar.DAY_OF_MONTH, 1);
+				begin1 = (Calendar) begin0.clone();
+				begin2 = (Calendar) begin0.clone();
+			}
+			
+			free0 = calculate.findFirstScheduleForDoctor(dr0, begin0, dates0);
+			free1 = calculate.findFirstScheduleForDoctor(dr1, begin1, dates1);
+			free2 = calculate.findFirstScheduleForDoctor(dr2, begin2, dates2);
+			
+			System.out.println("DEBUG FOR OPERATION");
+			System.out.println(dateConvertor.dateForFrontEndString(free0));
+			System.out.println(dateConvertor.dateForFrontEndString(free1));
+			System.out.println(dateConvertor.dateForFrontEndString(free2));
+		} while(! (free0.equals(free1) && free1.equals(free2)) );
+		
+		return free0;
 	}
 	
 }

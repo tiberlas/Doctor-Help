@@ -45,7 +45,8 @@ class AppointmentModal extends React.Component {
 
     componentWillReceiveProps(props) {
         this.setState({ confirmFinish: props.showConfirmAppointment})
-        console.log("props", props.showConfirmAppointment)
+        //console.log("props", props.showConfirmAppointment)
+        //console.log("HELP ME ", this.props.event)
     }
 
 
@@ -137,7 +138,7 @@ class AppointmentModal extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="fourth" >
                                     <ModalBody>
-                                        <ScheduleAnother />
+                                        <ScheduleAnother currentAppointment = {this.props.event.id}/>
                                     </ModalBody>
                                 </Tab.Pane>
                             </Tab.Content>
