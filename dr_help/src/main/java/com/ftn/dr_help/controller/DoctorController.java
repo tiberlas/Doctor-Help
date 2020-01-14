@@ -246,7 +246,7 @@ public class DoctorController {
 		}
 	}
 	
-	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
+	@PostMapping(value = "/schedules/operation/check", produces = "application/json", consumes = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> checkOperationSchedule(@RequestBody OperationRequestDTO request) {
 			

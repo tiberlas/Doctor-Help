@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.service.OperationService;
 
@@ -21,10 +22,14 @@ public class OperationController {
 	@Autowired
 	private OperationService operationServie;
 	
+	@Autowired
+	private CurrentUser currentUser;
+	
 	@PostMapping(value = "request/doctor/operation", consumes = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> createDoctorRequestedOperation(@RequestBody OperationRequestDTO requested) {
-		boolean success = operationServie.doctorRequestAppointment(requested);
+		String email = currentUser.getEmail();
+		boolean success = operationServie.doctorRequestAppointment(requested, email);
 		
 		if(!success)
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);

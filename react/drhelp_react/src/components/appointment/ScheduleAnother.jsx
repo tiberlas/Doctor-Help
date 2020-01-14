@@ -21,7 +21,7 @@ const fontStyles = {
 
 class ScheduleAnother extends Component {
     state = {
-        currentAppointment: this.props.currentAppointment,
+        currentAppointment: this.props.currentAppointment, //samo id od trenutnog appointmenta
         firstFreeDate: '01.09.2020 90:30',
         recomended: '',
         date: '',
@@ -34,6 +34,7 @@ class ScheduleAnother extends Component {
         disableOperatin: false,
         disabledDoctors: true,
         disableSubmit: true,
+        successedSchedule: false, //disables all inputs and submit button
         errorDate: true,
         errorTime: true,
         errorInUse: false,
@@ -217,6 +218,8 @@ class ScheduleAnother extends Component {
             axios.post('http://localhost:8080/api/appointments/request/doctor', {
                 oldAppointmentID: parseInt(this.state.currentAppointment),
                 dateAndTime: this.state.date + " " + this.state.time, 
+            }).then(respense => {
+                this.setState({successedSchedule: true, disableSubmit: true});
             }).catch(error => {
                 alert("Please refresh the page and try agan")
             })
@@ -228,7 +231,8 @@ class ScheduleAnother extends Component {
                 dateAndTime: this.state.date + " " + this.state.time,
                 doctor0: this.state.selectedDoctor[0],
                 doctor1: this.state.selectedDoctor[1],
-                doctor2: this.state.selectedDoctor[2]
+                doctor2: this.state.selectedDoctor[2],
+                patientId : this.state.currentAppointment
             }).catch(error => {
                 alert("Please refresh the page and try agan")
             })
@@ -245,11 +249,11 @@ class ScheduleAnother extends Component {
                         
                         <span class="form-grup">
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio1" name="radio" class="custom-control-input" onChange={this.handleChange} value="appointment" checked={this.state.selectedOption === 'appointment'}/>
+                                <input type="radio" id="customRadio1" name="radio" class="custom-control-input" onChange={this.handleChange} value="appointment" checked={this.state.selectedOption === 'appointment'} disabled={this.state.successedSchedule}/>
                                 <label class="custom-control-label" for="customRadio1">appointment</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio2" name="radio" class="custom-control-input" onChange={this.handleChange} value="operation" checked={this.state.selectedOption === 'operation'} disabled={this.state.disableOperatin}/>
+                                <input type="radio" id="customRadio2" name="radio" class="custom-control-input" onChange={this.handleChange} value="operation" checked={this.state.selectedOption === 'operation'} disabled={this.state.successedSchedule}/>
                                 <label class="custom-control-label" for="customRadio2">operation</label>
                             </div>
                         </span>
@@ -290,11 +294,11 @@ class ScheduleAnother extends Component {
 
                             <div>
                                 <label for='date'>Selecte date</label>
-                                <FormControl type="date" id='date' placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} className={`form-control ${this.state.errorDate? 'is-invalid': 'is-valid'}`}/>
+                                <FormControl type="date" id='date' placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} className={`form-control ${this.state.errorDate? 'is-invalid': 'is-valid'}`} disabled={this.state.successedSchedule}/>
                             </div>
                             <div>
                                 <label for='time'>Select time</label>
-                                <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`}/>
+                                <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`} disabled={this.state.successedSchedule}/>
                             </div>
                             {this.state.errorInUse && <p class="text-danger">The selected day and tyme are already reserved. Please try reserving an another day or time.</p>}
                             {this.state.errorInUse && this.state.recomended != "" && <p class="text-success">Recomended schedule is {this.state.recomended}</p>}
@@ -302,7 +306,12 @@ class ScheduleAnother extends Component {
                         </div>
                         
                         <br/>
-                        <input type="submit" class="btn btn-success" value="request" disabled={this.state.disableSubmit}/>
+                        <input type="submit" class="btn btn-success" value="request" disabled={this.state.disableSubmit || this.state.successedSchedule}/>
+                        {this.state.successedSchedule && 
+                            <p class='text-success'>
+                                You have successfully requested to scheduled an appointment.  
+                            </p>
+                        }
                     </div>
                 </div>
                 </form>
