@@ -16,7 +16,7 @@ import com.ftn.dr_help.service.OperationService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping (value = "api/operations/")
+@RequestMapping (value = "api/operations")
 public class OperationController {
 
 	@Autowired
@@ -25,7 +25,7 @@ public class OperationController {
 	@Autowired
 	private CurrentUser currentUser;
 	
-	@PostMapping(value = "request/doctor/operation", consumes = "application/json")
+	@PostMapping(value = "/request/doctor", consumes = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> createDoctorRequestedOperation(@RequestBody OperationRequestDTO requested) {
 		String email = currentUser.getEmail();

@@ -227,12 +227,13 @@ class ScheduleAnother extends Component {
         } else {
             
             axios.post('http://localhost:8080/api/operations/request/doctor', {
-                oldAppointmentID: parseInt(this.state.currentAppointment),
-                dateAndTime: this.state.date + " " + this.state.time,
+                appointmentId: parseInt(this.state.currentAppointment),
+                dateAndTimeString: this.state.date + " " + this.state.time,
                 doctor0: this.state.selectedDoctor[0],
                 doctor1: this.state.selectedDoctor[1],
-                doctor2: this.state.selectedDoctor[2],
-                patientId : this.state.currentAppointment
+                doctor2: this.state.selectedDoctor[2]
+            }).then(respense => {
+                this.setState({successedSchedule: true})
             }).catch(error => {
                 alert("Please refresh the page and try agan")
             })
@@ -263,7 +264,7 @@ class ScheduleAnother extends Component {
                             <div>
                                 <div className={`form-group ${this.state.errorType? 'has-danger': ''}`}>
                                     <label for="nurse">Select operation</label>
-                                    <select multiple="" className={`form-control ${this.state.errorType? 'is-invalid': 'is-valid'}`} id="type" name='typeId' onChange={this.handlerTypeChange}>
+                                    <select multiple="" className={`form-control ${this.state.errorType? 'is-invalid': 'is-valid'}`} id="type" name='typeId' onChange={this.handlerTypeChange} disabled={this.state.successedSchedule}>
                                         {this.createTypeItems()}
                                     </select>
                                 </div>
@@ -279,8 +280,8 @@ class ScheduleAnother extends Component {
                                         name="doctors" 
                                         options={this.state.doctorsOptions}  
                                         onChange = {this.handleDoctorChange}
-                                        isDisabled={this.state.disabledDoctors}
                                         isClearable="true"
+                                        isDisabled={this.state.successedSchedule || this.state.disabledDoctors}
                                     />  
                                 </div>
                                 {this.state.errorDoctoCount && <p class='text-warning'>Must select exact 3 doctors</p>}
@@ -309,7 +310,7 @@ class ScheduleAnother extends Component {
                         <input type="submit" class="btn btn-success" value="request" disabled={this.state.disableSubmit || this.state.successedSchedule}/>
                         {this.state.successedSchedule && 
                             <p class='text-success'>
-                                You have successfully requested to scheduled an appointment.  
+                                You have successfully send a request.  
                             </p>
                         }
                     </div>

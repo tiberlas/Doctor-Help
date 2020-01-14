@@ -6,37 +6,27 @@ public class OperationRequestDTO {
 	private Long doctor1;
 	private Long doctor2;
 	private String dateAndTimeString;
-	private Long patientId;
-	private Long operationType;
+	private Long appointmentId;
 	
 	public OperationRequestDTO() {
 		super();
 	}
 	
-	public OperationRequestDTO(Long doctor0, Long doctor1, Long doctor2, String dateAndTimeString, Long patientId, Long operationType) {
+	public OperationRequestDTO(Long doctor0, Long doctor1, Long doctor2, String dateAndTimeString, Long appointmentId) {
 		super();
 		this.doctor0 = doctor0;
 		this.doctor1 = doctor1;
 		this.doctor2 = doctor2;
 		this.dateAndTimeString = dateAndTimeString;
-		this.patientId = patientId;
-		this.operationType = operationType;
+		this.appointmentId = appointmentId;
 	}
 
-	public Long getPatientId() {
-		return patientId;
+	public Long getAppointmentId() {
+		return appointmentId;
 	}
 
-	public void setPatientId(Long patientId) {
-		this.patientId = patientId;
-	}
-
-	public Long getOperationType() {
-		return operationType;
-	}
-
-	public void setOperationType(Long operationType) {
-		this.operationType = operationType;
+	public void setAppointmentId(Long patientId) {
+		this.appointmentId = patientId;
 	}
 
 	public Long getDoctor0() {
