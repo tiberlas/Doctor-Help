@@ -40,4 +40,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query (value = "select a.* from appointments a inner join room r on a.room_id = r.id where a.deleted = false and status = 'DONE' and a.patient_id = ?1 and r.clinic_id = ?2", nativeQuery = true)
 	public List<AppointmentPOJO> getPatientsPastAppointmentsForClinic (Long patientId, Long clinicId);
 	
+	@Query (value = "select * from appointments a where a.patient_id = ?1 and a.status in ('REQUESTED', 'APPROVED')", nativeQuery = true)
+	public List<AppointmentPOJO> getPatientsPendingAppointments (Long email);
+	
 }

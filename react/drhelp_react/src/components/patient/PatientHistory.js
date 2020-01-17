@@ -22,11 +22,11 @@ class PatientHistory extends Component {
 		})
 	}
 	
-	updateReports (data) {
-		this.setState ({
-			reports : data
-		})
-	}
+	// updateReports (data) {
+	// 	this.setState ({
+	// 		reports : data
+	// 	})
+	// }
 
 	// _onChangeReports () {
 	// 	alert ("New reports!");
@@ -82,7 +82,7 @@ class PatientHistory extends Component {
 						<TableRow>
 							<TableCell><p class='text-success'>Date</p></TableCell>
 							<TableCell><p class='text-success'>Procedure Type</p></TableCell>
-							<TableCell><p class='text-success'>Approved</p></TableCell>
+							<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Approved</p></TableCell>
 							<TableCell><p class='text-success'>Doctor</p></TableCell>
 							<TableCell><p class='text-success'>Nurse</p></TableCell>
 							<TableCell><p class='text-success'>Perscription</p></TableCell>
@@ -94,7 +94,7 @@ class PatientHistory extends Component {
 							<TableRow key={row.examinationReportId}>
 								<TableCell><p class='text-white'>{row.date}</p></TableCell>
 								<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
-								<TableCell><p class='text-white'>Maybe?</p></TableCell>
+						<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>{row.status}</p></TableCell>
 								<TableCell><p class='text-white'>{row.doctor}</p></TableCell>
 								<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 								<TableCell><p class='text-white'>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>

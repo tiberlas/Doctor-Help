@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
+import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
 import com.ftn.dr_help.dto.PatientDTO;
-import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.PatientFilterDTO;
+import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
@@ -30,6 +31,7 @@ import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.model.pojo.TherapyPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.AllergyRepository;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ExaminationReportRepository;
 import com.ftn.dr_help.repository.HealthRecordRepository;
 import com.ftn.dr_help.repository.PatientRepository;
@@ -51,6 +53,8 @@ public class PatientService {
 	@Autowired
 	private ExaminationReportRepository examinationReportRepository;
 	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
 	
 	@Autowired
 	private HealthRecordRepository healthRecordRepository;
@@ -425,8 +429,13 @@ public class PatientService {
 	}
 
 	public List<PatientHistoryDTO> getPending(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		List<AppointmentPOJO> appointments = appointmentRepository.getPatientsPendingAppointments(patientRepository.findOneByEmail(email).getId());
+		List<PatientHistoryDTO> retVal = new ArrayList<PatientHistoryDTO> ();
+		for (AppointmentPOJO a : appointments) {
+			PatientHistoryDTO temp = new PatientHistoryDTO (a);
+			retVal.add(temp);
+		}
+		return retVal;
 	}
 	
 	
