@@ -95,13 +95,18 @@ class Patient extends Component {
                                 <HealthRecord />
                             </Route>
                             <Route exact path="/patient/history">
-                                <PatientHistory />
+                                <PatientHistory filter="NONE"/>
                             </Route>
                             <Route path="/patient/perscription">
                                 <PerscriptionOverview />
                             </Route>
                             <Route path="/clinic/">
                                 <DoctorListing />
+                            </Route>
+                            <Route path="/patient/appointmentList">
+                                <div>
+                                    <PatientHistory filter="PENDING" />
+                                </div>
                             </Route>
                             <Route path="/doctor/">
                                 <DoctorProfilePreview />

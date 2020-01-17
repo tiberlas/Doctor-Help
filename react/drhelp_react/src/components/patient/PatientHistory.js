@@ -10,16 +10,66 @@ import axios from 'axios';
 class PatientHistory extends Component {
 
 	state = {
-		reports: []
+		reports : [], 
+		filter : 'NONE', 
+		isUpToDate : false
 	}
 
 	componentDidMount () {
-		axios.get('http://localhost:8080/api/patients/history')
-		.then (response => {
-			this.setState ({
-				reports: response.data
-			})
+		this.updateComponent ();
+		this.setState ({
+			isUpToDate : true
 		})
+	}
+	
+	updateReports (data) {
+		this.setState ({
+			reports : data
+		})
+	}
+
+	// _onChangeReports () {
+	// 	alert ("New reports!");
+	// }
+
+	updateComponent () {
+		if (this.state.isUpToDate) {
+			return;
+		}
+		if (this.props.filter === 'NONE') {
+			// this.setState ({
+			// 	reports : []
+			// })
+			axios.get('http://localhost:8080/api/patients/history')
+			.then (response => {
+				//this.updateReports (response.data);
+				this.setState ({
+					reports: response.data, 
+					isUpToDate : false
+				})
+			});
+			//alert ("Unfiltered");
+		}
+		else if (this.props.filter === 'PENDING') {
+			// this.setState ({
+			// 	reports : []
+			// })
+			axios.get('http://localhost:8080/api/patients/pending')
+			.then (response => {
+				this.setState ({
+					reports : response.data,
+					isUpToDate : false
+				})
+			})
+			.catch ( response => {
+				this.setState ({
+					reports : [],
+					isUpToDate : false
+				})
+			}
+				
+			);
+		}
 	}
 
 	render () {
@@ -32,6 +82,7 @@ class PatientHistory extends Component {
 						<TableRow>
 							<TableCell><p class='text-success'>Date</p></TableCell>
 							<TableCell><p class='text-success'>Procedure Type</p></TableCell>
+							<TableCell><p class='text-success'>Approved</p></TableCell>
 							<TableCell><p class='text-success'>Doctor</p></TableCell>
 							<TableCell><p class='text-success'>Nurse</p></TableCell>
 							<TableCell><p class='text-success'>Perscription</p></TableCell>
@@ -43,6 +94,7 @@ class PatientHistory extends Component {
 							<TableRow key={row.examinationReportId}>
 								<TableCell><p class='text-white'>{row.date}</p></TableCell>
 								<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
+								<TableCell><p class='text-white'>Maybe?</p></TableCell>
 								<TableCell><p class='text-white'>{row.doctor}</p></TableCell>
 								<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 								<TableCell><p class='text-white'>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>

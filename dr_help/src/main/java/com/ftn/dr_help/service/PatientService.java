@@ -423,6 +423,11 @@ public class PatientService {
 			return null;
 		}
 	}
+
+	public List<PatientHistoryDTO> getPending(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	

@@ -27,11 +27,15 @@ class PatientHeader extends Component {
             <NavbarToggler aria-controls="basic-navbar-nav"/>
             <Collapse id="basic-navbar-nav" isOpen={this.state.dropdownAdd} navbar className="collapse">
             <Nav className="mr-auto">
-
-            <Nav.Link>
-                <Link exact to='/patient/clinicList' class="nav-link">Clinics</Link>
-            </Nav.Link>
-
+              <Nav.Link>
+                  <Link exact to='/patient/clinicList' class="nav-link">Clinics</Link>
+              </Nav.Link>
+              <Nav.Link>
+                  <Link exact to='/patient/appointmentList' class="nav-link">Requested Appointments</Link>
+              </Nav.Link>
+              <Nav.Link>
+                  <Link exact to='/patient/history' class="nav-link">Patient History</Link>
+              </Nav.Link>
             </Nav>
             <Nav className="justify-content-end" >
 

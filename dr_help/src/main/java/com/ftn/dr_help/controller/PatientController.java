@@ -174,10 +174,19 @@ public class PatientController {
 	@PreAuthorize("hasAuthority('PATIENT')")	
 	public ResponseEntity<List<PatientHistoryDTO>> getHistory () {
 		List<PatientHistoryDTO> retVal = patientService.getHistory(currentUser.getEmail());
+		if (retVal == null) {
+			retVal = new ArrayList<PatientHistoryDTO> ();
+		}
+		return new ResponseEntity<> (retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping (value="/pending")
+	@PreAuthorize("hasAuthority('PATIENT')")	
+	public ResponseEntity<List<PatientHistoryDTO>> getPendingAppointments () {
+		List<PatientHistoryDTO> retVal = patientService.getPending(currentUser.getEmail());
 		System.out.println("Zilav sam!!!1!");
 		if (retVal == null) {
 			retVal = new ArrayList<PatientHistoryDTO> ();
-			retVal.add(new PatientHistoryDTO ((long) 0, "", "", "", "", "", (long) 0));
 		}
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
