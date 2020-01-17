@@ -18,7 +18,7 @@ class PatientProfile extends Component {
                     		<label class="badge badge-success text-right">Insurance Number:</label>&nbsp;&nbsp;&nbsp;
                     		<label >{this.context.patient.insuranceNumber}</label>
                 		</div>
-						<div>
+						{/* <div>
 							<NavLink to = '/patient/health-record'>
 								Health Record
 							</NavLink>
@@ -27,7 +27,7 @@ class PatientProfile extends Component {
 							<NavLink to = '/patient/history'>
 								Patient History
 							</NavLink>
-						</div>
+						</div> */}
 						<div>
 							<NavLink to = '/patient/profile/change'>
 								Change profile

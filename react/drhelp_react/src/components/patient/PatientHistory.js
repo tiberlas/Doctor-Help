@@ -85,7 +85,7 @@ class PatientHistory extends Component {
 							<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Approved</p></TableCell>
 							<TableCell><p class='text-success'>Doctor</p></TableCell>
 							<TableCell><p class='text-success'>Nurse</p></TableCell>
-							<TableCell><p class='text-success'>Perscription</p></TableCell>
+							<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>Perscription</p></TableCell>
 							<TableCell><p class='text-success'>Clinic</p></TableCell>
 						</TableRow>
 					</TableHead>
@@ -97,7 +97,7 @@ class PatientHistory extends Component {
 						<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>{row.status}</p></TableCell>
 								<TableCell><p class='text-white'>{row.doctor}</p></TableCell>
 								<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
-								<TableCell><p class='text-white'>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
+								<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
 								<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
 							</TableRow>
 						))}		

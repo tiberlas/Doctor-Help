@@ -197,6 +197,7 @@ public class PatientController {
 		PerscriptionDisplayDTO retVal = patientService.getPerscription(examinationReportId);
 		
 		if (retVal == null) {
+			System.out.println("Nisam pronasao perscription " + examinationReportId);
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		}
 		

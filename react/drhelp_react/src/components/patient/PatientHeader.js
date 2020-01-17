@@ -36,6 +36,9 @@ class PatientHeader extends Component {
               <Nav.Link>
                   <Link exact to='/patient/history' class="nav-link">Patient History</Link>
               </Nav.Link>
+              <Nav.Link>
+                  <Link exact to='/patient/health-record' class="nav-link">Health record</Link>
+              </Nav.Link>
             </Nav>
             <Nav className="justify-content-end" >
 
