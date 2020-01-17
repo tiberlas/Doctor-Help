@@ -1,5 +1,7 @@
 package com.ftn.dr_help.service;
 
+import java.util.Calendar;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +40,6 @@ public class OperationService {
 		try {
 			
 			String freeSchedule = doctorService.checkOperationSchedue(request);
-			System.out.println(freeSchedule);
-			System.out.println(request.getDateAndTimeString());
 			if(freeSchedule.equals(request.getDateAndTimeString())) {
 				DoctorPOJO requestedDoctor = doctorRepository.findOneByEmail(emailOfRequestingDoctor);
 				DoctorPOJO doctor0 = doctorRepository.getOne(request.getDoctor0());
@@ -48,16 +48,11 @@ public class OperationService {
 			 	
 				AppointmentPOJO appointment = appointmentRepository.findOneById(request.getAppointmentId());
 				
-				System.out.println("appointment");
-				System.out.println(appointment.getId());
-				System.out.println(request.getAppointmentId());
-				
 				ProceduresTypePOJO operationType = appointment.getProcedureType();
 				
 				PatientPOJO patient = appointment.getPatient();
 				
 				if(requestedDoctor == null || doctor0 == null || doctor1 == null || doctor2 == null || operationType == null || patient == null) {
-					System.out.println("NULL VREDNOST");
 					return false;
 				}
 				
@@ -76,11 +71,33 @@ public class OperationService {
 				return true;
 			}
 			
-			System.out.println("VREME ME JEBE");
 			return false;
 		} catch (Exception e) {
 			System.out.println("GRESKA: ");
 			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean deleteRequested(Long operationId) {
+		try {
+			
+			OperationPOJO operation = operationRepository.getOne(operationId);
+			Calendar start = operation.getDate();
+			
+			//provera da li ima vise od 24h pre pocetka pregleda
+			Calendar now = Calendar.getInstance();
+			start.add(Calendar.DAY_OF_YEAR, -1); //24 sate pre operacije
+			if( now.before(start)) {
+				//moze da se obrise operacija
+				operation.setDeleted(true);
+				
+				operationRepository.save(operation);
+				return true;
+			}
+			
+			return false;
+		} catch(Exception e) {
 			return false;
 		}
 	}

@@ -1,14 +1,18 @@
 package com.ftn.dr_help.comon.schedule;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.ftn.dr_help.model.enums.DayEnum;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 
@@ -128,5 +132,163 @@ public class NiceScheduleBeginningTest {
 		assertTrue(day == 14 && hours == 0 && minutes == 0 && m == Calendar.AM);
 	}
 	
+	@Test
+	public void testOperation1() {
+		Calendar begin = Calendar.getInstance();
+		begin.set(Calendar.MONTH, Calendar.JANUARY);
+		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
+		begin.set(Calendar.HOUR, 0);
+		begin.set(Calendar.MINUTE, 0);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.MONDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.WEDNESDAY, Shift.FIRST));
+		
+		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
+		Calendar expected = Calendar.getInstance();
+		expected.set(Calendar.MONTH, Calendar.JANUARY);
+		expected.set(Calendar.DAY_OF_MONTH, 20); //ponedeljak
+		expected.set(Calendar.HOUR, 0);
+		expected.set(Calendar.MINUTE, 0);
+		expected.set(Calendar.SECOND, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertEquals(expected, finded);
+	}
 	
+	@Test
+	public void testOperation2() {
+		Calendar begin = Calendar.getInstance();
+		begin.set(Calendar.MONTH, Calendar.JANUARY);
+		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
+		begin.set(Calendar.HOUR, 0);
+		begin.set(Calendar.MINUTE, 0);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.FRIDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.SATURDAY, Shift.FIRST));
+		
+		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
+		Calendar expected = Calendar.getInstance();
+		expected.set(Calendar.MONTH, Calendar.JANUARY);
+		expected.set(Calendar.DAY_OF_MONTH, 17); //ponedeljak
+		expected.set(Calendar.HOUR, 0);
+		expected.set(Calendar.MINUTE, 0);
+		expected.set(Calendar.SECOND, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertEquals(expected, finded);
+	}
+	
+	@Test
+	public void testOperation3() {
+		Calendar begin = Calendar.getInstance();
+		begin.set(Calendar.MONTH, Calendar.JANUARY);
+		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
+		begin.set(Calendar.HOUR, 0);
+		begin.set(Calendar.MINUTE, 0);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.SUNDAY, Shift.FIRST));
+		
+		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
+		Calendar expected = Calendar.getInstance();
+		expected.set(Calendar.MONTH, Calendar.JANUARY);
+		expected.set(Calendar.DAY_OF_MONTH, 19); 
+		expected.set(Calendar.HOUR, 0);
+		expected.set(Calendar.MINUTE, 0);
+		expected.set(Calendar.SECOND, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertEquals(expected, finded);
+	}
+	
+	@Test
+	public void testOperation4() {
+		Calendar begin = Calendar.getInstance();
+		begin.set(Calendar.MONTH, Calendar.JANUARY);
+		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
+		begin.set(Calendar.HOUR, 0);
+		begin.set(Calendar.MINUTE, 0);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.MONDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.SATURDAY, Shift.FIRST));
+		
+		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
+		Calendar expected = Calendar.getInstance();
+		expected.set(Calendar.MONTH, Calendar.JANUARY);
+		expected.set(Calendar.DAY_OF_MONTH, 18);
+		expected.set(Calendar.HOUR, 0);
+		expected.set(Calendar.MINUTE, 0);
+		expected.set(Calendar.SECOND, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertEquals(expected, finded);
+	}
+	
+	@Test
+	public void testOperation5() {
+		Calendar begin = Calendar.getInstance();
+		begin.set(Calendar.MONTH, Calendar.JANUARY);
+		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
+		begin.set(Calendar.HOUR, 0);
+		begin.set(Calendar.MINUTE, 0);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.THURSDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.SUNDAY, Shift.FIRST));
+		
+		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
+		Calendar expected = Calendar.getInstance();
+		expected.set(Calendar.MONTH, Calendar.JANUARY);
+		expected.set(Calendar.DAY_OF_MONTH, 16); 
+		expected.set(Calendar.HOUR, 0);
+		expected.set(Calendar.MINUTE, 0);
+		expected.set(Calendar.SECOND, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertEquals(expected, finded);
+	}
+	
+	@Test
+	public void testOperation6() {
+		Calendar begin = Calendar.getInstance();
+		begin.set(Calendar.MONTH, Calendar.JANUARY);
+		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
+		begin.set(Calendar.HOUR, 10);
+		begin.set(Calendar.MINUTE, 32);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.THURSDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.SUNDAY, Shift.FIRST));
+		
+		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
+		Calendar expected = Calendar.getInstance();
+		expected.set(Calendar.MONTH, Calendar.JANUARY);
+		expected.set(Calendar.DAY_OF_MONTH, 16); 
+		expected.set(Calendar.HOUR, 10);
+		expected.set(Calendar.MINUTE, 32);
+		expected.set(Calendar.SECOND, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertEquals(expected, finded);
+	}
 }

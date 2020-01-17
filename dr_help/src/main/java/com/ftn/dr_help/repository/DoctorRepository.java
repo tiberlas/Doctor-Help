@@ -28,6 +28,13 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 	@Query(value = "select a.date from appointments a where a.deleted = FALSE and a.status <> 'DONE' and a.doctor_id = ?1 order by a.date", nativeQuery = true)
 	public List<Date> findAllReservedAppointments(Long doctorId);
 	
+	@Query(value = "select o.date from operations o where (o.first_doctor_id = ?1 or o.second_doctor_id = ?1 or third_doctor_id = ?1) and o.deleted = FALSE and o.status <> 'DONE'" , nativeQuery = true)
+	public List<Date> findAllReservedOperations(Long doctorId);
+	
 	@Query(value = "select d.* from doctors d where d.deleted <> TRUE and d.procedure_type_id = ?1", nativeQuery = true)
 	public List<DoctorPOJO> findAllDoctorsWihtSpetialization(long procedureTypeId);
+
+	@Query(value = "select ca.email from clinic_administrator ca inner join doctors d on (d.clinic_id = ca.clinic_id) where d.email = ?1", nativeQuery = true)
+	public List<String> findAllClinicAdminMails(String drMail);
+
 }

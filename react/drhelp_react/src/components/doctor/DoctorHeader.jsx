@@ -3,7 +3,8 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import {Link} from 'react-router-dom'
 import {DoctorContext} from '../../context/DoctorContextProvider';
- 
+import axios from 'axios';
+
 class DoctorHeader extends Component {
     static contextType = DoctorContext;
 
@@ -30,6 +31,14 @@ class DoctorHeader extends Component {
                   <Nav.Link>
                           <Link exact to='/doctor/patients' class="nav-link">Patients</Link>
                   </Nav.Link>
+
+                  {this.props.operation &&
+
+                    <Nav.Link>
+                      <Link exact to='/doctor/requested/operations' class="nav-link">Requested operations</Link>
+                    </Nav.Link>
+                  }
+
 
                 </Nav>
                 <Nav className="justify-content-end" style={{ width: "100%" }}>

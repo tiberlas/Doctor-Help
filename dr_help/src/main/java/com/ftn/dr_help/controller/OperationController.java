@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +36,18 @@ public class OperationController {
 		if(!success)
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<String>(HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping(value = "/requested={id}/delete")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> deleteRequestedOperation(@PathVariable("id") Long operationID) {
+		
+		boolean deleted = operationServie.deleteRequested(operationID);
+		
+		if(deleted) {
+			return new ResponseEntity<>("success", HttpStatus.ACCEPTED); //202
+		} else {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN); //403
+		}
 	}
 }

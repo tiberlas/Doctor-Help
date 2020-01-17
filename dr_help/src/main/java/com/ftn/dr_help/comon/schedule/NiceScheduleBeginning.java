@@ -1,6 +1,7 @@
 package com.ftn.dr_help.comon.schedule;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -72,5 +73,33 @@ public class NiceScheduleBeginning {
 			
 			++i;
 		}
+	}
+	
+	public Calendar setNiceOperationBegin(List<EqualDoctorShifts> equalShifts, Calendar begin) {
+		/*
+		 * vrati prida dan posle trazenog dana koji je u preseku radnih smena
+		 * */
+		Calendar niceBegin = Calendar.getInstance();
+		niceBegin.setTime(begin.getTime());
+	
+		for(int i=0; i<equalShifts.size(); ++i) {
+			int day = niceBegin.get(Calendar.DAY_OF_WEEK);
+
+			if(day == equalShifts.get(i).getDay().getValue()) {
+				return niceBegin;
+			} else if(day < equalShifts.get(i).getDay().getValue()) {
+				int goInFuture = equalShifts.get(i).getDay().getValue() - day;
+				niceBegin.add(Calendar.DAY_OF_MONTH, goInFuture);
+				return niceBegin;
+			} else {
+				if(i >= (equalShifts.size() - 1)) {
+					//pomeri se za nedelju dana
+					int goInFuture = day - equalShifts.get(0).getDay().getValue() + 1;
+					niceBegin.add(Calendar.DAY_OF_MONTH, goInFuture);
+				}					
+			}
+		}
+		
+		return niceBegin;
 	}
 }

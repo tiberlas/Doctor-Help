@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
@@ -25,6 +27,7 @@ import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.AppointmentService;
+import com.ftn.dr_help.service.DoctorService;
 import com.ftn.dr_help.service.PatientService;
 
 
@@ -38,6 +41,15 @@ public class AppointmentController {
 	
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private DoctorService doctorService;
+	
+	@Autowired
+	private Mail mailSender;
+	
+	@Autowired
+	private CurrentUser currentUser;
 	
 	@GetMapping(value = "/all_appointments/doctor={doctor_id}")
 	public ResponseEntity<List<DoctorAppointmentDTO>> getAllDoctorAppointments(@PathVariable("doctor_id") Long doctor_id) {
@@ -85,9 +97,21 @@ public class AppointmentController {
 	public ResponseEntity<String> createDoctorRequestedAppointment(@RequestBody DoctorRequestAppointmentDTO requestedAppointment) {
 		boolean success = appointmentService.doctorRequestAppointment(requestedAppointment);
 		
-		if(!success)
+		if(success) {
+			String drMail = currentUser.getEmail();
+			String dr = doctorService.getDoctorsFullName(drMail);
+			List<String> adminMails = doctorService.getAdminsMail(drMail); 
+			String type = appointmentService.getAppointmentType(requestedAppointment.getOldAppointmentID());
+			
+			for(String adminMail : adminMails) {
+				System.out.println("MAIL TO " + adminMail);
+				mailSender.sendAppointmentRequestEmail(adminMail, dr, type, requestedAppointment.getDateAndTime());				
+			}
+
+			return new ResponseEntity<String>(HttpStatus.CREATED);
+		} else {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
+		}
 	}
 	
 }

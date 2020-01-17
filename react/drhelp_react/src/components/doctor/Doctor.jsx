@@ -13,6 +13,7 @@ import DoctorCalendar from './DoctorCalendar'
 import HandlePatientList from './HandlePatientList.jsx';
 import DoctorVacation from './DoctorVacation.jsx';
 import StartAppointment from './StartAppointmnet.jsx';
+import DoctorRequestedOperations from './DoctorRequestedOperations.jsx';
 
 class Doctor extends Component {
     state = { 
@@ -25,13 +26,21 @@ class Doctor extends Component {
         state: "",
         phoneNumber: "",
         birthday: "",
-        clinicId: 1
+        clinicId: 1,
+        operation: false
      }
 
     static contextType = UserContext
 
     componentDidMount() {
         this.handleDoctor();
+
+        axios.get('http://localhost:8080/api/doctors/schedules/operation/requested/count')
+            .then(response => {
+                if(response.data == 'OPERATIONS') {
+                    this.setState({operation: true})
+                }
+            })
     }
 
     handleDoctor = () => {
@@ -57,7 +66,7 @@ class Doctor extends Component {
         return ( 
             <div>
                 <DoctorContextProvider doctor={doctor} >
-                    <DoctorHeader logout={() => this.props.logout ()}/>
+                    <DoctorHeader operation={this.state.operation} logout={() => this.props.logout ()}/>
 
                     <div>
                         <Switch>
@@ -68,6 +77,7 @@ class Doctor extends Component {
                             <Route exact path = "/doctor/schedule"><DoctorCalendar medical_staff = {doctor} regime='schedule'/></Route> 
                             <Route path="/profile/"> <ViewPatientProfile medical_staff = {doctor}/></Route>
                             <Route exact path = "/doctor/patients"><HandlePatientList /></Route>
+                            <Route exact path = "/doctor/requested/operations"><DoctorRequestedOperations /> </Route>
 
                         </Switch>
                     </div>

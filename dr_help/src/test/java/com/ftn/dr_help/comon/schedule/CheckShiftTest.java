@@ -1,15 +1,21 @@
 package com.ftn.dr_help.comon.schedule;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.ftn.dr_help.model.enums.DayEnum;
 import com.ftn.dr_help.model.enums.Shift;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
 
 @SpringBootTest
 public class CheckShiftTest {
@@ -250,5 +256,155 @@ public class CheckShiftTest {
 		assertTrue(retVal);
 	}
 
+	@Test
+	void shiftOperation1Test() {
+		DoctorPOJO dr1 = new DoctorPOJO();
+		DoctorPOJO dr2 = new DoctorPOJO();
+		DoctorPOJO dr3 = new DoctorPOJO();
+		
+		dr1.setMonday(Shift.NONE);
+		dr1.setTuesday(Shift.FIRST);
+		dr1.setWednesday(Shift.SECOND);
+		dr1.setThursday(Shift.NONE);
+		dr1.setFriday(Shift.NONE);
+		dr1.setSaturday(Shift.SECOND);
+		dr1.setSunday(Shift.NONE);
+		
+		dr2.setMonday(Shift.NONE);
+		dr2.setTuesday(Shift.FIRST);
+		dr2.setWednesday(Shift.SECOND);
+		dr2.setThursday(Shift.NONE);
+		dr2.setFriday(Shift.NONE);
+		dr2.setSaturday(Shift.SECOND);
+		dr2.setSunday(Shift.NONE);
+		
+		dr3.setMonday(Shift.NONE);
+		dr3.setTuesday(Shift.FIRST);
+		dr3.setWednesday(Shift.SECOND);
+		dr3.setThursday(Shift.NONE);
+		dr3.setFriday(Shift.NONE);
+		dr3.setSaturday(Shift.SECOND);
+		dr3.setSunday(Shift.NONE);
+		
+		List<EqualDoctorShifts> retVal = calculate.FindEqualDoctorShifts(dr1, dr2, dr3);
+		EqualDoctorShifts[] expected = new EqualDoctorShifts[] {
+			new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST),
+			new EqualDoctorShifts(DayEnum.WEDNESDAY, Shift.SECOND),
+			new EqualDoctorShifts(DayEnum.SATURDAY, Shift.SECOND)
+		};
+		
+		assertEquals(expected, retVal.toArray());
+	}
+	
+	@Test
+	void shiftOperation2Test() {
+		DoctorPOJO dr1 = new DoctorPOJO();
+		DoctorPOJO dr2 = new DoctorPOJO();
+		DoctorPOJO dr3 = new DoctorPOJO();
+		
+		dr1.setMonday(Shift.NONE);
+		dr1.setTuesday(Shift.FIRST);
+		dr1.setWednesday(Shift.SECOND);
+		dr1.setThursday(Shift.NONE);
+		dr1.setFriday(Shift.NONE);
+		dr1.setSaturday(Shift.SECOND);
+		dr1.setSunday(Shift.NONE);
+		
+		dr2.setMonday(Shift.NONE);
+		dr2.setTuesday(Shift.THIRD);
+		dr2.setWednesday(Shift.NONE);
+		dr2.setThursday(Shift.NONE);
+		dr2.setFriday(Shift.FIRST);
+		dr2.setSaturday(Shift.FIRST);
+		dr2.setSunday(Shift.NONE);
+		
+		dr3.setMonday(Shift.NONE);
+		dr3.setTuesday(Shift.FIRST);
+		dr3.setWednesday(Shift.THIRD);
+		dr3.setThursday(Shift.NONE);
+		dr3.setFriday(Shift.NONE);
+		dr3.setSaturday(Shift.THIRD);
+		dr3.setSunday(Shift.FIRST);
+		
+		List<EqualDoctorShifts> retVal = calculate.FindEqualDoctorShifts(dr1, dr2, dr3);
+		
+		assertEquals(null, retVal);
+	}
+	
+	@Test
+	void shiftOperation3Test() {
+		DoctorPOJO dr1 = new DoctorPOJO();
+		DoctorPOJO dr2 = new DoctorPOJO();
+		DoctorPOJO dr3 = new DoctorPOJO();
+		
+		dr1.setMonday(Shift.NONE);
+		dr1.setTuesday(Shift.FIRST);
+		dr1.setWednesday(Shift.SECOND);
+		dr1.setThursday(Shift.NONE);
+		dr1.setFriday(Shift.NONE);
+		dr1.setSaturday(Shift.SECOND);
+		dr1.setSunday(Shift.FIRST);
+		
+		dr2.setMonday(Shift.NONE);
+		dr2.setTuesday(Shift.FIRST);
+		dr2.setWednesday(Shift.SECOND);
+		dr2.setThursday(Shift.FIRST);
+		dr2.setFriday(Shift.NONE);
+		dr2.setSaturday(Shift.THIRD);
+		dr2.setSunday(Shift.NONE);
+		
+		dr3.setMonday(Shift.NONE);
+		dr3.setTuesday(Shift.FIRST);
+		dr3.setWednesday(Shift.SECOND);
+		dr3.setThursday(Shift.NONE);
+		dr3.setFriday(Shift.NONE);
+		dr3.setSaturday(Shift.SECOND);
+		dr3.setSunday(Shift.NONE);
+		
+		List<EqualDoctorShifts> retVal = calculate.FindEqualDoctorShifts(dr1, dr2, dr3);
+		EqualDoctorShifts[] expected = new EqualDoctorShifts[] {
+				new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST),
+				new EqualDoctorShifts(DayEnum.WEDNESDAY, Shift.SECOND),
+		};
+			
+		assertEquals(expected, retVal.toArray());
+	}
+	
+	@Test
+	void shiftOperation4Test() {
+		DoctorPOJO dr1 = new DoctorPOJO();
+		DoctorPOJO dr2 = new DoctorPOJO();
+		DoctorPOJO dr3 = new DoctorPOJO();
+		
+		dr1.setMonday(Shift.NONE);
+		dr1.setTuesday(Shift.FIRST);
+		dr1.setWednesday(Shift.THIRD);
+		dr1.setThursday(Shift.NONE);
+		dr1.setFriday(Shift.NONE);
+		dr1.setSaturday(Shift.SECOND);
+		dr1.setSunday(Shift.FIRST);
+		
+		dr2.setMonday(Shift.NONE);
+		dr2.setTuesday(Shift.FIRST);
+		dr2.setWednesday(Shift.SECOND);
+		dr2.setThursday(Shift.FIRST);
+		dr2.setFriday(Shift.NONE);
+		dr2.setSaturday(Shift.THIRD);
+		dr2.setSunday(Shift.FIRST);
+		
+		dr3.setMonday(Shift.NONE);
+		dr3.setTuesday(Shift.NONE);
+		dr3.setWednesday(Shift.SECOND);
+		dr3.setThursday(Shift.NONE);
+		dr3.setFriday(Shift.NONE);
+		dr3.setSaturday(Shift.SECOND);
+		dr3.setSunday(Shift.FIRST);
+		
+		List<EqualDoctorShifts> retVal = calculate.FindEqualDoctorShifts(dr1, dr2, dr3);
+		List<EqualDoctorShifts> expected = new ArrayList<EqualDoctorShifts>();
+		expected.add(new EqualDoctorShifts(DayEnum.SUNDAY, Shift.FIRST));
+			
+		assertEquals(expected, retVal);
+	}
 
 }

@@ -279,5 +279,11 @@ public class AppointmentService {
 			return false;
 		}
 	}
+	
+	public String getAppointmentType(Long id) {
+		AppointmentPOJO appointment = appointmentRepository.findOneById(id);
+		
+		return appointment.getProcedureType().getName();
+	}
 
 }

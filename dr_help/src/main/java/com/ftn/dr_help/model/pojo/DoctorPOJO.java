@@ -13,9 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -79,9 +76,10 @@ public class DoctorPOJO implements Serializable{
 	@OneToMany (mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<AppointmentPOJO> appointmentList;
 	
-	//@JsonManagedReference
-	@ManyToMany 
-	@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"))
+	@JsonManagedReference
+	//@ManyToMany 
+	//@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"))
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OperationPOJO> operationList;
 
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)

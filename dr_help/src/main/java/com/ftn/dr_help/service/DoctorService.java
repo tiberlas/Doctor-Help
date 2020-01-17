@@ -25,6 +25,7 @@ import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
+import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
 import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
@@ -34,11 +35,13 @@ import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
+import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
@@ -47,6 +50,9 @@ public class DoctorService {
 
 	@Autowired
 	private DoctorRepository repository;
+	
+	@Autowired
+	private OperationRepository operationRepository;
 	
 	@Autowired
 	private AppPasswordEncoder encoder;
@@ -516,58 +522,94 @@ public class DoctorService {
 		}
 	}
 	
-	private Calendar findFirstOperationSchedule(Long drId0, Long drId1, Long drId2, Calendar begin) throws Exception {
-		DoctorPOJO dr0 = repository.findById(drId0).orElse(null);
-		DoctorPOJO dr1 = repository.findById(drId1).orElse(null);
-		DoctorPOJO dr2 = repository.findById(drId2).orElse(null);
-		if(dr0 == null || dr1 == null || dr2 == null) {
-			return null;
-		}
-		
-		List<Date> dates0 = repository.findAllReservedAppointments(dr0.getId());
-		List<Date> dates1 = repository.findAllReservedAppointments(dr1.getId());
-		List<Date> dates2 = repository.findAllReservedAppointments(dr2.getId());
-		Calendar begin0 = (Calendar) begin.clone();
-		begin0.clear(Calendar.SECOND);
-		begin0.clear(Calendar.MILLISECOND);
-		
-		Calendar begin1 = (Calendar) begin0.clone();
-		Calendar begin2 = (Calendar) begin0.clone();
-		
-		Calendar free0 = null;
-		Calendar free1 = null;
-		Calendar free2 = null;
-		
-		//nadji privi slobodan termin koji odgovara svim doctorima
-		do {
-			
-			if(free0 != null) {
-				//znaci da je jedna iteracija prosla; sad treba samo begin da se pomeri za najveci nadjeni datum
-				
-				if(free0.after(free1) && free0.after(free2)) {
-					begin0 = (Calendar) free0.clone();
-				} else if(free1.after(free2)) {
-					begin0 = (Calendar) free1.clone();
-				} else {
-					begin0 = (Calendar) free2.clone();
-				}
-				
-				begin0.add(Calendar.DAY_OF_MONTH, 1);
-				begin1 = (Calendar) begin0.clone();
-				begin2 = (Calendar) begin0.clone();
+	public Calendar findFirstOperationSchedule(Long drId0, Long drId1, Long drId2, Calendar begin) {
+		try {
+			DoctorPOJO dr0 = repository.findById(drId0).orElse(null);
+			DoctorPOJO dr1 = repository.findById(drId1).orElse(null);
+			DoctorPOJO dr2 = repository.findById(drId2).orElse(null);
+			if(dr0 == null || dr1 == null || dr2 == null) {
+				System.out.println("ALL IS NULL");
+				return null;
 			}
 			
-			free0 = calculate.findFirstScheduleForDoctor(dr0, begin0, dates0);
-			free1 = calculate.findFirstScheduleForDoctor(dr1, begin1, dates1);
-			free2 = calculate.findFirstScheduleForDoctor(dr2, begin2, dates2);
+			List<Date> dates0 = repository.findAllReservedOperations(drId0);
+			List<Date> dates1 = repository.findAllReservedOperations(drId1);
+			List<Date> dates2 = repository.findAllReservedOperations(drId2);
 			
-			System.out.println("DEBUG FOR OPERATION");
-			System.out.println(dateConvertor.dateForFrontEndString(free0));
-			System.out.println(dateConvertor.dateForFrontEndString(free1));
-			System.out.println(dateConvertor.dateForFrontEndString(free2));
-		} while(! (free0.equals(free1) && free1.equals(free2)) );
-		
-		return free0;
+			System.out.println(begin.getTime());
+			if(calculate == null) {
+				calculate = new CalculateFirstFreeSchedule();
+			}
+			
+			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
+			//Calendar endOfEqualShift = Calendar.getInstance(); 
+			//endOfEqualShift.setTime(firstEqualShift.getTime());
+			//endOfEqualShift.add(Calendar.HOUR, 8);
+			
+			//provera da li svima odgovara termin
+			
+			
+			return firstEqualShift;
+		} catch(Exception e) {
+			System.out.println("EX1 " + e);
+			e.printStackTrace();
+			e.getStackTrace();
+			return null;
+		}
 	}
 	
+	public List<String> getAdminsMail(String drMail) {
+		List<String> adminMails = repository.findAllClinicAdminMails(drMail);
+		
+		return adminMails;
+	}
+	
+	public String getDoctorsFullName(String email) {
+		
+		DoctorPOJO dr = repository.findOneByEmail(email);
+		
+		return dr.getFirstName() + " " + dr.getLastName();
+	}
+	
+	public List<RequestedOperationScheduleDTO> getOperationRequests(String email) {
+		try {
+			
+			List<OperationPOJO> operations = operationRepository.getAllOperationRequests(email);
+			System.out.println(operations.get(0).getOperationType().getName());
+			
+			List<RequestedOperationScheduleDTO> finded = new ArrayList<>();
+			for(OperationPOJO operation : operations) {
+				finded.add(new RequestedOperationScheduleDTO(
+						operation.getId(),
+						operation.getOperationType().getName(), 
+						(operation.getPatient().getFirstName() +" "+ operation.getPatient().getLastName()), 
+						dateConvertor.dateForFrontEndString(operation.getDate()), 
+						("dr. "+ operation.getFirstDoctor().getFirstName() +" "+ operation.getFirstDoctor().getLastName()), 
+						("dr. "+ operation.getSecondDoctor().getFirstName() +" "+ operation.getSecondDoctor().getLastName()), 
+						("dr. "+ operation.getThirdDoctor().getFirstName() +" "+ operation.getThirdDoctor().getLastName()), 
+						operation.getStatus().toString()));
+			}
+			
+			return finded;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public boolean getOperationRequestsCount(String email) {
+		try {
+			
+			List<OperationPOJO> operations = operationRepository.getAllOperationRequests(email);
+			
+			if(operations == null || operations.isEmpty()) {
+				return false;
+			} else {
+				return true;
+			}
+			
+		} catch(Exception e) {
+			return false;
+		}
+	}
 }

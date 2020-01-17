@@ -32,6 +32,7 @@ import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
+import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
 import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
@@ -260,6 +261,34 @@ public class DoctorController {
 		} else {
 			return new ResponseEntity<>(schedule, HttpStatus.CREATED);//201
 		}
-		
 	}
+	
+	@GetMapping(value = "/schedules/operation/requested", produces = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<RequestedOperationScheduleDTO>> getAllOperationRequest() {
+		String email = currentUser.getEmail();
+		
+		List<RequestedOperationScheduleDTO> retVal = service.getOperationRequests(email);
+		
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping(value = "/schedules/operation/requested/count")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> getOperationRequestCount() {
+		String email = currentUser.getEmail();
+		
+		boolean retVal = service.getOperationRequestsCount(email);
+		System.out.println("broj operaciaj");
+		if(!retVal) {
+			return new ResponseEntity<>("NO OPERATIONS", HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>("OPERATIONS", HttpStatus.OK);
+		}
+	}
+	
 }

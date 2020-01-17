@@ -129,13 +129,30 @@ values(
 	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 7, false, 'NONE', 'NONE', 'NONE', 'SECOND', 'SECOND', 'THIRD', 'SECOND'
 );
 
+
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Psihoterapija', 25, false, 1, 1);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Opšta A', 30, false, 1, 2);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Opšta B', 31, false, 1, 1);
+insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
+	values('OPERACIONA SALA', 101, false, 1, 7);
 
+	--operacije 
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
+	values('2020-01-19 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
+	values('2020-01-19 12:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', true);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
+	values('2020-01-18 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
+	values('2020-01-18 13:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
+	values('2020-01-21 17:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
+			
+	
+	
 insert into healthrecord (blood_type, diopter, height, weight)
 values (
 	'A_NEGATIVE', 1.15, 1.75, 73
