@@ -285,5 +285,52 @@ public class AppointmentService {
 		
 		return appointment.getProcedureType().getName();
 	}
+	
+	public boolean canDelete(Long id) {
+		
+		try {
+
+			AppointmentPOJO appointment = appointmentRepository.findOneById(id);
+			if(appointment.isDeleted() == false && appointment.getStatus() != AppointmentStateEnum.DONE) {
+				Calendar now = Calendar.getInstance();
+				Calendar time = (Calendar) appointment.getDate().clone();
+				time.add(Calendar.DAY_OF_MONTH, -1);
+				
+				if( now.before(time)) {
+					return true;
+				}
+				
+			}
+			
+			return false;
+		} catch(Exception e) {
+			return false;
+		}
+		
+	}
+	
+	public boolean deleteRequested(Long id) {
+		try {
+			
+			AppointmentPOJO appointment = appointmentRepository.findOneById(id);
+			if(appointment.isDeleted() == false && appointment.getStatus() != AppointmentStateEnum.DONE) {
+				Calendar now = Calendar.getInstance();
+				Calendar time = (Calendar) appointment.getDate().clone();
+				time.add(Calendar.DAY_OF_MONTH, -1);
+					
+				if( now.before(time)) {
+					appointment.setDeleted(true);
+					
+					appointmentRepository.save(appointment);
+					return true;
+				}
+					
+			}
+			
+			return false;
+		} catch(Exception e) {
+			return false;
+		}
+	}
 
 }

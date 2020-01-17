@@ -83,7 +83,7 @@ public class OperationService {
 		try {
 			
 			OperationPOJO operation = operationRepository.getOne(operationId);
-			Calendar start = operation.getDate();
+			Calendar start = (Calendar) operation.getDate().clone();
 			
 			//provera da li ima vise od 24h pre pocetka pregleda
 			Calendar now = Calendar.getInstance();

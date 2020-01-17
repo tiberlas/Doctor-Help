@@ -114,4 +114,17 @@ public class AppointmentController {
 		}
 	}
 	
+	@GetMapping(value = "/requested={id}/can+delete")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> getCanDelete(@PathVariable("id") Long id) {
+		
+		boolean canDelete = appointmentService.canDelete(id);
+		
+		if(canDelete) {
+			return new ResponseEntity<>("CAN BE DELETED", HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+	}
+	
 }
