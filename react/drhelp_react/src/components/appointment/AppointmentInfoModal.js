@@ -1,11 +1,17 @@
 import React, {Fragment} from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import {Link} from 'react-router-dom'
+import axios from 'axios';
 
 class AppointmentInfoModal extends React.Component {
 
     state = {
-        showConfirmModal: false
+        showConfirmModal: false,
+        canDecline: false
+    }
+
+    handleDelete = () => {
+        alert("O YEAH")
     }
 
     checkCurrentDate = () => {
@@ -18,7 +24,16 @@ class AppointmentInfoModal extends React.Component {
 
 
     componentWillReceiveProps(props) {
-        this.setState({ showConfirmModal: props.showConfirmModal})
+        this.setState({ showConfirmModal: props.showConfirmModal}, () => {
+            axios.get('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/can+delete')
+            .then(response => {
+                if(response.data == 'CAN BE DELETED') {
+                    this.setState({canDecline: true});
+                }
+            }).catch(error => {
+                this.setState({canDecline: false});
+            })
+        })
     }
 
 
@@ -47,6 +62,9 @@ class AppointmentInfoModal extends React.Component {
                 </ModalBody>
                 <ModalFooter>
 
+            { this.state.canDecline &&
+                <Button color='warning' onClick={this.handleDelete}>Decline</Button>
+            }
         {!this.state.showConfirmModal ? <Fragment>
             <Button color="secondary" onClick={this.props.toggle}> Close</Button> 
         {(this.checkCurrentDate() && this.props.event.status === 'APPROVED') ? 

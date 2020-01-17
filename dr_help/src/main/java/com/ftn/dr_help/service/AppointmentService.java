@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.controller.DoctorRequestedAppointmentPOJO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
@@ -33,6 +34,7 @@ import com.ftn.dr_help.repository.ExaminationReportRepository;
 import com.ftn.dr_help.repository.MedicationRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.PerscriptionRepository;
+import com.ftn.dr_help.repository.RequestedAppointmentsRepository;
 import com.ftn.dr_help.repository.TherapyRepository;
 
 @Service
@@ -40,6 +42,9 @@ public class AppointmentService {
 
 	@Autowired
 	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private RequestedAppointmentsRepository requestedAppointmentsReposotory;
 	
 	@Autowired
 	private DiagnosisRepository diagnosisRepository;
@@ -271,6 +276,12 @@ public class AppointmentService {
 			newRequested.setProcedureType(old.getProcedureType());
 			newRequested.setStatus(AppointmentStateEnum.DOCTOR_REQUESTED_APPOINTMENT);
 			
+			//spoji appointment sa doktorom koji trazi
+			DoctorRequestedAppointmentPOJO requestApp = new DoctorRequestedAppointmentPOJO();
+			requestApp.setDoctor(old.getDoctor());
+			requestApp.setAppointment(newRequested);
+			requestedAppointmentsReposotory.save(requestApp);
+			
 			appointmentRepository.save(newRequested);
 			return true;
 		} catch(Exception e) {
@@ -286,12 +297,12 @@ public class AppointmentService {
 		return appointment.getProcedureType().getName();
 	}
 	
-	public boolean canDelete(Long id) {
+	public boolean canDelete(String email, Long id) {
 		
 		try {
 
-			AppointmentPOJO appointment = appointmentRepository.findOneById(id);
-			if(appointment.isDeleted() == false && appointment.getStatus() != AppointmentStateEnum.DONE) {
+			AppointmentPOJO appointment = appointmentRepository.getRequestedAppointment(email, id);
+			if(appointment != null && appointment.isDeleted() == false && appointment.getStatus() != AppointmentStateEnum.DONE) {
 				Calendar now = Calendar.getInstance();
 				Calendar time = (Calendar) appointment.getDate().clone();
 				time.add(Calendar.DAY_OF_MONTH, -1);
@@ -309,11 +320,11 @@ public class AppointmentService {
 		
 	}
 	
-	public boolean deleteRequested(Long id) {
+	public boolean deleteRequested(String email, Long id) {
 		try {
 			
-			AppointmentPOJO appointment = appointmentRepository.findOneById(id);
-			if(appointment.isDeleted() == false && appointment.getStatus() != AppointmentStateEnum.DONE) {
+			AppointmentPOJO appointment = appointmentRepository.getRequestedAppointment(email, id);
+			if(appointment != null && appointment.isDeleted() == false && appointment.getStatus() != AppointmentStateEnum.DONE) {
 				Calendar now = Calendar.getInstance();
 				Calendar time = (Calendar) appointment.getDate().clone();
 				time.add(Calendar.DAY_OF_MONTH, -1);

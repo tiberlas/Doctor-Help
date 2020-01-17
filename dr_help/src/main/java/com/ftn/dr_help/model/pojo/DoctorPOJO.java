@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ftn.dr_help.controller.DoctorRequestedAppointmentPOJO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.enums.Shift;
 
@@ -75,6 +76,9 @@ public class DoctorPOJO implements Serializable{
 	
 	@OneToMany (mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<AppointmentPOJO> appointmentList;
+	
+	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<DoctorRequestedAppointmentPOJO> request;
 	
 	@JsonManagedReference
 	//@ManyToMany 
@@ -294,5 +298,14 @@ public class DoctorPOJO implements Serializable{
 	public void setMustChangePassword(Boolean mustChangePassword) {
 		this.mustChangePassword = mustChangePassword;
 	}
+
+	public List<DoctorRequestedAppointmentPOJO> getRequest() {
+		return request;
+	}
+
+	public void setRequest(List<DoctorRequestedAppointmentPOJO> request) {
+		this.request = request;
+	}
+
 	
 }

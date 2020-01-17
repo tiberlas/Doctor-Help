@@ -196,12 +196,26 @@ values ('2020-1-22 10:30:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
 
 --for requesting a new appointment as doctor
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-14 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-1-17 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-15 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-1-18 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-16 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-1-19 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+--podaci za otkazivanje appointmenta
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-1-18 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-1-19 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-1-20 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 
+--veza doktor - requested appointment
+insert into doctor_requested(doctor_id, appointment_id)
+	values(1, 12);
+insert into doctor_requested(doctor_id, appointment_id)
+	values(1, 13);
+insert into doctor_requested(doctor_id, appointment_id)
+	values(1, 14);
 
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (3, 1, 1);
