@@ -95,7 +95,7 @@ class PatientHistory extends Component {
 								<TableCell><p class='text-white'>{row.date}</p></TableCell>
 								<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
 						<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>{row.status}</p></TableCell>
-								<TableCell><p class='text-white'>{row.doctor}</p></TableCell>
+								<TableCell><p class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></p></TableCell>
 								<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 								<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
 								<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
