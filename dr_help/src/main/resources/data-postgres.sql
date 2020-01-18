@@ -18,7 +18,7 @@ insert into centre_administrator(first_name, last_name, password, status, email,
 insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
 	values(
 		'Borislav','Borisavljević', '$2y$10$5ozpUNr/gCI4YGtih/eSiuWZ6C8L6FLlt4sGuJJbkbD0WxCQe3Mqe', 'CLINICAL_ADMINISTRATOR', 
-		'tiberlas1997@gmail.com', '06555555', 'Serbia', 'Novi Sad', 'Dom Kulture', '2003-2-1'::timestamp, 1 
+		'admin@admin', '06555555', 'Serbia', 'Novi Sad', 'Dom Kulture', '2003-2-1'::timestamp, 1 
 	);
 
 --password: maxBezbedno
