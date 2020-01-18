@@ -16,6 +16,7 @@ import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
+import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
@@ -341,6 +342,27 @@ public class AppointmentService {
 			return false;
 		} catch(Exception e) {
 			return false;
+		}
+	}
+	
+	public List<RequestingAppointmentDTO> getAllRequests(String email) {
+		try {
+			List<AppointmentPOJO> finded = appointmentRepository.getAllRequests(email);
+			List<RequestingAppointmentDTO> requests = new ArrayList<RequestingAppointmentDTO>();
+			
+			for(AppointmentPOJO request : finded) {
+				requests.add(new RequestingAppointmentDTO( 
+						request.getId(), 
+						dateConverter.dateForFrontEndString(request.getDate()), 
+						request.getProcedureType().getName(), 
+						request.getDoctor().getEmail(), 
+						request.getNurse().getEmail(), 
+						request.getPatient().getEmail()));
+			}
+			
+			return requests;
+		} catch(Exception e) {
+			return null;
 		}
 	}
 

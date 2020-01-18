@@ -208,6 +208,15 @@ insert into appointments (date, discount, status, doctor_id, examination_report_
 values ('2020-1-20 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-1-21 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+--podaci za rezervisanje sala
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-1-19 12:30:00', 0, 'DOCTOR_REQUESTED_APPOINTMENT', 1, null, 1, 1, 2, null, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-1-20 12:30:00', 0, 'DOCTOR_REQUESTED_APPOINTMENT', 1, null, 1, 1, 2, null, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-1-21 12:30:00', 0, 'REQUESTED', 1, null, 2, 1, 2, null, false);
+
+
 
 --veza doktor - requested appointment
 insert into doctor_requested(doctor_id, appointment_id)

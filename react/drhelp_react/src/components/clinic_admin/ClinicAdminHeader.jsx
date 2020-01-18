@@ -139,6 +139,27 @@ class ClinicAdminHeader extends Component {
                 </Nav>
             </Collapse>
 
+            <NavbarToggler onClick={this.toggle}/>
+            <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
+                <Nav className="mr-auto" navbar pullRight>
+                <UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                    Requests
+                    </DropdownToggle>
+                    <DropdownMenu className='dropdown-menu'>
+                    <LinkContainer exact to = '/clinic-administrator/requests/appointments'>
+                    <DropdownItem >Appointments</DropdownItem>
+                    </LinkContainer>
+                    
+                    <LinkContainer exact to='/clinic-administrator/requests/operations'>
+                    <DropdownItem >Operations</DropdownItem>
+                    </LinkContainer>
+
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+                </Nav>
+            </Collapse>
+
             </Nav>
             <Nav className="justify-content-end" >
 

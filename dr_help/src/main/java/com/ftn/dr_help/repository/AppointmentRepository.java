@@ -36,4 +36,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	
 	@Query( value = "select distinct a.* from doctors d inner join doctor_requested dr on (d.id = dr.doctor_id) inner join appointments a on (a.id = dr.appointment_id) where d.email= ?1 and a.id= ?2", nativeQuery = true)
 	AppointmentPOJO getRequestedAppointment(String doctorEmail, Long id);
+
+	@Query(value = "select a.* from \n" + 
+			"	appointments a inner join doctors d on d.id = a.doctor_id \n" + 
+			"	inner join clinic_administrator ca on ca.clinic_id = d.clinic_id\n" + 
+			"	where (a.status = 'REQUESTED' or a.status = 'DOCTOR_REQUESTED_APPOINTMENT') and (ca.email = ?1) order by a.id", nativeQuery = true)
+	List<AppointmentPOJO> getAllRequests(String clinicAdminMail);
 }

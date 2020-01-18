@@ -25,6 +25,7 @@ import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
+import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.AppointmentService;
@@ -140,6 +141,20 @@ public class AppointmentController {
 			return new ResponseEntity<>("DELETED", HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping(value = "/requests/all")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RequestingAppointmentDTO>> getAllRequestingAppointments() {
+		String email = currentUser.getEmail();
+		
+		List<RequestingAppointmentDTO> retVal = appointmentService.getAllRequests(email);
+		
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
 		}
 	}
 	
