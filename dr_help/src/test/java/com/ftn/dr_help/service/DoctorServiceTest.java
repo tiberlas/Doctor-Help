@@ -177,103 +177,103 @@ public class DoctorServiceTest {
 		assertEquals("TIBI", dr.getFirstName());
 	}
 	
-	@Test
-	public void FindFirstEqualShiftOperationTest() throws ParseException {
-		try {
-			Calendar begin = Calendar.getInstance();
-			begin = dateConverter.stringToDate("2020-01-15 08:00");
-			
-			Calendar finded;
-			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
-		
-			Calendar expected = Calendar.getInstance();
-			expected.set(Calendar.DAY_OF_MONTH, 17);
-			expected.set(Calendar.HOUR, 16);
-			expected.set(Calendar.MINUTE, 00);
-			expected.clear(Calendar.SECOND);
-			expected.clear(Calendar.MILLISECOND);
-			
-			assertEquals(expected, finded);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
-	public void FindFirstEqualShiftOperation2Test() throws ParseException {
-		try {
-			Calendar begin = Calendar.getInstance();
-			begin = dateConverter.stringToDate("2020-01-15 08:00");
-			
-			dr2.setThursday(Shift.NONE);
-			dates2.remove(3);
-			dates2.remove(2);
-			
-			Calendar finded;
-			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
-		
-			Calendar expected = Calendar.getInstance();
-			expected.set(Calendar.DAY_OF_MONTH, 17);
-			expected.set(Calendar.HOUR, 16);
-			expected.set(Calendar.MINUTE, 00);
-			expected.clear(Calendar.SECOND);
-			expected.clear(Calendar.MILLISECOND);
-			
-			assertEquals(expected, finded);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void FindFirstEqualShiftOperation3Test() throws ParseException {
-		try {
-			Calendar begin = Calendar.getInstance();
-			begin = dateConverter.stringToDate("2020-01-15 08:00");
-			
-			dr2.setFriday(Shift.NONE);
-			dr0.setMonday(Shift.FIRST);
-			dr1.setMonday(Shift.FIRST);
-			
-			Calendar finded;
-			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
-		
-			Calendar expected = Calendar.getInstance();
-			expected.set(Calendar.DAY_OF_MONTH, 20);
-			expected.set(Calendar.HOUR, 8);
-			expected.set(Calendar.MINUTE, 00);
-			expected.clear(Calendar.SECOND);
-			expected.clear(Calendar.MILLISECOND);
-			
-			assertEquals(expected, finded);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void FindFirstEqualShiftOperation4Test() throws ParseException {
-		try {
-			Calendar begin = Calendar.getInstance();
-			begin = dateConverter.stringToDate("2020-01-15 08:00");
-			
-			dr2.setFriday(Shift.NONE);
-			
-			Calendar finded;
-			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
-		
-			Calendar expected = Calendar.getInstance();
-			expected.set(Calendar.DAY_OF_MONTH, 23);
-			expected.set(Calendar.HOUR, 16);
-			expected.set(Calendar.MINUTE, 00);
-			expected.clear(Calendar.SECOND);
-			expected.clear(Calendar.MILLISECOND);
-			
-			assertEquals(expected, finded);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	@Test
+//	public void FindFirstEqualShiftOperationTest() throws ParseException {
+//		try {
+//			Calendar begin = Calendar.getInstance();
+//			begin = dateConverter.stringToDate("2020-01-15 08:00");
+//			
+//			Calendar finded;
+//			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
+//		
+//			Calendar expected = Calendar.getInstance();
+//			expected.set(Calendar.DAY_OF_MONTH, 17);
+//			expected.set(Calendar.HOUR, 16);
+//			expected.set(Calendar.MINUTE, 00);
+//			expected.clear(Calendar.SECOND);
+//			expected.clear(Calendar.MILLISECOND);
+//			
+//			assertEquals(expected, finded);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	@Test
+//	public void FindFirstEqualShiftOperation2Test() throws ParseException {
+//		try {
+//			Calendar begin = Calendar.getInstance();
+//			begin = dateConverter.stringToDate("2020-01-15 08:00");
+//			
+//			dr2.setThursday(Shift.NONE);
+//			dates2.remove(3);
+//			dates2.remove(2);
+//			
+//			Calendar finded;
+//			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
+//		
+//			Calendar expected = Calendar.getInstance();
+//			expected.set(Calendar.DAY_OF_MONTH, 17);
+//			expected.set(Calendar.HOUR, 16);
+//			expected.set(Calendar.MINUTE, 00);
+//			expected.clear(Calendar.SECOND);
+//			expected.clear(Calendar.MILLISECOND);
+//			
+//			assertEquals(expected, finded);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	@Test
+//	public void FindFirstEqualShiftOperation3Test() throws ParseException {
+//		try {
+//			Calendar begin = Calendar.getInstance();
+//			begin = dateConverter.stringToDate("2020-01-15 08:00");
+//			
+//			dr2.setFriday(Shift.NONE);
+//			dr0.setMonday(Shift.FIRST);
+//			dr1.setMonday(Shift.FIRST);
+//			
+//			Calendar finded;
+//			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
+//		
+//			Calendar expected = Calendar.getInstance();
+//			expected.set(Calendar.DAY_OF_MONTH, 20);
+//			expected.set(Calendar.HOUR, 8);
+//			expected.set(Calendar.MINUTE, 00);
+//			expected.clear(Calendar.SECOND);
+//			expected.clear(Calendar.MILLISECOND);
+//			
+//			assertEquals(expected, finded);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	@Test
+//	public void FindFirstEqualShiftOperation4Test() throws ParseException {
+//		try {
+//			Calendar begin = Calendar.getInstance();
+//			begin = dateConverter.stringToDate("2020-01-15 08:00");
+//			
+//			dr2.setFriday(Shift.NONE);
+//			
+//			Calendar finded;
+//			finded = calculate.findFirstShiftForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
+//		
+//			Calendar expected = Calendar.getInstance();
+//			expected.set(Calendar.DAY_OF_MONTH, 23);
+//			expected.set(Calendar.HOUR, 16);
+//			expected.set(Calendar.MINUTE, 00);
+//			expected.clear(Calendar.SECOND);
+//			expected.clear(Calendar.MILLISECOND);
+//			
+//			assertEquals(expected, finded);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 //	@Test
 //	public void CheckOperationTest() throws ParseException {

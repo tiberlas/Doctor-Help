@@ -107,4 +107,60 @@ public class CheckShift {
 		}
 	}
 	
+	public boolean isInShift(Calendar time, List<EqualDoctorShifts> equalShifts) {
+		
+		Calendar date = Calendar.getInstance();
+		date.setTime(time.getTime());
+		date.set(Calendar.SECOND, 0);
+		date.set(Calendar.MILLISECOND, 0);
+		
+		int day = date.get(Calendar.DAY_OF_WEEK);
+		
+		Calendar eight = (Calendar) date.clone();
+		eight.set(Calendar.MINUTE, 0);
+		eight.set(Calendar.HOUR, 8);
+		eight.set(Calendar.AM_PM, Calendar.AM);
+		
+		Calendar four = (Calendar) eight.clone();
+		four.set(Calendar.HOUR, 4);
+		four.set(Calendar.AM_PM, Calendar.PM);
+		
+		Calendar midnight = (Calendar) four.clone();
+		midnight.add(Calendar.DAY_OF_MONTH, -1);
+		midnight.set(Calendar.HOUR, 0);
+		midnight.set(Calendar.AM_PM, Calendar.AM);
+		
+		Calendar midnightPlusOne = (Calendar) four.clone();
+		midnightPlusOne.add(Calendar.DAY_OF_MONTH, 1);
+		midnightPlusOne.set(Calendar.HOUR, 0);
+		midnightPlusOne.set(Calendar.AM_PM, Calendar.AM);
+		
+		for(EqualDoctorShifts equalShift : equalShifts) {
+			if(day == equalShift.getDay().getValue()) {
+				switch(equalShift.getShift()) {
+					case FIRST:
+						if(date.compareTo(eight) >= 0 && date.compareTo(four) <= 0) {
+							return true;
+						} else {
+							return false;
+						}
+					case SECOND:
+						if(date.compareTo(four) >= 0 && date.compareTo(midnightPlusOne) <= 0) {
+							return true;
+						} else {
+							return false;
+						}
+					case THIRD:
+						if(date.compareTo(midnight) >= 0 && date.compareTo(eight) <= 0) {
+							return true;
+						} else {
+							return false;
+						}
+					default: break;
+				}
+			}
+		}
+		
+		return false;
+	} 
 }

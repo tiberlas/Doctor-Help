@@ -120,7 +120,7 @@ public class CalculateFirstFreeSchedule {
 			System.out.println("CURRENT BEGIN: " + convert.dateForFrontEndString(currentBegin));
 			System.out.println("CURRENT END: " + convert.dateForFrontEndString(currentEnd));
 			
-			if(begin.compareTo(currentEnd) > 0)
+			if(begin.compareTo(currentEnd) >= 0)
 				continue;
 			
 			//provera da li je termin zauzet
@@ -135,7 +135,7 @@ public class CalculateFirstFreeSchedule {
 				if(!checkWorkingDay(doctor, currentEnd)) {
 					niceBeginning.setNiceScheduleBeginning(doctor, currentEnd);
 					
-					if(currentEnd.compareTo(begin) < 0) {
+					if(currentEnd.compareTo(begin) <= 0) {
 						//vratio je za prethodni dan
 						currentEnd.add(Calendar.DAY_OF_MONTH, 1);
 						niceBeginning.setNiceScheduleBeginning(doctor, currentEnd);
@@ -228,6 +228,15 @@ public class CalculateFirstFreeSchedule {
 			Calendar free1 = null;
 			Calendar free2 = null;
 			
+			Calendar check0 = findFreeSchedule(dr0, begin0, dates0, true);
+			Calendar check1 = findFreeSchedule(dr1, begin0, dates1, true);
+			Calendar check2 = findFreeSchedule(dr2, begin0, dates2, true);
+			
+			if(check0 != null && check1 != null && check2 != null) {
+				//dati termin valja
+				return begin0;
+			}
+			
 			//nadji privi slobodan termin koji odgovara svim doctorima
 			do {
 				if(free0 != null) {
@@ -241,7 +250,20 @@ public class CalculateFirstFreeSchedule {
 						begin0.setTime(free2.getTime());
 					}
 					
-					begin0.add(Calendar.DAY_OF_MONTH, 1);
+					if(shift.isInShift(begin0, equalWorkDays)) {
+						//ovo je najveci datim sa zajednickim smenama
+						//provera da li svim lekarima odgovara ova datum
+						check0 = findFreeSchedule(dr0, begin0, dates0, true);
+						check1 = findFreeSchedule(dr1, begin0, dates1, true);
+						check2 = findFreeSchedule(dr2, begin0, dates2, true);
+						
+						if(check0 != null && check1 != null && check2 != null) {
+							//svim lekarima odgovara nadjeni datim
+							return begin0;
+						}
+					}
+					
+					begin0.add(Calendar.DAY_OF_MONTH, 1); //da bi algoritam progresovao
 					begin0.set(Calendar.HOUR, 0);
 					begin0.set(Calendar.MINUTE, 0);
 					begin0.set(Calendar.AM_PM, Calendar.AM);

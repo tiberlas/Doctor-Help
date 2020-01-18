@@ -293,7 +293,17 @@ public class CheckShiftTest {
 			new EqualDoctorShifts(DayEnum.SATURDAY, Shift.SECOND)
 		};
 		
-		assertEquals(expected, retVal.toArray());
+		if(retVal.size() != expected.length) {
+			assertTrue(false);
+		}
+		
+		for(int i=0; i<retVal.size(); ++i) {
+			if(!(retVal.get(i).getDay() == expected[i].getDay()) && (retVal.get(i).getShift() == expected[i].getShift())) {
+				assertTrue(false);
+			}
+		}
+		
+		assertTrue(true);
 	}
 	
 	@Test
@@ -367,7 +377,17 @@ public class CheckShiftTest {
 				new EqualDoctorShifts(DayEnum.WEDNESDAY, Shift.SECOND),
 		};
 			
-		assertEquals(expected, retVal.toArray());
+		if(retVal.size() != expected.length) {
+			assertTrue(false);
+		}
+		
+		for(int i=0; i<retVal.size(); ++i) {
+			if(!(retVal.get(i).getDay() == expected[i].getDay()) && (retVal.get(i).getShift() == expected[i].getShift())) {
+				assertTrue(false);
+			}
+		}
+		
+		assertTrue(true);
 	}
 	
 	@Test
@@ -404,7 +424,123 @@ public class CheckShiftTest {
 		List<EqualDoctorShifts> expected = new ArrayList<EqualDoctorShifts>();
 		expected.add(new EqualDoctorShifts(DayEnum.SUNDAY, Shift.FIRST));
 			
-		assertEquals(expected, retVal);
+		if(retVal.size() != expected.size()) {
+			assertTrue(false);
+		}
+		
+		for(int i=0; i<retVal.size(); ++i) {
+			if(!(retVal.get(i).getDay() == expected.get(i).getDay()) && (retVal.get(i).getShift() == expected.get(i).getShift())) {
+				assertTrue(false);
+			}
+		}
+		
+		assertTrue(true);
 	}
 
+	@Test
+	public void isInShiftTest1() {
+		Calendar time = Calendar.getInstance();
+		time.set(Calendar.YEAR, 2020);
+		time.set(Calendar.MONTH, 0);
+		time.set(Calendar.DAY_OF_MONTH, 17);
+		time.set(Calendar.HOUR, 1);
+		time.set(Calendar.MINUTE, 23);
+		time.set(Calendar.AM_PM, Calendar.PM);
+		time.set(Calendar.SECOND, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.THURSDAY, Shift.SECOND));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.FRIDAY, Shift.FIRST));
+		
+		
+		boolean ret = calculate.isInShift(time, equalShifts);
+		
+		assertTrue(ret);
+	}
+	
+	@Test
+	public void isInShiftTest2() {
+		Calendar time = Calendar.getInstance();
+		time.set(Calendar.YEAR, 2020);
+		time.set(Calendar.MONTH, 0);
+		time.set(Calendar.DAY_OF_MONTH, 17);
+		time.set(Calendar.HOUR, 1);
+		time.set(Calendar.MINUTE, 23);
+		time.set(Calendar.AM_PM, Calendar.PM);
+		time.set(Calendar.SECOND, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.THURSDAY, Shift.SECOND));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.FRIDAY, Shift.THIRD));
+		
+		
+		boolean ret = calculate.isInShift(time, equalShifts);
+		
+		assertFalse(ret);
+	}
+	
+	@Test
+	public void isInShiftTest3() {
+		Calendar time = Calendar.getInstance();
+		time.set(Calendar.YEAR, 2020);
+		time.set(Calendar.MONTH, 0);
+		time.set(Calendar.DAY_OF_MONTH, 17);
+		time.set(Calendar.HOUR, 1);
+		time.set(Calendar.MINUTE, 23);
+		time.set(Calendar.AM_PM, Calendar.PM);
+		time.set(Calendar.SECOND, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.FRIDAY, Shift.SECOND));
+		
+		
+		boolean ret = calculate.isInShift(time, equalShifts);
+		
+		assertFalse(ret);
+	}
+	
+	@Test
+	public void isInShiftTest4() {
+		Calendar time = Calendar.getInstance();
+		time.set(Calendar.YEAR, 2020);
+		time.set(Calendar.MONTH, 0);
+		time.set(Calendar.DAY_OF_MONTH, 17);
+		time.set(Calendar.HOUR, 8);
+		time.set(Calendar.MINUTE, 23);
+		time.set(Calendar.AM_PM, Calendar.PM);
+		time.set(Calendar.SECOND, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.FRIDAY, Shift.SECOND));
+		
+		
+		boolean ret = calculate.isInShift(time, equalShifts);
+		
+		assertTrue(ret);
+	}
+	
+	@Test
+	public void isInShiftTest5() {
+		Calendar time = Calendar.getInstance();
+		time.set(Calendar.YEAR, 2020);
+		time.set(Calendar.MONTH, 0);
+		time.set(Calendar.DAY_OF_MONTH, 17);
+		time.set(Calendar.HOUR, 2);
+		time.set(Calendar.MINUTE, 23);
+		time.set(Calendar.AM_PM, Calendar.AM);
+		time.set(Calendar.SECOND, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.FRIDAY, Shift.THIRD));
+		
+		
+		boolean ret = calculate.isInShift(time, equalShifts);
+		
+		assertTrue(ret);
+	}
 }

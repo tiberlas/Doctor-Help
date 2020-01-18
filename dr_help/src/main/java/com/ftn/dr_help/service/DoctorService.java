@@ -542,12 +542,6 @@ public class DoctorService {
 			}
 			
 			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
-			//Calendar endOfEqualShift = Calendar.getInstance(); 
-			//endOfEqualShift.setTime(firstEqualShift.getTime());
-			//endOfEqualShift.add(Calendar.HOUR, 8);
-			
-			//provera da li svima odgovara termin
-			
 			
 			return firstEqualShift;
 		} catch(Exception e) {

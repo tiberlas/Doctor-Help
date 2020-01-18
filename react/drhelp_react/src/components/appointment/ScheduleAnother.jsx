@@ -196,7 +196,7 @@ class ScheduleAnother extends Component {
         this.setState({selectedDoctor: doctors}, () => {
             if(this.state.selectedDoctor.length === 3) {
                 this.setState({errorDoctoCount: false})
-                axios.post("http://localhost:8080/api/doctors/schedules/first_free", {
+                axios.post("http://localhost:8080/api/doctors/schedules/operation/first_free", {
                     doctor0: this.state.selectedDoctor[0],
                     doctor1: this.state.selectedDoctor[1],
                     doctor2: this.state.selectedDoctor[2]

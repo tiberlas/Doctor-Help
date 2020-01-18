@@ -201,7 +201,7 @@ public class DoctorController {
 		return new ResponseEntity<>(date, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/schedules/first_free", produces = "application/json")
+	@PostMapping(value = "/schedules/operation/first_free", produces = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> getFirstFreeScheduleForThreeDoctors(@RequestBody ThreeDoctorsIdDTO doctors) {
 		
@@ -266,6 +266,7 @@ public class DoctorController {
 	@GetMapping(value = "/schedules/operation/requested", produces = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<List<RequestedOperationScheduleDTO>> getAllOperationRequest() {
+		//vraca listu operacija koje je lekar zakazao
 		String email = currentUser.getEmail();
 		
 		List<RequestedOperationScheduleDTO> retVal = service.getOperationRequests(email);
@@ -280,10 +281,10 @@ public class DoctorController {
 	@GetMapping(value = "/schedules/operation/requested/count")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> getOperationRequestCount() {
+		//vraca da li je lekar zakazao operacije; ako jeste na front-u vidi spisak operacija koje je on zakazao
 		String email = currentUser.getEmail();
 		
 		boolean retVal = service.getOperationRequestsCount(email);
-		System.out.println("broj operaciaj");
 		if(!retVal) {
 			return new ResponseEntity<>("NO OPERATIONS", HttpStatus.NOT_FOUND);
 		} else {

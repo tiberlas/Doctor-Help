@@ -149,7 +149,7 @@ public class CalculateFirstFreeOperationScheduleTest {
 	}
 	
 	@Test
-	public void test() {
+	public void test1() {
 		try {
 			
 			Calendar time = convertor.stringToDate("2020-01-17 16:35");
@@ -167,4 +167,89 @@ public class CalculateFirstFreeOperationScheduleTest {
 		}
 	}
 
+	@Test
+	public void test2() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 16:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar expected = convertor.stringToDate("2020-01-16 22:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void test3() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 2:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar expected = convertor.stringToDate("2020-01-16 22:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void test4() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 2:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2020, 0, 16, 22, 0);
+			
+			dates0.add(cal.getTime());
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar expected = convertor.stringToDate("2020-01-17 16:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void test5() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 2:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2020, 0, 16, 23, 0);
+			
+			dates0.add(cal.getTime());
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar expected = convertor.stringToDate("2020-01-17 16:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
