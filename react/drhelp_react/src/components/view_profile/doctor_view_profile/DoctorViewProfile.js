@@ -60,14 +60,10 @@ class DoctorViewProfile extends React.Component {
                     <div class="col-md-6">
                         <br/>
                         <br/> 
-                        {/* {this.state.displayHealthRecord &&  } */}
                         {this.state.display ?
                            <DoctorCalendar medical_staff = {this.state.doctor} regime={this.state.regime}/> :
                            <ShowMedicalStaffHealthRecord patient = {this.props.patient}/>
                         }
-                        {/* {this.state.displayMedicalHistory && <DoctorCalendar medical_staff = {this.state.doctor} regime='history' key={'history'}/>} */}
-                       
-                        {/* {!this.state.displayHealthRecord && !this.state.displayMedicalHistory && <DoctorCalendar medical_staff = {this.state.doctor} regime='profile'/>} */}
                     </div>
                 </div>
             </Fragment> 

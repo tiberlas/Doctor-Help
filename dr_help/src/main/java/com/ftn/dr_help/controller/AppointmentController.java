@@ -24,7 +24,6 @@ import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
-import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.service.AppointmentService;
 import com.ftn.dr_help.service.PatientService;
 
@@ -86,8 +85,6 @@ public class AppointmentController {
 		System.out.println("Date string: " + dateString);
 		
 		appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));
-		
-		
 		return null;
 	}
 	
@@ -127,6 +124,15 @@ public class AppointmentController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
+	}
+	
+	@GetMapping(value="/leave-request-appointments/nurse={id}")
+	public ResponseEntity<List<NurseAppointmentDTO>> 
+		getAvailableOrApprovedNurseAppointments(@PathVariable("id") Long id) {
+		
+		List<NurseAppointmentDTO> appointments = appointmentService.findAvailableOrApprovedNurseAppointments(id);
+		
+		return new ResponseEntity<List<NurseAppointmentDTO>>(appointments, HttpStatus.OK);
 	}
 	
 }

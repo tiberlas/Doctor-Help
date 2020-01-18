@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from "@fullcalendar/timegrid"
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import interaction from "@fullcalendar/interaction"
+import listPlugin from '@fullcalendar/list'
 import NurseAppointmentInfoModal from '../appointment/NurseAppointmentInfoModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
@@ -12,6 +13,7 @@ class NurseCalendar extends React.Component {
 
     state = {
         appointments: [],
+        businessHours: [],
         infoModal: false, 
         event: {
             id: 0,
@@ -33,12 +35,34 @@ class NurseCalendar extends React.Component {
       }
 
     componentDidMount() {
+      if(this.props.regime === 'schedule') {
             let url = 'http://localhost:8080/api/appointments/all_appointments/nurse=' + this.props.medical_staff.id 
             axios.get(url).then((response) => {
                 this.setState({
                   appointments: response.data
                 })
             })
+
+            axios.get('http://localhost:8080/api/nurses/nurse='+this.props.medical_staff.id+'/business-hours')
+            .then(response => {
+              this.setState({businessHours: response.data}, () => {
+                console.log('business hours:', this.state.businessHours)
+              })
+            })
+
+          }
+      }
+
+      componentWillReceiveProps(props) {
+        if(props.regime === 'history') {
+          let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
+          let url = 'http://localhost:8080/api/appointments/done_appointments/nurse/patient='+id
+          axios.get(url).then((response) => {
+            this.setState({
+              appointments: response.data
+            })
+          })
+        }
       }
 
 
@@ -109,30 +133,60 @@ class NurseCalendar extends React.Component {
 
         return(
             <div className='demo-app-calendar'> 
-                <FullCalendar defaultView="dayGridMonth" 
-            header={{
-                left: "prev,next, today",
-                center: "title",
-                right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
-            }}
-            buttonText={
-              {
-                prev: '<',
-                next: '>'
+                  {this.props.regime === 'schedule' && <FullCalendar defaultView="dayGridMonth" 
+              header={{
+                  left: "prev,next, today",
+                  center: "title",
+                  right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
+              }}
+              buttonText={
+                {
+                  prev: '<',
+                  next: '>'
+                }
               }
+              businessHours = { 
+                this.state.businessHours
+              }
+              selectable={true}
+              events = {this.generateEventList()}
+              eventLimit = {true}
+              eventRender={this.handleEventRender}
+              eventClick={this.handleEventClick}
+              plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
+            themeSystem = 'bootstrap' /> }
+
+
+              {this.props.regime === 'history' && <FullCalendar defaultView="listYear" //ako si na stranici pacijenta za history, list view
+          header={{
+            left: "",
+            center: "title",
+            right: "prev, next"
+          }}
+          buttonText={
+            {
+              prev: '<',
+              next: '>'
             }
-            selectable={true}
-            events = {this.generateEventList()}
-            eventLimit = {true}
-            eventRender={this.handleEventRender}
-            eventClick={this.handleEventClick}
-            plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
-            themeSystem = 'bootstrap' />
-            <NurseAppointmentInfoModal
-              event = {this.state.event}
-              modal = {this.state.infoModal}
-              toggle = {this.toggle}
-            />
+          } 
+          titleFormat={
+            {
+             year: 'numeric'
+            }
+          }
+          selectable={true}
+          events = {this.generateEventList()}
+          eventLimit = {true}
+          eventRender={this.handleEventRender}
+          eventClick={this.handleEventClick}
+          plugins={[ listPlugin, bootstrapPlugin, interaction]} 
+          themeSystem = 'bootstrap' />}
+              
+              <NurseAppointmentInfoModal
+                event = {this.state.event}
+                modal = {this.state.infoModal}
+                toggle = {this.toggle}
+              />
           </div>
         )
     }

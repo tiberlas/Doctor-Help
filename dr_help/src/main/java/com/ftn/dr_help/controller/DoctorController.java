@@ -28,6 +28,7 @@ import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -175,6 +176,20 @@ public class DoctorController {
 			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+	}
+	
+	@GetMapping(value="/doctor={id}/business-hours")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<BusinessDayHoursDTO>> getDoctorBusinessHours(@PathVariable("id") Long doctor_id) {
+		
+		List<BusinessDayHoursDTO> list = service.getDoctorBusinessHours(doctor_id);
+		
+		if(list == null) {
+			System.out.println("Error while calculating doctor business hours");
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		} else{
+			return new ResponseEntity<List<BusinessDayHoursDTO>>(list, HttpStatus.OK);
+		}
 	}
 	
 }

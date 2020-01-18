@@ -117,7 +117,7 @@ public class AppointmentService {
 		
 		List<AppointmentPOJO> list = appointmentRepository.findDoneAppointmentsForPatientWithId(patient_id);
 		
-		System.out.println("Done appointments za doktora");
+		System.out.println("Done appointments za nurse");
 		List<NurseAppointmentDTO> appointments = new ArrayList<NurseAppointmentDTO>();
 		int i = 0;
 		for (AppointmentPOJO appointmentPOJO : list) {
@@ -429,6 +429,23 @@ public class AppointmentService {
 		
 		return true;
 		
+	}
+	
+	
+	public List<NurseAppointmentDTO> findAvailableOrApprovedNurseAppointments(Long nurse_id) {
+		List<AppointmentPOJO> list = appointmentRepository.findAvailableOrApprovedNurseAppointments(nurse_id);
+
+		System.out.println("Leave request appointments za nurse");
+		List<NurseAppointmentDTO> appointments = new ArrayList<NurseAppointmentDTO>();
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+				System.out.println("-------------------" + i);
+				NurseAppointmentDTO dto = convertAppointmentToNurseDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+		}
+		
+		return appointments;
 	}
 	
 

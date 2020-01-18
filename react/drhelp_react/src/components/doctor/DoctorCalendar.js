@@ -11,15 +11,15 @@ import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
 import {DoctorContext} from '../../context/DoctorContextProvider'
 import equal from 'fast-deep-equal'
+import Moment from 'moment';
 
 class DoctorCalendar extends React.Component {
-
-
 
   static contextType = DoctorContext
 
   state = {
     appointments: [],
+    businessHours: [],
     infoModal: false,
     appointmentModal: false,
     showConfirmModal: false,
@@ -79,6 +79,14 @@ class DoctorCalendar extends React.Component {
               appointments: response.data
             })
         })
+
+        axios.get('http://localhost:8080/api/doctors/doctor='+this.props.medical_staff.id+'/business-hours')
+            .then(response => {
+              this.setState({businessHours: response.data}, () => {
+                console.log('business hours:', this.state.businessHours)
+              })
+            })
+
       }
   }
 
@@ -159,7 +167,7 @@ class DoctorCalendar extends React.Component {
   render() {
       return (
         <div className='demo-app-calendar'>
-          {this.props.regime==='schedule' &&  <FullCalendar defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
+          {this.props.regime==='schedule' &&  <FullCalendar id="FullCalendar" defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
           header={{
             left: "prev,next today",
             center: "title",
@@ -172,6 +180,20 @@ class DoctorCalendar extends React.Component {
             }
           }  
           selectable={true}
+
+          selectAllow={
+            function(selectInfo) {
+              return Moment().diff(selectInfo.start) <= 0
+            }
+          }
+          select={
+            function(info) {
+              alert('selected ' + info.startStr + ' to ' + info.endStr)
+            }
+          }
+          businessHours = { 
+            this.state.businessHours
+          }
           events = {this.generateEventList()}
           eventLimit = {true}
           eventRender={this.handleEventRender}
@@ -179,7 +201,7 @@ class DoctorCalendar extends React.Component {
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
           themeSystem = 'bootstrap' />} 
 
-        {this.props.regime==='profile' &&  <FullCalendar defaultView="listWeek" //ako si na stranici pacijenta, list view
+        {this.props.regime ==='profile' && this.generateEventList().length > 0 && <FullCalendar defaultView="listWeek" //ako si na stranici pacijenta, list view
           header={{
             left: "title",
             center: "Upcoming appointments",
@@ -191,15 +213,27 @@ class DoctorCalendar extends React.Component {
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}
           plugins={[ listPlugin, bootstrapPlugin, interaction]} 
-          themeSystem = 'bootstrap' />}
+          themeSystem = 'bootstrap' />} {
+          this.props.regime === 'profile' && this.generateEventList().length === 0 && <h2>No upcoming appointments. </h2> 
+          }
 
           {this.props.regime==='history' &&  <FullCalendar defaultView="listYear" //ako si na stranici pacijenta za history, list view
           header={{
-            left: "title",
-            center: "",
+            left: "",
+            center: "title",
             right: "prev, next"
           }}
-          
+          buttonText={
+            {
+              prev: '<',
+              next: '>'
+            }
+          } 
+          titleFormat={
+            {
+             year: 'numeric'
+            }
+          }
           selectable={true}
           events = {this.generateEventList()}
           eventLimit = {true}

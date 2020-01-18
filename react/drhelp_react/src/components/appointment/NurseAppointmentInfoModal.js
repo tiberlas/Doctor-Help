@@ -12,7 +12,7 @@ class NurseAppointmentInfoModal extends React.Component {
         report: {}
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps(props) { //ako je zavrsen appointment, prikazi izvestaj, u suprotnom ga ne prikazuj
         if(props.event.status === 'DONE') {
             axios.get('http://localhost:8080/api/nurses/perscription/appointment='+props.event.id).then(response => {
                 this.setState({report: response.data, showReport: true})

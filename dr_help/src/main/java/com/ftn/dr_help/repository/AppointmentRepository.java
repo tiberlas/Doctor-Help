@@ -40,4 +40,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query (value = "select * from appointments a where doctor_id = ?1 and deleted = false and date between ?2 and ?3", nativeQuery = true)
 	List<AppointmentPOJO> getDoctorsAppointments (Long doctorId, Calendar calendarMin, Calendar calendarMax); 
 	
+	/* -------------------za leave request medicinske sestre */
+	@Query(value="select distinct a.* from appointments a where a.nurse_id = ?1 and a.status = 'APPROVED' or a.status = 'AVAILABLE' and a.deleted = false", nativeQuery=true)
+	public List<AppointmentPOJO> findAvailableOrApprovedNurseAppointments(Long nurse_id);
+	/* -------------------za leave request doktora */
+	@Query(value="select distinct a.* from appointments a where a.doctor_id = ?1 and a.status = 'APPROVED' or a.status = 'AVAILABLE' and a.deleted = false", nativeQuery=true)
+	public List<AppointmentPOJO> findAvailableOrApprovedDoctorAppointments(Long doctor_id);
 }
