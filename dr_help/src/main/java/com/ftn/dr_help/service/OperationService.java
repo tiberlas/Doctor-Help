@@ -1,14 +1,17 @@
 package com.ftn.dr_help.service;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.model.enums.OperationStatus;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
+import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
@@ -34,6 +37,9 @@ public class OperationService {
 	
 	@Autowired
 	private DateConverter dateConvertor;
+	
+	@Autowired
+	private Mail mailSender;
 	
 	public boolean doctorRequestAppointment(OperationRequestDTO request, String emailOfRequestingDoctor) {
 		
@@ -68,6 +74,24 @@ public class OperationService {
 				operation.setStatus(OperationStatus.REQUESTED);
 				
 				operationRepository.save(operation);
+				
+				//poslati mejl adminu
+				List<ClinicAdministratorPOJO> admins = doctor0.getClinic().getClinicAdminList();
+				
+				for(ClinicAdministratorPOJO admin : admins) {
+					String requestingDoctorName = requestedDoctor.getFirstName() +" "+ requestedDoctor.getLastName();
+					String dr0Name =  doctor0.getFirstName() + " " + doctor0.getLastName();
+					String dr1Name = doctor1.getFirstName() + " " + doctor1.getLastName();
+					String dr2Name = doctor2.getFirstName() + " " + doctor2.getLastName();
+					mailSender.sendOperationRequestEmail(
+							admin.getEmail(), 
+							requestingDoctorName, 
+							dr0Name, 
+							dr1Name, 
+							dr2Name, 
+							operationType.getName(), 
+							freeSchedule);
+				}
 				return true;
 			}
 			

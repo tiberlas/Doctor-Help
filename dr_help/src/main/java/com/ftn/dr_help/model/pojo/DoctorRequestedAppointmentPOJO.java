@@ -1,4 +1,4 @@
-package com.ftn.dr_help.controller;
+package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 
@@ -10,9 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.ftn.dr_help.model.pojo.AppointmentPOJO;
-import com.ftn.dr_help.model.pojo.DoctorPOJO;
 
 @Entity
 @Table (name = "doctor_requested")

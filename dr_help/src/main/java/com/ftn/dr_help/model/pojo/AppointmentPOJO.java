@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.ftn.dr_help.controller.DoctorRequestedAppointmentPOJO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 
 @Entity

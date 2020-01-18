@@ -20,7 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ftn.dr_help.controller.DoctorRequestedAppointmentPOJO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.enums.Shift;
 
