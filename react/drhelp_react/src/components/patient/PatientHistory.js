@@ -12,7 +12,8 @@ class PatientHistory extends Component {
 	state = {
 		reports : [], 
 		filter : 'NONE', 
-		isUpToDate : false
+		isUpToDate : false, 
+		sortDate : 'unsorted'
 	}
 
 	componentDidMount () {
@@ -72,39 +73,78 @@ class PatientHistory extends Component {
 		}
 	}
 
+	renderArrowDate () {
+		if (this.state.sortDate === 'ascending') {
+			return '\u2191';
+		}
+		else if (this.state.sortDate === 'descending') {
+			return '\u2193';
+		}
+		else {
+			return '';
+		}
+	}
+
+	onSortChange (arg) {
+		if (this.state.sortDate === 'unsorted') {
+			this.setState ({
+				sortDate : 'ascending'
+			})
+		}
+		else if (this.state.sortDate === 'ascending') {
+			this.setState ({
+				sortDate : 'descending'
+			})
+		} 
+		else {
+			this.setState ({
+				sortDate : 'unsorted'
+			})
+		}
+		this.renderArrowDate();
+	}
+
+	// sortByDate (arg) {
+	// 	this.state.reports.sort((a > b) ?: (a:"date", b:"date") => number);
+	// }
+
 	render () {
+
+		// When viewing patient history, display a perscription Link;
+		// When viewing a pending appointment, display the satus (requested or approved)
+
 		return (
 			<div>
 				<div class='row d-flex justify-content-center'>
 					<div class='col-md-11'>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell><p class='text-success'>Date</p></TableCell>
-							<TableCell><p class='text-success'>Procedure Type</p></TableCell>
-							<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Approved</p></TableCell>
-							<TableCell><p class='text-success'>Doctor</p></TableCell>
-							<TableCell><p class='text-success'>Nurse</p></TableCell>
-							<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>Perscription</p></TableCell>
-							<TableCell><p class='text-success'>Clinic</p></TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{this.state.reports.map (row => (
-							<TableRow key={row.examinationReportId}>
-								<TableCell><p class='text-white'>{row.date}</p></TableCell>
-								<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
-						<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>{row.status}</p></TableCell>
-								<TableCell><p class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></p></TableCell>
-								<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
-								<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
-								<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
-							</TableRow>
-						))}		
-					</TableBody>
-				</Table>
-			</div>
-			</div>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Date{this.renderArrowDate()}</p></TableCell>
+									<TableCell><p class='text-success'>Procedure Type</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Status</p></TableCell>
+									<TableCell><p class='text-success'>Doctor</p></TableCell>
+									<TableCell><p class='text-success'>Nurse</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>Perscription</p></TableCell>
+									<TableCell><p class='text-success'>Clinic</p></TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{this.state.reports.sort((a, b) => (this.state.sortDate === 'ascending') ? (a.date < b.date) : (a.date > b.date)).map (row => (
+									<TableRow key={row.examinationReportId}>
+										<TableCell><p class='text-white'>{row.date}</p></TableCell>
+										<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>{row.status}</p></TableCell>
+										<TableCell><p class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></p></TableCell>
+										<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
+										<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
+									</TableRow>
+								))}		
+							</TableBody>
+						</Table>
+					</div>
+				</div>
 			</div>
 		);
 	}
