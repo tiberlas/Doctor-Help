@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -125,6 +126,20 @@ public class AppointmentController {
 			return new ResponseEntity<>("CAN BE DELETED", HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	@DeleteMapping(value = "/requested={id}/delete")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> deleteRequestedAppointment(@PathVariable("id") Long id) {
+		String email = currentUser.getEmail();
+		
+		boolean deleted = appointmentService.deleteRequested(email, id);
+
+		if(deleted) {
+			return new ResponseEntity<>("DELETED", HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

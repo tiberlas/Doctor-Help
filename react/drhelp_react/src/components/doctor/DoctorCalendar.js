@@ -33,7 +33,15 @@ class DoctorCalendar extends React.Component {
     }
   }
 
-  toggle = () => {
+  toggle = (id, declined) => {
+    if(declined == true) {
+      const items = this.state.appointments.filter(item => item.appointment_id != id);
+      this.setState({appointments: items}, () => {
+        console.log(this.state.appointments)
+        
+      });
+    }
+
     this.setState({ infoModal: !this.state.infoModal, showConfirmModal: false, showConfirmAppointment: false});
   }
 
@@ -171,7 +179,7 @@ class DoctorCalendar extends React.Component {
             event = {this.state.event} 
             confirmModal = {this.state.confirmModal}
             modal = {this.state.infoModal} 
-            toggle = {this.toggle} 
+            toggle = {(id, declined) => this.toggle(id, declined)} 
             toggleAppointment = {this.toggleAppointment}
            />
           <AppointmentModal 

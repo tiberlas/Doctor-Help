@@ -7,11 +7,18 @@ class AppointmentInfoModal extends React.Component {
 
     state = {
         showConfirmModal: false,
-        canDecline: false
+        canDecline: false,
+        showRequestDeclinedOK: false,
+        showRequestDeclinedBAD: false,
     }
 
     handleDelete = () => {
-        alert("O YEAH")
+        axios.delete('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/delete')
+            .then(response => {
+                this.setState({showRequestDeclinedOK: true})
+            }).catch(error=> {
+                this.setState({showRequestDeclinedBAD: true})
+            })
     }
 
     checkCurrentDate = () => {
@@ -24,15 +31,17 @@ class AppointmentInfoModal extends React.Component {
 
 
     componentWillReceiveProps(props) {
-        this.setState({ showConfirmModal: props.showConfirmModal}, () => {
-            axios.get('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/can+delete')
-            .then(response => {
-                if(response.data == 'CAN BE DELETED') {
-                    this.setState({canDecline: true});
-                }
-            }).catch(error => {
-                this.setState({canDecline: false});
-            })
+        this.setState({ showConfirmModal: props.showConfirmModal, canDecline: false, showRequestDeclinedOK: false, showRequestDeclinedBAD: false}, () => {
+            if(this.props.event.id > 0) {
+                axios.get('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/can+delete')
+                .then(response => {
+                    if(response.data == 'CAN BE DELETED') {
+                        this.setState({canDecline: true});
+                    }
+                }).catch(error => {
+                    this.setState({canDecline: false});
+                })
+            }
         })
     }
 
@@ -62,11 +71,11 @@ class AppointmentInfoModal extends React.Component {
                 </ModalBody>
                 <ModalFooter>
 
-            { this.state.canDecline &&
-                <Button color='warning' onClick={this.handleDelete}>Decline</Button>
-            }
         {!this.state.showConfirmModal ? <Fragment>
-            <Button color="secondary" onClick={this.props.toggle}> Close</Button> 
+            { this.state.canDecline &&
+                <Button color='warning' onClick={this.handleDelete} disabled={this.state.showRequestDeclinedOK}>Decline</Button>
+            }
+            <Button color="secondary" onClick={() => {this.props.toggle(this.props.event.id, this.state.showRequestDeclinedOK)}}> Close</Button> 
         {(this.checkCurrentDate() && this.props.event.status === 'APPROVED') ? 
         <Fragment>
             <Button color="primary" onClick = {() => {this.setState({showConfirmModal: true})}}>Start</Button>
@@ -82,6 +91,14 @@ class AppointmentInfoModal extends React.Component {
              <Button color = "secondary" onClick = {() => {this.setState({showConfirmModal: false})}}> Cancel</Button> 
              <Button color = "primary" onClick = {() => {this.props.toggleAppointment()}}>  Yes, my child.  </Button> 
             </Fragment>}
+
+            {this.state.showRequestDeclinedOK &&
+                <p> The appointment has been successfuly declined. </p>
+            }
+            {this.state.showRequestDeclinedBAD &&
+                <p class='text-warning'> The appointment could not declined. Try refreshing you page. </p>
+            }
+
                 </ModalFooter> 
 
               
