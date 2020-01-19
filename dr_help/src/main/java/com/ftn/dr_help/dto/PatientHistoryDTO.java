@@ -51,7 +51,7 @@ public class PatientHistoryDTO {
 		this.clinicId = appointment.getDoctor().getClinic().getId();
 		this.doctorId = appointment.getDoctor().getId();
 		this.nurseId = appointment.getNurse().getId();
-		// TODO: Dovrsi ovo formatiranje
+		this.appointmentId = appointment.getId();
 	}
 	
 	String status;
@@ -64,6 +64,7 @@ public class PatientHistoryDTO {
 	Long clinicId;
 	Long doctorId;
 	Long nurseId;
+	Long appointmentId;
 	
 	public Long getExaminationReportId() {
 		return examinationReportId;
@@ -124,6 +125,12 @@ public class PatientHistoryDTO {
 	}
 	public void setNurseId(Long nurseId) {
 		this.nurseId = nurseId;
+	}
+	public Long getAppointmentId() {
+		return appointmentId;
+	}
+	public void setAppointmentId(Long appointmentId) {
+		this.appointmentId = appointmentId;
 	}
 	
 }

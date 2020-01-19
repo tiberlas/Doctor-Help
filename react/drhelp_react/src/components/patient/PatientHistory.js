@@ -6,6 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import Button from 'react-bootstrap/Button';
 
 class PatientHistory extends Component {
 
@@ -108,6 +109,10 @@ class PatientHistory extends Component {
 	// 	this.state.reports.sort((a > b) ?: (a:"date", b:"date") => number);
 	// }
 
+	handleCancel (appointmentId) {
+		alert ("Canceling appointment " + appointmentId);
+	}
+
 	render () {
 
 		// When viewing patient history, display a perscription Link;
@@ -127,6 +132,7 @@ class PatientHistory extends Component {
 									<TableCell><p class='text-success'>Nurse</p></TableCell>
 									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>Perscription</p></TableCell>
 									<TableCell><p class='text-success'>Clinic</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Cancel appointment</p></TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
@@ -139,6 +145,7 @@ class PatientHistory extends Component {
 										<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
 										<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}><Button onClick={() => this.handleCancel(row.appointmentId)}>Cancel</Button></p></TableCell>
 									</TableRow>
 								))}		
 							</TableBody>
