@@ -70,5 +70,23 @@ public class LeaveRequestController {
 		
 		return new ResponseEntity<List<LeaveRequestDTO>>(list, HttpStatus.OK);
 	}
+	
+	@GetMapping(value="/get-approved/nurse={id}")
+	@PreAuthorize("hasAuthority('NURSE')")
+	public ResponseEntity<List<LeaveRequestDTO>> getApprovedNurseRequests(@PathVariable("id") Long nurse_id) {
+		
+		List<LeaveRequestDTO> list = leaveRequestService.getApprovedNurseRequests(nurse_id);
+		
+		return new ResponseEntity<List<LeaveRequestDTO>>(list, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/get-approved/doctor={id}")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<LeaveRequestDTO>> getApprovedDoctorRequests(@PathVariable("id") Long doctor_id) {
+		
+		List<LeaveRequestDTO> list = leaveRequestService.getApprovedDoctorRequests(doctor_id);
+		
+		return new ResponseEntity<List<LeaveRequestDTO>>(list, HttpStatus.OK);
+	}
 
 }

@@ -2,7 +2,7 @@ import React, {Fragment} from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-import Moment from 'moment';
+import Moment from 'moment'; //library for comparing dates
 
 import './fade-modal.css'
 
@@ -27,8 +27,8 @@ class LeaveRequestModal extends React.Component {
         ableToRequest: true,
         leaveType: "Personal leave",
         note: "", 
-        showNote: false,
-        successInfo: false,
+        showNote: false, //show textarea when button is clicked
+        successInfo: false, //if request is saved on back-end -> true
         id: this.props.id, //medical staff id
         role: this.props.role //medical staff role
     }
@@ -40,13 +40,13 @@ class LeaveRequestModal extends React.Component {
         })
     }
 
-    componentDidMount() {
-        let able = true
+    componentDidMount() { //validate my request with this.props.selectedDates which contains startDate and endDate
+        let able = true //able means able to make a leave request
         for(let i = 0; i < this.props.appointments.length; i++) {
             let appointmentStartDate = new Date(this.props.appointments[i].startDate)
             let selectedBeginDate = new Date(this.props.selectedDates.startStr)
             let selectedEndDate = new Date(this.props.selectedDates.endStr)
-            if(Moment(appointmentStartDate).isAfter(selectedBeginDate) && Moment(appointmentStartDate).isBefore(selectedEndDate)) {
+            if(Moment(appointmentStartDate).isAfter(selectedBeginDate) && Moment(appointmentStartDate).isBefore(selectedEndDate)) { //are there any appointments between my selected dates?
                 able = false
             }
         }
@@ -58,7 +58,10 @@ class LeaveRequestModal extends React.Component {
 
     displayUnableToRequest = () => { //if overlapping dates, unable to make a request
         let startDate = new Date(this.props.selectedDates.startStr).toLocaleDateString("en-US")
-        let endDate = new Date(this.props.selectedDates.endStr).toLocaleDateString("en-US")
+        
+        let endDate = new Date(this.props.selectedDates.endStr)
+        endDate.setDate(endDate.getDate()-1)
+        endDate = endDate.toLocaleDateString("en-US")
         
         return <Fragment>  
             <div class="row d-flex justify-content-center">
@@ -71,13 +74,17 @@ class LeaveRequestModal extends React.Component {
     }
 
     displayAbleToRequest = () => {
+
+        let endDate = new Date(this.props.selectedDates.endStr)
+        endDate.setDate(endDate.getDate()-1) //javascript calendar goes 1 day ahead, so i must reduce it by 1
+
        return <Fragment>                
                     <div class="row d-flex justify-content-center">
                         <div class='col-md-11'>
                           
                             <strong> Start:  </strong>&emsp; {new Date(this.props.selectedDates.startStr).toLocaleDateString("en-US")}
                             <br/>
-                            <strong> End: </strong> &emsp; {new Date(this.props.selectedDates.endStr).toLocaleDateString("en-US")}
+                            <strong> End: </strong> &emsp; {endDate.toLocaleDateString("en-US")}
                         </div>
                     </div>
 
@@ -137,6 +144,9 @@ class LeaveRequestModal extends React.Component {
             leaveTypeData = "PERSONAL"
         }
         
+        let endDate = new Date(this.props.selectedDates.endStr)
+        endDate.setDate(endDate.getDate()-1)
+
         if(this.state.role === 'NURSE') {
             axios.post('http://localhost:8080/api/leave-requests/add/nurse='+this.state.id, 
             {
@@ -145,7 +155,7 @@ class LeaveRequestModal extends React.Component {
                 staffId: this.state.id,
                 staffRole: "NURSE",
                 startDate: new Date(this.props.selectedDates.startStr),
-                endDate: new Date(this.props.selectedDates.endStr)
+                endDate: endDate
 
             }).then(response => {
                 this.setState({successInfo: true}, () => {
@@ -173,10 +183,8 @@ class LeaveRequestModal extends React.Component {
     }
 
     render() {
-        console.log('states are:', this.state)
         return (
             <Fragment>
-
                             <Modal
                             isOpen={this.props.modal}
                             toggle={this.props.toggle}
@@ -184,22 +192,18 @@ class LeaveRequestModal extends React.Component {
                             <ModalHeader toggle={this.props.toggle}>
                             {!this.state.ableToRequest ? <>Unable to request</> : <> New request overview </> } 
                             </ModalHeader>
-
-                           
-                                    <ModalBody>
+                                    <ModalBody> {/* able to request means the selected dates are validated */}
                                     
                                             {!this.state.ableToRequest && this.displayUnableToRequest()}
                                             {this.state.ableToRequest && this.displayAbleToRequest()}            
                                 
                                     </ModalBody>
-                           
                             <ModalFooter>
                                 
                         <Button color="secondary" onClick={this.props.toggle}> Cancel</Button>
                         {this.state.ableToRequest 
                         && <Button color="primary" onClick={this.handleConfirm}> Submit </Button>}
                             </ModalFooter>
-                        
                         </Modal>
                         
             </Fragment>

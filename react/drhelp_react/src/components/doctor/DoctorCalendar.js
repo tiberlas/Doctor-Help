@@ -10,8 +10,6 @@ import AppointmentModal from '../appointment/AppointmentModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
 import {DoctorContext} from '../../context/DoctorContextProvider'
-import equal from 'fast-deep-equal'
-import Moment from 'moment';
 
 class DoctorCalendar extends React.Component {
 
@@ -19,6 +17,7 @@ class DoctorCalendar extends React.Component {
 
   state = {
     appointments: [],
+    approvedLeaves: [], //approved leave requests for background events
     businessHours: [],
     infoModal: false,
     appointmentModal: false,
@@ -50,6 +49,11 @@ class DoctorCalendar extends React.Component {
 
 
   handleEventClick = ({ event, el }) => {
+    
+    if(event.extendedProps.leave === true) { //ako je leave request, iskaci
+      return
+    }
+
     this.toggle();
     this.setState({ 
         event: {
@@ -71,21 +75,22 @@ class DoctorCalendar extends React.Component {
 
   componentDidMount() {
     if(this.props.regime === 'schedule') {
-      console.log('doca', this.context.doctor.firstName)
         this.setState({regime: 'schedule'})
-        let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.props.medical_staff.id 
+        let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.context.doctor.id 
         axios.get(url).then((response) => {
             this.setState({
               appointments: response.data
             })
         })
 
-        axios.get('http://localhost:8080/api/doctors/doctor='+this.props.medical_staff.id+'/business-hours')
+        axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id +'/business-hours')
             .then(response => {
               this.setState({businessHours: response.data}, () => {
-                console.log('business hours:', this.state.businessHours)
               })
             })
+
+        axios.get('http://localhost:8080/api/leave-requests/get-approved/doctor='+this.context.doctor.id)
+            .then(response => {this.setState({approvedLeaves: response.data})})
 
       }
   }
@@ -94,7 +99,7 @@ class DoctorCalendar extends React.Component {
     if(this.props.regime === 'profile') {
       this.setState({regime: 'profile'})
       let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
-      let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+props.medical_staff.id+'/patient='+id
+      let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+this.context.doctor.id+'/patient='+id
       axios.get(url).then((response) => {
         this.setState({
           appointments: response.data
@@ -164,6 +169,32 @@ class DoctorCalendar extends React.Component {
     return events
   }
 
+  generateLeaveRequestsEventList = () => {
+    let events = []
+    for(let i = 0; i < this.state.approvedLeaves.length; i++)
+    {
+      let request = this.state.approvedLeaves[i]
+      let start = new Date(request.startDate).toISOString()
+      
+      let endDate = new Date(request.endDate)
+      endDate.setDate(endDate.getDate() + 1)
+      let end = endDate.toISOString()
+
+      let event = {
+          start: start,
+          end: end,
+          rendering: 'background',
+          color: '#ff9f89',
+          allDay: true,
+          leave: true
+      }
+
+      events.push(event)
+    }
+
+    return events
+  }
+
   render() {
       return (
         <div className='demo-app-calendar'>
@@ -182,7 +213,14 @@ class DoctorCalendar extends React.Component {
           businessHours = { 
             this.state.businessHours
           }
-          events = {this.generateEventList()}
+          eventSources = {
+           [
+             this.generateEventList(),
+             this.generateLeaveRequestsEventList()
+           ]
+          }
+          nowIndicator={true}
+          //events = {this.generateEventList()}
           eventLimit = {true}
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}

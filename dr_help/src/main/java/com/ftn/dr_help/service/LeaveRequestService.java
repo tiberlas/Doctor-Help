@@ -99,25 +99,52 @@ public class LeaveRequestService {
 	
 	
 	
+	//for request history table
 	public List<LeaveRequestDTO> getNurseRequests(Long nurse_id) {
 		List<LeaveRequestPOJO> list = leaveRequestRepository.getNurseLeaveRequests(nurse_id);
 		
 		List<LeaveRequestDTO> dtoList = new ArrayList<LeaveRequestDTO>();
 		for (LeaveRequestPOJO leaveRequestPOJO : list) {
-			LeaveRequestDTO dto = convertRequestToDTO(leaveRequestPOJO, RoleEnum.NURSE);
+			LeaveRequestDTO dto = convertRequestToDTO(leaveRequestPOJO);
 			dtoList.add(dto);
 		}
 		
 		return dtoList;
 	}
 	
+	//for schedule display
+	public List<LeaveRequestDTO> getApprovedNurseRequests(Long nurse_id) {
+		List<LeaveRequestPOJO> list = leaveRequestRepository.getNurseApprovedLeaveRequests(nurse_id);
+		
+		List<LeaveRequestDTO> dtoList = new ArrayList<LeaveRequestDTO>();
+		for (LeaveRequestPOJO leaveRequestPOJO : list) {
+			LeaveRequestDTO dto = convertRequestToDTO(leaveRequestPOJO);
+			dtoList.add(dto);
+		}
+		
+		return dtoList;
+	}
 	
+	//for request history table
 	public List<LeaveRequestDTO> getDoctorRequests(Long doctor_id) {
 		List<LeaveRequestPOJO> list = leaveRequestRepository.getDoctorLeaveRequests(doctor_id);
 		
 		List<LeaveRequestDTO> dtoList = new ArrayList<LeaveRequestDTO>();
 		for (LeaveRequestPOJO leaveRequestPOJO : list) {
-			LeaveRequestDTO dto = convertRequestToDTO(leaveRequestPOJO, RoleEnum.NURSE);
+			LeaveRequestDTO dto = convertRequestToDTO(leaveRequestPOJO);
+			dtoList.add(dto);
+		}
+		
+		return dtoList;
+	}
+	
+	//for schedule display
+	public List<LeaveRequestDTO> getApprovedDoctorRequests(Long doctor_id) {
+		List<LeaveRequestPOJO> list = leaveRequestRepository.getDoctorApprovedLeaveRequests(doctor_id);
+		
+		List<LeaveRequestDTO> dtoList = new ArrayList<LeaveRequestDTO>();
+		for (LeaveRequestPOJO leaveRequestPOJO : list) {
+			LeaveRequestDTO dto = convertRequestToDTO(leaveRequestPOJO);
 			dtoList.add(dto);
 		}
 		
@@ -125,7 +152,7 @@ public class LeaveRequestService {
 	}
 	
 	
-	private LeaveRequestDTO convertRequestToDTO(LeaveRequestPOJO request, RoleEnum role) {
+	private LeaveRequestDTO convertRequestToDTO(LeaveRequestPOJO request) {
 		
 			LeaveRequestDTO dto = new LeaveRequestDTO();
 			dto.setStartDate(request.getFirstDay().getTime());
@@ -135,5 +162,5 @@ public class LeaveRequestService {
 			dto.setLeaveStatus(request.getLeaveStatus());
 			
 			return dto;
-		}
+	}
 }

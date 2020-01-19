@@ -8,12 +8,16 @@ import listPlugin from '@fullcalendar/list'
 import NurseAppointmentInfoModal from '../appointment/NurseAppointmentInfoModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
+import {NurseContext} from '../../context/NurseContextProvider'
 
 class NurseCalendar extends React.Component {
+
+  static contextType = NurseContext
 
     state = {
         appointments: [],
         businessHours: [],
+        approvedLeaves: [],
         infoModal: false, 
         event: {
             id: 0,
@@ -36,19 +40,23 @@ class NurseCalendar extends React.Component {
 
     componentDidMount() {
       if(this.props.regime === 'schedule') {
-            let url = 'http://localhost:8080/api/appointments/all_appointments/nurse=' + this.props.medical_staff.id 
+            let url = 'http://localhost:8080/api/appointments/all_appointments/nurse=' + this.context.nurse.id 
             axios.get(url).then((response) => {
                 this.setState({
                   appointments: response.data
                 })
             })
 
-            axios.get('http://localhost:8080/api/nurses/nurse='+this.props.medical_staff.id+'/business-hours')
+            axios.get('http://localhost:8080/api/nurses/nurse='+this.context.nurse.id+'/business-hours')
             .then(response => {
               this.setState({businessHours: response.data}, () => {
-                console.log('business hours:', this.state.businessHours)
               })
             })
+
+            axios.get('http://localhost:8080/api/leave-requests/get-approved/nurse='+this.context.nurse.id)
+              .then(response => {
+                this.setState({approvedLeaves: response.data})
+              })
 
           }
       }
@@ -67,6 +75,11 @@ class NurseCalendar extends React.Component {
 
 
       handleEventClick = ({ event, el }) => {
+
+        if(event.extendedProps.leave === true) {
+          return
+        }
+
         this.toggle();
         this.setState({ 
             event: {
@@ -129,6 +142,33 @@ class NurseCalendar extends React.Component {
         return events
     }
 
+    generateLeaveRequestsEventList = () => {
+      let events = []
+      for(let i = 0; i < this.state.approvedLeaves.length; i++)
+      {
+        let request = this.state.approvedLeaves[i]
+        let start = new Date(request.startDate).toISOString()
+        
+        let endDate = new Date(request.endDate)
+        endDate.setDate(endDate.getDate() + 1)
+        let end = endDate.toISOString()
+  
+  
+        let event = {
+            start: start,
+            end: end,
+            rendering: 'background',
+            color: '#ff9f89',
+            allDay: true,
+            leave: true
+        }
+  
+        events.push(event)
+      }
+  
+      return events
+    }
+
     render() {
 
         return(
@@ -148,12 +188,17 @@ class NurseCalendar extends React.Component {
               businessHours = { 
                 this.state.businessHours
               }
-              events = {this.generateEventList()}
+              eventSources = {
+                [
+                  this.generateEventList(),
+                  this.generateLeaveRequestsEventList()
+                ]
+              }
               eventLimit = {true}
               eventRender={this.handleEventRender}
               eventClick={this.handleEventClick}
               plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
-            themeSystem = 'bootstrap' /> }
+              themeSystem = 'bootstrap' /> }
 
 
               {this.props.regime === 'history' && <FullCalendar defaultView="listYear" //ako si na stranici pacijenta za history, list view
