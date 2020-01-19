@@ -22,4 +22,12 @@ public interface ProcedureTypeRepository extends JpaRepository<ProceduresTypePOJ
 	
     @Query (value = "select pt.* from procedures_type pt where pt.deleted <> true and pt.clinic_id = ?1 and pt.is_operation = true", nativeQuery = true)
     List<ProceduresTypePOJO> findAllOperations(Long clinicId);
+
+    @Query(value = "select pt.* from procedures_type pt \n" + 
+    		"inner join clinic_administrator ca \n" + 
+    		"on pt.clinic_id = ca.clinic_id \n" + 
+    		"where ca.email = ?1 \n" + 
+    		"and pt.deleted = false \n" + 
+    		"and pt.is_operation = false", nativeQuery = true)
+    List<ProceduresTypePOJO> getAllNotOperations(String adminEmail);
 }

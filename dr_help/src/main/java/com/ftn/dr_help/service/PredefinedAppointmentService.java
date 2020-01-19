@@ -53,10 +53,10 @@ public class PredefinedAppointmentService {
 		}
 		
 		List<PredefinedAppointmentDTO> ret = new ArrayList<PredefinedAppointmentDTO>();
-		List<AppointmentPOJO> all = repository.findAll();
+		List<AppointmentPOJO> all = repository.findAllPredefined();
 		
 		for(AppointmentPOJO appointment : all) {
-			if(appointment.getRoom().getClinic().getId().equals(id) && appointment.isDeleted()==false) {
+			if(appointment.getRoom().getClinic().getId().equals(id)) {
 				ret.add(new PredefinedAppointmentDTO(appointment));
 			}
 		}

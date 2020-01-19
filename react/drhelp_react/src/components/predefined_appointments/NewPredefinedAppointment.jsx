@@ -51,7 +51,7 @@ class NewPredefinedAppointment extends Component {
                 this.setState({roomList: response.data})
             })
 
-        axios.get('http://localhost:8080/api/procedure+types/all')
+        axios.get('http://localhost:8080/api/procedure+types/appointments/all')
             .then(response => {
                 this.setState({procedureList: response.data})
             })

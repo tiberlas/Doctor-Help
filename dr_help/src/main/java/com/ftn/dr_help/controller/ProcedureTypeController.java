@@ -120,4 +120,13 @@ public class ProcedureTypeController {
 			return new ResponseEntity<>(operations, HttpStatus.OK);
 		}
 	}
+	
+	@GetMapping(value="/appointments/all", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<ProcedureTypeDTO>> getAllNotOperations() {
+    	String email = currentUser.getEmail();
+        List<ProcedureTypeDTO> ret = procedureTypeService.getAllNotOpeations(email);
+
+        return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
 }

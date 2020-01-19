@@ -13,7 +13,8 @@ class RoomModalSearch extends Component {
         procedureList: {},
         errorNumber: false,
         errorTime: false,
-        errorDate: false
+        errorDate: false,
+        hasType: false
     }
 
     componentDidMount() {
@@ -21,6 +22,9 @@ class RoomModalSearch extends Component {
         .then(response => {
             this.setState({procedureList: response.data})
         })
+        if(this.props.hasType == true) {
+            this.setState({hasType: true})
+        }
     }
 
     handleValidation = () => {
@@ -100,12 +104,14 @@ class RoomModalSearch extends Component {
                         {(this.state.errorNumber) && <div class="invalid-feedback"> Must enter a positive value. </div>}
                     </div>
 
-                    <div class='form-group'>
-                        <label for="procedureTypeId">Procedure name:</label>
-                        <select multiple="" class='form-control' id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
-                            {this.createProcedureItems()}
-                        </select>
-                    </div>
+                    {this.state.hasType != true &&
+                        <div class='form-group'>
+                            <label for="procedureTypeId">Procedure name:</label>
+                            <select multiple="" class='form-control' id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
+                                {this.createProcedureItems()}
+                            </select>
+                        </div>      
+                    }
 
                     <div className={`form-group ${this.state.errorDate? 'has-danger': ''}`}>
                         <label class="form-control-label" for="date">Date for scheduling:</label>

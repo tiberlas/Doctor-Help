@@ -8,12 +8,13 @@ public class RequestingAppointmentDTO {
 	private String doctor;
 	private String nurse;
 	private String patient;
+	private Long typeId;
 	
 	public RequestingAppointmentDTO() {
 		super();
 	}
 	
-	public RequestingAppointmentDTO(Long id, String date, String type, String doctor, String nurse, String patient) {
+	public RequestingAppointmentDTO(Long id, String date, String type, String doctor, String nurse, String patient, Long typeId) {
 		super();
 		this.id = id;
 		this.date = date;
@@ -21,6 +22,7 @@ public class RequestingAppointmentDTO {
 		this.doctor = doctor;
 		this.nurse = nurse;
 		this.patient = patient;
+		this.typeId = typeId;
 	}
 
 	public Long getId() {
@@ -69,6 +71,14 @@ public class RequestingAppointmentDTO {
 
 	public void setPatient(String patient) {
 		this.patient = patient;
+	}
+
+	public Long getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
 	}
 	
 }

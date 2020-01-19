@@ -357,10 +357,29 @@ public class AppointmentService {
 						request.getProcedureType().getName(), 
 						request.getDoctor().getEmail(), 
 						request.getNurse().getEmail(), 
-						request.getPatient().getEmail()));
+						request.getPatient().getEmail(),
+						request.getProcedureType().getId()));
 			}
 			
 			return requests;
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public RequestingAppointmentDTO getOneRequests(Long id) {
+		try {
+			
+			AppointmentPOJO finded = appointmentRepository.getOne(id);
+			
+			return new RequestingAppointmentDTO(
+					finded.getId(),
+					dateConverter.dateForFrontEndString(finded.getDate()), 
+					finded.getProcedureType().getName(), 
+					finded.getDoctor().getEmail(), 
+					finded.getNurse().getEmail(), 
+					finded.getPatient().getEmail(),
+					finded.getProcedureType().getId());
 		} catch(Exception e) {
 			return null;
 		}

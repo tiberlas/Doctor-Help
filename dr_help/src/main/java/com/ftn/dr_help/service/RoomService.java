@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
+import com.ftn.dr_help.dto.RoomReservingInfoDTO;
 import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
@@ -369,12 +370,9 @@ public class RoomService {
 	}
 	
 	private String findFirstFreeSchedule(RoomPOJO room) {
-		
-//		Date duration = room.getProcedurasTypes().getDuration();
-//		@SuppressWarnings("deprecation")
-//		int hours = duration.getHours();
-//		@SuppressWarnings("deprecation")
-//		int minutes = duration.getMinutes();
+		/*
+		 * Nadje prvi slobodni termin za sobu
+		 * */
 		
 		Calendar duration = Calendar.getInstance();
 		duration.setTime(room.getProcedurasTypes().getDuration());
@@ -417,7 +415,8 @@ public class RoomService {
 				if(current.after(end)) {
 					System.out.println(2);
 					//ovaj termin pocinje posle kraja trazenog termina; znaci trazeni termin je prvi slobodni
-					return dateConvertor.dateAndTimeToString(begin);
+					//return dateConvertor.dateAndTimeToString(begin);
+					return dateConvertor.dateForFrontEndString(begin);
 				} else {
 					System.out.println(3);
 					//definise se novi trazeni termin koji pocinje posle zavrsetka tekuceg
@@ -432,7 +431,28 @@ public class RoomService {
 			}
 		}
 		
-		return dateConvertor.dateAndTimeToString(begin);
+		//return dateConvertor.dateAndTimeToString(begin);
+		return dateConvertor.dateForFrontEndString(begin);
+	}
+	
+	public List<RoomReservingInfoDTO> getAllWithType(String adminEmail, Long typeId) {
+		try {
+			
+			List<RoomReservingInfoDTO> rooms = new ArrayList<>();
+			List<RoomPOJO> finded = repository.findAllWithType(adminEmail, typeId);
+			
+			for(RoomPOJO room : finded) {
+				rooms.add(new RoomReservingInfoDTO(
+						room.getId(), 
+						findFirstFreeSchedule(room), 
+						room.getName(), 
+						room.getNumber()));
+			}
+			
+			return rooms;
+		} catch(Exception e) {
+			return null;
+		}
 	}
 	
 }

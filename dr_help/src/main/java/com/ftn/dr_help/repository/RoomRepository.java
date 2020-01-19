@@ -21,4 +21,11 @@ public interface RoomRepository extends JpaRepository <RoomPOJO, Long>{
 	@Query(value = "select distinct r.* from room r inner join appointments a on r.id = a.room_id where a.status <> 'DONE' and a.deleted = FALSE", nativeQuery = true)
 	List<RoomPOJO> getAllReservedRooms();
 
+	@Query(value = "select r.* \n" + 
+			"from room r inner join clinic_administrator ca \n" + 
+			"on ca.clinic_id = r.clinic_id \n" + 
+			"where r.proceduras_types_id= ?2 \n" + 
+			"and r.deleted = false \n" + 
+			"and ca.email = ?1", nativeQuery = true)
+	List<RoomPOJO> findAllWithType(String adminEmail, Long proceduretypeId);
 }

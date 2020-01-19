@@ -158,4 +158,17 @@ public class AppointmentController {
 		}
 	}
 	
+	@GetMapping(value = "/requests/id={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<RequestingAppointmentDTO> getOneRequestingAppointments(@PathVariable("id") Long id) {
+		
+		RequestingAppointmentDTO retVal = appointmentService.getOneRequests(id);
+		
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		}
+	}
+	
 }

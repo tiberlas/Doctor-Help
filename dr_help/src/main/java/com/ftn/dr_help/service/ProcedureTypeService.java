@@ -268,4 +268,21 @@ public class ProcedureTypeService {
 			return null;
 		}
 	}
+	
+	public List<ProcedureTypeDTO> getAllNotOpeations(String email) {
+    	try {
+    		List<ProceduresTypePOJO> finded = procedureTypeRepository.getAllNotOperations(email);
+        	List<ProcedureTypeDTO> ret = new ArrayList<>();    	
+
+            for(ProceduresTypePOJO pojo : finded) {
+            	ret.add(new ProcedureTypeDTO(pojo));
+            }
+
+            return ret;
+    		
+    	} catch(Exception e) {
+    		return null;
+    	}
+    }
+	
 }
