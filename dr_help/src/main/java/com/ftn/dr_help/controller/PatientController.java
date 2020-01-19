@@ -184,7 +184,7 @@ public class PatientController {
 	@PreAuthorize("hasAuthority('PATIENT')")	
 	public ResponseEntity<List<PatientHistoryDTO>> getPendingAppointments () {
 		List<PatientHistoryDTO> retVal = patientService.getPending(currentUser.getEmail());
-		System.out.println("Zilav sam!!!1!");
+		//System.out.println("Zilav sam!!!1!");
 		if (retVal == null) {
 			retVal = new ArrayList<PatientHistoryDTO> ();
 		}

@@ -14,7 +14,8 @@ class PatientHistory extends Component {
 		reports : [], 
 		filter : 'NONE', 
 		isUpToDate : false, 
-		sortDate : 'unsorted'
+		sortDate : 'unsorted', 
+		dateString : ""
 	}
 
 	componentDidMount () {
@@ -22,6 +23,7 @@ class PatientHistory extends Component {
 		this.setState ({
 			isUpToDate : true
 		})
+		
 	}
 	
 	// updateReports (data) {
@@ -38,6 +40,15 @@ class PatientHistory extends Component {
 		if (this.state.isUpToDate) {
 			return;
 		}
+
+
+		let newDate = new Date()
+		let date = newDate.getDate();
+		let month = newDate.getMonth() + 1;
+		let year = newDate.getFullYear();
+		let hour = newDate.getHours();
+		let minutes = newDate.getMinutes()
+		let dateString = date + "." + month + "." + year + ". " + hour + ":" + minutes;
 		if (this.props.filter === 'NONE') {
 			// this.setState ({
 			// 	reports : []
@@ -72,6 +83,7 @@ class PatientHistory extends Component {
 				
 			);
 		}
+		
 	}
 
 	renderArrowDate () {
@@ -115,6 +127,9 @@ class PatientHistory extends Component {
 			data: {
 				appointmentId : appointmentId
 			}
+		})
+		.then (date => {
+			this.updateComponent();
 		});
 	}
 
@@ -130,7 +145,7 @@ class PatientHistory extends Component {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Date{this.renderArrowDate()}</p></TableCell>
+									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Time{this.renderArrowDate()}</p></TableCell>
 									<TableCell><p class='text-success'>Procedure Type</p></TableCell>
 									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Status</p></TableCell>
 									<TableCell><p class='text-success'>Doctor</p></TableCell>

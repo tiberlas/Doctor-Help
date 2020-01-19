@@ -1,5 +1,7 @@
 package com.ftn.dr_help.dto;
 
+import java.util.Calendar;
+
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
@@ -43,7 +45,8 @@ public class PatientHistoryDTO {
 		if (appointment.getExaminationReport() != null) {
 			this.examinationReportId = appointment.getExaminationReport().getId();
 		}
-		this.date = dateConverter.americanDateToString(appointment.getDate());
+		this.date = dateConverter.toString(appointment.getDate());
+		this.date += " " + appointment.getDate().get(Calendar.HOUR_OF_DAY) + ":" + appointment.getDate().get(Calendar.MINUTE);
 		this.procedureType = appointment.getProcedureType().getName();
 		this.doctor = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
 		this.nurse = appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName();
