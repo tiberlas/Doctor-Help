@@ -151,4 +151,23 @@ public class OperationService {
 			return null;
 		}
 	}
+	
+	public OperationRequestInfoDTO getOneRequests(Long operaionId) {
+		try {
+			OperationPOJO finded = operationRepository.getOne(operaionId);
+			OperationRequestInfoDTO operation = new OperationRequestInfoDTO(
+					finded.getId(), 
+					dateConvertor.dateForFrontEndString(finded.getDate()), 
+					finded.getOperationType().getName(), 
+					finded.getOperationType().getId(), 
+					finded.getFirstDoctor().getEmail(), 
+					finded.getSecondDoctor().getEmail(), 
+					finded.getThirdDoctor().getEmail(), 
+					finded.getPatient().getEmail());
+			
+			return operation;
+		} catch(Exception e) {
+			return null;
+		}
+	}
 }

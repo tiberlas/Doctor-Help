@@ -68,4 +68,16 @@ public class OperationController {
 			return new ResponseEntity<>(operations,HttpStatus.OK);
 		}
 	}
+	
+	@GetMapping(value = "/requests/id={id}", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<OperationRequestInfoDTO> getOneRequests(@PathVariable("id") Long id) {
+		OperationRequestInfoDTO operations = operationServie.getOneRequests(id);
+		
+		if(operations == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(operations,HttpStatus.OK);
+		}
+	}
 }
