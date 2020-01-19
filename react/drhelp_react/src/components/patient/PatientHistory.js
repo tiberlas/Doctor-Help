@@ -110,7 +110,12 @@ class PatientHistory extends Component {
 	// }
 
 	handleCancel (appointmentId) {
-		alert ("Canceling appointment " + appointmentId);
+		//alert ("Canceling appointment " + appointmentId);
+		axios.delete ("http://localhost:8080/api/appointments/delete", {
+			data: {
+				appointmentId : appointmentId
+			}
+		});
 	}
 
 	render () {

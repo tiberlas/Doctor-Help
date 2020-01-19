@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.dto.AddAppointmentDTO;
+import com.ftn.dr_help.dto.AppointmentDeleteDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -81,5 +83,12 @@ public class AppointmentController {
 		return null;
 	}
 	
+	@DeleteMapping (value="/delete", consumes="application/json", produces="application/json")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> delete (@RequestBody AppointmentDeleteDTO appointment) {
+		System.out.println("Attempted a delete on appointment number " + appointment.getAppointmentId());
+		appointmentService.delete(appointment.getAppointmentId());
+		return null;
+	}
 	
 }

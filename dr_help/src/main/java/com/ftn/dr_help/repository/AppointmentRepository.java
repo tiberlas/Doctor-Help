@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -40,7 +41,11 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query (value = "select a.* from appointments a inner join room r on a.room_id = r.id where a.deleted = false and status = 'DONE' and a.patient_id = ?1 and r.clinic_id = ?2", nativeQuery = true)
 	public List<AppointmentPOJO> getPatientsPastAppointmentsForClinic (Long patientId, Long clinicId);
 	
-	@Query (value = "select * from appointments a where a.patient_id = ?1 and a.status in ('REQUESTED', 'APPROVED')", nativeQuery = true)
+	@Query (value = "select * from appointments a where a.patient_id = ?1 and a.status in ('REQUESTED', 'APPROVED') and a.deleted = false", nativeQuery = true)
 	public List<AppointmentPOJO> getPatientsPendingAppointments (Long email);
+	
+	@Modifying
+	@Query (value = "update appointments set deleted = true where id = ?1", nativeQuery = true)
+	public void deleteAppointment (Long appointmentId);
 	
 }

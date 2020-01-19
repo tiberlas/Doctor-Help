@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
@@ -235,5 +236,9 @@ public class AppointmentService {
 		
 	}
 	
+	@Transactional
+	public void delete (Long appointmentId) {
+		appointmentRepository.deleteAppointment (appointmentId);
+	}
 
 }
