@@ -179,18 +179,6 @@ class DoctorCalendar extends React.Component {
               next: '>'
             }
           }  
-          selectable={true}
-
-          selectAllow={
-            function(selectInfo) {
-              return Moment().diff(selectInfo.start) <= 0
-            }
-          }
-          select={
-            function(info) {
-              alert('selected ' + info.startStr + ' to ' + info.endStr)
-            }
-          }
           businessHours = { 
             this.state.businessHours
           }

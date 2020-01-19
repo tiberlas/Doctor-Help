@@ -135,4 +135,13 @@ public class AppointmentController {
 		return new ResponseEntity<List<NurseAppointmentDTO>>(appointments, HttpStatus.OK);
 	}
 	
+	@GetMapping(value="/leave-request-appointments/doctor={id}")
+	public ResponseEntity<List<DoctorAppointmentDTO>> 
+		getAvailableOrApprovedDoctorAppointments(@PathVariable("id") Long id) {
+		
+		List<DoctorAppointmentDTO> appointments = appointmentService.findAvailableOrApprovedDoctorAppointments(id);
+		
+		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
+	}
+	
 }

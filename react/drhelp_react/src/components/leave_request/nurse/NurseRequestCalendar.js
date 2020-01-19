@@ -1,14 +1,14 @@
 import React from 'react'
-import {NurseContext} from '../../context/NurseContextProvider'
+import {NurseContext} from '../../../context/NurseContextProvider'
 import axios from 'axios'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import interaction from "@fullcalendar/interaction"
 import Moment from 'moment';
-import '../../main.scss' 
-import LeaveRequestModal from './LeaveRequestModal'
-import LeaveRequestHelpModal from './LeaveRequestHelpModal'
+import '../../../main.scss' 
+import LeaveRequestModal from '../LeaveRequestModal'
+import LeaveRequestHelpModal from '../LeaveRequestHelpModal'
 
 class NurseRequestCalendar extends React.Component {
 
@@ -71,22 +71,7 @@ class NurseRequestCalendar extends React.Component {
             info = appointment.roomName + ' ' + appointment.roomNumber
             let start = new Date(appointment.startDate).toISOString()
             let end = new Date(appointment.endDate).toISOString()
-    
-            let patientInfo = ''
-            if(appointment.patientFirstName.includes('-'))
-            {
-              patientInfo = '-'
-            } else {
-              patientInfo = appointment.patientFirstName + ' ' + appointment.patientLastName
-            }
 
-            let doctorInfo = appointment.doctorFirstName + ' ' + appointment.doctorLastName
-            let statusInfo = appointment.status
-            let procedureInfo = appointment.procedureName
-            let priceInfo = appointment.price
-            let discountInfo = appointment.discount
-            let insuranceInfo = appointment.insuranceNumber
-    
             let event = { 
               id: appointment.appointment_id,
               title: info, 

@@ -28,8 +28,10 @@ class LeaveRequestHistory extends React.Component {
     displayNote = (request) => {
         if(request.note.trim() === "") {
             return '-'
-        } else 
-            return request.note.trim()
+        } else {
+           //let text = request.note.trim().replace(/\r?\n/g, '<br />')
+            return  request.note.trim()
+        }
     }
 
     displayLeaveStatus = (request) => {
@@ -65,7 +67,7 @@ class LeaveRequestHistory extends React.Component {
                         <TableCell><p class='text-white'>{new Date(row.startDate).toLocaleDateString("en-US")}</p></TableCell>
                         <TableCell><p class='text-white'>{new Date(row.endDate).toLocaleDateString("en-US")}</p></TableCell>
                         <TableCell><p class='text-white'>{this.displayType(row)}</p></TableCell>
-                        <TableCell><p class='text-white'>{this.displayNote(row)}</p></TableCell>
+                        <TableCell style={{wordBreak: "break-all"}}><p class='text-white'>{this.displayNote(row)}</p></TableCell>
                         <TableCell><p class='text-white'>{this.displayLeaveStatus(row)}</p></TableCell>
                         </TableRow>))}
                     </TableBody>

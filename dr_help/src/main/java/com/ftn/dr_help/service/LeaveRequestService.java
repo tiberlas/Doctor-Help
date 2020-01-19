@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.dto.leave_requests.LeaveRequestDTO;
 import com.ftn.dr_help.model.enums.LeaveStatusEnum;
 import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.LeaveRequestPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
+import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.LeaveRequestRepository;
 import com.ftn.dr_help.repository.NurseRepository;
 
@@ -23,6 +25,9 @@ public class LeaveRequestService {
 	
 	@Autowired
 	private NurseRepository nurseRepository;
+	
+	@Autowired
+	private DoctorRepository doctorRepository;
 	
 	
 	public boolean addNurseRequest(Long nurse_id, LeaveRequestDTO dto) {
@@ -54,6 +59,40 @@ public class LeaveRequestService {
 		
 		leaveRequestRepository.save(leaveRequestPOJO);
 		System.out.println("Added new leave request for NURSE ID " + nurse_id + " FIRST_NAME: " + nurse.getFirstName());
+		
+		return true;
+	}
+	
+	
+	public boolean addDoctorRequest(Long doctor_id, LeaveRequestDTO dto) {
+		
+		LeaveRequestPOJO leaveRequestPOJO = new LeaveRequestPOJO();
+		DoctorPOJO doctor = doctorRepository.findOneById(doctor_id);
+		
+		if(doctor.isDeleted()) {
+			System.out.println("Doctor is deleted.");
+			return false;
+		}
+		
+		leaveRequestPOJO.setNurse(null); 
+		leaveRequestPOJO.setDoctor(doctor);
+		
+		leaveRequestPOJO.setRequestNote(dto.getNote());
+		leaveRequestPOJO.setLeaveType(dto.getLeaveType());
+		leaveRequestPOJO.setStaffRole(RoleEnum.DOCTOR);
+
+		Calendar firstDay = Calendar.getInstance(); //set calendar instance based on dto date
+		firstDay.setTime(dto.getStartDate()); 
+		leaveRequestPOJO.setFirstDay(firstDay);
+		
+		Calendar lastDay = Calendar.getInstance();
+		lastDay.setTime(dto.getEndDate());
+		leaveRequestPOJO.setLastDay(lastDay);
+		leaveRequestPOJO.setLeaveStatus(LeaveStatusEnum.REQUESTED);
+
+		
+		leaveRequestRepository.save(leaveRequestPOJO);
+		System.out.println("Added new leave request for DOCTOR ID " + doctor_id + " FIRST_NAME: " + doctor.getFirstName());
 		
 		return true;
 	}

@@ -148,7 +148,6 @@ class NurseCalendar extends React.Component {
               businessHours = { 
                 this.state.businessHours
               }
-              selectable={true}
               events = {this.generateEventList()}
               eventLimit = {true}
               eventRender={this.handleEventRender}

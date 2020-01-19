@@ -11,7 +11,7 @@ import axios from 'axios';
 import ViewPatientProfile from '../patient/ViewPatientProfile';
 import DoctorCalendar from './DoctorCalendar'
 import HandlePatientList from './HandlePatientList.jsx';
-import DoctorLeaveRequest from '../leave_request/DoctorLeaveRequest.js';
+import DoctorLeaveRequest from '../leave_request/doctor/DoctorLeaveRequest.js';
 
 class Doctor extends Component {
     state = { 

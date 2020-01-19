@@ -260,10 +260,14 @@ values (1, 5);
 
 
 insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
-	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'My wife is having her third child with my brother.', 'DOCTOR', 1, null);
+	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'أنا أعرف القليل من اللغة العربية ، كافر', 'DOCTOR', 1, null);
+	
+	insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
+	values ('2020-01-01', '2020-01-5', 'REQUESTED', 'ANNUAL', 'Vucic是我们的最高领导者', 'DOCTOR', 1, null);
 	
 insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
 	values ('2020-03-01', '2020-03-12', 'REQUESTED', 'ANNUAL', 'Please let me go, Ive been working for 45 days now.', 'DOCTOR', 1, null);
+	
 
 
 insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)

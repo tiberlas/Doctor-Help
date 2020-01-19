@@ -14,6 +14,9 @@ class LeaveRequestHelpModal extends React.Component {
                       </ModalHeader>
                               <ModalBody>
                                 To make a leave request, drag your cursor along the calendar dates you wish to request.
+
+                                <br/>
+                                Gray colored dates are your days off, based on your assigned work days.
                               </ModalBody>
                       <ModalFooter>
                           

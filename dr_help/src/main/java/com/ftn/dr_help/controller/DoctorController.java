@@ -150,7 +150,7 @@ public class DoctorController {
 
 	@PostMapping(value = "/new+doctor", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> createNurse(@RequestBody MedicalStaffSaveingDTO newDoctor) {
+	public ResponseEntity<String> createDoctor(@RequestBody MedicalStaffSaveingDTO newDoctor) {
 		String email = currentUser.getEmail();
 		
 		boolean ret = service.save(newDoctor, email);
@@ -166,7 +166,7 @@ public class DoctorController {
 	
 	@DeleteMapping(value = "/delete/id={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> deleteNurse(@PathVariable("id") Long id) {
+	public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
 		
 		boolean ret = service.delete(id);
 		

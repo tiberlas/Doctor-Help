@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
-import com.ftn.dr_help.dto.SignOffDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -441,6 +440,23 @@ public class AppointmentService {
 		for (AppointmentPOJO appointmentPOJO : list) {
 				System.out.println("-------------------" + i);
 				NurseAppointmentDTO dto = convertAppointmentToNurseDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+		}
+		
+		return appointments;
+	}
+	
+	
+	public List<DoctorAppointmentDTO> findAvailableOrApprovedDoctorAppointments(Long doctor_id) {
+		List<AppointmentPOJO> list = appointmentRepository.findAvailableOrApprovedDoctorAppointments(doctor_id);
+
+		System.out.println("Leave request appointments za doktora");
+		List<DoctorAppointmentDTO> appointments = new ArrayList<DoctorAppointmentDTO>();
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+				System.out.println("-------------------" + i);
+				DoctorAppointmentDTO dto = convertAppointmentToDoctorDTO(appointmentPOJO);
 				appointments.add(dto);
 				i++;
 		}

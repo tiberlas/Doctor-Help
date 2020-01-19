@@ -1,12 +1,12 @@
+
 import React, {Fragment} from 'react'
-import NurseRequestCalendar from './NurseRequestCalendar'
-import LeaveRequestHistory from './LeaveRequestHistory'
-import {NurseContext} from '../../context/NurseContextProvider'
+import DoctorRequestCalendar from './DoctorRequestCalendar'
+import LeaveRequestHistory from '../LeaveRequestHistory'
+import {DoctorContext} from '../../../context/DoctorContextProvider'
 import axios from 'axios'
 
-class NurseLeaveRequest extends React.Component {
-
-  static contextType = NurseContext
+class DoctorLeaveRequest extends React.Component {
+    static contextType = DoctorContext
 
     state = {
         requests: []
@@ -14,7 +14,7 @@ class NurseLeaveRequest extends React.Component {
 
 
     componentDidMount() {
-            axios.get('http://localhost:8080/api/leave-requests/get-all/nurse='+this.context.nurse.id)
+            axios.get('http://localhost:8080/api/leave-requests/get-all/doctor='+this.context.doctor.id)
             .then(response=>{
                 this.setState({
                     requests: response.data
@@ -23,7 +23,7 @@ class NurseLeaveRequest extends React.Component {
     }
 
     update = () => {
-        axios.get('http://localhost:8080/api/leave-requests/get-all/nurse='+this.context.nurse.id)
+        axios.get('http://localhost:8080/api/leave-requests/get-all/doctor='+this.context.doctor.id)
         .then(response=>{
             this.setState({
                 requests: response.data
@@ -42,7 +42,7 @@ class NurseLeaveRequest extends React.Component {
 
                     <div class='col-md-6'>
                         <br/>
-                        <NurseRequestCalendar update = {this.update} />
+                        <DoctorRequestCalendar update = {this.update} />
                     </div>
                   </div>
             </Fragment>
@@ -50,5 +50,4 @@ class NurseLeaveRequest extends React.Component {
     }
 }
 
-
-export default NurseLeaveRequest
+export default DoctorLeaveRequest

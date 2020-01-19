@@ -12,10 +12,10 @@ import com.ftn.dr_help.model.pojo.LeaveRequestPOJO;
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequestPOJO, Long> {
 
 	
-	@Query(value="select lr.* from leave_requests lr where nurse_id = ?1 order by first_day desc", nativeQuery=true)
+	@Query(value="select lr.* from leave_requests lr where nurse_id = ?1 order by lr.last_day desc", nativeQuery=true)
 	public List<LeaveRequestPOJO> getNurseLeaveRequests(Long nurse_id);
 	
-	@Query(value="select lr.* from leave_requests lr where doctor_id = ?1 order by first_day desc", nativeQuery=true)
+	@Query(value="select lr.* from leave_requests lr where doctor_id = ?1 order by lr.last_day desc", nativeQuery=true)
 	public List<LeaveRequestPOJO> getDoctorLeaveRequests(Long doctor_id);
 	
 	

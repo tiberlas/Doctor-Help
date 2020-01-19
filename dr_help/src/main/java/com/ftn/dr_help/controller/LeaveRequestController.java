@@ -39,6 +39,20 @@ public class LeaveRequestController {
 		return new ResponseEntity<>(HttpStatus.CONFLICT);
 	}
 	
+	
+	@PostMapping(value="/add/doctor={id}")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<LeaveRequestDTO> addDoctorRequest(@PathVariable("id") Long doctor_id, @RequestBody LeaveRequestDTO leaveRequestDTO) {
+		
+		boolean ret = leaveRequestService.addDoctorRequest(doctor_id, leaveRequestDTO);
+		
+		if(ret) {
+			return new ResponseEntity<LeaveRequestDTO>(leaveRequestDTO, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.CONFLICT);
+	}
+	
 	@GetMapping(value="/get-all/nurse={id}")
 	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<List<LeaveRequestDTO>> getNurseRequests(@PathVariable("id") Long nurse_id) {

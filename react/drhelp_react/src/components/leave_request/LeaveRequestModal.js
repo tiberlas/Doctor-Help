@@ -112,6 +112,7 @@ class LeaveRequestModal extends React.Component {
                             {this.state.showNote === true 
                             && <textarea name="note" onChange={this.handleChange} 
                                                     placeholder="Aditional note will make your request better!" 
+                                                    maxLength={50}
                                                     style={{resize: "none"}}/>}
 
                         </div>
@@ -152,7 +153,23 @@ class LeaveRequestModal extends React.Component {
                 })
             })
             
-        }
+        } else if(this.state.role === 'DOCTOR') {
+            axios.post('http://localhost:8080/api/leave-requests/add/doctor='+this.state.id, 
+            {
+                leaveType: leaveTypeData,
+                note: this.state.note,
+                staffId: this.state.id,
+                staffRole: "DOCTOR",
+                startDate: new Date(this.props.selectedDates.startStr),
+                endDate: new Date(this.props.selectedDates.endStr)
+
+            }).then(response => {
+                this.setState({successInfo: true}, () => {
+                    setTimeout(() => { this.props.toggle()}, 1000)
+                })
+            })
+            
+        } 
     }
 
     render() {

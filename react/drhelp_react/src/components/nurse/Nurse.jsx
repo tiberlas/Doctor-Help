@@ -12,7 +12,7 @@ import PatientList from './PatientList'
 import ViewPatientProfile from '../patient/ViewPatientProfile'
 import PerscriptionList from './PerscriptionList.js';
 import NurseCalendar from './NurseCalendar.js';
-import NurseLeaveRequest from '../leave_request/NurseLeaveRequest.js';
+import NurseLeaveRequest from '../leave_request/nurse/NurseLeaveRequest.js';
 
 class Nurse extends Component {
     state = { 
