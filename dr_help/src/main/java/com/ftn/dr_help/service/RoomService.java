@@ -85,6 +85,7 @@ public class RoomService {
 	public RoomDTO findOne(Long roomID, String email) {
 		
 		Long clinicID = adminRepository.findOneByEmail(email).getClinic().getId();
+		List<RoomPOJO> reservedRooms = repository.getAllReservedRooms();
 		
 		if(roomID == null) {
 			return null;
@@ -95,7 +96,12 @@ public class RoomService {
 		if(finded == null || finded.isDeleted())
 			return null;
 		
-		return new RoomDTO(finded);
+		RoomDTO room = new RoomDTO(finded);
+		if(reservedRooms.contains(finded)) {
+			room.setReserved(true);
+		}
+				
+		return room;
 	}
 	
 	public RoomDTO save(RoomDTO newRoom, String email) {
@@ -250,11 +256,15 @@ public class RoomService {
 		 * */
 		try {
 			List<RoomPOJO> allRooms = adminRepository.findOneByEmail(email).getClinic().getRoomList();
+			List<RoomPOJO> reservedRooms = repository.getAllReservedRooms();
 			
 			List<RoomDTO> retVal = new ArrayList<RoomDTO>();
 			for(RoomPOJO room : allRooms) {
 				RoomDTO newRoom = new RoomDTO(room);
 				newRoom.setFirstFreeSchedule(findFirstFreeSchedule(room));
+				if(reservedRooms.contains(room)) {
+					newRoom.setReserved(true);
+				}
 				retVal.add(newRoom);
 			}
 			
@@ -310,6 +320,9 @@ public class RoomService {
 					if(!flagReserved) {
 						RoomDTO newRoom = new RoomDTO(room);
 						newRoom.setFirstFreeSchedule(findFirstFreeSchedule(room));
+						if(reservedRooms.contains(room)) {
+							newRoom.setReserved(true);
+						}
 						roomsFilteredDate.add(newRoom);						
 					}
 				}
