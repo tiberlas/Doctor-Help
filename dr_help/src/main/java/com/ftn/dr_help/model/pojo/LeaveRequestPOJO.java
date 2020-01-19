@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,7 +22,7 @@ import com.ftn.dr_help.model.enums.LeaveStatusEnum;
 import com.ftn.dr_help.model.enums.LeaveTypeEnum;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
-@Entity
+@Entity(name="leaveRequests")
 public class LeaveRequestPOJO implements Serializable{
 
 	/**
@@ -33,11 +34,11 @@ public class LeaveRequestPOJO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "doctor_id", referencedColumnName = "id")
 	DoctorPOJO doctor;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "nurse_id", referencedColumnName = "id")
 	NursePOJO nurse;
 	
@@ -135,6 +136,14 @@ public class LeaveRequestPOJO implements Serializable{
 
 	public void setLeaveType(LeaveTypeEnum leaveType) {
 		this.leaveType = leaveType;
+	}
+
+	public LeaveStatusEnum getLeaveStatus() {
+		return leaveStatus;
+	}
+
+	public void setLeaveStatus(LeaveStatusEnum leaveStatus) {
+		this.leaveStatus = leaveStatus;
 	}
 	
 	

@@ -8,6 +8,7 @@ import interaction from "@fullcalendar/interaction"
 import Moment from 'moment';
 import '../../main.scss' 
 import LeaveRequestModal from './LeaveRequestModal'
+import LeaveRequestHelpModal from './LeaveRequestHelpModal'
 
 class NurseRequestCalendar extends React.Component {
 
@@ -30,18 +31,25 @@ class NurseRequestCalendar extends React.Component {
             discount: "",
             status: "",
             patientInsurance: ""
-        }
+        },
+        loading: true,
+        showHelpModal: false
     }
 
     toggle = () => {
-        this.setState({ showRequestModal: !this.state.showRequestModal})
+        this.setState({ showRequestModal: !this.state.showRequestModal}, ()=>{this.props.update()}) //update the parent component to rerender request history
+      }
+
+      toggleHelp = () => {
+        this.setState({showHelpModal: !this.state.showHelpModal})
       }
 
     componentDidMount() {
         let url = 'http://localhost:8080/api/appointments/leave-request-appointments/nurse=' + this.context.nurse.id 
         axios.get(url).then((response) => {
             this.setState({
-            appointments: response.data
+            appointments: response.data,
+            loading: false
             })
         })
 
@@ -98,49 +106,70 @@ class NurseRequestCalendar extends React.Component {
         this.setState({showRequestModal: true, selectedDates: info}, () => { console.log('selected ' + info.startStr + ' to ' + info.endStr)})
     }
 
+    handleHelpModal = () => {
+      this.setState({showHelpModal: true})
+    }
+
+
     render() {
-        return (
-            <div className='demo-app-calendar'> 
-                <FullCalendar defaultView="dayGridMonth" 
-              header={{
-                  left: '',
-                  center: "title",
-                  right: "prev,next"
-              }}
-              buttonText={
-                {
-                  prev: '<',
-                  next: '>'
+      if(this.state.loading) {
+        return (<div> Loading... </div>)
+      } else {
+          return (
+              <div className='demo-app-calendar'> 
+                  <FullCalendar defaultView="dayGridMonth" 
+                customButtons = {
+                  {
+                    helpButton: {
+                      text: "Help",
+                      click: this.handleHelpModal
+                  }}
                 }
-              }
-              businessHours = { 
-                this.state.businessHours
-              }
-              selectable={true}
-
-              selectAllow={ //restrikcija da se ne mogu selektovati datumi pre danas
-                function(selectInfo) {
-                  return Moment().diff(selectInfo.start) <= 0
+                header={{
+                    left: 'helpButton',
+                    center: "title",
+                    right: "prev,next"
+                }}
+                buttonText={
+                  {
+                    prev: '<',
+                    next: '>'
+                  }
                 }
-              }
-              select={ //aktivira modal kojem prosledjuje datume koji su selektovani
-                    this.handleSelectedDates
-              }
-              events = {this.generateEventList()}
-              eventLimit = {true}
-              eventRender={this.handleEventRender}
-              eventClick={this.handleEventClick}
-              plugins={[ dayGridPlugin, bootstrapPlugin, interaction]} 
-                themeSystem = 'bootstrap' />
+                businessHours = { 
+                  this.state.businessHours
+                }
+                selectable={true}
 
-             {this.state.showRequestModal 
-                && <LeaveRequestModal modal={this.state.showRequestModal} 
-                                      toggle={this.toggle}
-                                      appointments={this.state.appointments}
-                                      selectedDates={this.state.selectedDates}/>}
+                selectAllow={ //restrikcija da se ne mogu selektovati datumi pre danas
+                  function(selectInfo) {
+                    return Moment().diff(selectInfo.start) <= 0
+                  }
+                }
+                select={ //aktivira modal kojem prosledjuje datume koji su selektovani
+                      this.handleSelectedDates
+                }
+                events = {this.generateEventList()}
+                eventLimit = {true}
+                eventRender={this.handleEventRender}
+                eventClick={this.handleEventClick}
+                plugins={[ dayGridPlugin, bootstrapPlugin, interaction]} 
+                  themeSystem = 'bootstrap' />
 
-            </div>
-        )
+              {this.state.showRequestModal 
+                  && <LeaveRequestModal modal={this.state.showRequestModal} 
+                                        toggle={this.toggle}
+                                        appointments={this.state.appointments}
+                                        selectedDates={this.state.selectedDates}
+                                        id={this.context.nurse.id}
+                                        role='NURSE'/>}
+
+              {this.state.showHelpModal && <LeaveRequestHelpModal modal={this.state.showHelpModal}
+                                                                  toggle={this.toggleHelp}/>}
+
+              </div>
+          )
+              }
     }
 }
 

@@ -4,14 +4,33 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import Moment from 'moment';
 
+import './fade-modal.css'
+
+// const modalStyle = {
+//     ReactModal__Overlay {
+//         opacity: 0;
+//         transition: opacity 2000ms ease-in-out;
+//     }
+    
+//     .ReactModal__Overlay--after-open{
+//         opacity: 1;
+//     }
+    
+//     .ReactModal__Overlay--before-close{
+//         opacity: 0;
+//     }
+// }
+
 class LeaveRequestModal extends React.Component {
 
     state = {
         ableToRequest: true,
-        leaveType: "",
+        leaveType: "Personal leave",
         note: "", 
-        showNote: false
-
+        showNote: false,
+        successInfo: false,
+        id: this.props.id, //medical staff id
+        role: this.props.role //medical staff role
     }
 
 
@@ -30,7 +49,6 @@ class LeaveRequestModal extends React.Component {
             if(Moment(appointmentStartDate).isAfter(selectedBeginDate) && Moment(appointmentStartDate).isBefore(selectedEndDate)) {
                 able = false
             }
-            console.log('bigboy start date ', new Date(this.props.appointments[0].startDate).toISOString().split('T')[0])
         }
 
         this.setState({ableToRequest: able})
@@ -38,7 +56,7 @@ class LeaveRequestModal extends React.Component {
     }
 
 
-    displayUnableToRequest = () => {
+    displayUnableToRequest = () => { //if overlapping dates, unable to make a request
         let startDate = new Date(this.props.selectedDates.startStr).toLocaleDateString("en-US")
         let endDate = new Date(this.props.selectedDates.endStr).toLocaleDateString("en-US")
         
@@ -53,17 +71,7 @@ class LeaveRequestModal extends React.Component {
     }
 
     displayAbleToRequest = () => {
-        let leaveType = this.state.leaveType
-        if(leaveType === "Personal") {
-            leaveType = "Personal leave"
-        }
        return <Fragment>                
-                    {/* <div class="row d-flex justify-content-center">
-                        <div class='col-md-11'>
-                            <h4> Request overview </h4>
-                        </div>
-                    </div> */}
-
                     <div class="row d-flex justify-content-center">
                         <div class='col-md-11'>
                           
@@ -80,8 +88,8 @@ class LeaveRequestModal extends React.Component {
                             <input required
                                 type="radio" 
                                 name="leaveType"
-                                value="Personal"
-                                checked={this.state.leaveType === "Personal"}
+                                value="Personal leave"
+                                checked={this.state.leaveType === "Personal leave"}
                                 onChange={this.handleChange}
                             /> Personal leave
                         </label> &nbsp;
@@ -102,10 +110,18 @@ class LeaveRequestModal extends React.Component {
                         <div class='col-md-11'>
                            {this.state.showNote === false && <Button className="btn btn-info " onClick={()=>{this.setState({showNote: true})}}>Add note</Button>}
                             {this.state.showNote === true 
-                            && <textarea name="note" onChange={this.handleChange} placeholder="Aditional note will make your request better!" style={{resize: "none"}}/>}
+                            && <textarea name="note" onChange={this.handleChange} 
+                                                    placeholder="Aditional note will make your request better!" 
+                                                    style={{resize: "none"}}/>}
 
                         </div>
                     </div>
+
+                    {this.state.successInfo &&  <div class="row d-flex justify-content-center">
+                                                 <div class='col-md-11'>
+                                                    <div class="valid-feedback d-block"> Request successfully sent! </div>  
+                                                </div> 
+                                                </div>}
 
                   
                                             
@@ -113,37 +129,53 @@ class LeaveRequestModal extends React.Component {
     }
 
     handleConfirm = () => {
-        this.setState({confirmRequest: false}, () => {
-            this.props.toggle()
-        })
-    }
-    generateMyNonBreakableSpaces = () => { //:D
-        let items = []
-        for(let i=0;i<80;i++)
-            items.push('\u00A0')
-        return items
-    }
+        let leaveTypeData = ""
+        if(this.state.leaveType === 'Annual leave') {
+            leaveTypeData = "ANNUAL"
+        } else {
+            leaveTypeData = "PERSONAL"
+        }
+        
+        if(this.state.role === 'NURSE') {
+            axios.post('http://localhost:8080/api/leave-requests/add/nurse='+this.state.id, 
+            {
+                leaveType: leaveTypeData,
+                note: this.state.note,
+                staffId: this.state.id,
+                staffRole: "NURSE",
+                startDate: new Date(this.props.selectedDates.startStr),
+                endDate: new Date(this.props.selectedDates.endStr)
 
+            }).then(response => {
+                this.setState({successInfo: true}, () => {
+                    setTimeout(() => { this.props.toggle()}, 1000)
+                })
+            })
+            
+        }
+    }
 
     render() {
         console.log('states are:', this.state)
         return (
             <Fragment>
-                <div class="modal-body">
-                     <div class="container-fluid">
+
                             <Modal
                             isOpen={this.props.modal}
                             toggle={this.props.toggle}
-                            className={this.props.className} >
+                            closeTimeoutMS={2000} >
                             <ModalHeader toggle={this.props.toggle}>
                             {!this.state.ableToRequest ? <>Unable to request</> : <> New request overview </> } 
                             </ModalHeader>
-                            <ModalBody>
-                            
-                                    {!this.state.ableToRequest && this.displayUnableToRequest()}
-                                    {this.state.ableToRequest && this.displayAbleToRequest()}            
+
                            
-                            </ModalBody>
+                                    <ModalBody>
+                                    
+                                            {!this.state.ableToRequest && this.displayUnableToRequest()}
+                                            {this.state.ableToRequest && this.displayAbleToRequest()}            
+                                
+                                    </ModalBody>
+                           
                             <ModalFooter>
                                 
                         <Button color="secondary" onClick={this.props.toggle}> Cancel</Button>
@@ -152,8 +184,7 @@ class LeaveRequestModal extends React.Component {
                             </ModalFooter>
                         
                         </Modal>
-                        </div>
-                    </div>
+                        
             </Fragment>
         )
     }

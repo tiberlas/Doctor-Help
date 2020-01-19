@@ -19,7 +19,6 @@ class AppointmentModal extends React.Component {
     }
 
     handleDiagnosisChange = (option) => {
-        console.log("diagnosis", option.label)
         this.setState({selectedDiagnosis: option.label})
     }
 
@@ -32,19 +31,15 @@ class AppointmentModal extends React.Component {
         for(let i=0; i<options.length; i++) {
             medication.push(options[i].label)
         }
-        console.log("BOG:", medication)
-        console.log("STATE:", medication)
         this.setState({selectedMedication: medication})
     }
 
     handleNotesChange = (e) => {
-        console.log("owowo", e.target.value)
         this.setState({note: e.target.value})
     }
 
     componentWillReceiveProps(props) {
         this.setState({ confirmFinish: props.showConfirmAppointment})
-        console.log("props", props.showConfirmAppointment)
     }
 
 

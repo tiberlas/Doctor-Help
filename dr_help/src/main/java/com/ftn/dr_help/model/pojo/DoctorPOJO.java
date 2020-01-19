@@ -122,8 +122,8 @@ public class DoctorPOJO implements Serializable{
 	@Column(name = "mustChangePassword", nullable = true)
 	private Boolean mustChangePassword = false;
 	
-	@OneToOne(mappedBy="doctor")
-	private LeaveRequestPOJO leaveRequest;
+	@OneToMany(mappedBy="doctor",  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LeaveRequestPOJO> leaveRequest;
 	
 	public DoctorPOJO() {
 		super();
