@@ -49,6 +49,7 @@ class AppointmentInfoModal extends React.Component {
     render() {
        let appStart = new Date(this.props.event.start).toLocaleDateString("en-US")
        let profileUrl = '/profile/' + this.props.event.patientInsurance
+       
         return (
             <Fragment> 
                 <Modal
@@ -61,7 +62,9 @@ class AppointmentInfoModal extends React.Component {
                 <ModalBody>
                 <div>
                     <br/>
-                    Patient:  <Link to = {profileUrl}> {this.props.event.patient} </Link> <br/>
+                     Patient:  {this.props.event.patient.trim() === '-' 
+                     ? <span style={{fontStyle: "italic", color: "#cdcdcd"}}> unassigned </span> : <Fragment> <Link to = {profileUrl}> {this.props.event.patient} </Link> </Fragment> }
+                     <br/>
                     Status: {this.props.event.status}<br/>
                     Procedure: {this.props.event.procedure}<br/>
                     Price: {this.props.event.price}<br/>
