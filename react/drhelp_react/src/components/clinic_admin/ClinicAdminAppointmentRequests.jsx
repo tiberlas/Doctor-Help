@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import axios from 'axios';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,11 +10,15 @@ import RequestedAppointmentItem from '../requesting_appointment/RequestedAppoint
 
 class ClinicAdminAppointmentRequests extends Component {
     state = {  
-        appointments: []
+        appointments: [],
+        name: ''
     }
+
+    static contextType = ClinicAdminContext;
 
     componentDidMount() {
         this.handleGetRequests();
+        this.handleClinicName();
     }
 
     handleGetRequests = () => {
@@ -21,6 +26,15 @@ class ClinicAdminAppointmentRequests extends Component {
             .then(response => {
                 this.setState({appointments: response.data});
             })
+    }
+
+    handleClinicName = () => {
+        axios.get('http://localhost:8080/api/clinics/id='+this.context.admin.clinicId)
+        .then(response => {
+            this.setState({
+                name: response.data.name
+            })
+        })
     }
 
     handelUpdate = () => {
@@ -57,7 +71,6 @@ class ClinicAdminAppointmentRequests extends Component {
                 </Table>
             </div>
             </div>
-
         );
     }
 }

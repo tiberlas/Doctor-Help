@@ -1,5 +1,6 @@
 package com.ftn.dr_help.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.OperationRequestDTO;
+import com.ftn.dr_help.dto.OperationRequestInfoDTO;
 import com.ftn.dr_help.model.enums.OperationStatus;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
@@ -123,6 +125,30 @@ public class OperationService {
 			return false;
 		} catch(Exception e) {
 			return false;
+		}
+	}
+	
+	public List<OperationRequestInfoDTO> getAllRequests(String adminEmail) {
+		try {
+			
+			List<OperationPOJO> finded = operationRepository.getAllOperationRequestsForAdmin(adminEmail);
+			List<OperationRequestInfoDTO> operations = new ArrayList<>();
+			
+			for(OperationPOJO operation : finded) {
+				operations.add(new OperationRequestInfoDTO(
+						operation.getId(), 
+						dateConvertor.dateForFrontEndString(operation.getDate()), 
+						operation.getOperationType().getName(), 
+						operation.getOperationType().getId(), 
+						operation.getFirstDoctor().getEmail(), 
+						operation.getSecondDoctor().getEmail(), 
+						operation.getThirdDoctor().getEmail(), 
+						operation.getPatient().getEmail()));
+			}
+			
+			return operations;
+		} catch(Exception e) {
+			return null;
 		}
 	}
 }

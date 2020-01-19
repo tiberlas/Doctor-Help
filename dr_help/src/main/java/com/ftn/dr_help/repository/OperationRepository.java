@@ -14,6 +14,15 @@ public interface OperationRepository extends JpaRepository<OperationPOJO, Long> 
 	OperationPOJO findOneById(Long id);
 	
 	@Query(value = "select o.* from operations o inner join doctors d on (d.id = o.requested_doctor_id) where o.deleted = false and d.email= ?1 and o.status <> 'DONE'", nativeQuery = true)
-	public List<OperationPOJO> getAllOperationRequests(String email);
+	public List<OperationPOJO> getAllOperationRequests(String DoctorEmail);
 	
+	@Query(value = "select o.* from operations o \n" + 
+			"inner join procedures_type pt \n" + 
+			"on o.operation_type_id = pt.id \n" + 
+			"inner join clinic_administrator ca \n" + 
+			"on pt.clinic_id = ca.clinic_id \n" + 
+			"where ca.email = ?1 \n" + 
+			"and o.deleted = false \n" + 
+			"and o.status = 'REQUESTED'", nativeQuery = true)
+	public List<OperationPOJO> getAllOperationRequestsForAdmin(String ClinicAdminEmail);
 }

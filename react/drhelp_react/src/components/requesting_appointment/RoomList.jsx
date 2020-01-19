@@ -157,7 +157,19 @@ class RoomList extends Component {
             typeId: this.state.type,
             date: rdate
         }).then((response) => {
-            this.setState({rooms: response.data})//daje sa drugin nazivima treba premapirati
+            let items = [];
+            for(var i=0; i<response.data.length; ++i)  {
+                let item = {
+                    idRoom: response.data[i].id,
+                    freeDate: response.data[i].firstFreeSchedule,
+                    roomName: response.data[i].name,
+                    roomNumber: response.data[i].number
+                };
+                
+                items.push(item);
+            }
+
+            this.setState({rooms: items})//daje sa drugin nazivima treba premapirati
         })
 
     }
