@@ -11,6 +11,7 @@ public class PredefinedAppointmentDTO {
 	private String dateAndTime;
 	private Long procedureTypeId;
 	private Long roomId;
+	private Long nurseId;
 	private Long doctorId;
 	private double price;
 	private double disscount;
@@ -22,13 +23,14 @@ public class PredefinedAppointmentDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PredefinedAppointmentDTO(Long id, String dateAndTime, Long proceduretypeId, Long roomId, Long doctorId, double price,
+	public PredefinedAppointmentDTO(Long id, String dateAndTime, Long proceduretypeId, Long roomId, Long nurseId, Long doctorId, double price,
 			double disscount, Long clinicId) {
 		super();
 		this.id = id;
 		this.dateAndTime = dateAndTime;
 		this.procedureTypeId = proceduretypeId;
 		this.roomId = roomId;
+		this.nurseId = nurseId;
 		this.doctorId = doctorId;
 		this.price = price;
 		this.disscount = disscount;
@@ -45,6 +47,7 @@ public class PredefinedAppointmentDTO {
 		this.price = pojo.getProcedureType().getPrice();
 		this.disscount = pojo.getDiscount();
 		this.clinicId = pojo.getRoom().getClinic().getId();
+		this.nurseId = pojo.getNurse().getId();
 	}
 
 	public String getDateAndTime() {
@@ -110,4 +113,13 @@ public class PredefinedAppointmentDTO {
 	public void setClinicId(Long clinicId) {
 		this.clinicId = clinicId;
 	}
+
+	public Long getNurseId() {
+		return nurseId;
+	}
+
+	public void setNurseId(Long nurseId) {
+		this.nurseId = nurseId;
+	}
+	
 }

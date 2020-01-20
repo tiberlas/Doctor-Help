@@ -2,22 +2,23 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.ftn.dr_help.model.enums.OperationStatus;
 
 @Entity
 @Table (name = "operations")
@@ -38,54 +39,121 @@ public class OperationPOJO implements Serializable{
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PatientPOJO patient;
 	
-	@ManyToMany 
-	@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"))
-	List<DoctorPOJO> doctorLIst;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private DoctorPOJO requestedDoctor;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private DoctorPOJO firstDoctor;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private DoctorPOJO secondDoctor;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private DoctorPOJO thirdDoctor;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private RoomPOJO room;
 	
 	@OneToOne (fetch = FetchType.LAZY)
-	private ProceduresTypePOJO procedureType;
+	private ProceduresTypePOJO operationType;
+	
+	@Enumerated(EnumType.STRING)
+	@Column (name = "status", nullable = false)
+	private OperationStatus status;
+	
+	private boolean deleted;
 	
 	public OperationPOJO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Calendar getDate() {
 		return date;
 	}
+
 	public void setDate(Calendar date) {
 		this.date = date;
 	}
+
 	public PatientPOJO getPatient() {
 		return patient;
 	}
+
 	public void setPatient(PatientPOJO patient) {
 		this.patient = patient;
 	}
-	public List<DoctorPOJO> getDoctorLIst() {
-		return doctorLIst;
+
+	public DoctorPOJO getFirstDoctor() {
+		return firstDoctor;
 	}
-	public void setDoctorLIst(List<DoctorPOJO> doctorLIst) {
-		this.doctorLIst = doctorLIst;
+
+	public void setFirstDoctor(DoctorPOJO firstDoctor) {
+		this.firstDoctor = firstDoctor;
 	}
+
+	public DoctorPOJO getSecondDoctor() {
+		return secondDoctor;
+	}
+
+	public void setSecondDoctor(DoctorPOJO secondDoctor) {
+		this.secondDoctor = secondDoctor;
+	}
+
+	public DoctorPOJO getThirdDoctor() {
+		return thirdDoctor;
+	}
+
+	public void setThirdDoctor(DoctorPOJO thirdDoctor) {
+		this.thirdDoctor = thirdDoctor;
+	}
+
 	public RoomPOJO getRoom() {
 		return room;
 	}
+
 	public void setRoom(RoomPOJO room) {
 		this.room = room;
 	}
-	public ProceduresTypePOJO getProcedureType() {
-		return procedureType;
+
+	public ProceduresTypePOJO getOperationType() {
+		return operationType;
 	}
-	public void setProcedureType(ProceduresTypePOJO procedureType) {
-		this.procedureType = procedureType;
+
+	public void setOperationType(ProceduresTypePOJO operationType) {
+		this.operationType = operationType;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+
+	public OperationStatus getStatus() {
+		return status;
 	}
-	
+
+	public void setStatus(OperationStatus status) {
+		this.status = status;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public DoctorPOJO getRequestedDoctor() {
+		return requestedDoctor;
+	}
+
+	public void setRequestedDoctor(DoctorPOJO requestedDoctor) {
+		this.requestedDoctor = requestedDoctor;
+	}
 	
 }

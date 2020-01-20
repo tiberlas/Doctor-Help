@@ -66,11 +66,18 @@ public class PatientController {
 
 		PatientPOJO ret = patientService.findByInsuranceNumber(insuranceId);
 		
+		
 		if(ret == null) {
 			return new ResponseEntity<PatientDTO>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<PatientDTO>(new PatientDTO(ret), HttpStatus.OK);
+		String medicalStaffEmail = currentUser.getEmail(); //iz tokena izvadi email i proveri u obe tabele da li postoji istorija pregleda
+		boolean showHealthRecord = patientService.showHealthRecord(medicalStaffEmail, insuranceId);
+		
+		PatientDTO dto = new PatientDTO(ret);
+		dto.setShowHealthRecord(showHealthRecord); //prosiren dto da bi prikazao health record na front endu
+		
+		return new ResponseEntity<PatientDTO>(dto, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/all")
@@ -104,7 +111,6 @@ public class PatientController {
 	@PutMapping(value = "/confirmAccount", consumes = "application/json")
 	public ResponseEntity<PatientPOJO> confirmPatientAccount(@RequestBody PatientRequestDTO patient) {
 		//String email = currentUser.getEmail();
-		System.out.println("USO SAM");
 		
 		PatientPOJO p = patientService.findPatientByEmail(patient.getEmail());
 		

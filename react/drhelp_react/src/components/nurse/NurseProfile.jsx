@@ -9,9 +9,10 @@ class NurseProfile extends Component {
     render() { 
         return ( 
             <div>
-                <ViewProfile profile={this.context.nurse}/>
+               
                 <div class="row d-flex justify-content-center">
 					<div class='col-md-7'>
+                    <ViewProfile profile={this.context.nurse}/>
                         <div>
                             <NavLink to = '/nurse/profile/change'>
                                 change profile

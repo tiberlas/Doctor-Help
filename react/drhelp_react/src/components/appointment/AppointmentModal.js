@@ -4,9 +4,10 @@ import Nav from 'react-bootstrap/Nav'
 import {Row, Col} from 'react-bootstrap'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import OverviewTable from './OverviewTable'
-import HealthRecord from '../health_record/HealthRecord'
+import AppointmentHealthRecord from '../health_record/AppointmentHealthRecord'
 import ExaminationReport from './ExaminationReport'
 import axios from 'axios'
+import ScheduleAnother from './ScheduleAnother'
 
 class AppointmentModal extends React.Component {
     
@@ -19,7 +20,6 @@ class AppointmentModal extends React.Component {
     }
 
     handleDiagnosisChange = (option) => {
-        console.log("diagnosis", option.label)
         this.setState({selectedDiagnosis: option.label})
     }
 
@@ -32,27 +32,21 @@ class AppointmentModal extends React.Component {
         for(let i=0; i<options.length; i++) {
             medication.push(options[i].label)
         }
-        console.log("BOG:", medication)
-        console.log("STATE:", medication)
         this.setState({selectedMedication: medication})
     }
 
     handleNotesChange = (e) => {
-        console.log("owowo", e.target.value)
         this.setState({note: e.target.value})
     }
 
     componentWillReceiveProps(props) {
         this.setState({ confirmFinish: props.showConfirmAppointment})
-        console.log("props", props.showConfirmAppointment)
     }
 
 
     handleFinish = () => {
 
         this.props.toggleAppointment()
-        
-        
         let url = 'http://localhost:8080/api/appointments/done=' + this.props.event.id
         axios.put(url, {
             diagnosis: this.state.selectedDiagnosis,
@@ -122,7 +116,7 @@ class AppointmentModal extends React.Component {
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="second">
                                 <ModalBody>
-                                   <HealthRecord data = {this.props.event} />
+                                   <AppointmentHealthRecord data = {this.props.event} />
                                  </ModalBody>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="third">
@@ -133,6 +127,11 @@ class AppointmentModal extends React.Component {
                                     handleMedicationChange={this.handleMedicationChange}
                                     handleNotesChange={this.handleNotesChange} />
                                  </ModalBody>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="fourth" >
+                                    <ModalBody>
+                                        <ScheduleAnother currentAppointment = {this.props.event.id}/>
+                                    </ModalBody>
                                 </Tab.Pane>
                             </Tab.Content>
                             </Col>

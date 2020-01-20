@@ -13,16 +13,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.DailySchedule;
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.EmailCheck;
 import com.ftn.dr_help.comon.Term;
+import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
+import com.ftn.dr_help.dto.MedicalStaffNameDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
+import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
+import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
+import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -31,12 +38,16 @@ import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.DoctorReviewPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
+import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.DoctorReviewRepository;
+import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.PatientRepository;
+import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
 
 @Service
@@ -44,6 +55,9 @@ public class DoctorService {
 
 	@Autowired
 	private DoctorRepository repository;
+	
+	@Autowired
+	private OperationRepository operationRepository;
 	
 	@Autowired
 	private AppPasswordEncoder encoder;
@@ -59,6 +73,15 @@ public class DoctorService {
 	
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
+	
+	@Autowired
+	private ProcedureTypeRepository procedureRepository;
+	
+	@Autowired
+	private CalculateFirstFreeSchedule calculate;
+	
+	@Autowired
+	private DateConverter dateConvertor;
 	
 	@Autowired
 	private EmailCheck check;
@@ -342,6 +365,12 @@ public class DoctorService {
 				return false;
 			}
 			
+			ProceduresTypePOJO procedureType = procedureRepository.getOne(newDoctorDTO.getProcedureId());
+			
+			if(!clinic.getProcedureTypesList().contains(procedureType)) {
+				return false;
+			}
+			
 			DoctorPOJO newDoctor = new DoctorPOJO();
 			newDoctor.setFirstName(newDoctorDTO.getFirstName());
 			newDoctor.setLastName(newDoctorDTO.getLastName());
@@ -354,6 +383,7 @@ public class DoctorService {
 			birthday.setTime(newDoctorDTO.getBirthday());
 			newDoctor.setBirthday(birthday);
 			newDoctor.setClinic(clinic);
+			newDoctor.setProcedureType(procedureType);
 			newDoctor.setMonday(newDoctorDTO.getMonday());
 			newDoctor.setTuesday(newDoctorDTO.getTuesday());
 			newDoctor.setWednesday(newDoctorDTO.getWednesday());
@@ -483,6 +513,279 @@ public class DoctorService {
 		else {
 			doctorReviewRepository.updateReview(review, patientId, doctorId);
 		}
+	public String findFirstFreeSchedue(String email) {
+		
+		try {
+			
+			DoctorPOJO doctor = repository.findOneByEmail(email);
+			List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
+			Calendar begin = Calendar.getInstance();
+			begin.add(Calendar.DAY_OF_MONTH, 1);
+			begin.clear(Calendar.SECOND);
+			begin.clear(Calendar.MILLISECOND);
+			
+			Calendar firstFree = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+			
+			return dateConvertor.dateForFrontEndString(firstFree);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public String findFirstFreeSchedueForOperation(ThreeDoctorsIdDTO doctors) {
+		try {
+			
+			Calendar begin0 = Calendar.getInstance();
+			begin0.add(Calendar.DAY_OF_MONTH, 1);
+			
+			Calendar free = findFirstOperationSchedule(doctors.getDoctor0(), doctors.getDoctor1(), doctors.getDoctor2(), begin0);
+			//sva tri datuma su ista
+			return dateConvertor.dateForFrontEndString(free);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public Calendar checkSchedue(String email, Calendar requestedSchedule) {
+		
+		DoctorPOJO doctor = repository.findOneByEmail(email);
+		List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
+		
+		return calculate.checkScheduleOrFindFirstFree(doctor, requestedSchedule, dates);
+	}
+	
+	public String checkOperationSchedue(OperationRequestDTO request) {
+		
+		try {
+			Calendar begin0 = dateConvertor.stringToDate(request.getDateAndTimeString());
+			
+			Calendar free = findFirstOperationSchedule(request.getDoctor0(), request.getDoctor1(), request.getDoctor2(), begin0);
+			//sva tri datuma su ista
+			
+			if(free.equals(begin0)) {
+				return request.getDateAndTimeString();
+			} else {
+				return dateConvertor.dateForFrontEndString(free);
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public List<MedicalStaffNameDTO> getSpecializedDoctors(Long procedureTypeId) {
+		try {
+			
+			List<DoctorPOJO> finded = repository.findAllDoctorsWihtSpetialization(procedureTypeId);
+			List<MedicalStaffNameDTO> doctors = new ArrayList<>();
+			
+			if(finded == null) {
+				return doctors;
+			}
+			
+			for(DoctorPOJO doctor : finded) {
+				doctors.add(new MedicalStaffNameDTO(
+							doctor.getId(),
+							doctor.getFirstName(),
+							doctor.getLastName()
+						));
+			}
+			
+			return doctors;
+		} catch(Exception e) {
+			System.out.println("ZASTO");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Calendar findFirstOperationSchedule(Long drId0, Long drId1, Long drId2, Calendar begin) {
+		try {
+			DoctorPOJO dr0 = repository.findById(drId0).orElse(null);
+			DoctorPOJO dr1 = repository.findById(drId1).orElse(null);
+			DoctorPOJO dr2 = repository.findById(drId2).orElse(null);
+			if(dr0 == null || dr1 == null || dr2 == null) {
+				System.out.println("ALL IS NULL");
+				return null;
+			}
+			
+			List<Date> dates0 = repository.findAllReservedOperations(drId0);
+			List<Date> dates1 = repository.findAllReservedOperations(drId1);
+			List<Date> dates2 = repository.findAllReservedOperations(drId2);
+			
+			System.out.println(begin.getTime());
+			if(calculate == null) {
+				calculate = new CalculateFirstFreeSchedule();
+			}
+			
+			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
+			
+			return firstEqualShift;
+		} catch(Exception e) {
+			System.out.println("EX1 " + e);
+			e.printStackTrace();
+			e.getStackTrace();
+			return null;
+		}
+	}
+	
+	public List<String> getAdminsMail(String drMail) {
+		List<String> adminMails = repository.findAllClinicAdminMails(drMail);
+		
+		return adminMails;
+	}
+	
+	public String getDoctorsFullName(String email) {
+		
+		DoctorPOJO dr = repository.findOneByEmail(email);
+		
+		return dr.getFirstName() + " " + dr.getLastName();
+	}
+	
+	public List<RequestedOperationScheduleDTO> getOperationRequests(String email) {
+		try {
+			
+			List<OperationPOJO> operations = operationRepository.getAllOperationRequests(email);
+			System.out.println(operations.get(0).getOperationType().getName());
+			
+			List<RequestedOperationScheduleDTO> finded = new ArrayList<>();
+			for(OperationPOJO operation : operations) {
+				finded.add(new RequestedOperationScheduleDTO(
+						operation.getId(),
+						operation.getOperationType().getName(), 
+						(operation.getPatient().getFirstName() +" "+ operation.getPatient().getLastName()), 
+						dateConvertor.dateForFrontEndString(operation.getDate()), 
+						("dr. "+ operation.getFirstDoctor().getFirstName() +" "+ operation.getFirstDoctor().getLastName()), 
+						("dr. "+ operation.getSecondDoctor().getFirstName() +" "+ operation.getSecondDoctor().getLastName()), 
+						("dr. "+ operation.getThirdDoctor().getFirstName() +" "+ operation.getThirdDoctor().getLastName()), 
+						operation.getStatus().toString()));
+			}
+			
+			return finded;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public boolean getOperationRequestsCount(String email) {
+		try {
+			
+			List<OperationPOJO> operations = operationRepository.getAllOperationRequests(email);
+			
+			if(operations == null || operations.isEmpty()) {
+				return false;
+			} else {
+				return true;
+			}
+			
+		} catch(Exception e) {
+			return false;
+		}
+	}
+	
+	public List<BusinessDayHoursDTO> getDoctorBusinessHours(Long doctor_id) { //metoda racuna smene i prikazuje ih na kalendaru u prikladnom json formatu
+		//za primer formata, udji u BusinessDayHoursDTO
+		DoctorPOJO doctor = repository.findOneById(doctor_id);
+		
+		List<BusinessDayHoursDTO> businessDayList = new ArrayList<BusinessDayHoursDTO>();
+		
+		
+		if(!doctor.getMonday().toString().equals("NONE")) { //ako radi ponedeljkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(1); //1 == Monday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getMonday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getMonday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getMonday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		if(!doctor.getTuesday().toString().equals("NONE")) { //ako radi utorkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(2); //2 == Tuesday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getTuesday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getTuesday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getTuesday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		if(!doctor.getWednesday().toString().equals("NONE")) { //ako radi sredom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(3); //3 == Wednesday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getWednesday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getWednesday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getWednesday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		if(!doctor.getThursday().toString().equals("NONE")) { //ako radi cetvrtkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(4); //4 == Thursday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getThursday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getThursday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getThursday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+
+		if(!doctor.getFriday().toString().equals("NONE")) { //ako radi petkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(5); //5 == Friday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getFriday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getFriday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getFriday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		return businessDayList;
+		
 	}
 	
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,16 @@ public class HealthRecordController {
 		}
 		
 		return new ResponseEntity<PatientHealthRecordDTO>(returnDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/get/patient={insurance}")
+	@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('NURSE') or hasAuthority('PATIENT')")
+	public ResponseEntity<PatientHealthRecordDTO> findPatientHealthRecord(@PathVariable("insurance") Long insurance) {
+		
+		PatientHealthRecordDTO record = patientService.getPatientHealthRecordForMedicalStaff(insurance);
+		System.out.println("record basic info" + record.getLastName());
+		
+		return new ResponseEntity<PatientHealthRecordDTO> (record, HttpStatus.OK);
 	}
 
 }

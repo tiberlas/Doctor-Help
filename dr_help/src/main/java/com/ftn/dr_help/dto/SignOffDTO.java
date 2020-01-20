@@ -12,6 +12,8 @@ public class SignOffDTO {
 	private String patient;
 	private Long perscriptionId;
 	
+	private boolean isSigned;
+	
 	
 	public SignOffDTO() {
 		super();
@@ -81,6 +83,18 @@ public class SignOffDTO {
 
 	public void setPerscriptionId(Long perscriptionId) {
 		this.perscriptionId = perscriptionId;
+	}
+
+
+
+	public boolean isSigned() {
+		return isSigned;
+	}
+
+
+
+	public void setSigned(boolean isSigned) {
+		this.isSigned = isSigned;
 	}
 	
 	

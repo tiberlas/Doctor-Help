@@ -1,30 +1,81 @@
 import React, {Fragment} from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 import {Link} from 'react-router-dom'
+import axios from 'axios'
+import {DoctorContext} from '../../context/DoctorContextProvider'
+import DoctorShowExaminationReport from './DoctorShowExaminationReport'
 
 class AppointmentInfoModal extends React.Component {
 
+    static contextType = DoctorContext
+
     state = {
-        showConfirmModal: false
+        showConfirmModal: false,
+        canDecline: false,
+        showRequestDeclinedOK: false,
+        showRequestDeclinedBAD: false, 
+        showReport: false,
+        report: {}
     }
 
-    checkCurrentDate = () => {
+    handleDelete = () => {
+        axios.delete('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/delete')
+            .then(response => {
+                this.setState({showRequestDeclinedOK: true})
+            }).catch(error=> {
+                this.setState({showRequestDeclinedBAD: true})
+            })
+
+    }
+
+    checkCurrentDate = () => { //proverava da li se prosledjeni appointment slaze sa tekucim danom
 
         let today = new Date();
         let isToday = (today.toDateString() == this.props.event.start.toDateString());
-        console.log('is it today?', isToday)
         return isToday
     }
 
 
     componentWillReceiveProps(props) {
-        this.setState({ showConfirmModal: props.showConfirmModal})
+        this.setState({ showConfirmModal: props.showConfirmModal, canDecline: false, showRequestDeclinedOK: false, showRequestDeclinedBAD: false}, () => {
+
+            if(props.event.status == 'DONE') {
+                axios.get('http://localhost:8080/api/appointments/get-examination-report/appointment='+props.event.id+'/doctor='+this.context.doctor.id).then(response => {
+                    this.setState({report: response.data, showReport: true}, () => {this.handleCanDecline()})
+                })
+            } else {
+                this.setState({showReport: false}, () => {this.handleCanDecline()})
+            }
+        })
+    }
+
+    handleCanDecline = () => {
+        if(this.props.event.id > 0) {
+            axios.get('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/can+delete')
+            .then(response => {
+                if(response.data == 'CAN BE DELETED') {
+                    this.setState({canDecline: true});
+                }
+            }).catch(error => {
+                this.setState({canDecline: false});
+            })
+        }
+    }
+
+    updateReport = (note) => {
+        this.setState( prevState => ({
+            report: {
+                ...prevState.report,
+                note: note
+            }
+        }), ()=>{this.forceUpdate()})
     }
 
 
     render() {
        let appStart = new Date(this.props.event.start).toLocaleDateString("en-US")
        let profileUrl = '/profile/' + this.props.event.patientInsurance
+       
         return (
             <Fragment> 
                 <Modal
@@ -36,19 +87,31 @@ class AppointmentInfoModal extends React.Component {
                 </ModalHeader>
                 <ModalBody>
                 <div>
-                    <p> Development: Appointment ID - {this.props.event.id} </p> 
-                    <Link to = {profileUrl}> Patient: {this.props.event.patient} </Link>
-                    <p>Status: {this.props.event.status}</p>
-                    <p>Procedure: {this.props.event.procedure}</p>
-                    <p>Price: {this.props.event.price}</p>
-                    <p>Discount: {this.props.event.discount}% </p>
-                    <p>Total: {this.props.event.price * (1 - (this.props.event.discount / 100))} </p>
+                    <br/>
+                     Patient:  {this.props.event.patient.trim() === '-' 
+                     ? <span style={{fontStyle: "italic", color: "#cdcdcd"}}> unassigned </span> : <Fragment> <Link to = {profileUrl}> {this.props.event.patient} </Link> </Fragment> }
+                     <br/>
+                    Status: {this.props.event.status}<br/>
+                    Procedure: {this.props.event.procedure}<br/>
+                    Price: {this.props.event.price}<br/>
+                    Discount: {this.props.event.discount}% <br/>
+                    Total: {this.props.event.price * (1 - (this.props.event.discount / 100))}<br/>
                 </div>
+                <div>
+                {this.state.showReport && <DoctorShowExaminationReport
+                                                event = {this.props.event} 
+                                                report = {this.state.report}
+                                                updateReport={this.updateReport}/>}
+                </div>
+
                 </ModalBody>
                 <ModalFooter>
 
         {!this.state.showConfirmModal ? <Fragment>
-            <Button color="secondary" onClick={this.props.toggle}> Close</Button> 
+            { this.state.canDecline &&
+                <Button color='warning' onClick={this.handleDelete} disabled={this.state.showRequestDeclinedOK}>Decline</Button>
+            }
+            <Button color="secondary" onClick={() => {this.props.toggle(this.props.event.id, this.state.showRequestDeclinedOK)}}> Close</Button> 
         {(this.checkCurrentDate() && this.props.event.status === 'APPROVED') ? 
         <Fragment>
             <Button color="primary" onClick = {() => {this.setState({showConfirmModal: true})}}>Start</Button>
@@ -64,6 +127,14 @@ class AppointmentInfoModal extends React.Component {
              <Button color = "secondary" onClick = {() => {this.setState({showConfirmModal: false})}}> Cancel</Button> 
              <Button color = "primary" onClick = {() => {this.props.toggleAppointment()}}>  Yes, my child.  </Button> 
             </Fragment>}
+
+            {this.state.showRequestDeclinedOK &&
+                <p> The appointment has been successfuly declined. </p>
+            }
+            {this.state.showRequestDeclinedBAD &&
+                <p class='text-warning'> The appointment could not declined. Try refreshing you page. </p>
+            }
+
                 </ModalFooter> 
 
               

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
+import com.ftn.dr_help.dto.RoomReservingInfoDTO;
 import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
@@ -84,6 +85,7 @@ public class RoomService {
 	public RoomDTO findOne(Long roomID, String email) {
 		
 		Long clinicID = adminRepository.findOneByEmail(email).getClinic().getId();
+		List<RoomPOJO> reservedRooms = repository.getAllReservedRooms();
 		
 		if(roomID == null) {
 			return null;
@@ -94,7 +96,12 @@ public class RoomService {
 		if(finded == null || finded.isDeleted())
 			return null;
 		
-		return new RoomDTO(finded);
+		RoomDTO room = new RoomDTO(finded);
+		if(reservedRooms.contains(finded)) {
+			room.setReserved(true);
+		}
+				
+		return room;
 	}
 	
 	public RoomDTO save(RoomDTO newRoom, String email) {
@@ -249,11 +256,15 @@ public class RoomService {
 		 * */
 		try {
 			List<RoomPOJO> allRooms = adminRepository.findOneByEmail(email).getClinic().getRoomList();
+			List<RoomPOJO> reservedRooms = repository.getAllReservedRooms();
 			
 			List<RoomDTO> retVal = new ArrayList<RoomDTO>();
 			for(RoomPOJO room : allRooms) {
 				RoomDTO newRoom = new RoomDTO(room);
 				newRoom.setFirstFreeSchedule(findFirstFreeSchedule(room));
+				if(reservedRooms.contains(room)) {
+					newRoom.setReserved(true);
+				}
 				retVal.add(newRoom);
 			}
 			
@@ -309,6 +320,9 @@ public class RoomService {
 					if(!flagReserved) {
 						RoomDTO newRoom = new RoomDTO(room);
 						newRoom.setFirstFreeSchedule(findFirstFreeSchedule(room));
+						if(reservedRooms.contains(room)) {
+							newRoom.setReserved(true);
+						}
 						roomsFilteredDate.add(newRoom);						
 					}
 				}
@@ -369,33 +383,55 @@ public class RoomService {
 	}
 	
 	private String findFirstFreeSchedule(RoomPOJO room) {
+		/*
+		 * Nadje prvi slobodni termin za sobu
+		 * */
 		
-		Date duration = room.getProcedurasTypes().getDuration();
-		@SuppressWarnings("deprecation")
-		int hours = duration.getHours();
-		@SuppressWarnings("deprecation")
-		int minutes = duration.getMinutes();
+		Calendar duration = Calendar.getInstance();
+		duration.setTime(room.getProcedurasTypes().getDuration());
+		int hours = duration.get(Calendar.HOUR);
+		int minutes = duration.get(Calendar.MINUTE);
 		
 		Calendar begin = Calendar.getInstance(); //sadrzi pocetak prvog slobodnog termina; prvi je sutra u 8 
 		begin.add(Calendar.DAY_OF_MONTH, 1);
+		begin.set(Calendar.AM_PM, Calendar.AM);
 		begin.set(Calendar.HOUR, 8);
 		begin.set(Calendar.MINUTE, 0);
+		begin.clear(Calendar.SECOND);
+		begin.clear(Calendar.MILLISECOND);
 		
 		Calendar end = Calendar.getInstance(); //sadrzi kraj termina u odnosu na begin
 		end.add(Calendar.DAY_OF_MONTH, 1);
+		end.set(Calendar.AM_PM, Calendar.AM);
 		end.set(Calendar.HOUR, 8);
 		end.set(Calendar.MINUTE, 0);
 		end.add(Calendar.HOUR, hours);
 		end.add(Calendar.MINUTE, minutes);
+		end.clear(Calendar.SECOND);
+		end.clear(Calendar.MILLISECOND);
 		
+		Calendar current = Calendar.getInstance();
+		System.out.println("DEBUG MODE FOR " + room.getName());
 		List<Date> dates = appointmentRepository.findScheduledDatesOfRoom(room.getId());
 		for(Date date : dates) {
-			if(date.after(begin.getTime())) {
-				//prvi termin koji je posle trazenog pocetka
-				if(date.after(end.getTime())) {
+		
+			System.out.println("start time " + begin.getTime());
+			System.out.println("end time " + end.getTime());
+			System.out.println("CURRENT " + date);
+			
+			//pretvaranje DATE u calendar za tekuci dan
+			current.setTime(date);
+			
+			if(current.compareTo(begin) >= 0) {
+				System.out.println(1);
+				//prvi termin koji je posle trazenog pocetka iji je bas taj trazeni
+				if(current.after(end)) {
+					System.out.println(2);
 					//ovaj termin pocinje posle kraja trazenog termina; znaci trazeni termin je prvi slobodni
-					return dateConvertor.dateAndTimeToString(begin);
+					//return dateConvertor.dateAndTimeToString(begin);
+					return dateConvertor.dateForFrontEndString(begin);
 				} else {
+					System.out.println(3);
 					//definise se novi trazeni termin koji pocinje posle zavrsetka tekuceg
 					begin.setTime(date); //kraj tekuceg termina
 					begin.add(Calendar.HOUR, hours);
@@ -408,7 +444,28 @@ public class RoomService {
 			}
 		}
 		
-		return dateConvertor.dateAndTimeToString(begin);
+		//return dateConvertor.dateAndTimeToString(begin);
+		return dateConvertor.dateForFrontEndString(begin);
+	}
+	
+	public List<RoomReservingInfoDTO> getAllWithType(String adminEmail, Long typeId) {
+		try {
+			
+			List<RoomReservingInfoDTO> rooms = new ArrayList<>();
+			List<RoomPOJO> finded = repository.findAllWithType(adminEmail, typeId);
+			
+			for(RoomPOJO room : finded) {
+				rooms.add(new RoomReservingInfoDTO(
+						room.getId(), 
+						findFirstFreeSchedule(room), 
+						room.getName(), 
+						room.getNumber()));
+			}
+			
+			return rooms;
+		} catch(Exception e) {
+			return null;
+		}
 	}
 	
 }

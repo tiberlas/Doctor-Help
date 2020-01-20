@@ -3,6 +3,7 @@ package com.ftn.dr_help.model.pojo;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,13 +12,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.ftn.dr_help.model.enums.LeaveStatusEnum;
+import com.ftn.dr_help.model.enums.LeaveTypeEnum;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
-@Entity
+@Entity(name="leaveRequests")
 public class LeaveRequestPOJO implements Serializable{
 
 	/**
@@ -29,22 +34,36 @@ public class LeaveRequestPOJO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "doctor_id", referencedColumnName = "id")
+	DoctorPOJO doctor;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	private DoctorPOJO idDoc;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "nurse_id", referencedColumnName = "id")
+	NursePOJO nurse;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	private NursePOJO idNur;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "staffrole", nullable = false)
+	@Column(name = "staffRole", nullable = false)
 	private RoleEnum staffRole;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "leaveType", nullable = false)
+	private LeaveTypeEnum leaveType;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "leaveStatus", nullable = false)
+	private LeaveStatusEnum leaveStatus;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar firstDay;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar lastDay;
+	
+	@Column(name = "requestNote", nullable = true)
+	private String requestNote;
+	
 	
 	public LeaveRequestPOJO() {
 		
@@ -86,20 +105,45 @@ public class LeaveRequestPOJO implements Serializable{
 		return serialVersionUID;
 	}
 
-	public NursePOJO getIdNur() {
-		return idNur;
+
+	public String getRequestNote() {
+		return requestNote;
 	}
 
-	public void setIdNur(NursePOJO idNur) {
-		this.idNur = idNur;
+	public void setRequestNote(String requestNote) {
+		this.requestNote = requestNote;
 	}
 
-	public DoctorPOJO getIdDoc() {
-		return idDoc;
+	public DoctorPOJO getDoctor() {
+		return doctor;
 	}
 
-	public void setIdDoc(DoctorPOJO idDoc) {
-		this.idDoc = idDoc;
+	public void setDoctor(DoctorPOJO doctor) {
+		this.doctor = doctor;
+	}
+
+	public NursePOJO getNurse() {
+		return nurse;
+	}
+
+	public void setNurse(NursePOJO nurse) {
+		this.nurse = nurse;
+	}
+
+	public LeaveTypeEnum getLeaveType() {
+		return leaveType;
+	}
+
+	public void setLeaveType(LeaveTypeEnum leaveType) {
+		this.leaveType = leaveType;
+	}
+
+	public LeaveStatusEnum getLeaveStatus() {
+		return leaveStatus;
+	}
+
+	public void setLeaveStatus(LeaveStatusEnum leaveStatus) {
+		this.leaveStatus = leaveStatus;
 	}
 	
 	

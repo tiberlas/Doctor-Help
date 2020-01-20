@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
-import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
@@ -23,17 +22,21 @@ import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ExaminationReportPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.MedicationPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.model.pojo.TherapyPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.repository.AllergyRepository;
 import com.ftn.dr_help.repository.AppointmentRepository;
+import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.ExaminationReportRepository;
 import com.ftn.dr_help.repository.HealthRecordRepository;
+import com.ftn.dr_help.repository.NurseRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.UserRequestRepository;
 import com.ftn.dr_help.validation.PasswordValidate;
@@ -43,6 +46,12 @@ public class PatientService {
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired
+	private NurseRepository nurseRepository;
+	
+	@Autowired
+	private DoctorRepository doctorRepository;
 	
 	@Autowired
 	private UserRequestRepository userRequestRepository;
@@ -355,6 +364,7 @@ public class PatientService {
 		return false;
 	}
 	
+	//update health record
 	public PatientHealthRecordDTO findHealthRecordByInsuranceNumber(Long insuranceNumber, PatientHealthRecordDTO dto) {
 		PatientPOJO patient = patientRepository.findByInsuranceNumber(insuranceNumber);
 		HealthRecordPOJO recordPOJO = patient.getHealthRecord();
@@ -436,6 +446,67 @@ public class PatientService {
 			PatientHistoryDTO temp = new PatientHistoryDTO (a);
 			retVal.add(temp);
 		}
+		return retVal;
+	}
+	
+	
+	public boolean showHealthRecord(String medicalStaffEmail, Long insuranceNumber) {
+		
+		DoctorPOJO doctor = doctorRepository.findOneByEmail(medicalStaffEmail); //protrci kroz tabele za docu i sestru po mejlu
+		if(doctor != null) { //doca je
+			PatientPOJO patient = patientRepository.findByInsuranceNumber(insuranceNumber);
+			Integer count = doctorRepository.findDoneAppointmentForDoctorCount(doctor.getId(), patient.getId());
+			if(count > 0) {
+				System.out.println("Doctor count for health record display is larger than 0, can display health record");
+				return true;
+			}
+		}
+		
+		NursePOJO nurse = nurseRepository.findOneByEmail(medicalStaffEmail);
+
+		if(nurse != null) {
+			PatientPOJO patient = patientRepository.findByInsuranceNumber(insuranceNumber);
+			Integer count = nurseRepository.findDoneAppointmentForNurseCount(nurse.getId(), patient.getId());
+			if(count > 0) {
+				System.out.println("Nurse count for health record display is larger than 0, can display health record");
+				return true;
+			}
+		}
+		
+		System.out.println("Can't display health record");
+		return false;
+	}
+	
+	
+	public PatientHealthRecordDTO getPatientHealthRecordForMedicalStaff(Long insurance) {
+		
+		PatientPOJO patient = patientRepository.findByInsuranceNumber(insurance);
+		
+		if(patient == null) {
+			System.out.println("Patient not found");
+			return null;
+		}
+		
+		HealthRecordPOJO healthRecord = patient.getHealthRecord();
+		List<AllergyPOJO> allergies= healthRecord.getAllergyList();
+		
+		ArrayList<String> list = new ArrayList<String>();
+		
+		for (AllergyPOJO allergy : allergies) {
+			list.add(allergy.getAllergy());
+		}
+
+		
+		PatientHealthRecordDTO retVal = new PatientHealthRecordDTO();
+		
+		retVal.setBirthday(patient.getBirthday().getTime());
+		retVal.setBloodType(healthRecord.getBloodType());
+		retVal.setDiopter(healthRecord.getDiopter());
+		retVal.setFirstName(patient.getFirstName());
+		retVal.setHeight(healthRecord.getHeight());
+		retVal.setLastName(patient.getLastName());
+		retVal.setWeight(healthRecord.getWeight());
+		retVal.setAllergyList(list);
 		return retVal;
 	}
 	

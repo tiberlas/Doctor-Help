@@ -13,11 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,9 +77,13 @@ public class DoctorPOJO implements Serializable{
 	@OneToMany (mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<AppointmentPOJO> appointmentList;
 	
-	//@JsonManagedReference
-	@ManyToMany 
-	@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"))
+	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<DoctorRequestedAppointmentPOJO> request;
+	
+	@JsonManagedReference
+	//@ManyToMany 
+	//@JoinTable (name = "operating", joinColumns = @JoinColumn (name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn (name = "operations_id", referencedColumnName = "id"))
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OperationPOJO> operationList;
 
 	@ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -120,6 +122,9 @@ public class DoctorPOJO implements Serializable{
 	
 	@Column(name = "mustChangePassword", nullable = true)
 	private Boolean mustChangePassword = false;
+	
+	@OneToMany(mappedBy="doctor",  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LeaveRequestPOJO> leaveRequest;
 	
 	public DoctorPOJO() {
 		super();
@@ -296,5 +301,14 @@ public class DoctorPOJO implements Serializable{
 	public void setMustChangePassword(Boolean mustChangePassword) {
 		this.mustChangePassword = mustChangePassword;
 	}
+
+	public List<DoctorRequestedAppointmentPOJO> getRequest() {
+		return request;
+	}
+
+	public void setRequest(List<DoctorRequestedAppointmentPOJO> request) {
+		this.request = request;
+	}
+
 	
 }

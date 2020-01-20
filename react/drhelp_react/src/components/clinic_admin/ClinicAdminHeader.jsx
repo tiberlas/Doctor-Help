@@ -81,7 +81,7 @@ class ClinicAdminHeader extends Component {
                 <Nav className="mr-auto" navbar pullRight>
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav caret>
-                    Procedure type
+                    Procedure&nbsp;type
                     </DropdownToggle>
                     <DropdownMenu className='dropdown-menu'>
                     <LinkContainer exact to = '/clinic-administrator/procedure-types'>
@@ -102,7 +102,7 @@ class ClinicAdminHeader extends Component {
                 <Nav className="mr-auto" navbar pullRight>
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav caret>
-                    Predefined appointments
+                    Predefined&nbsp;appointments
                     </DropdownToggle>
                     <DropdownMenu className='dropdown-menu'>
                     <LinkContainer exact to = '/clinic-administrator/predefined-appointments'>
@@ -123,7 +123,7 @@ class ClinicAdminHeader extends Component {
                 <Nav className="mr-auto" navbar pullRight>
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav caret>
-                    Medical staffs
+                    Medical&nbsp;staffs
                     </DropdownToggle>
                     <DropdownMenu className='dropdown-menu'>
                     <LinkContainer exact to = '/clinic-administrator/medical-staff'>
@@ -132,6 +132,27 @@ class ClinicAdminHeader extends Component {
                     
                     <LinkContainer exact to='/clinic-administrator/medical-staff/add'>
                     <DropdownItem >Add</DropdownItem>
+                    </LinkContainer>
+
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+                </Nav>
+            </Collapse>
+
+            <NavbarToggler onClick={this.toggle}/>
+            <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
+                <Nav className="mr-auto" navbar pullRight>
+                <UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                    Requests
+                    </DropdownToggle>
+                    <DropdownMenu className='dropdown-menu'>
+                    <LinkContainer exact to = '/clinic-administrator/requests/appointments'>
+                    <DropdownItem >Appointments</DropdownItem>
+                    </LinkContainer>
+                    
+                    <LinkContainer exact to='/clinic-administrator/requests/operations'>
+                    <DropdownItem >Operations</DropdownItem>
                     </LinkContainer>
 
                     </DropdownMenu>

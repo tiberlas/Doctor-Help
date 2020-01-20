@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
+import com.ftn.dr_help.dto.RoomReservingInfoDTO;
 import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.service.RoomService;
 
@@ -123,6 +124,20 @@ public class RoomController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping(value="/all/type={id}", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<RoomReservingInfoDTO>> getAllRoomWithType(@PathVariable("id") Long typeId) {
+		String email = currentUser.getEmail();
+		
+		List<RoomReservingInfoDTO> rooms = service.getAllWithType(email, typeId);
+		
+		if(rooms == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(rooms, HttpStatus.OK);
 		}
 	}
 	

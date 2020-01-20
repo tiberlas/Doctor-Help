@@ -15,6 +15,7 @@ import ViewClinic from './ViewClinic.jsx';
 import PatientChangePassword from './PatientChangePassword.js';
 import DoctorListing from './DoctorListing.js';
 import DoctorProfilePreview from './DoctorProfilePreview';
+import ShowPatientHealthRecord from '../health_record/ShowPatientHealthRecord.js';
 
 
 class Patient extends Component {
@@ -92,7 +93,7 @@ class Patient extends Component {
                                 <PatientChangePassword />
                             </Route>
                             <Route exact path="/patient/health-record">
-                                <HealthRecord />
+                                <ShowPatientHealthRecord />
                             </Route>
                             <Route exact path="/patient/history">
                                 <PatientHistory filter="NONE"/>
