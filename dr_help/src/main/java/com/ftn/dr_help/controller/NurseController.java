@@ -27,6 +27,7 @@ import com.ftn.dr_help.dto.PatientDTO;
 import com.ftn.dr_help.dto.PatientFilterDTO;
 import com.ftn.dr_help.dto.SignOffDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
@@ -146,6 +147,20 @@ public class NurseController {
 		
 	}
 	
+	@GetMapping(value="/perscription/appointment={id}")
+	public ResponseEntity<SignOffDTO> getPerscriptionForAppointment(@PathVariable("id") Long id) {
+		
+		SignOffDTO dto = perscriptionService.findPerscriptionFromAppointment(id);
+		return new ResponseEntity<SignOffDTO>(dto, HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/signOff/appointment={id}")
+	public ResponseEntity<SignOffDTO> signOffPerscriptions(@PathVariable("id") Long id) {
+		perscriptionService.signAppointmentPerscription(id);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	@PutMapping(value = "/signOff/{nurseId}/{perscriptionId}")
 	@PreAuthorize("hasAuthority('NURSE')")
 	public ResponseEntity<PerscriptionPOJO> 
@@ -216,4 +231,20 @@ public class NurseController {
 		
 		return new ResponseEntity<MedicalStaffProfileDTO>(ret, HttpStatus.OK);
 	}
+	
+	@GetMapping(value="/nurse={id}/business-hours")
+	@PreAuthorize("hasAuthority('NURSE')")
+	public ResponseEntity<List<BusinessDayHoursDTO>> getNurseBusinessHours(@PathVariable("id") Long doctor_id) {
+		
+		List<BusinessDayHoursDTO> list = service.getNurseBusinessHours(doctor_id);
+		
+		if(list == null) {
+			System.out.println("Error while calculating doctor business hours");
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		} else{
+			return new ResponseEntity<List<BusinessDayHoursDTO>>(list, HttpStatus.OK);
+		}
+	}
+	
+
 }

@@ -34,6 +34,10 @@ class NurseHeader extends Component {
                     <Nav.Link>
                             <Link exact to='/nurse/schedule' class="nav-link">Schedule</Link>
                     </Nav.Link>
+
+                    <Nav.Link>
+                            <Link exact to='/nurse/leave-request' class="nav-link">Leave&nbsp;request</Link>
+                    </Nav.Link>
                 </Nav>
 
 

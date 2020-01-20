@@ -11,9 +11,10 @@ class PatientProfile extends Component {
 	render () {
 		return (
 			<div>
-				<ViewProfile profile={this.context.patient}/>
+				
 				<div class="row d-flex justify-content-center">
 					<div class='col-md-7'>
+					<ViewProfile profile={this.context.patient}/>
 						<div >
                     		<label class="badge badge-success text-right">Insurance Number:</label>&nbsp;&nbsp;&nbsp;
                     		<label >{this.context.patient.insuranceNumber}</label>

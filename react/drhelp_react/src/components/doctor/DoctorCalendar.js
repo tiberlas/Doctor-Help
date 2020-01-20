@@ -9,12 +9,16 @@ import AppointmentInfoModal from '../appointment/AppointmentInfoModal'
 import AppointmentModal from '../appointment/AppointmentModal'
 import axios from 'axios'
 import '../../main.scss' //webpack must be configured to do this
-import DoctorContext from '../../context/DoctorContextProvider'
+import {DoctorContext} from '../../context/DoctorContextProvider'
 
 class DoctorCalendar extends React.Component {
 
+  static contextType = DoctorContext
+
   state = {
     appointments: [],
+    approvedLeaves: [], //approved leave requests for background events
+    businessHours: [],
     infoModal: false,
     appointmentModal: false,
     showConfirmModal: false,
@@ -29,7 +33,9 @@ class DoctorCalendar extends React.Component {
       price: "",
       discount: "",
       status: "",
-      patientInsurance: ""
+      patientInsurance: "",
+      doctorId: "",
+      doctor: ""
     }
   }
 
@@ -51,6 +57,12 @@ class DoctorCalendar extends React.Component {
 
 
   handleEventClick = ({ event, el }) => {
+    
+    if(event.extendedProps.leave === true) { //ako je leave request, iskaci
+      return
+    }
+
+    this.toggle();
     this.setState({ 
         event: {
           id: event.id,
@@ -58,34 +70,56 @@ class DoctorCalendar extends React.Component {
           start: event.start,
           end: event.end,
           patient: event.extendedProps.patient,
+          doctor: event.extendedProps.doctor,
           procedure: event.extendedProps.procedure,
           price: event.extendedProps.price,
           discount: event.extendedProps.discount,
           status: event.extendedProps.status,
           patientInsurance: event.extendedProps.patientInsurance,
+          doctorId: event.extendedProps.doctorId
         }
      }, () => {
-      this.toggle();
+      //this.toggle();
      });
   };
 
   componentDidMount() {
     if(this.props.regime === 'schedule') {
-        let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.props.medical_staff.id 
+        this.setState({regime: 'schedule'})
+        let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.context.doctor.id 
         axios.get(url).then((response) => {
             this.setState({
               appointments: response.data
             })
         })
-      }
 
-     
+        axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id +'/business-hours')
+            .then(response => {
+              this.setState({businessHours: response.data}, () => {
+              })
+            })
+
+        axios.get('http://localhost:8080/api/leave-requests/get-approved/doctor='+this.context.doctor.id)
+            .then(response => {this.setState({approvedLeaves: response.data})})
+
+      }
   }
 
   componentWillReceiveProps(props){
     if(this.props.regime === 'profile') {
+      this.setState({regime: 'profile'})
       let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
-      let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+props.medical_staff.id+'/patient='+id
+      let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+this.context.doctor.id+'/patient='+id
+      axios.get(url).then((response) => {
+        this.setState({
+          appointments: response.data
+        })
+      })
+    }
+    
+    if(this.props.regime === 'history') {
+      let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
+      let url = 'http://localhost:8080/api/appointments/done_appointments/doctor/patient='+id
       axios.get(url).then((response) => {
         this.setState({
           appointments: response.data
@@ -93,7 +127,6 @@ class DoctorCalendar extends React.Component {
       })
     }
   }
-
 
   generateEventList = () => {
     let events = []
@@ -124,6 +157,8 @@ class DoctorCalendar extends React.Component {
         let priceInfo = appointment.price
         let discountInfo = appointment.discount
         let insuranceInfo = appointment.insuranceNumber
+        let doctorIdInfo = appointment.doctorId
+        let doctorInfo = appointment.doctorFirstName + ' ' + appointment.doctorLastName
 
         let event = { 
           id: appointment.appointment_id,
@@ -135,7 +170,9 @@ class DoctorCalendar extends React.Component {
           procedure: procedureInfo,
           price: priceInfo,
           discount: discountInfo,
-          patientInsurance: insuranceInfo
+          patientInsurance: insuranceInfo,
+          doctorId: doctorIdInfo,
+          doctor: doctorInfo
         }
 
         events.push(event)
@@ -143,29 +180,97 @@ class DoctorCalendar extends React.Component {
     return events
   }
 
+  generateLeaveRequestsEventList = () => {
+    let events = []
+    for(let i = 0; i < this.state.approvedLeaves.length; i++)
+    {
+      let request = this.state.approvedLeaves[i]
+      let start = new Date(request.startDate).toISOString()
+      
+      let endDate = new Date(request.endDate)
+      endDate.setDate(endDate.getDate() + 1)
+      let end = endDate.toISOString()
+
+      let event = {
+          start: start,
+          end: end,
+          rendering: 'background',
+          color: '#ff9f89',
+          allDay: true,
+          leave: true
+      }
+
+      events.push(event)
+    }
+
+    return events
+  }
+
   render() {
       return (
         <div className='demo-app-calendar'>
-          {this.props.regime==='schedule' &&  <FullCalendar defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
+          {this.props.regime==='schedule' &&  <FullCalendar id="FullCalendar" defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
           header={{
             left: "prev,next today",
             center: "title",
             right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
-          }}  
-          selectable={true}
-          events = {this.generateEventList()}
+          }}
+          buttonText={
+            {
+              prev: '<',
+              next: '>'
+            }
+          }  
+          businessHours = { 
+            this.state.businessHours
+          }
+          eventSources = {
+           [
+             this.generateEventList(),
+             this.generateLeaveRequestsEventList()
+           ]
+          }
+          nowIndicator={true}
+          //events = {this.generateEventList()}
           eventLimit = {true}
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
           themeSystem = 'bootstrap' />} 
 
-        {this.props.regime==='profile' &&  <FullCalendar defaultView="listWeek" //ako si na stranici pacijenta, list view
+        {this.props.regime ==='profile' && this.generateEventList().length > 0 && <FullCalendar defaultView="listWeek" //ako si na stranici pacijenta, list view
           header={{
             left: "title",
             center: "Upcoming appointments",
             right: ""
           }}
+          selectable={true}
+          events = {this.generateEventList()}
+          eventLimit = {true}
+          eventRender={this.handleEventRender}
+          eventClick={this.handleEventClick}
+          plugins={[ listPlugin, bootstrapPlugin, interaction]} 
+          themeSystem = 'bootstrap' />} {
+          this.props.regime === 'profile' && this.generateEventList().length === 0 && <h2>No upcoming appointments. </h2> 
+          }
+
+          {this.props.regime==='history' &&  <FullCalendar defaultView="listYear" //ako si na stranici pacijenta za history, list view
+          header={{
+            left: "",
+            center: "title",
+            right: "prev, next"
+          }}
+          buttonText={
+            {
+              prev: '<',
+              next: '>'
+            }
+          } 
+          titleFormat={
+            {
+             year: 'numeric'
+            }
+          }
           selectable={true}
           events = {this.generateEventList()}
           eventLimit = {true}

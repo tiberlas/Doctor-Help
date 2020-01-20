@@ -35,10 +35,13 @@ class DoctorHeader extends Component {
                   {this.props.operation &&
 
                     <Nav.Link>
-                      <Link exact to='/doctor/requested/operations' class="nav-link">Requested operations</Link>
+                      <Link exact to='/doctor/requested/operations' class="nav-link">Requested&nbsp;operations</Link>
                     </Nav.Link>
                   }
 
+                  <Nav.Link>
+                            <Link exact to='/doctor/leave-request' class="nav-link">Leave&nbsp;request</Link>
+                    </Nav.Link>
 
                 </Nav>
                 <Nav className="justify-content-end" style={{ width: "100%" }}>
