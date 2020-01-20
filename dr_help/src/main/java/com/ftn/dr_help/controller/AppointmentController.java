@@ -162,6 +162,7 @@ public class AppointmentController {
 		System.out.println("Attempted a delete on appointment number " + appointment.getAppointmentId());
 		appointmentService.delete(appointment.getAppointmentId());
 		return null;
+	}
 	@DeleteMapping(value = "/requested={id}/delete")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> deleteRequestedAppointment(@PathVariable("id") Long id) {

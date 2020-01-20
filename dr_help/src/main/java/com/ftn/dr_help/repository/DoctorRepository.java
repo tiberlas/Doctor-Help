@@ -15,6 +15,7 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 	
 	public List<DoctorPOJO> findAllByClinic_id(Long id);
 	
+	@Query (value = "select * from doctors d where d.email = ?1 and d.deleted = false", nativeQuery = true)
 	public DoctorPOJO findOneByEmail (String email);
 	
 	public Optional<DoctorPOJO> findById (Long id);

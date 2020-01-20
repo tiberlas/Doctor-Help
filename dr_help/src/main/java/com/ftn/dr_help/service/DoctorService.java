@@ -513,6 +513,8 @@ public class DoctorService {
 		else {
 			doctorReviewRepository.updateReview(review, patientId, doctorId);
 		}
+	}
+	
 	public String findFirstFreeSchedue(String email) {
 		
 		try {

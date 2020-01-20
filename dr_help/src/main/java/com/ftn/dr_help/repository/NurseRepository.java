@@ -12,6 +12,8 @@ import com.ftn.dr_help.model.pojo.NursePOJO;
 public interface NurseRepository extends JpaRepository<NursePOJO, Long>{
 	
 	List<NursePOJO> findAllByClinic_id(Long id);
+	
+	@Query (value = "select * from nurse where email = ?1 and deleted = false", nativeQuery = true)
 	NursePOJO findOneByEmail (String email);
 	
 	NursePOJO findOneById(Long id);

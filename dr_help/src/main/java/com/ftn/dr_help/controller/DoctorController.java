@@ -197,6 +197,7 @@ public class DoctorController {
 		service.addReview(doctorId, patientId, rating);
 		
 		return new ResponseEntity<String> ("All is well", HttpStatus.OK);
+	}
 	@GetMapping(value = "/schedules/first_free", produces = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> getFirstFreeSchedule() {
