@@ -92,10 +92,19 @@ public class ClinicController {
 	public ResponseEntity<ClinicDTO> getOneCLinic(@PathVariable("id") Long id) {
 		ClinicDTO finded = clinicService.findOneDTO(id);
 
-		if(finded == null)
-			return new ResponseEntity<ClinicDTO>(HttpStatus.NOT_FOUND);
+		//System.out.println("Getting one clinic by the following id: " + id);
 		
-		finded.setRating(clinicReviewRepository.getAverageReview(finded.getId()).toString());
+		if(finded == null) {
+			return new ResponseEntity<ClinicDTO>(HttpStatus.NOT_FOUND);
+		}
+		//System.out.println("Findeds id: " + clinicReviewRepository.getAverageReview(finded.getId()).toString());
+		Float retVal = clinicReviewRepository.getAverageReview(finded.getId());
+		if (retVal != null) {
+			finded.setRating(clinicReviewRepository.getAverageReview(finded.getId()).toString());
+		} 
+		else {
+			//System.out.println("Returned NULL od trazenja proseka");
+		}
 		return new ResponseEntity<ClinicDTO>(finded,  HttpStatus.OK);
 	} 
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import MapContainer from './MapContainer.jsx';
 import StarRatingComponent from 'react-star-rating-component';
-import { Button } from '@material-ui/core';
+import { Button } from 'reactstrap';
 import { UserContext } from '../../context/UserContextProvider'
 import Axios from 'axios';
 
@@ -22,10 +22,10 @@ class Clinic extends Component {
      }
 
      componentDidMount() {
-         this.handelUpdate()
+        this.handleUpdate()
      }
 
-     handelUpdate = () => {
+     handleUpdate () {
         axios.get('http://localhost:8080/api/clinics/id='+this.props.clinicId)
         .then(response => {
             this.setState({
@@ -35,7 +35,7 @@ class Clinic extends Component {
                 state: response.data.state,
                 description: response.data.description, 
                 rating : response.data.rating
-            })
+            });
         })
         if (this.context.user.role === "PATIENT") {
             Axios.get ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4])
@@ -43,18 +43,21 @@ class Clinic extends Component {
                 this.setState ({
                     haveInteracted : response.data.haveInteracted, 
                     myRating : response.data.myRating
-                })
+                });
             })
         }
+        let a = 0;
      }
 
      
     handleClick (nextValue) {
-        // alert ("Star click: " + nextValue);
         this.setState ({
             myRating : nextValue
         }); 
         Axios.post ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4] + "/" + nextValue)
+        .then (data => {
+            this.handleUpdate();
+        })
     }
 
     handleClear () {
@@ -62,6 +65,9 @@ class Clinic extends Component {
             myRating : 0
         })
         Axios.post ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4] + "/" + 0)
+        .then (data => {
+            this.handleUpdate();
+        })
     }
 
     render() {
@@ -76,25 +82,43 @@ class Clinic extends Component {
                     <br/>
 
                     <div class="card">
+
                         <div class="card-body">
                             <h4 class="card-title">{this.state.name}</h4>
                             <h6 class="card-subtitle mb-2 text-muted">location for healing: {this.state.address}, {this.state.city}, {this.state.state}</h6>
                             <p class="card-text">{this.state.description}</p>
                             <p class="card-text">Average rating: {this.state.rating}</p>
                             
-                            <div style={divMapStyle}>
-                                <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
-                            </div>
-
                             <div hidden={!this.state.haveInteracted}>
                                 <StarRatingComponent starCount={5} value={this.state.myRating} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
                             </div>
+
                             <div hidden={!this.state.haveInteracted}>
-                                <Button class="badge-success text-right" onClick={() => this.handleClear()}>
+                                <Button  onClick={() => this.handleClear()} disabled={false}>
                                     Clear rating
                                 </Button>
                             </div>
 
+
+                            <div style={divMapStyle}>
+                                <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
+                            </div>
+
+                            
+                            {/* <div hidden={!this.state.haveInteracted}>
+                            <div>
+                                <StarRatingComponent starCount={5} value={this.state.myRating} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
+                            </div>
+
+                            {/* <div hidden={!this.state.haveInteracted}> */}
+                            {/* <div>
+                                <Button  onClick={() => this.handleClear.bind(this)} disabled={false}>
+                                    Clear rating
+                                </Button>
+                            </div>
+                            <a class="btn btn-primary" onClick={() => this.handleClick()} disabled={false}>
+                                Klik
+                            </a> */} 
 
 
 

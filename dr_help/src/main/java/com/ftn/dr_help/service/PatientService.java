@@ -273,6 +273,7 @@ public class PatientService {
 			retValItem.setNurse(appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName());
 			retValItem.setClinicName(report.getClinic().getName());
 			retValItem.setClinicId(report.getClinic().getId());
+			retValItem.setDoctorId(appointment.getDoctor().getId());
 			retVal.add(retValItem);
 		}
 		if (retVal.size() > 0) {

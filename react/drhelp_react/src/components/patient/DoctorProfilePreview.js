@@ -38,7 +38,7 @@ class DoctorProfilePreview extends Component {
 		});
 	}
 
-	componentDidUpdate () {
+	handleUpdate () {
 		let parts = window.location.href.split ('/');
 		let tempId = parts[parts.length - 1];
 		axios.get ("http://localhost:8080/api/doctors/preview/" + tempId + "/" + this.context.user.id)
@@ -61,8 +61,10 @@ class DoctorProfilePreview extends Component {
 		this.setState ({
 			myRating : nextValue
 		})
-		axios.post ("http://localhost:8080/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + nextValue);
-		this.componentDidUpdate();
+		axios.post ("http://localhost:8080/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + nextValue)
+		.then (data => {
+			this.handleUpdate();
+		});
 	}
 
 	handleClear () {
@@ -70,6 +72,9 @@ class DoctorProfilePreview extends Component {
 			myRating : 0
 		})
 		axios.post ("http://localhost:8080/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + 0)
+		.then (data => {
+			this.handleUpdate();
+		});
 	}
 
 	render () {

@@ -47,6 +47,7 @@ export class MapContainer extends Component {
 
   handleMap = () => {
     //url example: number address, city, state
+    //alert ("Address: \"" + this.state.address + "\"" + "City: \"" + this.state.city + "\"" + "State: \"" + this.state.state + "\"");
     fetch('https://api.opencagedata.com/geocode/v1/json?q='+this.stringParser(this.state.address)+'%2c+'+this.stringParser(this.state.city)+'%2c+'+this.stringParser(this.state.state)+'&key=c94e6fbd30c540dba84374d9fc772e18&pretty=1')
       .then(response => response.json())
       .then(data => {

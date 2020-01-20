@@ -15,6 +15,7 @@ public interface ClinicReviewRepository extends JpaRepository<ClinicReviewPOJO, 
 	@Query (value = "update clinic_rewiew set rating = ?1 where clinic_id = ?3 and patient_id = ?2", nativeQuery = true)
 	public int updateReview (Integer newReting, Long patientId, Long clinicId);
 	
+	
 	@Query (value = "select avg(rating) from clinic_rewiew where clinic_id = ?1", nativeQuery = true)
 	public Float getAverageReview (Long clinicId);
 	
