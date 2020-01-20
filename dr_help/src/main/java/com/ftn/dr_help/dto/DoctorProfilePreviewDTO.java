@@ -10,19 +10,23 @@ public class DoctorProfilePreviewDTO {
 	private String clinic;
 	private String specialization;
 	private String rating = "/";
+	private String myRating = "/";
+	private boolean haveInteracted = false;
 	
 	public DoctorProfilePreviewDTO() {
 		super();
 	}
 	
 	public DoctorProfilePreviewDTO(String firstName, String lastName, String clinic, String specialization,
-			String rating) {
+			String rating, String myRating, boolean haveInteracted) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.clinic = clinic;
 		this.specialization = specialization;
 		this.rating = rating;
+		this.myRating = myRating;
+		this.haveInteracted = haveInteracted;
 	}
 	
 	public DoctorProfilePreviewDTO (DoctorPOJO d) {
@@ -61,6 +65,22 @@ public class DoctorProfilePreviewDTO {
 	}
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+
+	public boolean isHaveInteracted() {
+		return haveInteracted;
+	}
+
+	public void setHaveInteracted(boolean haveInteracted) {
+		this.haveInteracted = haveInteracted;
+	}
+
+	public String getMyRating() {
+		return myRating;
+	}
+
+	public void setMyRating(String myRating) {
+		this.myRating = myRating;
 	}
 	
 }

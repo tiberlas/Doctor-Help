@@ -2,6 +2,7 @@ package com.ftn.dr_help.model.pojo;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -58,6 +60,9 @@ public class AppointmentPOJO implements Serializable{
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private ExaminationReportPOJO examinationReport;
+	
+	@OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<DoctorRequestedAppointmentPOJO> requested;
 	
 	@Column (nullable = false)
 	private boolean deleted;
@@ -132,9 +137,11 @@ public class AppointmentPOJO implements Serializable{
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	
-	
-	
+	public List<DoctorRequestedAppointmentPOJO> getRequested() {
+		return requested;
+	}
+	public void setRequested(List<DoctorRequestedAppointmentPOJO> requested) {
+		this.requested = requested;
+	}
 	
 }

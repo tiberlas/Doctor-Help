@@ -7,6 +7,7 @@ class PredefinedAppointmentItem extends Component {
     state = {
         id: this.props.value.id,
         doctorID: this.props.value.doctorId,
+        nurseID: this.props.value.nurseId,
         roomID: this.props.value.roomId,
         procedureTypeID: this.props.value.procedureTypeId,
         price: this.props.value.price,
@@ -16,6 +17,7 @@ class PredefinedAppointmentItem extends Component {
 
         procedureName: '',
         doctorName: '',
+        nurseName: '',
         roomName: '',
         priceWithDiss: this.props.value.price * (1 - (this.props.value.disscount / 100)),
 
@@ -47,7 +49,12 @@ class PredefinedAppointmentItem extends Component {
                 this.setState({globalError: true})
             })
 
-
+        axios.get("http://localhost:8080/api/nurses/nurse="+this.state.nurseID)
+            .then(response => {
+                this.setState({nurseName: response.data.firstName+" "+response.data.lastName})
+            }).catch(error => {
+                this.setState({globalError: true})
+            })
 
     }
 
@@ -74,6 +81,7 @@ class PredefinedAppointmentItem extends Component {
             <Fragment>
                 <TableCell class="text-white">{this.state.procedureName}</TableCell>
                 <TableCell class="text-white">{this.state.doctorName}</TableCell>
+                <TableCell class="text-white">{this.state.nurseName}</TableCell>
                 <TableCell class="text-white">{this.state.roomName}</TableCell>
                 <TableCell class="text-white">{this.state.dateAndTime}</TableCell>
                 <TableCell class="text-white">{this.state.priceWithDiss}</TableCell>

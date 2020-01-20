@@ -14,4 +14,5 @@ public interface PatientRepository extends JpaRepository<PatientPOJO, Long> {
 	public PatientPOJO findOneByEmail (String email);
 	
 	public PatientPOJO findByInsuranceNumber (Long insuranceNumber);
+	
 }

@@ -19,6 +19,10 @@ import HandleingPredefinedAppointments from './HandleingPredefinedAppointments';
 import NewPredefinedAppointment from '../predefined_appointments/NewPredefinedAppointment';
 import CreateMedicalStaff from './CreateMedicalStaff';
 import RoomSchedule from '../rooms/RoomSchedule';
+import ClinicAdminAppointmentRequests from './ClinicAdminAppointmentRequests';
+import ClinicAdminOperationRequest from './ClinicAdminOperationRequest';
+import RequestedAppointment from '../requesting_appointment/RequestedAppointment';
+import RequestedOpration from '../requesting_operations/RequestedOperation.jsx';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -81,7 +85,11 @@ class ClinicAdministrator extends Component {
                     <Route exact path='/clinic-administrator/predefined-appointments/add'> <NewPredefinedAppointment /> </Route>
                     <Route exact path='/clinic-administrator/medical-staff'> <ClinicAdminMedicalStaff /> </Route>
                     <Route exact path='/clinic-administrator/medical-staff/add'> <CreateMedicalStaff /> </Route>
+                    <Route exact path='/clinic-administrator/requests/appointments'> <ClinicAdminAppointmentRequests/> </Route>
+                    <Route exact path='/clinic-administrator/requests/operations'> <ClinicAdminOperationRequest /> </Route>
                     <Route exact path='/clinic-administrator/profile/change/password'> <ClinicAdminChangePassword /> </Route>
+                    <Route path='/request/appointment/'> <RequestedAppointment /> </Route>
+                    <Route path='/request/operation/'> <RequestedOpration /> </Route>
                     <Route path='/schedule/'> <RoomSchedule /> </Route>
                 </Switch>
                 </div>

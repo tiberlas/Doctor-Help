@@ -62,8 +62,7 @@ public class Mail {
         helper.setText(text);
 
        javaMailSender.send(msg);
-	
-}
+	}
 
 
 	public void sendDeclineEmail(String sendTo, String description, String firstName, String lastName) {
@@ -79,7 +78,36 @@ public class Mail {
 	    msg.setText(text);
 	
 	    javaMailSender.send(msg);
+	}
+	
+	public void sendAppointmentRequestEmail(String sendTo, String doctorName, String type, String date) {
 
-}
+	    SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(sendTo);
+	
+	    msg.setSubject("DrHelp request appointment");
+	    String text = "Dr " + doctorName + " request an appointment for " + type;
+	    text += " at " + date;
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	}
+	
+	public void sendOperationRequestEmail(String sendTo, String requestingDoctorName, String dr0Name, String dr1Name, String dr2Name, String type, String date) {
+
+	    SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(sendTo);
+	
+	    msg.setSubject("DrHelp request operation");
+	    String text = "Dr " + requestingDoctorName + " request an operation for " + type;
+	    text += " at " + date;
+	    text += " with dr " + dr0Name + ", dr " + dr1Name + "and dr " + dr2Name;
+	    
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	}
 	
 }

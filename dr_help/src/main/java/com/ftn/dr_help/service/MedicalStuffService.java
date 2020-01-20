@@ -6,9 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.dto.MedicalStaffDTO;
 import com.ftn.dr_help.dto.MedicalStaffFilterDTO;
+import com.ftn.dr_help.dto.MedicalStaffInfoDTO;
 import com.ftn.dr_help.model.enums.FilterMedicalStaffEnum;
+import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
@@ -27,37 +28,16 @@ public class MedicalStuffService {
 	@Autowired
 	private ClinicAdministratorRepository adminRepository;
 	
-	public List<MedicalStaffDTO> findAll(Long clinic_id) {
+	public List<MedicalStaffInfoDTO> findAll(Long clinic_id) {
 		
 		if(clinic_id == null) {
 			return null;
 		}
 		
-		List<MedicalStaffDTO> ret = new ArrayList<MedicalStaffDTO>();
-		List<DoctorPOJO> findedDoctors = doctorRepository.findAllByClinic_id(clinic_id);
-		List<NursePOJO> findedNurses = nurseRepository.findAllByClinic_id(clinic_id);
+		List<MedicalStaffInfoDTO> ret = new ArrayList<MedicalStaffInfoDTO>();
 		
-		if(findedDoctors != null) {
-			for(DoctorPOJO doctor : findedDoctors) {
-				//logic delete
-				if(doctor.isDeleted()) {
-					continue;
-				}
-				
-				ret.add(new MedicalStaffDTO(doctor));
-			}
-		}
-		
-		if(findedNurses != null) {
-			for(NursePOJO nurse : findedNurses) {
-				//logic delete
-				if(nurse.isDeleted()) {
-					continue;
-				}
-				
-				ret.add(new MedicalStaffDTO(nurse));
-			}
-		}
+		ret.addAll(findDoctors(clinic_id));
+		ret.addAll(findNurses(clinic_id));
 		
 		if(ret.isEmpty()) {
 			return null;
@@ -66,12 +46,12 @@ public class MedicalStuffService {
 		return ret;
 	}
 	
-	public List<MedicalStaffDTO> findDoctors(Long clinicId) {
+	public List<MedicalStaffInfoDTO> findDoctors(Long clinicId) {
 		if(clinicId == null) {
 			return null;
 		}
 		
-		List<MedicalStaffDTO> ret = new ArrayList<MedicalStaffDTO>();
+		List<MedicalStaffInfoDTO> ret = new ArrayList<MedicalStaffInfoDTO>();
 		List<DoctorPOJO> findedDoctors = doctorRepository.findAllByClinic_id(clinicId);
 		
 		if(findedDoctors != null) {
@@ -81,7 +61,18 @@ public class MedicalStuffService {
 					continue;
 				}
 				
-				ret.add(new MedicalStaffDTO(doctor));
+				Long count = doctorRepository.getDoctorsAppointmentsCount(doctor.getId());
+				
+				boolean canDelete = (count!=null && count>0)? false: true;
+				
+				ret.add(new MedicalStaffInfoDTO(
+							doctor.getEmail(),
+							doctor.getFirstName(),
+							doctor.getLastName(),
+							canDelete,
+							RoleEnum.DOCTOR,
+							doctor.getId()
+						));
 			}
 		}
 		
@@ -92,12 +83,12 @@ public class MedicalStuffService {
 		return ret;
 	}
 	
-	public List<MedicalStaffDTO> findNurses(Long clinicId) {
+	public List<MedicalStaffInfoDTO> findNurses(Long clinicId) {
 		if(clinicId == null) {
 			return null;
 		}
 		
-		List<MedicalStaffDTO> ret = new ArrayList<MedicalStaffDTO>();
+		List<MedicalStaffInfoDTO> ret = new ArrayList<MedicalStaffInfoDTO>();
 		List<NursePOJO> findedNurses = nurseRepository.findAllByClinic_id(clinicId);
 		
 		if(findedNurses != null) {
@@ -107,7 +98,18 @@ public class MedicalStuffService {
 					continue;
 				}
 				
-				ret.add(new MedicalStaffDTO(nurse));
+				Long count = nurseRepository.getNursesAppointmentsCount(nurse.getId());
+				
+				boolean canDelete = (count!=null && count>0)? false: true;
+				
+				ret.add(new MedicalStaffInfoDTO(
+							nurse.getEmail(),
+							nurse.getFirstName(),
+							nurse.getLastName(),
+							canDelete,
+							RoleEnum.NURSE,
+							nurse.getId()
+						));
 			}
 		}
 		
@@ -118,7 +120,7 @@ public class MedicalStuffService {
 		return ret;
 	}
 	
-	public List<MedicalStaffDTO> filter(MedicalStaffFilterDTO filter, String email) {
+	public List<MedicalStaffInfoDTO> filter(MedicalStaffFilterDTO filter, String email) {
 		
 		System.out.println("role" + filter.getRole());
 		System.out.println( filter.getRole() == FilterMedicalStaffEnum.DOCTORS);
@@ -127,7 +129,7 @@ public class MedicalStuffService {
 		try {
 			
 			if(filter.getRole() == FilterMedicalStaffEnum.DISABLED) {
-				List<MedicalStaffDTO> list = findAll(clinicId);
+				List<MedicalStaffInfoDTO> list = findAll(clinicId);
 				
 				if(filter.getString().isEmpty()) {
 					return list;
@@ -135,7 +137,7 @@ public class MedicalStuffService {
 					return searchFilter(list, filter.getString());
 				}
 			} else if(filter.getRole() == FilterMedicalStaffEnum.DOCTORS) {
-				List<MedicalStaffDTO> list = findDoctors(clinicId);
+				List<MedicalStaffInfoDTO> list = findDoctors(clinicId);
 				
 				if(filter.getString().isEmpty()) {
 					return list;
@@ -143,7 +145,7 @@ public class MedicalStuffService {
 					return searchFilter(list, filter.getString());
 				}
 			} else {
-				List<MedicalStaffDTO> list = findNurses(clinicId);
+				List<MedicalStaffInfoDTO> list = findNurses(clinicId);
 				
 				if(filter.getString().isEmpty()) {
 					return list;
@@ -157,11 +159,11 @@ public class MedicalStuffService {
 		}
 	}
 
-	private List<MedicalStaffDTO> searchFilter(List<MedicalStaffDTO> list, String filter) {
-		List<MedicalStaffDTO> finded = new ArrayList<MedicalStaffDTO>();
+	private List<MedicalStaffInfoDTO> searchFilter(List<MedicalStaffInfoDTO> list, String filter) {
+		List<MedicalStaffInfoDTO> finded = new ArrayList<MedicalStaffInfoDTO>();
 		
 		String search = "";
-		for(MedicalStaffDTO staff : list) {
+		for(MedicalStaffInfoDTO staff : list) {
 			search = staff.getFirstName().toLowerCase() + staff.getLastName().toLowerCase() + staff.getEmail().toLowerCase();
 			
 			if(search.contains(filter.toLowerCase())) {

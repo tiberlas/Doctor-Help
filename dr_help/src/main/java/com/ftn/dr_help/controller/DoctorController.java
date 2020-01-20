@@ -1,6 +1,7 @@
 package com.ftn.dr_help.controller;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
+import com.ftn.dr_help.dto.DateAndTimeDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
 import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
+import com.ftn.dr_help.dto.MedicalStaffNameDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
+import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
+import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
+import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -44,6 +52,9 @@ public class DoctorController {
 	
 	@Autowired
 	private Mail mailSender;
+	
+	@Autowired
+	private DateConverter dateConvertor;
 	
 	@GetMapping(value = "/clinic={clinic_id}/all")
 	public ResponseEntity<List<DoctorProfileDTO>> getAllRooms(@PathVariable("clinic_id") Long clinic_id) {
@@ -118,7 +129,8 @@ public class DoctorController {
 		System.out.println("Date: " + appointmentDate);
 		
 		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
-			return new ResponseEntity<> (service.filterByClinic(clinicId), HttpStatus.OK);
+			List<DoctorListingDTO> doctors = service.filterByClinic(clinicId);
+			return new ResponseEntity<> (doctors, HttpStatus.OK);
 		} else {
 			List<DoctorListingDTO> doctors = service.filterByClinicDateProcedureType(clinicId, appointmentType.replace('_', ' '), appointmentDate);
 			
@@ -126,10 +138,10 @@ public class DoctorController {
 		}
 	}
 	
-	@GetMapping (value = "/preview/{id}")
+	@GetMapping (value = "/preview/{id}/{patient}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long id) {
-		DoctorProfilePreviewDTO retVal = service.getProfilePreview(id);
+	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long doctorId, @PathVariable("patient") Long patientId) {
+		DoctorProfilePreviewDTO retVal = service.getProfilePreview(doctorId, patientId);
 		if (retVal == null) {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		} 
@@ -149,7 +161,7 @@ public class DoctorController {
 
 	@PostMapping(value = "/new+doctor", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> createNurse(@RequestBody MedicalStaffSaveingDTO newDoctor) {
+	public ResponseEntity<String> createDoctor(@RequestBody MedicalStaffSaveingDTO newDoctor) {
 		String email = currentUser.getEmail();
 		
 		boolean ret = service.save(newDoctor, email);
@@ -165,7 +177,7 @@ public class DoctorController {
 	
 	@DeleteMapping(value = "/delete/id={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> deleteNurse(@PathVariable("id") Long id) {
+	public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
 		
 		boolean ret = service.delete(id);
 		
@@ -175,6 +187,134 @@ public class DoctorController {
 			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+	}
+	
+	@PostMapping (value="/review/{patient}/{doctor}/{rating}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
+				@PathVariable("doctor") Long doctorId, @PathVariable("rating") Integer rating) {
+		
+		service.addReview(doctorId, patientId, rating);
+		
+		return new ResponseEntity<String> ("All is well", HttpStatus.OK);
+	}
+	@GetMapping(value = "/schedules/first_free", produces = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> getFirstFreeSchedule() {
+		String email = currentUser.getEmail();
+		
+		String date = service.findFirstFreeSchedue(email);
+		
+		if(date == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(date, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/schedules/operation/first_free", produces = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> getFirstFreeScheduleForThreeDoctors(@RequestBody ThreeDoctorsIdDTO doctors) {
+		
+		String date = service.findFirstFreeSchedueForOperation(doctors);
+		
+		if(date == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(date, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> checkSchedule(@RequestBody DateAndTimeDTO dateAndTime) {
+		try {
+			String email = currentUser.getEmail();
+			Calendar requestedSchedule = dateConvertor.stringToDate(dateAndTime.getDateAndTimeString());
+			
+			Calendar schedule = service.checkSchedue(email, requestedSchedule);
+			
+			if(requestedSchedule.compareTo(schedule) == 0) {
+				return new ResponseEntity<>("OK", HttpStatus.OK);
+			} else {
+				String date = dateConvertor.dateForFrontEndString(schedule);
+				return new ResponseEntity<>(date, HttpStatus.CREATED);//201
+			}
+			
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping(value = "/all/specialization={id}", produces="application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<MedicalStaffNameDTO>> getSpecializedDoctors(@PathVariable("id") Long id) {
+		List<MedicalStaffNameDTO> doctors = service.getSpecializedDoctors(id);
+		
+		if(doctors == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(doctors, HttpStatus.OK);
+		}
+	}
+	
+	@PostMapping(value = "/schedules/operation/check", produces = "application/json", consumes = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> checkOperationSchedule(@RequestBody OperationRequestDTO request) {
+			
+		String schedule = service.checkOperationSchedue(request);
+		if(schedule == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if(schedule.equals(request.getDateAndTimeString())) {
+			return new ResponseEntity<>("OK", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(schedule, HttpStatus.CREATED);//201
+		}
+	}
+	
+	@GetMapping(value = "/schedules/operation/requested", produces = "application/json")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<RequestedOperationScheduleDTO>> getAllOperationRequest() {
+		//vraca listu operacija koje je lekar zakazao
+		String email = currentUser.getEmail();
+		
+		List<RequestedOperationScheduleDTO> retVal = service.getOperationRequests(email);
+		
+		if(retVal == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping(value = "/schedules/operation/requested/count")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<String> getOperationRequestCount() {
+		//vraca da li je lekar zakazao operacije; ako jeste na front-u vidi spisak operacija koje je on zakazao
+		String email = currentUser.getEmail();
+		
+		boolean retVal = service.getOperationRequestsCount(email);
+		if(!retVal) {
+			return new ResponseEntity<>("NO OPERATIONS", HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>("OPERATIONS", HttpStatus.OK);
+		}
+	}
+		
+	@GetMapping(value="/doctor={id}/business-hours")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<BusinessDayHoursDTO>> getDoctorBusinessHours(@PathVariable("id") Long doctor_id) {
+		
+		List<BusinessDayHoursDTO> list = service.getDoctorBusinessHours(doctor_id);
+		
+		if(list == null) {
+			System.out.println("Error while calculating doctor business hours");
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		} else{
+			return new ResponseEntity<List<BusinessDayHoursDTO>>(list, HttpStatus.OK);
+		}
 	}
 	
 }

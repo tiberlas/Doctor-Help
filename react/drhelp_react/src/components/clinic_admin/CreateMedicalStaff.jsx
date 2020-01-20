@@ -9,6 +9,8 @@ class CreateMedicalStaff extends Component {
         lastName: '',
         email: '',
         birthday: '',
+        procedures: {},
+        procedureID: '',
         monday: 'NONE',
         tuesday: 'NONE',
         wednesday: 'NONE',
@@ -24,9 +26,18 @@ class CreateMedicalStaff extends Component {
         errorEmail: true,
         errorBirthday: true,
         errorShift: true,
+        errorProcedure: true,
+        errorSpecialization: true,
 
         typeDoctor: true,
         go_profile: false
+    }
+
+    componentDidMount() {
+        axios.get('http://localhost:8080/api/procedure+types/all')
+            .then(response => {
+                this.setState({procedures: response.data})
+            })
     }
 
     handleValidation = () => {
@@ -77,7 +88,15 @@ class CreateMedicalStaff extends Component {
     }
 
     handleChangeType = () => {
-        this.setState({typeDoctor: !this.state.typeDoctor})
+        this.setState({typeDoctor: !this.state.typeDoctor}, () => {this.handleSpecialization()})
+    }
+
+    handleSpecialization = () => {
+        if(this.state.typeDoctor === false) {
+            this.setState({errorSpecialization: false, errorProcedure: true, procedureID: ''})
+        } else {
+            this.setState({errorSpecialization: true, errorProcedure: true, procedureID: ''})
+        }
     }
 
     handleSubmit = (event) => {
@@ -88,10 +107,15 @@ class CreateMedicalStaff extends Component {
         } else {
             url = 'http://localhost:8080/api/nurses/new+nurse'
         }
+        let id = ''
+        if(this.state.procedureID !== "") {
+            id = this.state.procedureID
+        }
         axios.post(url, {
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     email: this.state.email,
+                    procedureId: id,
                     birthday: this.state.birthday,
                     monday: this.state.monday,
                     tuesday: this.state.tuesday,
@@ -125,7 +149,29 @@ class CreateMedicalStaff extends Component {
         items.push(<option key='4' value="THIRD" > third shift </option>);
  
         return items;
-    } 
+    }
+
+    handlerChangeProcedureType = (event) => {
+        let val = event.target.value
+        if(val === "" || val === null) {
+            this.setState({errorSpecialization: true, errorProcedure: true})
+        } else {
+            this.setState({procedureID: val, errorSpecialization: false, errorProcedure: false})
+        }
+
+    }
+
+    createProcedure = () => {
+        let items = [];
+        var size = Object.keys(this.state.procedures).length;
+        items.push(<option key={size} name='procedureID' value="" selected="selected"> ---- </option>);
+        for(var i = 0; i<size; ++i) {
+            items.push()
+            items.push(<option key={i} name='procedureID' value={this.state.procedures[i].id} >{this.state.procedures[i].name}</option>);
+        }
+
+        return items;
+    }
 
     render() { 
         if(this.state.go_profile === true)
@@ -168,58 +214,90 @@ class CreateMedicalStaff extends Component {
                         <input type='date' name='birthday' id='birthday' className={`form-control ${this.state.errorBirthday? 'is-invalid': 'is-valid'}`} value={this.state.birthday} onChange={this.handlerChange} />
                     </div>
 
+                    {
+                        this.state.typeDoctor &&
+                        <div class='form-group'>
+                            <label class="form-control-label" for="procedure">Specialization</label>
+                            <select multiple="" className={`form-control ${this.state.errorProcedure? 'is-invalid': 'is-valid'}`} id="procedure" name='procedureID' onChange={this.handlerChangeProcedureType} >
+                                {this.createProcedure()}
+                            </select>
+                        </div>
+                    }
+
                     <br/>
                     <h5>Work shift</h5>
                     <br/>
 
-                    <div class='form-group'>
-                        <label class="form-control-label" for="monday">Monday</label>
-                        <select multiple="" class="form-control" id="monday" name='monday' onChange={this.handlerChange} >
-                            {this.createShift()}
-                        </select>
-                    </div>
+                    <table>
+                        <thead>
+                            <th for="monday">Monday</th>
+                            <th for="tuesday">Tuesday</th>
+                            <th for="wednesday">Wednesday</th>
+                            <th for="thursday">Thursday</th>
+                            <th for="friday">Friday</th>
+                            <th for="saturday">Saturday</th>
+                            <th for="sunday">Sunday</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <div class='form-group'>
+                                    <select multiple="" class="form-control" id="monday" name='monday' onChange={this.handlerChange} >
+                                        {this.createShift()}
+                                    </select>
+                                </div>
+                                </td>
+                            
+                                <td>
+                                <div class='form-group'>
+                                    <select multiple="" class="form-control" id="tuesday" name='tuesday' onChange={this.handlerChange}>
+                                        {this.createShift()}
+                                    </select>
+                                </div>
+                                </td>
 
-                    <div class='form-group'>
-                        <label class="form-control-label" for="tuesday">Tuesday</label>
-                        <select multiple="" class="form-control" id="tuesday" name='tuesday' onChange={this.handlerChange}>
-                            {this.createShift()}
-                        </select>
-                    </div>
+                                <td>
+                                <div class='form-group'>
+                                    <select multiple="" class="form-control" id="wednesday" name='wednesday' onChange={this.handlerChange}>
+                                        {this.createShift()}
+                                    </select>
+                                </div>
+                                </td>
 
-                    <div class='form-group'>
-                        <label class="form-control-label" for="wednesday">Wednesday</label>
-                        <select multiple="" class="form-control" id="wednesday" name='wednesday' onChange={this.handlerChange}>
-                            {this.createShift()}
-                        </select>
-                    </div>
+                                <td>
+                                <div class='form-group'>
+                                    <select multiple="" class="form-control" id="thursday" name='thursday' onChange={this.handlerChange}>
+                                        {this.createShift()}
+                                    </select>
+                                </div>
+                                </td>
 
-                    <div class='form-group'>
-                        <label class="form-control-label" for="thursday">Thursday</label>
-                        <select multiple="" class="form-control" id="thursday" name='thursday' onChange={this.handlerChange}>
-                            {this.createShift()}
-                        </select>
-                    </div>
+                                <td>
+                                <div class='form-group'>
+                                    <select multiple="" class="form-control" id="friday" name='friday' onChange={this.handlerChange}>
+                                        {this.createShift()}
+                                    </select>
+                                </div>
+                                </td>
 
-                    <div class='form-group'>
-                        <label class="form-control-label" for="friday">Friday</label>
-                        <select multiple="" class="form-control" id="friday" name='friday' onChange={this.handlerChange}>
-                            {this.createShift()}
-                        </select>
-                    </div>
+                                <td>
+                                <div class='form-group'>
+                                    <select multiple="" class="form-control" id="saturday" name='saturday' onChange={this.handlerChange}>
+                                        {this.createShift()}
+                                    </select>
+                                </div>
+                                </td>
 
-                    <div class='form-group'>
-                        <label class="form-control-label" for="saturday">Saturday</label>
-                        <select multiple="" class="form-control" id="saturday" name='saturday' onChange={this.handlerChange}>
-                            {this.createShift()}
-                        </select>
-                    </div>
-
-                    <div class='form-group'>
-                        <label class="form-control-label" for="sunday">Sunday</label>
-                        <select multiple="" class="form-control" id="sunday" name='sunday' onChange={this.handlerChange}>
-                            {this.createShift()}
-                        </select>
-                    </div>
+                                <td>
+                                <div class='form-group'>
+                                    <select multiple="" class="form-control" id="sunday" name='sunday' onChange={this.handlerChange}>
+                                        {this.createShift()}
+                                    </select>
+                                </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                     <div hidden={!this.state.errorShift}>
                         <p class='text-danger'>must dafined a minimum of three working days</p>
@@ -227,7 +305,7 @@ class CreateMedicalStaff extends Component {
 
                     <div class="form-group row">
                         <div class='col-md text-left'>
-                            <input type="submit" class="btn btn-success" disabled={ this.state.errorFirstName || this.state.errorLastName || this.state.errorEmail || this.state.errorBirthday || this.state.errorShift} value="submit"/>
+                            <input type="submit" class="btn btn-success" disabled={ this.state.errorFirstName || this.state.errorLastName || this.state.errorEmail || this.state.errorBirthday || this.state.errorShift || this.state.errorSpecialization} value="submit"/>
                         </div>
                         <div class='col-md text-right'>
                             <button type="button" class="btn btn-danger" onClick={this.handleCancel}>Cancel</button>

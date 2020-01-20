@@ -11,9 +11,10 @@ class ClinicAdminProfile extends Component {
     render() { 
         return ( 
             <div>
-                <ViewProfile profile={this.context.admin}/>
+              
                 <div class="row d-flex justify-content-center">
 					<div class='col-md-7'>
+                    <ViewProfile profile={this.context.admin}/>
                         <div>
                             <NavLink to = '/clinic-administrator/profile/change'>
                                 change profile
