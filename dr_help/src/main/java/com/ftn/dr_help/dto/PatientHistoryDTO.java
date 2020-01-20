@@ -7,6 +7,24 @@ import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
 public class PatientHistoryDTO {
 
+	public PatientHistoryDTO(String status, Long examinationReportId, String date,
+			String procedureType, String doctor, String nurse, String clinicName, Long clinicId, Long doctorId,
+			Long nurseId, Long appointmentId, boolean canCancel) {
+		super();
+		this.status = status;
+		this.examinationReportId = examinationReportId;
+		this.date = date;
+		this.procedureType = procedureType;
+		this.doctor = doctor;
+		this.nurse = nurse;
+		this.clinicName = clinicName;
+		this.clinicId = clinicId;
+		this.doctorId = doctorId;
+		this.nurseId = nurseId;
+		this.appointmentId = appointmentId;
+		this.canCancel = canCancel;
+	}
+
 	DateConverter dateConverter = new DateConverter ();
 	
 	public PatientHistoryDTO() {
@@ -55,6 +73,21 @@ public class PatientHistoryDTO {
 		this.doctorId = appointment.getDoctor().getId();
 		this.nurseId = appointment.getNurse().getId();
 		this.appointmentId = appointment.getId();
+		
+		
+		Calendar tempCal = Calendar.getInstance ();
+		//System.out.println("Now: " + tempCal.getTime());
+		tempCal.add(Calendar.DAY_OF_MONTH, 1);
+		if (tempCal.after(appointment.getDate())) {
+			//System.out.println("Ne smem da otkazem");
+			this.canCancel = true;
+		}
+		else {
+			System.out.println("Smem da otkazem");
+		}
+		//System.out.println("Current time: " + Calendar.getInstance().getTime());
+		//System.out.println("Appointment time: " + appointment.getDate().getTime());
+		//System.out.println("Yesterday: " + tempCal.getTime());
 	}
 	
 	String status;
@@ -68,6 +101,7 @@ public class PatientHistoryDTO {
 	Long doctorId;
 	Long nurseId;
 	Long appointmentId;
+	boolean canCancel = false;
 	
 	public Long getExaminationReportId() {
 		return examinationReportId;
@@ -134,6 +168,12 @@ public class PatientHistoryDTO {
 	}
 	public void setAppointmentId(Long appointmentId) {
 		this.appointmentId = appointmentId;
+	}
+	public boolean isCanCancel() {
+		return canCancel;
+	}
+	public void setCanCancel(boolean canCancel) {
+		this.canCancel = canCancel;
 	}
 	
 }

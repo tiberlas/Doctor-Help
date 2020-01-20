@@ -115,7 +115,6 @@ class PatientHistory extends Component {
 	// }
 
 	handleCancel (appointmentId, appointmentDate) {
-		this.canCancel(appointmentDate);
 		//alert ("Canceling appointment " + appointmentId);
 		axios.delete ("http://localhost:8080/api/appointments/delete", {
 			data: {
@@ -127,47 +126,7 @@ class PatientHistory extends Component {
 		});
 	}
 
-	canCancel (appointmentDate) {
-		let newDate = new Date()
-		let date = newDate.getDate();
-		let month = newDate.getMonth() + 1;
-		let year = newDate.getFullYear();
-		let hour = newDate.getHours();
-		let minutes = newDate.getMinutes()
-		let dateString = date + "." + month + "." + year + ". " + hour + ":" + minutes;
 
-		let parts = appointmentDate.split(' ');
-		let appDate = parts[0].split('.')[0];
-		let appMonth = parts[0].split('.')[1];
-		let appYear = parts[0].split('.')[2];
-		let appHour = parts[1].split(':')[0];
-		let appMinutes = parts[1].split(':')[1];
-
-		if (year === appYear) {
-			if (month === appMonth) {
-				if (date === appDate) {
-					return false;
-				}
-				// Ako je dan ranije, proveri sate
-				if (date === appDate - 1) {
-					if (hour > appHour) {
-						return false;
-					}
-					if (hour === appHour) {
-						if (minutes >= appMinutes) {
-							return false;
-						}
-					}
-				}
-			}
-			if (month === appMonth - 1) {
-				
-			}
-		}
-
-		return true();
-		alert ("Extracted time: " + appHour + ":" + appMinutes);
-	}
 
 	render () {
 
@@ -201,7 +160,7 @@ class PatientHistory extends Component {
 										<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
 										<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
-										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}><Button onClick={() => this.handleCancel(row.appointmentId, row.date)}>Cancel</Button></p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}><Button hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}>Cancel</Button></p></TableCell>
 									</TableRow>
 								))}		
 							</TableBody>
