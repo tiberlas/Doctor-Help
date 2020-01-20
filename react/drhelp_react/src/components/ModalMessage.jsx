@@ -19,7 +19,7 @@ class ModalMessage extends Component {
     render() {
         return (
             <Modal
-              size="sm"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered
               show={this.props.show}
