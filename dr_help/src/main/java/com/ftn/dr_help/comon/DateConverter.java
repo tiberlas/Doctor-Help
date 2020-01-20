@@ -3,6 +3,7 @@ package com.ftn.dr_help.comon;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.springframework.stereotype.Service;
 
@@ -64,6 +65,14 @@ public class DateConverter {
 	public Calendar stringToDate(String stringDate)  throws ParseException{
 		Calendar date = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		date.setTime(sdf.parse(stringDate));
+		
+		return date;
+	}
+	
+	public Calendar americanStringToDate(String stringDate)  throws ParseException{
+		Calendar date = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm a", Locale.US);
 		date.setTime(sdf.parse(stringDate));
 		
 		return date;

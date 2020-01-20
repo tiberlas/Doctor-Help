@@ -17,6 +17,7 @@ import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
@@ -74,6 +75,8 @@ public class AppointmentService {
 	@Autowired
 	private CalculateFirstFreeSchedule calculateSchedule;
 	
+	@Autowired
+	private WorkScheduleAdapter workSchedule;
 	
 	public List<DoctorAppointmentDTO> findDoctorAppointments(Long doctor_id) {
 		
@@ -264,7 +267,7 @@ public class AppointmentService {
 			
 			//provera da li je doca slobodan
 			List<Date> dates = doctorRepository.findAllReservedAppointments(old.getDoctor().getId());
-			Calendar retVal = calculateSchedule.checkScheduleOrFindFirstFree(old.getDoctor(), date, dates);
+			Calendar retVal = calculateSchedule.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(old.getDoctor()), date, dates);
 			if(!retVal.equals(date)) {
 				return false;
 			}

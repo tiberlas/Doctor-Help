@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import MapContainer from './MapContainer.jsx';
+import Button from 'react-bootstrap/Button';
+
 
 class Clinic extends Component {
     state = { 
@@ -49,7 +51,6 @@ class Clinic extends Component {
                             <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
                         </div>
                         
-
                     </div>
                     </div>
                 </div>

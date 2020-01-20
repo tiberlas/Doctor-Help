@@ -29,6 +29,7 @@ import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
 import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
@@ -80,6 +81,9 @@ public class DoctorService {
 	
 	@Autowired
 	private EmailCheck check;
+	
+	@Autowired
+	private WorkScheduleAdapter workSchedule;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -448,7 +452,7 @@ public class DoctorService {
 			begin.clear(Calendar.SECOND);
 			begin.clear(Calendar.MILLISECOND);
 			
-			Calendar firstFree = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+			Calendar firstFree = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(doctor), begin, dates);
 			
 			return dateConvertor.dateForFrontEndString(firstFree);
 		} catch (Exception e) {
@@ -475,7 +479,7 @@ public class DoctorService {
 		DoctorPOJO doctor = repository.findOneByEmail(email);
 		List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
 		
-		return calculate.checkScheduleOrFindFirstFree(doctor, requestedSchedule, dates);
+		return calculate.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(doctor), requestedSchedule, dates);
 	}
 	
 	public String checkOperationSchedue(OperationRequestDTO request) {

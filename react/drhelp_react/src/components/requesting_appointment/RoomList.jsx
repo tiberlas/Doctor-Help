@@ -37,6 +37,7 @@ const sortTypes = {
 class RoomList extends Component {
     state = {
         type: this.props.type,
+        date: this.props.date,
         rooms: [],
         currentSort: 'default',
         modalShow: false,
@@ -51,15 +52,18 @@ class RoomList extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.type !== this.props.type) {
-            this.setState({type: this.props.type}, () => {
+            this.setState({type: this.props.type, date: this.props.date}, () => {
                 this.handleGetAllRooms();
             })
         }
     }
 
     handleGetAllRooms = () => {
-        axios.get('http://localhost:8080/api/rooms/all/type='+this.state.type)
-            .then(response => {
+        axios.post('http://localhost:8080/api/rooms/all/',
+            {
+                typeId: this.state.type,
+                date: this.state.date
+            }).then(response => {
                 this.setState({rooms: response.data, currentSort: 'default'});
             })
     }

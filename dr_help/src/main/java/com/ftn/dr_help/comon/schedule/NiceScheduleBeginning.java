@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.enums.Shift;
-import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.MedicalStaffWorkSchedularPOJO;
 
 @Service
 public class NiceScheduleBeginning {
@@ -17,7 +17,7 @@ public class NiceScheduleBeginning {
 	 * ako je druga onda je poccetak u 4 poslepodne;
 	 * i treca je u ponoc
 	 * */
-	public void setNiceScheduleBeginning(DoctorPOJO doctor, Calendar begin) {
+	public void setNiceScheduleBeginning(MedicalStaffWorkSchedularPOJO doctor, Calendar begin) {
 		
 		Shift shift = Shift.NONE;
 		

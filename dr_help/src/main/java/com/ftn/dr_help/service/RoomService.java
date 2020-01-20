@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.ProcedureIdAndDateDTO;
 import com.ftn.dr_help.dto.RoomCalendarDTO;
 import com.ftn.dr_help.dto.RoomDTO;
 import com.ftn.dr_help.dto.RoomReservingInfoDTO;
@@ -387,10 +388,7 @@ public class RoomService {
 		 * Nadje prvi slobodni termin za sobu
 		 * */
 		
-		Calendar duration = Calendar.getInstance();
-		duration.setTime(room.getProcedurasTypes().getDuration());
-		int hours = duration.get(Calendar.HOUR);
-		int minutes = duration.get(Calendar.MINUTE);
+		
 		
 		Calendar begin = Calendar.getInstance(); //sadrzi pocetak prvog slobodnog termina; prvi je sutra u 8 
 		begin.add(Calendar.DAY_OF_MONTH, 1);
@@ -399,6 +397,15 @@ public class RoomService {
 		begin.set(Calendar.MINUTE, 0);
 		begin.clear(Calendar.SECOND);
 		begin.clear(Calendar.MILLISECOND);
+		
+		return findFirstFreeScheduleFromDate(room, begin);
+	}
+	
+	private String findFirstFreeScheduleFromDate(RoomPOJO room, Calendar begin) {
+		Calendar duration = Calendar.getInstance();
+		duration.setTime(room.getProcedurasTypes().getDuration());
+		int hours = duration.get(Calendar.HOUR);
+		int minutes = duration.get(Calendar.MINUTE);
 		
 		Calendar end = Calendar.getInstance(); //sadrzi kraj termina u odnosu na begin
 		end.add(Calendar.DAY_OF_MONTH, 1);
@@ -448,16 +455,18 @@ public class RoomService {
 		return dateConvertor.dateForFrontEndString(begin);
 	}
 	
-	public List<RoomReservingInfoDTO> getAllWithType(String adminEmail, Long typeId) {
+	public List<RoomReservingInfoDTO> getAllWithType(String adminEmail, ProcedureIdAndDateDTO request) {
 		try {
 			
 			List<RoomReservingInfoDTO> rooms = new ArrayList<>();
-			List<RoomPOJO> finded = repository.findAllWithType(adminEmail, typeId);
+			List<RoomPOJO> finded = repository.findAllWithType(adminEmail, request.getTypeId());
+			
+			Calendar begin = dateConvertor.americanStringToDate(request.getDate());
 			
 			for(RoomPOJO room : finded) {
 				rooms.add(new RoomReservingInfoDTO(
 						room.getId(), 
-						findFirstFreeSchedule(room), 
+						findFirstFreeScheduleFromDate(room, begin), 
 						room.getName(), 
 						room.getNumber()));
 			}

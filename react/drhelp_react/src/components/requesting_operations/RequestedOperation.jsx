@@ -67,7 +67,7 @@ class requestedOperation extends Component {
             </div>
             </div>
 
-                <RoomList type={this.state.procedureId}/>
+                <RoomList date={this.state.date} type={this.state.procedureId}/>
 
             </div>
         );
