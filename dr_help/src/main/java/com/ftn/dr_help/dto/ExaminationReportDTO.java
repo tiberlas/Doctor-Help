@@ -2,14 +2,21 @@ package com.ftn.dr_help.dto;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ExaminationReportDTO {
 
 	private String diagnosis;
 	private ArrayList<String> medicationList;
 	private String note;
-	
 	private Date dateStart;
+	
+	private List<MedicationDisplayDTO> medicationArray; //idk man ovo koristim
+	private boolean myExamination; ///myExamination -> da li je obavljeni appointment bas od strane ovog doktora koji trazi
+	
+	private boolean nurseSigned;
+	private Long nurseId;
+	private String nurse;
 	
 	public ExaminationReportDTO() {
 		
@@ -48,6 +55,46 @@ public class ExaminationReportDTO {
 
 	public void setDateStart(Date dateStart) {
 		this.dateStart = dateStart;
+	}
+
+	public boolean isMyExamination() {
+		return myExamination;
+	}
+
+	public void setMyExamination(boolean myExamination) {
+		this.myExamination = myExamination;
+	}
+
+	public List<MedicationDisplayDTO> getMedicationArray() {
+		return medicationArray;
+	}
+
+	public void setMedicationArray(List<MedicationDisplayDTO> medicationArray) {
+		this.medicationArray = medicationArray;
+	}
+
+	public boolean isNurseSigned() {
+		return nurseSigned;
+	}
+
+	public void setNurseSigned(boolean nurseSigned) {
+		this.nurseSigned = nurseSigned;
+	}
+
+	public Long getNurseId() {
+		return nurseId;
+	}
+
+	public void setNurseId(Long nurseId) {
+		this.nurseId = nurseId;
+	}
+
+	public String getNurse() {
+		return nurse;
+	}
+
+	public void setNurse(String nurse) {
+		this.nurse = nurse;
 	}
 	
 }

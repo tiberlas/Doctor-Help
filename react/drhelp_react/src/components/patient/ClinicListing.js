@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, FormControl } from 'react-bootstrap';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownItem from 'react-bootstrap/DropdownItem';
@@ -17,16 +17,19 @@ class ClinicListing extends Component {
 
 	state = {
 		clinics: [], 
-		activeFilter: '', 
-		appointmentTypes: []
+		activeFilter: 'unfiltered', 
+		appointmentTypes: [],
+		selectedDate: 'unfiltered'
 	}
 
 	componentDidMount () {
-		axios.get ('http://localhost:8080/api/clinics/listing/unfiltered')
+		axios.get ('http://localhost:8080/api/clinics/listing/unfiltered/unfiltered')
 		.then (response => {
 			this.setState ({
-				clinics: response.data.clinicList, 
-				appointmentTypes: response.data.procedureType
+				clinics : response.data.clinicList, 
+				appointmentTypes : response.data.procedureType, 
+				activeFilter  : response.data.procedureTypeString, 
+				selectedDate : response.data.dateString
 			})
 		})
 	}
@@ -36,8 +39,9 @@ class ClinicListing extends Component {
 		if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
 			profileUrl = '/clinic/' + row.id + '/' + this.state.activeFilter;
 		} else {
-			profileUrl = '/clinic/' + row.id;
+			profileUrl = '/clinic/' + row.id + '/unfiltered';
 		}
+		profileUrl += '/' + this.state.selectedDate;
 		return (
             <Fragment>
                 <TableCell><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
@@ -50,20 +54,52 @@ class ClinicListing extends Component {
         )
     }
 
-	handleFilter (text) {
+	handleFilterType (text) {
 		text = text.replace (' ', '_');
-		axios.get ('http://localhost:8080/api/clinics/listing/' + text)
+		let element = document.getElementById ("picker");
+		let value = element.value;
+		if (value === "") {
+			value = 'unfiltered'
+		}
+
+		this.setState ({
+			selectedDate : value,
+			activeFilter : text
+		})
+
+		this.fetchData (text, value);
+	}
+
+	handleFilterDate () {
+		let element = document.getElementById ("picker");
+		let value = element.value;
+		let text = this.state.activeFilter;
+		// text = text.replace (' ', '_');
+		
+		// alert ("Filter date: " + value + "; Filter type: " + text);
+		
+		this.setState ({
+			selectedDate : value,
+			activeFilter : text
+		})
+
+		this.fetchData(text, value)
+	}
+
+	fetchData (dil, dat) {
+		let text = this.state.activeFilter;
+		let date = this.state.selectedDate;
+		let requestPartOne = 'http://localhost:8080/api/clinics/listing/';
+		let requestPartTwo = dil + '/' + dat;
+		let wholeRequest = requestPartOne + requestPartTwo;
+		// alert (requestPartOne + requestPartTwo);
+		axios.get (wholeRequest)
 		.then (response => {
 			this.setState ({
 				clinics: response.data.clinicList, 
 				appointmentTypes: response.data.procedureType, 
-				activeFilter: text
+				// activeFilter: text
 			})
-			if (this.state.activeFilter === 'unfiltered') {
-				this.setState ({
-					activeFilter: ''
-				})
-			}
 		})
 	}
 
@@ -73,21 +109,38 @@ class ClinicListing extends Component {
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-					<Dropdown id = "dropdown_id" class='success'>
-							<DropdownToggle id="dropdown-basic" >
-								Appointment types
-							</DropdownToggle>
-							<DropdownMenu>
-								<MenuItem onClick={() => this.handleFilter ('unfiltered')}>-</MenuItem>
-								{
-									numberOfTypes > 0 ? this.state.appointmentTypes.map (row => (
-										<MenuItem onClick={() => this.handleFilter (row)}>{row}</MenuItem>
-									)) : null
-								}
-							</DropdownMenu>
-					</Dropdown>
+					
+
+					
+
 					<Table>
 						<TableHead>
+							<TableRow>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell>
+									<form>
+										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
+									</form>
+								</TableCell>
+								<TableCell>
+									<Dropdown id = "dropdown_id" class='success'>
+										<DropdownToggle id="dropdown-basic" >
+											{(this.state.activeFilter === 'unfiltered') ? ("Procedure types"): (this.state.activeFilter.replace('_', ' '))}
+										</DropdownToggle>
+										<DropdownMenu>
+											<MenuItem onClick={() => this.handleFilterType ('unfiltered')}>-</MenuItem>
+											{
+												numberOfTypes > 0 ? this.state.appointmentTypes.map (row => (
+													<MenuItem onClick={() => this.handleFilterType (row)}>{row}</MenuItem>
+												)) : null
+											}
+										</DropdownMenu>
+									</Dropdown>
+								</TableCell>
+							</TableRow>
 							<TableRow>
 								<TableCell><p class='text-success'>Clinic Name</p></TableCell>
 								<TableCell><p class='text-success'>Address</p></TableCell>

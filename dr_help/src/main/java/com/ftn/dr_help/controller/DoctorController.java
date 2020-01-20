@@ -1,5 +1,6 @@
 package com.ftn.dr_help.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -107,18 +109,21 @@ public class DoctorController {
 		
 	} 
 	
-	@GetMapping (value = "/listing/{clinic_id}/{appointment_type}")
+	@GetMapping (value = "/listing/{clinic_id}/{appointment_type}/{appointment_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<List<DoctorListingDTO>> getDoctorListing (@PathVariable("clinic_id") Long clinicId, 
-				@PathVariable("appointment_type") String appointmentType) {
+				@PathVariable("appointment_type") String appointmentType, @PathVariable("appointment_date") String appointmentDate) throws ParseException {
 
 		System.out.println("Appointment type: " + appointmentType);
 		System.out.println("Clinic id: " + clinicId);
+		System.out.println("Date: " + appointmentDate);
 		
-		if (appointmentType.equals("unfiltered")) {
+		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
 			return new ResponseEntity<> (service.filterByClinic(clinicId), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<> (service.filterByClinicAndProcedureType(clinicId, appointmentType.replace('_', ' ')), HttpStatus.OK);
+			List<DoctorListingDTO> doctors = service.filterByClinicDateProcedureType(clinicId, appointmentType.replace('_', ' '), appointmentDate);
+			
+			return new ResponseEntity<> (doctors, HttpStatus.OK);
 		}
 	}
 	
@@ -145,7 +150,7 @@ public class DoctorController {
 
 	@PostMapping(value = "/new+doctor", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> createNurse(@RequestBody MedicalStaffSaveingDTO newDoctor) {
+	public ResponseEntity<String> createDoctor(@RequestBody MedicalStaffSaveingDTO newDoctor) {
 		String email = currentUser.getEmail();
 		
 		boolean ret = service.save(newDoctor, email);
@@ -161,7 +166,7 @@ public class DoctorController {
 	
 	@DeleteMapping(value = "/delete/id={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> deleteNurse(@PathVariable("id") Long id) {
+	public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
 		
 		boolean ret = service.delete(id);
 		
@@ -171,6 +176,20 @@ public class DoctorController {
 			return new ResponseEntity<String>("not", HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+	}
+	
+	@GetMapping(value="/doctor={id}/business-hours")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<BusinessDayHoursDTO>> getDoctorBusinessHours(@PathVariable("id") Long doctor_id) {
+		
+		List<BusinessDayHoursDTO> list = service.getDoctorBusinessHours(doctor_id);
+		
+		if(list == null) {
+			System.out.println("Error while calculating doctor business hours");
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		} else{
+			return new ResponseEntity<List<BusinessDayHoursDTO>>(list, HttpStatus.OK);
+		}
 	}
 	
 }

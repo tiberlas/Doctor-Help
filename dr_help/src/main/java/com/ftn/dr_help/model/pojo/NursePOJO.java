@@ -1,5 +1,7 @@
 package com.ftn.dr_help.model.pojo;
 
+
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
@@ -15,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -118,6 +121,9 @@ public class NursePOJO implements Serializable{
 	
 	@Column(name = "mustChangePassword", nullable = true)
 	private Boolean mustChangePassword = false;
+	
+	@OneToMany(mappedBy="nurse",  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LeaveRequestPOJO> leaveRequest;
 	
 	public NursePOJO() {
 		super();

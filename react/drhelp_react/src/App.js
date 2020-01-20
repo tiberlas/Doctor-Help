@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import './App.css';
 import TempHome from './components/TempHome.js'
 import LoginPage from './LoginPage.js'
-import './App.css';
 
 import {BrowserRouter, Redirect, Route} from "react-router-dom";
 import {Switch} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
-
+//import 'font-awesome/css/font-awesome.min.css'; ne diraj, ovo je za ikonice
 import UserContextProvider from './context/UserContextProvider';
 import RegistrationPage from './components/RegistrationPage';
 import PatientProfile from './components/patient/PatientProfile';

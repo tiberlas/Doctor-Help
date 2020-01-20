@@ -1,7 +1,11 @@
 package com.ftn.dr_help.service;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
+import com.ftn.dr_help.dto.MedicationDisplayDTO;
+import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
@@ -21,8 +27,10 @@ import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.model.pojo.TherapyPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.DiagnosisRepository;
+import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.ExaminationReportRepository;
 import com.ftn.dr_help.repository.MedicationRepository;
+import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.PerscriptionRepository;
 import com.ftn.dr_help.repository.TherapyRepository;
 
@@ -47,6 +55,13 @@ public class AppointmentService {
 	@Autowired
 	private TherapyRepository therapyRepository;
 
+	@Autowired
+	private DoctorRepository doctorRepository;
+	
+	@Autowired
+	private PatientRepository patientRepository;
+	
+	
 	public List<DoctorAppointmentDTO> findDoctorAppointments(Long doctor_id) {
 		
 		List<AppointmentPOJO> list = appointmentRepository.findDoctorAppointments(doctor_id);
@@ -55,16 +70,11 @@ public class AppointmentService {
 		
 		int i = 0;
 		for (AppointmentPOJO appointmentPOJO : list) {
-			if(!appointmentPOJO.isDeleted()) {
 				System.out.println("-------------------" + i);
-				DoctorAppointmentDTO dto = convertAppointmentToDTO(appointmentPOJO);
+				DoctorAppointmentDTO dto = convertAppointmentToDoctorDTO(appointmentPOJO);
 				appointments.add(dto);
 				i++;
-			}
 		}
-		
-		
-		
 		return appointments;
 	}
 	
@@ -76,14 +86,60 @@ public class AppointmentService {
 		
 		int i = 0;
 		for (AppointmentPOJO appointmentPOJO : list) {
-			if(!appointmentPOJO.isDeleted()) {
 				System.out.println("-------------------" + i);
-				DoctorAppointmentDTO dto = convertAppointmentToDTO(appointmentPOJO);
+				DoctorAppointmentDTO dto = convertAppointmentToDoctorDTO(appointmentPOJO);
 				appointments.add(dto);
 				i++;
-			}
 		}
 		
+		return appointments;
+	}
+	
+	public List<DoctorAppointmentDTO> findDoctorDoneAppointmentsForPatientWithId(Long patient_id) { 
+			
+			List<AppointmentPOJO> list = appointmentRepository.findDoneAppointmentsForPatientWithId(patient_id);
+			
+			System.out.println("Done appointments za doktora");
+			List<DoctorAppointmentDTO> appointments = new ArrayList<DoctorAppointmentDTO>();
+			int i = 0;
+			for (AppointmentPOJO appointmentPOJO : list) {
+					System.out.println("-------------------" + i);
+					DoctorAppointmentDTO dto = convertAppointmentToDoctorDTO(appointmentPOJO);
+					appointments.add(dto);
+					i++;
+			}
+			
+			return appointments;
+	}
+
+	public List<NurseAppointmentDTO> findNurseDoneAppointmentsForPatientWithId(Long patient_id) { 
+		
+		List<AppointmentPOJO> list = appointmentRepository.findDoneAppointmentsForPatientWithId(patient_id);
+		
+		System.out.println("Done appointments za nurse");
+		List<NurseAppointmentDTO> appointments = new ArrayList<NurseAppointmentDTO>();
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+				System.out.println("-------------------" + i);
+				NurseAppointmentDTO dto = convertAppointmentToNurseDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+		}
+		
+		return appointments;
+	}
+	public List<NurseAppointmentDTO> findNurseAppointments(Long nurse_id) {
+		
+		List<AppointmentPOJO> list = appointmentRepository.findNurseAppointments(nurse_id);
+		List<NurseAppointmentDTO> appointments = new ArrayList<NurseAppointmentDTO>();
+		
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+				System.out.println("-------------------" + i);
+				NurseAppointmentDTO dto = convertAppointmentToNurseDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+		}
 		return appointments;
 	}
 	
@@ -104,7 +160,6 @@ public class AppointmentService {
 			System.out.println("Added medication: "+ med.getMedicationName());
 		}
 		
-		perscription.setMedicationList(medicationList);
 		perscription.setMedicationList(medicationList);
 		
 		for (MedicationPOJO medicationPOJO : medicationList) {
@@ -144,13 +199,108 @@ public class AppointmentService {
 		return app;
 	}
 	
+	private NurseAppointmentDTO convertAppointmentToNurseDTO(AppointmentPOJO appointment) {
+		NurseAppointmentDTO dto = new NurseAppointmentDTO();
+		
+		DoctorPOJO doctor = appointment.getDoctor();
+		
+		if(doctor == null) {
+			System.out.println("Nedje je greska, doktor ne sme biti null");
+			return null;
+		} 
+		
+		System.out.println("TKO JE DOCA" + doctor.getFirstName());
+		dto.setDoctor_id(doctor.getId());
+		dto.setDoctorFirstName(doctor.getFirstName());
+		dto.setDoctorLastName(doctor.getLastName());
+		
+		PatientPOJO patient = appointment.getPatient();
+		if(patient == null) {
+			dto.setPatientFirstName("-");
+			dto.setPatientLastName("-");
+			
+		}
+		else {
+			System.out.println("PACIJENT JE:" + patient.getFirstName());
+			dto.setPatientFirstName(patient.getFirstName());
+			dto.setPatientLastName(patient.getLastName());
+			dto.setInsuranceNumber(String.valueOf(patient.getInsuranceNumber()));
+		}
+		
+		ProceduresTypePOJO pt = appointment.getProcedureType();
+		dto.setProcedureName(pt.getName());
+		
+		dto.setStartDate(appointment.getDate().getTime());
+		System.out.println("START IS" + appointment.getDate().getTime());
+		
+		Calendar end = Calendar.getInstance(); // creates calendar
+		end.setTime(appointment.getDate().getTime()); // sets calendar time/date
+		
+		Calendar duration = Calendar.getInstance();
+		duration.setTime(pt.getDuration());
+		end.add(Calendar.HOUR_OF_DAY, duration.get(Calendar.HOUR)); //dodaje sate
+		end.add(Calendar.MINUTE, duration.get(Calendar.MINUTE)); //dodaje minute
+		System.out.println("AND END IS: " + end.getTime());
+		dto.setEndDate(end.getTime());
+		
+		
+		dto.setProcedureName(pt.getName());
+		
+		dto.setPrice(String.valueOf(appointment.getProcedureType().getPrice()));
+		System.out.println("PRICE IS: " + dto.getPrice());
+		dto.setDiscount(String.valueOf(appointment.getDiscount()));
+		System.out.println("DISCOUNT IS: " + dto.getDiscount());
+		dto.setStatus(String.valueOf(appointment.getStatus()));
+		
+		dto.setRoomName(appointment.getRoom().getName());
+		dto.setRoomNumber(String.valueOf(appointment.getRoom().getNumber()));
+		
+		dto.setAppointment_id(appointment.getId());
+		
+		
+		return dto;
+	}
 	
-	private DoctorAppointmentDTO convertAppointmentToDTO(AppointmentPOJO appointment) {
+	
+	
+	public boolean addAppointment (Long doctorId, String dateString, Long patientId) throws ParseException {
+		AppointmentPOJO newAppointment = new AppointmentPOJO ();
+		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+		Date date = sdf.parse(dateString);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		newAppointment.setDate(calendar);
+		newAppointment.setDeleted(false);
+		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
+		newAppointment.setDoctor(doctor);
+		newAppointment.setPatient(patientRepository.getOne(patientId));
+		newAppointment.setStatus(AppointmentStateEnum.REQUESTED);
+		newAppointment.setProcedureType(doctor.getProcedureType());
+		newAppointment.setRoom(null);
+		newAppointment.setNurse(null);
+		newAppointment.setDiscount(0);
+		newAppointment.setExaminationReport(null);
+		appointmentRepository.save(newAppointment);
+		
+		return false;
+	}
+	
+	
+	private DoctorAppointmentDTO convertAppointmentToDoctorDTO(AppointmentPOJO appointment) {
 		
 		DoctorAppointmentDTO dto = new DoctorAppointmentDTO();
 		
 		DoctorPOJO doctor = appointment.getDoctor();
-		System.out.println("DOCA JE" + doctor.getFirstName());
+		
+		if(doctor == null) {
+			System.out.println("Nedje je greska, doktor ne sme biti null");
+			return null;
+		} 
+		
+		System.out.println("TKO JE DOCA" + doctor.getFirstName());
+		dto.setDoctorId(doctor.getId());
+		dto.setDoctorFirstName(doctor.getFirstName());
+		dto.setDoctorLastName(doctor.getLastName());
 		
 		PatientPOJO patient = appointment.getPatient();
 		if(patient == null) {
@@ -198,6 +348,120 @@ public class AppointmentService {
 		
 		return dto;
 		
+	}
+	
+	
+	public ExaminationReportDTO findExaminationReportForDoneAppointment(Long appointmentId, Long doctor_id) {
+		AppointmentPOJO appointment = appointmentRepository.findOneById(appointmentId);
+		PerscriptionPOJO perscription = appointment.getExaminationReport().getPerscription();
+		
+		
+		ExaminationReportDTO dto = new ExaminationReportDTO();
+		
+		if(appointment.getDoctor().getId() == doctor_id) {
+			dto.setMyExamination(true); 
+		} else {
+			dto.setMyExamination(false);
+		}
+		
+		if(perscription.getDiagnosis() != null) {
+			dto.setDiagnosis(perscription.getDiagnosis().getDiagnosis());
+		} else {
+			dto.setDiagnosis("");
+		}
+		
+		List<MedicationDisplayDTO> medicationList = new ArrayList<MedicationDisplayDTO>();
+		if(perscription.getMedicationList() != null) {
+		
+			for (MedicationPOJO m : perscription.getMedicationList()) {
+				MedicationDisplayDTO mdDTO = new MedicationDisplayDTO();
+				mdDTO.setMedicationName(m.getMedicationName());
+				mdDTO.setMedicationDescription(m.getMedDescription());
+				medicationList.add(mdDTO);
+			}
+			
+			dto.setMedicationArray(medicationList);
+			
+			
+		}
+		
+		if (medicationList.size() == 0) {
+			medicationList.add(new MedicationDisplayDTO ("-", "-"));
+		}
+		
+		
+		TherapyPOJO therapy = perscription.getTherapy();
+		if (therapy != null) {
+			dto.setNote(therapy.getAdvice());
+		} else {
+			dto.setNote("");
+		}
+		
+		if(perscription.getSigningNurse() == null) {
+			dto.setNurseSigned(false);
+			System.out.println("Signing nurse is null");
+		} else {
+			dto.setNurseSigned(true);
+			dto.setNurse(appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName());
+			dto.setNurseId(appointment.getNurse().getId());
+			System.out.println("Nurse already signed off the perscription");
+		}
+		
+		return dto;
+	}
+	
+	public boolean updateExaminationReportDTO(Long appointment_id, ExaminationReportDTO dto) {
+		AppointmentPOJO appointment = appointmentRepository.findOneById(appointment_id);
+		
+		if(appointment.isDeleted()) {
+			System.out.println("Appointment is deleted");
+			return false;
+		}
+		
+		PerscriptionPOJO perscription = appointment.getExaminationReport().getPerscription();
+		if(perscription == null) {
+			return false;
+		}
+		System.out.println("Note is: " + dto.getNote());
+		perscription.getTherapy().setAdvice(dto.getNote()); //set the advice
+		perscriptionRepository.save(perscription);
+		
+		return true;
+		
+	}
+	
+	
+	public List<NurseAppointmentDTO> findAvailableOrApprovedNurseAppointments(Long nurse_id) {
+		List<AppointmentPOJO> list = appointmentRepository.findAvailableOrApprovedNurseAppointments(nurse_id);
+
+		System.out.println("Leave request appointments za nurse");
+		List<NurseAppointmentDTO> appointments = new ArrayList<NurseAppointmentDTO>();
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+				System.out.println("-------------------" + i);
+				NurseAppointmentDTO dto = convertAppointmentToNurseDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+		}
+		
+		return appointments;
+	}
+	
+	
+	public List<DoctorAppointmentDTO> findAvailableOrApprovedDoctorAppointments(Long doctor_id) {
+		List<AppointmentPOJO> list = appointmentRepository.findAvailableOrApprovedDoctorAppointments(doctor_id);
+
+		System.out.println("Leave request appointments za doktora");
+		List<DoctorAppointmentDTO> appointments = new ArrayList<DoctorAppointmentDTO>();
+		int i = 0;
+		for (AppointmentPOJO appointmentPOJO : list) {
+				System.out.println("-------------------" + i);
+				DoctorAppointmentDTO dto = convertAppointmentToDoctorDTO(appointmentPOJO);
+				appointments.add(dto);
+				i++;
+		}
+		
+		return appointments;
 	}
 	
 

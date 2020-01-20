@@ -1,14 +1,19 @@
 package com.ftn.dr_help.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
+import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.comon.EmailCheck;
+import com.ftn.dr_help.comon.Term;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
@@ -17,6 +22,7 @@ import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -333,6 +339,180 @@ public class DoctorService {
 		}
 		
 		return true;
+	}
+	
+	public List<DoctorListingDTO> filterByClinicDateProcedureType (Long clinicId, String procedureType, String dateString) throws ParseException {
+		List<DoctorListingDTO> retVal = new ArrayList<DoctorListingDTO> ();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat ("yyyyy-MM-dd hh:mm:ss");
+		String dateMinString = dateString + " 00:00:00";
+		String dateMaxString = dateString + " 23:59:59";
+		Date dateMin = sdf.parse (dateMinString);
+		Date dateMax = sdf.parse (dateMaxString);
+		
+		Calendar calendarMin = Calendar.getInstance ();
+		Calendar calendarMax = Calendar.getInstance ();
+		
+		calendarMin.setTime(dateMin);
+		calendarMax.setTime(dateMax);
+		
+		
+		
+		List<DoctorPOJO> doctors = repository.filterByClinicAndProcedureType(clinicId, procedureType);
+		for (DoctorPOJO d : doctors) {
+			DailySchedule schedule;
+			switch (calendarMin.get(Calendar.DAY_OF_WEEK)) {
+				case Calendar.MONDAY:
+					schedule = new DailySchedule (calendarMin, d.getMonday());
+					break;
+				case Calendar.TUESDAY:
+					schedule = new DailySchedule (calendarMin, d.getTuesday());
+					break;
+				case Calendar.WEDNESDAY:
+					schedule = new DailySchedule (calendarMin, d.getWednesday());
+					break;
+				case Calendar.THURSDAY:
+					schedule = new DailySchedule (calendarMin, d.getThursday());
+					break;
+				case Calendar.FRIDAY:
+					schedule = new DailySchedule (calendarMin, d.getFriday());
+					break;
+				case Calendar.SATURDAY:
+					schedule = new DailySchedule (calendarMin, d.getSaturday());
+					break;
+				default:
+					schedule = new DailySchedule (calendarMin, d.getSunday());
+					break;
+			}
+			List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(d.getId(), calendarMin, calendarMax);
+			for (AppointmentPOJO a : appointments) {
+				schedule.addAppointment(a);
+			}
+			DoctorListingDTO temp = new DoctorListingDTO (d);
+			List<Term> terms = schedule.getAvaliableTerms(d.getProcedureType());
+			List<String> times = new ArrayList<String> ();
+			for (Term t : terms) {
+				String tempTime = "";
+				tempTime += t.getTime().get(Calendar.HOUR_OF_DAY);
+				tempTime += ":";
+				tempTime += t.getTime().get(Calendar.MINUTE);
+				times.add(tempTime);
+			}
+			
+			temp.setTerms(times);
+			
+			retVal.add(temp);
+		}
+		
+		
+		
+		return retVal;
+	}
+	
+	
+	public List<BusinessDayHoursDTO> getDoctorBusinessHours(Long doctor_id) { //metoda racuna smene i prikazuje ih na kalendaru u prikladnom json formatu
+		//za primer formata, udji u BusinessDayHoursDTO
+		DoctorPOJO doctor = repository.findOneById(doctor_id);
+		
+		List<BusinessDayHoursDTO> businessDayList = new ArrayList<BusinessDayHoursDTO>();
+		
+		
+		if(!doctor.getMonday().toString().equals("NONE")) { //ako radi ponedeljkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(1); //1 == Monday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getMonday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getMonday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getMonday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		if(!doctor.getTuesday().toString().equals("NONE")) { //ako radi utorkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(2); //2 == Tuesday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getTuesday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getTuesday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getTuesday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		if(!doctor.getWednesday().toString().equals("NONE")) { //ako radi sredom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(3); //3 == Wednesday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getWednesday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getWednesday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getWednesday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		if(!doctor.getThursday().toString().equals("NONE")) { //ako radi cetvrtkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(4); //4 == Thursday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getThursday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getThursday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getThursday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+
+		if(!doctor.getFriday().toString().equals("NONE")) { //ako radi petkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(5); //5 == Friday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getFriday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getFriday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getFriday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		return businessDayList;
+		
 	}
 	
 }

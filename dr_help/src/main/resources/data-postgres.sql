@@ -73,15 +73,15 @@ values(
 
 
 insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
-values('psiho analiza', 255, false, '02:00:00'::time, 1, false);
+values('psiho analiza', 255, false, '01:00:00'::time, 1, false);
 insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
 values('opsti pregled', 25, false, '00:30:00'::time, 1, false);
 insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('01:00:00', false, 'Pregled opste prakse1', 330, 3, false);
+values ('01:00:00', false, 'Pregled opste prakse', 330, 3, false);
 insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('01:00:00', false, 'Pregled opste prakse2', 350, 2, false);
+values ('01:00:00', false, 'Pregled opste prakse', 350, 2, false);
 insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('01:15:00', false, 'Pregled opste prakse3', 250, 1, false);
+values ('01:15:00', false, 'Pregled opste prakse', 250, 1, false);
 insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
 values ('02:00:00', false, 'Pregled dermatologa', 630, 2, false);
 
@@ -118,7 +118,7 @@ insert into room(name, number, deleted, clinic_id, proceduras_types_id)
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Opšta A', 30, false, 1, 2);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('Opšta B', 31, false, 1, 2);
+	values('Opšta B', 31, false, 1, 1);
 
 insert into healthrecord (blood_type, diopter, height, weight)
 values (
@@ -144,6 +144,7 @@ insert into allergypojo (allergy, health_record_id)
 values ('Pollen', 2);
 
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+
 values ('2019-11-11', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2019-11-01', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
@@ -167,6 +168,8 @@ insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (1, 1, 1);
 insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
 values (2, 1, 2);
+insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
+values (4, 1, 1);
 
 update appointments 
 set examination_report_id = 1
@@ -177,6 +180,9 @@ where id = 2;
 update appointments 
 set examination_report_id = 3
 where id = 3;
+update appointments 
+set examination_report_id = 4
+where id = 4;
 
 update examination_reportpojo
 set health_record_id = 1
@@ -233,23 +239,38 @@ update examination_reportpojo
 set perscription_id = 3
 where id = 3;
 
-insert into medicationpojo_perscription (medication_list_id, perscription_id)
+insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
 values (1, 1);
-insert into medicationpojo_perscription (medication_list_id, perscription_id)
+insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
 values (2, 1);
-insert into medicationpojo_perscription (medication_list_id, perscription_id)
+insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
 values (3, 1);
 
-insert into medicationpojo_perscription (medication_list_id, perscription_id)
+insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
 values (1, 4);
 
 
-insert into medicationpojo_perscription (medication_list_id, perscription_id)
+insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
 values (2, 5);
 
 
-insert into medicationpojo_perscription (medication_list_id, perscription_id)
+insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
 values (1, 5);
 
+
+
+insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
+	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'أنا أعرف القليل من اللغة العربية ، كافر', 'DOCTOR', 1, null);
+	
+	insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
+	values ('2020-01-01', '2020-01-5', 'REQUESTED', 'ANNUAL', 'Vucic是我们的最高领导者', 'DOCTOR', 1, null);
+	
+insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
+	values ('2020-03-01', '2020-03-12', 'REQUESTED', 'ANNUAL', 'Please let me go, Ive been working for 45 days now.', 'DOCTOR', 1, null);
+	
+
+
+insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
+	values ('2020-02-01', '2020-02-04', 'REQUESTED', 'PERSONAL', 'release me from my flesh prison', 'NURSE', null, 1);
 
 
