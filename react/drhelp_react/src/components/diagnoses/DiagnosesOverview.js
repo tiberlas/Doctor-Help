@@ -107,7 +107,6 @@ class DiagnosesOverview extends React.Component {
         let i = 0
         return (
             <Fragment> 
-               
                <div style={{ overflow: "auto" }} >
                 <Table class="table table-hover">
                     <TableHead class="table-active">

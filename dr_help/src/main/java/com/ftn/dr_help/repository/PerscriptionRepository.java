@@ -12,8 +12,10 @@ public interface PerscriptionRepository extends JpaRepository<PerscriptionPOJO, 
 	
 	//List<PerscriptionPOJO> findNursePerscriptions(Long nurseId);
 	
-	@Query("select p from PerscriptionPOJO p where p.signingNurse is null")
-	public List<PerscriptionPOJO> findAllPendingPerscriptions();
+	@Query(value="select p.* from appointments a " +
+ "inner join examination_reportpojo er on a.examination_report_id = er.id " +
+ "inner join perscriptionpojo p on er.perscription_id = p.id where (p.signing_nurse_id is null) and (a.nurse_id = ?1)", nativeQuery=true)
+	public List<PerscriptionPOJO> findAllPendingPerscriptions(Long id);
 	
 	public PerscriptionPOJO findOneById(Long id);
 	
