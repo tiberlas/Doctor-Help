@@ -401,57 +401,58 @@ public class RoomService {
 		return findFirstFreeScheduleFromDate(room, begin);
 	}
 	
-	private String findFirstFreeScheduleFromDate(RoomPOJO room, Calendar begin) {
+	public String findFirstFreeScheduleFromDate(RoomPOJO room, Calendar begin) {
+		List<Date> dates = appointmentRepository.findScheduledDatesOfRoom(room.getId());
+		
 		Calendar duration = Calendar.getInstance();
 		duration.setTime(room.getProcedurasTypes().getDuration());
 		int hours = duration.get(Calendar.HOUR);
 		int minutes = duration.get(Calendar.MINUTE);
+	
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
 		
 		Calendar end = Calendar.getInstance(); //sadrzi kraj termina u odnosu na begin
-		end.add(Calendar.DAY_OF_MONTH, 1);
-		end.set(Calendar.AM_PM, Calendar.AM);
-		end.set(Calendar.HOUR, 8);
-		end.set(Calendar.MINUTE, 0);
+		end.setTime(begin.getTime());
 		end.add(Calendar.HOUR, hours);
 		end.add(Calendar.MINUTE, minutes);
-		end.clear(Calendar.SECOND);
-		end.clear(Calendar.MILLISECOND);
 		
-		Calendar current = Calendar.getInstance();
-		System.out.println("DEBUG MODE FOR " + room.getName());
-		List<Date> dates = appointmentRepository.findScheduledDatesOfRoom(room.getId());
+		Calendar currentBegin = Calendar.getInstance();
+		Calendar currentEnd = Calendar.getInstance();
 		for(Date date : dates) {
 		
-			System.out.println("start time " + begin.getTime());
-			System.out.println("end time " + end.getTime());
-			System.out.println("CURRENT " + date);
+			//iteriramo kroz zakazane termine; termini su sortirani 
+			currentBegin.setTime(date);
+			currentEnd.setTime(date);
+			currentEnd.add(Calendar.HOUR, hours);
+			currentEnd.add(Calendar.MINUTE, minutes);
+			currentBegin.clear(Calendar.SECOND);
+			currentBegin.clear(Calendar.MILLISECOND);
+			currentEnd.clear(Calendar.SECOND);
+			currentEnd.clear(Calendar.MILLISECOND);
 			
-			//pretvaranje DATE u calendar za tekuci dan
-			current.setTime(date);
+			System.out.println("----------------------------------------------------");
+			System.out.println("BEGIN: " + dateConvertor.dateForFrontEndString(begin));
+			System.out.println("END: " + dateConvertor.dateForFrontEndString(end));
+			System.out.println("CURRENT BEGIN: " + dateConvertor.dateForFrontEndString(currentBegin));
+			System.out.println("CURRENT END: " + dateConvertor.dateForFrontEndString(currentEnd));
 			
-			if(current.compareTo(begin) >= 0) {
-				System.out.println(1);
-				//prvi termin koji je posle trazenog pocetka iji je bas taj trazeni
-				if(current.after(end)) {
-					System.out.println(2);
-					//ovaj termin pocinje posle kraja trazenog termina; znaci trazeni termin je prvi slobodni
-					//return dateConvertor.dateAndTimeToString(begin);
-					return dateConvertor.dateForFrontEndString(begin);
-				} else {
-					System.out.println(3);
-					//definise se novi trazeni termin koji pocinje posle zavrsetka tekuceg
-					begin.setTime(date); //kraj tekuceg termina
-					begin.add(Calendar.HOUR, hours);
-					begin.add(Calendar.MINUTE, minutes);
-					
-					end.setTime(date);
-					end.add(Calendar.HOUR, hours*2);
-					end.add(Calendar.MINUTE, minutes*2);
-				}
+			if(begin.compareTo(currentEnd) >= 0) {
+				continue;
+			}
+			
+			if(end.compareTo(currentBegin) <= 0) {
+				//termin je dobar i vrati ga
+				return dateConvertor.dateForFrontEndString(begin);
+			} else {
+				//uzmi termin posle trenutnog
+				begin.setTime(currentEnd.getTime());
+				end.setTime(begin.getTime());
+				end.add(Calendar.HOUR, hours);
+				end.add(Calendar.MINUTE, minutes);
 			}
 		}
 		
-		//return dateConvertor.dateAndTimeToString(begin);
 		return dateConvertor.dateForFrontEndString(begin);
 	}
 	
