@@ -76,6 +76,10 @@ class PatientHistory extends Component {
 				
 			);
 		}
+		else if (this.props.filter === 'PREDEFINED') {
+			//alert ("Listing predefined appointments")
+			axios.get('http://localhost:8080/api/appointments/predefined');
+		}
 		
 	}
 
@@ -142,12 +146,15 @@ class PatientHistory extends Component {
 								<TableRow>
 									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Time{this.renderArrowDate()}</p></TableCell>
 									<TableCell><p class='text-success'>Procedure Type</p></TableCell>
-									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Status</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>Status</p></TableCell>
 									<TableCell><p class='text-success'>Doctor</p></TableCell>
 									<TableCell><p class='text-success'>Nurse</p></TableCell>
 									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>Perscription</p></TableCell>
 									<TableCell><p class='text-success'>Clinic</p></TableCell>
-									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>Cancel appointment</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>Cancel appointment</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Room</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Price</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Book</p></TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
@@ -155,12 +162,15 @@ class PatientHistory extends Component {
 									<TableRow key={row.examinationReportId}>
 										<TableCell><p class='text-white'>{row.date}</p></TableCell>
 										<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
-										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}>{row.status}</p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>{row.status}</p></TableCell>
 										<TableCell><p class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></p></TableCell>
 										<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
 										<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
-										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (true) : (false)}><Button hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}>Cancel</Button></p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><Button hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}>Cancel</Button></p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> Placeholder </p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> Placeholder </p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> <Button>Placeholder</Button> </p></TableCell>
 									</TableRow>
 								))}		
 							</TableBody>

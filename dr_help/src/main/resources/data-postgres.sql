@@ -203,6 +203,12 @@ insert into appointments (date, discount, status, doctor_id, examination_report_
 values ('2020-1-22 09:30:00', 20, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-1-22 10:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-28 10:00:00', 1, 'AVAILABLE', 1, null, 1, null, 1, 1, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-27 00:00:00', 1, 'AVAILABLE', 1, null, 1, null, 2, 1, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-02-03 00:04:00', 1, 'AVAILABLE', 1, null, 1, null, 1, 2, false);
 
 --for requesting a new appointment as doctor
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)

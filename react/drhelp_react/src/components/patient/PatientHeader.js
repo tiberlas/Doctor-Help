@@ -53,6 +53,11 @@ class PatientHeader extends Component {
                                             Patient History
                                         </DropdownItem>
                                     </LinkContainer>
+                                    <LinkContainer  exact to='/patient/predefined' class="nav-link">
+                                        <DropdownItem onClick={this.toggle}>
+                                            Book predefined
+                                        </DropdownItem>
+                                    </LinkContainer>
                                 </DropdownMenu>
                             </UncontrolledDropdown>
                         </Nav>
