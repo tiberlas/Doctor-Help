@@ -1,8 +1,7 @@
 package com.ftn.dr_help.repository;
 
-import java.util.Date;
-
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
 @Repository
@@ -73,4 +73,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	/* -------------------za leave request doktora */
 	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.deleted = false", nativeQuery=true)
 	public List<AppointmentPOJO> findAvailableOrApprovedDoctorAppointments(Long doctor_id);
+
+	@Query (value = "select * from appointments a where a.status = 'AVAILABLE'", nativeQuery = true)
+	public List<AppointmentPOJO> getAllPredefinedAppointments();
 }

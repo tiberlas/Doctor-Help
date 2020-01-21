@@ -78,7 +78,19 @@ class PatientHistory extends Component {
 		}
 		else if (this.props.filter === 'PREDEFINED') {
 			//alert ("Listing predefined appointments")
-			axios.get('http://localhost:8080/api/appointments/predefined');
+			axios.get('http://localhost:8080/api/appointments/predefined/doctor=undefined/procedure_type=undefined/clinic=undefined/date=undefined')
+			.then (response => {
+				this.setState ({
+					reports : response.data,
+					isUpToDate : false
+				})
+			})
+			.catch ( response => {
+				this.setState ({
+					reports : [],
+					isUpToDate : false
+				})
+			});
 		}
 		
 	}
@@ -168,8 +180,8 @@ class PatientHistory extends Component {
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
 										<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><Button hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}>Cancel</Button></p></TableCell>
-										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> Placeholder </p></TableCell>
-										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> Placeholder </p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.room}</p></TableCell>
+								<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.price}</p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> <Button>Placeholder</Button> </p></TableCell>
 									</TableRow>
 								))}		

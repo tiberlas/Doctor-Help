@@ -7,6 +7,25 @@ import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
 public class PatientHistoryDTO {
 
+	public PatientHistoryDTO(String status, Long examinationReportId, String date, String procedureType, String doctor,
+			String nurse, String clinicName, Long clinicId, Long doctorId, Long nurseId, Long appointmentId,
+			boolean canCancel, String room, Double price) {
+		super();
+		this.status = status;
+		this.examinationReportId = examinationReportId;
+		this.date = date;
+		this.procedureType = procedureType;
+		this.doctor = doctor;
+		this.nurse = nurse;
+		this.clinicName = clinicName;
+		this.clinicId = clinicId;
+		this.doctorId = doctorId;
+		this.nurseId = nurseId;
+		this.appointmentId = appointmentId;
+		this.canCancel = canCancel;
+		this.room = room;
+		this.price = price;
+	}
 	public PatientHistoryDTO(String status, Long examinationReportId, String date,
 			String procedureType, String doctor, String nurse, String clinicName, Long clinicId, Long doctorId,
 			Long nurseId, Long appointmentId, boolean canCancel) {
@@ -74,6 +93,14 @@ public class PatientHistoryDTO {
 		this.nurseId = appointment.getNurse().getId();
 		this.appointmentId = appointment.getId();
 		
+		if (appointment.getRoom() != null) {
+			this.room = appointment.getRoom().getName() + " " + appointment.getRoom().getNumber();
+		}
+		this.price = appointment.getProcedureType().getPrice() * appointment.getDiscount();
+		
+		
+//		System.out.println("Appointment room: " + this.room);
+//		System.out.println("Appointment price: " + this.price);
 		
 		Calendar tempCal = Calendar.getInstance ();
 		//System.out.println("Now: " + tempCal.getTime());
@@ -83,11 +110,8 @@ public class PatientHistoryDTO {
 			this.canCancel = true;
 		}
 		else {
-			System.out.println("Smem da otkazem");
+//			System.out.println("Smem da otkazem");
 		}
-		//System.out.println("Current time: " + Calendar.getInstance().getTime());
-		//System.out.println("Appointment time: " + appointment.getDate().getTime());
-		//System.out.println("Yesterday: " + tempCal.getTime());
 	}
 	
 	String status;
@@ -102,6 +126,8 @@ public class PatientHistoryDTO {
 	Long nurseId;
 	Long appointmentId;
 	boolean canCancel = false;
+	String room;
+	Double price;
 	
 	public Long getExaminationReportId() {
 		return examinationReportId;
@@ -174,6 +200,18 @@ public class PatientHistoryDTO {
 	}
 	public void setCanCancel(boolean canCancel) {
 		this.canCancel = canCancel;
+	}
+	public String getRoom() {
+		return room;
+	}
+	public void setRoom(String room) {
+		this.room = room;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 	
 }

@@ -19,6 +19,7 @@ import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
+import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -624,6 +625,20 @@ public class AppointmentService {
 		}
 		
 		return appointments;
+	}
+
+	public List<PatientHistoryDTO> getPredefinedAppointments(String doctorId, String procedureTypeId, String clinicId,
+			String date) {
+		List<AppointmentPOJO> appointmentList = new ArrayList<AppointmentPOJO>();
+		List<PatientHistoryDTO> retVal = new ArrayList<PatientHistoryDTO> ();
+		if (doctorId.equals("undefined") && doctorId.equals(procedureTypeId) && doctorId.equals(clinicId) && doctorId.equals(date)) {
+			appointmentList = appointmentRepository.getAllPredefinedAppointments();
+			for (AppointmentPOJO app : appointmentList) {
+				retVal.add(new PatientHistoryDTO(app));
+			}
+			return retVal;
+		}
+		return null;
 	}
 	
 }

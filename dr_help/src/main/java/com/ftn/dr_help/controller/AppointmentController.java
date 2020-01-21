@@ -2,6 +2,7 @@ package com.ftn.dr_help.controller;
 
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.ftn.dr_help.dto.AppointmentDeleteDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
+import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -240,6 +242,28 @@ public class AppointmentController {
 		List<DoctorAppointmentDTO> appointments = appointmentService.findAvailableOrApprovedDoctorAppointments(id);
 		
 		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
+	}
+	
+	@GetMapping (value="/predefined/doctor={dr_id}/procedure_type={proc_type_id}/clinic={clinic_id}/date={app_date}")
+	@PreAuthorize("hasAuthority('PATIENT')")	
+	public ResponseEntity<List<PatientHistoryDTO>> getHistory (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
+				@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
+//		List<PatientHistoryDTO> retVal = patientService.getHistory(currentUser.getEmail());
+//		if (retVal == null) {
+//			retVal = new ArrayList<PatientHistoryDTO> ();
+//		}
+//		return new ResponseEntity<> (retVal, HttpStatus.OK);
+		System.out.println("Prihvatio zahtev za predefinisane: ");
+		System.out.println("doktor: " + doctorId);
+		System.out.println("procedura: " + procedureTypeId);
+		System.out.println("klinika: " + clinicId);
+		System.out.println("datum: " + date);
+		
+		List<PatientHistoryDTO> retVal = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
+		if (retVal == null) {
+			retVal = new ArrayList<PatientHistoryDTO> ();
+		}
+		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
 }
