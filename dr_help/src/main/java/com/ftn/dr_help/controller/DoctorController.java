@@ -35,6 +35,7 @@ import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
 import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
+import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.service.DoctorService;
 
@@ -128,7 +129,8 @@ public class DoctorController {
 		System.out.println("Date: " + appointmentDate);
 		
 		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
-			return new ResponseEntity<> (service.filterByClinic(clinicId), HttpStatus.OK);
+			List<DoctorListingDTO> doctors = service.filterByClinic(clinicId);
+			return new ResponseEntity<> (doctors, HttpStatus.OK);
 		} else {
 			List<DoctorListingDTO> doctors = service.filterByClinicDateProcedureType(clinicId, appointmentType.replace('_', ' '), appointmentDate);
 			
@@ -136,10 +138,10 @@ public class DoctorController {
 		}
 	}
 	
-	@GetMapping (value = "/preview/{id}")
+	@GetMapping (value = "/preview/{id}/{patient}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long id) {
-		DoctorProfilePreviewDTO retVal = service.getProfilePreview(id);
+	public ResponseEntity<DoctorProfilePreviewDTO> getProfilePreview (@PathVariable("id") Long doctorId, @PathVariable("patient") Long patientId) {
+		DoctorProfilePreviewDTO retVal = service.getProfilePreview(doctorId, patientId);
 		if (retVal == null) {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		} 
@@ -159,7 +161,7 @@ public class DoctorController {
 
 	@PostMapping(value = "/new+doctor", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> createNurse(@RequestBody MedicalStaffSaveingDTO newDoctor) {
+	public ResponseEntity<String> createDoctor(@RequestBody MedicalStaffSaveingDTO newDoctor) {
 		String email = currentUser.getEmail();
 		
 		boolean ret = service.save(newDoctor, email);
@@ -175,7 +177,7 @@ public class DoctorController {
 	
 	@DeleteMapping(value = "/delete/id={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<String> deleteNurse(@PathVariable("id") Long id) {
+	public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
 		
 		boolean ret = service.delete(id);
 		
@@ -187,6 +189,15 @@ public class DoctorController {
 		
 	}
 	
+	@PostMapping (value="/review/{patient}/{doctor}/{rating}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
+				@PathVariable("doctor") Long doctorId, @PathVariable("rating") Integer rating) {
+		
+		service.addReview(doctorId, patientId, rating);
+		
+		return new ResponseEntity<String> ("All is well", HttpStatus.OK);
+	}
 	@GetMapping(value = "/schedules/first_free", produces = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<String> getFirstFreeSchedule() {
@@ -289,6 +300,20 @@ public class DoctorController {
 			return new ResponseEntity<>("NO OPERATIONS", HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<>("OPERATIONS", HttpStatus.OK);
+		}
+	}
+		
+	@GetMapping(value="/doctor={id}/business-hours")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<BusinessDayHoursDTO>> getDoctorBusinessHours(@PathVariable("id") Long doctor_id) {
+		
+		List<BusinessDayHoursDTO> list = service.getDoctorBusinessHours(doctor_id);
+		
+		if(list == null) {
+			System.out.println("Error while calculating doctor business hours");
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		} else{
+			return new ResponseEntity<List<BusinessDayHoursDTO>>(list, HttpStatus.OK);
 		}
 	}
 	

@@ -1,7 +1,32 @@
 package com.ftn.dr_help.dto;
 
+import java.util.Calendar;
+
+import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
+
 public class PatientHistoryDTO {
 
+	public PatientHistoryDTO(String status, Long examinationReportId, String date,
+			String procedureType, String doctor, String nurse, String clinicName, Long clinicId, Long doctorId,
+			Long nurseId, Long appointmentId, boolean canCancel) {
+		super();
+		this.status = status;
+		this.examinationReportId = examinationReportId;
+		this.date = date;
+		this.procedureType = procedureType;
+		this.doctor = doctor;
+		this.nurse = nurse;
+		this.clinicName = clinicName;
+		this.clinicId = clinicId;
+		this.doctorId = doctorId;
+		this.nurseId = nurseId;
+		this.appointmentId = appointmentId;
+		this.canCancel = canCancel;
+	}
+
+	DateConverter dateConverter = new DateConverter ();
+	
 	public PatientHistoryDTO() {
 		super();
 	}
@@ -12,17 +37,71 @@ public class PatientHistoryDTO {
 		this.date = date;
 		this.procedureType = procedureType;
 		this.doctor = doctor;
-		Nurse = nurse;
-		ClinicName = clinicName;
-		this.ClinicId = clinicId;
+		this.nurse = nurse;
+		this.clinicName = clinicName;
+		this.clinicId = clinicId;
 	}
+	
+	public PatientHistoryDTO (AppointmentPOJO appointment) {
+		switch (appointment.getStatus()) {
+			case DONE: 
+				this.status = "Done";
+				break;
+			case AVAILABLE:
+				this.status = "Available";
+				break;
+			case APPROVED: 
+				this.status = "Approved";
+				break;
+			case REQUESTED: 
+				this.status = "Requested";
+				break;
+			default:
+				this.status = "Unknown";
+				break;
+		}
+		if (appointment.getExaminationReport() != null) {
+			this.examinationReportId = appointment.getExaminationReport().getId();
+		}
+		this.date = dateConverter.toString(appointment.getDate());
+		this.date += " " + appointment.getDate().get(Calendar.HOUR_OF_DAY) + ":" + appointment.getDate().get(Calendar.MINUTE);
+		this.procedureType = appointment.getProcedureType().getName();
+		this.doctor = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
+		this.nurse = appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName();
+		this.clinicName = appointment.getDoctor().getClinic().getName();
+		this.clinicId = appointment.getDoctor().getClinic().getId();
+		this.doctorId = appointment.getDoctor().getId();
+		this.nurseId = appointment.getNurse().getId();
+		this.appointmentId = appointment.getId();
+		
+		
+		Calendar tempCal = Calendar.getInstance ();
+		//System.out.println("Now: " + tempCal.getTime());
+		tempCal.add(Calendar.DAY_OF_MONTH, 1);
+		if (tempCal.after(appointment.getDate())) {
+			//System.out.println("Ne smem da otkazem");
+			this.canCancel = true;
+		}
+		else {
+			System.out.println("Smem da otkazem");
+		}
+		//System.out.println("Current time: " + Calendar.getInstance().getTime());
+		//System.out.println("Appointment time: " + appointment.getDate().getTime());
+		//System.out.println("Yesterday: " + tempCal.getTime());
+	}
+	
+	String status;
 	Long examinationReportId;
 	String date;
 	String procedureType;
 	String doctor;
-	String Nurse;
-	String ClinicName;
-	Long ClinicId;
+	String nurse;
+	String clinicName;
+	Long clinicId;
+	Long doctorId;
+	Long nurseId;
+	Long appointmentId;
+	boolean canCancel = false;
 	
 	public Long getExaminationReportId() {
 		return examinationReportId;
@@ -49,22 +128,52 @@ public class PatientHistoryDTO {
 		this.doctor = doctor;
 	}
 	public String getNurse() {
-		return Nurse;
+		return this.nurse;
 	}
 	public void setNurse(String nurse) {
-		Nurse = nurse;
+		this.nurse = nurse;
 	}
 	public String getClinicName() {
-		return ClinicName;
+		return clinicName;
 	}
 	public void setClinicName(String clinicName) {
-		ClinicName = clinicName;
+		this.clinicName = clinicName;
 	}
 	public Long getClinicId() {
-		return ClinicId;
+		return clinicId;
 	}
 	public void setClinicId(Long clinicId) {
-		ClinicId = clinicId;
+		this.clinicId = clinicId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Long getDoctorId() {
+		return doctorId;
+	}
+	public void setDoctorId(Long doctorId) {
+		this.doctorId = doctorId;
+	}
+	public Long getNurseId() {
+		return this.nurseId;
+	}
+	public void setNurseId(Long nurseId) {
+		this.nurseId = nurseId;
+	}
+	public Long getAppointmentId() {
+		return appointmentId;
+	}
+	public void setAppointmentId(Long appointmentId) {
+		this.appointmentId = appointmentId;
+	}
+	public boolean isCanCancel() {
+		return canCancel;
+	}
+	public void setCanCancel(boolean canCancel) {
+		this.canCancel = canCancel;
 	}
 	
 }

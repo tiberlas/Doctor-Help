@@ -15,3 +15,5 @@ za kalendar:
 	npm install --save @fullcalendar/interaction
 select-picker:
 	npm install --save react-select
+moment-js:
+	npm i --save moment

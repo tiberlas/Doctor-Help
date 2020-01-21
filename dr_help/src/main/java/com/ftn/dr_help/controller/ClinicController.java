@@ -22,7 +22,12 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicListingDTO;
 import com.ftn.dr_help.dto.ClinicPreviewDTO;
+import com.ftn.dr_help.dto.ClinicRatingDTO;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.model.pojo.ClinicReviewPOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
+import com.ftn.dr_help.repository.ClinicReviewRepository;
 import com.ftn.dr_help.service.ClinicService;
 import com.ftn.dr_help.service.ProcedureTypeService;
 
@@ -39,6 +44,12 @@ public class ClinicController {
 	
 	@Autowired
 	private ProcedureTypeService procedureTypeService;
+	
+	@Autowired
+	private ClinicReviewRepository clinicReviewRepository;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
 	
 	@PostMapping(value = "/newClinic", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
@@ -80,10 +91,20 @@ public class ClinicController {
 	@GetMapping(value = "/id={id}")
 	public ResponseEntity<ClinicDTO> getOneCLinic(@PathVariable("id") Long id) {
 		ClinicDTO finded = clinicService.findOneDTO(id);
+
+		//System.out.println("Getting one clinic by the following id: " + id);
 		
-		if(finded == null)
+		if(finded == null) {
 			return new ResponseEntity<ClinicDTO>(HttpStatus.NOT_FOUND);
-		
+		}
+		//System.out.println("Findeds id: " + clinicReviewRepository.getAverageReview(finded.getId()).toString());
+		Float retVal = clinicReviewRepository.getAverageReview(finded.getId());
+		if (retVal != null) {
+			finded.setRating(clinicReviewRepository.getAverageReview(finded.getId()).toString());
+		} 
+		else {
+			//System.out.println("Returned NULL od trazenja proseka");
+		}
 		return new ResponseEntity<ClinicDTO>(finded,  HttpStatus.OK);
 	} 
 
@@ -104,32 +125,10 @@ public class ClinicController {
 	@GetMapping (value = "/listing/{filter}/{date_string}")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter, @PathVariable("date_string") String dateString) throws ParseException {
-//		System.out.println("");
-//		System.out.println("XOXOXOXOXO");
-//		System.out.println("Filter: " + filter);
-//		System.out.println("Date string: " + dateString);
-//		System.out.println("XOXOXOXOXO");
-//		System.out.println("");
-//		List<ClinicPreviewDTO> clinicDTO = new ArrayList<>();
-//		
-//		if (filter.equals("unfiltered")) {
-//			List<ClinicPOJO> clinics = clinicService.findAll();
-//			for (ClinicPOJO c : clinics) {
-//				clinicDTO.add(new ClinicPreviewDTO(c));
-//			} 
-//		} else {
-//			filter = filter.replace('_', ' ');
-//			List<ClinicPOJO> clinics = clinicService.filterByProcedureType (filter);
-//			for (ClinicPOJO c : clinics) {
-//				ClinicPreviewDTO newPreview = new ClinicPreviewDTO(c);
-//				newPreview.setPrice(Double.toString(procedureTypeService.getPrice(c.getId(), filter)) + " rsd");
-//				clinicDTO.add(newPreview);
-//			} 
-//		}
+
 		List<ClinicPOJO> clinicList = new ArrayList<ClinicPOJO>();
 		
 		if (filter.equals("unfiltered")) {
-//			System.out.println("NEFILTRIRANE KLINIKE!!!1!");
 			List<ClinicPOJO> clinics = clinicService.findAll();
 			for (ClinicPOJO c : clinics) {
 				clinicList.add(c);
@@ -153,6 +152,10 @@ public class ClinicController {
 				Double price = procedureTypeService.getPrice(c.getId(), filter);
 				temp.setPrice((price == null) ? ("-") : (Double.toString(price) + " rsd"));
 			}
+			Float averageReview = clinicReviewRepository.getAverageReview(temp.getId());
+			if (averageReview != null) {
+				temp.setRating(averageReview.toString());
+			}
 			clinicDTO.add(temp);
 		}
 		
@@ -163,6 +166,39 @@ public class ClinicController {
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
+	@PostMapping (value="/review/{patient}/{clinic}/{rating}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
+				@PathVariable("clinic") Long clinicId, @PathVariable("rating") Integer rating) {
+		
+//		System.out.println("Patient id: " + patientId);
+//		System.out.println("Clinic id: " + clinicId);
+//		System.out.println("Rating: " + rating);
+		clinicService.addReview(patientId, clinicId, rating);
+		
+		return new ResponseEntity<> ("All is swell, gentlmen", HttpStatus.OK); 
+	}
 	
+	@GetMapping (value="/review/{patient}/{clinic}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<ClinicRatingDTO> haveInteracted (@PathVariable("patient") Long patientId, 
+				@PathVariable("clinic") Long clinicId) {
+		
+		ClinicRatingDTO retVal = new ClinicRatingDTO();
+//		System.out.println("Patient id: " + patientId);
+//		System.out.println("Clinic id: " + clinicId);
+		List<AppointmentPOJO> appointments = appointmentRepository.getPatientsPastAppointmentsForClinic(patientId, clinicId);
+		if (appointments.size() > 0) {
+			retVal.setHaveInteracted(true);;
+		}
+		ClinicReviewPOJO crp = clinicReviewRepository.getClinicReview(patientId, clinicId);
+		if (crp != null) {
+			retVal.setMyRating(crp.getRating());
+		}
+		
+		
+		
+		return new ResponseEntity<> (retVal, HttpStatus.OK); 
+	}
 	
 }

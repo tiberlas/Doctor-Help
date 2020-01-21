@@ -11,9 +11,8 @@ import axios from 'axios';
 import ViewPatientProfile from '../patient/ViewPatientProfile';
 import DoctorCalendar from './DoctorCalendar'
 import HandlePatientList from './HandlePatientList.jsx';
-import DoctorVacation from './DoctorVacation.jsx';
-import StartAppointment from './StartAppointmnet.jsx';
 import DoctorRequestedOperations from './DoctorRequestedOperations.jsx';
+import DoctorLeaveRequest from '../leave_request/doctor/DoctorLeaveRequest.js';
 
 class Doctor extends Component {
     state = { 
@@ -62,7 +61,7 @@ class Doctor extends Component {
     }
 
     render() { 
-        var doctor = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId, role:'doctor'} 
+        var doctor = {id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, address: this.state.address, state: this.state.state, city: this.state.city, phoneNumber: this.state.phoneNumber, email: this.state.email, birthday: this.state.birthday, clinicId: this.state.clinicId, role: 'doctor'} 
         return ( 
             <div>
                 <DoctorContextProvider doctor={doctor} >
@@ -74,7 +73,8 @@ class Doctor extends Component {
                             <Route exact path="/doctor/profile"> <DoctorProfile /></Route>
                             <Route exact path="/doctor/profile/change"> <DoctorChangeProfile handleUpdate={this.handleDoctor}/></Route>
                             <Route exact path="/doctor/profile/change/password"> <DoctorChangePassword /></Route>
-                            <Route exact path = "/doctor/schedule"><DoctorCalendar medical_staff = {doctor} regime='schedule'/></Route> 
+                            <Route exact path = "/doctor/schedule"><DoctorCalendar regime='schedule'/></Route>
+                            <Route exact path="/doctor/leave-request"> <DoctorLeaveRequest/> </Route>
                             <Route path="/profile/"> <ViewPatientProfile medical_staff = {doctor}/></Route>
                             <Route exact path = "/doctor/patients"><HandlePatientList /></Route>
                             <Route exact path = "/doctor/requested/operations"><DoctorRequestedOperations /> </Route>

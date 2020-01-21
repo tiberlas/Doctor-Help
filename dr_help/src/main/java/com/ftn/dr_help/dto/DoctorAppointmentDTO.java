@@ -5,6 +5,10 @@ import java.util.Date;
 public class DoctorAppointmentDTO {
 
 	private Long appointment_id;
+	private Long doctorId;
+	
+	private String doctorFirstName;
+	private String doctorLastName;
 
 	private String patientFirstName;
 	private String patientLastName;
@@ -137,6 +141,30 @@ public class DoctorAppointmentDTO {
 
 	public void setInsuranceNumber(String insuranceNumber) {
 		this.insuranceNumber = insuranceNumber;
+	}
+
+	public Long getDoctorId() {
+		return doctorId;
+	}
+
+	public void setDoctorId(Long doctorId) {
+		this.doctorId = doctorId;
+	}
+
+	public String getDoctorFirstName() {
+		return doctorFirstName;
+	}
+
+	public void setDoctorFirstName(String doctorFirstName) {
+		this.doctorFirstName = doctorFirstName;
+	}
+
+	public String getDoctorLastName() {
+		return doctorLastName;
+	}
+
+	public void setDoctorLastName(String doctorLastName) {
+		this.doctorLastName = doctorLastName;
 	}
 	
 	

@@ -70,7 +70,8 @@ public class MedicalStuffService {
 							doctor.getFirstName(),
 							doctor.getLastName(),
 							canDelete,
-							RoleEnum.DOCTOR
+							RoleEnum.DOCTOR,
+							doctor.getId()
 						));
 			}
 		}
@@ -106,7 +107,8 @@ public class MedicalStuffService {
 							nurse.getFirstName(),
 							nurse.getLastName(),
 							canDelete,
-							RoleEnum.NURSE
+							RoleEnum.NURSE,
+							nurse.getId()
 						));
 			}
 		}

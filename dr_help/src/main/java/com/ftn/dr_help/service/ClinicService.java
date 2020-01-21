@@ -10,17 +10,21 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.model.pojo.ClinicReviewPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.ClinicRepository;
+import com.ftn.dr_help.repository.ClinicReviewRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.validation.ClinicValidation;
 
 
@@ -42,6 +46,11 @@ public class ClinicService {
 	@Autowired
 	private DoctorRepository doctorRepository;
 	
+	@Autowired
+	private ClinicReviewRepository clinicReviewRepository;
+	
+	@Autowired
+	private PatientRepository patientRepository;
 	
 	public ClinicPOJO findOne(Long id) {
 		if(id == null) {
@@ -192,6 +201,21 @@ public class ClinicService {
 		}
 		
 		return retVal;
+	}
+	
+	@Transactional
+	public void addReview (Long patientId, Long clinicId, Integer review) {
+		ClinicReviewPOJO newReview = new ClinicReviewPOJO (repository.getOne(clinicId), patientRepository.getOne (patientId), review);
+		ClinicReviewPOJO oldReview = clinicReviewRepository.getClinicReview (patientId, clinicId);
+		if (review == 0) {
+			clinicReviewRepository.delete(oldReview);
+		}
+		else if (oldReview == null) {
+			clinicReviewRepository.save(newReview);
+		}
+		else {
+			clinicReviewRepository.updateReview(review, patientId, clinicId);
+		}
 	}
 	
 }

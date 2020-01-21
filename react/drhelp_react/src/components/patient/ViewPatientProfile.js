@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import ViewProfile from '../ViewProfile';
 import axios from 'axios'
 import DoctorViewProfile from '../view_profile/doctor_view_profile/DoctorViewProfile'
+import NurseViewProfile from '../view_profile/NurseViewProfile'
+
 
 class ViewPatientProfile extends Component {
 
@@ -28,23 +29,13 @@ class ViewPatientProfile extends Component {
 		return (
             this.state.loading ? <h1> Loading... </h1> :
 			<div>
-                <div class="row d-flex justify-content-center">
-                 <div class='col-md-4'>
-                <br/>
-                <br/>
-				<ViewProfile profile={this.state.patient}/>
-                </div>
-                <div class="col-md-6"> 
-                {
-
-                //TODO:  here comes the specific options for medical staff
-                this.props.medical_staff.role === 'doctor' && <DoctorViewProfile 
+                {this.props.medical_staff.role === 'doctor' && <DoctorViewProfile //ako si doca, imas opcije za doktora
                                                                 patient={this.state.patient}
                                                                 doctor = {this.props.medical_staff}
-                                                                /> //ako si doca, imas opcije za doktora
-                }
-                </div>
-                </div>
+                                                                />}
+                {this.props.medical_staff.role === 'nurse' && <NurseViewProfile
+                                                                patient={this.state.patient}
+                                                                nurse = {this.props.medical_staff}/>}               
 			</div>
 		);
 	}

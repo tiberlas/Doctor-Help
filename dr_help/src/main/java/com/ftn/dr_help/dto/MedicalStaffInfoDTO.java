@@ -9,20 +9,31 @@ public class MedicalStaffInfoDTO {
 	private String lastName;
 	private boolean canDelete;
 	private RoleEnum role;
+	private Long id;
+	
 	
 	public MedicalStaffInfoDTO() {
 		super();
 	}
 	
-	public MedicalStaffInfoDTO(String email, String firstName, String lastName, boolean canDelete, RoleEnum role) {
+	public MedicalStaffInfoDTO(String email, String firstName, String lastName, boolean canDelete, RoleEnum role, Long id) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.canDelete = canDelete;
 		this.role = role;
+		this.id = id;
 	}
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getEmail() {
 		return email;
 	}

@@ -40,12 +40,12 @@ class OperationItem extends Component {
                 <TableCell class="text-white">{this.state.doctor1}</TableCell>
                 <TableCell class="text-white">{this.state.doctor2}</TableCell>
                 <TableCell class="text-white">{this.state.status}</TableCell>
-                <TableCell class="text-white"><button onClick={this.onDelite} class='btn btn-danger'>cancle operation</button></TableCell>
+                <TableCell class="text-white"><button onClick={this.onDelite} class='btn btn-danger'>Cancel</button></TableCell>
                 <TableCell>
 
                 <ModalMessage
-                    title={"REFUSED"}
-                    message={"Can not cance the operation becouse the are less than 24h before the operation begins"} 
+                    title={"Error"}
+                    message={"Unable to cancel the request because it starts in less than 24 hours."} 
                     show={this.state.messageShow}
                     onHide={this.setMessageHide}/>
                 </TableCell>

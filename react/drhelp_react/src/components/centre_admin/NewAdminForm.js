@@ -80,15 +80,6 @@ class NewAdminForm extends React.Component {
         event.preventDefault()
 
         let birthdayForm = document.getElementById('ad_birthday').value;
-
-        const data = {
-            email: this.state.email,
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            id: this.state.id,
-            birthday: birthdayForm
-          };
-
         if(this.state.error)
           return
 
@@ -103,7 +94,6 @@ class NewAdminForm extends React.Component {
                     birthday: birthdayForm
 
                  }).then(res => {
-                    console.log(data);
                     // alert("Successfully added new clinic administrator.")
                     this.setState({success: true, error: false, errorMailResponse: false})
                 }).catch(error => {
@@ -118,7 +108,6 @@ class NewAdminForm extends React.Component {
                     birthday: birthdayForm
          })
             .then(res => {
-            console.log(data);
                 // alert("Successfully added new centre administrator.")
                 this.setState({success: true, error: false, errorMailResponse: false})
             }).catch(error => {
