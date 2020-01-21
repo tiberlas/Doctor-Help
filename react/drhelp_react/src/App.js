@@ -10,10 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
 //import 'font-awesome/css/font-awesome.min.css'; ne diraj, ovo je za ikonice
 import UserContextProvider from './context/UserContextProvider';
-import RegistrationPage from './components/RegistrationPage';
-import PatientProfile from './components/patient/PatientProfile';
 import interceptor from './Interseptor.js';
-import axios from "axios"
 import FirstTimePasswordChange from './components/FirstTimePasswordChange'
 
 

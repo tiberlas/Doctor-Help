@@ -21,13 +21,15 @@ class NewDiagnosisForm extends React.Component {
     }
 
     validate = () => {
-        this.setState({error: false, errorDiagnosisName: false, errorDiagnosisResponse: false, errorDescription: false, success: false})
+        this.setState({error: false, errorDiagnosisName: false, errorDiagnosisResponse: false, errorDescription: false, success: false}, ()=>{
+            this.props.disabledOff(false)
+        })
         if(!this.state.diagnosisName.trim() || this.state.diagnosisName.length < 3) {
-            this.setState({error: true, errorDiagnosisName: true})
+            this.setState({error: true, errorDiagnosisName: true}, ()=>{this.props.disabledOn()})
         }
 
         if(!this.state.diagnosisDescription.trim() || this.state.diagnosisDescription.length < 3) {
-            this.setState({error: true, errorDescription: true})
+            this.setState({error: true, errorDescription: true}, ()=>{this.props.disabledOn()})
         }
 
     }
@@ -38,9 +40,8 @@ class NewDiagnosisForm extends React.Component {
         }, ()=> {this.validate()})
     }
 
-    handleSubmit = (event) => {
-        event.preventDefault()
-
+    handleSubmit = () => {
+        //event.preventDefault()
         if(this.state.error) {
             return 
         }
@@ -51,18 +52,17 @@ class NewDiagnosisForm extends React.Component {
             description: this.state.diagnosisDescription
         })
             .then(res => {
-                // alert("Successfully added new diagnosis.");
                 this.setState({
                     success: true,
                     errorDiagnosisResponse: false,
                     error: false
-                })
+                }, ()=>{this.props.disabledOff(true)})
             }).catch(error => {
                 this.setState({
                     errorDiagnosisResponse: true,
                     success: false,
                     error: true
-                })
+                }, ()=>{this.props.disabledOn()})
             })
     }
 
@@ -70,8 +70,8 @@ class NewDiagnosisForm extends React.Component {
         return (
             <div> 
             <div class="row d-flex justify-content-center">
-                <div class='col-md-3'>
-                <h1>>New diagnosis </h1>
+                <div class='col-md-11'>
+                {/* <h1>>New diagnosis </h1> */}
                 <Form onSubmit = {this.handleSubmit}>
                 <div className={`form-group ${(this.state.errorDiagnosisName || this.state.errorDiagnosisResponse)? 'has-danger': ''}`}>
                 <Form.Group controlId="formDiagnosisName">
@@ -90,7 +90,7 @@ class NewDiagnosisForm extends React.Component {
                 </Form.Group>
                 </div>
 
-                <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
+                {/* <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/> */}
                 </Form>
                </div>
             </div>

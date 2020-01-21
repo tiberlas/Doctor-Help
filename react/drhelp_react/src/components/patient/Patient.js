@@ -8,10 +8,8 @@ import PatientContextProvider from '../../context/PatientContextProvider.js';
 import PatientChangeProfile from './PatientChangeProfile';
 import axios from 'axios'
 import ClinicListing from './ClinicListing.js';
-import HealthRecord from './HealthRecord.js';
 import PatientHistory from './PatientHistory.js';
 import PerscriptionOverview from './PerscriptionOverview.js';
-import ViewClinic from './ViewClinic.jsx';
 import PatientChangePassword from './PatientChangePassword.js';
 import DoctorListing from './DoctorListing.js';
 import DoctorProfilePreview from './DoctorProfilePreview';

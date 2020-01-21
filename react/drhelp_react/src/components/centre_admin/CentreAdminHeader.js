@@ -43,6 +43,11 @@ class CentreAdminHeader extends Component {
             <NavbarToggler aria-controls="basic-navbar-nav"/>
             <Collapse id="basic-navbar-nav" isOpen={this.state.dropdownAdd} navbar className="collapse">
             <Nav className="mr-auto">
+
+
+            <Nav.Link>
+                  <Link exact to = '/admin/dashboard' class="nav-link"> Dashboard </Link>
+            </Nav.Link>
               
                 <NavbarToggler onClick={this.toggle}/>
                   <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">

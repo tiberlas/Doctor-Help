@@ -12,6 +12,7 @@ import CentreAdminContextProvider from '../../context/CentreAdminContextProvider
 import CentreAdminChangeProfile from './CentreAdminChangeProfile'
 import CentreAdminChangePassword from './CentreAdminChangePassword'
 import NewDiagnosisForm from '../diagnoses/NewDiagnosisForm'
+import CentreAdminDashboard from './CentreAdminDashboard'
 
 class CenterAdministrator extends Component {
     state = {
@@ -63,6 +64,7 @@ handleCentreAdmin = () => {
                     <Route exact path='/centreAdministrator/profile/change/password'> <CentreAdminChangePassword first={false}/> </Route>
                     <Route path="/clinic/add" ><NewClinicForm /> </Route>
                     <Route path="/admin/add" ><NewAdminForm /> </Route>
+                    <Route path="/admin/dashboard" ><CentreAdminDashboard /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>
                     <Route path = "/medication/new"> <NewMedicationForm/> </Route>
                     <Route path = "/diagnosis/new"> <NewDiagnosisForm/> </Route>
