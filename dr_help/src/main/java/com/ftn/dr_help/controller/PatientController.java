@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
@@ -178,22 +179,25 @@ public class PatientController {
 	
 	@GetMapping (value="/history")
 	@PreAuthorize("hasAuthority('PATIENT')")	
-	public ResponseEntity<List<PatientHistoryDTO>> getHistory () {
-		List<PatientHistoryDTO> retVal = patientService.getHistory(currentUser.getEmail());
-		if (retVal == null) {
-			retVal = new ArrayList<PatientHistoryDTO> ();
+	public ResponseEntity<AppointmentListDTO> getHistory () {
+		AppointmentListDTO retVal = new AppointmentListDTO ();
+		List<PatientHistoryDTO> appointmentList = patientService.getHistory(currentUser.getEmail());
+		if (appointmentList == null) {
+			appointmentList = new ArrayList<PatientHistoryDTO> ();
 		}
+		retVal.setAppointmentList(appointmentList);
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
 	@GetMapping (value="/pending")
 	@PreAuthorize("hasAuthority('PATIENT')")	
-	public ResponseEntity<List<PatientHistoryDTO>> getPendingAppointments () {
-		List<PatientHistoryDTO> retVal = patientService.getPending(currentUser.getEmail());
-		//System.out.println("Zilav sam!!!1!");
-		if (retVal == null) {
-			retVal = new ArrayList<PatientHistoryDTO> ();
+	public ResponseEntity<AppointmentListDTO> getPendingAppointments () {
+		AppointmentListDTO retVal = new AppointmentListDTO();
+		List<PatientHistoryDTO> appointmentList = patientService.getPending(currentUser.getEmail());
+		if (appointmentList == null) {
+			appointmentList = new ArrayList<PatientHistoryDTO> ();
 		}
+		retVal.setAppointmentList(appointmentList);
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	

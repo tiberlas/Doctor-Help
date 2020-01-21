@@ -14,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
-import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
 import com.ftn.dr_help.dto.PatientHistoryDTO;
+import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -627,18 +628,128 @@ public class AppointmentService {
 		return appointments;
 	}
 
-	public List<PatientHistoryDTO> getPredefinedAppointments(String doctorId, String procedureTypeId, String clinicId,
+	public AppointmentListDTO getPredefinedAppointments(String doctorId, String procedureTypeId, String clinicId,
 			String date) {
+		AppointmentListDTO retVal = new AppointmentListDTO ();
 		List<AppointmentPOJO> appointmentList = new ArrayList<AppointmentPOJO>();
-		List<PatientHistoryDTO> retVal = new ArrayList<PatientHistoryDTO> ();
-		if (doctorId.equals("undefined") && doctorId.equals(procedureTypeId) && doctorId.equals(clinicId) && doctorId.equals(date)) {
-			appointmentList = appointmentRepository.getAllPredefinedAppointments();
-			for (AppointmentPOJO app : appointmentList) {
-				retVal.add(new PatientHistoryDTO(app));
+		
+		appointmentList = appointmentRepository.getAllPredefinedAppointments();
+		for (AppointmentPOJO app : appointmentList) {
+			retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+		}
+		
+		List<String> dateList = new ArrayList<String>();
+		dateList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : dateList) {
+				if (str.split(" ")[0].equals(p.getDate().split(" ")[0])) {
+					isThere = true;
+					break;
+				}
 			}
+			if (!isThere) {
+				dateList.add(p.getDate().split(" ")[0]);
+			}
+		}
+		retVal.setPossibleDates(dateList);
+		
+		List<String> doctorList = new ArrayList<String> ();
+		doctorList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : doctorList) {
+				System.out.println("Leva strana: " + str);
+				System.out.println("Desn strana: " + p.getDoctor());
+				if (str.equals(p.getDoctor())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				doctorList.add(p.getDoctor());
+			}
+		}
+		retVal.setPossibleDoctors(doctorList);
+		
+		List<String> clinicList = new ArrayList<String> ();
+		clinicList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : clinicList) {
+				if (str.equals(p.getClinicName())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				clinicList.add(p.getClinicName());
+			}
+		}
+		retVal.setPossibleClinics(clinicList);
+		
+		List<String> typeList = new ArrayList<String> ();
+		typeList.add("undefined");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : typeList) {
+				if (str.equals(p.getProcedureType())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				typeList.add(p.getProcedureType());
+			}
+		}
+		retVal.setPossibleTypes(typeList);
+		
+		if (doctorId.equals("unfiltered") && doctorId.equals(procedureTypeId) && doctorId.equals(clinicId) && doctorId.equals(date)) {
+			System.out.println("Getting all predefined appointments");
 			return retVal;
 		}
-		return null;
+		
+		if (!date.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getDate().split(" ")[0].equals(date + ".")) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!doctorId.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getDoctor().equals(doctorId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!clinicId.contentEquals(("unfiltered"))) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getClinicName().equals(clinicId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!procedureTypeId.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getProcedureType().equals(procedureTypeId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		return retVal;
 	}
 	
 }

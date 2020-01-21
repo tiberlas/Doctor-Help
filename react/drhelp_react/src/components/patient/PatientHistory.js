@@ -7,6 +7,12 @@ import TableRow from '@material-ui/core/TableRow';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
+import Select from 'react-select'
+import SelectInput from '@material-ui/core/Select/SelectInput';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+//import Option from 'react'
 
 class PatientHistory extends Component {
 
@@ -15,7 +21,15 @@ class PatientHistory extends Component {
 		filter : 'NONE', 
 		isUpToDate : false, 
 		sortDate : 'unsorted', 
-		dateString : ""
+		dateString : "", 
+		dates : [], 
+		clinics : [], 
+		doctors : [], 
+		types : [], 
+		activeDateFilter : "unfiltered", 
+		activeClinicFilter : "unfiltered",
+		activeDoctorFilter : "unfiltered", 
+		activeTypeFilter : "unfiltered",  
 	}
 
 	componentDidMount () {
@@ -50,7 +64,7 @@ class PatientHistory extends Component {
 			.then (response => {
 				//this.updateReports (response.data);
 				this.setState ({
-					reports: response.data, 
+					reports: response.data.appointmentList, 
 					isUpToDate : false
 				})
 			});
@@ -63,7 +77,7 @@ class PatientHistory extends Component {
 			axios.get('http://localhost:8080/api/patients/pending')
 			.then (response => {
 				this.setState ({
-					reports : response.data,
+					reports : response.data.appointmentList,
 					isUpToDate : false
 				})
 			})
@@ -78,17 +92,25 @@ class PatientHistory extends Component {
 		}
 		else if (this.props.filter === 'PREDEFINED') {
 			//alert ("Listing predefined appointments")
-			axios.get('http://localhost:8080/api/appointments/predefined/doctor=undefined/procedure_type=undefined/clinic=undefined/date=undefined')
+			axios.get('http://localhost:8080/api/appointments/predefined/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter)
 			.then (response => {
 				this.setState ({
-					reports : response.data,
-					isUpToDate : false
+					reports : response.data.appointmentList,
+					isUpToDate : false, 
+					dates : response.data.possibleDates, 
+					doctors : response.data.possibleDoctors, 
+					clinics : response.data.possibleClinics, 
+					types : response.data.possibleTypes 
 				})
 			})
 			.catch ( response => {
 				this.setState ({
 					reports : [],
-					isUpToDate : false
+					isUpToDate : false, 
+					dates : response.data.possibleDates, 
+					doctors : response.data.possibleDoctors, 
+					clinics : response.data.possibleClinics, 
+					types : response.data.possibleTypes 
 				})
 			});
 		}
@@ -142,20 +164,145 @@ class PatientHistory extends Component {
 		});
 	}
 
+	handleDateFilter = (option) => {
+		//alert ("Date filter: Activate! " + option.value);
+		axios.get('http://localhost:8080/api/appointments/predefined/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + option.value)
+		.then (response => {
+			this.setState ({
+				reports : response.data.appointmentList,
+				isUpToDate : false, 
+				activeDateFilter : option.value
+			})
+		})
+		.catch ( response => {
+			this.setState ({
+				reports : [],
+				isUpToDate : false, 
+				activeDateFilter : option.value
+			})
+		});
+		
+	}
 
+	handleDoctorFilter = (option) => {
+		//alert ("Date filter: Activate! " + option.value);
+		axios.get('http://localhost:8080/api/appointments/predefined/doctor=' + option.value + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter)
+		.then (response => {
+			this.setState ({
+				reports : response.data.appointmentList,
+				isUpToDate : false, 
+				activeDoctorFilter : option.value
+			})
+		})
+		.catch ( response => {
+			this.setState ({
+				reports : [],
+				isUpToDate : false, 
+				activeDoctorFilter : option.value
+			})
+		});
+		
+	}
+
+	handleClinicFilter = (option) => {
+		//alert ("Date filter: Activate! " + option.value);
+		axios.get('http://localhost:8080/api/appointments/predefined/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + option.value + '/date=' + this.state.activeDateFilter)
+		.then (response => {
+			this.setState ({
+				reports : response.data.appointmentList,
+				isUpToDate : false, 
+				activeClinicFilter : option.value
+			})
+		})
+		.catch ( response => {
+			this.setState ({
+				reports : [],
+				isUpToDate : false, 
+				activeClinicFilter : option.value
+			})
+		});
+		
+	}
+
+	handleTypeFilter = (option) => {
+		//alert ("Date filter: Activate! " + option.value);
+		axios.get('http://localhost:8080/api/appointments/predefined/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + option.value + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter)
+		.then (response => {
+			this.setState ({
+				reports : response.data.appointmentList,
+				isUpToDate : false, 
+				activeTypeFilter : option.value
+			})
+		})
+		.catch ( response => {
+			this.setState ({
+				reports : [],
+				isUpToDate : false, 
+				activeTypeFilter : option.value
+			})
+		});
+		
+	}
 
 	render () {
 
 		// When viewing patient history, display a perscription Link;
 		// When viewing a pending appointment, display the satus (requested or approved)
 
+		const options = [
+			// {[this.state.dates], [this.state.dates]}
+		]
+
 		return (
 			<div>
 				<div class='row d-flex justify-content-center'>
 					<div class='col-md-11'>
+
+
+
+
+						<div hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>
+							<FormControl class='text-success'>
+									<Select 
+										style="width:500px"
+										onChange = {this.handleDateFilter.bind(this)}
+										options={this.state.dates.map(opt => ({ label: opt, value: opt }))}
+									></Select>
+								<FormHelperText class='text-success'>Date filter</FormHelperText>
+							</FormControl>
+							<FormControl class='text-success'>
+									<Select 
+										style="width:500px"
+										onChange = {this.handleDoctorFilter.bind(this)}
+										options={this.state.doctors.map(opt => ({ label: opt, value: opt }))}
+									></Select>
+								<FormHelperText class='text-success'>Doctor filter</FormHelperText>
+							</FormControl>
+							<FormControl class='text-success'>
+									<Select 
+										style="width:500px"
+										onChange = {this.handleClinicFilter.bind(this)}
+										options={this.state.clinics.map(opt => ({ label: opt, value: opt }))}
+									></Select>
+								<FormHelperText class='text-success'>Clinic filter</FormHelperText>
+							</FormControl>
+							<FormControl class='text-success'>
+									<Select 
+										style="width:500px"
+										onChange = {this.handleTypeFilter.bind(this)}
+										options={this.state.types.map(opt => ({ label: opt, value: opt }))}
+									></Select>
+								<FormHelperText class='text-success'>Appointment type filter</FormHelperText>
+							</FormControl>
+						</div>
+
+
+
+
 						<Table>
 							<TableHead>
 								<TableRow>
+									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Date{this.renderArrowDate()}</p></TableCell>
 									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Time{this.renderArrowDate()}</p></TableCell>
 									<TableCell><p class='text-success'>Procedure Type</p></TableCell>
 									<TableCell><p class='text-success' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>Status</p></TableCell>
@@ -172,7 +319,8 @@ class PatientHistory extends Component {
 							<TableBody>
 								{this.state.reports.sort((a, b) => (this.state.sortDate === 'ascending') ? (a.date < b.date) : (a.date > b.date)).map (row => (
 									<TableRow key={row.examinationReportId}>
-										<TableCell><p class='text-white'>{row.date}</p></TableCell>
+										<TableCell><p class='text-white'>{row.date.split(' ')[0]}</p></TableCell>
+										<TableCell><p class='text-white'>{row.date.split(' ')[1]}</p></TableCell>
 										<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>{row.status}</p></TableCell>
 										<TableCell><p class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></p></TableCell>

@@ -24,6 +24,7 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.AppointmentDeleteDTO;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
@@ -246,23 +247,25 @@ public class AppointmentController {
 	
 	@GetMapping (value="/predefined/doctor={dr_id}/procedure_type={proc_type_id}/clinic={clinic_id}/date={app_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")	
-	public ResponseEntity<List<PatientHistoryDTO>> getHistory (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
+	public ResponseEntity<AppointmentListDTO> getPredefined (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
 				@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
 //		List<PatientHistoryDTO> retVal = patientService.getHistory(currentUser.getEmail());
 //		if (retVal == null) {
 //			retVal = new ArrayList<PatientHistoryDTO> ();
 //		}
 //		return new ResponseEntity<> (retVal, HttpStatus.OK);
-		System.out.println("Prihvatio zahtev za predefinisane: ");
-		System.out.println("doktor: " + doctorId);
-		System.out.println("procedura: " + procedureTypeId);
-		System.out.println("klinika: " + clinicId);
-		System.out.println("datum: " + date);
+//		System.out.println("Prihvatio zahtev za predefinisane: ");
+//		System.out.println("doktor: " + doctorId);
+//		System.out.println("procedura: " + procedureTypeId);
+//		System.out.println("klinika: " + clinicId);
+//		System.out.println("datum: " + date);
+		AppointmentListDTO retVal = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
 		
-		List<PatientHistoryDTO> retVal = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
-		if (retVal == null) {
-			retVal = new ArrayList<PatientHistoryDTO> ();
+		//List<PatientHistoryDTO> appointmentList = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
+		if (retVal.getAppointmentList() == null) {
+			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
+		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
