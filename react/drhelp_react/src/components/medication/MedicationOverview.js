@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, {Component, Fragment } from 'react'
 import axios from 'axios'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,9 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button'
-import AddDiagnosisModal from './AddDiagnosisModal';
-
-
+import AddMedicationModal from './AddMedicationModal';
 
 const sortTypes = {
     name_up: {
@@ -40,18 +38,18 @@ const sortTypes = {
     }
 }
 
+class MedicationOverview extends Component {
 
-class DiagnosesOverview extends React.Component {
-
-    state = {
-        diagnoses: [],
+    state={
+        medication: [],
         currentSort: 'default',
         showAddModal: false
     }
 
+
     componentDidMount() {
-        axios.get('http://localhost:8080/api/diagnoses/all').then( response => {
-            this.setState({diagnoses: response.data})
+        axios.get('http://localhost:8080/api/medication/all').then( response => {
+            this.setState({medication: response.data})
         })
     }
 
@@ -85,28 +83,31 @@ class DiagnosesOverview extends React.Component {
         }
     }
 
+
     toggle = () => {
         this.setState({showAddModal: !this.state.showAddModal})
     }
 
     update = () => {
-        axios.get('http://localhost:8080/api/diagnoses/all').then( response => {
-            this.setState({diagnoses: response.data, showAddModal: false})
+        axios.get('http://localhost:8080/api/medication/all').then( response => {
+            this.setState({medication: response.data, showAddModal: false})
         })
     }
 
-    handleDelete = (diagnosis) => {
-        if(diagnosis.reserved)
+    handleDelete = (medication) => {
+        if(medication.reserved)
             return
 
-        axios.delete('http://localhost:8080/api/diagnoses/delete='+diagnosis.id).then(this.update)
+        axios.delete('http://localhost:8080/api/medication/delete='+medication.id).then(this.update)
     }
 
-    render() {
+
+    render()
+    {
         let i = 0
-        return (
-            <Fragment> 
-               <div style={{ overflow: "auto" }} >
+        return(
+            <Fragment>
+                <div style={{ overflow: "auto" }} >
                 <Table class="table table-hover">
                     <TableHead class="table-active">
                         <TableRow class="table-active" style={{height: "35px"}}>
@@ -119,7 +120,7 @@ class DiagnosesOverview extends React.Component {
                 <div style={{ overflow: 'auto', height: '250px' }}>
                 <Table style={{tableLayout: 'fixed'}}>
                     <TableBody >
-                        {this.state.diagnoses.sort(sortTypes[this.state.currentSort].fn).map (c => (
+                        {this.state.medication.sort(sortTypes[this.state.currentSort].fn).map (c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
                                 <TableCell class='text text-white'>&nbsp;{c.name}</TableCell>
                                 <TableCell class='text text-white'>{c.description}</TableCell>
@@ -133,14 +134,13 @@ class DiagnosesOverview extends React.Component {
                 </div>
                 </div>
 
-                {this.state.showAddModal && <AddDiagnosisModal modal={this.state.showAddModal}
+                {this.state.showAddModal && <AddMedicationModal modal={this.state.showAddModal}
                                     toggle={this.toggle}
                                     update={this.update}/>}
                 
-               
             </Fragment>
         )
     }
 }
 
-export default DiagnosesOverview
+export default MedicationOverview

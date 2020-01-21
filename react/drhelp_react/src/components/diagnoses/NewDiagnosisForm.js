@@ -41,7 +41,6 @@ class NewDiagnosisForm extends React.Component {
     }
 
     handleSubmit = () => {
-        //event.preventDefault()
         if(this.state.error) {
             return 
         }

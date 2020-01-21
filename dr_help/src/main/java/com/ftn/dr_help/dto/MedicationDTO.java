@@ -6,6 +6,10 @@ public class MedicationDTO {
 
 	private String name;
 	private String description;
+	private Long id;
+	
+	private Boolean reserved;
+	
 	
 	
 	public MedicationDTO() {
@@ -37,6 +41,22 @@ public class MedicationDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Boolean getReserved() {
+		return reserved;
+	}
+
+	public void setReserved(Boolean reserved) {
+		this.reserved = reserved;
 	}
 	
 	
