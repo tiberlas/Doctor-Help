@@ -101,7 +101,7 @@ public class PatientHistoryDTO {
 		
 //		System.out.println("Appointment room: " + this.room);
 //		System.out.println("Appointment price: " + this.price);
-		
+		 
 		Calendar tempCal = Calendar.getInstance ();
 		//System.out.println("Now: " + tempCal.getTime());
 		tempCal.add(Calendar.DAY_OF_MONTH, 1);
