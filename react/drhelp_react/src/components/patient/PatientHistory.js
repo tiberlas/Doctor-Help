@@ -262,7 +262,51 @@ class PatientHistory extends Component {
 
 
 						<div hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>
-							<FormControl class='text-success'>
+							<Table>
+								<TableRow>
+									<TableCell>
+										<FormControl class='text-success'>
+											<Select 
+												style="width:500px"
+												onChange = {this.handleDateFilter.bind(this)}
+												options={this.state.dates.map(opt => ({ label: opt, value: opt }))}
+											></Select>
+											<FormHelperText class='text-success'>Date filter</FormHelperText>
+										</FormControl>
+									</TableCell>
+									<TableCell>
+									<FormControl class='text-success'>
+									<Select 
+										style="width:500px"
+										onChange = {this.handleDoctorFilter.bind(this)}
+										options={this.state.doctors.map(opt => ({ label: opt, value: opt }))}
+									></Select>
+								<FormHelperText class='text-success'>Doctor filter</FormHelperText>
+							</FormControl>
+									</TableCell>
+									<TableCell>
+									<FormControl class='text-success'>
+									<Select 
+										style="width:500px"
+										onChange = {this.handleClinicFilter.bind(this)}
+										options={this.state.clinics.map(opt => ({ label: opt, value: opt }))}
+									></Select>
+								<FormHelperText class='text-success'>Clinic filter</FormHelperText>
+							</FormControl>
+									</TableCell>
+									<TableCell>
+									<FormControl class='text-success'>
+									<Select 
+										style="width:500px"
+										onChange = {this.handleTypeFilter.bind(this)}
+										options={this.state.types.map(opt => ({ label: opt, value: opt }))}
+									></Select>
+								<FormHelperText class='text-success'>Appointment type filter</FormHelperText>
+							</FormControl>
+									</TableCell>
+								</TableRow>
+							</Table>
+							{/* <FormControl class='text-success'>
 									<Select 
 										style="width:500px"
 										onChange = {this.handleDateFilter.bind(this)}
@@ -293,7 +337,7 @@ class PatientHistory extends Component {
 										options={this.state.types.map(opt => ({ label: opt, value: opt }))}
 									></Select>
 								<FormHelperText class='text-success'>Appointment type filter</FormHelperText>
-							</FormControl>
+							</FormControl> */}
 						</div>
 
 
