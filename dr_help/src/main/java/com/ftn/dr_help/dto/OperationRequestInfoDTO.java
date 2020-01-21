@@ -10,13 +10,14 @@ public class OperationRequestInfoDTO {
 	private String dr1;
 	private String dr2;
 	private String patient;
+	private String procedureDuration;
 	
 	public OperationRequestInfoDTO() {
 		super();
 	}
 	
 	public OperationRequestInfoDTO(Long operationId, String date, String procedureName, Long procedureId, String dr0,
-			String dr1, String dr2, String patient) {
+			String dr1, String dr2, String patient, String procedureDuration) {
 		super();
 		this.operationId = operationId;
 		this.date = date;
@@ -26,6 +27,15 @@ public class OperationRequestInfoDTO {
 		this.dr1 = dr1;
 		this.dr2 = dr2;
 		this.patient = patient;
+		this.procedureDuration = procedureDuration;
+	}
+
+	public String getProcedureDuration() {
+		return procedureDuration;
+	}
+
+	public void setProcedureDuration(String procedureDuration) {
+		this.procedureDuration = procedureDuration;
 	}
 
 	public Long getOperationId() {

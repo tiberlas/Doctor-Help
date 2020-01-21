@@ -79,7 +79,13 @@ class NewRoom extends Component {
         var size = Object.keys(this.state.procedureList).length;
         items.push(<option key={size} name='procedureTypeId' value="" selected="selected"> ---- </option>);
         for (let i = 0; i < size; i++) {
-             items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);
+            let durationParts = this.state.procedureList[i].duration.split(":"); 
+            items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >
+                        {this.state.procedureList[i].name}
+                        &nbsp;({this.state.procedureList[i].price})
+                        &nbsp;{durationParts[0]}:{durationParts[1]} H
+                        &nbsp;{this.state.procedureList[i].operation? 'OPERATION':''}
+                    </option>);
         }
         return items;
     }
@@ -107,7 +113,7 @@ class NewRoom extends Component {
                     </div>
 
                     <div className={`form-group ${this.state.errorProcedureType? 'has-danger': ''}`}>
-                        <label for="procedureTypeId">appointment type</label>
+                        <label for="procedureTypeId">procedure type</label>
                         <select multiple="" className={`form-control ${this.state.errorProcedureType? 'is-invalid': 'is-valid'}`} id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
                             {this.createProcedureItems()}
                         </select>

@@ -189,8 +189,13 @@ class NewPredefinedAppointment extends Component {
         let items = []; 
         var size = Object.keys(this.state.procedureList).length;
         items.push(<option key={size} name='procedureTypeId' value="-" selected="selected"> ---- </option>);
-        for (let i = 0; i < size; i++) {             
-             items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);   
+        for (let i = 0; i < size; i++) {
+            let durationParts = this.state.procedureList[i].duration.split(":"); 
+             items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >
+                    {this.state.procedureList[i].name} 
+                    &nbsp;({this.state.procedureList[i].price})
+                    &nbsp;{durationParts[0]}:{durationParts[1]} H
+                </option>);   
              //here I will be creating my options dynamically based on
              //what props are currently passed to the parent component
         }

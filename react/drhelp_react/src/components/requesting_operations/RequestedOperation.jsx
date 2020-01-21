@@ -13,6 +13,7 @@ class requestedOperation extends Component {
         date: '',
         procedureName: '',
         procedureId: '',
+        procedureDuration: '',
         dr0: '',
         dr1: '',
         dr2: '',
@@ -28,6 +29,7 @@ class requestedOperation extends Component {
                     date: responce.data.date,
                     procedureName: responce.data.procedureName,
                     procedureId: responce.data.procedureId,
+                    procedureDuration: responce.data.procedureDuration,
                     dr0: responce.data.dr0,
                     dr1: responce.data.dr1,
                     dr2: responce.data.dr2,
@@ -57,7 +59,7 @@ class requestedOperation extends Component {
                     </TableHead>
                     <TableBody>
                         <TableCell class="text-white" >{this.state.date}</TableCell>
-                        <TableCell class='text text-white'>{this.state.procedureName}</TableCell>
+                        <TableCell class='text text-white'>{this.state.procedureName}&nbsp;{this.state.procedureDuration}&nbsp;H</TableCell>
                         <TableCell class='text text-white'>{this.state.dr0}</TableCell>
                         <TableCell class='text text-white'>{this.state.dr1}</TableCell>
                         <TableCell class='text text-white'>{this.state.dr2}</TableCell>

@@ -7,6 +7,7 @@ class RequestedOperationItem extends Component {
         operationId: this.props.value.operationId,
         date: this.props.value.date,
         procedureName: this.props.value.procedureName,
+        procedureDuration: this.props.value.procedureDuration,
         procedureId: this.props.value.procedureId,
         dr0: this.props.value.dr0,
         dr1: this.props.value.dr1,
@@ -22,7 +23,7 @@ class RequestedOperationItem extends Component {
                         {this.state.date}
                     </Link>
                 </TableCell>
-                <TableCell class='text text-white'>{this.state.procedureName}</TableCell>
+                <TableCell class='text text-white'>{this.state.procedureName}&nbsp;{this.state.procedureDuration}&nbsp;H</TableCell>
                 <TableCell class='text text-white'>{this.state.dr0}</TableCell>
                 <TableCell class='text text-white'>{this.state.dr1}</TableCell>
                 <TableCell class='text text-white'>{this.state.dr2}</TableCell>

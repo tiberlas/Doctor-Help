@@ -7,6 +7,7 @@ class RequestedAppointmentItem extends Component {
         id: this.props.value.id,
         date: this.props.value.date,
         procedure: this.props.value.type,
+        duration: this.props.value.duration,
         doctor: this.props.value.doctor,
         nurse: this.props.value.nurse,
         patient: this.props.value.patient
@@ -20,7 +21,7 @@ class RequestedAppointmentItem extends Component {
                         {this.state.date}
                     </Link>
                 </TableCell>
-                <TableCell class='text text-white'>{this.state.procedure}</TableCell>
+                <TableCell class='text text-white'>{this.state.procedure}&nbsp;{this.state.duration}&nbsp;H</TableCell>
                 <TableCell class='text text-white'>{this.state.doctor}</TableCell>
                 <TableCell class='text text-white'>{this.state.nurse}</TableCell>
                 <TableCell class='text text-white'>{this.state.patient}</TableCell>

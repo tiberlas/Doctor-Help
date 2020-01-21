@@ -12,6 +12,7 @@ class RequestedAppointment extends Component {
         id: '',
         date: '',
         procedure: '',
+        duration: '',
         typeId: 0,
         doctor: '',
         nurse: '',
@@ -29,7 +30,8 @@ class RequestedAppointment extends Component {
                     doctor: responce.data.doctor,
                     nurse: responce.data.nurse,
                     patient: responce.data.patient,
-                    typeId: responce.data.typeId
+                    typeId: responce.data.typeId,
+                    duration: responce.data.duration
                 })
             })
     }
@@ -55,7 +57,7 @@ class RequestedAppointment extends Component {
                     </TableHead>
                     <TableBody>
                         <TableCell class='text text-white'>{this.state.date}</TableCell>
-                        <TableCell class='text text-white'>{this.state.procedure}</TableCell>
+                        <TableCell class='text text-white'>{this.state.procedure}&nbsp;{this.state.duration}&nbsp;H</TableCell>
                         <TableCell class='text text-white'>{this.state.doctor}</TableCell>
                         <TableCell class='text text-white'>{this.state.nurse}</TableCell>
                         <TableCell class='text text-white'>{this.state.patient}</TableCell>

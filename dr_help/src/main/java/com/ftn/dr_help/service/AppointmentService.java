@@ -481,6 +481,9 @@ public class AppointmentService {
 					nurse = request.getNurse().getEmail();
 				}
 				
+				Calendar duration = Calendar.getInstance();
+				duration.setTime(request.getProcedureType().getDuration());
+				
 				requests.add(new RequestingAppointmentDTO( 
 						request.getId(), 
 						dateConverter.dateForFrontEndString(request.getDate()), 
@@ -488,7 +491,8 @@ public class AppointmentService {
 						request.getDoctor().getEmail(), 
 						nurse, 
 						request.getPatient().getEmail(),
-						request.getProcedureType().getId()));
+						request.getProcedureType().getId(),
+						dateConverter.timeToString(duration)));
 			}
 			
 			return requests;
@@ -503,6 +507,9 @@ public class AppointmentService {
 			
 			AppointmentPOJO finded = appointmentRepository.getOne(id);
 			
+			Calendar duration = Calendar.getInstance();
+			duration.setTime(finded.getProcedureType().getDuration());
+			
 			return new RequestingAppointmentDTO(
 					finded.getId(),
 					dateConverter.dateForFrontEndString(finded.getDate()), 
@@ -510,7 +517,8 @@ public class AppointmentService {
 					finded.getDoctor().getEmail(), 
 					finded.getNurse().getEmail(), 
 					finded.getPatient().getEmail(),
-					finded.getProcedureType().getId());
+					finded.getProcedureType().getId(),
+					dateConverter.timeToString(duration));
 		} catch(Exception e) {
 			return null;
 		}

@@ -134,7 +134,10 @@ public class OperationService {
 			List<OperationPOJO> finded = operationRepository.getAllOperationRequestsForAdmin(adminEmail);
 			List<OperationRequestInfoDTO> operations = new ArrayList<>();
 			
+			Calendar duration = Calendar.getInstance();
 			for(OperationPOJO operation : finded) {
+				duration.setTime(operation.getOperationType().getDuration());
+
 				operations.add(new OperationRequestInfoDTO(
 						operation.getId(), 
 						dateConvertor.dateForFrontEndString(operation.getDate()), 
@@ -143,7 +146,8 @@ public class OperationService {
 						operation.getFirstDoctor().getEmail(), 
 						operation.getSecondDoctor().getEmail(), 
 						operation.getThirdDoctor().getEmail(), 
-						operation.getPatient().getEmail()));
+						operation.getPatient().getEmail(),
+						dateConvertor.timeToString(duration)));
 			}
 			
 			return operations;
@@ -155,6 +159,9 @@ public class OperationService {
 	public OperationRequestInfoDTO getOneRequests(Long operaionId) {
 		try {
 			OperationPOJO finded = operationRepository.getOne(operaionId);
+			Calendar duration = Calendar.getInstance();
+			duration.setTime(finded.getOperationType().getDuration());
+
 			OperationRequestInfoDTO operation = new OperationRequestInfoDTO(
 					finded.getId(), 
 					dateConvertor.dateForFrontEndString(finded.getDate()), 
@@ -163,7 +170,8 @@ public class OperationService {
 					finded.getFirstDoctor().getEmail(), 
 					finded.getSecondDoctor().getEmail(), 
 					finded.getThirdDoctor().getEmail(), 
-					finded.getPatient().getEmail());
+					finded.getPatient().getEmail(),
+					dateConvertor.timeToString(duration));
 			
 			return operation;
 		} catch(Exception e) {
