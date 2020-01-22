@@ -19,5 +19,10 @@ public interface ClinicRepository extends JpaRepository<ClinicPOJO, Long>{
 	@Query (value = "select distinct c.* from clinic c inner join procedures_type pt on pt.clinic_id = c.id where pt.\"name\" = ?1", nativeQuery = true)
 	public List<ClinicPOJO> filterByAppointmentType (String procedureType);
 	
+	
+	//for centre admin CRUD
+	@Query(value="select count(ca.*) from clinic_administrator ca where clinic_id = ?1", nativeQuery=true)
+	public Integer findAdminOccurencesInClinic(Long clinic_id);
+	
 }
  

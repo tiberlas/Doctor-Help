@@ -32,26 +32,28 @@ class NewClinicForm extends React.Component {
     }
 
     validate = () => {
-        this.setState({error: false, errorName: false, errorAddress: false, errorDescription: false, errorClinicName: false, success:false, errorCity: false, errorState: false})
+        this.setState({error: false, errorName: false, errorAddress: false, errorDescription: false, errorClinicName: false, success:false, errorCity: false, errorState: false}, ()=>{
+            this.props.disabledOff(false)
+        })
         if(!this.state.clinicName.trim() || this.state.clinicName.length < 3) {
-            this.setState({error: true, errorName: true})
+            this.setState({error: true, errorName: true}, ()=>this.props.disabledOn())
         }
 
         if(!this.state.clinicDescription.trim() || this.state.clinicDescription.length < 3) {
-            this.setState({error: true, errorDescription: true})
+            this.setState({error: true, errorDescription: true}, ()=>this.props.disabledOn())
         }
 
         if(!this.state.clinicAddress.trim() || this.state.clinicAddress.length < 3 || !this.isCharNumber(this.state.clinicAddress[0])) {
             
-            this.setState({error: true, errorAddress: true})
+            this.setState({error: true, errorAddress: true}, ()=>this.props.disabledOn())
         }
 
         if(!this.state.clinicCity.trim() || this.state.clinicCity.length < 3) {
-            this.setState({error: true, errorCity: true})
+            this.setState({error: true, errorCity: true}, ()=>this.props.disabledOn())
         }
 
         if(!this.state.clinicState.trim() || this.state.clinicState.length < 3) {
-            this.setState({error: true, errorState: true})
+            this.setState({error: true, errorState: true}, ()=>this.props.disabledOn())
         }
     }
 
@@ -62,8 +64,8 @@ class NewClinicForm extends React.Component {
         }, () => {this.validate()})
     }
 
-    handleSubmit = (event) => {
-        event.preventDefault()
+    handleSubmit = () => {
+        // event.preventDefault()
 
         if(this.state.error)
             return
@@ -78,10 +80,12 @@ class NewClinicForm extends React.Component {
         })
             .then(res => {
                 // alert("Successfully added new clinic.");
-                this.setState({success:true, error: false, errorClinicName: false})
+                this.setState({success:true, error: false, errorClinicName: false}, ()=>{
+                    this.props.disabledOff(true)
+                })
 
             }).catch(error => { 
-                this.setState({errorClinicName: true, success: false, error: true})
+                this.setState({errorClinicName: true, success: false, error: true}, ()=>this.props.disabledOn())
             })
     }
 
@@ -90,11 +94,8 @@ class NewClinicForm extends React.Component {
         return (
             
                 <div class="row d-flex justify-content-center">
-                    <div class='col-md-3'>
-                    
-                    <h1>>New clinic </h1>
-                   
-                   
+                    <div class='col-md-11'>
+
                     <Form onSubmit = {this.handleSubmit}>
                     <div className={`form-group ${(this.state.errorName || this.state.errorClinicName)? 'has-danger': ''}`}>
                     <Form.Group controlId="formClinicName">         
@@ -140,7 +141,7 @@ class NewClinicForm extends React.Component {
                         {/* <input type='submit' value='submit' className={`btn btn-success ${this.state.error? 'disabled': ''}`}/> */}
                         
                        
-                        <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
+                        {/* <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/> */}
                     {/* <Button variant="btn btn-success" type="submit" className={`btn btn-success ${this.state.error? 'disabled': ''}`}>
                         Create
                     </Button> */}

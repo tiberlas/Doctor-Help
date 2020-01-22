@@ -63,21 +63,19 @@ class CentreAdminHeader extends Component {
                 id="language-switcher-container"
                 title="Dashboard"
               >
-                <LinkContainer exact to="/admin/dashboard">
+                <LinkContainer exact to="/admin/dashboard/d-m">
                             <DropdownItem >Diagnoses and medication</DropdownItem>
                           </LinkContainer>
 
-                          <LinkContainer exact to="/clinic/add">
+                          <LinkContainer exact to="/admin/dashboard/c">
                             <DropdownItem >Clinics</DropdownItem>
                           </LinkContainer>
 
-                          <LinkContainer exact to="/admin/add">
+                          <LinkContainer exact to="/admin/dashboard/a">
                             <DropdownItem >Administrators</DropdownItem>
                           </LinkContainer>
                 
               </NavDropdown>
-              
-
             </Nav>
 
             

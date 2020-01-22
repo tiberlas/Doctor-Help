@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
-import DiagnosesOverview from '../diagnoses/DiagnosesOverview'
-import MedicationOverview from '../medication/MedicationOverview'
+import DiagnosesOverview from './dashboard/diagnoses/DiagnosesOverview'
+import MedicationOverview from './dashboard/medication/MedicationOverview'
 
 class CentreAdminDashboard extends React.Component {
 
