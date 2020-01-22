@@ -13,17 +13,28 @@ import {DropdownItem} from  'react-bootstrap'
 import {DropdownToggle, DropdownMenu, NavbarToggler, Collapse,
   UncontrolledDropdown, NavItem} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
+import MenuItem from 'react-bootstrap/DropdownMenu';
 
 
 class CentreAdminHeader extends Component {
   static contextType = CentreAdminContext;
     
   state = {
-    dropdownAdd: false
+    dropdownAdd: false,
+    isOpenManage: false
   }
 
   toogle = () => {
     this.setState({dropdownAdd:!this.state.dropdownAdd});
+  }
+
+  
+  handleOpenManage = () => {
+    this.setState({ isOpenManage: true })
+  }
+
+  handleCloseManage = () => {
+     this.setState({ isOpenManage: false })
   }
 
     render() { 
@@ -41,48 +52,41 @@ class CentreAdminHeader extends Component {
                 </Nav>
             </Navbar.Brand>
             <NavbarToggler aria-controls="basic-navbar-nav"/>
-            <Collapse id="basic-navbar-nav" isOpen={this.state.dropdownAdd} navbar className="collapse">
-            <Nav className="mr-auto">
+            <Collapse id="basic-navbar-nav" isOpenManage={this.state.dropdownAdd} navbar className="collapse">
+            
+            <Nav>
+              <NavDropdown
+                onMouseEnter = { this.handleOpenManage }
+                onMouseLeave = { this.handleCloseManage }
+                show={ this.state.isOpenManage }
+                noCaret
+                id="language-switcher-container"
+                title="Dashboard"
+              >
+                <LinkContainer exact to="/admin/dashboard">
+                            <DropdownItem >Diagnoses and medication</DropdownItem>
+                          </LinkContainer>
 
-
-            <Nav.Link>
-                  <Link exact to = '/admin/dashboard' class="nav-link"> Dashboard </Link>
-            </Nav.Link>
-              
-                <NavbarToggler onClick={this.toggle}/>
-                  <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
-                      <Nav className="mr-auto" navbar pullRight>
-                        <UncontrolledDropdown nav inNavbar>
-                          <DropdownToggle nav caret>
-                            Add
-                          </DropdownToggle>
-                          <DropdownMenu className='dropdown-menu'>
                           <LinkContainer exact to="/clinic/add">
-                            <DropdownItem >New clinic</DropdownItem>
+                            <DropdownItem >Clinics</DropdownItem>
                           </LinkContainer>
 
                           <LinkContainer exact to="/admin/add">
-                            <DropdownItem >New administrator</DropdownItem>
+                            <DropdownItem >Administrators</DropdownItem>
                           </LinkContainer>
-
-                          <LinkContainer exact to="/medication/new">
-                            <DropdownItem >New medication</DropdownItem>
-                          </LinkContainer>
-
-                          <LinkContainer exact to="/diagnosis/new">
-                            <DropdownItem >New diagnosis</DropdownItem>
-                          </LinkContainer>
-
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </Nav>
-            </Collapse>
                 
+              </NavDropdown>
+              
+
+            </Nav>
+
+            
+            <Nav className="mr-auto">
                 <Nav.Link>
                   <Link exact to = '/admin/requests' class="nav-link"> Patient requests </Link>
                 </Nav.Link>
-
             </Nav>
+
             <Nav className="justify-content-end" >
 
                 <Nav.Link>
