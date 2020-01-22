@@ -659,8 +659,6 @@ public class AppointmentService {
 		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
 			boolean isThere = false;
 			for (String str : doctorList) {
-				System.out.println("Leva strana: " + str);
-				System.out.println("Desn strana: " + p.getDoctor());
 				if (str.equals(p.getDoctor())) {
 					isThere = true;
 					break;
@@ -752,4 +750,9 @@ public class AppointmentService {
 		return retVal;
 	}
 	
+	@Transactional
+	public Boolean reserveAppointment (Long appointmentId, Long patientId) {
+		appointmentRepository.reserveAppointment(appointmentId, patientId);
+		return true;	
+	}
 }

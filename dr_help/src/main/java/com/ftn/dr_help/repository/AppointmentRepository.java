@@ -76,4 +76,9 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 
 	@Query (value = "select * from appointments a where a.status = 'AVAILABLE'", nativeQuery = true)
 	public List<AppointmentPOJO> getAllPredefinedAppointments();
+	
+	@Modifying
+	@Query (value = "update appointments set patient_id = ?2, status = 'APPROVED' where id = ?1", nativeQuery = true)
+	public void reserveAppointment (Long appointmentId, Long patinentId);
+	
 }

@@ -249,24 +249,23 @@ public class AppointmentController {
 	@PreAuthorize("hasAuthority('PATIENT')")	
 	public ResponseEntity<AppointmentListDTO> getPredefined (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
 				@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
-//		List<PatientHistoryDTO> retVal = patientService.getHistory(currentUser.getEmail());
-//		if (retVal == null) {
-//			retVal = new ArrayList<PatientHistoryDTO> ();
-//		}
-//		return new ResponseEntity<> (retVal, HttpStatus.OK);
-//		System.out.println("Prihvatio zahtev za predefinisane: ");
-//		System.out.println("doktor: " + doctorId);
-//		System.out.println("procedura: " + procedureTypeId);
-//		System.out.println("klinika: " + clinicId);
-//		System.out.println("datum: " + date);
 		AppointmentListDTO retVal = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
 		
-		//List<PatientHistoryDTO> appointmentList = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
 		if (retVal.getAppointmentList() == null) {
 			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
 		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
+	
+	@PostMapping (value = "/predefined/reserve")
+	@PreAuthorize("hasAuthority('PATIENT')")	
+	public ResponseEntity<Boolean> reservePredefined (@RequestBody AppointmentDeleteDTO input) {
+		System.out.println("Trying to book appointment: " + input.getAppointmentId() + "; for patient with id: " + input.getPatientId());
+		appointmentService.reserveAppointment(input.getAppointmentId(), input.getPatientId());
+		
+		return new ResponseEntity<Boolean> (false, HttpStatus.OK);
+	}
+	
 	
 }

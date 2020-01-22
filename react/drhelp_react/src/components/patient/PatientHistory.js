@@ -12,6 +12,7 @@ import SelectInput from '@material-ui/core/Select/SelectInput';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { UserContext } from '../../context/UserContextProvider.js';
 //import Option from 'react'
 
 class PatientHistory extends Component {
@@ -31,6 +32,8 @@ class PatientHistory extends Component {
 		activeDoctorFilter : "unfiltered", 
 		activeTypeFilter : "unfiltered",  
 	}
+
+    static contextType = UserContext
 
 	componentDidMount () {
 		this.updateComponent ();
@@ -244,6 +247,23 @@ class PatientHistory extends Component {
 		
 	}
 
+	handleReservationClick (appointmentId) {
+		// alert (appointmentId);
+		axios.post ('http://localhost:8080/api/appointments/predefined/reserve', {
+			appointmentId : appointmentId,
+			patientId : this.context.user.id
+		})
+		.then (response =>{
+			if (response.data === true) {
+				//alert ("I got true")
+			}
+			else {
+				//alert ("I got false")
+			}
+			this.updateComponent();
+		});
+	}
+
 	render () {
 
 		// When viewing patient history, display a perscription Link;
@@ -262,6 +282,7 @@ class PatientHistory extends Component {
 
 
 						<div hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>
+						{/* <div> */}
 							<Table>
 								<TableRow>
 									<TableCell>
@@ -325,7 +346,7 @@ class PatientHistory extends Component {
 									<TableCell><p class='text-success' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>Cancel appointment</p></TableCell>
 									<TableCell><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Room</p></TableCell>
 									<TableCell><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Price</p></TableCell>
-									<TableCell><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Book</p></TableCell>
+									<TableCell><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Reserve</p></TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
@@ -341,8 +362,8 @@ class PatientHistory extends Component {
 										<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><Button hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}>Cancel</Button></p></TableCell>
 										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.room}</p></TableCell>
-								<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.price}</p></TableCell>
-										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> <Button>Placeholder</Button> </p></TableCell>
+										<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.price}</p></TableCell>
+								<TableCell><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} onClick={() => this.handleReservationClick(row.appointmentId)}> <Button>Reserve</Button> </p></TableCell>
 									</TableRow>
 								))}		
 							</TableBody>
