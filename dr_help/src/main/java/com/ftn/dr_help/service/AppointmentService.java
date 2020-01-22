@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -752,7 +753,19 @@ public class AppointmentService {
 	
 	@Transactional
 	public Boolean reserveAppointment (Long appointmentId, Long patientId) {
-		appointmentRepository.reserveAppointment(appointmentId, patientId);
-		return true;	
+		AppointmentPOJO appointment = appointmentRepository.getOne(appointmentId);
+
+		try {
+			TimeUnit.SECONDS.sleep(60);
+			System.out.println("OI, I just woke up, egg");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if (appointment.getStatus() == AppointmentStateEnum.AVAILABLE) {
+			appointmentRepository.reserveAppointment(appointmentId, patientId);
+			return true;
+		} 
+
+		return false;
 	}
 }

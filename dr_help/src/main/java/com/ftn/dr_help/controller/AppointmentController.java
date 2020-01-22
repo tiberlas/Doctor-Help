@@ -4,6 +4,7 @@ package com.ftn.dr_help.controller;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -262,9 +263,10 @@ public class AppointmentController {
 	@PreAuthorize("hasAuthority('PATIENT')")	
 	public ResponseEntity<Boolean> reservePredefined (@RequestBody AppointmentDeleteDTO input) {
 		System.out.println("Trying to book appointment: " + input.getAppointmentId() + "; for patient with id: " + input.getPatientId());
-		appointmentService.reserveAppointment(input.getAppointmentId(), input.getPatientId());
+		Boolean retVal = appointmentService.reserveAppointment(input.getAppointmentId(), input.getPatientId());
 		
-		return new ResponseEntity<Boolean> (false, HttpStatus.OK);
+		
+		return new ResponseEntity<Boolean> (retVal, HttpStatus.OK);
 	}
 	
 	

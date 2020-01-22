@@ -255,10 +255,10 @@ class PatientHistory extends Component {
 		})
 		.then (response =>{
 			if (response.data === true) {
-				//alert ("I got true")
+				alert ("Rezervacija uspesna :D")
 			}
 			else {
-				//alert ("I got false")
+				alert ("Rezervacija neuspesna :p")
 			}
 			this.updateComponent();
 		});
