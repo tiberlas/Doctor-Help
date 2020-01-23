@@ -5,14 +5,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import { Dropdown, FormControl } from 'react-bootstrap';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownItem from 'react-bootstrap/DropdownItem';
 import { MenuItem, Menu } from '@material-ui/core';
 import { Button} from 'react-bootstrap';
-
+import { Form, Submit } from 'react-bootstrap';
 
 class ClinicListing extends Component {
 
@@ -37,12 +37,12 @@ class ClinicListing extends Component {
 	}
 
 	generateClinicRows(row) {
-		let profileUrl;
-		// if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
-			// profileUrl = '/clinic/' + row.id + '/' + this.state.activeFilter;
-		// } else {
-			profileUrl = '/clinic/' + row.id + '/unfiltered';
-		// }
+		let profileUrl = "";// = 'http://localhost:3000';
+		if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
+			profileUrl += '/clinic/' + row.id + '/' + this.state.activeFilter;
+		} else {
+			profileUrl += '/clinic/' + row.id + '/unfiltered';
+		}
 		profileUrl += '/' + this.state.selectedDate;
 		return (
             <Fragment>
@@ -52,14 +52,20 @@ class ClinicListing extends Component {
 				<TableCell><p class='text-white'>{row.state}</p></TableCell>
 				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
 				<TableCell><p class='text-white'>{row.price}</p></TableCell>
-				<TableCell hidden={this.state.cantReserve}><p class='text-white'><Button onClick={this.goToDoctorListing(row)}>Reserve</Button></p></TableCell>
-             </Fragment>
+                <TableCell hidden={this.state.cantReserve}><Link exact to = {profileUrl} >Reserve</Link></TableCell>
+				{/* <TableCell hidden={this.state.cantReserve}><Form onSubmit={newUrl}><p class='text-white'><Button type="submit" onClick={alert (profileUrl)} >Reserve</Button></p></Form></TableCell> */}
+		     </Fragment>
         )
     }
 
-	goToDoctorListing (row) {
-		alert ("Looking for some doctors?")
-	}
+	// goToDoctorListing (row) {
+	// 	// alert ("Looking for some doctors?")
+	// 	let profileUrl = 'http://localhost:3000' + '/clinic/' + row.id + '/' + this.state.activeFilter + '/' + this.state.selectedDate;
+	// 	alert (profileUrl);
+	// 	window.location.href = profileUrl;
+	// 	// exact to = profileUrl;
+	// }
+
 
 	handleFilterType (text)  {
 		text = text.replace (' ', '_');

@@ -106,7 +106,9 @@ class DoctorListing extends Component {
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
 
-				<ViewClinic ></ViewClinic>
+				<div hidden={this.state.filtered}>
+					<ViewClinic hidden={this.state.filtered}></ViewClinic>
+				</div>
 
 				<h3>{(this.state.filtered) ? ("Filtered doctors") : ("All doctors")}</h3>
 					<Table>
