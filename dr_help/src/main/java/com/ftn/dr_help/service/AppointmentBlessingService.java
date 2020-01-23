@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.AppointmentForSchedulingDTO;
 import com.ftn.dr_help.dto.AppointmentInternalBlessedDTO;
 import com.ftn.dr_help.dto.NurseWIthFirstFreeDateInnerDTO;
@@ -45,6 +46,9 @@ public class AppointmentBlessingService {
 	
 	@Autowired
 	private DoctorRepository doctorRepository;
+	
+	@Autowired
+	private Mail mailSender;
 	
 	public AppointmentInternalBlessedDTO blessing(AppointmentForSchedulingDTO requested, String adminMeil) {
 		/**
@@ -95,10 +99,15 @@ public class AppointmentBlessingService {
 			if(appointment.getStatus() == AppointmentStateEnum.REQUESTED) {
 				//pacijent je trazio pregled, pa pitamo da li njemu odgovara
 				appointment.setStatus(AppointmentStateEnum.BLESSED);
-				//mejl
+				
+				mailSender.sendAppointmentBlessedEmail(appointment);
 			} else {
 				//doktor je trazio pregled pa ih obavestavamo o ishodu
 				appointment.setStatus(AppointmentStateEnum.APPROVED);
+				
+				mailSender.sendAppointmentApprovedToDoctorEmail(appointment);
+				mailSender.sendAppointmentApprovedToNurseEmail(appointment);
+				mailSender.sendAppointmentApprovedToPatientEmail(appointment);
 			}			
 			appointmentRepository.save(appointment);
 			

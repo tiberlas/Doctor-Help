@@ -12,12 +12,16 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
 @Service
 public class Mail {
 
 	@Autowired 
 	private JavaMailSender javaMailSender;
+	
+	@Autowired
+	private DateConverter dateConvertor;
 	
 	public void sendAccountInfoEmail(String sendTo, String password, String firstName, String lastName, RoleEnum role) {
 
@@ -103,6 +107,80 @@ public class Mail {
 	    String text = "Dr " + requestingDoctorName + " request an operation for " + type;
 	    text += " at " + date;
 	    text += " with dr " + dr0Name + ", dr " + dr1Name + "and dr " + dr2Name;
+	    
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	}
+	
+	public void sendAppointmentBlessedEmail(AppointmentPOJO appointment) {
+		
+		SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(appointment.getPatient().getEmail());
+	
+	    msg.setSubject("DrHelp requesting appointment");
+	    String text = "Dear " + appointment.getPatient().getFirstName() +" "+appointment.getPatient().getLastName()+ 
+	    		" your appointemnt for " +appointment.getProcedureType().getName()+" has been schedule for "+
+	    		dateConvertor.dateForFrontEndString(appointment.getDate())+", in room "+
+	    		appointment.getRoom().getName()+" number "+appointment.getRoom().getNumber()+
+	    		". Dr "+appointment.getDoctor().getFirstName()+
+	    		" "+appointment.getDoctor().getLastName()+" will examin you.";
+	    
+	    //NIKOLA OVDE TI DODAS LINK KA ODOBRAVANJU PREGLEDA
+	    
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	}
+	
+	public void sendAppointmentApprovedToPatientEmail(AppointmentPOJO appointment) {
+			
+			SimpleMailMessage msg = new SimpleMailMessage();
+		    msg.setTo(appointment.getPatient().getEmail());
+		
+		    msg.setSubject("DrHelp appointment check");
+		    String text = "Dear " + appointment.getPatient().getFirstName() +" "+appointment.getPatient().getLastName()+ 
+		    		" your appointemnt for " +appointment.getProcedureType().getName()+" has been schedule for "+
+		    		dateConvertor.dateForFrontEndString(appointment.getDate())+", in room "+
+		    		appointment.getRoom().getName()+" number "+appointment.getRoom().getNumber()+
+		    		". Dr "+appointment.getDoctor().getFirstName()+
+		    		" "+appointment.getDoctor().getLastName()+" will examin you.";
+		    
+		    text += "\n\n\n" + "Forever helping, drHelp.";
+		    msg.setText(text);
+		
+		    javaMailSender.send(msg);
+	}
+	
+	public void sendAppointmentApprovedToDoctorEmail(AppointmentPOJO appointment) {
+		
+		SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(appointment.getDoctor().getEmail());
+	
+	    msg.setSubject("DrHelp appointment check");
+	    String text = "Dear dr " + appointment.getDoctor().getFirstName() +" "+appointment.getDoctor().getLastName()+ 
+	    		" your appointemnt for patient "+appointment.getPatient().getFirstName()+" "+appointment.getPatient().getLastName()+
+	    		" has been scheduled for "+dateConvertor.dateForFrontEndString(appointment.getDate())+", in room "+
+			    appointment.getRoom().getName()+" number "+appointment.getRoom().getNumber();
+	    
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	}
+
+	public void sendAppointmentApprovedToNurseEmail(AppointmentPOJO appointment) {
+		
+		SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(appointment.getNurse().getEmail());
+	
+	    msg.setSubject("DrHelp appointment reserved");
+	    String text = "Dear " + appointment.getNurse().getFirstName() +" "+appointment.getNurse().getLastName()+ 
+	    		" you have an appointemnt on "+
+	    		dateConvertor.dateForFrontEndString(appointment.getDate())+", in room "+
+			    appointment.getRoom().getName()+" number "+appointment.getRoom().getNumber();
 	    
 	    text += "\n\n\n" + "Forever helping, drHelp.";
 	    msg.setText(text);
