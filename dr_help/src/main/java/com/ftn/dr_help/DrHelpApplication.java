@@ -5,12 +5,14 @@ import java.text.ParseException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-
-import com.ftn.dr_help.comon.DailySchedule;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication
 @ComponentScan(basePackages={"com.ftn.dr_help"})
+@EnableTransactionManagement
+@EnableJpaRepositories
 public class DrHelpApplication {
 
 	public static void main(String[] args) throws ParseException {

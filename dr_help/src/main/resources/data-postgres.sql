@@ -168,6 +168,21 @@ values (
 update patiens 
 set health_record_id = 2
 where patiens.id = 2;
+insert into healthrecord (blood_type, diopter, height, weight)
+values (
+	'A_NEGATIVE', 1.15, 1.75, 73
+);
+update patiens 
+set health_record_id = 3
+where patiens.id = 3;
+
+insert into healthrecord (blood_type, diopter, height, weight)
+values (
+	'O_POSITIVE', -3.2, 1.83, 86
+);
+update patiens 
+set health_record_id = 4
+where patiens.id = 4;
 
 insert into allergypojo (allergy, health_record_id)
 values ('Nuts', 1);
@@ -210,7 +225,7 @@ values ('2020-01-27 00:00:00', 1, 'AVAILABLE', 1, null, 1, null, 2, 1, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-02-03 04:00:00', 1, 'AVAILABLE', 1, null, 1, null, 1, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-03 02:00:00', 1, 'AVAILABLE', 4, null, 1, null, 1, 2, false);
+values ('2020-02-03 02:00:00', 30, 'AVAILABLE', 4, null, 1, null, 1, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-02-03 06:00:00', 1, 'AVAILABLE', 3, null, 1, null, 1, 2, false);
 

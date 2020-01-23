@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
 @Repository
@@ -48,7 +47,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	public List<AppointmentPOJO> getPatientsPastAppointmentsForClinic (Long patientId, Long clinicId);
 	
 	@Query (value = "select * from appointments a where a.patient_id = ?1 and a.status in ('REQUESTED', 'APPROVED') and a.deleted = false", nativeQuery = true)
-	public List<AppointmentPOJO> getPatientsPendingAppointments (Long email);
+	public List<AppointmentPOJO> getPatientsPendingAppointments (Long patientId);
 	
 	@Modifying
 	@Query (value = "update appointments set deleted = true where id = ?1", nativeQuery = true)

@@ -9,6 +9,26 @@ public class PatientHistoryDTO {
 
 	public PatientHistoryDTO(String status, Long examinationReportId, String date, String procedureType, String doctor,
 			String nurse, String clinicName, Long clinicId, Long doctorId, Long nurseId, Long appointmentId,
+			boolean canCancel, String room, Double price, Double discount) {
+		super();
+		this.status = status;
+		this.examinationReportId = examinationReportId;
+		this.date = date;
+		this.procedureType = procedureType;
+		this.doctor = doctor;
+		this.nurse = nurse;
+		this.clinicName = clinicName;
+		this.clinicId = clinicId;
+		this.doctorId = doctorId;
+		this.nurseId = nurseId;
+		this.appointmentId = appointmentId;
+		this.canCancel = canCancel;
+		this.room = room;
+		this.price = price;
+		this.discount = discount;
+	}
+	public PatientHistoryDTO(String status, Long examinationReportId, String date, String procedureType, String doctor,
+			String nurse, String clinicName, Long clinicId, Long doctorId, Long nurseId, Long appointmentId,
 			boolean canCancel, String room, Double price) {
 		super();
 		this.status = status;
@@ -96,7 +116,17 @@ public class PatientHistoryDTO {
 		if (appointment.getRoom() != null) {
 			this.room = appointment.getRoom().getName() + " " + appointment.getRoom().getNumber();
 		}
-		this.price = appointment.getProcedureType().getPrice() * appointment.getDiscount();
+//		this.price = appointment.getProcedureType().getPrice() * appointment.getDiscount();
+		
+//		this.props.value.price * (1 - (this.props.value.disscount / 100))
+		this.price = appointment.getProcedureType().getPrice() * (1 - appointment.getDiscount() / 100);
+		
+		
+		
+		
+		
+		this.discount = appointment.getDiscount();
+		
 		
 		
 //		System.out.println("Appointment room: " + this.room);
@@ -128,6 +158,7 @@ public class PatientHistoryDTO {
 	boolean canCancel = false;
 	String room;
 	Double price;
+	Double discount;
 	
 	public Long getExaminationReportId() {
 		return examinationReportId;
@@ -212,6 +243,12 @@ public class PatientHistoryDTO {
 	}
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+	public Double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(Double discount) {
+		this.discount = discount;
 	}
 	
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
@@ -688,7 +689,7 @@ public class AppointmentService {
 		retVal.setPossibleClinics(clinicList);
 		
 		List<String> typeList = new ArrayList<String> ();
-		typeList.add("undefined");
+		typeList.add("unfiltered");
 		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
 			boolean isThere = false;
 			for (String str : typeList) {
@@ -751,12 +752,12 @@ public class AppointmentService {
 		return retVal;
 	}
 	
-	@Transactional
+	@Transactional (isolation = Isolation.READ_UNCOMMITTED)
 	public Boolean reserveAppointment (Long appointmentId, Long patientId) {
 		AppointmentPOJO appointment = appointmentRepository.getOne(appointmentId);
 
 		try {
-			TimeUnit.SECONDS.sleep(60);
+			TimeUnit.SECONDS.sleep(10);
 			System.out.println("OI, I just woke up, egg");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
