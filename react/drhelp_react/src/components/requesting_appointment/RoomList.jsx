@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button';
 import RoomModalSearch from '../rooms/RoomModalSearch';
+import ScheduleAppointment from './ScheduleAppointment';
 
 const sortTypes = {
     name_up: {
@@ -38,10 +39,13 @@ class RoomList extends Component {
     state = {
         type: this.props.type,
         date: this.props.date,
+        appointmentId: this.props.appointment,
         rooms: [],
         currentSort: 'default',
         modalShow: false,
-        name: ''
+        name: '',
+        book: false,
+        roomId: 0
     }
 
     static contextType = ClinicAdminContext;
@@ -52,7 +56,7 @@ class RoomList extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.type !== this.props.type) {
-            this.setState({type: this.props.type, date: this.props.date}, () => {
+            this.setState({type: this.props.type, date: this.props.date, appointmentId: this.props.appointment}, () => {
                 this.handleGetAllRooms();
             })
         }
@@ -177,6 +181,14 @@ class RoomList extends Component {
         })
 
     }
+    
+    handleCancleBooking = () => {
+        this.setState({book: false})
+    }
+
+    handleSchedule = (id) => {
+        this.setState({book: true, roomId: id, nurse: this.props.nurse})
+    }
 
     render() {
         let i = 0;
@@ -198,7 +210,7 @@ class RoomList extends Component {
                     <TableBody>
                         {this.state.rooms.sort(sortTypes[this.state.currentSort].fn).map (c => (
                             <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <RoomReservingItem key={c.id} id={c.id} value={c} />
+                                <RoomReservingItem key={c.id} id={c.id} value={c} handleSchedule={(id) => {this.handleSchedule(id)}}/>
                             </TableRow>
                         ))  }
 
@@ -210,6 +222,13 @@ class RoomList extends Component {
                     show={this.state.modalShow}
                     onHide={this.handleHideModal}
                     handleSearch={(name, number, date, time) => this.handleRoomSearch(name, number, date, time)}
+                />
+
+                <ScheduleAppointment
+                    onHide={this.handleCancleBooking}
+                    show={this.state.book}
+                    roomId={this.state.roomId}
+                    appointmentId={this.state.appointmentId}
                 />
 
             </div>

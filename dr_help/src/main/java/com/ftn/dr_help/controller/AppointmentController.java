@@ -23,6 +23,8 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.AppointmentDeleteDTO;
+import com.ftn.dr_help.dto.AppointmentForSchedulingDTO;
+import com.ftn.dr_help.dto.AppointmentInternalBlessedDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
@@ -30,6 +32,7 @@ import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
+import com.ftn.dr_help.service.AppointmentBlessingService;
 import com.ftn.dr_help.service.AppointmentService;
 import com.ftn.dr_help.service.DoctorService;
 import com.ftn.dr_help.service.PatientService;
@@ -54,6 +57,9 @@ public class AppointmentController {
 	
 	@Autowired
 	private CurrentUser currentUser;
+	
+	@Autowired
+	private AppointmentBlessingService blesingService;
 	
 	@GetMapping(value = "/all_appointments/doctor={doctor_id}")
 	public ResponseEntity<List<DoctorAppointmentDTO>> getAllDoctorAppointments(@PathVariable("doctor_id") Long doctor_id) {
@@ -240,6 +246,25 @@ public class AppointmentController {
 		List<DoctorAppointmentDTO> appointments = appointmentService.findAvailableOrApprovedDoctorAppointments(id);
 		
 		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
+	}
+	
+	@PostMapping(value="/bless", produces="application/json", consumes="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> checkAppointemnt(@RequestBody AppointmentForSchedulingDTO appointment) {
+		
+		String adminMeil = currentUser.getEmail();
+		AppointmentInternalBlessedDTO response = blesingService.blessing(appointment, adminMeil);
+		
+		switch(response.getBlessingLvl()) {
+			case BLESSED:
+				return new ResponseEntity<>("OK", HttpStatus.ACCEPTED);
+			case BAD_DOCTOR:
+				return new ResponseEntity<>("DOCTOR#"+response.getMessage() , HttpStatus.NOT_ACCEPTABLE); //406
+			case BAD_DATE:
+				return new ResponseEntity<>("DATE#"+response.getMessage(), HttpStatus.NOT_ACCEPTABLE); //406
+			default:
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 }

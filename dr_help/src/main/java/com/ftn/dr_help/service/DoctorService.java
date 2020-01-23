@@ -592,7 +592,8 @@ public class DoctorService {
 				doctors.add(new MedicalStaffNameDTO(
 							doctor.getId(),
 							doctor.getFirstName(),
-							doctor.getLastName()
+							doctor.getLastName(),
+							doctor.getEmail()
 						));
 			}
 			

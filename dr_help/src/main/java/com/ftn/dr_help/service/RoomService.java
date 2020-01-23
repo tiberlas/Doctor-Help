@@ -105,6 +105,22 @@ public class RoomService {
 		return room;
 	}
 	
+	public RoomPOJO findOnePOJO(Long roomID, String email) {
+		
+		Long clinicID = adminRepository.findOneByEmail(email).getClinic().getId();
+		
+		if(roomID == null) {
+			return null;
+		}
+		
+		RoomPOJO finded = repository.findByIdAndClinic_id(roomID, clinicID).orElse(null);
+		
+		if(finded == null || finded.isDeleted())
+			return null;
+				
+		return finded;
+	}
+	
 	public RoomDTO save(RoomDTO newRoom, String email) {
 
 		try {
@@ -387,8 +403,6 @@ public class RoomService {
 		/*
 		 * Nadje prvi slobodni termin za sobu
 		 * */
-		
-		
 		
 		Calendar begin = Calendar.getInstance(); //sadrzi pocetak prvog slobodnog termina; prvi je sutra u 8 
 		begin.add(Calendar.DAY_OF_MONTH, 1);

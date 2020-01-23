@@ -78,8 +78,6 @@ class DoctorCalendar extends React.Component {
           patientInsurance: event.extendedProps.patientInsurance,
           doctorId: event.extendedProps.doctorId
         }
-     }, () => {
-      //this.toggle();
      });
   };
 

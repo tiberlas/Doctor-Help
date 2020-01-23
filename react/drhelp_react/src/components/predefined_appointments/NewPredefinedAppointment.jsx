@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
 import TimePicker from 'react-time-picker/dist/TimePicker';
 import FormControl from 'react-bootstrap/FormControl';
 

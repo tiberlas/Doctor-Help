@@ -247,7 +247,7 @@ public class DoctorController {
 	}
 	
 	@GetMapping(value = "/all/specialization={id}", produces="application/json")
-	@PreAuthorize("hasAuthority('DOCTOR')")
+	@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<List<MedicalStaffNameDTO>> getSpecializedDoctors(@PathVariable("id") Long id) {
 		List<MedicalStaffNameDTO> doctors = service.getSpecializedDoctors(id);
 		
