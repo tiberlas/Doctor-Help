@@ -159,7 +159,7 @@ class ScheduleAppointment extends Component {
             >
 
                 <Modal.Header closeButton onClick={this.props.onHide}>
-        <Modal.Title id="contained-modal-title-vcenter">Schedule appointment{this.props.appointmentId}</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">Schedule appointment</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={this.handleBless}>
                     <Modal.Body>
@@ -212,7 +212,7 @@ class ScheduleAppointment extends Component {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={this.props.onHide}>Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={(success) => {this.props.onHide(this.state.success)}}>Close</button>
                         <input type="submit" class="btn btn-success" value="Bless" disabled={this.state.success}/>
                     </Modal.Footer>
                 </form>

@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button';
 import RoomModalSearch from '../rooms/RoomModalSearch';
 import ScheduleAppointment from './ScheduleAppointment';
+import { Redirect } from 'react-router-dom';
 
 const sortTypes = {
     name_up: {
@@ -45,7 +46,8 @@ class RoomList extends Component {
         modalShow: false,
         name: '',
         book: false,
-        roomId: 0
+        roomId: 0,
+        go_appointments: false
     }
 
     static contextType = ClinicAdminContext;
@@ -182,8 +184,12 @@ class RoomList extends Component {
 
     }
     
-    handleCancleBooking = () => {
-        this.setState({book: false})
+    handleCancleBooking = (success) => {
+        this.setState({book: false}, () => {
+            if(success) {
+                this.setState({go_appointments: true});
+            }
+        })
     }
 
     handleSchedule = (id) => {
@@ -191,6 +197,8 @@ class RoomList extends Component {
     }
 
     render() {
+        if(this.state.go_appointments === true)
+            return(<Redirect to='/clinic-administrator/requests/appointments'></Redirect> ); 
         let i = 0;
         return (
             <div class='row d-flex justify-content-center'>
@@ -225,7 +233,7 @@ class RoomList extends Component {
                 />
 
                 <ScheduleAppointment
-                    onHide={this.handleCancleBooking}
+                    onHide={(success) => {this.handleCancleBooking(success)}}
                     show={this.state.book}
                     roomId={this.state.roomId}
                     appointmentId={this.state.appointmentId}
