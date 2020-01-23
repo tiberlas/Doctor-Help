@@ -17,6 +17,7 @@ import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.EmailCheck;
 import com.ftn.dr_help.comon.Term;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
@@ -95,6 +96,9 @@ public class DoctorService {
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired 
+	private LeaveRequestService leaveRequestsService;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -530,7 +534,8 @@ public class DoctorService {
 			begin.clear(Calendar.SECOND);
 			begin.clear(Calendar.MILLISECOND);
 			
-			Calendar firstFree = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(doctor), begin, dates);
+			List<AbsenceInnerDTO> absenceDates = leaveRequestsService.getAllDoctorAbsence(doctor.getId());
+			Calendar firstFree = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(doctor), begin, dates, absenceDates);
 			
 			return dateConvertor.dateForFrontEndString(firstFree);
 		} catch (Exception e) {
@@ -555,9 +560,10 @@ public class DoctorService {
 	public Calendar checkSchedue(String email, Calendar requestedSchedule) {
 		
 		DoctorPOJO doctor = repository.findOneByEmail(email);
-		List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
+		List<Date> reservedDates = repository.findAllReservedAppointments(doctor.getId());
+		List<AbsenceInnerDTO> absenceDates = leaveRequestsService.getAllDoctorAbsence(doctor.getId());
 		
-		return calculate.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(doctor), requestedSchedule, dates);
+		return calculate.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(doctor), requestedSchedule, reservedDates, absenceDates);
 	}
 	
 	public String checkOperationSchedue(OperationRequestDTO request) {
@@ -619,12 +625,16 @@ public class DoctorService {
 			List<Date> dates1 = repository.findAllReservedOperations(drId1);
 			List<Date> dates2 = repository.findAllReservedOperations(drId2);
 			
+			List<AbsenceInnerDTO> absence0 = leaveRequestsService.getAllDoctorAbsence(drId0);
+			List<AbsenceInnerDTO> absence1 = leaveRequestsService.getAllDoctorAbsence(drId1);
+			List<AbsenceInnerDTO> absence2 = leaveRequestsService.getAllDoctorAbsence(drId2);
+			
 			System.out.println(begin.getTime());
 			if(calculate == null) {
 				calculate = new CalculateFirstFreeSchedule();
 			}
 			
-			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
+			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, absence0, absence1, absence2, begin);
 			
 			return firstEqualShift;
 		} catch(Exception e) {

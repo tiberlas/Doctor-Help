@@ -27,6 +27,10 @@ public interface NurseRepository extends JpaRepository<NursePOJO, Long>{
 	@Query(value="select distinct count(a.*) from appointments a where a.nurse_id = ?1 and a.patient_id = ?2 and a.status = 'DONE' and deleted = false", nativeQuery=true)
 	public Integer findDoneAppointmentForNurseCount(Long nurse_id, Long patient_id);
 
-	@Query(value = "select a.date from appointments a where a.deleted = FALSE and a.status <> 'DONE' and a.nurse_id = ?1 order by a.date", nativeQuery = true)
+	@Query(value = "select a.date from appointments a "+
+					"where (a.status = 'APPROVED' " + 
+					"or a.status = 'BLESSED') "+
+					"and a.deleted = FALSE "+
+					"and a.nurse_id = ?1 order by a.date", nativeQuery = true)
 	public List<Date> findAllReservedAppointments(Long nurseId);
 }

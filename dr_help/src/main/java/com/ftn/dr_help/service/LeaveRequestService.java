@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.leave_requests.LeaveRequestDTO;
 import com.ftn.dr_help.model.enums.LeaveStatusEnum;
 import com.ftn.dr_help.model.enums.RoleEnum;
@@ -28,6 +30,9 @@ public class LeaveRequestService {
 	
 	@Autowired
 	private DoctorRepository doctorRepository;
+	
+	@Autowired
+	private DateConverter dateConverter;
 	
 	
 	public boolean addNurseRequest(Long nurse_id, LeaveRequestDTO dto) {
@@ -162,5 +167,35 @@ public class LeaveRequestService {
 			dto.setLeaveStatus(request.getLeaveStatus());
 			
 			return dto;
+	}
+	
+	public List<AbsenceInnerDTO> getAllDoctorAbsence(Long doctorId) {
+		List<AbsenceInnerDTO> absenceDates = new ArrayList<>();
+		
+		Calendar now = Calendar.getInstance();
+		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForDoctor(doctorId, dateConverter.americanDateToString(now));
+	
+		for(LeaveRequestPOJO absence : vacationDates) {
+			absenceDates.add(new AbsenceInnerDTO(
+					absence.getFirstDay().getTime(),
+					absence.getLastDay().getTime()));
+		}
+		
+		return absenceDates;
+	}
+	
+	public List<AbsenceInnerDTO> getAllNurseAbsence(Long nurseId) {
+		List<AbsenceInnerDTO> absenceDates = new ArrayList<>();
+		
+		Calendar now = Calendar.getInstance();
+		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForNurses(nurseId, dateConverter.americanDateToString(now));
+	
+		for(LeaveRequestPOJO absence : vacationDates) {
+			absenceDates.add(new AbsenceInnerDTO(
+					absence.getFirstDay().getTime(),
+					absence.getLastDay().getTime()));
+		}
+		
+		return absenceDates;
 	}
 }

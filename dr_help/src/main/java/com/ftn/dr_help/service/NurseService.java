@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.EmailCheck;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
@@ -53,6 +54,9 @@ public class NurseService {
 	
 	@Autowired
 	private CalculateFirstFreeSchedule calculate;
+	
+	@Autowired
+	private LeaveRequestService leaveRequestService;
 	
 	public List<MedicalStaffProfileDTO> getAll(String email) {
 		
@@ -338,7 +342,8 @@ public class NurseService {
 	public NurseCheckIfAvailableInnerDTO checkSchedue(NursePOJO nurse, Calendar requestedSchedule, Calendar duration) {
 		
 		List<Date> dates = repository.findAllReservedAppointments(nurse.getId());
-		Calendar firstFree = calculate.checkScheduleOrFindFirstFree(workSchedule.fromNurse(nurse, duration), requestedSchedule, dates);
+		List<AbsenceInnerDTO> absence = leaveRequestService.getAllNurseAbsence(nurse.getId());
+		Calendar firstFree = calculate.checkScheduleOrFindFirstFree(workSchedule.fromNurse(nurse, duration), requestedSchedule, dates, absence);
 		
 		if(firstFree.getTime().equals(requestedSchedule.getTime())) {
 			return new NurseCheckIfAvailableInnerDTO(true, requestedSchedule);

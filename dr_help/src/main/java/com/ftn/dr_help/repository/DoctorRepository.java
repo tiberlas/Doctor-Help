@@ -34,7 +34,12 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 	@Query(value = "select count(a.doctor_id) from appointments a where a.status <> 'DONE' and a.deleted = false and a.doctor_id = ?1 group by a.doctor_id", nativeQuery = true)
 	public Long getDoctorsAppointmentsCount(Long doctorId);
 	
-	@Query(value = "select a.date from appointments a where a.deleted = FALSE and a.status <> 'DONE' and a.doctor_id = ?1 order by a.date", nativeQuery = true)
+	@Query(value = "select a.date from appointments a "+
+					"where (a.status = 'APPROVED' "+
+					"or a.status = 'BLESSED') "+
+					"and a.deleted = FALSE "+
+					"and a.doctor_id = ?1 "+
+					"order by a.date", nativeQuery = true)
 	public List<Date> findAllReservedAppointments(Long doctorId);
 	
 	@Query(value = "select o.date from operations o where (o.first_doctor_id = ?1 or o.second_doctor_id = ?1 or third_doctor_id = ?1) and o.deleted = FALSE and o.status <> 'DONE'" , nativeQuery = true)

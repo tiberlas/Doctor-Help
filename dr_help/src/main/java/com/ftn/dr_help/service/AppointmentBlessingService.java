@@ -47,6 +47,14 @@ public class AppointmentBlessingService {
 	private DoctorRepository doctorRepository;
 	
 	public AppointmentInternalBlessedDTO blessing(AppointmentForSchedulingDTO requested, String adminMeil) {
+		/**
+		 * provera da li requested appointment odgovara sobi i doktoru; 
+		 * dodeli medicinsku sestru appointmentu;
+		 * ako je sve uredu stavi stanje appointmenta na BLESSED; a ako doktoru ili sobi ne odgovara termin
+		 * vrati prvi slobdan termin koji im odgovara;
+		 * takodje ako ni jedna medicinska sestra ne moze da prisustvuje za requested appointment onda se vrati priv slobodan termin
+		 * 
+		 * */
 		try {
 			
 			Calendar date = dateConverter.stringToDate(requested.getDateAndTime());
@@ -83,10 +91,17 @@ public class AppointmentBlessingService {
 			appointment.setDoctor(doctor);
 			appointment.setNurse(freeNurse.getNurse());
 			appointment.setRoom(room);
-			appointment.setStatus(AppointmentStateEnum.APPROVED);
 			appointment.setDeleted(false);
-			
+			if(appointment.getStatus() == AppointmentStateEnum.REQUESTED) {
+				//pacijent je trazio pregled, pa pitamo da li njemu odgovara
+				appointment.setStatus(AppointmentStateEnum.BLESSED);
+				//mejl
+			} else {
+				//doktor je trazio pregled pa ih obavestavamo o ishodu
+				appointment.setStatus(AppointmentStateEnum.APPROVED);
+			}			
 			appointmentRepository.save(appointment);
+			
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.BLESSED, "BLESSING RECIVED");
 		} catch(Exception e) {
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.REFFUSED, "NOT WORTHY");

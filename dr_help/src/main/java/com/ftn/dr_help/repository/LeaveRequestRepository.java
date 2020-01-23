@@ -26,4 +26,19 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestPOJO, 
 	@Query(value="select lr.* from leave_requests lr where nurse_id = ?1 and lr.leave_status = 'APPROVED'", nativeQuery=true)
 	public List<LeaveRequestPOJO> getNurseApprovedLeaveRequests(Long nurse_id);
 	/* -- */
+	
+	/* vrati sve leave requests koji trebaju da se ostvare */
+	@Query(value = "select lr.* from leave_requests lr " + 
+			"where lr.leave_status = 'APPROVED' " + 
+			"and lr.doctor_id = ?1 " + 
+			"and lr.last_day >= ?2 "+
+			"order by lr.first_day", nativeQuery = true)
+	public List<LeaveRequestPOJO> findAllForDoctor(Long doctorId, String currentDate);//currentDate in format: YYYY-MM-DD
+	
+	@Query(value = "select lr.* from leave_requests lr " + 
+			"where lr.leave_status = 'APPROVED' " + 
+			"and lr.nurse_id = ?1 " + 
+			"and lr.last_day >= ?2 "+
+			"order by lr.first_day", nativeQuery = true)
+	public List<LeaveRequestPOJO> findAllForNurses(Long nurseId, String currentDate);//currentDate in format: YYYY-MM-DD
 }

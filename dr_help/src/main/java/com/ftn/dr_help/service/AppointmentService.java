@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
@@ -80,6 +81,9 @@ public class AppointmentService {
 	
 	@Autowired
 	private WorkScheduleAdapter workSchedule;
+	
+	@Autowired
+	private LeaveRequestService leaveRequestService;
 	
 	public List<DoctorAppointmentDTO> findDoctorAppointments(Long doctor_id) {
 		
@@ -373,11 +377,12 @@ public class AppointmentService {
 	public void delete (Long appointmentId) {
 		appointmentRepository.deleteAppointment (appointmentId);
 	}
+	
 	public boolean doctorRequestAppointment(DoctorRequestAppointmentDTO request) {
 		try {
 			
 			AppointmentPOJO old = appointmentRepository.findOneById(request.getOldAppointmentID());
-			System.out.println("KILLING");
+			System.out.println("REQUESTED");
 			System.out.println(request.getOldAppointmentID());
 			System.out.println(old == null);
 			System.out.println(old.getId());
@@ -387,7 +392,8 @@ public class AppointmentService {
 			
 			//provera da li je doca slobodan
 			List<Date> dates = doctorRepository.findAllReservedAppointments(old.getDoctor().getId());
-			Calendar retVal = calculateSchedule.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(old.getDoctor()), date, dates);
+			List<AbsenceInnerDTO> absence = leaveRequestService.getAllDoctorAbsence(old.getDoctor().getId());
+			Calendar retVal = calculateSchedule.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(old.getDoctor()), date, dates, absence);
 			if(!retVal.equals(date)) {
 				return false;
 			}

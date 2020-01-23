@@ -44,6 +44,7 @@ public class DateConverter {
 	}
 	
 	public String americanDateToString(Calendar date) {
+		/* YYYY-MM-DD */
 		String retVal = String.valueOf(date.get(Calendar.YEAR)) + "-";
 		
 		if((date.get(Calendar.MONTH) + 1) < 10) {
