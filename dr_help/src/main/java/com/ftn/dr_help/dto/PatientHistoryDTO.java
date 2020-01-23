@@ -106,11 +106,13 @@ public class PatientHistoryDTO {
 		this.date += " " + appointment.getDate().get(Calendar.HOUR_OF_DAY) + ":" + appointment.getDate().get(Calendar.MINUTE);
 		this.procedureType = appointment.getProcedureType().getName();
 		this.doctor = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
-		this.nurse = appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName();
+		if (appointment.getNurse() != null) {
+			this.nurse = appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName();
+			this.nurseId = appointment.getNurse().getId();
+		}
 		this.clinicName = appointment.getDoctor().getClinic().getName();
 		this.clinicId = appointment.getDoctor().getClinic().getId();
 		this.doctorId = appointment.getDoctor().getId();
-		this.nurseId = appointment.getNurse().getId();
 		this.appointmentId = appointment.getId();
 		
 		if (appointment.getRoom() != null) {

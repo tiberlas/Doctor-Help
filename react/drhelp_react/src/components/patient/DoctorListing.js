@@ -8,6 +8,9 @@ import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import { UserContext } from '../../context/UserContextProvider';
 import ViewClinic from './ViewClinic';
+import FormControl from '@material-ui/core/FormControl';
+import Select from 'react-select'
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 
 class DoctorListing extends Component {
@@ -42,7 +45,7 @@ class DoctorListing extends Component {
 
 	handleSubmit (row) {
 		if (row.selectedTime === undefined) {
-			alert ("Please specify a timepoint")
+			alert ("Nemam reda")
 		} 
 		else {
 			// alert ("Rezervisem kod " + row.firstName + " u " + row.selectedTime)
@@ -56,9 +59,10 @@ class DoctorListing extends Component {
 	}
 
 	handleSelect (row, time) {
-		row.selectedTime = time;
-		let tekst = document.getElementById (row.id);
-		//tekst.setValue("row.selectedTime")
+		// alert (time.value)
+		row.selectedTime = time.value;
+		// let tekst = document.getElementById (row.id);
+		// tekst.setValue("row.selectedTime")
 	}
 
 	generateDoctorRows (row) {
@@ -70,24 +74,13 @@ class DoctorListing extends Component {
 				<TableCell><p class='text-white'>{row.lastName}</p></TableCell>
 				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
 				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
-					<Dropdown>
-						<DropdownToggle >
-							{(row.selectedTime === 'undefined') ? ('Terms') : (row.selectedTime)}
-							Tekst
-						</DropdownToggle>
-						<DropdownMenu>
-							{
-								row.terms.map (term => (
-									<MenuItem onClick={() => this.handleSelect(row, term)}>{term}</MenuItem>
-								))
-							}
-						</DropdownMenu>
-					</Dropdown>
-				</TableCell>
-				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
-					<p class='text-white' id={row.id} >
-						{(row.selectedTime === undefined) ? ("--:--") : (row.selectedTime)}
-					</p>
+					<FormControl class='text-black'>
+						<Select 
+							style="width:500px"
+							onChange = {this.handleSelect.bind(this, row)}
+							options={row.terms.map(term => ({ label: term, value: term }))}
+						></Select>
+					</FormControl>
 				</TableCell>
 				<TableCell hidden={(this.state.filtered) ? (false) : (true)} >
 					<Button onClick={() => this.handleSubmit(row)}>
@@ -118,7 +111,6 @@ class DoctorListing extends Component {
 								<TableCell><p class='text-success'>Last Name</p></TableCell>
 								<TableCell><p class='text-success'>Rating</p></TableCell>
 								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Terms</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Selected term</p></TableCell>
 								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Confirm</p></TableCell>
 							</TableRow>
 						</TableHead>
