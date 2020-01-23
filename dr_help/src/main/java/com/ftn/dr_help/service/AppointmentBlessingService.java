@@ -113,6 +113,7 @@ public class AppointmentBlessingService {
 			
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.BLESSED, "BLESSING RECIVED");
 		} catch(Exception e) {
+			e.printStackTrace();
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.REFFUSED, "NOT WORTHY");
 		}
 	}

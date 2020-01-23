@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.leave_requests.LeaveRequestDTO;
 import com.ftn.dr_help.model.enums.LeaveStatusEnum;
@@ -30,10 +29,6 @@ public class LeaveRequestService {
 	
 	@Autowired
 	private DoctorRepository doctorRepository;
-	
-	@Autowired
-	private DateConverter dateConverter;
-	
 	
 	public boolean addNurseRequest(Long nurse_id, LeaveRequestDTO dto) {
 		
@@ -173,7 +168,11 @@ public class LeaveRequestService {
 		List<AbsenceInnerDTO> absenceDates = new ArrayList<>();
 		
 		Calendar now = Calendar.getInstance();
-		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForDoctor(doctorId, dateConverter.americanDateToString(now));
+		now.set(Calendar.HOUR, 0);
+		now.set(Calendar.MINUTE, 0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.MILLISECOND, 0);
+		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForDoctor(doctorId, now.getTime());
 	
 		for(LeaveRequestPOJO absence : vacationDates) {
 			absenceDates.add(new AbsenceInnerDTO(
@@ -188,7 +187,11 @@ public class LeaveRequestService {
 		List<AbsenceInnerDTO> absenceDates = new ArrayList<>();
 		
 		Calendar now = Calendar.getInstance();
-		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForNurses(nurseId, dateConverter.americanDateToString(now));
+		now.set(Calendar.HOUR, 0);
+		now.set(Calendar.MINUTE, 0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.MILLISECOND, 0);
+		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForNurses(nurseId, now.getTime());
 	
 		for(LeaveRequestPOJO absence : vacationDates) {
 			absenceDates.add(new AbsenceInnerDTO(

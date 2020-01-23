@@ -1,5 +1,6 @@
 package com.ftn.dr_help.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,12 +34,12 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestPOJO, 
 			"and lr.doctor_id = ?1 " + 
 			"and lr.last_day >= ?2 "+
 			"order by lr.first_day", nativeQuery = true)
-	public List<LeaveRequestPOJO> findAllForDoctor(Long doctorId, String currentDate);//currentDate in format: YYYY-MM-DD
+	public List<LeaveRequestPOJO> findAllForDoctor(Long doctorId, Date currentDate);
 	
 	@Query(value = "select lr.* from leave_requests lr " + 
 			"where lr.leave_status = 'APPROVED' " + 
 			"and lr.nurse_id = ?1 " + 
 			"and lr.last_day >= ?2 "+
 			"order by lr.first_day", nativeQuery = true)
-	public List<LeaveRequestPOJO> findAllForNurses(Long nurseId, String currentDate);//currentDate in format: YYYY-MM-DD
+	public List<LeaveRequestPOJO> findAllForNurses(Long nurseId, Date currentDate);
 }
