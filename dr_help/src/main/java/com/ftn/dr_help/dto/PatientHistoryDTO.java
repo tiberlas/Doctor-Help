@@ -125,7 +125,7 @@ public class PatientHistoryDTO {
 		
 		
 		
-		
+		 
 		
 		this.discount = appointment.getDiscount();
 		
