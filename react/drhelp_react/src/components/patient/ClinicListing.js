@@ -11,6 +11,7 @@ import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownItem from 'react-bootstrap/DropdownItem';
 import { MenuItem, Menu } from '@material-ui/core';
+import { Button} from 'react-bootstrap';
 
 
 class ClinicListing extends Component {
@@ -19,7 +20,8 @@ class ClinicListing extends Component {
 		clinics: [], 
 		activeFilter: 'unfiltered', 
 		appointmentTypes: [],
-		selectedDate: 'unfiltered'
+		selectedDate: 'unfiltered', 
+		cantReserve : true
 	}
 
 	componentDidMount () {
@@ -36,11 +38,11 @@ class ClinicListing extends Component {
 
 	generateClinicRows(row) {
 		let profileUrl;
-		if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
-			profileUrl = '/clinic/' + row.id + '/' + this.state.activeFilter;
-		} else {
+		// if ((this.state.activeFilter !== '') && (this.state.activeFilter !== 'unfiltered')) {
+			// profileUrl = '/clinic/' + row.id + '/' + this.state.activeFilter;
+		// } else {
 			profileUrl = '/clinic/' + row.id + '/unfiltered';
-		}
+		// }
 		profileUrl += '/' + this.state.selectedDate;
 		return (
             <Fragment>
@@ -50,9 +52,14 @@ class ClinicListing extends Component {
 				<TableCell><p class='text-white'>{row.state}</p></TableCell>
 				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
 				<TableCell><p class='text-white'>{row.price}</p></TableCell>
+				<TableCell hidden={this.state.cantReserve}><p class='text-white'><Button onClick={this.goToDoctorListing(row)}>Reserve</Button></p></TableCell>
              </Fragment>
         )
     }
+
+	goToDoctorListing (row) {
+		alert ("Looking for some doctors?")
+	}
 
 	handleFilterType (text)  {
 		text = text.replace (' ', '_');
@@ -66,6 +73,18 @@ class ClinicListing extends Component {
 			selectedDate : value,
 			activeFilter : text
 		})
+		if ((this.state.selectedDate === 'unfiltered') || (this.state.selectedFilter === 'unfiltered')) {
+			// alert ("Unfiltered =D");
+			this.setState ({
+				cantReserve : true
+			})
+		}
+		else {
+			// alert ("Filtered")
+			this.setState ({
+				cantReserve : false
+			})
+		}
 
 		this.fetchData (text, value);
 	}
@@ -91,6 +110,19 @@ class ClinicListing extends Component {
 			selectedDate : value,
 			activeFilter : text
 		})
+
+		if ((this.state.selectedDate === 'unfiltered') || (this.state.selectedFilter === 'unfiltered')) {
+			// alert ("Unfiltered =D");
+			this.setState ({
+				cantReserve : true
+			})
+		}
+		else {
+			// alert ("Filtered")
+			this.setState ({
+				cantReserve : false
+			})
+		}
 
 		this.fetchData(text, value)
 
@@ -160,6 +192,7 @@ class ClinicListing extends Component {
 								<TableCell><p class='text-success'>State</p></TableCell>
 								<TableCell><p class='text-success'>Rating</p></TableCell>
 								<TableCell><p class='text-success'>Price</p></TableCell>
+								<TableCell  hidden={this.state.cantReserve}><p class='text-success'>Reserve</p></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

@@ -350,7 +350,6 @@ class PatientHistory extends Component {
 													<strong>Discount: </strong>
 												</TableCell>
 												<TableCell class='text-white'>
-													{/* this.props.value.price * (1 - (this.props.value.disscount / 100)) */}
 													<p style={{ color: 'red' }}>
 														{this.state.reservedAppointment.discount}%
 													</p>
