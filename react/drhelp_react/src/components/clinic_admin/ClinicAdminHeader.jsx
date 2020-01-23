@@ -6,6 +6,7 @@ import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import {DropdownItem} from  'react-bootstrap'
 import {DropdownToggle, DropdownMenu, NavbarToggler, Collapse, UncontrolledDropdown, NavItem} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
+import cross from '../../images/reed_cross.gif';
 
 class ClinicAdminHeader extends Component {
     static contextType = ClinicAdminContext
@@ -25,7 +26,9 @@ class ClinicAdminHeader extends Component {
               <Nav> 
                   <Nav.Link>
                     <Link exact to = '/home' class="nav-link">
-                      <strong> drHelp++ </strong>
+                      <strong class="text-danger" style={{fontFamily: "serif", fontSize: "34px"}}> drHelp </strong>
+                      <img src={cross} height="45px" width="45px"/>
+                      <img src={cross} height="45px" width="45px"/>
                     </Link>
                   </Nav.Link>
                 </Nav>
