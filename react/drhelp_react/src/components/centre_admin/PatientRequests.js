@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
-import PatientRegistrationInformation from './PatientRegistrationInformation'
+import React, {Component, Fragment} from 'react'
 import axios from 'axios';
+import UserRequestItem from './UserRequestItem';
+import RequestModal from './RequestModal';
 class PatientRequests extends Component {
 
     _isMounted = false
@@ -8,9 +9,21 @@ class PatientRequests extends Component {
     constructor() {
         super()
         this.state = {
-                patientInfo: {}
+                patientInfo: [],
+                showRequestModal: false,
+                selectedRequest: {}
         }
 
+    }
+
+    toggle = () =>{
+        this.setState({showRequestModal: !this.state.showRequestModal})
+    }
+
+    setRequestSelected = (request) => {
+        this.setState({selectedRequest: request, showRequestModal: true}, () => {
+            console.log("and i selected", this.state.selectedRequest)
+        })
     }
 
     componentDidMount = () => {
@@ -18,8 +31,7 @@ class PatientRequests extends Component {
 
         axios.get('http://localhost:8080/api/centreAdmins/requests',)
         .then(res =>  {
-            const patientInfo = res.data
-            this.setState({patientInfo})
+            this.setState({patientInfo: res.data})
         })
         .catch(err => 
             console.log(err)
@@ -36,34 +48,74 @@ class PatientRequests extends Component {
         console.log("state", items)
     }
 
-    // componentDidUpdate = () => {
-    //     axios.get('http://localhost:8080/api/centreAdmins/requests',)
-    //     .then(res =>  {
-    //         const patientInfo = res.data
-    //         this.setState({patientInfo})
-    //     })
-    //     .catch(err => 
-    //         console.log(err)
-    //     )
-    // }
-
     componentDidUnmount = () => {
         this._isMounted = false
+    }
+
+    update = () => {
+        setTimeout(() => {axios.get('http://localhost:8080/api/centreAdmins/requests',)
+        .then(res =>  {
+            this.setState({patientInfo: res.data, showRequestModal: false}, ()=>{this.forceUpdate()})
+        })
+        .catch(err => 
+            console.log(err)
+        )}, 1000)
     }
 
     render() {
 
         var size = Object.keys(this.state.patientInfo).length
-
+        console.log('patient info', this.state.patientInfo)
         if(this._isMounted)
             return(
-                <div>
-                    <h1>>Registration requests</h1>
+                <div> 
+                <br/>
+                <br/>
+                    <div class="row d-flex justify-content-center">
+                        <div class='col-md-3'>
+                            <h3> Patient requests</h3>
+                        </div>  
+                    </div>
 
-                    {size > 0 ? <PatientRegistrationInformation data = {{...this.state.patientInfo}} handleUpdate={this.handleUpdate}/> 
-                                : <div> <h2> No requests at the moment :) </h2></div>}
-                
+                <div class="row d-flex justify-content-center">
+                <div class='col-md-11'>
+                 <br/>
+
+                 {size == 0 ? <div> <br/> <br/> <h4> No new requests at the moment. </h4> </div> : <Fragment> 
+                <table class="table table-hover">
+                        <thead> 
+                            <tr>
+                                <th scope="row">
+                                    Email
+                                </th>
+                                <th scope="row">
+                                    First name
+                                </th>
+                                <th scope="row">
+                                    Last name
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.patientInfo.map( request => (
+                               <UserRequestItem key={request.email} userRequest = {request} setRequestSelected={this.setRequestSelected}/>
+                            ))}
+                        </tbody>
+                    </table> </Fragment>   }
+
+                   {this.state.showRequestModal && <RequestModal modal={this.state.showRequestModal}
+                                 toggle={this.toggle}
+                                 request={this.state.selectedRequest}
+                            update = {this.update}/> }
+
+                    {/* {size > 0 ? <PatientRegistrationInformation data = {{...this.state.patientInfo}} handleUpdate={this.handleUpdate}/> 
+                                : <div> <h2> No requests at the moment :) </h2></div>} */}
+
+                    
+                    </div> 
                 </div>
+                </div>
+                         
             )
         else {
             return (
