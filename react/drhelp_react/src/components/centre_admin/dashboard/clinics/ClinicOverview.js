@@ -108,7 +108,6 @@ export class ClinicOverview extends React.Component {
     render() {
         let i = 0
         return (
-         
             <Fragment> 
             <div class="row d-flex justify-content-center">
                 <div class='col-md-9'>

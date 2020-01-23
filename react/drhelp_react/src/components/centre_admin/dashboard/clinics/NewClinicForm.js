@@ -22,8 +22,10 @@ class NewClinicForm extends React.Component {
             errorState: true,
             clinicCity: "",
             clinicState: "",
-            success: false
+            success: false,
+            loading: false
         }
+       
        
     }
 
@@ -70,6 +72,14 @@ class NewClinicForm extends React.Component {
         if(this.state.error)
             return
 
+        this.setState({loading: true}, () => {
+            this.submitClinic()
+        })
+
+     
+    }
+
+    submitClinic = () => {
         axios.post('http://localhost:8080/api/clinics/newClinic', { 
 
             name: this.state.clinicName,
@@ -80,12 +90,12 @@ class NewClinicForm extends React.Component {
         })
             .then(res => {
                 // alert("Successfully added new clinic.");
-                this.setState({success:true, error: false, errorClinicName: false}, ()=>{
+                this.setState({success:true, error: false, errorClinicName: false, loading: false}, ()=>{
                     this.props.disabledOff(true)
                 })
 
             }).catch(error => { 
-                this.setState({errorClinicName: true, success: false, error: true}, ()=>this.props.disabledOn())
+                this.setState({errorClinicName: true, success: false, error: true, loading: false}, ()=>this.props.disabledOn())
             })
     }
 
@@ -134,17 +144,10 @@ class NewClinicForm extends React.Component {
                              <div class="valid-feedback"> Great success, added new clinic! </div>
                              {/* <Redirect to='/clinic/add'/> */}
                              </Fragment>}
+                        {this.state.loading && <div> <p class="text-info">Loading... </p> </div>} 
                     </Form.Group>
                     </div>
 
-                    
-                        {/* <input type='submit' value='submit' className={`btn btn-success ${this.state.error? 'disabled': ''}`}/> */}
-                        
-                       
-                        {/* <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/> */}
-                    {/* <Button variant="btn btn-success" type="submit" className={`btn btn-success ${this.state.error? 'disabled': ''}`}>
-                        Create
-                    </Button> */}
 
                     </Form>
                     </div>

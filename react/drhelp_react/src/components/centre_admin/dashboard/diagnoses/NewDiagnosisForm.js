@@ -15,7 +15,8 @@ class NewDiagnosisForm extends React.Component {
             errorDiagnosisName: true,
             errorDiagnosisResponse: false,
             errorDescription: true,
-            success: false
+            success: false,
+            loading: false
         }
       
     }
@@ -45,6 +46,13 @@ class NewDiagnosisForm extends React.Component {
             return 
         }
 
+        this.setState({loading: true}, () => {
+            this.submitDiagnosis()
+        })
+        
+    }
+
+    submitDiagnosis = () => {
         axios.post('http://localhost:8080/api/diagnoses/new', { 
 
             name: this.state.diagnosisName,
@@ -54,13 +62,15 @@ class NewDiagnosisForm extends React.Component {
                 this.setState({
                     success: true,
                     errorDiagnosisResponse: false,
-                    error: false
+                    error: false,
+                    loading: false
                 }, ()=>{this.props.disabledOff(true)})
             }).catch(error => {
                 this.setState({
                     errorDiagnosisResponse: true,
                     success: false,
-                    error: true
+                    error: true,
+                    loading: false
                 }, ()=>{this.props.disabledOn()})
             })
     }
@@ -84,8 +94,8 @@ class NewDiagnosisForm extends React.Component {
                     <Form.Control type="text" name = "diagnosisDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': 'is-valid'}`}/>
                     {this.state.success && 
                              <div class="valid-feedback"> Good success, added new diagnosis! </div>
-                             
                             }
+                     {this.state.loading && <div> <p class="text-info">Loading... </p> </div>} 
                 </Form.Group>
                 </div>
 

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import CentreAdminHeader from './CentreAdminHeader'
 import {Route} from 'react-router-dom'
 import {Switch} from 'react-router-dom'
-import NewClinicForm from './dashboard/clinics/NewClinicForm'
-import NewAdminForm from './NewAdminForm'
 import PatientRequests from './PatientRequests';
 import CentreAdminProfile from './CentreAdminProfile'
 import axios from 'axios'
@@ -12,6 +10,7 @@ import CentreAdminChangeProfile from './CentreAdminChangeProfile'
 import CentreAdminChangePassword from './CentreAdminChangePassword'
 import CentreAdminDashboard from './CentreAdminDashboard'
 import { ClinicOverview } from './dashboard/clinics/ClinicOverview'
+import { AdminOverview } from './dashboard/admins/AdminOverview'
 
 class CenterAdministrator extends Component {
     state = {
@@ -62,7 +61,7 @@ handleCentreAdmin = () => {
                     <Route exact path="/centreAdministrator/profile/change" ><CentreAdminChangeProfile  handleUpdate={this.handleCentreAdmin}/> </Route>
                     <Route exact path='/centreAdministrator/profile/change/password'> <CentreAdminChangePassword first={false}/> </Route>
                     <Route path="/admin/dashboard/c" ><ClinicOverview /> </Route>
-                    <Route path="/admin/dashboard/a" ><NewAdminForm /> </Route>
+                    <Route path="/admin/dashboard/a" ><AdminOverview /> </Route>
                     <Route path="/admin/dashboard/d-m" ><CentreAdminDashboard /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>
                    

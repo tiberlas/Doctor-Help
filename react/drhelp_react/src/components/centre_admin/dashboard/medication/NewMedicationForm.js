@@ -14,7 +14,8 @@ class NewMedicationForm extends React.Component {
             errorMedicationName: true,
             errorMedicationResponse: false,
             errorDescription: true,
-            success: false
+            success: false,
+            loading: false
         }
       
     }
@@ -40,11 +41,17 @@ class NewMedicationForm extends React.Component {
     }
 
     handleSubmit = () => {
-        //event.preventDefault()
 
         if(this.state.error)
             return
 
+        this.setState({loading: true}, () => {
+            this.submitMedication()
+        })
+       
+    }
+
+    submitMedication = () => {
         axios.post('http://localhost:8080/api/medication/new', { 
 
             name: this.state.medicationName,
@@ -52,12 +59,13 @@ class NewMedicationForm extends React.Component {
         })
             .then(res => {
                 // alert("Successfully added new medication.");
-                this.setState({success: true, error: false, errorMedicationResponse: false}, ()=>{this.props.disabledOff(true)})
+                this.setState({success: true, error: false, errorMedicationResponse: false, loading: false}, ()=>{this.props.disabledOff(true)})
             }).catch(error => {
                 this.setState({
                     errorMedicationResponse: true,
                     success: false,
-                    error: true
+                    error: true,
+                    loading: false
                 }, ()=>{this.props.disabledOn()})
             })
     }
@@ -81,9 +89,9 @@ class NewMedicationForm extends React.Component {
                     <Form.Group controlId="formMedicationDescription">
                         <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': 'is-valid'}`}/>
                         {this.state.success && 
-                             <div class="valid-feedback"> Ultra success, added new medication! </div>
+                             <div class="valid-feedback"> Ultra success, added new medication! </div>}
                              
-                            }
+                            {this.state.loading && <div> <p class="text-info">Loading... </p> </div>} 
                     </Form.Group>
                     </div>
 

@@ -47,7 +47,6 @@ class ExaminationReport extends React.Component {
                  items.push(option);
             }
 
-            console.log("items: ", items)
             this.setState({
                 diagnosisOptions: items
             })
@@ -67,7 +66,6 @@ class ExaminationReport extends React.Component {
                  items.push(option);
             }
 
-            console.log("items: ", items)
             this.setState({
                 medicationOptions: items
             })
