@@ -144,10 +144,13 @@ insert into room(name, number, deleted, clinic_id, proceduras_types_id)
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Opšta A', 30, false, 1, 2);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('Opšta B', 31, false, 1, 1);
+	values('Opšta B', 31, false, 1, 2);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('OPERACIONA SALA', 101, false, 1, 7);
+insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
+	values('OPERACIONA SALA', 102, false, 1, 7);
 
+	
 	--operacije 
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
 	values('2020-01-19 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
@@ -155,6 +158,8 @@ insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, s
 	values('2020-01-19 12:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', true);
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
 	values('2020-01-18 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
+	values('2020-01-21 17:00', 2, 2, 9, 7, 8, 5, 7, 'REQUESTED', false);
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
 	values('2020-01-18 13:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
@@ -215,11 +220,11 @@ values ('2020-1-22 10:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
 
 --for requesting a new appointment as doctor
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-18 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-1-18 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 3, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-19 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-1-19 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 3, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-20 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-1-20 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 3, false);
 --podaci za otkazivanje appointmenta
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-1-20 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);

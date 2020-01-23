@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button';
 import RoomModalSearch from '../rooms/RoomModalSearch';
 import ScheduleAppointment from './ScheduleAppointment';
 import { Redirect } from 'react-router-dom';
+import ScheduleOperation from '../requesting_operations/ScheduleOperation';
 
 const sortTypes = {
     name_up: {
@@ -41,13 +42,15 @@ class RoomList extends Component {
         type: this.props.type,
         date: this.props.date,
         appointmentId: this.props.appointment,
+        operationId: this.props.operationId,
         rooms: [],
         currentSort: 'default',
         modalShow: false,
         name: '',
         book: false,
         roomId: 0,
-        go_appointments: false
+        go_appointments: false,
+        operation: false
     }
 
     static contextType = ClinicAdminContext;
@@ -58,8 +61,12 @@ class RoomList extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.type !== this.props.type) {
-            this.setState({type: this.props.type, date: this.props.date, appointmentId: this.props.appointment}, () => {
-                this.handleGetAllRooms();
+            this.setState({type: this.props.type, 
+                            date: this.props.date, 
+                            appointmentId: this.props.appointment, 
+                            operation: this.props.operation,
+                            operationId: this.props.operationId}, () => {
+                                    this.handleGetAllRooms();
             })
         }
     }
@@ -186,7 +193,8 @@ class RoomList extends Component {
     
     handleCancleBooking = (success) => {
         this.setState({book: false}, () => {
-            if(success) {
+            console.log("success", success)
+            if(success === true) {
                 this.setState({go_appointments: true});
             }
         })
@@ -232,12 +240,21 @@ class RoomList extends Component {
                     handleSearch={(name, number, date, time) => this.handleRoomSearch(name, number, date, time)}
                 />
 
-                <ScheduleAppointment
-                    onHide={(success) => {this.handleCancleBooking(success)}}
-                    show={this.state.book}
-                    roomId={this.state.roomId}
-                    appointmentId={this.state.appointmentId}
-                />
+                {this.state.operation? 
+                    <ScheduleOperation 
+                        operationId={this.state.operationId}
+                        onHide={(success) => {this.handleCancleBooking(success)}}
+                        show={this.state.book}
+                        roomId={this.state.roomId}
+                    />:
+
+                    <ScheduleAppointment
+                        onHide={this.handleCancleBooking}
+                        show={this.state.book}
+                        roomId={this.state.roomId}
+                        appointmentId={this.state.appointmentId}
+                    />
+                }
 
             </div>
             </div>

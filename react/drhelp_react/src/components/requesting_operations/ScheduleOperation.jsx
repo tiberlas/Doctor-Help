@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 import TimePicker from 'react-time-picker/dist/TimePicker';
 import FormControl from 'react-bootstrap/FormControl';
+import Select from 'react-select';
 
 const fontStyles = {
     option: provided => ({
@@ -19,33 +20,42 @@ const fontStyles = {
     })
 }
 
-class ScheduleAppointment extends Component {
+class ScheduleOperation extends Component {
     state = {
-        procedure: "",
-        patient: "",
         room: '',
-        doctorList: [],
-        nurse: '',
-        date: '',
-        time: '',
+        patient: '',
+        procedure: '',
+        procedureId: '',
         dateAndTime: '',
-        procedureId: 0,
-        doctorSelected: '',
-        scheduleRecomendedDate: '',
-        doctorRecomendedDate: '',
-        errorDate: false,
-        errorTime: false,
-        errorDateAndTime: false,
-        errorDoctor: false,
-        success: false,
-        fatalError: false
+        time: '',
+        date: '',
+        doctorsOptions: [],
+        selectedDoctor: [],
+        disabledDoctors: true,
+        errorDoctor: true,
+        errorDoctoCount: true
     }
     
-    handleGetDoctors = () => {
-        axios.get('http://localhost:8080/api/doctors/all/specialization='+this.state.procedureId)
-            .then(response => {
-                this.setState({doctorList: response.data})
-            })
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.roomId != this.props.roomId) {
+            axios.get('http://localhost:8080/api/rooms/one/room='+this.props.roomId)
+                .then(response => {
+                    this.setState({room: response.data.name+': '+response.data.number})
+                })
+
+            axios.get('http://localhost:8080/api/operations/requests/id='+this.props.operationId)
+                .then(response => {
+                    this.setState({
+                        dateAndTime: response.data.date,
+                        procedure: response.data.procedureName+" "+response.data.procedureDuration+" H",
+                        procedureId: response.data.procedureId,
+                        patient: response.data.patient
+                    }, ()=> {
+                        this.getDoctors()
+                        this.handelDateAndTimeConversion()
+                    })
+                })
+        }
     }
 
     handelDateAndTimeConversion = () => {
@@ -66,45 +76,28 @@ class ScheduleAppointment extends Component {
             this.setState({time: parts[1]}, () => {this.handleChanngeDateAndTime()});
         }
     }
-    
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.roomId !== this.props.roomId) {
-            axios.get('http://localhost:8080/api/rooms/one/room='+this.props.roomId)
-                .then(response => {
-                    this.setState({room: response.data.name+': '+response.data.number})
+
+    getDoctors = () => {
+        axios.get(`http://localhost:8080/api/doctors/all/specialization=${this.state.procedureId}`)
+            .then(response => {
+                let items = []; 
+                var size = Object.keys(response.data).length;
+
+                for (let i = 0; i < size; i++) {
+                    let option = {
+                        label: 'dr ' + response.data[i].firstName + ' ' + response.data[i].lastName,
+                        value: response.data[i].id
+                    }             
+                    items.push(option);
+                }
+
+                console.log("doctors: ", items)
+                this.setState({
+                    doctorsOptions: items, errorDoctor: true, disabledDoctors: false, errorDoctoCount: true
                 })
-
-            axios.get('http://localhost:8080/api/appointments/requests/id='+this.props.appointmentId)
-                .then(response => {
-                    this.setState({procedure: response.data.type+' '+response.data.duration+' H',
-                                    patient: response.data.patient,
-                                    doctorSelected: response.data.doctor,
-                                    procedureId: response.data.typeId,
-                                    dateAndTime: response.data.date
-                                }, ()=> {
-                                    this.handleGetDoctors()
-                                    this.handelDateAndTimeConversion()
-                                })
-                })
-        }
-    }
-
-    createDoctorItems = () => {
-        let items = []; 
-        var size = Object.keys(this.state.doctorList).length;
-        for (let i = 0; i < size; i++) {
-            if(this.state.doctorList[i].email == this.state.doctorSelected) {
-                items.push(<option key={i} name = "doctor" selected="selected" value={this.state.doctorList[i].email} >{this.state.doctorList[i].email}</option>);
-            } else {
-                items.push(<option key={i} name = "doctor" value={this.state.doctorList[i].email} >{this.state.doctorList[i].email}</option>);
-            }
-        }
-        return items;
-    }
-
-    handlerChangeDoctor = (event) => {
-        let val = event.target.value
-        this.setState({doctorSelected: val, errorDoctor: false})
+            }).catch(error => {
+                this.setState({errorDoctor: true, disabledDoctors: true, errorType: true, doctorsOptions: [], errorDoctoCount: true})
+            })
     }
 
     handleChanngeDateAndTime = () => {
@@ -119,36 +112,6 @@ class ScheduleAppointment extends Component {
         this.setState({date: event.target.value}, () => {this.handleChanngeDateAndTime() });
     }
 
-    handleBless = (event) => {
-        event.preventDefault();
-
-        this.setState({errorDateAndTime: false, errorDoctor: false}, () => {
-            axios.post('http://localhost:8080/api/appointments/bless', {
-                patientEmail: this.state.patient,
-                doctorEmail: this.state.doctorSelected,
-                roomId: this.props.roomId,
-                procedureId: this.state.procedureId,
-                dateAndTime: this.state.dateAndTime,
-                appointmentRequestedId: this.props.appointmentId
-            }).then(response => {
-                //aleluja
-                this.setState({success: true})
-            }).catch(error => {
-                if(error.response.status == 406) {
-                    let status = error.response.data.split("#");
-                    if(status[0] == 'DOCTOR') {
-                        this.setState({errorDoctor: true, doctorRecomendedDate: status[1]})
-                    } else {
-                        this.setState({errorDateAndTime: true, errorDate: true, errorTime: true, scheduleRecomendedDate: status[1]})
-                    }
-                } else {
-                    //fatalan error
-                    this.setState({fatalError: true})
-                }
-            })
-        })
-    }
-
     render() { 
         return (
             <Modal
@@ -159,7 +122,7 @@ class ScheduleAppointment extends Component {
             >
 
                 <Modal.Header closeButton onClick={this.props.onHide}>
-                    <Modal.Title id="contained-modal-title-vcenter">Schedule appointment</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">Schedule operation{this.props.operationId}</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={this.handleBless}>
                     <Modal.Body>
@@ -183,13 +146,22 @@ class ScheduleAppointment extends Component {
                         </div>
                         <hr class="my-4" />
 
-                        <div className={`form-group ${this.state.errorDoctor? 'has-danger': ''}`}>
-                            <label for="doctor">Doctor</label>
-                            <select multiple="" className={`form-control ${this.state.errorDoctor? 'is-invalid': 'is-valid'}`} id="doctor" name='doctor' onChange={this.handlerChangeDoctor} disabled={this.state.success}>
-                                {this.createDoctorItems()}
-                            </select>
-                            { (this.state.errorDoctor) && <div class="invalid-feedback"> Doctor is occupied for this schedule, try {this.state.doctorRecomendedDate} </div>}
-                        </div>
+                            <div className={`form-group ${this.state.errorDoctor? 'has-danger': ''}`}>
+                                <label for="doctorsSelect">Select doctors</label>
+                                <Select 
+                                    id="doctorsSelect" 
+                                    styles={fontStyles} 
+                                    isMulti
+                                    className={'basic-multi-select'} 
+                                    classNamePrefix="select" 
+                                    name="doctors" 
+                                    options={this.state.doctorsOptions}  
+                                    onChange = {this.handleDoctorChange}
+                                    isClearable="true"
+                                    isDisabled={this.state.successedSchedule || this.state.disabledDoctors}
+                                />  
+                            </div>
+                            {this.state.errorDoctoCount && <p class='text-warning'>Must select exact 3 doctors</p>}
 
                         <div>
                             <label for='date'>date</label>
@@ -212,7 +184,7 @@ class ScheduleAppointment extends Component {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={() => {this.props.onHide(this.state.success)}}>Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={(success) => {this.props.onHide(this.state.success)}}>Close</button>
                         <input type="submit" class="btn btn-success" value="Bless" disabled={this.state.success}/>
                     </Modal.Footer>
                 </form>
@@ -221,4 +193,4 @@ class ScheduleAppointment extends Component {
     }
 }
  
-export default ScheduleAppointment;
+export default ScheduleOperation;

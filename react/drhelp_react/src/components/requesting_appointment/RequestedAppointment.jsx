@@ -66,7 +66,7 @@ class RequestedAppointment extends Component {
             </div>
             </div>
 
-                <RoomList appointment={this.state.id} date={this.state.date} type={this.state.typeId} nurse={this.state.nurse}></RoomList>
+                <RoomList operation={false} appointment={this.state.id} date={this.state.date} type={this.state.typeId} nurse={this.state.nurse}></RoomList>
 
             </div>
         );

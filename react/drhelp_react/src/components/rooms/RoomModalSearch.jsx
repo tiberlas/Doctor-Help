@@ -121,7 +121,7 @@ class RoomModalSearch extends Component {
 
                     <div className={`form-group ${this.state.errorTime? 'has-danger': ''}`}>
                         <label class="form-control-label" for="time">Schedule time:</label>
-                        <TimePicker name='time' id='time' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`}/>
+                        <TimePicker name='time' id='time' onChange={this.handleChangeTime} locale="us" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`}/>
                         {(this.state.errorTime) && <div class="invalid-feedback"> Must enter time if date is defined. </div>}
                     </div>
 

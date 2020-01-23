@@ -21,13 +21,13 @@ class ClinicAdminHeader extends Component {
 
     render() { 
         return (
-            <Navbar bg="light" expand="lg" id="navbarColor01">
+            <Navbar bg="dark" expand="sm">
             <Navbar.Brand >
               <Nav> 
                   <Nav.Link>
                     <Link exact to = '/home' class="nav-link">
-                      <strong class="text-danger" style={{fontFamily: "serif", fontSize: "34px"}}> drHelp </strong>
-                      <img src={cross} height="45px" width="45px"/>
+                      <strong class="text-danger" style={{fontFamily: "serif", fontSize: "40px", textAlign: "center", webkitTextStrokeWidth: "2px", webkitTextStrokeColor: "white"}}> drHelp </strong>
+                      <img src={cross} height="45px" width="45px" style={{alignContent: "up"}}/>
                       <img src={cross} height="45px" width="45px"/>
                     </Link>
                   </Nav.Link>
