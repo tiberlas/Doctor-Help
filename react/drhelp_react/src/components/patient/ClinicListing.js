@@ -13,6 +13,7 @@ import DropdownItem from 'react-bootstrap/DropdownItem';
 import { MenuItem, Menu } from '@material-ui/core';
 import { Button} from 'react-bootstrap';
 import { Form, Submit } from 'react-bootstrap';
+import Select from 'react-select'
 
 class ClinicListing extends Component {
 
@@ -21,7 +22,8 @@ class ClinicListing extends Component {
 		activeFilter: 'unfiltered', 
 		appointmentTypes: [],
 		selectedDate: 'unfiltered', 
-		cantReserve : true
+		cantReserve : true, 
+		types : []
 	}
 
 	componentDidMount () {
@@ -32,6 +34,21 @@ class ClinicListing extends Component {
 				appointmentTypes : response.data.procedureType, 
 				activeFilter  : response.data.procedureTypeString, 
 				selectedDate : response.data.dateString
+			})
+			let items =[];
+			var size = response.data.procedureType.length;
+			items.push ({
+				label : "-", 
+				value : "-"
+			})
+			for (let i = 0; i < size; ++i) {
+				items.push ({
+					label : response.data.procedureType[i],
+					value : response.data.procedureType[i]
+				})
+			}
+			this.setState ({
+				types : items
 			})
 		})
 	}
@@ -68,13 +85,17 @@ class ClinicListing extends Component {
 
 
 	handleFilterType (text)  {
+		text = text.value;
 		text = text.replace (' ', '_');
 		let element = document.getElementById ("picker");
 		let value = element.value;
-		if (value === "") {
+		if (value === "-") {
 			value = 'unfiltered'
 		}
-
+		if (text === "-") {
+			text = 'unfiltered'
+		}
+		// alert (text)
 		this.setState ({
 			selectedDate : value,
 			activeFilter : text
@@ -104,6 +125,7 @@ class ClinicListing extends Component {
 	  }
 
 	handleFilterDate () {
+		
 		this.toggleMenu();
 		let element = document.getElementById ("picker");
 		let value = element.value;
@@ -112,12 +134,18 @@ class ClinicListing extends Component {
 		
 		// alert ("Filter date: " + value + "; Filter type: " + text);
 		
+		if (value === "") {
+			value = "unfiltered";
+			// alert ("I am in if")
+		}
+
+		// alert ("Filter date: " + value + "; Filter type: " + text);
 		this.setState ({
 			selectedDate : value,
 			activeFilter : text
 		})
 
-		if ((this.state.selectedDate === 'unfiltered') || (this.state.selectedFilter === 'unfiltered')) {
+		if ((value === 'unfiltered') || (text === 'unfiltered')) {
 			// alert ("Unfiltered =D");
 			this.setState ({
 				cantReserve : true
@@ -151,7 +179,24 @@ class ClinicListing extends Component {
 		})
 	}
 
-	
+	// handleSelect (obj) {
+	// 	// alert (obj.value)
+	// 	this.setState ({
+	// 		activeFilter : obj.value
+	// 	})
+	// }
+
+	// getTypeFilter = () => {
+	// 	return (
+	// 	<FormControl >
+	// 		<Select 
+	// 			// style="width:500px"
+	// 			// onChange = {this.handleSelect.bind(this)}
+	// 			onChange = {this.handleSelect.bind(this)}
+	// 			options={this.state.types}
+	// 		/>
+	// 	</FormControl>)
+	// }
 
 	render () {
 		let size = this.state.clinics.length;
@@ -166,17 +211,30 @@ class ClinicListing extends Component {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell></TableCell>
-								<TableCell></TableCell>
-								<TableCell></TableCell>
-								<TableCell></TableCell>
 								<TableCell>
+
+									{/* <FormControl >
+										<Select 
+											// style="width:500px"
+											onChange = {this.handleSelect.bind(this)}
+											options={this.state.appointmentTypes.map(term => ({ label: term, value: term }))}
+										></Select>
+									</FormControl> */}
+									{/* {this.getTypeFilter()} */}
+
+
 									<form>
-										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
+										<Select 
+											// style="width:500px"
+											// onChange = {this.handleSelect.bind(this)} 
+											
+											onChange = {this.handleFilterType.bind(this)}
+											options={this.state.types}
+										/>
 									</form>
-								</TableCell>
-								<TableCell>
-									<Dropdown id = "dropdown_id" class='success' onFocus='this.toggleMenu' >
+
+
+									{/* <Dropdown id = "dropdown_id" class='success' onFocus='this.toggleMenu' >
 										<DropdownToggle id="dropdown-basic" >
 											{(this.state.activeFilter === 'unfiltered') ? ("Procedure types"): (this.state.activeFilter.replace('_', ' '))}
 										</DropdownToggle>
@@ -188,8 +246,18 @@ class ClinicListing extends Component {
 												)) : null
 											}
 										</DropdownMenu>
-									</Dropdown>
+									</Dropdown> */}
 								</TableCell>
+								<TableCell>
+									<form>
+										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
+									</form>
+								</TableCell>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell></TableCell>
+								<TableCell hidden={this.state.cantReserve}></TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell><p class='text-success'>Clinic Name</p></TableCell>

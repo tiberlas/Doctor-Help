@@ -119,11 +119,15 @@ public class DoctorController {
 		
 	} 
 	
-	@GetMapping (value = "/listing/{clinic_id}/{appointment_type}/{appointment_date}")
+	@GetMapping (value = "/listing/clinic={clinic_id}&appointment={appointment_type}&date={appointment_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<List<DoctorListingDTO>> getDoctorListing (@PathVariable("clinic_id") Long clinicId, 
 				@PathVariable("appointment_type") String appointmentType, @PathVariable("appointment_date") String appointmentDate) throws ParseException {
 
+		
+		
+		
+		
 		System.out.println("Appointment type: " + appointmentType);
 		System.out.println("Clinic id: " + clinicId);
 		System.out.println("Date: " + appointmentDate);

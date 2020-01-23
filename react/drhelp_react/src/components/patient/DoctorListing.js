@@ -26,10 +26,11 @@ class DoctorListing extends Component {
 	componentDidMount () {
 		let url = window.location.href.split ('/');
 		// alert ('Filter: ' + url[5] + '; Date: ' + url[6]);
+		//clinic={clinic_id}&appointment={appointment_type}&date={appointment_date}
 		let request = 'http://localhost:8080/api/doctors/listing';
-		request += '/' + url[4];
-		request += '/' + url[5];
-		request += '/' + url[6];
+		request += '/clinic=' + url[4];
+		request += '&appointment=' + url[5];
+		request += '&date=' + url[6];
 		if ((url[5] !== 'unfiltered') && (url[6] !== 'unfiltered')) {
 			this.setState ({
 				filtered : true
