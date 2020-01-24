@@ -28,10 +28,10 @@ public class DateConverter {
 	public String timeToString(Calendar time) {
 		String retVal = "";
 		
-		if(time.get(Calendar.HOUR) < 10) {
-			retVal += "0"+String.valueOf(time.get(Calendar.HOUR)) + ":";
+		if(time.get(Calendar.HOUR_OF_DAY) < 10) {
+			retVal += "0"+String.valueOf(time.get(Calendar.HOUR_OF_DAY)) + ":";
 		} else {
-			retVal += String.valueOf(time.get(Calendar.HOUR)) + ":";
+			retVal += String.valueOf(time.get(Calendar.HOUR_OF_DAY)) + ":";
 		}
 		
 		if(time.get(Calendar.MINUTE) < 10) {

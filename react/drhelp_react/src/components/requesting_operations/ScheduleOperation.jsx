@@ -29,11 +29,14 @@ class ScheduleOperation extends Component {
         dateAndTime: '',
         time: '',
         date: '',
+        scheduleRecomendedDate: '',
         doctorsOptions: [],
         selectedDoctor: [],
-        disabledDoctors: true,
-        errorDoctor: true,
-        errorDoctoCount: true
+        success: false,
+        fatalError: false,
+        errorDoctor: false,
+        errorDoctoCount: true,
+        errorNoDoctors: false
     }
     
     componentDidUpdate(prevProps, prevState) {
@@ -52,13 +55,13 @@ class ScheduleOperation extends Component {
                         patient: response.data.patient
                     }, ()=> {
                         this.getDoctors()
-                        this.handelDateAndTimeConversion()
+                        this.handelStringToDateAndTimeConversion()
                     })
                 })
         }
     }
 
-    handelDateAndTimeConversion = () => {
+    handelStringToDateAndTimeConversion = () => {
         let parts = this.state.dateAndTime.split(" ");
         let dates = parts[0].split("/");
         let svDate = dates[2] +"-"+ dates[0] +"-"+ dates[1];
@@ -67,14 +70,27 @@ class ScheduleOperation extends Component {
         if(parts[2] == 'PM') {
             let hoursAndMinutes = parts[1].split(":")
             let hours = parseInt(hoursAndMinutes[0]);
-            let minutes = parseInt(hoursAndMinutes[1]);
             hours += 12;
 
-            let timeString = hours + ":"+minutes
+            let timeString = hours +":"+hoursAndMinutes[1]
             this.setState({time: timeString}, () => {this.handleChanngeDateAndTime()})
         } else {
             this.setState({time: parts[1]}, () => {this.handleChanngeDateAndTime()});
         }
+    }
+
+    handleDateAndTimeToStringConversion = () => {
+        let dateParts = this.state.date.split('-');
+        let time = this.state.time;
+        let dayPeriod = 'AM';
+        let timePart = this.state.time.split(":");
+        if(parseInt(timePart[0]) > 11) {
+            dayPeriod = 'PM';
+            time = parseInt(timePart[0]) - 11;
+            time = time.toString +":"+ timePart[1];
+        }
+
+        return dateParts[1]+"/"+dateParts[2]+"/"+dateParts[0]+' '+time+' '+dayPeriod;
     }
 
     getDoctors = () => {
@@ -96,20 +112,75 @@ class ScheduleOperation extends Component {
                     doctorsOptions: items, errorDoctor: true, disabledDoctors: false, errorDoctoCount: true
                 })
             }).catch(error => {
-                this.setState({errorDoctor: true, disabledDoctors: true, errorType: true, doctorsOptions: [], errorDoctoCount: true})
+                this.setState({errorDoctor: true, disabledDoctors: true, errorNoDoctors: true, doctorsOptions: [], errorDoctoCount: true})
             })
     }
 
+    handleDoctorChange = (options) => {
+        if(options === null) {
+            this.setState({selectedDoctor: []})
+            return
+        }
+        let doctors = []
+        for(let i=0; i<options.length; ++i) {
+            doctors.push(options[i].value)
+        }
+
+        this.setState({selectedDoctor: doctors}, () => {
+            if(this.state.selectedDoctor.length === 3) {
+                this.setState({errorDoctoCount: false})
+                axios.post("http://localhost:8080/api/operations/schedules/first_free", {
+                    doctor0: this.state.selectedDoctor[0],
+                    doctor1: this.state.selectedDoctor[1],
+                    doctor2: this.state.selectedDoctor[2]
+                }).then(response => {
+                    this.setState({scheduleRecomendedDate: response.data}, () => {
+                        if(this.state.dateAndTime != this.state.scheduleRecomendedDate) {
+                            this.setState({errorDateAndTime: true})
+                        } else {
+                            this.setState({errorDateAndTime: false})
+                        }
+                    })
+                })
+            } else {
+                this.setState({errorDoctoCount: true})
+            }
+        })
+    }
+
     handleChanngeDateAndTime = () => {
-        this.setState({dateAndTime: this.state.date +' '+ this.state.time, errorDate: false})
+        this.setState({dateAndTime: this.handleDateAndTimeToStringConversion()})
     }
 
     handleChangeTime = (time) => {
-        this.setState({time: time, errorTime: false}, () => {this.handleChanngeDateAndTime() })
+        this.setState({time}, () => {this.handleChanngeDateAndTime() })
     }
 
     handleChangeDate = (event) => {
         this.setState({date: event.target.value}, () => {this.handleChanngeDateAndTime() });
+    }
+
+    handleBless = (event) => {
+        event.preventDefault();
+        let dateAndTimeString = this.state.date + " " + this.state.time;
+            axios.post("http://localhost:8080/api/operations/schedules/bless", {
+                dateAndTimeString: dateAndTimeString,
+                operationId: this.props.operationId,
+                doctor0: this.state.selectedDoctor[0],
+                doctor1: this.state.selectedDoctor[1],
+                doctor2: this.state.selectedDoctor[2]
+            }).then(response => {
+                this.setState({errorDateAndTime: false, success: true})
+            }).catch(error => {
+                if(error.response.status == 409) {
+                    //dobijen predlog za drugi termin
+                    this.setState({errorDateAndTime: true, scheduleRecomendedDate: error.response.data})
+                } else {
+                    if(this.state.errorDoctoCount == false) {
+                        this.setState({fatalError: true})
+                    }
+                }
+            })
     }
 
     render() { 
@@ -158,18 +229,18 @@ class ScheduleOperation extends Component {
                                     options={this.state.doctorsOptions}  
                                     onChange = {this.handleDoctorChange}
                                     isClearable="true"
-                                    isDisabled={this.state.successedSchedule || this.state.disabledDoctors}
+                                    isDisabled={this.state.success}
                                 />  
                             </div>
                             {this.state.errorDoctoCount && <p class='text-warning'>Must select exact 3 doctors</p>}
 
                         <div>
                             <label for='date'>date</label>
-                            <FormControl type="date" id='date' placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} value={this.state.date} className={`form-control ${this.state.errorDate? 'is-invalid': 'is-valid'}`} disabled={this.state.success}/>
+                            <FormControl type="date" id='date' placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} value={this.state.date} className={`form-control ${this.state.errorDateAndTime? 'is-invalid': 'is-valid'}`} disabled={this.state.success}/>
                         </div>
                         <div>
                             <label for='time'>time</label>
-                            <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="us" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`} disabled={this.state.success}/>
+                            <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="us" value={this.state.time} className={`form-control ${this.state.errorDateAndTime? 'is-invalid': 'is-valid'}`} disabled={this.state.success}/>
                         </div>
                         {this.state.errorDateAndTime && 
                             <div class="text-danger"> Schedule is occupied, try {this.state.scheduleRecomendedDate} </div>
@@ -185,7 +256,7 @@ class ScheduleOperation extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={(success) => {this.props.onHide(this.state.success)}}>Close</button>
-                        <input type="submit" class="btn btn-success" value="Bless" disabled={this.state.success}/>
+                        <input type="submit" class="btn btn-success" value="Bless" disabled={this.state.success?true:(this.state.errorDoctoCount)}/>
                     </Modal.Footer>
                 </form>
             </Modal>

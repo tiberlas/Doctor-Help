@@ -25,4 +25,13 @@ public interface OperationRepository extends JpaRepository<OperationPOJO, Long> 
 			"and o.deleted = false \n" + 
 			"and o.status = 'REQUESTED'", nativeQuery = true)
 	public List<OperationPOJO> getAllOperationRequestsForAdmin(String ClinicAdminEmail);
+	
+	@Query(value = "select o.* from room r " + 
+			"inner join operations o " + 
+			"on o.room_id = r.id " + 
+			"where o.status = 'APPROVED' " + 
+			"and o.deleted = false " + 
+			"and r.deleted = false " + 
+			"and r.id = ?1", nativeQuery = true)
+	public List<OperationPOJO> findAllScheduledOperationsInRoom(Long roomId);
 }

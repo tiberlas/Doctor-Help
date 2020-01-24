@@ -77,4 +77,13 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	/* -------------------za leave request doktora */
 	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.deleted = false", nativeQuery=true)
 	public List<AppointmentPOJO> findAvailableOrApprovedDoctorAppointments(Long doctor_id);
+
+	@Query(value = "select a.* from room r " + 
+			"inner join appointments a " + 
+			"on a.room_id = r.id " + 
+			"where (a.status = 'APPROVED' or a.status = 'BLESSED') " + 
+			"and r.deleted = false " + 
+			"and a.deleted = false " + 
+			"and r.id = ?1", nativeQuery = true)
+	public List<AppointmentPOJO> findAllScheduledAppointmentsInRoom(Long roomId);
 }

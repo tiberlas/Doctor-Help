@@ -163,7 +163,7 @@ insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, s
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
 	values('2020-01-18 13:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-21 17:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
+	values('2020-01-21 08:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
 			
 	
 	

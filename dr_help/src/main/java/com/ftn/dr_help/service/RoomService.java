@@ -17,11 +17,13 @@ import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.ClinicRepository;
+import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
 import com.ftn.dr_help.repository.RoomRepository;
 
@@ -42,6 +44,9 @@ public class RoomService {
 	
 	@Autowired
 	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private OperationRepository operationRepository;
 	
 	@Autowired
 	private DateConverter dateConvertor;
@@ -231,38 +236,64 @@ public class RoomService {
 	
 	public List<RoomCalendarDTO> getSchedule(Long roomId) throws NullPointerException{
 		
-			RoomPOJO room = repository.findById(roomId).orElse(null);
-			
-			String begining;
-			if(room.getProcedurasTypes().isOperation()) {
-				begining = "Operation with dr ";
-			} else {
-				begining = "Appointment with dr ";
-			}
-			
-			Calendar durationDate = Calendar.getInstance(); 
-			durationDate.setTime(room.getProcedurasTypes().getDuration());
-			
-			List<RoomCalendarDTO> ret = new ArrayList<>();
-			for(AppointmentPOJO appointment : room.getAppointments()) {
-				if(!appointment.isDeleted()) {
-					RoomCalendarDTO scheduledAppointment = new RoomCalendarDTO();
-					scheduledAppointment.setAppointmentId(appointment.getId());
-					scheduledAppointment.setTitle(begining+appointment.getDoctor().getFirstName()+" "+appointment.getDoctor().getLastName());
-					scheduledAppointment.setDate(dateConvertor.americanDateToString(appointment.getDate()));
-					scheduledAppointment.setStartTime(dateConvertor.timeToString(appointment.getDate()));
-					
-					Calendar endTimeDate = appointment.getDate();
-					endTimeDate.add(Calendar.HOUR, durationDate.get(Calendar.HOUR));
-					endTimeDate.add(Calendar.MINUTE, durationDate.get(Calendar.MINUTE));
-					String endTime = dateConvertor.timeToString(endTimeDate);
-					scheduledAppointment.setEndTime(endTime);
-					
-					ret.add(scheduledAppointment);
+			try {
+				String begining;
+				List<RoomCalendarDTO> ret = new ArrayList<>();
+				
+				Calendar durationDate = Calendar.getInstance(); 
+				
+				List<AppointmentPOJO> reservedAppointmentsInRoom = appointmentRepository.findAllScheduledAppointmentsInRoom(roomId);
+				if(reservedAppointmentsInRoom != null) {
+					begining = " Appointment with dr ";
+					for(AppointmentPOJO appointment : reservedAppointmentsInRoom) {
+						RoomCalendarDTO scheduledAppointment = new RoomCalendarDTO();
+						scheduledAppointment.setAppointmentId(appointment.getId());
+						scheduledAppointment.setOperationId(null);
+						scheduledAppointment.setTitle(begining+appointment.getDoctor().getFirstName()+" "+appointment.getDoctor().getLastName());
+						scheduledAppointment.setDate(dateConvertor.americanDateToString(appointment.getDate()));
+						scheduledAppointment.setStartTime(dateConvertor.timeToString(appointment.getDate()));
+						
+						durationDate.setTime(appointment.getProcedureType().getDuration());
+						Calendar endTimeDate = appointment.getDate();
+						endTimeDate.add(Calendar.HOUR, durationDate.get(Calendar.HOUR));
+						endTimeDate.add(Calendar.MINUTE, durationDate.get(Calendar.MINUTE));
+						String endTime = dateConvertor.timeToString(endTimeDate);
+						scheduledAppointment.setEndTime(endTime);
+						
+						ret.add(scheduledAppointment);
+					}
 				}
+				
+				List<OperationPOJO> reservedOperationsInRoom = operationRepository.findAllScheduledOperationsInRoom(roomId);
+				if(reservedOperationsInRoom != null) {
+					begining = " Operation with dr ";
+					for(OperationPOJO operation : reservedOperationsInRoom) {
+						RoomCalendarDTO scheduledAppointment = new RoomCalendarDTO();
+						scheduledAppointment.setAppointmentId(null);
+						scheduledAppointment.setOperationId(operation.getId());
+						
+						scheduledAppointment.setTitle(begining+
+													operation.getFirstDoctor().getFirstName()+" "+operation.getFirstDoctor().getLastName()+
+													", dr "+operation.getSecondDoctor().getFirstName()+" "+operation.getSecondDoctor().getLastName()+
+													" and with dr "+operation.getThirdDoctor().getFirstName()+" "+operation.getThirdDoctor().getLastName()); 
+						
+						scheduledAppointment.setDate(dateConvertor.americanDateToString(operation.getDate()));
+						scheduledAppointment.setStartTime(dateConvertor.timeToString(operation.getDate()));
+						durationDate.setTime(operation.getOperationType().getDuration());
+						Calendar endTimeDate = operation.getDate();
+						endTimeDate.add(Calendar.HOUR, durationDate.get(Calendar.HOUR));
+						endTimeDate.add(Calendar.MINUTE, durationDate.get(Calendar.MINUTE));
+						String endTime = dateConvertor.timeToString(endTimeDate);
+						scheduledAppointment.setEndTime(endTime);
+						
+						ret.add(scheduledAppointment);
+					}
+				}
+				
+				return ret;
+			} catch(Exception e) {
+				return null;
 			}
-			
-			return ret;
 	}
 	
 	public List<RoomDTO> search(RoomSearchDTO searchParameters, String email) {

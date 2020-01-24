@@ -49,7 +49,8 @@ class RoomList extends Component {
         name: '',
         book: false,
         roomId: 0,
-        go_appointments: false,
+        go_appointmentList: false,
+        go_operationList: false,
         operation: false
     }
 
@@ -195,7 +196,11 @@ class RoomList extends Component {
         this.setState({book: false}, () => {
             console.log("success", success)
             if(success === true) {
-                this.setState({go_appointments: true});
+                if(this.state.operation == true) {
+                    this.setState({go_operationList: true});
+                } else {
+                    this.setState({go_appointmentList: true});
+                }
             }
         })
     }
@@ -205,8 +210,10 @@ class RoomList extends Component {
     }
 
     render() {
-        if(this.state.go_appointments === true)
-            return(<Redirect to='/clinic-administrator/requests/appointments'></Redirect> ); 
+        if(this.state.go_appointmentList === true)
+            return(<Redirect to='/clinic-administrator/requests/appointments'></Redirect> );
+        if(this.state.go_operationList === true)
+            return(<Redirect to='/clinic-administrator/requests/operations'></Redirect> ); 
         let i = 0;
         return (
             <div class='row d-flex justify-content-center'>

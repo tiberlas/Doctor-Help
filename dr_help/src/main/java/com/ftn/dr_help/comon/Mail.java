@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.enums.RoleEnum;
@@ -114,6 +115,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 	
+	@Async
 	public void sendAppointmentBlessedEmail(AppointmentPOJO appointment) {
 		
 		SimpleMailMessage msg = new SimpleMailMessage();
@@ -135,6 +137,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 	
+	@Async
 	public void sendAppointmentApprovedToPatientEmail(AppointmentPOJO appointment) {
 			
 			SimpleMailMessage msg = new SimpleMailMessage();
@@ -154,6 +157,7 @@ public class Mail {
 		    javaMailSender.send(msg);
 	}
 	
+	@Async
 	public void sendAppointmentApprovedToDoctorEmail(AppointmentPOJO appointment) {
 		
 		SimpleMailMessage msg = new SimpleMailMessage();
@@ -171,6 +175,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 
+	@Async
 	public void sendAppointmentApprovedToNurseEmail(AppointmentPOJO appointment) {
 		
 		SimpleMailMessage msg = new SimpleMailMessage();

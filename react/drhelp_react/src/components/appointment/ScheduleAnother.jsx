@@ -125,7 +125,7 @@ class ScheduleAnother extends Component {
                     })
                 } else {
                     if(!this.state.errorDoctoCount) {
-                        axios.post("http://localhost:8080/api/doctors/schedules/operation/check", {
+                        axios.post("http://localhost:8080/api/operations/schedules/check", {
                                 dateAndTimeString: dateAndTime,
                                 doctor0: this.state.selectedDoctor[0],
                                 doctor1: this.state.selectedDoctor[1],
