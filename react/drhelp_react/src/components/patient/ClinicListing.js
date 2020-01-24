@@ -5,15 +5,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
-import {Link, Redirect} from 'react-router-dom';
-import { Dropdown, FormControl } from 'react-bootstrap';
-import DropdownMenu from 'react-bootstrap/DropdownMenu';
-import DropdownToggle from 'react-bootstrap/DropdownToggle';
-import DropdownItem from 'react-bootstrap/DropdownItem';
-import { MenuItem, Menu } from '@material-ui/core';
-import { Button} from 'react-bootstrap';
-import { Form, Submit } from 'react-bootstrap';
-import Select from 'react-select'
+import { Link } from 'react-router-dom';
+import { FormControl } from 'react-bootstrap';
+import Select from 'react-select';
+import Button from 'react-bootstrap/Button';
+
 
 class ClinicListing extends Component {
 
@@ -23,7 +19,7 @@ class ClinicListing extends Component {
 		appointmentTypes: [],
 		selectedDate: 'unfiltered', 
 		cantReserve : true, 
-		types : []
+		types : [], 
 	}
 
 	componentDidMount () {
@@ -63,13 +59,13 @@ class ClinicListing extends Component {
 		profileUrl += '/' + this.state.selectedDate;
 		return (
             <Fragment>
-                <TableCell><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
-				<TableCell><p class='text-white'>{row.address}</p></TableCell>
-				<TableCell><p class='text-white'>{row.city}</p></TableCell>
-				<TableCell><p class='text-white'>{row.state}</p></TableCell>
-				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
-				<TableCell><p class='text-white'>{row.price}</p></TableCell>
-                <TableCell hidden={this.state.cantReserve}><Link exact to = {profileUrl} >Reserve</Link></TableCell>
+                <TableCell width="350px"><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
+				<TableCell width="100px"><p class='text-white'>{row.address}</p></TableCell>
+				<TableCell width="100px"><p class='text-white'>{row.city}</p></TableCell>
+				<TableCell width="50px"><p class='text-white'>{row.state}</p></TableCell>
+				<TableCell width="50px"><p class='text-white'>{row.rating}</p></TableCell>
+				<TableCell width="75px"><p class='text-white'>{row.price}</p></TableCell>
+                <TableCell width="50px">< Link exact to = {profileUrl} hidden={this.state.cantReserve} >Reserve</Link></TableCell>
 				{/* <TableCell hidden={this.state.cantReserve}><Form onSubmit={newUrl}><p class='text-white'><Button type="submit" onClick={alert (profileUrl)} >Reserve</Button></p></Form></TableCell> */}
 		     </Fragment>
         )
@@ -89,18 +85,19 @@ class ClinicListing extends Component {
 		text = text.replace (' ', '_');
 		let element = document.getElementById ("picker");
 		let value = element.value;
-		if (value === "-") {
+		if (value === "") {
 			value = 'unfiltered'
 		}
 		if (text === "-") {
 			text = 'unfiltered'
 		}
-		// alert (text)
+		
 		this.setState ({
 			selectedDate : value,
 			activeFilter : text
-		})
-		if ((this.state.selectedDate === 'unfiltered') || (this.state.selectedFilter === 'unfiltered')) {
+		});
+		
+		if ((value === 'unfiltered') || (text === 'unfiltered')) {
 			// alert ("Unfiltered =D");
 			this.setState ({
 				cantReserve : true
@@ -168,105 +165,58 @@ class ClinicListing extends Component {
 		let requestPartOne = 'http://localhost:8080/api/clinics/listing/';
 		let requestPartTwo = dil + '/' + dat;
 		let wholeRequest = requestPartOne + requestPartTwo;
-		// alert (requestPartOne + requestPartTwo);
+		
 		axios.get (wholeRequest)
 		.then (response => {
 			this.setState ({
 				clinics: response.data.clinicList, 
 				appointmentTypes: response.data.procedureType, 
-				// activeFilter: text
+				
 			})
 		})
 	}
 
-	// handleSelect (obj) {
-	// 	// alert (obj.value)
-	// 	this.setState ({
-	// 		activeFilter : obj.value
-	// 	})
-	// }
-
-	// getTypeFilter = () => {
-	// 	return (
-	// 	<FormControl >
-	// 		<Select 
-	// 			// style="width:500px"
-	// 			// onChange = {this.handleSelect.bind(this)}
-	// 			onChange = {this.handleSelect.bind(this)}
-	// 			options={this.state.types}
-	// 		/>
-	// 	</FormControl>)
-	// }
-
+	
 	render () {
 		let size = this.state.clinics.length;
 		let numberOfTypes = this.state.appointmentTypes.length;
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
-					
-					
-					
+
+				
 
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>
-
-									{/* <FormControl >
-										<Select 
-											// style="width:500px"
-											onChange = {this.handleSelect.bind(this)}
-											options={this.state.appointmentTypes.map(term => ({ label: term, value: term }))}
-										></Select>
-									</FormControl> */}
-									{/* {this.getTypeFilter()} */}
-
-
+								<TableCell width="350px">
 									<form>
 										<Select 
-											// style="width:500px"
-											// onChange = {this.handleSelect.bind(this)} 
-											
 											onChange = {this.handleFilterType.bind(this)}
 											options={this.state.types}
 										/>
 									</form>
-
-
-									{/* <Dropdown id = "dropdown_id" class='success' onFocus='this.toggleMenu' >
-										<DropdownToggle id="dropdown-basic" >
-											{(this.state.activeFilter === 'unfiltered') ? ("Procedure types"): (this.state.activeFilter.replace('_', ' '))}
-										</DropdownToggle>
-										<DropdownMenu>
-											<MenuItem onClick={() => this.handleFilterType ('unfiltered')}>-</MenuItem>
-											{
-												numberOfTypes > 0 ? this.state.appointmentTypes.map (row => (
-													<MenuItem onClick={() => this.handleFilterType (row)}>{row}</MenuItem>
-												)) : null
-											}
-										</DropdownMenu>
-									</Dropdown> */}
 								</TableCell>
-								<TableCell>
+								<TableCell width="100px">
 									<form>
 										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
 									</form>
 								</TableCell>
-								<TableCell></TableCell>
-								<TableCell></TableCell>
-								<TableCell></TableCell>
-								<TableCell></TableCell>
-								<TableCell hidden={this.state.cantReserve}></TableCell>
+								<TableCell width="100px"></TableCell>
+								<TableCell width="50px"></TableCell>
+								<TableCell width="50px"></TableCell>
+								<TableCell width="75px"></TableCell>
+								<TableCell width="50px"></TableCell>
 							</TableRow>
-							<TableRow>
-								<TableCell><p class='text-success'>Clinic Name</p></TableCell>
-								<TableCell><p class='text-success'>Address</p></TableCell>
-								<TableCell><p class='text-success'>City</p></TableCell>
-								<TableCell><p class='text-success'>State</p></TableCell>
-								<TableCell><p class='text-success'>Rating</p></TableCell>
-								<TableCell><p class='text-success'>Price</p></TableCell>
-								<TableCell  hidden={this.state.cantReserve}><p class='text-success'>Reserve</p></TableCell>
+							<TableRow> 
+								<TableCell width="350px"><p class='text-success'>Clinic Name</p></TableCell>
+								<TableCell width="100px"><p class='text-success'>Address</p></TableCell>
+								<TableCell width="100px"><p class='text-success'>City</p></TableCell>
+								<TableCell width="50px"><p class='text-success'>State</p></TableCell>
+								<TableCell width="50px"><p class='text-success'>Rating</p></TableCell>
+								<TableCell width="75px"><p class='text-success'>Price</p></TableCell>
+								{/* <TableCell  hidden={this.state.cantReserve}> */}
+								<TableCell width="50px"><p class='text-success'>Reserve</p></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

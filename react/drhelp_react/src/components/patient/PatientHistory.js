@@ -14,7 +14,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { UserContext } from '../../context/UserContextProvider.js';
 import { Modal } from 'react-bootstrap';
-//import Option from 'react'
+
 
 class PatientHistory extends Component {
 
@@ -357,10 +357,9 @@ class PatientHistory extends Component {
 											</TableRow>
 										</TableBody>
 									</Table>
-									
 								</Modal.Body>
 							<Modal.Footer>
-								<Button variant="secondary" onClick={this.handleClose}>
+								<Button variant="primary" onClick={this.handleClose}>
 									Close
 								</Button>
 							</Modal.Footer>

@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import { TableHead, TableBody, TableRow, TableCell, MenuItem } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import { Dropdown, Button, Row } from 'react-bootstrap';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
@@ -10,7 +10,7 @@ import { UserContext } from '../../context/UserContextProvider';
 import ViewClinic from './ViewClinic';
 import FormControl from '@material-ui/core/FormControl';
 import Select from 'react-select'
-import FormHelperText from '@material-ui/core/FormHelperText';
+import { Modal } from 'react-bootstrap';
 
 
 class DoctorListing extends Component {
@@ -18,15 +18,22 @@ class DoctorListing extends Component {
 	state = {
 		filtered: false, 
 		doctors: [], 
-		
+		showDialog : false, 
+		showMissing : false, 
+		selectedRow : [], 
+		appointmentType : "", 
+		selectedDate : "", 
+		clinicName: "", 
+		clinicAddress : "", 
+		showFinished : false, 
+		redirect : false
 	}
 
 	static contextType = UserContext;
 
 	componentDidMount () {
 		let url = window.location.href.split ('/');
-		// alert ('Filter: ' + url[5] + '; Date: ' + url[6]);
-		//clinic={clinic_id}&appointment={appointment_type}&date={appointment_date}
+
 		let request = 'http://localhost:8080/api/doctors/listing';
 		request += '/clinic=' + url[4];
 		request += '&appointment=' + url[5];
@@ -39,23 +46,35 @@ class DoctorListing extends Component {
 		axios.get (request)
 		.then (response => {
 			this.setState ({
-				doctors: response.data
+				doctors: response.data.doctorListing, 
+				clinicName : response.data.clinicName, 
+				clinicAddress : response.data.address
 			})
+		})
+		this.setState ({
+			appointmentType : window.location.href.split('/')[5], 
+			selectedDate : window.location.href.split('/')[6]
 		})
 	}
 
 	handleSubmit (row) {
 		if (row.selectedTime === undefined) {
-			alert ("Nemam reda")
+			this.setState ({
+				showMissing : true
+			})
 		} 
 		else {
-			// alert ("Rezervisem kod " + row.firstName + " u " + row.selectedTime)
 			axios.post ('http://localhost:8080/api/appointments/add', {
 				doctorId : row.id, 
 				date: window.location.href.split('/')[6], 
 				time: row.selectedTime, 
 				patientId : this.context.user.id
-			}) 
+			})
+			.then (data => {
+				this.setState ({
+					showFinished : true
+				})
+			});
 		}
 	}
 
@@ -66,15 +85,36 @@ class DoctorListing extends Component {
 		// tekst.setValue("row.selectedTime")
 	}
 
+	handleRequest (row) {
+		if (row.selectedTime === undefined) {
+			// alert ("Undefined")
+			this.setState ({
+				showMissing : true
+			})
+			return;
+		}
+		this.setState ({
+			selectedRow : row, 
+		})
+		this.setState ({
+			showDialog : true
+		})
+	}
+
 	generateDoctorRows (row) {
 		let profileUrl = '/doctor/profile/'
 
+		let hide = false;
+		if (row.terms.length === 0) {
+			hide = true;
+		}
+		
 		return (
 			<Fragment>
-				<TableCell><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
-				<TableCell><p class='text-white'>{row.lastName}</p></TableCell>
-				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
-				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
+				<TableCell hidden={hide}><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
+				<TableCell hidden={hide}><p class='text-white'>{row.lastName}</p></TableCell>
+				<TableCell hidden={hide}><p class='text-white'>{row.rating}</p></TableCell>
+				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide}>
 					<FormControl class='text-black'>
 						<Select 
 							style="width:500px"
@@ -83,13 +123,46 @@ class DoctorListing extends Component {
 						></Select>
 					</FormControl>
 				</TableCell>
-				<TableCell hidden={(this.state.filtered) ? (false) : (true)} >
-					<Button onClick={() => this.handleSubmit(row)}>
-						Confirm
+				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide} >
+					<Button onClick={() => this.handleRequest(row)}>
+						Request
 					</Button>
 				</TableCell>
 			</Fragment>
 		)
+	}
+
+	closeDialog () {
+		this.setState ({
+			showDialog : false
+		})
+		
+		this.handleSubmit(this.state.selectedRow);
+	}
+
+	closeMissingDialog () {
+		this.setState ({
+			showMissing : false
+		})
+	}
+
+	closeFinishedDialog () {
+		this.setState ({
+			showFinished : false, 
+			redirect : true
+		})
+	}
+
+	quitDialog () {
+		this.setState ({
+			showDialog : false
+		})
+	}
+
+	quitFinishedDialog () {
+		this.setState ({
+			showFinished : false, 
+		})
 	}
 
 	render () {
@@ -97,8 +170,118 @@ class DoctorListing extends Component {
 		let size = this.state.doctors.length;
 
 		return (
+			
+
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
+
+					{
+						this.state.redirect && 
+						<Redirect to='/patient/appointmentList' from='/clinic/'/>
+					}
+
+					
+					<Modal show={this.state.showDialog} onHide={() => this.quitDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>Confirm appointment request:</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							<Table>
+								<TableRow>
+									<TableCell>
+										Appointment type:
+									</TableCell>
+									<TableCell>
+										{this.state.appointmentType.replace ('_', ' ')}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Clinic:
+									</TableCell>
+									<TableCell>
+										{this.state.clinicName}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Adddress:
+									</TableCell>
+									<TableCell>
+										{this.state.clinicAddress}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Doctor:
+									</TableCell>
+									<TableCell>
+										{this.state.selectedRow.lastName + " dr " + this.state.selectedRow.firstName}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Date:
+									</TableCell>
+									<TableCell>
+										{this.state.selectedDate.split('-')[2] + "." + this.state.selectedDate.split('-')[1] + "." + this.state.selectedDate.split('-')[0] + "."}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Time:
+									</TableCell>
+									<TableCell>
+										{this.state.selectedRow.selectedTime}
+									</TableCell>
+								</TableRow>
+							</Table>
+							<p>
+								<br/>
+								You are about to request this appointment. 
+							</p>
+							{/* <a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a> */}
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeDialog()}>
+								Confirm
+							</Button>
+						</Modal.Footer>
+					</Modal>
+
+					<Modal show={this.state.showMissing} onHide={() => this.closeMissingDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>Error!</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							<p>Please choose a time for your appointment</p>
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeMissingDialog()}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>
+
+					<Modal show={this.state.showFinished} onHide={() => this.quitFinishedDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>Request has been sent!</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							<a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a>
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeFinishedDialog()}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>
 
 				<div hidden={this.state.filtered}>
 					<ViewClinic hidden={this.state.filtered}></ViewClinic>
@@ -111,8 +294,8 @@ class DoctorListing extends Component {
 								<TableCell><p class='text-success'>First Name</p></TableCell>
 								<TableCell><p class='text-success'>Last Name</p></TableCell>
 								<TableCell><p class='text-success'>Rating</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Terms</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Confirm</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Terms</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Confirm</p></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
