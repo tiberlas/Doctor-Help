@@ -432,7 +432,7 @@ public class RoomService {
 	
 	private String findFirstFreeSchedule(RoomPOJO room) {
 		/*
-		 * Nadje prvi slobodni termin za sobu
+		 * Nadje prvi slobodni termin za sobu od trenutnog vremena(vremena poziva ove funkcije)
 		 * */
 		
 		Calendar begin = Calendar.getInstance(); //sadrzi pocetak prvog slobodnog termina; prvi je sutra u 8 
@@ -446,7 +446,22 @@ public class RoomService {
 		return findFirstFreeScheduleFromDate(room, begin);
 	}
 	
+	public String findFirstFreeScheduleFromDate(Long roomId, Calendar begin) {
+		try {
+			RoomPOJO room = repository.getOne(roomId);
+			
+			return findFirstFreeScheduleFromDate(room, begin);
+		} catch(Exception e) {
+			return null;
+		}
+		
+	}
+	
 	public String findFirstFreeScheduleFromDate(RoomPOJO room, Calendar begin) {
+		/**
+		 * nadje priv slobodan termin za sobu od trenutka (begin)
+		 * ako je bas trazeni termin (begin) slobodan on se vrati u string obliku
+		 * */
 		List<Date> dates = appointmentRepository.findScheduledDatesOfRoom(room.getId());
 		
 		Calendar duration = Calendar.getInstance();

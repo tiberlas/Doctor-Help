@@ -94,8 +94,10 @@ public class OperationController {
 		switch(status.getBlessedLvl()) {
 			case BLESSED:
 				return new ResponseEntity<>(HttpStatus.OK);
-			case REFUSED:
-				return new ResponseEntity<>(status.getRecomendedDate(), HttpStatus.CONFLICT);//409
+			case DOCTORS_REFUSED:
+				return new ResponseEntity<>("DOCTOR#"+status.getRecomendedDate(), HttpStatus.CONFLICT);//409
+			case ROOM_REFUSED:
+				return new ResponseEntity<>("ROOM#"+status.getRecomendedDate(), HttpStatus.CONFLICT);
 			default:
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);//400
 		}

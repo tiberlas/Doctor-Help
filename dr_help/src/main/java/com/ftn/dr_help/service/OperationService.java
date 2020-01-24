@@ -45,6 +45,9 @@ public class OperationService {
 	private LeaveRequestService  leaveRequestsService;
 	
 	@Autowired
+	private RoomService roomService;
+	
+	@Autowired
 	private CalculateFirstFreeSchedule calculate;
 	
 	@Autowired
@@ -227,6 +230,14 @@ public class OperationService {
 			//sva tri datuma su ista
 			
 			if(free.equals(begin0)) {
+				//doktorima odgovara vreme
+				String roomFreeDate = roomService.findFirstFreeScheduleFromDate(request.getRoomId(), free);
+				String freeString = dateConvertor.dateForFrontEndString(free);
+				if(!freeString.equals(roomFreeDate)) {
+					//soba predlaze drugi termin
+					return new OperationBlessingInnerDTO(roomFreeDate, OperationBlessing.ROOM_REFUSED);
+				}
+				
 				//zakazivanje operacije
 				OperationPOJO operation = operationRepository.findOneById(request.getOperationId());
 				operation.setDate(free);
@@ -240,7 +251,7 @@ public class OperationService {
 			} else {
 				return new OperationBlessingInnerDTO(
 						dateConvertor.dateForFrontEndString(free),
-						OperationBlessing.REFUSED
+						OperationBlessing.DOCTORS_REFUSED
 						);
 			}
 		} catch (Exception e) {

@@ -7,18 +7,20 @@ public class OperationBlessingDTO {
 	private Long doctor2;
 	private String dateAndTimeString;
 	private Long operationId;
+	private Long roomId;
 	
 	public OperationBlessingDTO() {
 		super();
 	}
 	
-	public OperationBlessingDTO(Long doctor0, Long doctor1, Long doctor2, String dateAndTimeString, Long operationId) {
+	public OperationBlessingDTO(Long doctor0, Long doctor1, Long doctor2, String dateAndTimeString, Long operationId, Long roomId) {
 		super();
 		this.doctor0 = doctor0;
 		this.doctor1 = doctor1;
 		this.doctor2 = doctor2;
 		this.dateAndTimeString = dateAndTimeString;
 		this.operationId = operationId;
+		this.roomId = roomId;
 	}
 
 	public Long getDoctor0() {
@@ -59,5 +61,13 @@ public class OperationBlessingDTO {
 
 	public void setOperationId(Long operationId) {
 		this.operationId = operationId;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
 	}
 }

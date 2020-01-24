@@ -168,13 +168,19 @@ class ScheduleOperation extends Component {
                 operationId: this.props.operationId,
                 doctor0: this.state.selectedDoctor[0],
                 doctor1: this.state.selectedDoctor[1],
-                doctor2: this.state.selectedDoctor[2]
+                doctor2: this.state.selectedDoctor[2],
+                roomId: this.props.roomId
             }).then(response => {
                 this.setState({errorDateAndTime: false, success: true})
             }).catch(error => {
                 if(error.response.status == 409) {
                     //dobijen predlog za drugi termin
-                    this.setState({errorDateAndTime: true, scheduleRecomendedDate: error.response.data})
+                    let errorParts = error.response.data.split("#");
+                    if(errorParts[0] == 'DOCTOR') {
+                        this.setState({errorDoctors: true, scheduleRecomendedDate: error.response.data})
+                    } else {
+                        this.setState({errorDateAndTime: true, scheduleRecomendedDate: error.response.data})
+                    }
                 } else {
                     if(this.state.errorDoctoCount == false) {
                         this.setState({fatalError: true})
