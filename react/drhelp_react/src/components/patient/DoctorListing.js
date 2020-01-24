@@ -57,6 +57,32 @@ class DoctorListing extends Component {
 		})
 	}
 
+	handleUpdate () {
+		let url = window.location.href.split ('/');
+
+		let request = 'http://localhost:8080/api/doctors/listing';
+		request += '/clinic=' + url[4];
+		request += '&appointment=' + url[5];
+		request += '&date=' + url[6];
+		if ((url[5] !== 'unfiltered') && (url[6] !== 'unfiltered')) {
+			this.setState ({
+				filtered : true
+			});
+		}
+		axios.get (request)
+		.then (response => {
+			this.setState ({
+				doctors: response.data.doctorListing, 
+				clinicName : response.data.clinicName, 
+				clinicAddress : response.data.address
+			})
+		})
+		this.setState ({
+			appointmentType : window.location.href.split('/')[5], 
+			selectedDate : window.location.href.split('/')[6]
+		})
+	}
+
 	handleSubmit (row) {
 		if (row.selectedTime === undefined) {
 			this.setState ({
@@ -70,10 +96,12 @@ class DoctorListing extends Component {
 				time: row.selectedTime, 
 				patientId : this.context.user.id
 			})
-			.then (data => {
+			.then (response => {
 				this.setState ({
 					showFinished : true
 				})
+				//this.handleUpdate();
+				alert (response.data)
 			});
 		}
 	}

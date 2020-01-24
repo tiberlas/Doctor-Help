@@ -109,6 +109,9 @@ public class DailySchedule {
 		endTime.add (Calendar.HOUR_OF_DAY, startTime.get (Calendar.HOUR_OF_DAY));
 		endTime.add (Calendar.MINUTE, startTime.get (Calendar.MINUTE));
 		
+		System.out.println("Pokusavam da ubacim termin od " + startTime.getTime() + " do " + endTime.getTime());
+		
+		
 //		System.out.println ("Start time: " + startTime.get (Calendar.YEAR) + "-" 
 //				+ startTime.get (Calendar.MONTH) + "-" 
 //				+ startTime.get (Calendar.DAY_OF_MONTH) + " " 
@@ -174,11 +177,11 @@ public class DailySchedule {
 		temp.setTime(start.getTime());
 //		System.out.println("Petljam:");
 		while ((temp.get(Calendar.HOUR_OF_DAY) < end.get(Calendar.HOUR_OF_DAY)) || (temp.get(Calendar.MINUTE) < end.get(Calendar.MINUTE))) {
-//			System.out.println ("rangeIsFree Interval: " + temp.get (Calendar.YEAR) + "-" 
-//					+ temp.get (Calendar.MONTH) + "-" 
-//					+ temp.get (Calendar.DAY_OF_MONTH) + " " 
-//					+ temp.get (Calendar.HOUR_OF_DAY) + ":" 
-//					+ temp.get (Calendar.MINUTE));
+			System.out.println ("rangeIsFree Interval: " + temp.get (Calendar.YEAR) + "-" 
+					+ temp.get (Calendar.MONTH) + "-" 
+					+ temp.get (Calendar.DAY_OF_MONTH) + " " 
+					+ temp.get (Calendar.HOUR_OF_DAY) + ":" 
+					+ temp.get (Calendar.MINUTE));
 			Term curr = getTerm (temp);
 			if (curr == null) {
 				return false;

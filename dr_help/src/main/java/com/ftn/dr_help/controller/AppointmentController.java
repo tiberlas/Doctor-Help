@@ -1,6 +1,7 @@
 package com.ftn.dr_help.controller;
 
 
+import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,13 +98,12 @@ public class AppointmentController {
 	
 	@PostMapping (value = "add", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<String> add (@RequestBody AddAppointmentDTO dto) throws NumberFormatException, ParseException {
+	public ResponseEntity<Boolean> add (@RequestBody AddAppointmentDTO dto) throws NumberFormatException, ParseException {
 
 		String dateString = dto.getDate() + " " + dto.getTime() + ":00";
 //		System.out.println("Date string: " + dateString);
-		
-		appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));
-		return null;
+		Boolean retVal = appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));
+		return new ResponseEntity<Boolean> (retVal, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/done_appointments/doctor/patient={insuranceNumber}")

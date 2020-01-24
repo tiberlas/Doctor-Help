@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.AppointmentListDTO;
@@ -25,6 +26,7 @@ import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
+import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
@@ -281,9 +283,21 @@ public class AppointmentService {
 		return dto;
 	}
 	
-	
-	
 	public boolean addAppointment (Long doctorId, String dateString, Long patientId) throws ParseException {
+
+		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
+		
+		
+//		Calendar appointmentDate = Calendar.getInstance();
+//		appointmentDate.set(Calendar.YEAR, Integer.parseInt(dateString.split(" ")[0].split("-")[0]));
+//		appointmentDate.set(Calendar.MONTH, Integer.parseInt(dateString.split(" ")[0].split("-")[1]));
+//		appointmentDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateString.split(" ")[0].split("-")[2]));
+//		appointmentDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateString.split(" ")[1].split(":")[0]));
+//		appointmentDate.set(Calendar.MINUTE, Integer.parseInt(dateString.split(" ")[1].split(":")[1]));
+//
+//		System.out.println("Extracted time: " + appointmentDate.getTime ());
+		
+		
 		AppointmentPOJO newAppointment = new AppointmentPOJO ();
 		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
 		Date date = sdf.parse(dateString);
@@ -291,19 +305,99 @@ public class AppointmentService {
 		calendar.setTime(date);
 		newAppointment.setDate(calendar);
 		newAppointment.setDeleted(false);
-		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
 		newAppointment.setDoctor(doctor);
 		newAppointment.setPatient(patientRepository.getOne(patientId));
 		newAppointment.setStatus(AppointmentStateEnum.REQUESTED);
 		newAppointment.setProcedureType(doctor.getProcedureType());
 		newAppointment.setRoom(null);
 		newAppointment.setNurse(null);
-		newAppointment.setDiscount(0);
+		newAppointment.setDiscount(0.0);
 		newAppointment.setExaminationReport(null);
-		appointmentRepository.save(newAppointment);
+		
+		
+		Shift shift = null;		
+		switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+			case Calendar.MONDAY: 
+				shift = doctor.getMonday();
+				break;
+			case Calendar.TUESDAY: 
+				shift = doctor.getTuesday();
+				break;
+			case Calendar.WEDNESDAY: 
+				shift = doctor.getWednesday();
+				break;
+			case Calendar.THURSDAY: 
+				shift = doctor.getThursday();
+				break;
+			case Calendar.FRIDAY: 
+				shift = doctor.getFriday();
+				break;
+			case Calendar.SATURDAY: 
+				shift = doctor.getSaturday();
+				break;
+			case Calendar.SUNDAY: 
+				shift = doctor.getSunday();
+				break;
+		}
+		
+//		System.out.println("//////////////////////////////////////////////////////////////////////////////////");
+//		System.out.println("DateString: " + dateString);
+//		System.out.println("Date after extraction: " + date.getTime());
+		DailySchedule dailySchedule = new DailySchedule (calendar, shift);
+		if (insertNewAppointment(newAppointment, calendar, shift, doctor)) {
+			System.out.println("Mogu da dodam ovo");
+			return true;
+		} 
+		else {
+			System.out.println("E ipak ne mogi...");
+		}
+
+//		System.out.println("//////////////////////////////////////////////////////////////////////////////////");
+		
 		
 		return false;
 	}
+	
+	@Transactional (isolation = Isolation.READ_UNCOMMITTED)
+	private Boolean insertNewAppointment (AppointmentPOJO newAppointment, Calendar calendar, Shift shift, DoctorPOJO doctor) {
+		Calendar calendarMin = Calendar.getInstance();
+		calendarMin.set(Calendar.HOUR_OF_DAY, 0);
+		calendarMin.set(Calendar.MINUTE, 0);
+		calendarMin.set(Calendar.SECOND, 0);
+		calendarMin.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+		calendarMin.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+		calendarMin.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+		Calendar calendarMax = Calendar.getInstance();
+		calendarMax.set(Calendar.HOUR_OF_DAY, 23);
+		calendarMax.set(Calendar.MINUTE, 45);
+		calendarMax.set(Calendar.SECOND, 00);
+		calendarMax.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+		calendarMax.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+		calendarMax.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+		System.out.println("Date min is: " + calendarMin.getTime());
+		System.out.println("Date max is: " + calendarMax.getTime());
+		
+		DailySchedule dailySchedule;
+		try {
+			dailySchedule = new DailySchedule (calendar, shift);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		List<AppointmentPOJO> appointments =  appointmentRepository.getDoctorsAppointments(doctor.getId(), calendarMin, calendarMax);
+		for (AppointmentPOJO a : appointments) {
+			dailySchedule.addAppointment(a);
+			System.out.println("Adding an appointment at: " + a.getDate().getTime());
+		}
+		System.out.println("And the new appointment I'm tryingt to add is at: " + newAppointment.getDate().getTime());
+		if (dailySchedule.canAdd(newAppointment)) {
+			appointmentRepository.save(newAppointment);
+			return true;
+		}
+		return false;
+	}
+	
 	
 	
 	private DoctorAppointmentDTO convertAppointmentToDoctorDTO(AppointmentPOJO appointment) {
@@ -761,6 +855,7 @@ public class AppointmentService {
 			System.out.println("OI, I just woke up, egg");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			return false;
 		}
 		if (appointment.getStatus() == AppointmentStateEnum.AVAILABLE) {
 			appointmentRepository.reserveAppointment(appointmentId, patientId);
