@@ -1,19 +1,12 @@
-import React, { Component, useState } from 'react';
-import Button from 'react-bootstrap/Button'
+import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import NavLink from 'react-bootstrap/NavLink'
 import Navbar from 'react-bootstrap/Navbar'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
 import {CentreAdminContext} from '../../context/CentreAdminContextProvider';
 import {DropdownItem} from  'react-bootstrap'
-import {DropdownToggle, DropdownMenu, NavbarToggler, Collapse,
-  UncontrolledDropdown, NavItem} from 'reactstrap'
+import {NavbarToggler, Collapse} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
-import MenuItem from 'react-bootstrap/DropdownMenu';
 
 
 class CentreAdminHeader extends Component {
@@ -42,6 +35,7 @@ class CentreAdminHeader extends Component {
       
         return ( 
             <Navbar bg="light" expand="lg" id="navbarColor01">
+              {/* <div class="navbar-inner" style={{background: "transparent"}}> */}
             <Navbar.Brand >
               <Nav> 
                   <Nav.Link>
@@ -98,6 +92,7 @@ class CentreAdminHeader extends Component {
                 </Nav.Link>
             </Nav>
         </Collapse>
+        {/* </div> */}
         </Navbar>
          );
     }

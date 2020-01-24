@@ -39,7 +39,8 @@
     "react-star-rating-component": "^1.4.1",
     "react-time-picker": "^3.8.0",
     "react-transition-group": "^4.3.0",
-    "reactstrap": "^8.2.0"
+    "reactstrap": "^8.2.0",
+    "video.js": "^7.6.6"
   },
   "scripts": {
     "start": "react-scripts start",

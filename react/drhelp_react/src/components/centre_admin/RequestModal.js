@@ -9,7 +9,8 @@ class RequestModal extends React.Component {
         decline: false,
         declineReason: "",
         sending: false,
-        success: false
+        success: false,
+        conflict: false
     }
 
     displayUserRequestTable = () => {
@@ -68,6 +69,8 @@ class RequestModal extends React.Component {
                 this.setState({success: true, sending: false}, ()=>{
                     this.props.update()
                  })
+            }).catch(error => {
+                this.setState({sending: false, conflict: true}, ()=>this.props.update())
             })
         })
     }
@@ -82,6 +85,8 @@ class RequestModal extends React.Component {
                            success: true,
                            sending: false
                        }, ()=> this.props.update()) 
+             }).catch(error => {
+                 this.setState({sending: false, conflict: true}, ()=> {this.props.update()})
              })
         })
     }
@@ -121,12 +126,13 @@ class RequestModal extends React.Component {
                                                 <Button variant="outline-primary"  onClick = {this.sendDecline}>Send</Button>
                                                 </Fragment>}
 
-                                            {/* decline not clicked:  */}
-                                            {!this.state.decline && !this.state.success && <Fragment> <Button variant="outline-danger" onClick={()=>{this.setState({decline: true})}}>Decline</Button>&nbsp;&nbsp;
+                                            {/* decline not clicked:  ako nisi u konfliktu i ako nisi uspesan, prikazi decline i accept */}
+                                            {(!this.state.decline && !this.state.success && !this.state.conflict) && <Fragment> <Button variant="outline-danger" onClick={()=>{this.setState({decline: true})}}>Decline</Button>&nbsp;&nbsp;
                                             <Button variant="outline-success" onClick={this.sendAccept}>Accept</Button> </Fragment>}
                                             </Fragment>}
 
                                         {this.state.success && <div class="valid-feedback d-block"> Success. </div>}
+                                        {this.state.conflict && <div class="invalid-feedback d-block"> Something went wrong. Please try again </div>}
 
                                         </div>
                                 </div>

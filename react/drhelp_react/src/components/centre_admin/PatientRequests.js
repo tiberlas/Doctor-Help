@@ -22,7 +22,6 @@ class PatientRequests extends Component {
 
     setRequestSelected = (request) => {
         this.setState({selectedRequest: request, showRequestModal: true}, () => {
-            console.log("and i selected", this.state.selectedRequest)
         })
     }
 

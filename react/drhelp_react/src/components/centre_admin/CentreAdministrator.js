@@ -11,6 +11,7 @@ import CentreAdminChangePassword from './CentreAdminChangePassword'
 import CentreAdminDashboard from './CentreAdminDashboard'
 import { ClinicOverview } from './dashboard/clinics/ClinicOverview'
 import { AdminOverview } from './dashboard/admins/AdminOverview'
+import HomeLanding from './home_page/HomeLanding'
 
 class CenterAdministrator extends Component {
     state = {
@@ -64,6 +65,7 @@ handleCentreAdmin = () => {
                     <Route path="/admin/dashboard/a" ><AdminOverview /> </Route>
                     <Route path="/admin/dashboard/d-m" ><CentreAdminDashboard /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>
+                    <Route path="/home"> <HomeLanding/> </Route>
                    
                 </Switch>
                 </CentreAdminContextProvider>
