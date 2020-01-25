@@ -138,6 +138,20 @@ public class PatientHistoryDTO {
 		if (date.split(":")[1].length() < 2) {
 			date = date.split(":")[0] + ":0" + date.split(":")[1];
 		}
+//		System.out.println("Date is: " + date);
+//		String[] parts = date.split(" ");
+//		parts = parts[0].split(".");
+//		System.out.println(parts.length);
+//		for (String s : parts) {
+//			System.out.println("Part: " + s);
+//		}
+//		if (date.split(".")[0].length() < 2) {
+//			date = "0" + date;
+//		}
+//		if (date.split(".")[1].length() < 2) {
+//			date = date.split(".")[0] + ".0" + date.split(".")[1] + "." + date.split(".")[2];
+//		}
+		
 		this.procedureType = appointment.getProcedureType().getName();
 		this.doctor = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
 		if (appointment.getNurse() != null) {

@@ -4,6 +4,7 @@ package com.ftn.dr_help.controller;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -97,9 +98,14 @@ public class AppointmentController {
 	@PostMapping (value = "add", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<Boolean> add (@RequestBody AddAppointmentDTO dto) throws NumberFormatException, ParseException {
-
+		try {
+			TimeUnit.SECONDS.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String dateString = dto.getDate() + " " + dto.getTime() + ":00";
-//		System.out.println("Date string: " + dateString);
+
 		Boolean retVal = appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));
 		return new ResponseEntity<Boolean> (retVal, HttpStatus.OK);
 	}

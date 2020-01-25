@@ -19,14 +19,17 @@ class DoctorListing extends Component {
 		filtered: false, 
 		doctors: [], 
 		showDialog : false, 
-		showMissing : false, 
+		showMissing : false,
+		showErrror : false,  
 		selectedRow : [], 
 		appointmentType : "", 
 		selectedDate : "", 
 		clinicName: "", 
 		clinicAddress : "", 
 		showFinished : false, 
-		redirect : false
+		redirect : false, 
+		finishedTitle : "", 
+		finishedContent : ""
 	}
 
 	static contextType = UserContext;
@@ -97,11 +100,21 @@ class DoctorListing extends Component {
 				patientId : this.context.user.id
 			})
 			.then (response => {
-				this.setState ({
-					showFinished : true
-				})
-				//this.handleUpdate();
-				alert (response.data)
+				if (response.data) {
+					this.setState ({
+						showFinished : true, 
+						finishedTitle : "Congratulations!!!1!", 
+						finishedContent : "Your request has been sent. "
+					})
+				}
+				else {
+					this.setState ({
+						showError : true
+					})
+				}
+				this.handleUpdate();
+				//alert (response.data)
+					
 			});
 		}
 	}
@@ -190,6 +203,12 @@ class DoctorListing extends Component {
 	quitFinishedDialog () {
 		this.setState ({
 			showFinished : false, 
+		})
+	}
+
+	closeErrorDialog () {
+		this.setState ({
+			showError : false, 
 		})
 	}
 
@@ -295,17 +314,35 @@ class DoctorListing extends Component {
 						</Modal.Footer>
 					</Modal>
 
-					<Modal show={this.state.showFinished} onHide={() => this.quitFinishedDialog()}>
+					<Modal show={this.state.showFinished} onHide={() => this.closeFinishedDialog()}>
 						<Modal.Header closeButton>
-							<Modal.Title>Request has been sent!</Modal.Title>
+							<Modal.Title>{this.state.finishedTitle}}</Modal.Title>
 						</Modal.Header>
 
 						<Modal.Body>
+							{this.state.finishedContent}
+							<br />
 							<a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a>
 						</Modal.Body>
 
 						<Modal.Footer>
 							<Button variant="primary" onClick={() => this.closeFinishedDialog()}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>
+
+					<Modal show={this.state.showError} onHide={() => this.closeErrorDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>Request failed!</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							<p>We're sorry to report that we have made an error, and your request could not pass through. Please try and request a different appointment. </p>
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeErrorDialog()}>
 								Close
 							</Button>
 						</Modal.Footer>
