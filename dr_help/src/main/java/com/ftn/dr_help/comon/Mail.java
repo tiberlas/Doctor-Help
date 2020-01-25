@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.OperationPOJO;
 
 @Service
 public class Mail {
@@ -191,6 +193,45 @@ public class Mail {
 	    msg.setText(text);
 	
 	    javaMailSender.send(msg);
+	}
+	
+	@Async
+	public void sendOperationApprovedToDoctorsEmail(DoctorPOJO doctor, OperationPOJO operation) {
+		
+		SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(doctor.getEmail());
+	
+	    msg.setSubject("DrHelp operation scheduled");
+	    String text = "Dear " + doctor.getFirstName() +" "+doctor.getLastName()+ 
+	    		" you have an operation on "+
+	    		dateConvertor.dateForFrontEndString(operation.getDate())+", in room "+
+			    operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+	    
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	}
+	
+	@Async
+	public void sendOperationApprovedToPatientEmail(OperationPOJO operation) {
+			
+			SimpleMailMessage msg = new SimpleMailMessage();
+		    msg.setTo(operation.getPatient().getEmail());
+		
+		    msg.setSubject("DrHelp operation scheduled");
+		    String text = "Dear " + operation.getPatient().getFirstName() +" "+operation.getPatient().getLastName()+ 
+		    		" your operation for " +operation.getOperationType().getName()+" has been schedule for "+
+		    		dateConvertor.dateForFrontEndString(operation.getDate())+", in room "+
+		    		operation.getRoom().getName()+" number "+operation.getRoom().getNumber()+
+		    		". Operation will be executed by dr. "+operation.getFirstDoctor().getFirstName()+" "+operation.getFirstDoctor().getLastName()+
+		    		", dr. "+operation.getSecondDoctor().getFirstName()+" "+operation.getSecondDoctor().getLastName()+
+		    		" and dr. "+operation.getThirdDoctor().getFirstName()+" "+operation.getThirdDoctor().getLastName()+".";
+		    
+		    text += "\n\n\n" + "Forever helping, drHelp.";
+		    msg.setText(text);
+		
+		    javaMailSender.send(msg);
 	}
 	
 }

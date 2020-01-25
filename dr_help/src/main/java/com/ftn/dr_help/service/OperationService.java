@@ -246,6 +246,11 @@ public class OperationService {
 				operation.setThirdDoctor(doctorRepository.getOne(request.getDoctor2()));
 				operation.setStatus(OperationStatus.APPROVED);
 				
+				mailSender.sendOperationApprovedToDoctorsEmail(operation.getFirstDoctor(), operation);
+				mailSender.sendOperationApprovedToDoctorsEmail(operation.getSecondDoctor(), operation);
+				mailSender.sendOperationApprovedToDoctorsEmail(operation.getThirdDoctor(), operation);
+				mailSender.sendOperationApprovedToPatientEmail(operation);
+				
 				operationRepository.save(operation);
 				return new OperationBlessingInnerDTO("BLESSED", OperationBlessing.BLESSED);
 			} else {
