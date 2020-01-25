@@ -478,6 +478,7 @@ public class DoctorService {
 			else {
 				temp.setRating ("/");
 			}
+			
 			List<Term> terms = schedule.getAvaliableTerms(d.getProcedureType());
 			List<String> times = new ArrayList<String> ();
 			for (Term t : terms) {

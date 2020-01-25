@@ -133,7 +133,7 @@ class DoctorListing extends Component {
 		let profileUrl = '/doctor/profile/'
 
 		let hide = false;
-		if (row.terms.length === 0) {
+		if ((row.terms.length === 0) && this.state.filtered) {
 			hide = true;
 		}
 		
@@ -315,7 +315,7 @@ class DoctorListing extends Component {
 					<ViewClinic hidden={this.state.filtered}></ViewClinic>
 				</div>
 
-				<h3>{(this.state.filtered) ? ("Filtered doctors") : ("All doctors")}</h3>
+				<h3>{(this.state.filtered) ? ("Request an " + this.state.appointmentType + " appointment at " + this.state.clinicName + " hospital:") : ("All doctors")}</h3>
 					<Table>
 						<TableHead>
 							<TableRow>

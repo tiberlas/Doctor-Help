@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.AppointmentListDTO;
@@ -286,18 +285,7 @@ public class AppointmentService {
 	public boolean addAppointment (Long doctorId, String dateString, Long patientId) throws ParseException {
 
 		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
-		
-		
-//		Calendar appointmentDate = Calendar.getInstance();
-//		appointmentDate.set(Calendar.YEAR, Integer.parseInt(dateString.split(" ")[0].split("-")[0]));
-//		appointmentDate.set(Calendar.MONTH, Integer.parseInt(dateString.split(" ")[0].split("-")[1]));
-//		appointmentDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateString.split(" ")[0].split("-")[2]));
-//		appointmentDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateString.split(" ")[1].split(":")[0]));
-//		appointmentDate.set(Calendar.MINUTE, Integer.parseInt(dateString.split(" ")[1].split(":")[1]));
-//
-//		System.out.println("Extracted time: " + appointmentDate.getTime ());
-		
-		
+			
 		AppointmentPOJO newAppointment = new AppointmentPOJO ();
 		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
 		Date date = sdf.parse(dateString);
@@ -313,7 +301,6 @@ public class AppointmentService {
 		newAppointment.setNurse(null);
 		newAppointment.setDiscount(0.0);
 		newAppointment.setExaminationReport(null);
-		
 		
 		Shift shift = null;		
 		switch (calendar.get(Calendar.DAY_OF_WEEK)) {
@@ -340,61 +327,67 @@ public class AppointmentService {
 				break;
 		}
 		
-//		System.out.println("//////////////////////////////////////////////////////////////////////////////////");
-//		System.out.println("DateString: " + dateString);
-//		System.out.println("Date after extraction: " + date.getTime());
-		DailySchedule dailySchedule = new DailySchedule (calendar, shift);
-		if (insertNewAppointment(newAppointment, calendar, shift, doctor)) {
-			System.out.println("Mogu da dodam ovo");
+///////////////////////////////////////////////////////////////////////////
+		
+		Date d = newAppointment.getProcedureType().getDuration();
+		
+		Calendar duration = Calendar.getInstance();
+		duration.setTime(d);
+		
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+		startTime.setTime(newAppointment.getDate().getTime());
+		endTime.setTime(newAppointment.getDate().getTime());
+		
+		startTime.add(Calendar.HOUR_OF_DAY, - duration.get(Calendar.HOUR_OF_DAY));
+		startTime.add(Calendar.MINUTE, - duration.get(Calendar.MINUTE) + 1);
+		
+		endTime.add(Calendar.HOUR_OF_DAY, duration.get(Calendar.HOUR_OF_DAY));
+		endTime.add(Calendar.MINUTE, duration.get(Calendar.MINUTE) - 1);
+		
+		if ((startTime.get(Calendar.YEAR) != newAppointment.getDate().get(Calendar.YEAR)) 
+					|| (startTime.get(Calendar.MONTH) != newAppointment.getDate().get(Calendar.MONTH)) 
+					|| (startTime.get(Calendar.DAY_OF_YEAR) != newAppointment.getDate().get(Calendar.DAY_OF_YEAR))) {				
+			startTime.add(Calendar.DAY_OF_MONTH, 1);
+			startTime.set(Calendar.HOUR_OF_DAY, 0);
+			startTime.set(Calendar.MINUTE, 0);
+			startTime.set(Calendar.SECOND, 0);
+		}
+		if ((endTime.get(Calendar.YEAR) != newAppointment.getDate().get(Calendar.YEAR)) 
+					|| (endTime.get(Calendar.MONTH) != newAppointment.getDate().get(Calendar.MONTH)) 
+					|| (endTime.get(Calendar.DAY_OF_YEAR) != newAppointment.getDate().get(Calendar.DAY_OF_YEAR))) {				
+			endTime.add(Calendar.DAY_OF_MONTH, -1);
+			endTime.set(Calendar.HOUR_OF_DAY, 23);
+			endTime.set(Calendar.MINUTE, 59);
+			endTime.set(Calendar.SECOND, 59);
+		}
+		
+/////////////////////////////////////////////////////////////////////////
+		if (insertNewAppointment(newAppointment, shift, doctor, startTime, endTime)) {
+//			System.out.println("Mogu da dodam ovo");
 			return true;
 		} 
 		else {
-			System.out.println("E ipak ne mogi...");
+//			System.out.println("E ipak ne mogi...");
 		}
-
-//		System.out.println("//////////////////////////////////////////////////////////////////////////////////");
-		
 		
 		return false;
 	}
 	
 	@Transactional (isolation = Isolation.READ_UNCOMMITTED)
-	private Boolean insertNewAppointment (AppointmentPOJO newAppointment, Calendar calendar, Shift shift, DoctorPOJO doctor) {
-		Calendar calendarMin = Calendar.getInstance();
-		calendarMin.set(Calendar.HOUR_OF_DAY, 0);
-		calendarMin.set(Calendar.MINUTE, 0);
-		calendarMin.set(Calendar.SECOND, 0);
-		calendarMin.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
-		calendarMin.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
-		calendarMin.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
-		Calendar calendarMax = Calendar.getInstance();
-		calendarMax.set(Calendar.HOUR_OF_DAY, 23);
-		calendarMax.set(Calendar.MINUTE, 45);
-		calendarMax.set(Calendar.SECOND, 00);
-		calendarMax.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
-		calendarMax.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
-		calendarMax.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
-		System.out.println("Date min is: " + calendarMin.getTime());
-		System.out.println("Date max is: " + calendarMax.getTime());
+	private Boolean insertNewAppointment (AppointmentPOJO newAppointment, Shift shift, DoctorPOJO doctor, Calendar startTime, Calendar endTime) {
 		
-		DailySchedule dailySchedule;
-		try {
-			dailySchedule = new DailySchedule (calendar, shift);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return false;
-		}
+//		System.out.println("Definitive start time: " + startTime.getTime());
+//		System.out.println("Definitive end time: " + endTime.getTime());
 		
-		List<AppointmentPOJO> appointments =  appointmentRepository.getDoctorsAppointments(doctor.getId(), calendarMin, calendarMax);
-		for (AppointmentPOJO a : appointments) {
-			dailySchedule.addAppointment(a);
-			System.out.println("Adding an appointment at: " + a.getDate().getTime());
-		}
-		System.out.println("And the new appointment I'm tryingt to add is at: " + newAppointment.getDate().getTime());
-		if (dailySchedule.canAdd(newAppointment)) {
+		List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(doctor.getId(), startTime, endTime);
+		
+		if (appointments.size() == 0) {
+//			System.out.println("*****    Nemam nista => slobodan sam    *****");
 			appointmentRepository.save(newAppointment);
 			return true;
 		}
+		
 		return false;
 	}
 	

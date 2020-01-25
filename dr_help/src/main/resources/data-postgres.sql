@@ -199,7 +199,7 @@ insert into appointments (date, discount, status, doctor_id, examination_report_
 values ('2019-11-24', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
 --novi podaci
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-20 15:30:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
+values ('2020-1-20 15:06:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-1-22 08:00:00', 0, 'APPROVED', 2, null, 1, 2, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)

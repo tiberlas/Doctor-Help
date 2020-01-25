@@ -109,7 +109,7 @@ public class DailySchedule {
 		endTime.add (Calendar.HOUR_OF_DAY, startTime.get (Calendar.HOUR_OF_DAY));
 		endTime.add (Calendar.MINUTE, startTime.get (Calendar.MINUTE));
 		
-		System.out.println("Pokusavam da ubacim termin od " + startTime.getTime() + " do " + endTime.getTime());
+//		System.out.println("Pokusavam da ubacim termin od " + startTime.getTime() + " do " + endTime.getTime());
 		
 		
 //		System.out.println ("Start time: " + startTime.get (Calendar.YEAR) + "-" 
@@ -176,12 +176,12 @@ public class DailySchedule {
 		Calendar temp = Calendar.getInstance();
 		temp.setTime(start.getTime());
 //		System.out.println("Petljam:");
-		while ((temp.get(Calendar.HOUR_OF_DAY) < end.get(Calendar.HOUR_OF_DAY)) || (temp.get(Calendar.MINUTE) < end.get(Calendar.MINUTE))) {
-			System.out.println ("rangeIsFree Interval: " + temp.get (Calendar.YEAR) + "-" 
-					+ temp.get (Calendar.MONTH) + "-" 
-					+ temp.get (Calendar.DAY_OF_MONTH) + " " 
-					+ temp.get (Calendar.HOUR_OF_DAY) + ":" 
-					+ temp.get (Calendar.MINUTE));
+		while ((temp.get(Calendar.HOUR_OF_DAY) < end.get(Calendar.HOUR_OF_DAY)) || (temp.get(Calendar.MINUTE) <= end.get(Calendar.MINUTE) && temp.get(Calendar.HOUR_OF_DAY) == end.get(Calendar.HOUR_OF_DAY))) {
+//			System.out.println ("rangeIsFree Interval: " + temp.get (Calendar.YEAR) + "-" 
+//					+ temp.get (Calendar.MONTH) + "-" 
+//					+ temp.get (Calendar.DAY_OF_MONTH) + " " 
+//					+ temp.get (Calendar.HOUR_OF_DAY) + ":" 
+//					+ temp.get (Calendar.MINUTE));
 			Term curr = getTerm (temp);
 			if (curr == null) {
 				return false;
@@ -201,6 +201,7 @@ public class DailySchedule {
 			Date duration = appointment.getProcedureType().getDuration();
 			Calendar endTime = Calendar.getInstance();
 			
+			
 			endTime.setTime(duration);
 			
 //			System.out.println ("Pocetni end time: " + endTime.get (Calendar.YEAR) + "-" 
@@ -219,11 +220,11 @@ public class DailySchedule {
 			
 			while ((temp.get(Calendar.HOUR_OF_DAY) < endTime.get(Calendar.HOUR_OF_DAY)) 
 						|| (temp.get(Calendar.MINUTE) < endTime.get(Calendar.MINUTE))) {
-				System.out.println ("addAppointment Interval: " + temp.get (Calendar.YEAR) + "-" 
-						+ temp.get (Calendar.MONTH) + "-" 
-						+ temp.get (Calendar.DAY_OF_MONTH) + " " 
-						+ temp.get (Calendar.HOUR_OF_DAY) + ":" 
-						+ temp.get (Calendar.MINUTE));
+//				System.out.println ("addAppointment Interval: " + temp.get (Calendar.YEAR) + "-" 
+//						+ temp.get (Calendar.MONTH) + "-" 
+//						+ temp.get (Calendar.DAY_OF_MONTH) + " " 
+//						+ temp.get (Calendar.HOUR_OF_DAY) + ":" 
+//						+ temp.get (Calendar.MINUTE));
 				Term curr = getTerm (temp);
 				curr.setTaken(true);
 				temp.add(Calendar.MINUTE, 15);

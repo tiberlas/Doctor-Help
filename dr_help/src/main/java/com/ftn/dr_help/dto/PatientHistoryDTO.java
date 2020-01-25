@@ -13,6 +13,12 @@ public class PatientHistoryDTO {
 		super();
 		this.status = status;
 		this.examinationReportId = examinationReportId;
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
 		this.date = date;
 		this.procedureType = procedureType;
 		this.doctor = doctor;
@@ -33,6 +39,13 @@ public class PatientHistoryDTO {
 		super();
 		this.status = status;
 		this.examinationReportId = examinationReportId;
+		System.out.println(date);
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
 		this.date = date;
 		this.procedureType = procedureType;
 		this.doctor = doctor;
@@ -52,6 +65,13 @@ public class PatientHistoryDTO {
 		super();
 		this.status = status;
 		this.examinationReportId = examinationReportId;
+		System.out.println(date);
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
 		this.date = date;
 		this.procedureType = procedureType;
 		this.doctor = doctor;
@@ -73,6 +93,13 @@ public class PatientHistoryDTO {
 			String clinicName, Long clinicId) {
 		super();
 		this.examinationReportId = examinationReportId;
+		System.out.println(date);
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}		
 		this.date = date;
 		this.procedureType = procedureType;
 		this.doctor = doctor;
@@ -104,6 +131,13 @@ public class PatientHistoryDTO {
 		}
 		this.date = dateConverter.toString(appointment.getDate());
 		this.date += " " + appointment.getDate().get(Calendar.HOUR_OF_DAY) + ":" + appointment.getDate().get(Calendar.MINUTE);
+
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
 		this.procedureType = appointment.getProcedureType().getName();
 		this.doctor = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
 		if (appointment.getNurse() != null) {
@@ -118,27 +152,14 @@ public class PatientHistoryDTO {
 		if (appointment.getRoom() != null) {
 			this.room = appointment.getRoom().getName() + " " + appointment.getRoom().getNumber();
 		}
-//		this.price = appointment.getProcedureType().getPrice() * appointment.getDiscount();
-		
-//		this.props.value.price * (1 - (this.props.value.disscount / 100))
 		this.price = appointment.getProcedureType().getPrice() * (1 - appointment.getDiscount() / 100);
 		
-		
-		
-		 
-		
 		this.discount = appointment.getDiscount();
-		
-		
-		
-//		System.out.println("Appointment room: " + this.room);
-//		System.out.println("Appointment price: " + this.price);
 		 
 		Calendar tempCal = Calendar.getInstance ();
-		//System.out.println("Now: " + tempCal.getTime());
+		
 		tempCal.add(Calendar.DAY_OF_MONTH, 1);
 		if (tempCal.after(appointment.getDate())) {
-			//System.out.println("Ne smem da otkazem");
 			this.canCancel = true;
 		}
 		else {
