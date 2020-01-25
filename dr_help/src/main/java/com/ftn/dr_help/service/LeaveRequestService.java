@@ -152,6 +152,21 @@ public class LeaveRequestService {
 	}
 	
 	
+	public List<LeaveRequestDTO> getAdminRequests() {
+		
+		Calendar now = Calendar.getInstance();
+		List<LeaveRequestPOJO> list = leaveRequestRepository.getAdminRequests(now.getTime());
+		
+		List<LeaveRequestDTO> dtoList = new ArrayList<LeaveRequestDTO>();
+		for (LeaveRequestPOJO leaveRequestPOJO : list) {
+			LeaveRequestDTO dto = convertRequestToDTO(leaveRequestPOJO);
+			dtoList.add(dto);
+		}
+		
+		return dtoList;
+	}
+	
+	
 	private LeaveRequestDTO convertRequestToDTO(LeaveRequestPOJO request) {
 		
 			LeaveRequestDTO dto = new LeaveRequestDTO();
@@ -160,7 +175,20 @@ public class LeaveRequestService {
 			dto.setLeaveType(request.getLeaveType());
 			dto.setNote(request.getRequestNote());
 			dto.setLeaveStatus(request.getLeaveStatus());
+			dto.setStaffRole(request.getStaffRole());
 			
+			if(request.getStaffRole().equals(RoleEnum.DOCTOR)) {
+				System.out.println("doca request");
+				dto.setFirstName(request.getDoctor().getFirstName());
+				dto.setLastName(request.getDoctor().getLastName());
+			} else {
+				System.out.println("nurse request");
+				dto.setFirstName(request.getNurse().getFirstName());
+				dto.setLastName(request.getNurse().getLastName());
+			}
 			return dto;
 	}
+	
+	
+	
 }

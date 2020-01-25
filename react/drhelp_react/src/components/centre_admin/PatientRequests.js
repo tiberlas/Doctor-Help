@@ -38,19 +38,6 @@ class PatientRequests extends Component {
     }
 
 
-    handleUpdate = (key) => {
-
-        const items = this.state.patientInfo.filter(item => item.email !== key)
-        
-        console.log('items', items)
-        this.setState({ patientInfo: items});
-        console.log("state", items)
-    }
-
-    componentDidUnmount = () => {
-        this._isMounted = false
-    }
-
     update = () => {
         setTimeout(() => {axios.get('http://localhost:8080/api/centreAdmins/requests',)
         .then(res =>  {
@@ -84,13 +71,13 @@ class PatientRequests extends Component {
                 <table class="table table-hover">
                         <thead> 
                             <tr>
-                                <th scope="row">
+                                <th class="text-success" scope="row">
                                     Email
                                 </th>
-                                <th scope="row">
+                                <th class="text-success" scope="row">
                                     First name
                                 </th>
-                                <th scope="row">
+                                <th class="text-success" scope="row">
                                     Last name
                                 </th>
                             </tr>
@@ -106,10 +93,6 @@ class PatientRequests extends Component {
                                  toggle={this.toggle}
                                  request={this.state.selectedRequest}
                             update = {this.update}/> }
-
-                    {/* {size > 0 ? <PatientRegistrationInformation data = {{...this.state.patientInfo}} handleUpdate={this.handleUpdate}/> 
-                                : <div> <h2> No requests at the moment :) </h2></div>} */}
-
                     
                     </div> 
                 </div>

@@ -6,7 +6,8 @@ class ActivatePatient extends React.Component {
 
 
     state = {
-        showSuccess: false
+        showSuccess: false,
+        loading: true
     }
 
     componentDidMount() {
@@ -19,14 +20,24 @@ class ActivatePatient extends React.Component {
               email: window.location.href.split('=')[1]
             })}).then(response => {
             console.log('odradio axios')
-            this.setState({showSuccess: true})
+            this.setState({showSuccess: true, loading: false})
         }).catch(error => {
             console.log('nisam odradio axios')
-            this.setState({showSuccess: false})
+            this.setState({showSuccess: false, loading: false})
         })
     }
 
     render() {
+        if(this.state.loading) {
+            return(<Fragment> 
+                 <BasicHeader/>
+                 <div class="row d-flex justify-content-center">
+                        <div class='col-md-7'>
+                        <h2> Loading... </h2>
+                        </div>
+                 </div>
+            </Fragment>)
+        }
         return( <Fragment>
             <BasicHeader/>
             <div class="row d-flex justify-content-center">

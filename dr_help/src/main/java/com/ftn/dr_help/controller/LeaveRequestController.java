@@ -88,5 +88,17 @@ public class LeaveRequestController {
 		
 		return new ResponseEntity<List<LeaveRequestDTO>>(list, HttpStatus.OK);
 	}
-
+	
+	@GetMapping(value="/get-admin")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<LeaveRequestDTO>> getAdminRequests() {
+		List<LeaveRequestDTO> list = leaveRequestService.getAdminRequests();
+		return new ResponseEntity<List<LeaveRequestDTO>>(list, HttpStatus.OK);
+	}
+	
+//	@GetMapping(value="get-admin/validate/doctor={id}")
+//	@PreAuthorize("haAuthority('CLINICAL_ADMINISTRATOR')")
+//	public ResponseEntity<List<DoctorAppointmentDTO>> validateDoctorRequest(@PathVariable("id") Long doctor_id, @RequestBody LeaveRequestDTO request) {
+//		
+//	}
 }

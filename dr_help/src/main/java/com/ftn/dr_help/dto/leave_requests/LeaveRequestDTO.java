@@ -18,6 +18,9 @@ public class LeaveRequestDTO {
 	private Long staffId;
 	private RoleEnum staffRole; //DOCTOR ili NURSE
 	
+	private String firstName;
+	private String lastName;
+	
 	
 	public LeaveRequestDTO() {
 		
@@ -91,6 +94,26 @@ public class LeaveRequestDTO {
 
 	public void setLeaveStatus(LeaveStatusEnum leaveStatus) {
 		this.leaveStatus = leaveStatus;
+	}
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 	

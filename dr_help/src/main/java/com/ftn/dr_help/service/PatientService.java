@@ -513,6 +513,7 @@ public class PatientService {
 	
 	
 	public PatientPOJO confirmAccount(String email){
+		
 		PatientPOJO p = patientRepository.findOneByEmail(email);
 		
 		if(p == null) {

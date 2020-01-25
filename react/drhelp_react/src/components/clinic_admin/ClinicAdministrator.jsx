@@ -23,6 +23,7 @@ import ClinicAdminAppointmentRequests from './ClinicAdminAppointmentRequests';
 import ClinicAdminOperationRequest from './ClinicAdminOperationRequest';
 import RequestedAppointment from '../requesting_appointment/RequestedAppointment';
 import RequestedOpration from '../requesting_operations/RequestedOperation.jsx';
+import LeaveRequests from '../leave_request/clinic_admin/LeaveRequests';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -87,6 +88,7 @@ class ClinicAdministrator extends Component {
                     <Route exact path='/clinic-administrator/medical-staff/add'> <CreateMedicalStaff /> </Route>
                     <Route exact path='/clinic-administrator/requests/appointments'> <ClinicAdminAppointmentRequests/> </Route>
                     <Route exact path='/clinic-administrator/requests/operations'> <ClinicAdminOperationRequest /> </Route>
+                    <Route exact path='/clinic-administrator/requests/leaves'> <LeaveRequests /> </Route>
                     <Route exact path='/clinic-administrator/profile/change/password'> <ClinicAdminChangePassword /> </Route>
                     <Route path='/request/appointment/'> <RequestedAppointment /> </Route>
                     <Route path='/request/operation/'> <RequestedOpration /> </Route>
