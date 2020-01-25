@@ -104,7 +104,7 @@ public class OperationController {
 	}
 	
 	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
-	@PreAuthorize("hasAuthority('DOCTOR')")
+	@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> checkOperationSchedule(@RequestBody OperationRequestDTO request) {
 			
 		String schedule = operationServie.checkOperationSchedue(request);
@@ -119,6 +119,7 @@ public class OperationController {
 		}
 	}
 	
+	//treba izbaciti
 	@PostMapping(value = "/schedules/first_free", produces = "application/json")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> getFirstFreeScheduleForThreeDoctors(@RequestBody ThreeDoctorsIdDTO doctors) {

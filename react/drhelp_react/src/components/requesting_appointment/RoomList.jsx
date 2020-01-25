@@ -263,9 +263,8 @@ class RoomList extends Component {
 										show all
 									</Button>
 								</TableCell>
-								<TableCell class="text-success">
+								<TableCell>
 									<Button
-										class="btn btn-success"
 										data-testid="searchButton"
 										onClick={this.handleSearchClick}
 									>
@@ -315,7 +314,9 @@ class RoomList extends Component {
 						/>
 					) : (
 						<ScheduleAppointment
-							onHide={this.handleCancleBooking}
+							onHide={(success) => {
+								this.handleCancleBooking(success);
+							}}
 							show={this.state.book}
 							roomId={this.state.roomId}
 							appointmentId={this.state.appointmentId}

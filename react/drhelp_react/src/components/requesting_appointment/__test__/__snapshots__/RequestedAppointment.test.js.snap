@@ -192,13 +192,12 @@ exports[`matches snapshot 1`] = `
             </th>
             <th
               aria-sort={null}
-              class="text-success"
               className="MuiTableCell-root MuiTableCell-head"
               scope="col"
             >
               <button
-                class="btn btn-success"
                 className="btn btn-primary"
+                data-testid="searchButton"
                 disabled={false}
                 onClick={[Function]}
                 type="button"

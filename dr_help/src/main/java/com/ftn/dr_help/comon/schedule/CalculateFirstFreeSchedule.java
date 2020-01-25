@@ -72,9 +72,11 @@ public class CalculateFirstFreeSchedule {
 		return findFreeSchedule(doctor, begin, dates, absenceDates, false);
 	}
 	
-	private Calendar findFreeSchedule(MedicalStaffWorkSchedularPOJO doctor, Calendar begin, List<Date> dates, List<AbsenceInnerDTO> absenceDates, boolean justCheckDate) {
+	private Calendar findFreeSchedule(MedicalStaffWorkSchedularPOJO doctor, Calendar start, List<Date> dates, List<AbsenceInnerDTO> absenceDates, boolean justCheckDate) {
+		System.out.println("krenuo od " + convert.dateForFrontEndString(start));
 		
-		begin = setWorkingDay(doctor, begin, absenceDates);
+		Calendar begin = Calendar.getInstance();
+		begin = setWorkingDay(doctor, start, absenceDates);
 		
 		//nadje trajanje za schedule
 		Calendar duration = Calendar.getInstance();

@@ -277,11 +277,6 @@ public class OperationService {
 			List<AbsenceInnerDTO> absence1 = leaveRequestsService.getAllDoctorAbsence(drId1);
 			List<AbsenceInnerDTO> absence2 = leaveRequestsService.getAllDoctorAbsence(drId2);
 			
-			System.out.println(begin.getTime());
-			if(calculate == null) {
-				calculate = new CalculateFirstFreeSchedule();
-			}
-			
 			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, absence0, absence1, absence2, begin);
 			
 			return firstEqualShift;
