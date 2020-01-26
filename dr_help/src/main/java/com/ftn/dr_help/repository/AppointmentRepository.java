@@ -83,4 +83,11 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 		 "select a3.* from appointments a3 where a3.date > ?2 and a3.date <= ?3 and a3.deleted=false", nativeQuery=true)
 	public List<AppointmentPOJO> getNurseAppointmentsBetweenRequestDates(Long nurse_id, Date startDate, Date endDate);
 	
+	@Query(value="select a.* from appointments a where a.doctor_id=?1 " +
+			 "intersect " +
+			 "select a2.* from appointments a2 where a2.status = 'APPROVED' or a2.status = 'AVAILABLE' " +
+			 "intersect " +
+			 "select a3.* from appointments a3 where a3.date > ?2 and a3.date <= ?3 and a3.deleted=false", nativeQuery=true)
+		public List<AppointmentPOJO> getDoctorAppointmentsBetweenRequestDates(Long nurse_id, Date startDate, Date endDate);
+	
 }

@@ -44,7 +44,26 @@ class LeaveRequestStaffModal extends React.Component {
             })
 
         } else {
-
+            axios.post('http://localhost:8080/api/leave-requests/get-admin/validate/doctor', {
+                firstName: this.state.request.firstName,
+                lastName: this.state.request.lastName,
+                startDate: this.state.request.startDate,
+                endDate: this.state.request.endDate,
+                leaveStatus: this.state.request.leaveStatus,
+                leaveType: this.state.request.leaveType,
+                note: this.state.request.note,
+                staffId: this.state.request.staffId,
+                staffRole: this.state.request.staffRole
+            }).then(response=> {
+                console.log('response', response.data)
+                if(response.data.validationEnum === 'APPROVED_CONFLICT') {
+                    this.setState({approvedConflict: true, approvedCount: response.data.approvedAppointmentsCount})
+                } else if(response.data.validationEnum === 'AVAILABLE_CONFLICT') {
+                    this.setState({availableConflict: true})
+                } else if(response.data.validationEnum === 'CAN_BLESS') {
+                    this.setState({canBless: true})
+                }
+            })
          }
     }
 
@@ -86,6 +105,21 @@ class LeaveRequestStaffModal extends React.Component {
                     this.setState({sending: false, error: true}, ()=>this.props.update())
                 })
             })
+        } else {
+            this.setState({declining: false, sending: true, success: false}, ()=> {
+                this.forceUpdate()
+                axios.put('http://localhost:8080/api/leave-requests/decline-doctor/request='+this.props.request.id, {
+                    staffId: this.state.request.staffId,
+                    staffRole: this.state.request.staffRole,
+                    note: this.state.declineReason
+                }).then( response => {
+                    this.setState({success: true, sending: false}, ()=>{
+                        this.props.update()
+                    })
+                }).catch(error => {
+                    this.setState({sending: false, error: true}, ()=>this.props.update())
+                })
+            })
         }
     }
 
@@ -93,6 +127,27 @@ class LeaveRequestStaffModal extends React.Component {
         if(this.props.request.staffRole === 'NURSE') {
             this.setState({decline: false, sending: true, success: false}, () => {
                 axios.put('http://localhost:8080/api/leave-requests/accept-nurse/request='+this.props.request.id, {
+                    firstName: this.state.request.firstName,
+                    lastName: this.state.request.lastName,
+                    startDate: this.state.request.startDate,
+                    endDate: this.state.request.endDate,
+                    leaveStatus: this.state.request.leaveStatus,
+                    leaveType: this.state.request.leaveType,
+                    note: this.state.request.note,
+                    staffId: this.state.request.staffId,
+                    staffRole: this.state.request.staffRole
+                 }).then( response => {
+                           this.setState({
+                               success: true,
+                               sending: false
+                           }, ()=> this.props.update()) 
+                 }).catch(error => {
+                     this.setState({sending: false, error: true}, ()=> {this.props.update()})
+                 })
+            })
+        } else {
+            this.setState({decline: false, sending: true, success: false}, () => {
+                axios.put('http://localhost:8080/api/leave-requests/accept-doctor/request='+this.props.request.id, {
                     firstName: this.state.request.firstName,
                     lastName: this.state.request.lastName,
                     startDate: this.state.request.startDate,
@@ -249,28 +304,6 @@ class LeaveRequestStaffModal extends React.Component {
                                 {conflict === 'bless' 
                                     && <div class="valid-feedback d-block"> 
                                     No conflicting appointments. Everything seems okay! </div>}
-{/* 
-                                <div class="row d-flex justify-content-center">
-                                        <div class='col-md-11'>
-
-                                        {this.state.sending ? <div> <p class="text-info">Sending... </p> </div> : <Fragment> 
-                                            {this.state.decline && <Fragment> 
-                                                <textarea name="declineReason" placeholder="Reasons for declining..." onChange = {this.updateTextArea}/>
-                                                <br/>
-                                                <Button variant="outline-secondary" onClick = {()=>this.setState({decline: false})}>Back</Button> &nbsp;&nbsp;&nbsp;
-                                                <Button variant="outline-primary"  onClick = {this.sendDecline}>Send</Button>
-                                                </Fragment>}
-
-                                            
-                                            {(!this.state.decline && !this.state.success && !this.state.conflict) && <Fragment> <Button variant="outline-danger" onClick={()=>{this.setState({decline: true})}}>Decline</Button>&nbsp;&nbsp;
-                                            <Button variant="outline-success" onClick={this.sendAccept}>Accept</Button> </Fragment>}
-                                            </Fragment>}
-
-                                        {this.state.success && <div class="valid-feedback d-block"> Success. </div>}
-                                        {this.state.conflict && <div class="invalid-feedback d-block"> Something went wrong. Please try again </div>}
-
-                                        </div>
-                                </div> */}
                                     </div>
                                 </div>
                             </ModalBody>

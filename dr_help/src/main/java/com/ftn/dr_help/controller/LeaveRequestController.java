@@ -110,6 +110,26 @@ public class LeaveRequestController {
 		return new ResponseEntity<BlessingConflictsDTO>(en00ms, HttpStatus.OK);
 	}
 	
+	@PostMapping(value="/get-admin/validate/doctor")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<BlessingConflictsDTO> validateDoctorRequest(@RequestBody LeaveRequestDTO request) {
+		BlessingConflictsDTO en00ms = leaveRequestService.validateDoctorRequest(request);
+		
+		
+		return new ResponseEntity<BlessingConflictsDTO>(en00ms, HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/decline-doctor/request={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<LeaveRequestDTO> declineDoctorRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
+		LeaveRequestDTO dto = leaveRequestService.declineDoctorRequest(requestDTO, request_id);
+		
+		return new ResponseEntity<LeaveRequestDTO>(dto, HttpStatus.OK);
+	}
+	
+	
+	
+	
 	@PutMapping(value="/decline-nurse/request={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<LeaveRequestDTO> declineNurseRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
@@ -124,6 +144,17 @@ public class LeaveRequestController {
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<BlessingConflictsDTO> acceptNurseRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
 		BlessingConflictsDTO dto = leaveRequestService.acceptNurseRequest(requestDTO, request_id);
+		if(!dto.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
+			return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.CONFLICT);
+		}
+		return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.OK);
+	}
+	
+	
+	@PutMapping(value="/accept-doctor/request={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<BlessingConflictsDTO> acceptDoctorRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
+		BlessingConflictsDTO dto = leaveRequestService.acceptDoctorRequest(requestDTO, request_id);
 		if(!dto.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
 			return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.CONFLICT);
 		}
