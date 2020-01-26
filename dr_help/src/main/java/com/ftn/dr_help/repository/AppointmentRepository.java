@@ -1,7 +1,6 @@
 package com.ftn.dr_help.repository;
 
 import java.util.Date;
-
 import java.util.Calendar;
 import java.util.List;
 
@@ -67,10 +66,21 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 			"where a.status = 'AVAILABLE' \n" + 
 			"and a.deleted = false", nativeQuery = true)
 	List<AppointmentPOJO> findAllPredefined();
+	
 	/* -------------------za leave request medicinske sestre */
 	@Query(value="select a.* from appointments a where a.nurse_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.deleted = false", nativeQuery=true)
 	public List<AppointmentPOJO> findAvailableOrApprovedNurseAppointments(Long nurse_id);
 	/* -------------------za leave request doktora */
 	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.deleted = false", nativeQuery=true)
 	public List<AppointmentPOJO> findAvailableOrApprovedDoctorAppointments(Long doctor_id);
+	
+
+	//JEBEN POSAO DECKO MOJ
+	@Query(value="select a.* from appointments a where a.nurse_id=?1 " +
+		 "intersect " +
+		 "select a2.* from appointments a2 where a2.status = 'APPROVED' or a2.status = 'AVAILABLE' " +
+		 "intersect " +
+		 "select a3.* from appointments a3 where a3.date > ?2 and a3.date <= ?3 and a3.deleted=false", nativeQuery=true)
+	public List<AppointmentPOJO> getNurseAppointmentsBetweenRequestDates(Long nurse_id, Date startDate, Date endDate);
+	
 }

@@ -19,7 +19,7 @@ class PredefinedAppointmentItem extends Component {
         doctorName: '',
         nurseName: '',
         roomName: '',
-        priceWithDiss: this.props.value.price * (1 - (this.props.value.disscount / 100)),
+        priceWithDiss: (this.props.value.price * (1 - (this.props.value.disscount / 100))).toFixed(2),
 
         globalError: false,
         messageShow: false,

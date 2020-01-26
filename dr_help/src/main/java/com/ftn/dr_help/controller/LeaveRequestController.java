@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.dr_help.dto.leave_requests.BlessingConflictsDTO;
 import com.ftn.dr_help.dto.leave_requests.LeaveRequestDTO;
+import com.ftn.dr_help.model.enums.LeaveRequestValidationEnum;
+import com.ftn.dr_help.model.enums.LeaveStatusEnum;
 import com.ftn.dr_help.service.LeaveRequestService;
 
 @RestController
@@ -93,12 +97,36 @@ public class LeaveRequestController {
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<List<LeaveRequestDTO>> getAdminRequests() {
 		List<LeaveRequestDTO> list = leaveRequestService.getAdminRequests();
+		
 		return new ResponseEntity<List<LeaveRequestDTO>>(list, HttpStatus.OK);
 	}
 	
-//	@GetMapping(value="get-admin/validate/doctor={id}")
-//	@PreAuthorize("haAuthority('CLINICAL_ADMINISTRATOR')")
-//	public ResponseEntity<List<DoctorAppointmentDTO>> validateDoctorRequest(@PathVariable("id") Long doctor_id, @RequestBody LeaveRequestDTO request) {
-//		
-//	}
+	@PostMapping(value="/get-admin/validate/nurse")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<BlessingConflictsDTO> validateNurseRequest(@RequestBody LeaveRequestDTO request) {
+		BlessingConflictsDTO en00ms = leaveRequestService.validateNurseRequest(request);
+		
+		
+		return new ResponseEntity<BlessingConflictsDTO>(en00ms, HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/decline-nurse/request={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<LeaveRequestDTO> declineNurseRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
+		LeaveRequestDTO dto = leaveRequestService.declineNurseRequest(requestDTO, request_id);
+		
+		return new ResponseEntity<LeaveRequestDTO>(dto, HttpStatus.OK);
+	}
+	
+	
+	
+	@PutMapping(value="/accept-nurse/request={id}")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<BlessingConflictsDTO> acceptNurseRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
+		BlessingConflictsDTO dto = leaveRequestService.acceptNurseRequest(requestDTO, request_id);
+		if(!dto.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
+			return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.CONFLICT);
+		}
+		return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.OK);
+	}
 }

@@ -7,6 +7,8 @@ import com.ftn.dr_help.model.enums.LeaveTypeEnum;
 import com.ftn.dr_help.model.enums.RoleEnum;
 
 public class LeaveRequestDTO {
+	
+	Long id;
 
 	private LeaveTypeEnum leaveType;
 	private LeaveStatusEnum leaveStatus;
@@ -20,6 +22,7 @@ public class LeaveRequestDTO {
 	
 	private String firstName;
 	private String lastName;
+	
 	
 	
 	public LeaveRequestDTO() {
@@ -114,6 +117,16 @@ public class LeaveRequestDTO {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

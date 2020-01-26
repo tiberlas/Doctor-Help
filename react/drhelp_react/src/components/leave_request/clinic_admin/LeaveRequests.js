@@ -36,7 +36,15 @@ class LeaveRequests extends React.Component {
     }
 
     update = () => {
-        
+        setTimeout(()=>{
+             axios.get('http://localhost:8080/api/leave-requests/get-admin',)
+        .then(res =>  {
+            this.setState({leaveRequests: res.data, showRequestModal: false})
+        })
+        .catch(err => 
+            console.log(err)
+        )
+        }, 1200)
     }
 
 
@@ -79,7 +87,7 @@ class LeaveRequests extends React.Component {
                         </thead>
                         <tbody>
                             {this.state.leaveRequests.map( request => (
-                               <LeaveRequestItem key={request.staffId} userRequest = {request} setRequestSelected={this.setRequestSelected}/>
+                               <LeaveRequestItem key={request.staffId + request.staffRole} userRequest = {request} setRequestSelected={this.setRequestSelected}/>
                             ))}
                         </tbody>
                     </table> </Fragment>   }

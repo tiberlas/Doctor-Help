@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.enums.RoleEnum;
@@ -108,6 +109,41 @@ public class Mail {
 	    msg.setText(text);
 	
 	    javaMailSender.send(msg);
+	}
+	
+	@Async
+	public void sendDeclineLeaveRequestEmail(String sendTo, String description, String firstName, String lastName, String leaveType, String fromDate, String toDate) {
+
+	    SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(sendTo);
+	
+	    msg.setSubject("DrHelp account registration");
+	    String text = "Dear " + firstName + " " + lastName + "," + '\n';
+	    text += "Your " + leaveType + " leave request from " + fromDate + " to " +toDate + " has been declined with an administrator message attached:";
+	    text += "\n\n\n" + description;
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	    System.out.println("Sent leave request declination mail to nurse.");
+	}
+	
+	
+	@Async
+	public void sendAcceptLeaveRequestEmail(String sendTo, String firstName, String lastName, String leaveType, String fromDate, String toDate) {
+
+	    SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(sendTo);
+	
+	    msg.setSubject("DrHelp account registration");
+	    String text = "Dear " + firstName + " " + lastName + "," + '\n';
+	    text += "Your " + leaveType + " leave request from " + fromDate + " to " +toDate + " has been accepted!";
+	    text += "\nWe wish you the best during your absence, you deserve it.";
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	
+	    javaMailSender.send(msg);
+	    System.out.println("Sent leave request declination mail to nurse.");
 	}
 	
 }

@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.LeaveRequestPOJO;
 
 @Repository
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequestPOJO, Long> {
 
+	LeaveRequestPOJO findOneById(Long id);
 	/* -- get all staff requests - for request history table*/
 	@Query(value="select lr.* from leave_requests lr where nurse_id = ?1 order by lr.last_day desc", nativeQuery=true)
 	public List<LeaveRequestPOJO> getNurseLeaveRequests(Long nurse_id);
@@ -30,4 +32,6 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestPOJO, 
 	
 	@Query(value="select lr.* from leave_requests lr where lr.leave_status = 'REQUESTED' and lr.last_day > ?1", nativeQuery=true)
 	public List<LeaveRequestPOJO> getAdminRequests(Date now);
+	
+	
 }
