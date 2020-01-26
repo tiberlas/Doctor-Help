@@ -82,7 +82,7 @@ class NewRoom extends Component {
             let durationParts = this.state.procedureList[i].duration.split(":"); 
             items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >
                         {this.state.procedureList[i].name}
-                        &nbsp;({this.state.procedureList[i].price})
+                        &nbsp;({this.state.procedureList[i].price}&#x20bf;)
                         &nbsp;{durationParts[0]}:{durationParts[1]} H
                         &nbsp;{this.state.procedureList[i].operation? 'OPERATION':''}
                     </option>);
@@ -95,28 +95,46 @@ class NewRoom extends Component {
             return(<Redirect to='/clinic-administrator/rooms'></Redirect> ); 
         return (  
             <div class='row d-flex justify-content-center'>
-            <div class='col-md-3'> 
+            <div class='col-md-5'> 
+                <br/>
                 <div>
                     <h5>Add new room</h5>
                 </div>
+                <hr class="my-4"/>
+                <br/>
                 <form onSubmit={this.handleSubmit}> 
                     <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                         <label class="form-control-label" for="name">name:</label>
+                        <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
                         <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
+                        </div>
                     </div>
 
                     <div className={`form-group ${this.state.errorNumber? 'has-danger': ''}`}>
                         <label class="form-control-label" for="number">number:</label>
+                        <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
                         <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': 'is-valid'}`} value={this.state.number} onChange={this.handlerChange} />
+                        </div>
                         {(this.state.errorNumber) && <div class="invalid-feedback"> Must enter a positive value. </div>}
                         {(this.state.errorBack) && <div class="text text-danger"> Room number already exists. Please try with a different number. </div>}
                     </div>
 
                     <div className={`form-group ${this.state.errorProcedureType? 'has-danger': ''}`}>
                         <label for="procedureTypeId">procedure type</label>
+                        <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
                         <select multiple="" className={`form-control ${this.state.errorProcedureType? 'is-invalid': 'is-valid'}`} id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
                             {this.createProcedureItems()}
                         </select>
+                        </div>
                         { (this.state.errorProcedureType) && <div class="invalid-feedback"> Must select a procedure type. </div>}
                     </div>
 

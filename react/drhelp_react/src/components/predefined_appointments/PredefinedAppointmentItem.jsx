@@ -26,79 +26,79 @@ class PredefinedAppointmentItem extends Component {
         message: '',
         title: ''
     }
-    
+
     componentDidMount() {
-        axios.get("http://localhost:8080/api/procedure+types/id="+this.state.procedureTypeID)
+        axios.get("http://localhost:8080/api/procedure+types/id=" + this.state.procedureTypeID)
             .then(response => {
-                this.setState({procedureName: response.data.name})
+                this.setState({ procedureName: response.data.name })
             }).catch(error => {
-                this.setState({globalError: true})
+                this.setState({ globalError: true })
             })
 
-        axios.get("http://localhost:8080/api/doctors/clinic="+this.state.clinicID+"/one/doctor="+this.state.doctorID)
+        axios.get("http://localhost:8080/api/doctors/clinic=" + this.state.clinicID + "/one/doctor=" + this.state.doctorID)
             .then(response => {
-                this.setState({doctorName: response.data.firstName+' '+response.data.lastName})
+                this.setState({ doctorName: response.data.firstName + ' ' + response.data.lastName })
             }).catch(error => {
-                this.setState({globalError: true})
-            })
-        
-        axios.get("http://localhost:8080/api/rooms/one/room="+this.state.roomID)
-            .then(response => {
-                this.setState({roomName: response.data.name+' '+response.data.number})
-            }).catch(error => {
-                this.setState({globalError: true})
+                this.setState({ globalError: true })
             })
 
-        axios.get("http://localhost:8080/api/nurses/nurse="+this.state.nurseID)
+        axios.get("http://localhost:8080/api/rooms/one/room=" + this.state.roomID)
             .then(response => {
-                this.setState({nurseName: response.data.firstName+" "+response.data.lastName})
+                this.setState({ roomName: response.data.name + ' ' + response.data.number })
             }).catch(error => {
-                this.setState({globalError: true})
+                this.setState({ globalError: true })
+            })
+
+        axios.get("http://localhost:8080/api/nurses/nurse=" + this.state.nurseID)
+            .then(response => {
+                this.setState({ nurseName: response.data.firstName + " " + response.data.lastName })
+            }).catch(error => {
+                this.setState({ globalError: true })
             })
 
     }
 
     onDelite = () => {
-        axios.delete("http://localhost:8080/api/predefined+appointments/delete/id="+this.state.id)
-        .then(response => {
-            this.props.handleUpdate(this.state.id);
-        }).catch(error => {
-            this.setState({
-                messageShow: true,
-                message: 'Could not delete room. Please reload page and try again!',
-                title: 'Some error has occured'
+        axios.delete("http://localhost:8080/api/predefined+appointments/delete/id=" + this.state.id)
+            .then(response => {
+                this.props.handleUpdate(this.state.id);
+            }).catch(error => {
+                this.setState({
+                    messageShow: true,
+                    message: 'Could not delete room. Please reload page and try again!',
+                    title: 'Some error has occured'
+                })
             })
-        })
     };
 
-    setMessageHide= () => {
-        this.setState({messageShow: false})
+    setMessageHide = () => {
+        this.setState({ messageShow: false })
     }
 
-    render() { 
+    render() {
 
-        return ( 
+        return (
             <Fragment>
                 <TableCell class="text-white">{this.state.procedureName}</TableCell>
                 <TableCell class="text-white">{this.state.doctorName}</TableCell>
                 <TableCell class="text-white">{this.state.nurseName}</TableCell>
                 <TableCell class="text-white">{this.state.roomName}</TableCell>
                 <TableCell class="text-white">{this.state.dateAndTime}</TableCell>
-                <TableCell class="text-white">{this.state.priceWithDiss}</TableCell>
+                <TableCell class="text-white">{this.state.priceWithDiss}&#x20bf;</TableCell>
                 <TableCell class="text-danger">-{this.state.disscount}%</TableCell>
                 <TableCell><button onClick={this.onDelite} class='btn btn-danger'>delete</button></TableCell>
-                
 
-                    <ModalMessage
-                        title={this.state.title}
-                        message={this.state.message} 
-                        show={this.state.messageShow}
-                        onHide={this.setMessageHide}/>
-                
+
+                <ModalMessage
+                    title={this.state.title}
+                    message={this.state.message}
+                    show={this.state.messageShow}
+                    onHide={this.setMessageHide} />
+
 
             </Fragment>
-         );
+        );
     }
 }
- 
+
 export default PredefinedAppointmentItem;

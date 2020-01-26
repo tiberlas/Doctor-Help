@@ -71,25 +71,43 @@ class NewProcedureType extends Component {
             return(<Redirect to='/clinic-administrator/procedure-types'></Redirect> ); 
         return (  
             <div class='row d-flex justify-content-center'>
-            <div class='col-md-3'> 
+            <div class='col-md-5'>
+                <br/>
                 <div>
                     <h5>Create a procedure type</h5>
                 </div>
+                <hr class="my-4" />
+                <br/>
                 <form onSubmit={this.handleSubmit}> 
                 <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                             <label class="form-control-label" for="name">name:</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
                             <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
+                            </div>
                             {(this.state.errorName) && <div class="invalid-feedback"> Procedure type name already exists. </div>}
                         </div>
 
                         <div className={`form-group ${this.state.errorPrice? 'has-danger': ''}`}>
                             <label class="form-control-label" for="price">price:</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">&#x20bf;</span>
+                                </div>
                             <input type='number' min="1" name='price' id='price' className={`form-control ${this.state.errorPrice? 'is-invalid': 'is-valid'}`} value={this.state.price} onChange={this.handlerChange} />
+                            </div>
                         </div>
 
                         <div className={`form-group ${this.state.errorDuration? 'has-danger': ''}`}>
                             <label class="form-control-label" for="duration">duration:</label>
-                            <TimePicker name='duration' id='duration' onChange={this.handleChangeTime} locale="sv-sv" value={this.state.duration} className={`form-control ${this.state.errorDuration? 'is-invalid': 'is-valid'}`}/>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                            <TimePicker name='duration' id='duration' onChange={this.handleChangeTime} locale="en-us" value={this.state.duration} className={`form-control ${this.state.errorDuration? 'is-invalid': 'is-valid'}`}/>
+                            </div>
                         </div>
 
                         <div>

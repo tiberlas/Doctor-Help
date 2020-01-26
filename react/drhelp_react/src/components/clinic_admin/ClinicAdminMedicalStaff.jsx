@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
+import { ClinicAdminContext } from '../../context/ClinicAdminContextProvider';
 import MedicalStuffItem from './MedicalStuffItem';
 import axios from 'axios';
 import Table from '@material-ui/core/Table';
@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button';
+import '../../customRadioButton.css';
 
 const sortTypes = {
     first_up: {
@@ -42,23 +43,23 @@ const sortTypes = {
 class ClinicAdminMedicalStaff extends Component {
     static contextType = ClinicAdminContext
 
-    state = { 
+    state = {
         medicalStuff: [],
+        shownMedicalStaff: [],
         clinicName: '',
         filterString: '',
         isFilterRoleActive: false,
         currentSort: 'default',
-        checkedMedicalStaff: 'NURSES',
-        filterRoleEnum: 'DISABLED'
+        checkedMedicalStaff: 'ALL'
     }
-    
+
     componentDidMount() {
-        this.handleMedicalStuff();  
-        this.handleCLinicName();  
+        this.handleMedicalStuff();
+        this.handleCLinicName();
     }
 
     handleCLinicName = () => {
-        axios.get("http://localhost:8080/api/clinics/id="+ this.context.admin.clinicId)
+        axios.get("http://localhost:8080/api/clinics/id=" + this.context.admin.clinicId)
             .then(response => {
                 this.setState({
                     clinicName: response.data.name
@@ -67,27 +68,28 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     handleMedicalStuff = () => {
-        axios.get("http://localhost:8080/api/medical+stuff/clinic="+ this.context.admin.clinicId + "/all")
+        axios.get("http://localhost:8080/api/medical+stuff/clinic=" + this.context.admin.clinicId + "/all")
             .then(response => {
                 this.setState({
-                    medicalStuff: response.data
+                    medicalStuff: response.data,
+                    shownMedicalStaff: response.data
                 })
             })
     }
 
     onSortChange = (name) => {
-		const { currentSort } = this.state;
+        const { currentSort } = this.state;
         let nextSort;
 
-        if(name === 'first') {
+        if (name === 'first') {
             if (currentSort === 'first_down') nextSort = 'first_up';
             else if (currentSort === 'first_up') nextSort = 'default';
             else nextSort = 'first_down';
-        } else if(name === 'last') {
+        } else if (name === 'last') {
             if (currentSort === 'last_down') nextSort = 'last_up';
             else if (currentSort === 'last_up') nextSort = 'default';
             else nextSort = 'last_down';
-        } else if(name === 'email') {
+        } else if (name === 'email') {
             if (currentSort === 'email_down') nextSort = 'email_up';
             else if (currentSort === 'email_up') nextSort = 'default';
             else nextSort = 'email_down';
@@ -97,9 +99,9 @@ class ClinicAdminMedicalStaff extends Component {
             else nextSort = 'role_down';
         }
 
-		this.setState({
-			currentSort: nextSort
-		}, () => {
+        this.setState({
+            currentSort: nextSort
+        }, () => {
             this.renderArrowFirst()
             this.renderArrowLast()
             this.renderArrowEmail()
@@ -108,9 +110,9 @@ class ClinicAdminMedicalStaff extends Component {
     };
 
     renderArrowFirst = () => {
-        if(this.state.currentSort === 'first_up') {
+        if (this.state.currentSort === 'first_up') {
             return '\u2191'
-        } else if(this.state.currentSort === 'first_down') {
+        } else if (this.state.currentSort === 'first_down') {
             return '\u2193'
         } else {
             return ''
@@ -118,9 +120,9 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     renderArrowLast = () => {
-        if(this.state.currentSort === 'last_up') {
+        if (this.state.currentSort === 'last_up') {
             return '\u2191'
-        } else if(this.state.currentSort === 'last_down') {
+        } else if (this.state.currentSort === 'last_down') {
             return '\u2193'
         } else {
             return ''
@@ -128,9 +130,9 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     renderArrowEmail = () => {
-        if(this.state.currentSort === 'email_up') {
+        if (this.state.currentSort === 'email_up') {
             return '\u2191'
-        } else if(this.state.currentSort === 'email_down') {
+        } else if (this.state.currentSort === 'email_down') {
             return '\u2193'
         } else {
             return ''
@@ -138,9 +140,9 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     renderArrowRole = () => {
-        if(this.state.currentSort === 'role_up') {
+        if (this.state.currentSort === 'role_up') {
             return '\u2191'
-        } else if(this.state.currentSort === 'role_down') {
+        } else if (this.state.currentSort === 'role_down') {
             return '\u2193'
         } else {
             return ''
@@ -148,106 +150,141 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     handleChange = (event) => {
-        this.setState({[event.target.name]: event.target.value})
+        this.setState({ [event.target.name]: event.target.value })
     }
 
     handleUpdate = (key, role) => {
         const items = this.state.medicalStuff.filter(item => (item.id !== key || item.role !== role));
-        this.setState({ medicalStuff: items});
-    }
-
-    handleFilterRole = () => {
-        if(this.state.isFilterRoleActive === true) {
-            this.setState({filterRoleEnum: this.state.checkedMedicalStaff})
-        } else {
-            this.setState({filterRoleEnum: 'DISABLED'})
-        }
-    }
-
-    handleActivateFilter = () => {
-        this.setState({isFilterRoleActive: !this.state.isFilterRoleActive},
-            () => {
-                this.handleFilterRole()
-            })
+        this.setState({ medicalStuff: items }, () => {
+            this.handleFilterRole()
+        });
     }
 
     handleOptionChange = (changeEvent) => {
         this.setState({
-          checkedMedicalStaff: changeEvent.target.value
+            checkedMedicalStaff: changeEvent.target.value
         }, () => {
             this.handleFilterRole()
         });
     }
 
+    handleFilterRole = () => {
+        if (this.state.checkedMedicalStaff == 'DOCTOR') {
+            let items = this.state.medicalStuff.filter(item => item.role === 'DOCTOR');
+            this.setState({ shownMedicalStaff: items })
+        } else if (this.state.checkedMedicalStaff == 'NURSE') {
+            let items = this.state.medicalStuff.filter(item => item.role === 'NURSE');
+            this.setState({ shownMedicalStaff: items })
+        } else {
+            this.setState({ shownMedicalStaff: this.state.medicalStuff })
+        }
+    }
+
     handleFilter = () => {
-        axios.post('http://localhost:8080/api/medical+stuff/filter', 
+        axios.post('http://localhost:8080/api/medical+stuff/filter',
             {
                 string: this.state.filterString,
-                role: this.state.filterRoleEnum
+                role: 'DISABLED'
             }).then(response => {
-                this.setState({medicalStuff: response.data});
+                this.setState({ medicalStuff: response.data }, () => {
+                    this.handleFilterRole();
+                });
             }).catch(error => {
                 console.log('error in filter of procedure types')
             })
     }
 
-    render() { 
+    render() {
         let i = 0;
-        return ( 
+        return (
             <div class='row d-flex justify-content-center'>
-            <div class='col-md-8'>
-                <br/>
-                <h3>Clinic {this.state.clinicName}</h3>
-                <h4>List of employees</h4>
-                <br/>
-                <Table class="table table-hover">
-                    <TableHead class="table-active">
-                        <TableRow class="table-active">
-                            <TableCell>
-                                <span class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="filterRole" onChange={this.handleActivateFilter} checked={this.state.isFilterRoleActive}/>
-                                    <label class="custom-control-label text-white" for="filterRole">filter by role:</label>
-                                </span>
-                            </TableCell>
-                            <TableCell>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="NURSES" checked={this.state.checkedMedicalStaff === 'NURSES'} onChange={this.handleOptionChange} disabled={!this.state.isFilterRoleActive} />
-                                    <label className={`custom-control-label ${this.state.isFilterRoleActive? 'text-white': 'text-muted'} `} for="customRadio1">nurses</label>
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="DOCTORS" checked={this.state.checkedMedicalStaff === 'DOCTORS'} onChange={this.handleOptionChange} disabled={!this.state.isFilterRoleActive}/>
-                                    <label className={`custom-control-label ${this.state.isFilterRoleActive? 'text-white': 'text-muted'} `} for="customRadio2">doctors</label>
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/>
-                            </TableCell>
-                            <TableCell>
-                                <Button class="btn btn-success" onClick = {this.handleFilter}>Search</Button> 
-                            </TableCell>
-                        </TableRow>
-                        <TableRow class="table-active">
-                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('first')}>first name{this.renderArrowFirst()}</TableCell>
-                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('last')}>last name{this.renderArrowLast()}</TableCell>
-                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('email')}>email{this.renderArrowEmail()}</TableCell>
-                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('role')}>role{this.renderArrowRole()}</TableCell>
-                            <TableCell class="text-success"></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {this.state.medicalStuff.sort(sortTypes[this.state.currentSort].fn).map(c => (
-                            <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <MedicalStuffItem key={i} value={c} handleUpdate={this.handleUpdate}/>
+                <div class='col-md-8'>
+                    <br />
+                    <h3>Clinic {this.state.clinicName}</h3>
+                    <h4>List of employees</h4>
+                    <br />
+                    <Table class="table table-hover">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell colSpan='3'>
+                                    <ul>
+                                        <li>
+                                            <input
+                                                type="radio"
+                                                id="customRadio3"
+                                                name="customRadio"
+                                                value="ALL"
+                                                onChange={this.handleOptionChange}
+                                            />
+                                            <label
+                                                class="text-white"
+                                                for="customRadio3"
+                                            >
+                                                all
+											</label>
+                                            <div class="check"></div>
+                                        </li>
+                                        <li>
+                                            <input
+                                                type="radio"
+                                                id="customRadio1"
+                                                name="customRadio"
+                                                value="DOCTOR"
+                                                onChange={this.handleOptionChange}
+                                            />
+                                            <label
+                                                class="text-white"
+                                                for="customRadio1"
+                                            >
+                                                doctors
+											</label>
+                                            <div class="check"></div>
+                                        </li>
+                                        <li>
+                                            <input
+                                                type="radio"
+                                                id="customRadio2"
+                                                name="customRadio"
+                                                value="NURSE"
+                                                onChange={this.handleOptionChange}
+                                            />
+                                            <label
+                                                class="text-white"
+                                                for="customRadio2"
+                                            >
+                                                nurses
+											</label>
+                                            <div class="check"></div>
+                                        </li>
+                                    </ul>
+                                </TableCell>
+                                <TableCell>
+                                    <input type="text" placeholder="Filter..." name="filterString" onChange={this.handleChange} />
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="success" onClick={this.handleFilter}>Search</Button>
+                                </TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                            <TableRow class="table-active">
+                                <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('first')}>first name{this.renderArrowFirst()}</TableCell>
+                                <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('last')}>last name{this.renderArrowLast()}</TableCell>
+                                <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('email')}>email{this.renderArrowEmail()}</TableCell>
+                                <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('role')}>role{this.renderArrowRole()}</TableCell>
+                                <TableCell class="text-success"></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.shownMedicalStaff.sort(sortTypes[this.state.currentSort].fn).map(c => (
+                                <TableRow className={(++i) % 2 ? `table-dark` : ``} >
+                                    <MedicalStuffItem key={i} value={c} handleUpdate={this.handleUpdate} />
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </div>
-            </div>
-         );
+        );
     }
 }
- 
+
 export default ClinicAdminMedicalStaff;
