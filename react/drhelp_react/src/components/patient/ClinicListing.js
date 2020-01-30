@@ -20,16 +20,26 @@ class ClinicListing extends Component {
 		selectedDate: 'unfiltered', 
 		cantReserve : true, 
 		types : [], 
+		states : [], 
+
+		stateFilter: 'unfiltered',
+		cityFilter : 'unfiltered',
+		addressFilter : 'unfiltered', 
+		minRat : 'unfiltered', 
+		maxRat : 'unfiltered', 
+		minPrice : 'unfiltered', 
+		maxPrice : 'unfiltered'
 	}
 
 	componentDidMount () {
-		axios.get ('http://localhost:8080/api/clinics/listing/unfiltered/unfiltered')
+		axios.get ('http://localhost:8080/api/clinics/listing/proc_type=unfiltered/date=unfiltered/stat=unfiltered/cit=unfiltered/adr=unfiltered/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered')
 		.then (response => {
 			this.setState ({
 				clinics : response.data.clinicList, 
 				appointmentTypes : response.data.procedureType, 
 				activeFilter  : response.data.procedureTypeString, 
-				selectedDate : response.data.dateString
+				selectedDate : response.data.dateString, 
+				states : response.data.stateList
 			})
 			let items =[];
 			var size = response.data.procedureType.length;
@@ -43,8 +53,22 @@ class ClinicListing extends Component {
 					value : response.data.procedureType[i]
 				})
 			}
+
+			let itemsState = [];
+			let sizeState = response.data.stateList.length;
+			itemsState.push ({
+				label : "-", 
+				value : "-"
+			})
+			for (let i = 0; i < sizeState; ++i) {
+				itemsState.push ({
+					label : response.data.stateList[i],
+					value : response.data.stateList[i]
+				})
+			}
 			this.setState ({
-				types : items
+				types : items,
+				states : itemsState
 			})
 		})
 	}
@@ -110,7 +134,7 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData (text, value);
+		this.fetchData(text, value, this.state.stateFilter);
 	}
 
 	toggleMenu = () => {
@@ -119,7 +143,11 @@ class ClinicListing extends Component {
 		} else {
 		  this.setState({ visible: false, hide: false});
 		}
-	  }
+	}
+
+
+
+	
 
 	handleFilterDate () {
 		
@@ -155,15 +183,26 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData(text, value)
+		this.fetchData(text, value, this.state.stateFilter);
 
 	}
 
-	fetchData (dil, dat) {
-		let text = this.state.activeFilter;
-		let date = this.state.selectedDate;
-		let requestPartOne = 'http://localhost:8080/api/clinics/listing/';
-		let requestPartTwo = dil + '/' + dat;
+	handleFilterState (text) {
+		// alert ("Filtering by state!");
+		this.toggleMenu();
+		this.setState ({
+			stateFilter : text.value
+		})
+		this.fetchData(this.state.activeFilter, this.state.selectedDate, text.value);
+	}
+
+	fetchData (dil, dat, sFilter) {
+		// let text = this.state.activeFilter;
+		// let date = this.state.selectedDate;
+		let requestPartOne = 'http://localhost:8080/api/clinics/listing/proc_type=';
+		let requestPartTwo = dil + '/date=' + dat;
+		requestPartTwo += '/stat=' + sFilter;
+		requestPartTwo += '/cit=unfiltered/adr=unfiltered/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered';
 		let wholeRequest = requestPartOne + requestPartTwo;
 		
 		axios.get (wholeRequest)
@@ -202,7 +241,14 @@ class ClinicListing extends Component {
 										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
 									</form>
 								</TableCell>
-								<TableCell width="100px"></TableCell>
+								<TableCell width="100px">
+									<form>
+										<Select 
+											onChange = {this.handleFilterState.bind(this)}
+											options={this.state.states}
+										/>
+									</form>
+								</TableCell>
 								<TableCell width="50px"></TableCell>
 								<TableCell width="50px"></TableCell>
 								<TableCell width="75px"></TableCell>

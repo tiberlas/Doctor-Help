@@ -55,7 +55,7 @@ class DoctorListing extends Component {
 			})
 		})
 		this.setState ({
-			appointmentType : window.location.href.split('/')[5], 
+			appointmentType : window.location.href.split('/')[5].replace('%20', ' '), 
 			selectedDate : window.location.href.split('/')[6]
 		})
 	}

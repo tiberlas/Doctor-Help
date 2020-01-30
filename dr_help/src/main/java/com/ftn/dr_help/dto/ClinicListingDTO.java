@@ -17,10 +17,12 @@ public class ClinicListingDTO {
 	}
 
 
-	private List<ClinicPreviewDTO> clinicList;
-	private List<String> procedureType;
 	private String procedureTypeString;
 	private String dateString;
+	private String stateString;
+	private List<ClinicPreviewDTO> clinicList;
+	private List<String> procedureType;
+	private List<String> stateList;
 	
 	public ClinicListingDTO () {
 		clinicList = new ArrayList<ClinicPreviewDTO> ();
@@ -62,6 +64,26 @@ public class ClinicListingDTO {
 
 	public void setDateString(String dateString) {
 		this.dateString = dateString;
+	}
+
+
+	public List<String> getStateList() {
+		return stateList;
+	}
+
+
+	public void setStateList(List<String> stateList) {
+		this.stateList = stateList;
+	}
+
+
+	public String getStateString() {
+		return stateString;
+	}
+
+
+	public void setStateString(String stateString) {
+		this.stateString = stateString;
 	}
 	
 	

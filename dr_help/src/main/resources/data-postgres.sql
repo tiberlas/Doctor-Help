@@ -5,6 +5,7 @@ insert into clinic(address, city, state, name, description) values('7A Bulevar d
 insert into clinic(address, city, state, name, description) values('7 Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Arkham', 'Assylum for the criminally insane.');
 insert into clinic(address, city, state, name, description) values('5A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic.');
 insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
+insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Novi Sad', 'Montenegro', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
 
 --password: sifra
 insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday) 

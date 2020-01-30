@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.dto.ClinicDTO;
+import com.ftn.dr_help.dto.ClinicListingDTO;
+import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
@@ -216,6 +218,35 @@ public class ClinicService {
 		else {
 			clinicReviewRepository.updateReview(review, patientId, clinicId);
 		}
+	}
+
+	public ClinicListingDTO doOtherFilters(ClinicListingDTO input, String state) {
+		List<String> stateNames = new ArrayList<String> ();
+		for (ClinicPreviewDTO cp : input.getClinicList()) {
+			boolean isThere = false;
+			for (String s : stateNames) {
+				if (s.equals(cp.getState())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				stateNames.add(cp.getState());
+			}
+		}
+		input.setStateList(stateNames);
+		
+		if (!state.equals("unfiltered")) {
+			List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+			for (ClinicPreviewDTO temp : input.getClinicList()) {
+				if (temp.getState().equals(state)) {
+					tempList.add(temp);
+				}
+			}
+			input.setClinicList(tempList);
+		}
+		
+		return input;
 	}
 	
 }
