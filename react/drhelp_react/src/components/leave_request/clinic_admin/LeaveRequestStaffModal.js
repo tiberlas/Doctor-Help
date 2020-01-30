@@ -16,7 +16,8 @@ class LeaveRequestStaffModal extends React.Component {
         sending: false,
         declining: false,
         declineReason: "",
-        success: false
+        success: false,
+        operatingDoctor: false
     }
 
     componentDidMount() {
@@ -56,6 +57,7 @@ class LeaveRequestStaffModal extends React.Component {
                 staffRole: this.state.request.staffRole
             }).then(response=> {
                 console.log('response', response.data)
+                this.setState({operatingDoctor: response.data.operatingDoctor})
                 if(response.data.validationEnum === 'APPROVED_CONFLICT') {
                     this.setState({approvedConflict: true, approvedCount: response.data.approvedAppointmentsCount})
                 } else if(response.data.validationEnum === 'AVAILABLE_CONFLICT') {
@@ -78,7 +80,7 @@ class LeaveRequestStaffModal extends React.Component {
 
     noteDisplay = () => {
         if(this.props.request.note.trim() === "") {
-            return <div style={{fontStyle: "italic"}}> No note attached. </div>
+            return <span style={{fontStyle: "italic"}}> No note attached. </span>
         } else 
             return this.props.request.note 
     }
@@ -191,7 +193,7 @@ class LeaveRequestStaffModal extends React.Component {
                 </tr>
                 <tr> 
                     <th scope="row">Additional note: </th>
-                    <td >  &emsp;{this.noteDisplay()} </td>
+                    <td>  &emsp;{this.noteDisplay()} </td>
                 </tr>
                 <tr> 
                     <th scope="row">Start date: </th>
@@ -208,6 +210,12 @@ class LeaveRequestStaffModal extends React.Component {
 
     render() {
 
+        let procedureType = ''
+        if(this.state.operatingDoctor) {
+            procedureType = 'operation'
+        } else {
+            procedureType = 'appointment'
+        }
 
         let conflict = ''
         if(this.state.sending) {
@@ -264,7 +272,7 @@ class LeaveRequestStaffModal extends React.Component {
                                 {conflict === 'approved' 
                                     && <div class="invalid-feedback d-block"> 
                                     There {this.state.approvedCount == 1 ? 'is' : 'are' } {this.state.approvedCount.toString()} 
-                                   &nbsp; approved appointment{this.state.approvedCount == 1 ? '':'s'} in the request period. </div>}
+                                   &nbsp; approved {procedureType} {this.state.approvedCount == 1 ? '':'s'} in the request period. </div>}
 
 
                                 {conflict === 'available' && !this.state.declining 
@@ -303,7 +311,7 @@ class LeaveRequestStaffModal extends React.Component {
 
                                 {conflict === 'bless' 
                                     && <div class="valid-feedback d-block"> 
-                                    No conflicting appointments. Everything seems okay! </div>}
+                                    No conflicting {procedureType + 's'}. Everything seems okay! </div>}
                                     </div>
                                 </div>
                             </ModalBody>

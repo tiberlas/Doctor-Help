@@ -171,7 +171,7 @@ class LeaveRequestModal extends React.Component {
                 staffId: this.state.id,
                 staffRole: "DOCTOR",
                 startDate: new Date(this.props.selectedDates.startStr),
-                endDate: new Date(this.props.selectedDates.endStr)
+                endDate: endDate
 
             }).then(response => {
                 this.setState({successInfo: true}, () => {

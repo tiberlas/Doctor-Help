@@ -6,7 +6,7 @@ public class BlessingConflictsDTO {
 
 	private LeaveRequestValidationEnum validationEnum;
 	private Integer approvedAppointmentsCount;
-	
+	private boolean operatingDoctor;
 	
 	public BlessingConflictsDTO() {
 		
@@ -23,5 +23,13 @@ public class BlessingConflictsDTO {
 	}
 	public void setApprovedAppointmentsCount(Integer approvedAppointmentsCount) {
 		this.approvedAppointmentsCount = approvedAppointmentsCount;
+	}
+
+	public boolean isOperatingDoctor() {
+		return operatingDoctor;
+	}
+
+	public void setOperatingDoctor(boolean operatingDoctor) {
+		this.operatingDoctor = operatingDoctor;
 	}
 }

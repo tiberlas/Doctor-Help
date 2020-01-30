@@ -272,6 +272,10 @@ public class LeaveRequestService {
 	
 	
 	public BlessingConflictsDTO validateDoctorRequest(LeaveRequestDTO requestDTO) {
+		
+		DoctorPOJO doctor = doctorRepository.findOneById(requestDTO.getStaffId());
+		boolean operatingDoctor = doctor.getProcedureType().isOperation(); //is he an operating doctor or not
+		
 		Calendar now = Calendar.getInstance();
 		
 		now.set(Calendar.HOUR_OF_DAY, 24);
@@ -301,6 +305,12 @@ public class LeaveRequestService {
 		}
 		
 		BlessingConflictsDTO blessConflictsDTO = new BlessingConflictsDTO();
+		if(operatingDoctor) {
+			blessConflictsDTO.setOperatingDoctor(true);
+		} else {
+			blessConflictsDTO.setOperatingDoctor(false);
+		}
+		
 		Integer approvedCount = 0;
 		List<OperationPOJO> operationList = new ArrayList<OperationPOJO>();
 		
@@ -316,6 +326,7 @@ public class LeaveRequestService {
 			
 			if(operationList.isEmpty()) {
 				blessConflictsDTO.setValidationEnum(LeaveRequestValidationEnum.CAN_BLESS);
+				
 				return blessConflictsDTO;
 			} else {
 				for (OperationPOJO operationPOJO : operationList) {
@@ -326,7 +337,6 @@ public class LeaveRequestService {
 				
 				blessConflictsDTO.setValidationEnum(LeaveRequestValidationEnum.APPROVED_CONFLICT);
 				blessConflictsDTO.setApprovedAppointmentsCount(approvedCount);
-				
 				return blessConflictsDTO;
 			}
 			
