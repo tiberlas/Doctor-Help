@@ -220,9 +220,10 @@ public class ClinicService {
 		}
 	}
 
-	public ClinicListingDTO doOtherFilters(ClinicListingDTO input, String state, String city) {
+	public ClinicListingDTO doOtherFilters(ClinicListingDTO input, String state, String city, String address) {
 		List<String> stateNames = new ArrayList<String> ();
 		List<String> cityNames = new ArrayList<String> ();
+		List<String> addressNames = new ArrayList<String> ();
 		for (ClinicPreviewDTO cp : input.getClinicList()) {
 			boolean isThere = false;
 			// Set up states
@@ -246,9 +247,21 @@ public class ClinicService {
 			if (!isThere) {
 				cityNames.add(cp.getCity());
 			}
+			
+			isThere = false; 
+			for (String s : addressNames) {
+				if (s.equals(cp.getAddress())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				addressNames.add(cp.getAddress());
+			}
 		}
 		input.setStateList(stateNames);
 		input.setCityList(cityNames);
+		input.setAddressList(addressNames);
 		
 		if (!state.equals("unfiltered")) {
 			List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
@@ -268,8 +281,17 @@ public class ClinicService {
 				}
 			}
 			input.setClinicList(tempList);
-		}		
+		}
 		
+		if (!address.equals("unfiltered")) {
+			List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+			for (ClinicPreviewDTO temp : input.getClinicList()) {
+				if (temp.getAddress().equals(address)) {
+					tempList.add(temp);
+				}
+			}
+			input.setClinicList(tempList);
+		}
 		
 		return input;
 	}

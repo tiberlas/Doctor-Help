@@ -22,6 +22,7 @@ class ClinicListing extends Component {
 		types : [], 
 		states : [], 
 		cities : [], 
+		addresses : [], 
 
 		stateFilter: 'unfiltered',
 		cityFilter : 'unfiltered',
@@ -81,10 +82,24 @@ class ClinicListing extends Component {
 				})
 			}
 
+			let itemsAddress = [];
+			let sizeAddress = response.data.addressList.length;
+			itemsAddress.push ({
+				label : "-", 
+				value : "-"
+			})
+			for (let i = 0; i < sizeAddress; ++i) {
+				itemsAddress.push ({
+					label : response.data.addressList[i], 
+					value : response.data.addressList[i]
+				})
+			}
+
 			this.setState ({
 				types : items,
 				states : itemsState,
-				cities : itemsCity
+				cities : itemsCity,
+				addresses : itemsAddress
 			})
 		})
 	}
@@ -150,7 +165,7 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter);
+		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter);
 	}
 
 	toggleMenu = () => {
@@ -199,7 +214,7 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter);
+		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter, this.addressFilter);
 
 	}
 
@@ -215,13 +230,13 @@ class ClinicListing extends Component {
 		this.setState ({
 			stateFilter : str
 		})
-		this.fetchData(this.state.activeFilter, this.state.selectedDate, str, this.state.cityFilter);
+		this.fetchData(this.state.activeFilter, this.state.selectedDate, str, this.state.cityFilter, this.state.addressFilter);
 	}
 
 	handleFilterCity (text) {
 		let str = text.value;
 		if (str === '-') {
-			str = 'unfiltered'
+			str = 'unfiltered';
 		}
 
 		this.toggleMenu();
@@ -229,17 +244,32 @@ class ClinicListing extends Component {
 		this.setState ({
 			cityFilter : str
 		})
-		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, str);
+		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.cityFilter, str, this.state.addressFilter);
 	}
 
-	fetchData (dil, dat, sFilter, cFilter) {
+	handleFilterAddress (text) {
+		let str = text.value;
+		if (str === '-') {
+			str = 'unfiltered';
+		}
+
+		this.toggleMenu();
+
+		this.setState ({
+			addressFilter : str
+		})
+		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.cityFilter, this.state.cityFilter, str);
+	}
+
+	fetchData (dil, dat, sFilter, cFilter, aFilter) {
 		// let text = this.state.activeFilter;
 		// let date = this.state.selectedDate;
 		let requestPartOne = 'http://localhost:8080/api/clinics/listing/proc_type=';
 		let requestPartTwo = dil + '/date=' + dat;
 		requestPartTwo += '/stat=' + sFilter;
 		requestPartTwo += '/cit=' + cFilter;
-		requestPartTwo += '/adr=unfiltered/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered';
+		requestPartTwo += '/adr=' + aFilter;
+		requestPartTwo += '/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered';
 		let wholeRequest = requestPartOne + requestPartTwo;
 		
 		axios.get (wholeRequest)
@@ -294,7 +324,14 @@ class ClinicListing extends Component {
 										/>
 									</form>
 								</TableCell>
-								<TableCell width="50px"></TableCell>
+								<TableCell width="50px">
+									<form>
+										<Select 
+											onChange = {this.handleFilterAddress.bind(this)}
+											options={this.state.addresses}
+										/>
+									</form>
+								</TableCell>
 								<TableCell width="75px"></TableCell>
 								<TableCell width="50px"></TableCell>
 							</TableRow>

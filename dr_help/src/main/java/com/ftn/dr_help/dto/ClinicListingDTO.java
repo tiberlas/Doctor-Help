@@ -25,6 +25,7 @@ public class ClinicListingDTO {
 	private List<String> procedureType;
 	private List<String> stateList;
 	private List<String> cityList;
+	private List<String> addressList;
 	
 	public ClinicListingDTO () {
 		clinicList = new ArrayList<ClinicPreviewDTO> ();
@@ -106,6 +107,16 @@ public class ClinicListingDTO {
 
 	public void setCityList(List<String> cityList) {
 		this.cityList = cityList;
+	}
+
+
+	public List<String> getAddressList() {
+		return addressList;
+	}
+
+
+	public void setAddressList(List<String> addressList) {
+		this.addressList = addressList;
 	}
 	
 	
