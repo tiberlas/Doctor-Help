@@ -189,11 +189,16 @@ class ClinicListing extends Component {
 
 	handleFilterState (text) {
 		// alert ("Filtering by state!");
+		let str = text.value;
+		if (str === '-') {
+			str = 'unfiltered'
+		} 
+
 		this.toggleMenu();
 		this.setState ({
-			stateFilter : text.value
+			stateFilter : str
 		})
-		this.fetchData(this.state.activeFilter, this.state.selectedDate, text.value);
+		this.fetchData(this.state.activeFilter, this.state.selectedDate, str);
 	}
 
 	fetchData (dil, dat, sFilter) {
