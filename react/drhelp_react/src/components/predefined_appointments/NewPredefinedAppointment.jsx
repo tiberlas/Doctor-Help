@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { ClinicAdminContext } from '../../context/ClinicAdminContextProvider';
-import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import TimePicker from 'react-time-picker/dist/TimePicker';
 import FormControl from 'react-bootstrap/FormControl';
+import Modal from "react-bootstrap/Modal";
 
 class NewPredefinedAppointment extends Component {
     state = {
@@ -195,7 +195,7 @@ class NewPredefinedAppointment extends Component {
                 disscount: this.state.disscount
             }).then((response) => {
                 //201 created
-                this.setState({ go_profile: true })
+                this.props.onSubmit();
             }).catch((error) => {
                 if (error.response.status == 409) {
                     this.setState({
@@ -219,21 +219,23 @@ class NewPredefinedAppointment extends Component {
     }
 
     handleCancel = () => {
-        this.setState({ go_profile: true })
+        this.props.onHide();
     }
 
     render() {
-        if (this.state.go_profile === true)
-            return (<Redirect to='/clinic-administrator/predefined-appointments'></Redirect>);
         return (
-            <div class='row d-flex justify-content-center'>
-                <div class='col-md-5'>
-                    <div>
-                        <br />
+            <Modal
+                size="md"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                show={this.props.show}
+            >
+                    <Modal.Header closeButton onClick={this.props.onHide}>
+                    <Modal.Title id="contained-modal-title-vcenter">
                         <h4>Create a predefined appointment</h4>
-                        <hr class="md-4" />
-                        <br />
-                    </div>
+                     </Modal.Title>
+                     </Modal.Header>
+                    <Modal.Body>
                     <form onSubmit={this.handleSubmit}>
 
                         <div className={`form-group ${this.state.doctorDisabled ? 'has-danger' : ''}`} >
@@ -274,11 +276,22 @@ class NewPredefinedAppointment extends Component {
 
                         <div>
                             <label for='date'>date</label>
-                            <FormControl type="date" id='date' locale="en-us" placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} className={`form-control ${this.state.errorDate ? 'is-invalid' : 'is-valid'}`} />
+                            <div class="input-group">
+                                <div class="input-group-preppend">
+                                    <span class="input-group-text">&#x1F4C5;</span>
+                                </div>
+                                <FormControl type="date" id='date' locale="en-us" placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} className={`form-control ${this.state.errorDate ? 'is-invalid' : 'is-valid'}`} />
+                            </div>
                         </div>
-                        <div>
+
+                        <div class='form-group'>
                             <label for='time'>time</label>
-                            <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="en-us" value={this.state.time} className={`form-control ${this.state.errorTime ? 'is-invalid' : 'is-valid'}`} />
+                            <div class="input-group">
+                                <div class="input-group-preppend">
+                                    <span class="input-group-text">&#x231A;</span>
+                                </div>
+                                    <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="en-us" value={this.state.time} className={`form-control ${this.state.errorTime ? 'is-invalid' : 'is-valid'}`} />
+                            </div>
                         </div>
 
                         <div class='form-group'>
@@ -305,9 +318,10 @@ class NewPredefinedAppointment extends Component {
                             <p class="text-danger">{this.state.whomNotDateFit}not free. Please try with date: {this.state.recomendedDate}.</p>
                         }
                         {this.state.fatalError &&
-                            <p calss="text-danger">Please select a date in future</p>
+                            <p class="text-danger">Please select a date in future</p>
                         }
 
+                        <Modal.Footer>
                         <div class="form-group row">
                             <div class='col-md text-left'>
                                 <input type="submit" class="btn btn-success" disabled={this.state.errorDisscount || this.state.errorTimeAndDate || this.state.errorRoom || this.state.errorNurse} value="submit" />
@@ -316,10 +330,10 @@ class NewPredefinedAppointment extends Component {
                                 <button type="button" class="btn btn-danger" onClick={this.handleCancel}>Cancel</button>
                             </div>
                         </div>
+                        </Modal.Footer>
                     </form>
-
-                </div>
-            </div>
+                    </Modal.Body>
+               </Modal>
         );
     }
 }

@@ -83,7 +83,7 @@ class ChangeProcedureTypeModal extends Component {
                             <label class="form-control-label" for="name">name:</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">&#9815;</span>
                                 </div>
                                 <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
                             </div>
@@ -104,7 +104,7 @@ class ChangeProcedureTypeModal extends Component {
                             <label class="form-control-label" for="duration">duration:</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">&#8987;</span>
                                 </div>
                                 <TimePicker name='duration' id='duration' onChange={this.handleChangeTime} locale="en-us" value={this.state.duration} className={`form-control ${this.state.errorDuration? 'is-invalid': 'is-valid'}`}/>
                             </div>

@@ -7,6 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import PredefinedAppointmentItem from "../predefined_appointments/PredefinedAppointmentItem";
+import NewPredefinedAppointment from '../predefined_appointments/NewPredefinedAppointment';
 
 const sortTypes = {
 	date_up: {
@@ -37,22 +38,13 @@ class HandleingPredefinedAppointments extends Component {
 		predefined: [],
 		currentSort: "default",
 		name: "",
+		showAddPredefinedAppointment: false
 	};
 
 	static contextType = ClinicAdminContext;
 
 	componentDidMount() {
-		axios
-			.get(
-				"http://localhost:8080/api/predefined+appointments/clinic=" +
-					this.context.admin.clinicId +
-					"/all",
-			)
-			.then((response) => {
-				this.setState({
-					predefined: response.data,
-				});
-			});
+		this.handleAllPredefinedAppointments()
 
 		axios
 			.get(
@@ -64,6 +56,21 @@ class HandleingPredefinedAppointments extends Component {
 					name: response.data.name,
 				});
 			});
+	}
+
+	handleAllPredefinedAppointments = () => {
+		axios
+		.get(
+			"http://localhost:8080/api/predefined+appointments/clinic=" +
+				this.context.admin.clinicId +
+				"/all",
+		)
+		.then((response) => {
+			this.setState({
+				predefined: response.data,
+			});
+		});
+
 	}
 
 	handleUpdate = (key) => {
@@ -131,6 +138,15 @@ class HandleingPredefinedAppointments extends Component {
 		}
 	};
 
+	handleAddPredefinedAppointment = () => {
+		this.setState({showAddPredefinedAppointment: !this.state.showAddPredefinedAppointment})
+	}
+
+	handleCreatedPredefinedAppointment = () => {
+		this.handleAddPredefinedAppointment();
+		this.handleAllPredefinedAppointments();
+	}
+
 	render() {
 		let i = 0;
 		return (
@@ -138,8 +154,20 @@ class HandleingPredefinedAppointments extends Component {
 				<div class="col-md-7">
 					<br />
 					<h3>Clinic {this.state.name}</h3>
-					<h4>List of predefined appointments</h4>
+					<div class='row'>
+                        <div class='col'>
+						<h4>List of predefined appointments</h4>
+                        </div>
+                        <div class='col'>
+                            <button class='btn btn-success rounded-circle float-right mr-5' onClick={this.handleAddPredefinedAppointment}>+</button>
+                        </div>
+                    </div>
 					<br />
+					<NewPredefinedAppointment
+						show={this.state.showAddPredefinedAppointment}
+						onHide={this.handleAddPredefinedAppointment}
+						onSubmit={this.handleCreatedPredefinedAppointment}
+					/>
 					<Table class="table table-hover ">
 						<TableHead>
 							<TableRow>

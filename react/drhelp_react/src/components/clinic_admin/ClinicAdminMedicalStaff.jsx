@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button';
 import '../../customRadioButton.css';
+import CreateMedicalStaff from './CreateMedicalStaff';
 
 const sortTypes = {
     first_up: {
@@ -50,7 +51,8 @@ class ClinicAdminMedicalStaff extends Component {
         filterString: '',
         isFilterRoleActive: false,
         currentSort: 'default',
-        checkedMedicalStaff: 'ALL'
+        checkedMedicalStaff: 'ALL',
+        addModalDialog: false
     }
 
     componentDidMount() {
@@ -194,15 +196,30 @@ class ClinicAdminMedicalStaff extends Component {
             })
     }
 
+    handleAddMedicalStaff = () => {
+        this.setState({ addModalDialog: !this.state.addModalDialog });
+    }
+
     render() {
         let i = 0;
         return (
             <div class='row d-flex justify-content-center'>
                 <div class='col-md-8'>
                     <br />
-                    <h3>Clinic {this.state.clinicName}</h3>
-                    <h4>List of employees</h4>
+                    <h3 class=''>Clinic {this.state.clinicName}</h3>
+                    <div class='row'>
+                        <div class='col'>
+                            <h4>List of employees</h4>
+                        </div>
+                        <div class='col'>
+                            <button class='btn btn-success rounded-circle float-right mr-5' onClick={this.handleAddMedicalStaff}>+</button>
+                        </div>
+                    </div>
                     <br />
+                    <CreateMedicalStaff
+                        show={this.state.addModalDialog}
+                        onHide={this.handleAddMedicalStaff}
+                    />
                     <Table class="table table-hover">
                         <TableHead>
                             <TableRow>
@@ -214,6 +231,7 @@ class ClinicAdminMedicalStaff extends Component {
                                                 id="customRadio3"
                                                 name="customRadio"
                                                 value="ALL"
+                                                defaultChecked
                                                 onChange={this.handleOptionChange}
                                             />
                                             <label

@@ -7,11 +7,14 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import RequestedAppointmentItem from "../requesting_appointment/RequestedAppointmentItem.jsx";
+import { Redirect } from "react-router-dom";
 
 class ClinicAdminAppointmentRequests extends Component {
 	state = {
 		appointments: [],
 		name: "",
+		id: 0,
+		redirectState: false
 	};
 
 	static contextType = ClinicAdminContext;
@@ -42,13 +45,18 @@ class ClinicAdminAppointmentRequests extends Component {
 			});
 	};
 
-	handelUpdate = () => {};
+	handleRedirectPage = (id) => {
+		this.setState({redirectState: true, id: id})
+	}
 
 	render() {
 		let i = 0;
 		return (
 			<div class="row d-flex justify-content-center">
 				<div class="col-md-7">
+			{this.state.redirectState &&
+				<Redirect extact to={`/request/appointment/${this.state.id}`} />
+			}
 					<br />
 					<h3>Clinic {this.state.name}</h3>
 					<h4>List of requested appointments</h4>
@@ -75,8 +83,9 @@ class ClinicAdminAppointmentRequests extends Component {
 						</TableHead>
 						<TableBody>
 							{this.state.appointments.map((c) => (
-								<TableRow
+								<TableRow 
 									className={++i % 2 ? `table-dark` : ``}
+									onClick={(id) => this.handleRedirectPage(c.id)}
 								>
 									<RequestedAppointmentItem
 										key={c.id}

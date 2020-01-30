@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.OperationBlessingDTO;
 import com.ftn.dr_help.dto.OperationBlessingInnerDTO;
+import com.ftn.dr_help.dto.OperationDoctorRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestInfoDTO;
 import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
@@ -37,7 +38,7 @@ public class OperationController {
 	
 	@PostMapping(value = "/request/doctor", consumes = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
-	public ResponseEntity<String> createDoctorRequestedOperation(@RequestBody OperationRequestDTO requested) {
+	public ResponseEntity<String> createDoctorRequestedOperation(@RequestBody OperationDoctorRequestDTO requested) {
 		String email = currentUser.getEmail();
 		boolean success = operationServie.doctorRequestAppointment(requested, email);
 		
@@ -104,7 +105,7 @@ public class OperationController {
 	}
 	
 	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
-	@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('CLINICAL_ADMINISTRATOR')")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> checkOperationSchedule(@RequestBody OperationRequestDTO request) {
 			
 		String schedule = operationServie.checkOperationSchedue(request);

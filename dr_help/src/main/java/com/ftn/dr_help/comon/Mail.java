@@ -101,7 +101,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 	
-	public void sendOperationRequestEmail(String sendTo, String requestingDoctorName, String dr0Name, String dr1Name, String dr2Name, String type, String date) {
+	public void sendOperationRequestEmail(String sendTo, String requestingDoctorName, String type, String date) {
 
 	    SimpleMailMessage msg = new SimpleMailMessage();
 	    msg.setTo(sendTo);
@@ -109,7 +109,6 @@ public class Mail {
 	    msg.setSubject("DrHelp request operation");
 	    String text = "Dr " + requestingDoctorName + " request an operation for " + type;
 	    text += " at " + date;
-	    text += " with dr " + dr0Name + ", dr " + dr1Name + "and dr " + dr2Name;
 	    
 	    text += "\n\n\n" + "Forever helping, drHelp.";
 	    msg.setText(text);

@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "react-bootstrap/Button";
 import RoomModalSearch from "../rooms/RoomModalSearch";
+import NewRoom from "../rooms/NewRoom";
 
 const sortTypes = {
 	name_up: {
@@ -46,6 +47,7 @@ class HandlingRooms extends Component {
 		currentSort: "default",
 		modalShow: false,
 		name: "",
+		showAddModal: false
 	};
 
 	static contextType = ClinicAdminContext;
@@ -56,7 +58,7 @@ class HandlingRooms extends Component {
 		axios
 			.get(
 				"http://localhost:8080/api/clinics/id=" +
-					this.context.admin.clinicId,
+				this.context.admin.clinicId,
 			)
 			.then((response) => {
 				this.setState({
@@ -197,6 +199,15 @@ class HandlingRooms extends Component {
 			});
 	};
 
+	handleAddRoom = () => {
+		this.setState({ showAddModal: !this.state.showAddModal })
+	}
+
+	handleCreatedRoom = () => {
+		this.handleAddRoom()
+		this.handleShowAll()
+	}
+
 	render() {
 		let i = 0;
 		return (
@@ -204,8 +215,20 @@ class HandlingRooms extends Component {
 				<div class="col-md-7">
 					<br />
 					<h3>Clinic {this.state.name}</h3>
-					<h4>List of rooms</h4>
+					<div class='row'>
+						<div class='col'>
+							<h4>List of rooms</h4>
+						</div>
+						<div class='col'>
+							<button class='btn btn-success rounded-circle float-right mr-5' onClick={this.handleAddRoom}>+</button>
+						</div>
+					</div>
 					<br />
+					<NewRoom
+						show={this.state.showAddModal}
+						onHide={this.handleAddRoom}
+						onSubmit={this.handleCreatedRoom}
+					/>
 					<Table class="table table-hover ">
 						<TableHead>
 							<TableRow>

@@ -14,6 +14,7 @@ import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.OperationBlessingDTO;
 import com.ftn.dr_help.dto.OperationBlessingInnerDTO;
+import com.ftn.dr_help.dto.OperationDoctorRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestInfoDTO;
 import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
@@ -28,6 +29,7 @@ import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.OperationRepository;
+import com.ftn.dr_help.repository.ProcedureTypeRepository;
 
 @Service
 public class OperationService {
@@ -40,6 +42,9 @@ public class OperationService {
 	
 	@Autowired
 	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private ProcedureTypeRepository procedureRepository;
 	
 	@Autowired
 	private LeaveRequestService  leaveRequestsService;
@@ -56,61 +61,44 @@ public class OperationService {
 	@Autowired
 	private Mail mailSender;
 	
-	public boolean doctorRequestAppointment(OperationRequestDTO request, String emailOfRequestingDoctor) {
+	public boolean doctorRequestAppointment(OperationDoctorRequestDTO request, String emailOfRequestingDoctor) {
 		
 		try {
-			
-			String freeSchedule = checkOperationSchedue(request);
-			if(freeSchedule.equals(request.getDateAndTimeString())) {
-				DoctorPOJO requestedDoctor = doctorRepository.findOneByEmail(emailOfRequestingDoctor);
-				DoctorPOJO doctor0 = doctorRepository.getOne(request.getDoctor0());
-				DoctorPOJO doctor1 = doctorRepository.getOne(request.getDoctor1());
-				DoctorPOJO doctor2 = doctorRepository.getOne(request.getDoctor2());
+			DoctorPOJO requestedDoctor = doctorRepository.findOneByEmail(emailOfRequestingDoctor);
 			 	
-				AppointmentPOJO appointment = appointmentRepository.findOneById(request.getAppointmentId());
+			AppointmentPOJO appointment = appointmentRepository.findOneById(request.getAppointmentId());
 				
-				ProceduresTypePOJO operationType = appointment.getProcedureType();
+			ProceduresTypePOJO operationType = procedureRepository.getOne(request.getProcedureTypeId());
 				
-				PatientPOJO patient = appointment.getPatient();
+			PatientPOJO patient = appointment.getPatient();
 				
-				if(requestedDoctor == null || doctor0 == null || doctor1 == null || doctor2 == null || operationType == null || patient == null) {
-					return false;
-				}
+			if(requestedDoctor == null || operationType == null || patient == null) {
+				return false;
+			}
 				
-				OperationPOJO operation = new OperationPOJO();
-				operation.setDate(dateConvertor.stringToDate(freeSchedule));
-				operation.setDeleted(false);
-				operation.setRequestedDoctor(requestedDoctor);
-				operation.setFirstDoctor(doctor0);
-				operation.setSecondDoctor(doctor1);
-				operation.setThirdDoctor(doctor2);
-				operation.setPatient(patient);
-				operation.setOperationType(operationType);
-				operation.setStatus(OperationStatus.REQUESTED);
+			OperationPOJO operation = new OperationPOJO();
+			operation.setDate(dateConvertor.stringToDate(request.getDateAndTimeString()));
+			operation.setDeleted(false);
+			operation.setRequestedDoctor(requestedDoctor);
+			operation.setPatient(patient);
+			operation.setOperationType(operationType);
+			operation.setStatus(OperationStatus.REQUESTED);
 				
-				operationRepository.save(operation);
+			operationRepository.save(operation);
 				
-				//poslati mejl adminu
-				List<ClinicAdministratorPOJO> admins = doctor0.getClinic().getClinicAdminList();
+			//poslati mejl adminu
+			List<ClinicAdministratorPOJO> admins = requestedDoctor.getClinic().getClinicAdminList();
 				
-				for(ClinicAdministratorPOJO admin : admins) {
-					String requestingDoctorName = requestedDoctor.getFirstName() +" "+ requestedDoctor.getLastName();
-					String dr0Name =  doctor0.getFirstName() + " " + doctor0.getLastName();
-					String dr1Name = doctor1.getFirstName() + " " + doctor1.getLastName();
-					String dr2Name = doctor2.getFirstName() + " " + doctor2.getLastName();
-					mailSender.sendOperationRequestEmail(
-							admin.getEmail(), 
-							requestingDoctorName, 
-							dr0Name, 
-							dr1Name, 
-							dr2Name, 
-							operationType.getName(), 
-							freeSchedule);
-				}
-				return true;
+			for(ClinicAdministratorPOJO admin : admins) {
+				String requestingDoctorName = requestedDoctor.getFirstName() +" "+ requestedDoctor.getLastName();
+				mailSender.sendOperationRequestEmail(
+						admin.getEmail(), 
+						requestingDoctorName,  
+						operationType.getName(), 
+						request.getDateAndTimeString());
 			}
 			
-			return false;
+			return true;
 		} catch (Exception e) {
 			System.out.println("GRESKA: ");
 			e.printStackTrace();
@@ -156,9 +144,6 @@ public class OperationService {
 						dateConvertor.dateForFrontEndString(operation.getDate()), 
 						operation.getOperationType().getName(), 
 						operation.getOperationType().getId(), 
-						operation.getFirstDoctor().getEmail(), 
-						operation.getSecondDoctor().getEmail(), 
-						operation.getThirdDoctor().getEmail(), 
 						operation.getPatient().getEmail(),
 						dateConvertor.timeToString(duration)));
 			}
@@ -180,9 +165,6 @@ public class OperationService {
 					dateConvertor.dateForFrontEndString(finded.getDate()), 
 					finded.getOperationType().getName(), 
 					finded.getOperationType().getId(), 
-					finded.getFirstDoctor().getEmail(), 
-					finded.getSecondDoctor().getEmail(), 
-					finded.getThirdDoctor().getEmail(), 
 					finded.getPatient().getEmail(),
 					dateConvertor.timeToString(duration));
 			

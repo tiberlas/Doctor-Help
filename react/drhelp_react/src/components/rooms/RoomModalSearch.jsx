@@ -90,7 +90,7 @@ class RoomModalSearch extends Component {
 					name="procedureTypeId"
 					selected={
 						this.state.procedureTypeId ===
-						this.state.procedureList[i].id
+							this.state.procedureList[i].id
 							? "selected"
 							: ""
 					}
@@ -147,7 +147,7 @@ class RoomModalSearch extends Component {
 						<div
 							className={`form-group ${
 								this.state.errorNumber ? "has-danger" : ""
-							}`}
+								}`}
 						>
 							<label class="form-control-label" for="number">
 								Room's number:
@@ -161,7 +161,7 @@ class RoomModalSearch extends Component {
 									this.state.errorNumber
 										? "is-invalid"
 										: "is-valid"
-								}`}
+									}`}
 								value={this.state.number}
 								onChange={this.handlerChange}
 							/>
@@ -193,7 +193,7 @@ class RoomModalSearch extends Component {
 						<div
 							className={`form-group ${
 								this.state.errorDate ? "has-danger" : ""
-							}`}
+								}`}
 						>
 							<label class="form-control-label" for="date">
 								Date for scheduling:
@@ -206,7 +206,7 @@ class RoomModalSearch extends Component {
 									this.state.errorDate
 										? "is-invalid"
 										: "is-valid"
-								}`}
+									}`}
 								value={this.state.date}
 								onChange={this.handlerChange}
 							/>
@@ -221,7 +221,7 @@ class RoomModalSearch extends Component {
 						<div
 							className={`form-group ${
 								this.state.errorTime ? "has-danger" : ""
-							}`}
+								}`}
 						>
 							<label class="form-control-label" for="time">
 								Schedule time:
@@ -236,7 +236,7 @@ class RoomModalSearch extends Component {
 									this.state.errorTime
 										? "is-invalid"
 										: "is-valid"
-								}`}
+									}`}
 							/>
 							{this.state.errorTime && (
 								<div class="invalid-feedback">

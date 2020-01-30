@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "react-bootstrap/Button";
 import '../../customRadioButton.css';
+import NewProcedureType from "../procedureType/NewProcedureType";
 
 
 const sortTypes = {
@@ -46,11 +47,27 @@ class HandleingProcedureTypes extends Component {
 		currentSort: "default",
 		checkFilter: "NOT_OPERATION",
 		filterOperationDTO: "NOT_DEFINED",
+		showAddType: false
 	};
 
 	static contextType = ClinicAdminContext;
 
 	componentDidMount() {
+		this.handleAllProcedureType()
+
+		axios
+			.get(
+				"http://localhost:8080/api/clinics/id=" +
+				this.context.admin.clinicId,
+			)
+			.then((response) => {
+				this.setState({
+					name: response.data.name,
+				});
+			});
+	}
+
+	handleAllProcedureType = () => {
 		axios
 			.get("http://localhost:8080/api/procedure+types/all")
 			.then((response) => {
@@ -58,17 +75,6 @@ class HandleingProcedureTypes extends Component {
 					procedures: response.data,
 					shownProcedures: response.data,
 					refresh: false,
-				});
-			});
-
-		axios
-			.get(
-				"http://localhost:8080/api/clinics/id=" +
-					this.context.admin.clinicId,
-			)
-			.then((response) => {
-				this.setState({
-					name: response.data.name,
 				});
 			});
 	}
@@ -153,14 +159,14 @@ class HandleingProcedureTypes extends Component {
 	};
 
 	updateOptionChange = () => {
-		if(this.state.filterOperationDTO == 'OPERATION') {
+		if (this.state.filterOperationDTO == 'OPERATION') {
 			let items = this.state.procedures.filter(item => item.operation == true)
-			this.setState({shownProcedures: items})
-		} else if(this.state.filterOperationDTO == 'NOT_OPERATION') {
+			this.setState({ shownProcedures: items })
+		} else if (this.state.filterOperationDTO == 'NOT_OPERATION') {
 			let items = this.state.procedures.filter(item => item.operation == false)
-			this.setState({shownProcedures: items})
+			this.setState({ shownProcedures: items })
 		} else {
-			this.setState({shownProcedures: this.state.procedures})
+			this.setState({ shownProcedures: this.state.procedures })
 		}
 	}
 
@@ -180,6 +186,15 @@ class HandleingProcedureTypes extends Component {
 			});
 	};
 
+	handleAddType = () => {
+		this.setState({ showAddType: !this.state.showAddType })
+	}
+
+	handleCreatetType = () => {
+		this.handleAddType();
+		this.handleAllProcedureType()
+	}
+
 	render() {
 		let i = 0;
 		return (
@@ -187,8 +202,20 @@ class HandleingProcedureTypes extends Component {
 				<div class="col-md-7">
 					<br />
 					<h3>Clinic {this.state.name}</h3>
-					<h4>List of procedure types</h4>
+					<div class='row'>
+						<div class='col'>
+							<h4>List of procedure types</h4>
+						</div>
+						<div class='col'>
+							<button class='btn btn-success rounded-circle float-right mr-5' onClick={this.handleAddType}>+</button>
+						</div>
+					</div>
 					<br />
+					<NewProcedureType
+						show={this.state.showAddType}
+						onHide={this.handleAddType}
+						onSubmit={this.handleCreatetType}
+					/>
 					<Table class="table table-hover ">
 						<TableHead>
 							<TableRow>
@@ -200,6 +227,7 @@ class HandleingProcedureTypes extends Component {
 												id="customRadio3"
 												name="customRadio"
 												value="NOT_DEFINED"
+												defaultChecked
 												onChange={this.handleOptionChange}
 											/>
 											<label
@@ -307,7 +335,7 @@ class HandleingProcedureTypes extends Component {
 						</TableBody>
 					</Table>
 				</div>
-			</div>
+			</div >
 		);
 	}
 }
