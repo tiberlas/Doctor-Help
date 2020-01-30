@@ -20,9 +20,11 @@ public class ClinicListingDTO {
 	private String procedureTypeString;
 	private String dateString;
 	private String stateString;
+	private String cityString;
 	private List<ClinicPreviewDTO> clinicList;
 	private List<String> procedureType;
 	private List<String> stateList;
+	private List<String> cityList;
 	
 	public ClinicListingDTO () {
 		clinicList = new ArrayList<ClinicPreviewDTO> ();
@@ -84,6 +86,26 @@ public class ClinicListingDTO {
 
 	public void setStateString(String stateString) {
 		this.stateString = stateString;
+	}
+
+
+	public String getCityString() {
+		return cityString;
+	}
+
+
+	public void setCityString(String cityString) {
+		this.cityString = cityString;
+	}
+
+
+	public List<String> getCityList() {
+		return cityList;
+	}
+
+
+	public void setCityList(List<String> cityList) {
+		this.cityList = cityList;
 	}
 	
 	

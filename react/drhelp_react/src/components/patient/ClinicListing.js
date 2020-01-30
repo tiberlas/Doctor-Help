@@ -21,6 +21,7 @@ class ClinicListing extends Component {
 		cantReserve : true, 
 		types : [], 
 		states : [], 
+		cities : [], 
 
 		stateFilter: 'unfiltered',
 		cityFilter : 'unfiltered',
@@ -66,9 +67,24 @@ class ClinicListing extends Component {
 					value : response.data.stateList[i]
 				})
 			}
+
+			let itemsCity = [];
+			let sizeCity = response.data.cityList.length;
+			itemsCity.push ({
+				label : "-", 
+				value : "-"
+			})
+			for (let i = 0; i < sizeCity; ++i) {
+				itemsCity.push ({
+					label : response.data.cityList[i],
+					value : response.data.cityList[i]
+				})
+			}
+
 			this.setState ({
 				types : items,
-				states : itemsState
+				states : itemsState,
+				cities : itemsCity
 			})
 		})
 	}
@@ -134,7 +150,7 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData(text, value, this.state.stateFilter);
+		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter);
 	}
 
 	toggleMenu = () => {
@@ -183,7 +199,7 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData(text, value, this.state.stateFilter);
+		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter);
 
 	}
 
@@ -195,19 +211,35 @@ class ClinicListing extends Component {
 		} 
 
 		this.toggleMenu();
+
 		this.setState ({
 			stateFilter : str
 		})
-		this.fetchData(this.state.activeFilter, this.state.selectedDate, str);
+		this.fetchData(this.state.activeFilter, this.state.selectedDate, str, this.state.cityFilter);
 	}
 
-	fetchData (dil, dat, sFilter) {
+	handleFilterCity (text) {
+		let str = text.value;
+		if (str === '-') {
+			str = 'unfiltered'
+		}
+
+		this.toggleMenu();
+
+		this.setState ({
+			cityFilter : str
+		})
+		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, str);
+	}
+
+	fetchData (dil, dat, sFilter, cFilter) {
 		// let text = this.state.activeFilter;
 		// let date = this.state.selectedDate;
 		let requestPartOne = 'http://localhost:8080/api/clinics/listing/proc_type=';
 		let requestPartTwo = dil + '/date=' + dat;
 		requestPartTwo += '/stat=' + sFilter;
-		requestPartTwo += '/cit=unfiltered/adr=unfiltered/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered';
+		requestPartTwo += '/cit=' + cFilter;
+		requestPartTwo += '/adr=unfiltered/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered';
 		let wholeRequest = requestPartOne + requestPartTwo;
 		
 		axios.get (wholeRequest)
@@ -254,7 +286,14 @@ class ClinicListing extends Component {
 										/>
 									</form>
 								</TableCell>
-								<TableCell width="50px"></TableCell>
+								<TableCell width="50px">
+									<form>
+										<Select 
+											onChange = {this.handleFilterCity.bind(this)}
+											options={this.state.cities}
+										/>
+									</form>
+								</TableCell>
 								<TableCell width="50px"></TableCell>
 								<TableCell width="75px"></TableCell>
 								<TableCell width="50px"></TableCell>
