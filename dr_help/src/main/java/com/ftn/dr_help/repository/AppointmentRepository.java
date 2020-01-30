@@ -67,6 +67,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 			"	where (a.status = 'REQUESTED' or a.status = 'DOCTOR_REQUESTED_APPOINTMENT') and (ca.email = ?1) order by a.id", nativeQuery = true)
 	List<AppointmentPOJO> getAllRequests(String clinicAdminMail);
 
+	@Query(value = "select a.* from appointments a \n" +  
+			"where (a.status = 'REQUESTED' or a.status = 'DOCTOR_REQUESTED_APPOINTMENT') order by a.id", nativeQuery = true)
+	List<AppointmentPOJO> getAllRequests();
+	
 	@Query(value = "select a.* from appointments a \n" + 
 			"where a.status = 'AVAILABLE' \n" + 
 			"and a.deleted = false", nativeQuery = true)

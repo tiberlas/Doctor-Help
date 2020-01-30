@@ -50,5 +50,8 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 
 	@Query(value = "select ca.email from clinic_administrator ca inner join doctors d on (d.clinic_id = ca.clinic_id) where d.email = ?1", nativeQuery = true)
 	public List<String> findAllClinicAdminMails(String drMail);
+	
+	@Query(value = "select * from doctors d where d.clinic_id = ?1 and d.procedure_type_id = ?2", nativeQuery = true)
+	public List<DoctorPOJO> getAllDoctorsFromClinicWithSpecialization(Long clinicId, Long procedureId);
 
 }

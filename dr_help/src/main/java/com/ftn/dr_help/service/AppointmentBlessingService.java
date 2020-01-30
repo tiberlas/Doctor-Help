@@ -14,6 +14,7 @@ import com.ftn.dr_help.model.enums.AppointmentBlessing;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
@@ -89,32 +90,40 @@ public class AppointmentBlessingService {
 			}
 
 			DoctorPOJO doctor = doctorRepository.findOneByEmail(requested.getDoctorEmail());
-			
 			AppointmentPOJO appointment = appointmentRepository.getOne(requested.getAppointmentRequestedId());
-			appointment.setDate(date);
-			appointment.setDoctor(doctor);
-			appointment.setNurse(freeNurse.getNurse());
-			appointment.setRoom(room);
-			appointment.setDeleted(false);
-			if(appointment.getStatus() == AppointmentStateEnum.REQUESTED) {
-				//pacijent je trazio pregled, pa pitamo da li njemu odgovara
-				appointment.setStatus(AppointmentStateEnum.BLESSED);
-				
-				mailSender.sendAppointmentBlessedEmail(appointment);
-			} else {
-				//doktor je trazio pregled pa ih obavestavamo o ishodu
-				appointment.setStatus(AppointmentStateEnum.APPROVED);
-				
-				mailSender.sendAppointmentApprovedToDoctorEmail(appointment);
-				mailSender.sendAppointmentApprovedToNurseEmail(appointment);
-				mailSender.sendAppointmentApprovedToPatientEmail(appointment);
-			}			
-			appointmentRepository.save(appointment);
+			NursePOJO nurse = freeNurse.getNurse();
+			
+			scheduleAndSendMail(appointment, doctor, nurse, room, date);
 			
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.BLESSED, "BLESSING RECIVED");
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.REFFUSED, "NOT WORTHY");
 		}
+	}
+	
+	public void scheduleAndSendMail(AppointmentPOJO appointment, DoctorPOJO doctor, NursePOJO nurse, RoomPOJO room, Calendar date) {
+		/*
+		 * saveing scheduled appointemnt and sending required mails
+		 * */
+		appointment.setDate(date);
+		appointment.setDoctor(doctor);
+		appointment.setNurse(nurse);
+		appointment.setRoom(room);
+		appointment.setDeleted(false);
+		if(appointment.getStatus() == AppointmentStateEnum.REQUESTED) {
+			//pacijent je trazio pregled, pa pitamo da li njemu odgovara
+			appointment.setStatus(AppointmentStateEnum.BLESSED);
+			
+			mailSender.sendAppointmentBlessedEmail(appointment);
+		} else {
+			//doktor je trazio pregled pa ih obavestavamo o ishodu
+			appointment.setStatus(AppointmentStateEnum.APPROVED);
+			
+			mailSender.sendAppointmentApprovedToDoctorEmail(appointment);
+			mailSender.sendAppointmentApprovedToNurseEmail(appointment);
+			mailSender.sendAppointmentApprovedToPatientEmail(appointment);
+		}			
+		appointmentRepository.save(appointment);
 	}
 }

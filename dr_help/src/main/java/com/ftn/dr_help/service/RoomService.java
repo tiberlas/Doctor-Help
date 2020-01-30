@@ -457,7 +457,7 @@ public class RoomService {
 		
 	}
 	
-	public String findFirstFreeScheduleFromDate(RoomPOJO room, Calendar begin) {
+	public Calendar findFirstFreeScheduleFromDateInRawformat(RoomPOJO room, Calendar begin) {
 		/**
 		 * nadje priv slobodan termin za sobu od trenutka (begin)
 		 * ako je bas trazeni termin (begin) slobodan on se vrati u string obliku
@@ -503,7 +503,7 @@ public class RoomService {
 			
 			if(end.compareTo(currentBegin) <= 0) {
 				//termin je dobar i vrati ga
-				return dateConvertor.dateForFrontEndString(begin);
+				return (Calendar) begin.clone();
 			} else {
 				//uzmi termin posle trenutnog
 				begin.setTime(currentEnd.getTime());
@@ -513,7 +513,14 @@ public class RoomService {
 			}
 		}
 		
-		return dateConvertor.dateForFrontEndString(begin);
+		return (Calendar) begin.clone();
+	
+	}
+	
+	public String findFirstFreeScheduleFromDate(RoomPOJO room, Calendar begin) {
+			
+		Calendar finded = findFirstFreeScheduleFromDateInRawformat(room, begin);
+		return dateConvertor.dateForFrontEndString(finded);
 	}
 	
 	public List<RoomReservingInfoDTO> getAllWithType(String adminEmail, ProcedureIdAndDateDTO request) {
@@ -536,6 +543,10 @@ public class RoomService {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+	
+	public List<RoomPOJO> getAllRoomFromClinicWithProcedure(Long clinicId, Long procedureId) {
+		return repository.getAllRoomFromClinicWithProcedure(clinicId, procedureId);
 	}
 	
 }

@@ -116,7 +116,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 	
-	@Async
+	//@Async
 	public void sendAppointmentBlessedEmail(AppointmentPOJO appointment) {
 		
 		SimpleMailMessage msg = new SimpleMailMessage();
@@ -138,7 +138,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 	
-	@Async
+	//@Async
 	public void sendAppointmentApprovedToPatientEmail(AppointmentPOJO appointment) {
 			
 			SimpleMailMessage msg = new SimpleMailMessage();
@@ -158,7 +158,7 @@ public class Mail {
 		    javaMailSender.send(msg);
 	}
 	
-	@Async
+	//@Async
 	public void sendAppointmentApprovedToDoctorEmail(AppointmentPOJO appointment) {
 		
 		SimpleMailMessage msg = new SimpleMailMessage();
@@ -176,7 +176,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 
-	@Async
+	//@Async
 	public void sendAppointmentApprovedToNurseEmail(AppointmentPOJO appointment) {
 		
 		SimpleMailMessage msg = new SimpleMailMessage();

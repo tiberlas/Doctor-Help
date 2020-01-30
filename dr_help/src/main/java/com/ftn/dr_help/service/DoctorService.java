@@ -737,4 +737,11 @@ public class DoctorService {
 		
 	}
 	
+	public List<DoctorPOJO> getAllDoctorsFromClinicWithSpecialization(Long clinicId, Long procedureId) {
+		try {
+			return repository.getAllDoctorsFromClinicWithSpecialization(clinicId, procedureId);
+		} catch(Exception e) {
+			return null;
+		}
+	}
 }
