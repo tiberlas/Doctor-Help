@@ -122,7 +122,14 @@ public class LeaveRequestController {
 	@PutMapping(value="/decline-doctor/request={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<LeaveRequestDTO> declineDoctorRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
-		LeaveRequestDTO dto = leaveRequestService.declineDoctorRequest(requestDTO, request_id);
+		LeaveRequestDTO dto = null;
+		try {
+		dto = leaveRequestService.declineDoctorRequest(requestDTO, request_id);
+		} catch(Exception e) {
+			System.out.println("Optimistic lock exception");
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		
 		return new ResponseEntity<LeaveRequestDTO>(dto, HttpStatus.OK);
 	}
@@ -133,8 +140,15 @@ public class LeaveRequestController {
 	@PutMapping(value="/decline-nurse/request={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<LeaveRequestDTO> declineNurseRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
-		LeaveRequestDTO dto = leaveRequestService.declineNurseRequest(requestDTO, request_id);
+		LeaveRequestDTO dto = null;
+		try {
 		
+		dto = leaveRequestService.declineNurseRequest(requestDTO, request_id);
+		} catch(Exception e) {
+			System.out.println("Optimistic lock exception");
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		return new ResponseEntity<LeaveRequestDTO>(dto, HttpStatus.OK);
 	}
 	
@@ -143,9 +157,16 @@ public class LeaveRequestController {
 	@PutMapping(value="/accept-nurse/request={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<BlessingConflictsDTO> acceptNurseRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
-		BlessingConflictsDTO dto = leaveRequestService.acceptNurseRequest(requestDTO, request_id);
-		if(!dto.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
-			return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.CONFLICT);
+		BlessingConflictsDTO dto = null;
+		try {
+		dto = leaveRequestService.acceptNurseRequest(requestDTO, request_id);
+			if(!dto.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
+				return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.CONFLICT);
+			}
+		} catch (Exception e) {
+			System.out.println("Optimistic lock exception");
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.OK);
 	}
@@ -154,9 +175,17 @@ public class LeaveRequestController {
 	@PutMapping(value="/accept-doctor/request={id}")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<BlessingConflictsDTO> acceptDoctorRequest (@PathVariable("id") Long request_id, @RequestBody LeaveRequestDTO requestDTO) {
-		BlessingConflictsDTO dto = leaveRequestService.acceptDoctorRequest(requestDTO, request_id);
-		if(!dto.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
-			return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.CONFLICT);
+		
+		BlessingConflictsDTO dto = null;
+		try {
+			dto = leaveRequestService.acceptDoctorRequest(requestDTO, request_id);
+			if(!dto.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
+				return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.CONFLICT);
+			}
+		} catch(Exception e) {
+			System.out.println("Optimistic lock exception");
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<BlessingConflictsDTO>(dto, HttpStatus.OK);
 	}

@@ -111,7 +111,7 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 	
-	@Async
+	//@Async
 	public void sendDeclineLeaveRequestEmail(String sendTo, String description, String firstName, String lastName, String leaveType, String fromDate, String toDate) {
 
 	    SimpleMailMessage msg = new SimpleMailMessage();
@@ -129,7 +129,7 @@ public class Mail {
 	}
 	
 	
-	@Async
+	//@Async
 	public void sendAcceptLeaveRequestEmail(String sendTo, String firstName, String lastName, String leaveType, String fromDate, String toDate) {
 
 	    SimpleMailMessage msg = new SimpleMailMessage();

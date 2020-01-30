@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.leave_requests.BlessingConflictsDTO;
@@ -209,7 +214,7 @@ public class LeaveRequestService {
 			return dto;
 	}
 	
-	
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS, isolation=Isolation.READ_COMMITTED)
 	public BlessingConflictsDTO validateNurseRequest(LeaveRequestDTO requestDTO) {
 		Calendar now = Calendar.getInstance();
 		
@@ -271,6 +276,7 @@ public class LeaveRequestService {
 	}
 	
 	
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS, isolation=Isolation.READ_COMMITTED)
 	public BlessingConflictsDTO validateDoctorRequest(LeaveRequestDTO requestDTO) {
 		
 		DoctorPOJO doctor = doctorRepository.findOneById(requestDTO.getStaffId());
@@ -366,10 +372,12 @@ public class LeaveRequestService {
 	}
 	
 	
-	
-	public LeaveRequestDTO declineNurseRequest(LeaveRequestDTO requestDTO, Long request_id) {
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation=Isolation.READ_COMMITTED)
+	public LeaveRequestDTO declineNurseRequest(LeaveRequestDTO requestDTO, Long request_id) throws Exception {
 		LeaveRequestPOJO request = leaveRequestRepository.findOneById(request_id);
-		
+		if(!request.getLeaveStatus().equals(LeaveStatusEnum.REQUESTED)) {
+			throw new Exception("Status is already handled");
+		}
 		request.setLeaveStatus(LeaveStatusEnum.DECLINED);
 		leaveRequestRepository.save(request);
 		
@@ -384,10 +392,12 @@ public class LeaveRequestService {
 		return requestDTO;
 	}
 	
-	
-	public LeaveRequestDTO declineDoctorRequest(LeaveRequestDTO requestDTO, Long request_id) {
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation=Isolation.READ_COMMITTED)
+	public LeaveRequestDTO declineDoctorRequest(LeaveRequestDTO requestDTO, Long request_id) throws Exception {
 		LeaveRequestPOJO request = leaveRequestRepository.findOneById(request_id);
-		
+		if(!request.getLeaveStatus().equals(LeaveStatusEnum.REQUESTED)) {
+			throw new Exception("Status is already handled");
+		}
 		request.setLeaveStatus(LeaveStatusEnum.DECLINED);
 		leaveRequestRepository.save(request);
 		
@@ -402,9 +412,12 @@ public class LeaveRequestService {
 		return requestDTO;
 	}
 	
-	public BlessingConflictsDTO acceptNurseRequest(LeaveRequestDTO requestDTO, Long request_id) {
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation=Isolation.READ_COMMITTED)
+	public BlessingConflictsDTO acceptNurseRequest(LeaveRequestDTO requestDTO, Long request_id) throws Exception {
 		LeaveRequestPOJO request = leaveRequestRepository.findOneById(request_id);
-		
+		if(!request.getLeaveStatus().equals(LeaveStatusEnum.REQUESTED)) {
+			throw new Exception("Status is already handled");
+		}
 		BlessingConflictsDTO conf = validateNurseRequest(requestDTO);
 		
 		if(conf.getValidationEnum().equals(LeaveRequestValidationEnum.CAN_BLESS)) {
@@ -424,9 +437,13 @@ public class LeaveRequestService {
 		return conf;
 	}
 	
-	
-	public BlessingConflictsDTO acceptDoctorRequest(LeaveRequestDTO requestDTO, Long request_id) {
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation=Isolation.READ_COMMITTED)
+	public BlessingConflictsDTO acceptDoctorRequest(LeaveRequestDTO requestDTO, Long request_id) throws Exception {
 		LeaveRequestPOJO request = leaveRequestRepository.findOneById(request_id);
+		
+		if(!request.getLeaveStatus().equals(LeaveStatusEnum.REQUESTED)) {
+			throw new Exception("Status is already handled");
+		}
 		
 		BlessingConflictsDTO conf = validateDoctorRequest(requestDTO);
 		
