@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.Mail;
+import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestInfoDTO;
+import com.ftn.dr_help.dto.operations.DoctorOperationDTO;
+import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.enums.OperationStatus;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
@@ -169,5 +173,81 @@ public class OperationService {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+	
+	public List<DoctorOperationDTO> findDoctorOperations(Long doctor_id) {
+		
+		List<OperationPOJO> list = operationRepository.getDoctorOperations(doctor_id);
+		
+		List<DoctorOperationDTO> operations = new ArrayList<DoctorOperationDTO>();
+		
+		int i = 0;
+		for (OperationPOJO operationPOJO : list) {
+				System.out.println("-------------------" + i);
+				DoctorOperationDTO dto = convertOperationToDoctorDTO(operationPOJO);
+				operations.add(dto);
+				i++;
+		}
+		return operations;
+	}
+	
+	
+	
+	private DoctorOperationDTO convertOperationToDoctorDTO(OperationPOJO operation) {
+		
+		DoctorOperationDTO dto = new DoctorOperationDTO();
+		
+		DoctorPOJO doctor1 = operation.getFirstDoctor();
+		DoctorPOJO doctor2 = operation.getSecondDoctor();
+		DoctorPOJO doctor3 = operation.getThirdDoctor();
+		
+
+		dto.setFirstDoctor(doctor1.getFirstName() + ' ' + doctor1.getLastName());
+		dto.setSecondDoctor(doctor2.getFirstName() + ' ' + doctor2.getLastName());
+		dto.setThirdDoctor(doctor3.getFirstName() + ' ' + doctor3.getLastName());
+		
+		
+		PatientPOJO patient = operation.getPatient();
+		if(patient == null) {
+			dto.setPatientFirstName("-");
+			dto.setPatientLastName("-");
+			
+		}
+		else {
+			System.out.println("PACIJENT JE:" + patient.getFirstName());
+			dto.setPatientFirstName(patient.getFirstName());
+			dto.setPatientLastName(patient.getLastName());
+			dto.setInsuranceNumber(String.valueOf(patient.getInsuranceNumber()));
+		}
+		
+		ProceduresTypePOJO pt = doctor1.getProcedureType();
+		dto.setProcedureName(pt.getName());
+		
+		dto.setStartDate(operation.getDate().getTime());
+		System.out.println("START IS" + operation.getDate().getTime());
+		
+		Calendar end = Calendar.getInstance(); // creates calendar
+		end.setTime(operation.getDate().getTime()); // sets calendar time/date
+		
+		Calendar duration = Calendar.getInstance();
+		duration.setTime(pt.getDuration());
+		end.add(Calendar.HOUR_OF_DAY, duration.get(Calendar.HOUR)); //dodaje sate
+		end.add(Calendar.MINUTE, duration.get(Calendar.MINUTE)); //dodaje minute
+		System.out.println("AND END IS: " + end.getTime());
+		dto.setEndDate(end.getTime());
+		
+		
+		dto.setProcedureName(pt.getName());
+		
+		dto.setPrice(String.valueOf(doctor1.getProcedureType().getPrice()));
+		System.out.println("PRICE IS: " + dto.getPrice());
+		dto.setStatus(String.valueOf(operation.getStatus()));
+		
+		dto.setRoomName(operation.getRoom().getName());
+		dto.setRoomNumber(String.valueOf(operation.getRoom().getNumber()));
+		
+		
+		return dto;
+		
 	}
 }

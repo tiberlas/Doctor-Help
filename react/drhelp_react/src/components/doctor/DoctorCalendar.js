@@ -19,6 +19,7 @@ class DoctorCalendar extends React.Component {
     appointments: [],
     approvedLeaves: [], //approved leave requests for background events
     businessHours: [],
+    operations: [],
     infoModal: false,
     appointmentModal: false,
     showConfirmModal: false,
@@ -35,7 +36,12 @@ class DoctorCalendar extends React.Component {
       status: "",
       patientInsurance: "",
       doctorId: "",
-      doctor: ""
+      doctor: "",
+      nurse: "",
+      operation: false,
+      firstDoctor: "",
+      secondDoctor: "",
+      thirdDoctor: "",
     }
   }
 
@@ -62,7 +68,7 @@ class DoctorCalendar extends React.Component {
       return
     }
 
-    this.toggle();
+    
     this.setState({ 
         event: {
           id: event.id,
@@ -76,10 +82,15 @@ class DoctorCalendar extends React.Component {
           discount: event.extendedProps.discount,
           status: event.extendedProps.status,
           patientInsurance: event.extendedProps.patientInsurance,
-          doctorId: event.extendedProps.doctorId
+          doctorId: event.extendedProps.doctorId,
+          nurse: event.extendedProps.nurse,
+          operation: event.extendedProps.operation,
+          firstDoctor: event.extendedProps.firstDoctor,
+          secondDoctor: event.extendedProps.secondDoctor,
+          thirdDoctor: event.extendedProps.thirdDoctor
         }
      }, () => {
-      //this.toggle();
+      this.toggle();
      });
   };
 
@@ -91,6 +102,10 @@ class DoctorCalendar extends React.Component {
             this.setState({
               appointments: response.data
             })
+        })
+
+        axios.get('http://localhost:8080/api/operations/all-approved/doctor='+this.context.doctor.id).then(response => {
+          this.setState({operations: response.data})
         })
 
         axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id +'/business-hours')
@@ -134,13 +149,13 @@ class DoctorCalendar extends React.Component {
     for(let i = 0; i < this.state.appointments.length; i++) {
         let appointment = this.state.appointments[i]
 
-        if (appointment.isOperation) {
-          info = 'Operation\n'
-        } else {
-          info = 'Appointment\n'
-        }
+        // if (appointment.isOperation) {
+        //   info = 'Operation\n'
+        // } else {
+        //   info = 'Appointment\n'
+        // }
 
-        info += ' in ' + appointment.roomName + ' ' + appointment.roomNumber
+        info = appointment.roomName + ' ' + appointment.roomNumber
         let start = new Date(appointment.startDate).toISOString()
         let end = new Date(appointment.endDate).toISOString()
 
@@ -159,6 +174,24 @@ class DoctorCalendar extends React.Component {
         let insuranceInfo = appointment.insuranceNumber
         let doctorIdInfo = appointment.doctorId
         let doctorInfo = appointment.doctorFirstName + ' ' + appointment.doctorLastName
+        let nurseInfo = appointment.nurseFirstName + ' ' + appointment.nurseLastName
+
+
+        let color = ''
+        if(statusInfo === 'AVAILABLE') {
+          color = '#999900'
+        } else if(statusInfo === 'APPROVED') {
+          color = '#3CB371'
+        } else if(statusInfo === 'DONE') {
+          color = '#FF4500'
+        }
+
+        console.log('status info', statusInfo)
+        if(statusInfo === 'DOCTOR_REQUESTED_APPOINTMENT') { //soba je null za ovaj status, pa se mora promeniti naslov
+          info = 'Requested'
+          color = '#999900'
+          nurseInfo = '-'
+        }
 
         let event = { 
           id: appointment.appointment_id,
@@ -172,7 +205,9 @@ class DoctorCalendar extends React.Component {
           discount: discountInfo,
           patientInsurance: insuranceInfo,
           doctorId: doctorIdInfo,
-          doctor: doctorInfo
+          doctor: doctorInfo,
+          nurse: nurseInfo,
+          color: color
         }
 
         events.push(event)
@@ -195,9 +230,41 @@ class DoctorCalendar extends React.Component {
           start: start,
           end: end,
           rendering: 'background',
-          color: '#ff9f89',
+          color: '#ff9f89', //red
           allDay: true,
           leave: true
+      }
+
+      events.push(event)
+    }
+
+    return events
+  }
+
+
+  generateOperationList = () => {
+    let events = []
+    for(let i = 0; i < this.state.operations.length; i++) {
+      let operation = this.state.operations[i]
+
+      let start = new Date(operation.startDate).toISOString()
+      let end = new Date(operation.endDate).toISOString()
+
+      let color = '#4B0082' //purple
+
+      let event = {
+        title: operation.roomName + ' ' + operation.roomNumber,
+        start: start,
+        end: end,
+        patient: operation.patientFirstName + ' ' + operation.patientLastName,
+        status: operation.status,
+        price: operation.price,
+        operation: true,
+        firstDoctor: operation.firstDoctor,
+        secondDoctor: operation.secondDoctor,
+        thirdDoctor: operation.thirdDoctor,
+        procedure: operation.procedureName,
+        color: color
       }
 
       events.push(event)
@@ -227,11 +294,11 @@ class DoctorCalendar extends React.Component {
           eventSources = {
            [
              this.generateEventList(),
-             this.generateLeaveRequestsEventList()
+             this.generateLeaveRequestsEventList(),
+             this.generateOperationList()
            ]
           }
           nowIndicator={true}
-          //events = {this.generateEventList()}
           eventLimit = {true}
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}

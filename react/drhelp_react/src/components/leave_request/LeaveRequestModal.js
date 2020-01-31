@@ -6,21 +6,6 @@ import Moment from 'moment'; //library for comparing dates
 
 import './fade-modal.css'
 
-// const modalStyle = {
-//     ReactModal__Overlay {
-//         opacity: 0;
-//         transition: opacity 2000ms ease-in-out;
-//     }
-    
-//     .ReactModal__Overlay--after-open{
-//         opacity: 1;
-//     }
-    
-//     .ReactModal__Overlay--before-close{
-//         opacity: 0;
-//     }
-// }
-
 class LeaveRequestModal extends React.Component {
 
     state = {
@@ -30,7 +15,8 @@ class LeaveRequestModal extends React.Component {
         showNote: false, //show textarea when button is clicked
         successInfo: false, //if request is saved on back-end -> true
         id: this.props.id, //medical staff id
-        role: this.props.role //medical staff role
+        role: this.props.role, //medical staff role
+        operation: false
     }
 
 
@@ -48,10 +34,23 @@ class LeaveRequestModal extends React.Component {
             let selectedEndDate = new Date(this.props.selectedDates.endStr)
             if(Moment(appointmentStartDate).isAfter(selectedBeginDate) && Moment(appointmentStartDate).isBefore(selectedEndDate)) { //are there any appointments between my selected dates?
                 able = false
+                this.setState({ableToRequest: false})
             }
         }
 
-        this.setState({ableToRequest: able})
+        for(let i = 0; i < this.props.operations.length; i++) {
+            let operationStartDate = new Date(this.props.operations[i].startDate)
+            console.log('a', operationStartDate)
+            let selectedBeginDate = new Date(this.props.selectedDates.startStr)
+
+            let selectedEndDate = new Date(this.props.selectedDates.endStr)
+            if(Moment(operationStartDate).isAfter(selectedBeginDate) && Moment(operationStartDate).isBefore(selectedEndDate) || Moment(operationStartDate).isSame(selectedBeginDate, 'day')) { //are there any appointments between my selected dates?
+                able = false
+                this.setState({ableToRequest: false, operation: true})
+            }
+        }
+
+        //this.setState({ableToRequest: able})
 
     }
 
@@ -62,12 +61,17 @@ class LeaveRequestModal extends React.Component {
         let endDate = new Date(this.props.selectedDates.endStr)
         endDate.setDate(endDate.getDate()-1)
         endDate = endDate.toLocaleDateString("en-US")
-        
+
+        let type = ''
+        if(this.state.operation)
+            type = 'operations'
+        else
+            type = 'appointments'
         return <Fragment>  
             <div class="row d-flex justify-content-center">
                 <div class='col-md-11'> 
                         {'Unable to make a request between ' + startDate + ' and ' + endDate + 
-                ' because some appointments overlap.\nPlease try another date.' }  
+                ' because some ' + type + ' overlap.\nPlease try another date.' }  
                 </div>
             </div> 
             </Fragment>

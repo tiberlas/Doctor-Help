@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestInfoDTO;
+import com.ftn.dr_help.dto.operations.DoctorOperationDTO;
 import com.ftn.dr_help.service.OperationService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -79,5 +80,13 @@ public class OperationController {
 		} else {
 			return new ResponseEntity<>(operations,HttpStatus.OK);
 		}
+	}
+	
+	@GetMapping(value="/all-approved/doctor={id}")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<DoctorOperationDTO>> getDoctorApprovedOperations(@PathVariable("id") Long doctor_id) {
+		List<DoctorOperationDTO> list = operationServie.findDoctorOperations(doctor_id);
+		
+		return new ResponseEntity<List<DoctorOperationDTO>>(list, HttpStatus.OK);
 	}
 }

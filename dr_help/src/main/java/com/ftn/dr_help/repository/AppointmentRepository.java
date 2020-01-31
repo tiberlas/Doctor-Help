@@ -19,7 +19,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	
 	AppointmentPOJO findOneById(Long id);
 	
-	@Query(value = "select distinct a.* from appointments a where a.doctor_id = ?1 and a.status != 'REQUESTED' and a.status != 'DOCTOR_REQUESTED_APPOINTMENT' and a.deleted = false", nativeQuery = true)
+	@Query(value = "select distinct a.* from appointments a where a.doctor_id = ?1 and a.status != 'REQUESTED' and a.deleted = false", nativeQuery = true)
 	public List<AppointmentPOJO> findDoctorAppointments(Long doctor_id);
 	
 	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.patient_id = ?2 and a.status = 'APPROVED' and a.deleted=false", nativeQuery = true)
@@ -68,10 +68,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	List<AppointmentPOJO> findAllPredefined();
 	
 	/* -------------------za leave request medicinske sestre */
-	@Query(value="select a.* from appointments a where a.nurse_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.deleted = false", nativeQuery=true)
+	@Query(value="select a.* from appointments a where a.nurse_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.status != 'DOCTOR_REQUESTED_APPOINTMENT' and a.deleted = false", nativeQuery=true)
 	public List<AppointmentPOJO> findAvailableOrApprovedNurseAppointments(Long nurse_id);
 	/* -------------------za leave request doktora */
-	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.deleted = false", nativeQuery=true)
+	@Query(value="select a.* from appointments a where a.doctor_id = ?1 and a.status != 'DONE' and a.status != 'REQUESTED' and a.status != 'DOCTOR_REQUESTED_APPOINTMENT' and a.deleted = false", nativeQuery=true)
 	public List<AppointmentPOJO> findAvailableOrApprovedDoctorAppointments(Long doctor_id);
 	
 

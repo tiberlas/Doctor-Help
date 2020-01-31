@@ -33,4 +33,10 @@ public interface OperationRepository extends JpaRepository<OperationPOJO, Long> 
 	public List<OperationPOJO> getDoctorOperationsBetweenDates(Long doctor_id, Date startDate, Date endDate);
 	
 	
+	//for doctor work schedule
+	@Query(value="select o.* from operations o " +
+"where (o.first_doctor_id = ?1 or o.second_doctor_id = ?1 or o.third_doctor_id = ?1) and o.status = 'APPROVED' and o.deleted=false", nativeQuery=true)
+	public List<OperationPOJO> getDoctorOperations(Long doctor_id);
+	
+	
 }
