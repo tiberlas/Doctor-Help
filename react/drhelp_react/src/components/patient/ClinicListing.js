@@ -281,7 +281,7 @@ class ClinicListing extends Component {
 		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, value, this.state.minPrice, this.state.maxPrice);
 	}
 
-	handleMinPrice () {
+	handleMinPriceFilter () {
 		let element = document.getElementById ("id_min_price");
 		if (element.value === '') {
 			// alert ("NaN");
@@ -292,15 +292,33 @@ class ClinicListing extends Component {
 			this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, 'unfiltered', this.state.maxPrice);
 		}
 		else {
-			alert (element.value);
+			// alert (element.value);
 			this.setState ({
 				minPrice : element.value
 			})	
 
 			this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, element.value, this.state.maxPrice);
 		}
+	}
 
+	handleMaxPriceFilter () {
+		let element = document.getElementById ("id_max_price");
+		if (element.value === '') {
+			// alert ("NaN");
+			this.setState ({
+				maxPrice : 'unfiltered'
+			})
 
+			this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, this.state.minPrice, 'unfiltered');
+		}
+		else {
+			// alert (element.value);
+			this.setState ({
+				maxPrice : element.value
+			})	
+
+			this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, this.state.minPrice, element.value);
+		}
 	}
 
 	fetchData (dil, dat, sFilter, cFilter, aFilter, minrFilter, maxrFilter, minpFilter, maxpFilter) {
@@ -421,11 +439,16 @@ class ClinicListing extends Component {
 
 							<p>Min price</p>
 							<FormControl type="number" 
-								onChange = {(event, text) => this.handleMinPrice()}
+								onChange = {(event, text) => this.handleMinPriceFilter()}
 								id = "id_min_price"
 								placeholder="Minimal price" 
-								// id="tb_phone" 
-								// className={`form-control ${!this.state.phone_length? 'is-invalid': ''}`}
+							/>
+
+							<p>Max price</p>
+							<FormControl type="number" 
+								onChange = {(event, text) => this.handleMaxPriceFilter()}
+								id = "id_max_price"
+								placeholder="Maximal price" 
 							/>
 							
 

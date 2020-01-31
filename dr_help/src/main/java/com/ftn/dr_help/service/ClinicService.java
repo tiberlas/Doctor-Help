@@ -332,6 +332,44 @@ public class ClinicService {
 			}
 		}
 		
+		if (!minPrice.equals("unfiltered")) {
+			Float price = Float.parseFloat(minPrice);
+			if (price != null) {
+				List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+				for (ClinicPreviewDTO temp : input.getClinicList()) {
+					if (temp.getPrice().equals("/")) {
+						continue;
+					}
+					Float tempFloat = Float.parseFloat(temp.getPrice().split(" ")[0]);
+					if (tempFloat != null) {
+						if (price <= tempFloat) {
+							tempList.add(temp);
+						}
+					}
+				}
+				input.setClinicList(tempList);
+			}
+		}
+		
+		if (!maxPrice.equals("unfiltered")) {
+			Float price = Float.parseFloat(maxPrice);
+			if (price != null) {
+				List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+				for (ClinicPreviewDTO temp : input.getClinicList()) {
+					if (temp.getPrice().equals("/")) {
+						continue;
+					}
+					Float tempFloat = Float.parseFloat(temp.getPrice().split(" ")[0]);
+					if (tempFloat != null) {
+						if (price >= tempFloat) {
+							tempList.add(temp);
+						}
+					}
+				}
+				input.setClinicList(tempList);
+			}
+		}
+		
 		return input;
 	}
 	
