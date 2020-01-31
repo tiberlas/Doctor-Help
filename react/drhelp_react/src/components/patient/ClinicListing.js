@@ -9,6 +9,9 @@ import { Link } from 'react-router-dom';
 import { FormControl } from 'react-bootstrap';
 import Select from 'react-select';
 import Slider from '@material-ui/core/Slider';
+import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Tab } from '@material-ui/core';
 
 
 class ClinicListing extends Component {
@@ -30,7 +33,9 @@ class ClinicListing extends Component {
 		minRat : 'unfiltered', 
 		maxRat : 'unfiltered', 
 		minPrice : 'unfiltered', 
-		maxPrice : 'unfiltered'
+		maxPrice : 'unfiltered', 
+
+		showModal : true
 	}
 
 	componentDidMount () {
@@ -355,10 +360,140 @@ class ClinicListing extends Component {
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
 
-					
+				<Modal show={this.state.showModal}>
+					<Modal.Header closeButton>
+						<Modal.Title>Search for an appointment</Modal.Title>
+					</Modal.Header>
+
+					<Modal.Body>
+						<Table>
+							<TableRow>
+								<TableCell colSpan = "3">
+									To request an appointment, you must choose a procedure type and date. Other fields are not necessary.
+								</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell colSpan = "3">
+									<form>
+										<Select 
+											onChange = {this.handleFilterType.bind(this)}
+											options={this.state.types}
+										/>
+									</form>
+								</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell colSpan = "3">
+									<form>
+										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
+									</form>		
+								</TableCell>						
+							</TableRow>
+							<TableRow>
+								<TableCell>
+									<form>
+										<Select 
+											onChange = {this.handleFilterState.bind(this)}
+											options={this.state.states}
+										/>
+									</form>
+								</TableCell>
+								<TableCell></TableCell>
+								<TableCell>
+									<form>
+										<Select 
+											onChange = {this.handleFilterCity.bind(this)}
+											options={this.state.cities}
+										/>
+									</form>
+								</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell colSpan = "3">
+									<form>
+										<Select 
+											onChange = {this.handleFilterAddress.bind(this)}
+											options={this.state.addresses}
+										/>
+									</form>
+								</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell>
+									<Slider 
+										defaultValue={0}
+										// getAriaValueText={valuetext}
+										aria-labelledby="discrete-slider"
+										valueLabelDisplay="auto"
+										step={1}
+										marks
+										min={1}
+										max={5}
+										onChange = {(event, value) => this.handleMinRatingFilter(value)}
+									/>
+								</TableCell>
+								<TableCell>
+									<Slider 
+										defaultValue={5}
+										// getAriaValueText={valuetext}
+										aria-labelledby="discrete-slider"
+										valueLabelDisplay="auto"
+										step={1}
+										marks
+										min={1}
+										max={5}
+										onChange = {(event, value) => this.handleMaxRatingFilter(value)}
+									/>
+								</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell>
+									<FormControl type="number" 
+										onChange = {(event, text) => this.handleMinPriceFilter()}
+										id = "id_min_price"
+										placeholder="Minimal price" 
+									/>
+								</TableCell>
+								<TableCell>
+									<FormControl type="number" 
+										onChange = {(event, text) => this.handleMaxPriceFilter()}
+										id = "id_max_price"
+										placeholder="Maximal price" 
+									/>
+								</TableCell>
+								<TableCell>
+									<Button>
+										Apply
+									</Button>
+								</TableCell>
+							</TableRow>
+						</Table>
+						
+						
+
+						<p>Min rating</p>
+							
+							<p>Max rating</p>
+							
+
+							<p>Min price</p>
+							
+
+							<p>Max price</p>
+							
+
+					</Modal.Body>
+
+					<Modal.Footer>
+						<Button variant="primary">Save changes</Button>
+					</Modal.Footer>
+				</Modal>
+
+
+
 					<Table>
 						<TableHead>
-							<TableRow>
+							{/* <TableRow>
 								<TableCell width="350px">
 									<form>
 										<Select 
@@ -398,7 +533,7 @@ class ClinicListing extends Component {
 								</TableCell>
 								<TableCell width="75px"></TableCell>
 								<TableCell width="50px"></TableCell>
-							</TableRow>
+							</TableRow> */}
 							<TableRow> 
 								<TableCell width="350px"><p class='text-success'>Clinic Name</p></TableCell>
 								<TableCell width="100px"><p class='text-success'>Address</p></TableCell>
