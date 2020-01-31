@@ -21,6 +21,7 @@ public class ClinicListingDTO {
 	private String dateString;
 	private String stateString;
 	private String cityString;
+	private String addressString;
 	private List<ClinicPreviewDTO> clinicList;
 	private List<String> procedureType;
 	private List<String> stateList;
@@ -117,6 +118,16 @@ public class ClinicListingDTO {
 
 	public void setAddressList(List<String> addressList) {
 		this.addressList = addressList;
+	}
+
+
+	public String getAddressString() {
+		return addressString;
+	}
+
+
+	public void setAddressString(String addressString) {
+		this.addressString = addressString;
 	}
 	
 	

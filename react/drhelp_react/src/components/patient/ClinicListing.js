@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FormControl } from 'react-bootstrap';
 import Select from 'react-select';
-import Button from 'react-bootstrap/Button';
+import Slider from '@material-ui/core/Slider';
 
 
 class ClinicListing extends Component {
@@ -41,7 +41,10 @@ class ClinicListing extends Component {
 				appointmentTypes : response.data.procedureType, 
 				activeFilter  : response.data.procedureTypeString, 
 				selectedDate : response.data.dateString, 
-				states : response.data.stateList
+				states : response.data.stateList, 
+				stateFilter : response.data.stateString, 
+				cityFilter : response.data.cityString, 
+				addressFilter : response.data.addressString
 			})
 			let items =[];
 			var size = response.data.procedureType.length;
@@ -165,7 +168,7 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter);
+		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, this.state.minPrice, this.state.maxPrice);
 	}
 
 	toggleMenu = () => {
@@ -214,7 +217,7 @@ class ClinicListing extends Component {
 			})
 		}
 
-		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter, this.addressFilter);
+		this.fetchData(text, value, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, this.state.minPrice, this.state.maxPrice);
 
 	}
 
@@ -230,7 +233,7 @@ class ClinicListing extends Component {
 		this.setState ({
 			stateFilter : str
 		})
-		this.fetchData(this.state.activeFilter, this.state.selectedDate, str, this.state.cityFilter, this.state.addressFilter);
+		this.fetchData(this.state.activeFilter, this.state.selectedDate, str, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, this.state.minPrice, this.state.maxPrice);
 	}
 
 	handleFilterCity (text) {
@@ -244,7 +247,7 @@ class ClinicListing extends Component {
 		this.setState ({
 			cityFilter : str
 		})
-		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.cityFilter, str, this.state.addressFilter);
+		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, str, this.state.addressFilter, this.state.minRat, this.state.maxRat, this.state.minPrice, this.state.maxPrice);
 	}
 
 	handleFilterAddress (text) {
@@ -258,10 +261,49 @@ class ClinicListing extends Component {
 		this.setState ({
 			addressFilter : str
 		})
-		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.cityFilter, this.state.cityFilter, str);
+		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, str, this.state.minRat, this.state.maxRat, this.state.minPrice, this.state.maxPrice);
 	}
 
-	fetchData (dil, dat, sFilter, cFilter, aFilter) {
+	handleMinRatingFilter (value) {
+		// alert (value);
+		this.setState ({
+			minRat : value
+		});
+
+		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, value, this.state.maxRat, this.state.minPrice, this.state.maxPrice);
+	}
+
+	handleMaxRatingFilter (value) {
+		this.setState ({
+			maxRat : value
+		});
+		
+		this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, value, this.state.minPrice, this.state.maxPrice);
+	}
+
+	handleMinPrice () {
+		let element = document.getElementById ("id_min_price");
+		if (element.value === '') {
+			// alert ("NaN");
+			this.setState ({
+				minPrice : 'unfiltered'
+			})
+
+			this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, 'unfiltered', this.state.maxPrice);
+		}
+		else {
+			alert (element.value);
+			this.setState ({
+				minPrice : element.value
+			})	
+
+			this.fetchData (this.state.activeFilter, this.state.selectedDate, this.state.stateFilter, this.state.cityFilter, this.state.addressFilter, this.state.minRat, this.state.maxRat, element.value, this.state.maxPrice);
+		}
+
+
+	}
+
+	fetchData (dil, dat, sFilter, cFilter, aFilter, minrFilter, maxrFilter, minpFilter, maxpFilter) {
 		// let text = this.state.activeFilter;
 		// let date = this.state.selectedDate;
 		let requestPartOne = 'http://localhost:8080/api/clinics/listing/proc_type=';
@@ -269,7 +311,10 @@ class ClinicListing extends Component {
 		requestPartTwo += '/stat=' + sFilter;
 		requestPartTwo += '/cit=' + cFilter;
 		requestPartTwo += '/adr=' + aFilter;
-		requestPartTwo += '/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered';
+		requestPartTwo += '/min_rat=' + minrFilter;
+		requestPartTwo += '/max_rat=' + maxrFilter;
+		requestPartTwo += '/min_price=' + minpFilter;
+		requestPartTwo += '/max_price=' + maxpFilter;
 		let wholeRequest = requestPartOne + requestPartTwo;
 		
 		axios.get (wholeRequest)
@@ -283,6 +328,8 @@ class ClinicListing extends Component {
 	}
 
 	
+
+	
 	render () {
 		let size = this.state.clinics.length;
 		let numberOfTypes = this.state.appointmentTypes.length;
@@ -290,8 +337,7 @@ class ClinicListing extends Component {
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
 
-				
-
+					
 					<Table>
 						<TableHead>
 							<TableRow>
@@ -347,6 +393,43 @@ class ClinicListing extends Component {
 							</TableRow>
 						</TableHead>
 						<TableBody>
+				
+							<p>Min rating</p>
+							<Slider 
+								defaultValue={0}
+								// getAriaValueText={valuetext}
+								aria-labelledby="discrete-slider"
+								valueLabelDisplay="auto"
+								step={1}
+								marks
+								min={1}
+								max={5}
+								onChange = {(event, value) => this.handleMinRatingFilter(value)}
+							/>
+							<p>Max rating</p>
+							<Slider 
+								defaultValue={5}
+								// getAriaValueText={valuetext}
+								aria-labelledby="discrete-slider"
+								valueLabelDisplay="auto"
+								step={1}
+								marks
+								min={1}
+								max={5}
+								onChange = {(event, value) => this.handleMaxRatingFilter(value)}
+							/>
+
+							<p>Min price</p>
+							<FormControl type="number" 
+								onChange = {(event, text) => this.handleMinPrice()}
+								id = "id_min_price"
+								placeholder="Minimal price" 
+								// id="tb_phone" 
+								// className={`form-control ${!this.state.phone_length? 'is-invalid': ''}`}
+							/>
+							
+
+
 							{
 								size > 0 ? this.state.clinics.map (row => (
 									<TableRow key={row.id}>

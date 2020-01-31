@@ -176,7 +176,9 @@ public class ClinicController {
 		
 		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes, filter, dateString);
 		retVal.setStateString(state);
-		retVal = clinicService.doOtherFilters (retVal, state, city, address);
+		retVal.setCityString(city);
+		retVal.setAddressString(address);
+		retVal = clinicService.doOtherFilters (retVal, state, city, address, minimalRating, maximumRating, minimalPrice, maximalPrice);
 		
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}

@@ -377,6 +377,13 @@ insert into clinic_rewiew (rating, clinic_id, patient_id)
 values (4, 1, 3);
 insert into clinic_rewiew (rating, clinic_id, patient_id)
 values (3, 1, 4);
+insert into clinic_rewiew (rating, clinic_id, patient_id)
+values (1, 2, 3);
+insert into clinic_rewiew (rating, clinic_id, patient_id)
+values (2, 2, 4);
+
+
+
 insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
 	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'أنا أعرف القليل من اللغة العربية ، كافر', 'DOCTOR', 1, null);
 	
