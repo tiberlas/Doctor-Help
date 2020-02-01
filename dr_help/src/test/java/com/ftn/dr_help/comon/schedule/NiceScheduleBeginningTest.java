@@ -12,15 +12,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.DayEnum;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
 @SpringBootTest
 public class NiceScheduleBeginningTest {
 
 	@Autowired
 	private NiceScheduleBeginning schedule;
+	
+	@Autowired
+	private WorkScheduleAdapter adapter;
 	
 	private DoctorPOJO doctor = new DoctorPOJO();
 	
@@ -40,13 +45,19 @@ public class NiceScheduleBeginningTest {
 		doctor.setFriday(Shift.FIRST);
 		doctor.setSaturday(Shift.NONE);
 		doctor.setSunday(Shift.NONE);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(Calendar.HOUR, 1);
+		ProceduresTypePOJO procedure = new ProceduresTypePOJO();
+		procedure.setDuration(duration.getTime());
+		doctor.setProcedureType(procedure);
 	}
 	
 	@Test
 	public void testShouldPass() {
 		cal.set(Calendar.DAY_OF_MONTH, 9); //thursday
 		
-		schedule.setNiceScheduleBeginning(doctor, cal);
+		schedule.setNiceScheduleBeginning(adapter.fromDoctor(doctor), cal);
 		
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int m = cal.get(Calendar.AM_PM);
@@ -60,7 +71,7 @@ public class NiceScheduleBeginningTest {
 	public void testNextWeekShouldPass() {
 		cal.set(Calendar.DAY_OF_MONTH, 11); //saturday
 		
-		schedule.setNiceScheduleBeginning(doctor, cal);
+		schedule.setNiceScheduleBeginning(adapter.fromDoctor(doctor), cal);
 		
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int m = cal.get(Calendar.AM_PM);
@@ -76,7 +87,7 @@ public class NiceScheduleBeginningTest {
 		doctor.setThursday(Shift.NONE);
 		doctor.setFriday(Shift.FIRST);
 		
-		schedule.setNiceScheduleBeginning(doctor, cal);
+		schedule.setNiceScheduleBeginning(adapter.fromDoctor(doctor), cal);
 		
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int m = cal.get(Calendar.AM_PM);
@@ -91,7 +102,7 @@ public class NiceScheduleBeginningTest {
 		cal.set(Calendar.DAY_OF_MONTH, 13); //monday
 		doctor.setMonday(Shift.SECOND);
 		
-		schedule.setNiceScheduleBeginning(doctor, cal);
+		schedule.setNiceScheduleBeginning(adapter.fromDoctor(doctor), cal);
 		
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int m = cal.get(Calendar.AM_PM);
@@ -107,7 +118,7 @@ public class NiceScheduleBeginningTest {
 		doctor.setWednesday(Shift.NONE);
 		doctor.setThursday(Shift.SECOND);
 		
-		schedule.setNiceScheduleBeginning(doctor, cal);
+		schedule.setNiceScheduleBeginning(adapter.fromDoctor(doctor), cal);
 		
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int m = cal.get(Calendar.AM_PM);
@@ -122,7 +133,7 @@ public class NiceScheduleBeginningTest {
 		cal.set(Calendar.DAY_OF_MONTH, 14); //tuesday
 		doctor.setTuesday(Shift.THIRD);
 		
-		schedule.setNiceScheduleBeginning(doctor, cal);
+		schedule.setNiceScheduleBeginning(adapter.fromDoctor(doctor), cal);
 		
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int m = cal.get(Calendar.AM_PM);

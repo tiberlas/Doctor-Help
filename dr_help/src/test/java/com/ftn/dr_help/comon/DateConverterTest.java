@@ -1,5 +1,6 @@
 package com.ftn.dr_help.comon;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.ParseException;
@@ -33,6 +34,7 @@ public class DateConverterTest {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			assertTrue(false);
 		}
 	}
 
@@ -54,6 +56,48 @@ public class DateConverterTest {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void testDateToTimeAM() {
+		try {
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 20, 9, 16, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			Calendar actual = convertor.americanStringToDate("01/20/2020 09:16 AM");
+			actual.set(Calendar.YEAR, 2020);
+			actual.set(Calendar.MONTH, 0);
+			actual.set(Calendar.DAY_OF_MONTH, 20);
+			actual.set(Calendar.SECOND, 0);
+			actual.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, actual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void testDateToTimePM() {
+		try {
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 20, 21, 16, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			Calendar actual = convertor.americanStringToDate("01/20/2020 09:16 PM");
+			actual.set(Calendar.YEAR, 2020);
+			actual.set(Calendar.MONTH, 0);
+			actual.set(Calendar.DAY_OF_MONTH, 20);
+			actual.set(Calendar.SECOND, 0);
+			actual.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, actual);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
 		}
 	}
 }

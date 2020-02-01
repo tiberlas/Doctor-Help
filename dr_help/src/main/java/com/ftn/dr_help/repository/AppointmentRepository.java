@@ -29,7 +29,11 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query(value="select distinct a.* from appointments a where a.patient_id = ?1 and a.status = 'DONE' and a.deleted=false", nativeQuery=true)
 	List<AppointmentPOJO> findDoneAppointmentsForPatientWithId(Long patient_id);
 
-	@Query(value = "select a.date from appointments a where a.deleted = FALSE and a.status <> 'DONE' and a.room_id = ?1 order by a.date", nativeQuery = true)
+	@Query(value = "select a.date from appointments a "+
+					"where (a.status = 'APPROVED' "+
+					"or a.status = 'BLESSED') "+
+					"and a.deleted = FALSE "+
+					"and a.room_id = ?1 order by a.date", nativeQuery = true)
 	public List<Date> findScheduledDatesOfRoom(Long roomId);
 	
 	@Query(value="select a.* from appointments a where a.nurse_id = ?1 and a.status != 'REQUESTED' and a.status != 'DOCTOR_REQUESTED_APPOINTMENT' and a.deleted = false", nativeQuery = true)
@@ -63,6 +67,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 			"	where (a.status = 'REQUESTED' or a.status = 'DOCTOR_REQUESTED_APPOINTMENT') and (ca.email = ?1) order by a.id", nativeQuery = true)
 	List<AppointmentPOJO> getAllRequests(String clinicAdminMail);
 
+	@Query(value = "select a.* from appointments a \n" +  
+			"where (a.status = 'REQUESTED' or a.status = 'DOCTOR_REQUESTED_APPOINTMENT') order by a.id", nativeQuery = true)
+	List<AppointmentPOJO> getAllRequests();
+	
 	@Query(value = "select a.* from appointments a \n" + 
 			"where a.status = 'AVAILABLE' \n" + 
 			"and a.deleted = false", nativeQuery = true)
@@ -97,4 +105,13 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query(value="update appointments set deleted = true where (status = 'APPROVED' or status = 'AVAILABLE') and date <= ?1", nativeQuery=true)
 	public void deleteAppointmentsInThePast(Date now);
 	
+
+	@Query(value = "select a.* from room r " + 
+			"inner join appointments a " + 
+			"on a.room_id = r.id " + 
+			"where (a.status = 'APPROVED' or a.status = 'BLESSED') " + 
+			"and r.deleted = false " + 
+			"and a.deleted = false " + 
+			"and r.id = ?1", nativeQuery = true)
+	public List<AppointmentPOJO> findAllScheduledAppointmentsInRoom(Long roomId);
 }

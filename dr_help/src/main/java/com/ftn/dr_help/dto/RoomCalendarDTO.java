@@ -3,6 +3,7 @@ package com.ftn.dr_help.dto;
 public class RoomCalendarDTO {
 	
 	private Long appointmentId;
+	private Long operationId;
 	private String title;
 	private String date;
 	private String startTime;
@@ -12,9 +13,10 @@ public class RoomCalendarDTO {
 		super();
 	}
 	
-	public RoomCalendarDTO(Long appointmentId, String title, String date, String time, String duration) {
+	public RoomCalendarDTO(Long appointmentId, Long operationId, String title, String date, String time, String duration) {
 		super();
 		this.appointmentId = appointmentId;
+		this.operationId = operationId;
 		this.title = title;
 		this.date = date;
 		this.startTime = time;
@@ -50,6 +52,12 @@ public class RoomCalendarDTO {
 	}
 	public void setEndTime(String duration) {
 		this.endTime = duration;
+	}
+	public Long getOperationId() {
+		return operationId;
+	}
+	public void setOperationId(Long operationId) {
+		this.operationId = operationId;
 	}
 
 }

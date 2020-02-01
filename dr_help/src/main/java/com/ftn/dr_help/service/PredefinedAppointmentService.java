@@ -1,6 +1,5 @@
 package com.ftn.dr_help.service;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,21 +9,21 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.NurseWIthFirstFreeDateInnerDTO;
 import com.ftn.dr_help.dto.PredefinedAppointmentDTO;
+import com.ftn.dr_help.dto.PredefinedAppointmentResponseDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
+import com.ftn.dr_help.model.enums.CreatingPredefinedAppointmentEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
-import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
-import com.ftn.dr_help.repository.DoctorRepository;
-import com.ftn.dr_help.repository.NurseRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
-import com.ftn.dr_help.repository.RoomRepository;
 
 @Service
 public class PredefinedAppointmentService {
@@ -36,16 +35,19 @@ public class PredefinedAppointmentService {
 	private ClinicAdministratorRepository adminRepository;
 	
 	@Autowired
-	private DoctorRepository doctorRepository;
-	
-	@Autowired
-	private NurseRepository nurseRepository;
-	
-	@Autowired
 	private ProcedureTypeRepository procedureRepository;
 	
 	@Autowired
-	private RoomRepository roomRepository;
+	private DateConverter dateConverter;
+	
+	@Autowired
+	private NurseService nurseService;
+	
+	@Autowired
+	private DoctorService doctorService;
+	
+	@Autowired
+	private RoomService roomService;
 	
 	public List<PredefinedAppointmentDTO> getAll(Long id) {
 		if(id == null) {
@@ -64,72 +66,93 @@ public class PredefinedAppointmentService {
 		return ret;
 	}
 	
-	public PredefinedAppointmentDTO save(PredefinedAppointmentDTO newPredefined, String email) {
-		if(newPredefined == null || 
-				newPredefined.getDoctorId() == null ||
-				newPredefined.getProcedureTypeId() == null ||
-				newPredefined.getRoomId() == null ||
-				newPredefined.getDateAndTime() == null ||
-				newPredefined.getDateAndTime().isEmpty() ||
-				newPredefined.getPrice() < 0) {
-			return null;
-		}
-		
-		ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
-		ClinicPOJO clinic = admin.getClinic();
-    	if(clinic == null) {
-    		return null;
-    	}
-    	
-    	RoomPOJO room = roomRepository.findById(newPredefined.getRoomId()).orElse(null);
-    	if(room == null || !room.getClinic().getId().equals(clinic.getId())) {
-    		return null;
-    	}
-    	
-    	DoctorPOJO doctor = doctorRepository.findById(newPredefined.getDoctorId()).orElse(null);
-    	if(doctor == null || !doctor.getClinic().getId().equals(clinic.getId())) {
-    		return null;
-    	}
-    	
-    	NursePOJO nurse = nurseRepository.findById(newPredefined.getNurseId()).orElse(null);
-    	if(nurse == null || !nurse.getClinic().getId().equals(clinic.getId())) {
-    		return null;
-    	}
-    	
-    	ProceduresTypePOJO procedureType = procedureRepository.findById(newPredefined.getProcedureTypeId()).orElse(null);
-    	if(procedureType == null || !procedureType.getClinic().getId().equals(clinic.getId())) {
-    		return null;
-    	}
-
-    	
-    	AppointmentPOJO appointment = new AppointmentPOJO();
-    	Calendar cal = Calendar.getInstance();
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-    	try {
+	public PredefinedAppointmentResponseDTO save(PredefinedAppointmentDTO newPredefined, String email) {
+		try {
+			Calendar cal = Calendar.getInstance();
+	    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+	
 			cal.setTime(sdf.parse(newPredefined.getDateAndTime()));
-		} catch (ParseException e) {
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+	    	String AppointmentRequestingDate = dateConverter.dateForFrontEndString(cal);
+			Calendar now = Calendar.getInstance();
+			now.add(Calendar.DAY_OF_MONTH, 1);
+			now.set(Calendar.HOUR_OF_DAY, 0);
+			now.set(Calendar.MINUTE, 0);
+			now.set(Calendar.SECOND, 0);
+			now.set(Calendar.MILLISECOND, 0);
+			
+			if(now.after(cal)) {
+				return null;
+			}
+			
+			ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+			ClinicPOJO clinic = admin.getClinic();
+	    	if(clinic == null) {
+	    		return null;
+	    	}
+	    	
+	    	RoomPOJO room = roomService.findOnePOJO(newPredefined.getRoomId(), email);
+	    	if(room == null || !room.getClinic().getId().equals(clinic.getId())) {
+	    		return null;
+	    	}
+	    	
+	    	DoctorPOJO doctor = doctorService.findOne(newPredefined.getDoctorId());
+	    	if(doctor == null || !doctor.getClinic().getId().equals(clinic.getId())) {
+	    		return null;
+	    	}
+	    	
+	    	ProceduresTypePOJO procedureType = procedureRepository.findById(newPredefined.getProcedureTypeId()).orElse(null);
+	    	if(procedureType == null || !procedureType.getClinic().getId().equals(clinic.getId())) {
+	    		return null;
+	    	}
+			
+			String time = roomService.findFirstFreeScheduleFromDate(room, cal);
+			if(!time.equals(AppointmentRequestingDate)) {
+				return new PredefinedAppointmentResponseDTO(
+						time, 
+						CreatingPredefinedAppointmentEnum.ROOM_NOT_FREE);
+			}
+			
+			//provera da li je doktor slobodan
+			Calendar doctorsFreeDate = doctorService.checkSchedue(doctor.getEmail(), cal);
+			if(!doctorsFreeDate.equals(cal)) {
+				return new PredefinedAppointmentResponseDTO(
+						dateConverter.dateForFrontEndString(doctorsFreeDate),
+						CreatingPredefinedAppointmentEnum.DOCTOR_NOT_FREE);
+			}
+			
+			//provera da li moze neka sestra da bude prisutna na pregledu
+	    	Calendar duration = Calendar.getInstance();
+	    	duration.setTime(procedureType.getDuration());
+	    	NurseWIthFirstFreeDateInnerDTO freeNurse = nurseService.findFreeNurse(cal, duration, room.getClinic().getId());
+	    	
+	    	if(!freeNurse.getFirstFreeDate().equals(cal)) {
+	    		//sestrama ne odgovara termin i predlaze se drugi
+	    		return new PredefinedAppointmentResponseDTO(
+	    				dateConverter.dateForFrontEndString(cal),
+	    				CreatingPredefinedAppointmentEnum.NURSE_NOT_FREE);
+	    	}
+	    		
+	    	//pregled je validan
+	    	AppointmentPOJO appointment = new AppointmentPOJO();
+	    	appointment.setDate(cal);
+    		appointment.setRoom(room);
+    		appointment.setDoctor(doctor);
+    		appointment.setNurse(freeNurse.getNurse());
+    		appointment.setProcedureType(procedureType);
+    		appointment.setDiscount(newPredefined.getDisscount());
+    		appointment.setStatus(AppointmentStateEnum.AVAILABLE);
+    		appointment.setDeleted(false);
+    		repository.save(appointment);	    	
+	    	
+	    	return new PredefinedAppointmentResponseDTO(
+	    				dateConverter.dateForFrontEndString(freeNurse.getFirstFreeDate()),
+	    				CreatingPredefinedAppointmentEnum.APPROVED);
+
+		} catch(Exception e) {
 			return null;
 		}
-    	appointment.setDate(cal);
-    	appointment.setRoom(room);
-    	appointment.setDoctor(doctor);
-    	appointment.setNurse(nurse);
-    	appointment.setProcedureType(procedureType);
-    	appointment.setDiscount(newPredefined.getDisscount());
-    	appointment.setStatus(AppointmentStateEnum.AVAILABLE);
-    	appointment.setDeleted(false);
-		repository.save(appointment);
-		
-		doctor.getAppointmentList().add(appointment);
-		doctorRepository.save(doctor);
-		
-		DoctorPOJO doc = doctorRepository.findOneByEmail(doctor.getEmail());
-		System.out.println("DOCTOR APPOINTMENTS ARE:");
-		for (AppointmentPOJO app : doc.getAppointmentList()) {
-			System.out.println(app.getDoctor().getFirstName());
-		}
-		
-		return newPredefined;
 	}
 	
 	public void delete(Long id) { 

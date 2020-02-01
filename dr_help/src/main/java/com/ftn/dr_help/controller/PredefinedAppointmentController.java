@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.dto.PredefinedAppointmentDTO;
+import com.ftn.dr_help.dto.PredefinedAppointmentResponseDTO;
+import com.ftn.dr_help.model.enums.CreatingPredefinedAppointmentEnum;
 import com.ftn.dr_help.service.PredefinedAppointmentService;
 
 @RestController
@@ -44,15 +46,18 @@ public class PredefinedAppointmentController {
 	
 	@PostMapping(value = "/newPredefinedAppointment")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
-	public ResponseEntity<PredefinedAppointmentDTO> create(@RequestBody PredefinedAppointmentDTO newPredefinedAppointment) {
+	public ResponseEntity<PredefinedAppointmentResponseDTO> create(@RequestBody PredefinedAppointmentDTO newPredefinedAppointment) {
 		String email = currentUser.getEmail();
 		
-		PredefinedAppointmentDTO ret = service.save(newPredefinedAppointment, email);
+		PredefinedAppointmentResponseDTO ret = service.save(newPredefinedAppointment, email);
 		
 		if(ret == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else if(ret.getStatus() != CreatingPredefinedAppointmentEnum.APPROVED) {
+			return new ResponseEntity<>(ret, HttpStatus.CONFLICT);//409
+		} else {
+			return new ResponseEntity<>(ret, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<>(ret, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(value = "delete/id={id}")

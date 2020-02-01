@@ -39,4 +39,13 @@ public interface OperationRepository extends JpaRepository<OperationPOJO, Long> 
 	public List<OperationPOJO> getDoctorOperations(Long doctor_id);
 	
 	
+	@Query(value = "select o.* from room r " + 
+			"inner join operations o " + 
+			"on o.room_id = r.id " + 
+			"where o.status = 'APPROVED' " + 
+			"and o.deleted = false " + 
+			"and r.deleted = false " + 
+			"and r.id = ?1", nativeQuery = true)
+	public List<OperationPOJO> findAllScheduledOperationsInRoom(Long roomId);
+
 }
