@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
@@ -89,5 +90,11 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 			 "intersect " +
 			 "select a3.* from appointments a3 where a3.date > ?2 and a3.date <= ?3 and a3.deleted=false", nativeQuery=true)
 		public List<AppointmentPOJO> getDoctorAppointmentsBetweenRequestDates(Long nurse_id, Date startDate, Date endDate);
+	
+	
+	@Transactional
+	@Modifying
+	@Query(value="update appointments set deleted = true where (status = 'APPROVED' or status = 'AVAILABLE') and date <= ?1", nativeQuery=true)
+	public void deleteAppointmentsInThePast(Date now);
 	
 }
