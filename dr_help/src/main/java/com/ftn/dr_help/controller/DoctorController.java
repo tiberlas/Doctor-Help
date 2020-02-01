@@ -143,7 +143,7 @@ public class DoctorController {
 		//		System.out.println("Clinic id: " + clinicId);
 //		System.out.println("Date: " + appointmentDate);
 		
-		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
+		if (appointmentType.equals("unfiltered") || appointmentDate.equals("unfiltered")) {
 			List<DoctorListingDTO> doctors = service.filterByClinic(clinicId);
 			retVal.setDoctorListing(doctors);
 			return new ResponseEntity<> (retVal, HttpStatus.OK);

@@ -10,11 +10,16 @@ import java.util.List;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
+import com.ftn.dr_help.repository.LeaveRequestRepository;
+
 
 public class DailySchedule {
 
 	private List<Term> schedule = new ArrayList<Term> ();
 	private Shift shift;
+	private boolean isOnLeave = false;
+	
+	private LeaveRequestRepository leaveRequestRepository;
 	
 	private void init (Shift shift, Calendar inputDay) throws ParseException {
 		int year = inputDay.get (Calendar.YEAR);
@@ -39,8 +44,44 @@ public class DailySchedule {
 			schedule.add (new Term (key, false));
 		}
 		
-		//printSchedule ();
 	}
+	
+	private void setIsOnLeave (Long doctorId) {
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Checking if doctor " + doctorId + " is on leave");
+		System.out.println("");
+		System.out.println("");
+		
+		Calendar today = schedule.get(0).getTime();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+			
+		Integer count;
+		if (leaveRequestRepository == null) {
+			System.out.println("I fount no leave request repository :p");
+			return;
+		}
+		leaveRequestRepository.getDoctorApprovedLeaveRequests(doctorId);
+		count = leaveRequestRepository.checkIfDoctorIsFree(doctorId, today);
+		if (count == null) {
+			System.out.println("Doctor " + doctorId + " is NOT on leave on " + today.getTime());
+			isOnLeave = false;
+			return;
+		}
+		if (count == 0) {
+			System.out.println("Doctor " + doctorId + " is NOT on leave on " + today.getTime());
+			isOnLeave = false;
+			return;
+		}
+		else {
+			System.out.println("Doctor " + doctorId + " IS on leave on " + today.getTime());
+			isOnLeave = true;
+			return;
+		}
+	}
+	
 	
 	public void printSchedule () {
 		System.out.println ("----------------------------------------------------------------------------------------");
@@ -55,8 +96,10 @@ public class DailySchedule {
 		}
 	}
 	
-	public DailySchedule (Calendar calendar, Shift shift) throws ParseException {
+	public DailySchedule (Calendar calendar, Shift shift, Long doctorId, LeaveRequestRepository lrp) throws ParseException {
 		init (shift, calendar);
+		this.leaveRequestRepository = lrp;
+		setIsOnLeave(doctorId);
 		this.shift = shift;
 	}
 	
@@ -135,7 +178,7 @@ public class DailySchedule {
 			//System.out.println("Predjoh u sl dan");
 			return false;
 		}
-		if (this.shift == Shift.FIRST) {
+		if (this.shift == Shift.THIRD) {
 			if (startTime.get(Calendar.HOUR_OF_DAY) > 8) {
 				return false;
 			}
@@ -148,7 +191,7 @@ public class DailySchedule {
 				}
 			}
 		} 
-		else if (this.shift == Shift.SECOND) {
+		else if (this.shift == Shift.FIRST) {
 			if (startTime.get(Calendar.HOUR_OF_DAY) < 8) {
 				return false;
 			}
@@ -164,7 +207,7 @@ public class DailySchedule {
 				}
 			}
 		} 
-		else if (this.shift == Shift.THIRD) {
+		else if (this.shift == Shift.SECOND) {
 			if (startTime.get(Calendar.HOUR_OF_DAY) < 16) {
 				return false;
 			}
@@ -237,6 +280,12 @@ public class DailySchedule {
 	
 	public List<Term> getAvaliableTerms (ProceduresTypePOJO procedureType) {
 		List<Term> retVal = new ArrayList<Term> ();
+		
+		if (this.isOnLeave) {
+			return retVal;
+		}
+		
+		
 		Calendar shiftStart = Calendar.getInstance();
 		Calendar shiftEnd = Calendar.getInstance();
 		
@@ -251,16 +300,17 @@ public class DailySchedule {
 		shiftStart.set(Calendar.SECOND, 0);
 		shiftEnd.set(Calendar.SECOND, 59);
 		
-		if (this.shift == Shift.FIRST) {
+		if (this.shift == Shift.THIRD) {
 			shiftStart.set(Calendar.HOUR_OF_DAY, 0);
 			shiftEnd.set(Calendar.HOUR_OF_DAY, 7);
-		} else if (this.shift == Shift.SECOND) {
+		} else if (this.shift == Shift.FIRST) {
 			shiftStart.set(Calendar.HOUR_OF_DAY, 8);
 			shiftEnd.set(Calendar.HOUR_OF_DAY, 15);
-		} else if (this.shift == Shift.THIRD) {
+		} else if (this.shift == Shift.SECOND) {
 			shiftStart.set(Calendar.HOUR_OF_DAY, 16);
 			shiftEnd.set(Calendar.HOUR_OF_DAY, 23);
 		} else {
+			System.out.println("          SIso, jedem govna!!!!1!!!");
 			return retVal;
 		}
 		
@@ -291,7 +341,7 @@ public class DailySchedule {
 				temp.set(Calendar.YEAR, fakeAppointment.getDate().get(Calendar.YEAR));
 				temp.set(Calendar.MONTH, fakeAppointment.getDate().get(Calendar.MONTH));
 				temp.set(Calendar.DAY_OF_MONTH, fakeAppointment.getDate().get(Calendar.DAY_OF_MONTH));
-				temp.set(Calendar.HOUR_OF_DAY, fakeAppointment.getDate().get(Calendar.HOUR));
+				temp.set(Calendar.HOUR_OF_DAY, fakeAppointment.getDate().get(Calendar.HOUR_OF_DAY));
 				temp.set(Calendar.MINUTE, fakeAppointment.getDate().get(Calendar.MINUTE));
 				temp.set(Calendar.SECOND, fakeAppointment.getDate().get(Calendar.SECOND));
 				retVal.add(new Term (temp, false));

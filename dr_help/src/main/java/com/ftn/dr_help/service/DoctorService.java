@@ -45,6 +45,7 @@ import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.DoctorReviewRepository;
+import com.ftn.dr_help.repository.LeaveRequestRepository;
 import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
@@ -91,6 +92,9 @@ public class DoctorService {
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired
+	private LeaveRequestRepository leaveRequestRepository;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -445,25 +449,25 @@ public class DoctorService {
 			DailySchedule schedule;
 			switch (calendarMin.get(Calendar.DAY_OF_WEEK)) {
 				case Calendar.MONDAY:
-					schedule = new DailySchedule (calendarMin, d.getMonday());
+					schedule = new DailySchedule (calendarMin, d.getMonday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.TUESDAY:
-					schedule = new DailySchedule (calendarMin, d.getTuesday());
+					schedule = new DailySchedule (calendarMin, d.getTuesday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.WEDNESDAY:
-					schedule = new DailySchedule (calendarMin, d.getWednesday());
+					schedule = new DailySchedule (calendarMin, d.getWednesday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.THURSDAY:
-					schedule = new DailySchedule (calendarMin, d.getThursday());
+					schedule = new DailySchedule (calendarMin, d.getThursday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.FRIDAY:
-					schedule = new DailySchedule (calendarMin, d.getFriday());
+					schedule = new DailySchedule (calendarMin, d.getFriday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.SATURDAY:
-					schedule = new DailySchedule (calendarMin, d.getSaturday());
+					schedule = new DailySchedule (calendarMin, d.getSaturday(), d.getId(), leaveRequestRepository);
 					break;
 				default:
-					schedule = new DailySchedule (calendarMin, d.getSunday());
+					schedule = new DailySchedule (calendarMin, d.getSunday(), d.getId(), leaveRequestRepository);
 					break;
 			}
 			List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(d.getId(), calendarMin, calendarMax);

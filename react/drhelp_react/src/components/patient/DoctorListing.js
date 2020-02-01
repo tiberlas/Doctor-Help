@@ -22,9 +22,9 @@ class DoctorListing extends Component {
 		showMissing : false,
 		showErrror : false,  
 		selectedRow : [], 
-		appointmentType : "", 
-		selectedDate : "", 
-		clinicName: "", 
+		appointmentType : "unfiltered", 
+		selectedDate : "unfiltered", 
+		clinicName: "unfiltered", 
 		clinicAddress : "", 
 		showFinished : false, 
 		redirect : false, 
@@ -36,28 +36,46 @@ class DoctorListing extends Component {
 
 	componentDidMount () {
 		let url = window.location.href.split ('/');
-
-		let request = 'http://localhost:8080/api/doctors/listing';
-		request += '/clinic=' + url[4];
-		request += '&appointment=' + url[5];
-		request += '&date=' + url[6];
-		if ((url[5] !== 'unfiltered') && (url[6] !== 'unfiltered')) {
-			this.setState ({
-				filtered : true
-			});
-		}
-		axios.get (request)
-		.then (response => {
-			this.setState ({
-				doctors: response.data.doctorListing, 
-				clinicName : response.data.clinicName, 
-				clinicAddress : response.data.address
+		if (url.length > 5) {
+			let request = 'http://localhost:8080/api/doctors/listing';
+			request += '/clinic=' + url[4];
+			request += '&appointment=' + url[5];
+			request += '&date=' + url[6];
+			if ((url[5] !== 'unfiltered') && (url[6] !== 'unfiltered')) {
+				this.setState ({
+					filtered : true
+				});
+			}
+			axios.get (request)
+			.then (response => {
+				this.setState ({
+					doctors: response.data.doctorListing, 
+					clinicName : response.data.clinicName, 
+					clinicAddress : response.data.address
+				})
 			})
-		})
-		this.setState ({
-			appointmentType : window.location.href.split('/')[5].replace('%20', ' '), 
-			selectedDate : window.location.href.split('/')[6]
-		})
+			this.setState ({
+				appointmentType : window.location.href.split('/')[5].replace('_', ' '), 
+				selectedDate : window.location.href.split('/')[6]
+			})
+		}
+		else {
+			let request = 'http://localhost:8080/api/doctors/listing/clinic=';
+			request += window.location.href.split('/')[4];
+			request += '&appointment=unfiltered&date=unfiltered';
+			axios.get (request)
+			.then (response => {
+				this.setState ({
+					doctors: response.data.doctorListing, 
+					clinicName : response.data.clinicName, 
+					clinicAddress : response.data.address
+				})
+			})
+			
+		}
+
+
+		
 	}
 
 	handleUpdate () {
@@ -214,7 +232,10 @@ class DoctorListing extends Component {
 
 	render () {
 
-		let size = this.state.doctors.length;
+		let size = 0;
+		if (this.state.doctors !== []) {
+			size = this.state.doctors.length;
+		}
 
 		return (
 			
