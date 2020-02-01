@@ -297,6 +297,7 @@ class DoctorCalendar extends React.Component {
           }
           nowIndicator={true}
           eventLimit = {true}
+          
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 

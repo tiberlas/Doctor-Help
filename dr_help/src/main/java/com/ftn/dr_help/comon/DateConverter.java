@@ -28,10 +28,10 @@ public class DateConverter {
 	public String timeToString(Calendar time) {
 		String retVal = "";
 		
-		if(time.get(Calendar.HOUR) < 10) {
-			retVal += "0"+String.valueOf(time.get(Calendar.HOUR)) + ":";
+		if(time.get(Calendar.HOUR_OF_DAY) < 10) {
+			retVal += "0"+String.valueOf(time.get(Calendar.HOUR_OF_DAY)) + ":";
 		} else {
-			retVal += String.valueOf(time.get(Calendar.HOUR)) + ":";
+			retVal += String.valueOf(time.get(Calendar.HOUR_OF_DAY)) + ":";
 		}
 		
 		if(time.get(Calendar.MINUTE) < 10) {
@@ -44,6 +44,7 @@ public class DateConverter {
 	}
 	
 	public String americanDateToString(Calendar date) {
+		/* YYYY-MM-DD */
 		String retVal = String.valueOf(date.get(Calendar.YEAR)) + "-";
 		
 		if((date.get(Calendar.MONTH) + 1) < 10) {
@@ -65,6 +66,20 @@ public class DateConverter {
 		Calendar date = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		date.setTime(sdf.parse(stringDate));
+		
+		return date;
+	}
+	
+	//test
+	public Calendar americanStringToDate(String stringDate)  throws ParseException{
+		Calendar date = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
+		date.setTime(sdf.parse(stringDate));
+		String[] parts = stringDate.split(" ");
+		if(parts[2].equals("PM")) {
+			date.set(Calendar.AM_PM, Calendar.PM);
+		}
+			
 		
 		return date;
 	}

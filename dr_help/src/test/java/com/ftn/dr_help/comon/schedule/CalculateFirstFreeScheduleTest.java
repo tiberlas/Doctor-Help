@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
 @SpringBootTest
@@ -26,13 +29,18 @@ public class CalculateFirstFreeScheduleTest {
 	@Autowired
 	private DateConverter convert;
 	
+	@Autowired
+	private WorkScheduleAdapter adapter;
+	
 	private DoctorPOJO doctor = new DoctorPOJO();
+	private NursePOJO nurse = new NursePOJO();
+	private ProceduresTypePOJO procedure = new ProceduresTypePOJO();
 	private Calendar begin = Calendar.getInstance();
 	private List<Date> dates = new ArrayList<Date>();
 	
 	@BeforeEach
 	public void setUp() {
-		ProceduresTypePOJO procedure = new ProceduresTypePOJO();
+		//ProceduresTypePOJO procedure = new ProceduresTypePOJO();
 		Calendar duration = Calendar.getInstance();
 		duration.set(Calendar.HOUR, 1);
 		duration.set(Calendar.MINUTE, 0);
@@ -46,6 +54,14 @@ public class CalculateFirstFreeScheduleTest {
 		doctor.setFriday(Shift.FIRST);
 		doctor.setSaturday(Shift.NONE);
 		doctor.setSunday(Shift.NONE);
+		
+		nurse.setMonday(Shift.FIRST);
+		nurse.setTuesday(Shift.FIRST);
+		nurse.setWednesday(Shift.FIRST);
+		nurse.setThursday(Shift.FIRST);
+		nurse.setFriday(Shift.FIRST);
+		nurse.setSaturday(Shift.NONE);
+		nurse.setSunday(Shift.NONE);
 		
 		if(!dates.isEmpty()) dates.clear();
 		
@@ -70,7 +86,7 @@ public class CalculateFirstFreeScheduleTest {
 	
 	@Test
 	void testInMiddleShouldPass() {
-		Calendar finded = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, null);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
 			reserved += " AM";
@@ -89,7 +105,28 @@ public class CalculateFirstFreeScheduleTest {
 			e.printStackTrace();
 		}
 		
-		Calendar finded = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, null);
+		String reserved = convert.dateAndTimeToString(finded);
+		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
+			reserved += " AM";
+		} else {
+			reserved += " PM";
+		}
+		
+		assertEquals("8.1.2020. 8:0 AM", reserved);
+	}
+	
+	@Test
+	void testOnBeginningNurseShouldPass() {
+		try {
+			begin = convert.stringToDate("2020-1-8 08:00");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(procedure.getDuration());
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromNurse(nurse, cal), begin, dates, null);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
 			reserved += " AM";
@@ -109,7 +146,7 @@ public class CalculateFirstFreeScheduleTest {
 			e.printStackTrace();
 		}
 		
-		Calendar finded = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, null);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
 			reserved += " AM";
@@ -139,7 +176,7 @@ public class CalculateFirstFreeScheduleTest {
 			e.printStackTrace();
 		}
 		
-		Calendar finded = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, null);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
 			reserved += " AM";
@@ -170,7 +207,7 @@ public class CalculateFirstFreeScheduleTest {
 			e.printStackTrace();
 		}
 		
-		Calendar finded = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, null);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
 			reserved += " AM";
@@ -225,7 +262,7 @@ public class CalculateFirstFreeScheduleTest {
 			e.printStackTrace();
 		}
 		
-		Calendar finded = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, null);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
 			reserved += " AM";
@@ -240,6 +277,8 @@ public class CalculateFirstFreeScheduleTest {
 	void testJumpFirstToThirdShiftShouldPass() {
 		doctor.setTuesday(Shift.FIRST);
 		doctor.setWednesday(Shift.THIRD);
+		
+		List<AbsenceInnerDTO> absence = new ArrayList<AbsenceInnerDTO>();
 		
 		dates.clear();
 		try {
@@ -276,7 +315,7 @@ public class CalculateFirstFreeScheduleTest {
 			e.printStackTrace();
 		}
 		
-		Calendar finded = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, absence);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
 			reserved += " AM";
@@ -287,4 +326,120 @@ public class CalculateFirstFreeScheduleTest {
 		assertEquals("8.1.2020. 0:0 AM", reserved);
 	}
 	
+	@Test
+	void testJumpFirstToThirdShiftVacationShouldPass() {
+		doctor.setTuesday(Shift.FIRST);
+		doctor.setWednesday(Shift.THIRD);
+		
+		List<AbsenceInnerDTO> absence = new ArrayList<AbsenceInnerDTO>();
+		
+		dates.clear();
+		try {
+			begin = convert.stringToDate("2020-01-7 1:0");
+			
+			Calendar day = convert.stringToDate("2020-01-7 8:0");
+			day.set(Calendar.AM_PM, Calendar.AM);
+			dates.add(day.getTime());
+			Calendar day1 = convert.stringToDate("2020-01-7 9:0");
+			day1.set(Calendar.AM_PM, Calendar.AM);
+			dates.add(day1.getTime());
+			Calendar day2 = convert.stringToDate("2020-01-7 10:0");
+			day2.set(Calendar.AM_PM, Calendar.AM);
+			dates.add(day2.getTime());
+			day1 = convert.stringToDate("2020-01-7 11:0");
+			day1.set(Calendar.AM_PM, Calendar.AM);
+			dates.add(day1.getTime());
+			day1 = convert.stringToDate("2020-01-7 0:0");
+			day1.set(Calendar.AM_PM, Calendar.PM);
+			dates.add(day1.getTime());
+			day = convert.stringToDate("2020-01-7 1:0");
+			day.set(Calendar.AM_PM, Calendar.PM);
+			dates.add(day.getTime());
+			day1 = convert.stringToDate("2020-01-7 2:0");
+			day1.set(Calendar.AM_PM, Calendar.PM);
+			dates.add(day1.getTime());
+			day1 = convert.stringToDate("2020-01-7 3:0");
+			day1.set(Calendar.AM_PM, Calendar.PM);
+			dates.add(day1.getTime());
+			day1 = convert.stringToDate("2020-01-7 4:0");
+			day1.set(Calendar.AM_PM, Calendar.PM);
+			dates.add(day1.getTime());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		Calendar begin = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		
+		begin.set(2020, 0, 7, 0, 0, 0);
+		end.set(2020, 0, 10, 23, 23, 59);
+		absence.add(new AbsenceInnerDTO(begin.getTime(), end.getTime()));
+		
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, absence);
+		String reserved = convert.dateAndTimeToString(finded);
+		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
+			reserved += " AM";
+		} else {
+			reserved += " PM";
+		}
+		
+		assertEquals("13.1.2020. 8:0 AM", reserved);
+	}
+	
+	@Test
+	void testAfterAbsenceShouldPass() {
+		begin.set(2020, 0, 6, 10, 30, 0);
+		List<AbsenceInnerDTO> absence = new ArrayList<AbsenceInnerDTO>();
+		
+		Calendar bbegin = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		
+		bbegin.set(2020, 0, 6, 0, 0, 0);
+		end.set(2020, 0, 8, 0, 20, 0);
+		absence.add(new AbsenceInnerDTO(bbegin.getTime(), end.getTime()));
+		
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, absence);
+		String reserved = convert.dateAndTimeToString(finded);
+		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
+			reserved += " AM";
+		} else {
+			reserved += " PM";
+		}
+		
+		assertEquals("9.1.2020. 10:0 AM", reserved);
+	}
+	
+	@Test
+	void testBeforeAbsenceShouldPass() {
+		begin.set(2020, 0, 9, 10, 30, 0);
+		List<AbsenceInnerDTO> absence = new ArrayList<AbsenceInnerDTO>();
+		
+		Calendar bbegin = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		
+		bbegin.set(2020, 0, 10, 0, 0, 0);
+		end.set(2020, 0, 15, 0, 20, 0);
+		absence.add(new AbsenceInnerDTO(begin.getTime(), end.getTime()));
+		
+		bbegin.set(2020, 0, 9, 10, 0, 0);
+		dates.add(2, bbegin.getTime());
+		bbegin.set(2020, 0, 9, 13, 0, 0);
+		dates.add(bbegin.getTime());
+		bbegin.set(2020, 0, 9, 14, 0, 0);
+		dates.add(bbegin.getTime());
+		bbegin.set(2020, 0, 9, 15, 0, 0);
+		dates.add(bbegin.getTime());
+		bbegin.set(2020, 0, 9, 16, 0, 0);
+		dates.add(bbegin.getTime());
+		
+		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, absence);
+		String reserved = convert.dateAndTimeToString(finded);
+		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
+			reserved += " AM";
+		} else {
+			reserved += " PM";
+		}
+		
+		assertEquals("16.1.2020. 8:0 AM", reserved);
+	}
 }

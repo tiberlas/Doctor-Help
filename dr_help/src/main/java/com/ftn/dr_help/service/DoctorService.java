@@ -17,6 +17,7 @@ import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.EmailCheck;
 import com.ftn.dr_help.comon.Term;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.DoctorProfileDTO;
@@ -24,13 +25,12 @@ import com.ftn.dr_help.dto.DoctorProfilePreviewDTO;
 import com.ftn.dr_help.dto.MedicalStaffNameDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
-import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.PatientHealthRecordDTO;
 import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
-import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
@@ -87,10 +87,16 @@ public class DoctorService {
 	private EmailCheck check;
 	
 	@Autowired
+	private WorkScheduleAdapter workSchedule;
+
+	@Autowired
 	private DoctorReviewRepository doctorReviewRepository;
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired 
+	private LeaveRequestService leaveRequestsService;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -527,23 +533,10 @@ public class DoctorService {
 			begin.clear(Calendar.SECOND);
 			begin.clear(Calendar.MILLISECOND);
 			
-			Calendar firstFree = calculate.findFirstScheduleForDoctor(doctor, begin, dates);
+			List<AbsenceInnerDTO> absenceDates = leaveRequestsService.getAllDoctorAbsence(doctor.getId());
+			Calendar firstFree = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(doctor), begin, dates, absenceDates);
 			
 			return dateConvertor.dateForFrontEndString(firstFree);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-	
-	public String findFirstFreeSchedueForOperation(ThreeDoctorsIdDTO doctors) {
-		try {
-			
-			Calendar begin0 = Calendar.getInstance();
-			begin0.add(Calendar.DAY_OF_MONTH, 1);
-			
-			Calendar free = findFirstOperationSchedule(doctors.getDoctor0(), doctors.getDoctor1(), doctors.getDoctor2(), begin0);
-			//sva tri datuma su ista
-			return dateConvertor.dateForFrontEndString(free);
 		} catch (Exception e) {
 			return null;
 		}
@@ -552,27 +545,10 @@ public class DoctorService {
 	public Calendar checkSchedue(String email, Calendar requestedSchedule) {
 		
 		DoctorPOJO doctor = repository.findOneByEmail(email);
-		List<Date> dates = repository.findAllReservedAppointments(doctor.getId());
+		List<Date> reservedDates = repository.findAllReservedAppointments(doctor.getId());
+		List<AbsenceInnerDTO> absenceDates = leaveRequestsService.getAllDoctorAbsence(doctor.getId());
 		
-		return calculate.checkScheduleOrFindFirstFree(doctor, requestedSchedule, dates);
-	}
-	
-	public String checkOperationSchedue(OperationRequestDTO request) {
-		
-		try {
-			Calendar begin0 = dateConvertor.stringToDate(request.getDateAndTimeString());
-			
-			Calendar free = findFirstOperationSchedule(request.getDoctor0(), request.getDoctor1(), request.getDoctor2(), begin0);
-			//sva tri datuma su ista
-			
-			if(free.equals(begin0)) {
-				return request.getDateAndTimeString();
-			} else {
-				return dateConvertor.dateForFrontEndString(free);
-			}
-		} catch (Exception e) {
-			return null;
-		}
+		return calculate.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(doctor), requestedSchedule, reservedDates, absenceDates);
 	}
 	
 	public List<MedicalStaffNameDTO> getSpecializedDoctors(Long procedureTypeId) {
@@ -589,7 +565,8 @@ public class DoctorService {
 				doctors.add(new MedicalStaffNameDTO(
 							doctor.getId(),
 							doctor.getFirstName(),
-							doctor.getLastName()
+							doctor.getLastName(),
+							doctor.getEmail()
 						));
 			}
 			
@@ -597,36 +574,6 @@ public class DoctorService {
 		} catch(Exception e) {
 			System.out.println("ZASTO");
 			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public Calendar findFirstOperationSchedule(Long drId0, Long drId1, Long drId2, Calendar begin) {
-		try {
-			DoctorPOJO dr0 = repository.findById(drId0).orElse(null);
-			DoctorPOJO dr1 = repository.findById(drId1).orElse(null);
-			DoctorPOJO dr2 = repository.findById(drId2).orElse(null);
-			if(dr0 == null || dr1 == null || dr2 == null) {
-				System.out.println("ALL IS NULL");
-				return null;
-			}
-			
-			List<Date> dates0 = repository.findAllReservedOperations(drId0);
-			List<Date> dates1 = repository.findAllReservedOperations(drId1);
-			List<Date> dates2 = repository.findAllReservedOperations(drId2);
-			
-			System.out.println(begin.getTime());
-			if(calculate == null) {
-				calculate = new CalculateFirstFreeSchedule();
-			}
-			
-			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, begin);
-			
-			return firstEqualShift;
-		} catch(Exception e) {
-			System.out.println("EX1 " + e);
-			e.printStackTrace();
-			e.getStackTrace();
 			return null;
 		}
 	}
@@ -791,4 +738,11 @@ public class DoctorService {
 		
 	}
 	
+	public List<DoctorPOJO> getAllDoctorsFromClinicWithSpecialization(Long clinicId, Long procedureId) {
+		try {
+			return repository.getAllDoctorsFromClinicWithSpecialization(clinicId, procedureId);
+		} catch(Exception e) {
+			return null;
+		}
+	}
 }

@@ -13,9 +13,7 @@ class requestedOperation extends Component {
         date: '',
         procedureName: '',
         procedureId: '',
-        dr0: '',
-        dr1: '',
-        dr2: '',
+        procedureDuration: '',
         patient: ''
     }
 
@@ -28,9 +26,7 @@ class requestedOperation extends Component {
                     date: responce.data.date,
                     procedureName: responce.data.procedureName,
                     procedureId: responce.data.procedureId,
-                    dr0: responce.data.dr0,
-                    dr1: responce.data.dr1,
-                    dr2: responce.data.dr2,
+                    procedureDuration: responce.data.procedureDuration,
                     patient: responce.data.patient
                 })
             })
@@ -40,38 +36,32 @@ class requestedOperation extends Component {
         return (
             <div>
                 <div class='row d-flex justify-content-center'>
-                <div class='col-md-7'> 
-                <Table class="table table-hover ">
-                    <TableHead class="table-active">
-                        <TableRow class="table-active">
-                            <TableCell colSpan='6' class='text text-success text-center' align='center'>Requested operations</TableCell>
-                        </TableRow>
-                        <TableRow class="table-active">
-                            <TableCell class="text-success cursor-pointer" >date and time</TableCell>
-                            <TableCell class="text-success cursor-pointer" >procedure</TableCell>
-                            <TableCell class="text-success cursor-pointer" >first doctor</TableCell>
-                            <TableCell class="text-success cursor-pointer" >second doctor</TableCell>
-                            <TableCell class="text-success cursor-pointer" >third doctor</TableCell>
-                            <TableCell class="text-success cursor-pointer" >patient</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableCell class="text-white" >{this.state.date}</TableCell>
-                        <TableCell class='text text-white'>{this.state.procedureName}</TableCell>
-                        <TableCell class='text text-white'>{this.state.dr0}</TableCell>
-                        <TableCell class='text text-white'>{this.state.dr1}</TableCell>
-                        <TableCell class='text text-white'>{this.state.dr2}</TableCell>
-                        <TableCell class='text text-white'>{this.state.patient}</TableCell>
-                    </TableBody>
-                </Table>
-            </div>
-            </div>
+                    <div class='col-md-7'>
+                        <Table class="table table-hover ">
+                            <TableHead class="table-active">
+                                <TableRow class="table-active">
+                                    <TableCell colSpan='6' class='text text-success text-center' align='center'>Requested operations</TableCell>
+                                </TableRow>
+                                <TableRow class="table-active">
+                                    <TableCell class="text-success cursor-pointer" >date and time</TableCell>
+                                    <TableCell class="text-success cursor-pointer" >procedure</TableCell>
+                                    <TableCell class="text-success cursor-pointer" >patient</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableCell class="text-white" >{this.state.date}</TableCell>
+                                <TableCell class='text text-white'>{this.state.procedureName}&nbsp;{this.state.procedureDuration}&nbsp;H</TableCell>
+                                <TableCell class='text text-white'>{this.state.patient}</TableCell>
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
 
-                <RoomList type={this.state.procedureId}/>
+                <RoomList operation={true} operationId={this.state.operationId} date={this.state.date} type={this.state.procedureId} />
 
             </div>
         );
     }
 }
- 
+
 export default requestedOperation;

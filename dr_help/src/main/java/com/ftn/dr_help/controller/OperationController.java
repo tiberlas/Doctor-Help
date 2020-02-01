@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.OperationBlessingDTO;
+import com.ftn.dr_help.dto.OperationBlessingInnerDTO;
+import com.ftn.dr_help.dto.OperationDoctorRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestInfoDTO;
 import com.ftn.dr_help.dto.operations.DoctorOperationDTO;
+import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.service.OperationService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -32,9 +36,10 @@ public class OperationController {
 	@Autowired
 	private CurrentUser currentUser;
 	
+	
 	@PostMapping(value = "/request/doctor", consumes = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
-	public ResponseEntity<String> createDoctorRequestedOperation(@RequestBody OperationRequestDTO requested) {
+	public ResponseEntity<String> createDoctorRequestedOperation(@RequestBody OperationDoctorRequestDTO requested) {
 		String email = currentUser.getEmail();
 		boolean success = operationServie.doctorRequestAppointment(requested, email);
 		
@@ -82,11 +87,60 @@ public class OperationController {
 		}
 	}
 	
+
 	@GetMapping(value="/all-approved/doctor={id}")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<List<DoctorOperationDTO>> getDoctorApprovedOperations(@PathVariable("id") Long doctor_id) {
 		List<DoctorOperationDTO> list = operationServie.findDoctorOperations(doctor_id);
 		
 		return new ResponseEntity<List<DoctorOperationDTO>>(list, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/schedules/bless", produces = "application/json", consumes = "application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> blessOperation(@RequestBody OperationBlessingDTO request) {
+			
+		OperationBlessingInnerDTO status = operationServie.blessOperation(request);
+		
+		switch(status.getBlessedLvl()) {
+			case BLESSED:
+				return new ResponseEntity<>(HttpStatus.OK);
+			case DOCTORS_REFUSED:
+				return new ResponseEntity<>("DOCTOR#"+status.getRecomendedDate(), HttpStatus.CONFLICT);//409
+			case ROOM_REFUSED:
+				return new ResponseEntity<>("ROOM#"+status.getRecomendedDate(), HttpStatus.CONFLICT);
+			default:
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);//400
+		}
+	}
+	
+	@PostMapping(value = "/schedules/check", produces = "application/json", consumes = "application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> checkOperationSchedule(@RequestBody OperationRequestDTO request) {
+			
+		String schedule = operationServie.checkOperationSchedue(request);
+		if(schedule == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if(schedule.equals(request.getDateAndTimeString())) {
+			return new ResponseEntity<>("OK", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(schedule, HttpStatus.CREATED);//201
+		}
+	}
+	
+	//treba izbaciti
+	@PostMapping(value = "/schedules/first_free", produces = "application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<String> getFirstFreeScheduleForThreeDoctors(@RequestBody ThreeDoctorsIdDTO doctors) {
+		
+		String date = operationServie.findFirstFreeSchedueForOperation(doctors);
+		
+		if(date == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(date, HttpStatus.OK);
 	}
 }

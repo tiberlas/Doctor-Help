@@ -6,6 +6,7 @@ import {ClinicAdminContext} from '../../context/ClinicAdminContextProvider';
 import {DropdownItem} from  'react-bootstrap'
 import {DropdownToggle, DropdownMenu, NavbarToggler, Collapse, UncontrolledDropdown, NavItem} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
+import cross from '../../images/reed_cross.gif';
 
 class ClinicAdminHeader extends Component {
     static contextType = ClinicAdminContext
@@ -20,12 +21,14 @@ class ClinicAdminHeader extends Component {
 
     render() { 
         return (
-            <Navbar bg="light" expand="lg" id="navbarColor01">
+            <Navbar bg="dark" expand="sm">
             <Navbar.Brand >
               <Nav> 
                   <Nav.Link>
                     <Link exact to = '/home' class="nav-link">
-                      <strong> drHelp++ </strong>
+                      <strong class="text-danger" style={{fontFamily: "serif", fontSize: "40px", textAlign: "center", webkitTextStrokeWidth: "2px", webkitTextStrokeColor: "white"}}> drHelp </strong>
+                      <img src={cross} height="45px" width="45px" style={{alignContent: "up"}}/>
+                      <img src={cross} height="45px" width="45px"/>
                     </Link>
                   </Nav.Link>
                 </Nav>
@@ -55,89 +58,21 @@ class ClinicAdminHeader extends Component {
                 </Nav>
             </Collapse>
 
-            <NavbarToggler onClick={this.toggle}/>
-            <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
-                <Nav className="mr-auto" navbar pullRight>
-                <UncontrolledDropdown nav inNavbar>
-                    <DropdownToggle nav caret>
-                    Room
-                    </DropdownToggle>
-                    <DropdownMenu className='dropdown-menu'>
-                    <LinkContainer exact to = '/clinic-administrator/rooms'>
-                    <DropdownItem >List</DropdownItem>
-                    </LinkContainer>
-                    
-                    <LinkContainer exact to='/clinic-administrator/rooms/add'>
-                    <DropdownItem >Add</DropdownItem>
-                    </LinkContainer>
+            <Nav.Link>
+                <Link exact to = '/clinic-administrator/rooms' class="nav-link">Room</Link>
+            </Nav.Link>
 
-                    </DropdownMenu>
-                </UncontrolledDropdown>
-                </Nav>
-            </Collapse>
+            <Nav.Link>
+                <Link exact to = '/clinic-administrator/procedure-types' class="nav-link">Procedure&nbsp;type</Link>
+            </Nav.Link>
 
-            <NavbarToggler onClick={this.toggle}/>
-            <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
-                <Nav className="mr-auto" navbar pullRight>
-                <UncontrolledDropdown nav inNavbar>
-                    <DropdownToggle nav caret>
-                    Procedure&nbsp;type
-                    </DropdownToggle>
-                    <DropdownMenu className='dropdown-menu'>
-                    <LinkContainer exact to = '/clinic-administrator/procedure-types'>
-                    <DropdownItem >List</DropdownItem>
-                    </LinkContainer>
-                    
-                    <LinkContainer exact to='/clinic-administrator/procedure-types/add'>
-                    <DropdownItem >Add</DropdownItem>
-                    </LinkContainer>
+            <Nav.Link>
+                <Link exact to = '/clinic-administrator/predefined-appointments' class="nav-link">Predefined&nbsp;appointments</Link>
+            </Nav.Link>
 
-                    </DropdownMenu>
-                </UncontrolledDropdown>
-                </Nav>
-            </Collapse>
-
-            <NavbarToggler onClick={this.toggle}/>
-            <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
-                <Nav className="mr-auto" navbar pullRight>
-                <UncontrolledDropdown nav inNavbar>
-                    <DropdownToggle nav caret>
-                    Predefined&nbsp;appointments
-                    </DropdownToggle>
-                    <DropdownMenu className='dropdown-menu'>
-                    <LinkContainer exact to = '/clinic-administrator/predefined-appointments'>
-                    <DropdownItem >List</DropdownItem>
-                    </LinkContainer>
-                    
-                    <LinkContainer exact to='/clinic-administrator/predefined-appointments/add'>
-                    <DropdownItem >Add</DropdownItem>
-                    </LinkContainer>
-
-                    </DropdownMenu>
-                </UncontrolledDropdown>
-                </Nav>
-            </Collapse>
-
-            <NavbarToggler onClick={this.toggle}/>
-            <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
-                <Nav className="mr-auto" navbar pullRight>
-                <UncontrolledDropdown nav inNavbar>
-                    <DropdownToggle nav caret>
-                    Medical&nbsp;staffs
-                    </DropdownToggle>
-                    <DropdownMenu className='dropdown-menu'>
-                    <LinkContainer exact to = '/clinic-administrator/medical-staff'>
-                    <DropdownItem >List</DropdownItem>
-                    </LinkContainer>
-                    
-                    <LinkContainer exact to='/clinic-administrator/medical-staff/add'>
-                    <DropdownItem >Add</DropdownItem>
-                    </LinkContainer>
-
-                    </DropdownMenu>
-                </UncontrolledDropdown>
-                </Nav>
-            </Collapse>
+            <Nav.Link>
+                <Link exact to = '/clinic-administrator/medical-staff' class="nav-link">Medical&nbsp;staffs</Link>
+            </Nav.Link>
 
             <NavbarToggler onClick={this.toggle}/>
             <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">

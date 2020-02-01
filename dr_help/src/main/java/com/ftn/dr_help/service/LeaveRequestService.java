@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import javassist.tools.rmi.ObjectNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -13,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.Mail;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.leave_requests.BlessingConflictsDTO;
 import com.ftn.dr_help.dto.leave_requests.LeaveRequestDTO;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
@@ -465,4 +464,42 @@ public class LeaveRequestService {
 	}
 	
 	
+	public List<AbsenceInnerDTO> getAllDoctorAbsence(Long doctorId) {
+		List<AbsenceInnerDTO> absenceDates = new ArrayList<>();
+		
+		Calendar now = Calendar.getInstance();
+		now.set(Calendar.HOUR, 0);
+		now.set(Calendar.MINUTE, 0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.MILLISECOND, 0);
+		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForDoctor(doctorId, now.getTime());
+	
+		for(LeaveRequestPOJO absence : vacationDates) {
+			absenceDates.add(new AbsenceInnerDTO(
+					absence.getFirstDay().getTime(),
+					absence.getLastDay().getTime()));
+		}
+		
+		return absenceDates;
+	}
+	
+	public List<AbsenceInnerDTO> getAllNurseAbsence(Long nurseId) {
+		List<AbsenceInnerDTO> absenceDates = new ArrayList<>();
+		
+		Calendar now = Calendar.getInstance();
+		now.set(Calendar.HOUR, 0);
+		now.set(Calendar.MINUTE, 0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.MILLISECOND, 0);
+		List<LeaveRequestPOJO> vacationDates = leaveRequestRepository.findAllForNurses(nurseId, now.getTime());
+	
+		for(LeaveRequestPOJO absence : vacationDates) {
+			absenceDates.add(new AbsenceInnerDTO(
+					absence.getFirstDay().getTime(),
+					absence.getLastDay().getTime()));
+		}
+		
+		return absenceDates;
+	}
+
 }
