@@ -50,8 +50,6 @@ public class DailySchedule {
 		System.out.println("");
 		System.out.println("");
 		System.out.println("Checking if doctor " + doctorId + " is on leave");
-		System.out.println("");
-		System.out.println("");
 		
 		Calendar today = schedule.get(0).getTime();
 		today.set(Calendar.HOUR_OF_DAY, 0);
@@ -63,8 +61,10 @@ public class DailySchedule {
 			System.out.println("I fount no leave request repository :p");
 			return;
 		}
-		leaveRequestRepository.getDoctorApprovedLeaveRequests(doctorId);
+//		leaveRequestRepository.getDoctorApprovedLeaveRequests(doctorId);
 		count = leaveRequestRepository.checkIfDoctorIsFree(doctorId, today);
+		System.out.println("");
+		System.out.println("");
 		if (count == null) {
 			System.out.println("Doctor " + doctorId + " is NOT on leave on " + today.getTime());
 			isOnLeave = false;
