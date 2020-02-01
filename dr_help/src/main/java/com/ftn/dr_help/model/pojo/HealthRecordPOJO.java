@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ftn.dr_help.model.enums.BloodTypeEnum;
 
 @Entity
@@ -51,13 +50,11 @@ public class HealthRecordPOJO implements Serializable {
 	@Column(name = "bloodType", nullable = true)
 	private BloodTypeEnum bloodType;
 	
-
-
 	@OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ExaminationReportPOJO> examinationReport;
 
 
-	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "healthRecord")
 	private PatientPOJO patient;
 	
 	

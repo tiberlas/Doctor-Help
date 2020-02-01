@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 
@@ -26,6 +27,25 @@ import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 @Table (name = "appointments")
 public class AppointmentPOJO implements Serializable{
 
+	public AppointmentPOJO(Long id, Calendar date, DoctorPOJO doctor, NursePOJO nurse, PatientPOJO patient,
+			AppointmentStateEnum status, double discount, ProceduresTypePOJO procedureType, RoomPOJO room,
+			ExaminationReportPOJO examinationReport, List<DoctorRequestedAppointmentPOJO> requested, boolean deleted,
+			Long version) {
+		super();
+		this.id = id;
+		this.date = date;
+		this.doctor = doctor;
+		this.nurse = nurse;
+		this.patient = patient;
+		this.status = status;
+		this.discount = discount;
+		this.procedureType = procedureType;
+		this.room = room;
+		this.examinationReport = examinationReport;
+		this.requested = requested;
+		this.deleted = deleted;
+		this.version = version;
+	}
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -66,6 +86,9 @@ public class AppointmentPOJO implements Serializable{
 	
 	@Column (nullable = false)
 	private boolean deleted;
+	
+	@Version
+	private Long version;
 	
 	public AppointmentPOJO() {
 		super();
@@ -142,6 +165,12 @@ public class AppointmentPOJO implements Serializable{
 	}
 	public void setRequested(List<DoctorRequestedAppointmentPOJO> requested) {
 		this.requested = requested;
+	}
+	public Long getVersion() {
+		return version;
+	}
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 	
 }

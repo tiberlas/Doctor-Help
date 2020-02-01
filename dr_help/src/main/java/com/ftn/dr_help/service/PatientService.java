@@ -489,15 +489,21 @@ public class PatientService {
 		}
 		
 		HealthRecordPOJO healthRecord = patient.getHealthRecord();
-		List<AllergyPOJO> allergies= healthRecord.getAllergyList();
-		
+		List<AllergyPOJO> allergies;
 		ArrayList<String> list = new ArrayList<String>();
 		
-		for (AllergyPOJO allergy : allergies) {
-			list.add(allergy.getAllergy());
-		}
-
 		
+		if (healthRecord != null) {
+			allergies = healthRecord.getAllergyList();
+			for (AllergyPOJO allergy : allergies) {
+				list.add(allergy.getAllergy());
+			}
+		}
+		else {
+			allergies = null;
+		}
+		
+				
 		PatientHealthRecordDTO retVal = new PatientHealthRecordDTO();
 		
 		retVal.setBirthday(patient.getBirthday().getTime());

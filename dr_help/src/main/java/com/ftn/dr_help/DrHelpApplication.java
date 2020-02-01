@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages={"com.ftn.dr_help"})
 @EnableTransactionManagement
 @EnableAsync
+@EnableJpaRepositories
 public class DrHelpApplication {
 
 	public static void main(String[] args) throws ParseException {
@@ -21,3 +23,4 @@ public class DrHelpApplication {
 	}
 
 }
+ 

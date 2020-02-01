@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.DiagnosisDTO;
+import com.ftn.dr_help.dto.ClinicListingDTO;
+import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
@@ -237,6 +239,159 @@ public class ClinicService {
 		else {
 			clinicReviewRepository.updateReview(review, patientId, clinicId);
 		}
+	}
+
+	public ClinicListingDTO doOtherFilters(ClinicListingDTO input, String state, String city, String address, String minRat, String maxRat, String minPrice, String maxPrice) {
+		
+		List<String> stateNames = new ArrayList<String> ();
+		List<String> cityNames = new ArrayList<String> ();
+		List<String> addressNames = new ArrayList<String> ();
+		for (ClinicPreviewDTO cp : input.getClinicList()) {
+			boolean isThere = false;
+			// Set up states
+			for (String s : stateNames) {
+				if (s.equals(cp.getState())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				stateNames.add(cp.getState());
+			}
+			
+			isThere = false;
+			for (String s : cityNames) {
+				if (s.equals(cp.getCity())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				cityNames.add(cp.getCity());
+			}
+			
+			isThere = false; 
+			for (String s : addressNames) {
+				if (s.equals(cp.getAddress())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				addressNames.add(cp.getAddress());
+			}
+		}
+		input.setStateList(stateNames);
+		input.setCityList(cityNames);
+		input.setAddressList(addressNames);
+		
+		if (!state.equals("unfiltered")) {
+			List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+			for (ClinicPreviewDTO temp : input.getClinicList()) {
+				if (temp.getState().equals(state)) {
+					tempList.add(temp);
+				}
+			}
+			input.setClinicList(tempList);
+		}
+		
+		if (!city.equals("unfiltered")) {
+			List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+			for (ClinicPreviewDTO temp : input.getClinicList()) {
+				if (temp.getCity().equals(city)) {
+					tempList.add(temp);
+				}
+			}
+			input.setClinicList(tempList);
+		}
+		
+		if (!address.equals("unfiltered")) {
+			List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+			for (ClinicPreviewDTO temp : input.getClinicList()) {
+				if (temp.getAddress().equals(address)) {
+					tempList.add(temp);
+				}
+			}
+			input.setClinicList(tempList);
+		}
+		
+		if ((!minRat.equals("1")) && (!minRat.equals("unfiltered"))) {
+			Integer mRat = Integer.parseInt(minRat);
+			if (mRat != null) {
+				List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+				for (ClinicPreviewDTO temp : input.getClinicList()) {
+					if (temp.getRating().equals("/")) {
+						continue;
+					}
+					Float tempInt = Float.parseFloat(temp.getRating());
+					if (tempInt != null) {
+						if (mRat <= tempInt) {
+							tempList.add(temp);
+						}
+					}
+				}
+				input.setClinicList(tempList);
+			}
+		}
+		
+		if ((!maxRat.equals("5")) && (!maxRat.equals("unfiltered"))) {
+			Integer mRat = Integer.parseInt(maxRat);
+			if (mRat != null) {
+				List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+				for (ClinicPreviewDTO temp : input.getClinicList()) {
+					if (temp.getRating().equals("/")) {
+						continue;
+					}
+					Float tempInt = Float.parseFloat(temp.getRating());
+					if (tempInt != null) {
+						if (mRat >= tempInt) {
+							tempList.add(temp);
+						}
+					}
+				}
+				input.setClinicList(tempList);
+			}
+		}
+		
+		if (!minPrice.equals("unfiltered")) {
+			Float price = Float.parseFloat(minPrice);
+			if (price != null) {
+				List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+				for (ClinicPreviewDTO temp : input.getClinicList()) {
+					if (temp.getPrice().equals("/")) {
+						continue;
+					}
+					Float tempFloat = Float.parseFloat(temp.getPrice().split(" ")[0]);
+					if (tempFloat != null) {
+						if (price <= tempFloat) {
+							tempList.add(temp);
+						}
+					}
+				}
+				input.setClinicList(tempList);
+			}
+		}
+		
+		if (!maxPrice.equals("unfiltered")) {
+			Float price = Float.parseFloat(maxPrice);
+			if (price != null) {
+				List<ClinicPreviewDTO> tempList = new ArrayList<ClinicPreviewDTO> ();
+				for (ClinicPreviewDTO temp : input.getClinicList()) {
+					if (temp.getPrice().equals("/")) {
+						continue;
+					}
+					Float tempFloat = Float.parseFloat(temp.getPrice().split(" ")[0]);
+					if (tempFloat != null) {
+						if (price >= tempFloat) {
+							tempList.add(temp);
+						}
+					}
+				}
+				input.setClinicList(tempList);
+			}
+		}
+		
+		return input;
 	}
 	
 	

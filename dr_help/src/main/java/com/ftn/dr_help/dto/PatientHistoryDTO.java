@@ -7,12 +7,71 @@ import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 
 public class PatientHistoryDTO {
 
+	public PatientHistoryDTO(String status, Long examinationReportId, String date, String procedureType, String doctor,
+			String nurse, String clinicName, Long clinicId, Long doctorId, Long nurseId, Long appointmentId,
+			boolean canCancel, String room, Double price, Double discount) {
+		super();
+		this.status = status;
+		this.examinationReportId = examinationReportId;
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
+		this.date = date;
+		this.procedureType = procedureType;
+		this.doctor = doctor;
+		this.nurse = nurse;
+		this.clinicName = clinicName;
+		this.clinicId = clinicId;
+		this.doctorId = doctorId;
+		this.nurseId = nurseId;
+		this.appointmentId = appointmentId;
+		this.canCancel = canCancel;
+		this.room = room;
+		this.price = price;
+		this.discount = discount;
+	}
+	public PatientHistoryDTO(String status, Long examinationReportId, String date, String procedureType, String doctor,
+			String nurse, String clinicName, Long clinicId, Long doctorId, Long nurseId, Long appointmentId,
+			boolean canCancel, String room, Double price) {
+		super();
+		this.status = status;
+		this.examinationReportId = examinationReportId;
+		System.out.println(date);
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
+		this.date = date;
+		this.procedureType = procedureType;
+		this.doctor = doctor;
+		this.nurse = nurse;
+		this.clinicName = clinicName;
+		this.clinicId = clinicId;
+		this.doctorId = doctorId;
+		this.nurseId = nurseId;
+		this.appointmentId = appointmentId;
+		this.canCancel = canCancel;
+		this.room = room;
+		this.price = price;
+	}
 	public PatientHistoryDTO(String status, Long examinationReportId, String date,
 			String procedureType, String doctor, String nurse, String clinicName, Long clinicId, Long doctorId,
 			Long nurseId, Long appointmentId, boolean canCancel) {
 		super();
 		this.status = status;
 		this.examinationReportId = examinationReportId;
+		System.out.println(date);
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
 		this.date = date;
 		this.procedureType = procedureType;
 		this.doctor = doctor;
@@ -34,6 +93,13 @@ public class PatientHistoryDTO {
 			String clinicName, Long clinicId) {
 		super();
 		this.examinationReportId = examinationReportId;
+		System.out.println(date);
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}		
 		this.date = date;
 		this.procedureType = procedureType;
 		this.doctor = doctor;
@@ -65,29 +131,54 @@ public class PatientHistoryDTO {
 		}
 		this.date = dateConverter.toString(appointment.getDate());
 		this.date += " " + appointment.getDate().get(Calendar.HOUR_OF_DAY) + ":" + appointment.getDate().get(Calendar.MINUTE);
+
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
+//		System.out.println("Date is: " + date);
+//		String[] parts = date.split(" ");
+//		parts = parts[0].split(".");
+//		System.out.println(parts.length);
+//		for (String s : parts) {
+//			System.out.println("Part: " + s);
+//		}
+//		if (date.split(".")[0].length() < 2) {
+//			date = "0" + date;
+//		}
+//		if (date.split(".")[1].length() < 2) {
+//			date = date.split(".")[0] + ".0" + date.split(".")[1] + "." + date.split(".")[2];
+//		}
+		
 		this.procedureType = appointment.getProcedureType().getName();
 		this.doctor = appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName();
-		this.nurse = appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName();
+		if (appointment.getNurse() != null) {
+			this.nurse = appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName();
+			this.nurseId = appointment.getNurse().getId();
+		}
 		this.clinicName = appointment.getDoctor().getClinic().getName();
 		this.clinicId = appointment.getDoctor().getClinic().getId();
 		this.doctorId = appointment.getDoctor().getId();
-		this.nurseId = appointment.getNurse().getId();
 		this.appointmentId = appointment.getId();
 		
+		if (appointment.getRoom() != null) {
+			this.room = appointment.getRoom().getName() + " " + appointment.getRoom().getNumber();
+		}
+		this.price = appointment.getProcedureType().getPrice() * (1 - appointment.getDiscount() / 100);
 		
+		this.discount = appointment.getDiscount();
+		 
 		Calendar tempCal = Calendar.getInstance ();
-		//System.out.println("Now: " + tempCal.getTime());
+		
 		tempCal.add(Calendar.DAY_OF_MONTH, 1);
 		if (tempCal.after(appointment.getDate())) {
-			//System.out.println("Ne smem da otkazem");
 			this.canCancel = true;
 		}
 		else {
-			System.out.println("Smem da otkazem");
+//			System.out.println("Smem da otkazem");
 		}
-		//System.out.println("Current time: " + Calendar.getInstance().getTime());
-		//System.out.println("Appointment time: " + appointment.getDate().getTime());
-		//System.out.println("Yesterday: " + tempCal.getTime());
 	}
 	
 	String status;
@@ -102,6 +193,9 @@ public class PatientHistoryDTO {
 	Long nurseId;
 	Long appointmentId;
 	boolean canCancel = false;
+	String room;
+	Double price;
+	Double discount;
 	
 	public Long getExaminationReportId() {
 		return examinationReportId;
@@ -174,6 +268,24 @@ public class PatientHistoryDTO {
 	}
 	public void setCanCancel(boolean canCancel) {
 		this.canCancel = canCancel;
+	}
+	public String getRoom() {
+		return room;
+	}
+	public void setRoom(String room) {
+		this.room = room;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	public Double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(Double discount) {
+		this.discount = discount;
 	}
 	
 }

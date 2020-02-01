@@ -2,12 +2,15 @@ import React, {Component, Fragment} from 'react';
 import { TableHead, TableBody, TableRow, TableCell, MenuItem } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import { Dropdown, Button, Row } from 'react-bootstrap';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import { UserContext } from '../../context/UserContextProvider';
 import ViewClinic from './ViewClinic';
+import FormControl from '@material-ui/core/FormControl';
+import Select from 'react-select'
+import { Modal } from 'react-bootstrap';
 
 
 class DoctorListing extends Component {
@@ -15,18 +18,29 @@ class DoctorListing extends Component {
 	state = {
 		filtered: false, 
 		doctors: [], 
-		
+		showDialog : false, 
+		showMissing : false,
+		showErrror : false,  
+		selectedRow : [], 
+		appointmentType : "", 
+		selectedDate : "", 
+		clinicName: "", 
+		clinicAddress : "", 
+		showFinished : false, 
+		redirect : false, 
+		finishedTitle : "", 
+		finishedContent : ""
 	}
 
 	static contextType = UserContext;
 
 	componentDidMount () {
 		let url = window.location.href.split ('/');
-		// alert ('Filter: ' + url[5] + '; Date: ' + url[6]);
+
 		let request = 'http://localhost:8080/api/doctors/listing';
-		request += '/' + url[4];
-		request += '/' + url[5];
-		request += '/' + url[6];
+		request += '/clinic=' + url[4];
+		request += '&appointment=' + url[5];
+		request += '&date=' + url[6];
 		if ((url[5] !== 'unfiltered') && (url[6] !== 'unfiltered')) {
 			this.setState ({
 				filtered : true
@@ -35,67 +49,167 @@ class DoctorListing extends Component {
 		axios.get (request)
 		.then (response => {
 			this.setState ({
-				doctors: response.data
+				doctors: response.data.doctorListing, 
+				clinicName : response.data.clinicName, 
+				clinicAddress : response.data.address
 			})
+		})
+		this.setState ({
+			appointmentType : window.location.href.split('/')[5].replace('%20', ' '), 
+			selectedDate : window.location.href.split('/')[6]
+		})
+	}
+
+	handleUpdate () {
+		let url = window.location.href.split ('/');
+
+		let request = 'http://localhost:8080/api/doctors/listing';
+		request += '/clinic=' + url[4];
+		request += '&appointment=' + url[5];
+		request += '&date=' + url[6];
+		if ((url[5] !== 'unfiltered') && (url[6] !== 'unfiltered')) {
+			this.setState ({
+				filtered : true
+			});
+		}
+		axios.get (request)
+		.then (response => {
+			this.setState ({
+				doctors: response.data.doctorListing, 
+				clinicName : response.data.clinicName, 
+				clinicAddress : response.data.address
+			})
+		})
+		this.setState ({
+			appointmentType : window.location.href.split('/')[5], 
+			selectedDate : window.location.href.split('/')[6]
 		})
 	}
 
 	handleSubmit (row) {
 		if (row.selectedTime === undefined) {
-			alert ("Please specify a timepoint")
+			this.setState ({
+				showMissing : true
+			})
 		} 
 		else {
-			// alert ("Rezervisem kod " + row.firstName + " u " + row.selectedTime)
 			axios.post ('http://localhost:8080/api/appointments/add', {
 				doctorId : row.id, 
 				date: window.location.href.split('/')[6], 
 				time: row.selectedTime, 
 				patientId : this.context.user.id
-			}) 
+			})
+			.then (response => {
+				if (response.data) {
+					this.setState ({
+						showFinished : true, 
+						finishedTitle : "Congratulations!!!1!", 
+						finishedContent : "Your request has been sent. "
+					})
+				}
+				else {
+					this.setState ({
+						showError : true
+					})
+				}
+				this.handleUpdate();
+				//alert (response.data)
+					
+			});
 		}
 	}
 
 	handleSelect (row, time) {
-		row.selectedTime = time;
-		let tekst = document.getElementById (row.id);
-		//tekst.setValue("row.selectedTime")
+		// alert (time.value)
+		row.selectedTime = time.value;
+		// let tekst = document.getElementById (row.id);
+		// tekst.setValue("row.selectedTime")
+	}
+
+	handleRequest (row) {
+		if (row.selectedTime === undefined) {
+			// alert ("Undefined")
+			this.setState ({
+				showMissing : true
+			})
+			return;
+		}
+		this.setState ({
+			selectedRow : row, 
+		})
+		this.setState ({
+			showDialog : true
+		})
 	}
 
 	generateDoctorRows (row) {
 		let profileUrl = '/doctor/profile/'
 
+		let hide = false;
+		if ((row.terms.length === 0) && this.state.filtered) {
+			hide = true;
+		}
+		
 		return (
 			<Fragment>
-				<TableCell><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
-				<TableCell><p class='text-white'>{row.lastName}</p></TableCell>
-				<TableCell><p class='text-white'>{row.rating}</p></TableCell>
-				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
-					<Dropdown>
-						<DropdownToggle >
-							{(row.selectedTime === 'undefined') ? ('Terms') : (row.selectedTime)}
-							Tekst
-						</DropdownToggle>
-						<DropdownMenu>
-							{
-								row.terms.map (term => (
-									<MenuItem onClick={() => this.handleSelect(row, term)}>{term}</MenuItem>
-								))
-							}
-						</DropdownMenu>
-					</Dropdown>
+				<TableCell hidden={hide}><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
+				<TableCell hidden={hide}><p class='text-white'>{row.lastName}</p></TableCell>
+				<TableCell hidden={hide}><p class='text-white'>{row.rating}</p></TableCell>
+				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide}>
+					<FormControl class='text-black'>
+						<Select 
+							style="width:500px"
+							onChange = {this.handleSelect.bind(this, row)}
+							options={row.terms.map(term => ({ label: term, value: term }))}
+						></Select>
+					</FormControl>
 				</TableCell>
-				<TableCell hidden={(this.state.filtered) ? (false) : (true)}>
-					<p class='text-white' id={row.id} >
-						{(row.selectedTime === undefined) ? ("--:--") : (row.selectedTime)}
-					</p>
-				</TableCell>
-				<TableCell hidden={(this.state.filtered) ? (false) : (true)} >
-					<Button onClick={() => this.handleSubmit(row)}>
-						Confirm
+				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide} >
+					<Button onClick={() => this.handleRequest(row)}>
+						Request
 					</Button>
 				</TableCell>
 			</Fragment>
 		)
+	}
+
+	closeDialog () {
+		this.setState ({
+			showDialog : false
+		})
+		
+		this.handleSubmit(this.state.selectedRow);
+	}
+
+	closeMissingDialog () {
+		this.setState ({
+			showMissing : false
+		})
+	}
+
+	closeFinishedDialog () {
+		this.setState ({
+			showFinished : false, 
+			redirect : true
+		})
+	}
+
+	quitDialog () {
+		this.setState ({
+			showDialog : false
+		})
+	}
+
+	quitFinishedDialog () {
+		this.setState ({
+			showFinished : false, 
+		})
+	}
+
+	closeErrorDialog () {
+		this.setState ({
+			showError : false, 
+		})
 	}
 
 	render () {
@@ -103,21 +217,150 @@ class DoctorListing extends Component {
 		let size = this.state.doctors.length;
 
 		return (
+			
+
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
 
-				<ViewClinic ></ViewClinic>
+					{
+						this.state.redirect && 
+						<Redirect to='/patient/appointmentList' from='/clinic/'/>
+					}
 
-				<h3>{(this.state.filtered) ? ("Filtered doctors") : ("All doctors")}</h3>
+					
+					<Modal show={this.state.showDialog} onHide={() => this.quitDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>Confirm appointment request:</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							<Table>
+								<TableRow>
+									<TableCell>
+										Appointment type:
+									</TableCell>
+									<TableCell>
+										{this.state.appointmentType.replace ('_', ' ')}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Clinic:
+									</TableCell>
+									<TableCell>
+										{this.state.clinicName}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Adddress:
+									</TableCell>
+									<TableCell>
+										{this.state.clinicAddress}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Doctor:
+									</TableCell>
+									<TableCell>
+										{this.state.selectedRow.lastName + " dr " + this.state.selectedRow.firstName}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Date:
+									</TableCell>
+									<TableCell>
+										{this.state.selectedDate.split('-')[2] + "." + this.state.selectedDate.split('-')[1] + "." + this.state.selectedDate.split('-')[0] + "."}
+									</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										Time:
+									</TableCell>
+									<TableCell>
+										{this.state.selectedRow.selectedTime}
+									</TableCell>
+								</TableRow>
+							</Table>
+							<p>
+								<br/>
+								You are about to request this appointment. 
+							</p>
+							{/* <a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a> */}
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeDialog()}>
+								Confirm
+							</Button>
+						</Modal.Footer>
+					</Modal>
+
+					<Modal show={this.state.showMissing} onHide={() => this.closeMissingDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>Error!</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							<p>Please choose a time for your appointment</p>
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeMissingDialog()}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>
+
+					<Modal show={this.state.showFinished} onHide={() => this.closeFinishedDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>{this.state.finishedTitle}}</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							{this.state.finishedContent}
+							<br />
+							<a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a>
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeFinishedDialog()}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>
+
+					<Modal show={this.state.showError} onHide={() => this.closeErrorDialog()}>
+						<Modal.Header closeButton>
+							<Modal.Title>Request failed!</Modal.Title>
+						</Modal.Header>
+
+						<Modal.Body>
+							<p>We're sorry to report that we have made an error, and your request could not pass through. Please try and request a different appointment. </p>
+						</Modal.Body>
+
+						<Modal.Footer>
+							<Button variant="primary" onClick={() => this.closeErrorDialog()}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>
+
+				<div hidden={this.state.filtered}>
+					<ViewClinic hidden={this.state.filtered}></ViewClinic>
+				</div>
+
+				<h3>{(this.state.filtered) ? ("Request an " + this.state.appointmentType + " appointment at " + this.state.clinicName + " hospital:") : ("All doctors")}</h3>
 					<Table>
 						<TableHead>
 							<TableRow>
 								<TableCell><p class='text-success'>First Name</p></TableCell>
 								<TableCell><p class='text-success'>Last Name</p></TableCell>
 								<TableCell><p class='text-success'>Rating</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Terms</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Selected term</p></TableCell>
-								<TableCell><p class='text-success' hidden={(this.state.filtered) ? (false) : (true)}>Confirm</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Terms</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Confirm</p></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

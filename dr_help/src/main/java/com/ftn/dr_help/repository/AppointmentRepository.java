@@ -2,6 +2,7 @@ package com.ftn.dr_help.repository;
 
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,7 +49,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	public List<AppointmentPOJO> getPatientsPastAppointmentsForClinic (Long patientId, Long clinicId);
 	
 	@Query (value = "select * from appointments a where a.patient_id = ?1 and a.status in ('REQUESTED', 'APPROVED') and a.deleted = false", nativeQuery = true)
-	public List<AppointmentPOJO> getPatientsPendingAppointments (Long email);
+	public List<AppointmentPOJO> getPatientsPendingAppointments (Long patientId);
 	
 	@Modifying
 	@Query (value = "update appointments set deleted = true where id = ?1", nativeQuery = true)
@@ -96,5 +97,12 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Modifying
 	@Query(value="update appointments set deleted = true where (status = 'APPROVED' or status = 'AVAILABLE') and date <= ?1", nativeQuery=true)
 	public void deleteAppointmentsInThePast(Date now);
+
+	@Query (value = "select * from appointments a where a.status = 'AVAILABLE'", nativeQuery = true)
+	public List<AppointmentPOJO> getAllPredefinedAppointments();
+	
+	@Modifying
+	@Query (value = "update appointments set patient_id = ?2, status = 'APPROVED' where id = ?1", nativeQuery = true)
+	public void reserveAppointment (Long appointmentId, Long patinentId);
 	
 }
