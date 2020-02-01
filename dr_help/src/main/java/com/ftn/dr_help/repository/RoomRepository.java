@@ -18,6 +18,8 @@ public interface RoomRepository extends JpaRepository <RoomPOJO, Long>{
 	Optional<RoomPOJO> findOneByName(String name);
 	Optional<RoomPOJO> findOneByNumber(int number);
 	
+	RoomPOJO findOneById(Long roomId);
+	
 	@Query(value = "select distinct r.* " + 
 			"from room r " + 
 			"inner join appointments a " + 

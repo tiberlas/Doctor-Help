@@ -27,10 +27,12 @@ import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
+import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
+import com.ftn.dr_help.repository.RoomRepository;
 
 @Service
 public class OperationService {
@@ -52,6 +54,9 @@ public class OperationService {
 	
 	@Autowired
 	private RoomService roomService;
+	
+	@Autowired
+	private RoomRepository roomRepository;
 	
 	@Autowired
 	private CalculateFirstFreeSchedule calculate;
@@ -305,6 +310,9 @@ public class OperationService {
 				operation.setThirdDoctor(doctorRepository.getOne(request.getDoctor2()));
 				operation.setStatus(OperationStatus.APPROVED);
 				
+				RoomPOJO room = roomRepository.findOneById(request.getRoomId());
+				operation.setRoom(room);
+				
 				mailSender.sendOperationApprovedToDoctorsEmail(operation.getFirstDoctor(), operation);
 				mailSender.sendOperationApprovedToDoctorsEmail(operation.getSecondDoctor(), operation);
 				mailSender.sendOperationApprovedToDoctorsEmail(operation.getThirdDoctor(), operation);
@@ -319,6 +327,7 @@ public class OperationService {
 						);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new OperationBlessingInnerDTO("", OperationBlessing.ERROR);
 		}
 	}

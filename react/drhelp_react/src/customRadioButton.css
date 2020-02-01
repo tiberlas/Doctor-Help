@@ -132,9 +132,10 @@ input[type=radio]:checked ~ label{
 }
 
 
+
 /* Styles for alert... 
 by the way it is so weird when you look at your code a couple of years after you wrote it XD */
-
+/* 
 .alert {
 	box-sizing: border-box;
 	background-color: #BDFFE1;
@@ -145,7 +146,7 @@ by the way it is so weird when you look at your code a couple of years after you
 	z-index: 300;
 	padding: 20px 40px;
 	color: #333;
-}
+} */
 
 .alert h2 {
 	font-size: 22px;

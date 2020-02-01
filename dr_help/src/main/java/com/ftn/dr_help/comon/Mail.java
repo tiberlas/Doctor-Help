@@ -236,11 +236,16 @@ public class Mail {
 		SimpleMailMessage msg = new SimpleMailMessage();
 	    msg.setTo(doctor.getEmail());
 	
-	    msg.setSubject("DrHelp operation scheduled");
-	    String text = "Dear " + doctor.getFirstName() +" "+doctor.getLastName()+ 
+	msg.setSubject("DrHelp operation scheduled");
+	  String text = "Dear " + doctor.getFirstName() +" "+doctor.getLastName()+ 
 	    		" you have an operation on "+
-	    		dateConvertor.dateForFrontEndString(operation.getDate())+", in room "+
-			    operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+	    		dateConvertor.dateForFrontEndString(operation.getDate())+", in";
+	  	if(operation.getRoom() != null) {
+	    	text += " room " + operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+	    } else {
+	    	text += "undefined room";
+	    }
+	  
 	    
 	    text += "\n\n\n" + "Forever helping, drHelp.";
 	    msg.setText(text);
@@ -252,12 +257,17 @@ public class Mail {
 			
 			SimpleMailMessage msg = new SimpleMailMessage();
 		    msg.setTo(operation.getPatient().getEmail());
-		
-		    msg.setSubject("DrHelp operation scheduled");
 		    String text = "Dear " + operation.getPatient().getFirstName() +" "+operation.getPatient().getLastName()+ 
-		    		" your operation for " +operation.getOperationType().getName()+" has been schedule for "+
-		    		dateConvertor.dateForFrontEndString(operation.getDate())+", in room "+
-		    		operation.getRoom().getName()+" number "+operation.getRoom().getNumber()+
+		    		" your operation for " +operation.getOperationType().getName()+" has been schedule for ";
+		    
+		    if(operation.getRoom() != null) {
+		    	text +=  "in room "+
+			    		operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+		    } else {
+		    	text += "in undefined room";
+		    }
+		    msg.setSubject("DrHelp operation scheduled");
+		    text += dateConvertor.dateForFrontEndString(operation.getDate())+"," +
 		    		". Operation will be executed by dr. "+operation.getFirstDoctor().getFirstName()+" "+operation.getFirstDoctor().getLastName()+
 		    		", dr. "+operation.getSecondDoctor().getFirstName()+" "+operation.getSecondDoctor().getLastName()+
 		    		" and dr. "+operation.getThirdDoctor().getFirstName()+" "+operation.getThirdDoctor().getLastName()+".";
