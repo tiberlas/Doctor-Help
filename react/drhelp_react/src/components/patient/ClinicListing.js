@@ -13,6 +13,21 @@ import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { Tab } from '@material-ui/core';
 
+const crniFont = {
+	option: provided => ({
+		...provided,
+		color: 'black'
+	  }),
+	  control: provided => ({
+		...provided,
+		color: 'black'
+	  }),
+	  singleValue: (provided) => ({
+		...provided,
+		color: 'black'
+	  })
+}
+
 
 class ClinicListing extends Component {
 
@@ -35,7 +50,7 @@ class ClinicListing extends Component {
 		minPrice : 'unfiltered', 
 		maxPrice : 'unfiltered', 
 
-		showModal : true
+		showModal : false
 	}
 
 	componentDidMount () {
@@ -287,6 +302,9 @@ class ClinicListing extends Component {
 	}
 
 	handleMinPriceFilter () {
+		if (this.state.activeFilter === 'unfiltered') {
+			return;
+		}
 		let element = document.getElementById ("id_min_price");
 		if (element.value === '') {
 			// alert ("NaN");
@@ -307,6 +325,9 @@ class ClinicListing extends Component {
 	}
 
 	handleMaxPriceFilter () {
+		if (this.state.activeFilter === 'unfiltered') {
+			return;
+		}
 		let element = document.getElementById ("id_max_price");
 		if (element.value === '') {
 			// alert ("NaN");
@@ -351,78 +372,104 @@ class ClinicListing extends Component {
 	}
 
 	
-
+	switchDialog () {
+		if (this.state.showModal === true) {
+			this.setState ({
+				showModal : false
+			})
+		}
+		else {
+			this.setState ({
+				showModal : true
+			})
+		}
+	}
 	
 	render () {
+
+
+
+
 		let size = this.state.clinics.length;
 		let numberOfTypes = this.state.appointmentTypes.length;
 		return (
 			<div class="row d-flex justify-content-center">
                 <div class='col-md-10'>
 
-				<Modal show={this.state.showModal}>
+				<Modal show={this.state.showModal} onHide={() => this.switchDialog()}>
 					<Modal.Header closeButton>
-						<Modal.Title>Search for an appointment</Modal.Title>
+						<Modal.Title>Filter through appointments</Modal.Title>
 					</Modal.Header>
 
 					<Modal.Body>
+						
 						<Table>
+							
 							<TableRow>
-								<TableCell colSpan = "3">
-									To request an appointment, you must choose a procedure type and date. Other fields are not necessary.
-								</TableCell>
+								<TableCell colSpan="4">To request an appointment, you must choose a procedure type and date. Other fields are optional.</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell colSpan = "3">
+								<TableCell colSpan="4">
 									<form>
 										<Select 
-											onChange = {this.handleFilterType.bind(this)}
+											styles={crniFont}
+											placeholder={(this.state.activeFilter === 'unfiltered') ? ('Choose a procedure type') : (this.state.activeFilter.replace('_', ' '))}
+											onChange={this.handleFilterType.bind(this)}
 											options={this.state.types}
+											// defaultValue = {(this.state.activeFilter === 'unfiltered') ? (this.state.types[0]) : (this.state.activeFilter)}
 										/>
 									</form>
 								</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell colSpan = "3">
+								<TableCell width="180px">
 									<form>
 										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
 									</form>		
-								</TableCell>						
+								</TableCell>	
+								<TableCell></TableCell>		
+								<TableCell>{(this.state.selectedDate === 'unfiltered') ? ("") : ("Current: " + this.state.selectedDate)}</TableCell>		
+								<TableCell></TableCell>					
 							</TableRow>
 							<TableRow>
-								<TableCell>
+								<TableCell width="205px" colSpan="2">
 									<form>
 										<Select 
-											onChange = {this.handleFilterState.bind(this)}
+											styles={crniFont}
+											onChange={this.handleFilterState.bind(this)}
 											options={this.state.states}
+											placeholder={(this.state.stateFilter === 'unfiltered') ? ('Choose a state') : (this.state.stateFilter)}
 										/>
 									</form>
 								</TableCell>
-								<TableCell></TableCell>
-								<TableCell>
+								<TableCell colSpan="2">
 									<form>
 										<Select 
+											styles={crniFont}
 											onChange = {this.handleFilterCity.bind(this)}
 											options={this.state.cities}
+											placeholder={(this.state.cityFilter === 'unfiltered') ? ('Choose a city') : (this.state.cityFilter)}
 										/>
 									</form>
 								</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell colSpan = "3">
+								<TableCell colSpan = "4">
 									<form>
 										<Select 
+											styles={crniFont}
 											onChange = {this.handleFilterAddress.bind(this)}
 											options={this.state.addresses}
+											placeholder={(this.state.addressFilter === 'unfiltered') ? ('Choose an address') : (this.state.addressFilter)}
 										/>
 									</form>
 								</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell>
+								<TableCell colSpan="20">
+									Minimal rating: 
 									<Slider 
-										defaultValue={0}
-										// getAriaValueText={valuetext}
+										defaultValue={(this.state.minRat === 'unfiltered') ? (1) : (this.state.minRat)}
 										aria-labelledby="discrete-slider"
 										valueLabelDisplay="auto"
 										step={1}
@@ -431,11 +478,9 @@ class ClinicListing extends Component {
 										max={5}
 										onChange = {(event, value) => this.handleMinRatingFilter(value)}
 									/>
-								</TableCell>
-								<TableCell>
+									Maximal rating: 
 									<Slider 
-										defaultValue={5}
-										// getAriaValueText={valuetext}
+										defaultValue={(this.state.maxRat === 'unfiltered') ? (5) : (this.state.maxRat)}
 										aria-labelledby="discrete-slider"
 										valueLabelDisplay="auto"
 										step={1}
@@ -451,89 +496,32 @@ class ClinicListing extends Component {
 									<FormControl type="number" 
 										onChange = {(event, text) => this.handleMinPriceFilter()}
 										id = "id_min_price"
-										placeholder="Minimal price" 
+										placeholder={(this.state.minPrice === 'unfiltered') ? ('Minimal price') : (this.state.minPrice)}
 									/>
 								</TableCell>
-								<TableCell>
+								<TableCell></TableCell>
+								<TableCell width="180px">
 									<FormControl type="number" 
 										onChange = {(event, text) => this.handleMaxPriceFilter()}
 										id = "id_max_price"
-										placeholder="Maximal price" 
+										placeholder={(this.state.maxPrice === 'unfiltered') ? ('Maximum price') : (this.state.maxPrice)}
 									/>
 								</TableCell>
-								<TableCell>
-									<Button>
-										Apply
-									</Button>
-								</TableCell>
+								<TableCell></TableCell>
 							</TableRow>
 						</Table>
-						
-						
-
-						<p>Min rating</p>
-							
-							<p>Max rating</p>
-							
-
-							<p>Min price</p>
-							
-
-							<p>Max price</p>
-							
-
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="primary">Save changes</Button>
+						<Button variant="primary" onClick={() => this.switchDialog()}>Save filters</Button>
 					</Modal.Footer>
 				</Modal>
 
 
+					
 
 					<Table>
 						<TableHead>
-							{/* <TableRow>
-								<TableCell width="350px">
-									<form>
-										<Select 
-											onChange = {this.handleFilterType.bind(this)}
-											options={this.state.types}
-										/>
-									</form>
-								</TableCell>
-								<TableCell width="100px">
-									<form>
-										<FormControl id="picker" type="date" onChange={() => this.handleFilterDate ()}></FormControl>
-									</form>
-								</TableCell>
-								<TableCell width="100px">
-									<form>
-										<Select 
-											onChange = {this.handleFilterState.bind(this)}
-											options={this.state.states}
-										/>
-									</form>
-								</TableCell>
-								<TableCell width="50px">
-									<form>
-										<Select 
-											onChange = {this.handleFilterCity.bind(this)}
-											options={this.state.cities}
-										/>
-									</form>
-								</TableCell>
-								<TableCell width="50px">
-									<form>
-										<Select 
-											onChange = {this.handleFilterAddress.bind(this)}
-											options={this.state.addresses}
-										/>
-									</form>
-								</TableCell>
-								<TableCell width="75px"></TableCell>
-								<TableCell width="50px"></TableCell>
-							</TableRow> */}
 							<TableRow> 
 								<TableCell width="350px"><p class='text-success'>Clinic Name</p></TableCell>
 								<TableCell width="100px"><p class='text-success'>Address</p></TableCell>
@@ -542,12 +530,17 @@ class ClinicListing extends Component {
 								<TableCell width="50px"><p class='text-success'>Rating</p></TableCell>
 								<TableCell width="75px"><p class='text-success'>Price</p></TableCell>
 								{/* <TableCell  hidden={this.state.cantReserve}> */}
-								<TableCell width="50px"><p class='text-success'>Reserve</p></TableCell>
+								<TableCell width="50px">
+									<Button onClick={() => this.switchDialog()}>
+										Filter
+									</Button>
+									{/* <p class='text-success'>Reserve</p> */}
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 				
-							<p>Min rating</p>
+							{/* <p>Min rating</p>
 							<Slider 
 								defaultValue={0}
 								// getAriaValueText={valuetext}
@@ -584,7 +577,7 @@ class ClinicListing extends Component {
 								onChange = {(event, text) => this.handleMaxPriceFilter()}
 								id = "id_max_price"
 								placeholder="Maximal price" 
-							/>
+							/> */}
 							
 
 
