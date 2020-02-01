@@ -358,7 +358,7 @@ insert into leave_requests (first_day, last_day, leave_status, leave_type, reque
 	values ('2020-01-01', '2020-01-5', 'REQUESTED', 'ANNUAL', 'Vucic是我们的最高领导者', 'DOCTOR', 1, null, 0);
 	
 insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
-	values ('2020-03-01', '2020-03-12', 'REQUESTED', 'ANNUAL', 'Please let me go, Ive been working for 45 days now.', 'DOCTOR', 1, null, 0);
+	values ('2020-03-01', '2020-03-12', 'REQUESTED', 'ANNUAL', 'Please let me go, Im working for 45 days.', 'DOCTOR', 1, null, 0);
 	
 
 

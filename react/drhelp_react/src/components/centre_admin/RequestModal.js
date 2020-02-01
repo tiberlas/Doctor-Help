@@ -17,35 +17,35 @@ class RequestModal extends React.Component {
         return <Fragment> 
             <table> 
                 <tr> 
-                    <th scole="row">First name: </th>
+                    <th scole="row"> <i class="fas fa-user-circle"></i> First name: </th>
                     <td> &emsp;{this.props.request.firstName} </td>
                 </tr>
                 <tr> 
-                    <th scole="row">Last name: </th>
+                    <th scole="row"> <i class="fas fa-user-circle"></i> Last name: </th>
                     <td> &emsp;{this.props.request.lastName} </td>
                 </tr>
                 <tr> 
-                    <th scole="row">Email: </th>
+                    <th scole="row"> <i class="fas fa-envelope-open"></i> Email: </th>
                     <td> &emsp;{this.props.request.email} </td>
                 </tr>
                 <tr> 
-                    <th scole="row">Address: </th>
+                    <th scole="row"><i class="fas fa-map-marker-alt"></i> Address: </th>
                     <td>  &emsp;{this.props.request.address} </td>
                 </tr>
                 <tr> 
-                    <th scole="row">City: </th>
+                    <th scole="row"><i class="fas fa-city"></i> City: </th>
                     <td>  &emsp;{this.props.request.city} </td>
                 </tr>
                 <tr> 
-                    <th scole="row">state: </th>
+                    <th scole="row"><i class="fas fa-globe-africa"></i> State: </th>
                     <td>  &emsp;{this.props.request.state} </td>
                 </tr>
                 <tr> 
-                    <th scole="row">Insur. num.: </th>
+                    <th scole="row"><i class="fas fa-file-medical"></i> Insur. num.: </th>
                     <td >  &emsp;{this.props.request.insuranceNumber} </td>
                 </tr>
                 <tr> 
-                    <th scole="row">Phone num.: </th>
+                    <th scole="row"><i class="fas fa-mobile-alt"></i> Phone num.: </th>
                     <td>  &emsp;{this.props.request.phoneNumber} </td>
                 </tr>
 

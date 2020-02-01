@@ -8,7 +8,7 @@ import {Switch} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
-//import 'font-awesome/css/font-awesome.min.css'; ne diraj, ovo je za ikonice
+//import 'font-awesome/css/font-awesome.min.css'; //za ikonice
 import UserContextProvider from './context/UserContextProvider';
 import interceptor from './Interseptor.js';
 import FirstTimePasswordChange from './components/FirstTimePasswordChange'
@@ -89,6 +89,10 @@ class App extends Component {
 
       return (
         <div>
+          <link 
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/> {/* za fontawesome ikonice*/}
           <BrowserRouter >
             <Switch>
                 { this.state.passwordChange?

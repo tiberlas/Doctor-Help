@@ -176,31 +176,31 @@ class LeaveRequestStaffModal extends React.Component {
         return <Fragment> 
             <table> 
                 <tr> 
-                    <th scope="row">First name: </th>
+                    <th scope="row"> <i class="fas fa-user-circle"></i> First&nbsp;name: </th>
                     <td> &emsp;{this.props.request.firstName} </td>
                 </tr>
                 <tr> 
-                    <th scope="row">Last name: </th>
+                    <th scope="row"> <i class="fas fa-user-circle"></i> Last name: </th>
                     <td> &emsp;{this.props.request.lastName} </td>
                 </tr>
                 <tr> 
-                    <th scope="row">Role: </th>
+                    <th scope="row"><i class="fas fa-user-md"></i> Role: </th>
                     <td> &emsp;{this.staffRoleDisplay()} </td>
                 </tr>
                 <tr> 
-                    <th scope="row">Leave type: </th>
+                    <th scope="row"><i class="fas fa-sign-out-alt"></i> Leave&nbsp;type: </th>
                     <td>  &emsp;{this.leaveTypeDisplay()} </td>
                 </tr>
                 <tr> 
-                    <th scope="row">Additional note: </th>
+                    <th scope="row"><i class="far fa-sticky-note"></i> Note: </th>
                     <td>  &emsp;{this.noteDisplay()} </td>
                 </tr>
                 <tr> 
-                    <th scope="row">Start date: </th>
+                    <th scope="row"><i class="fas fa-calendar-minus"></i> Start date: </th>
                     <td>  &emsp; {new Date(this.props.request.startDate).toLocaleDateString("en-US")} </td>
                 </tr>
                 <tr> 
-                    <th scope="row">End date: </th>
+                    <th scope="row"><i class="fas fa-calendar-plus"></i> End date: </th>
                     <td >  &emsp; {new Date(this.props.request.endDate).toLocaleDateString("en-US")} </td>
                 </tr>
             </table>

@@ -56,7 +56,7 @@ class LeaveRequests extends React.Component {
                 <br/>
                     <div class="row d-flex justify-content-center">
                         <div class='col-md-3'>
-                            <h3> Leave requests</h3>
+                            <h3> Leave requests. </h3>
                         </div>  
                     </div>
 
@@ -69,19 +69,19 @@ class LeaveRequests extends React.Component {
                         <thead> 
                             <tr >
                                 <th class="text-success" scope="row">
-                                    Full name
+                                <i class="fas fa-user-circle"></i> Full name
                                 </th>
                                 <th class="text-success" scope="row">
-                                    Role
+                                <i class="fas fa-user-md"></i> Role
                                 </th>
                                 <th class="text-success" scope="row">
-                                    Leave type
+                                <i class="fas fa-sign-out-alt"></i> Leave type
                                 </th>
                                 <th class="text-success" scope="row">
-                                    From
+                                <i class="fas fa-calendar-minus"></i> From
                                 </th>
                                 <th class="text-success" scope="row">
-                                    Until
+                                <i class="fas fa-calendar-plus"></i>  Until
                                 </th>
                             </tr>
                         </thead>
