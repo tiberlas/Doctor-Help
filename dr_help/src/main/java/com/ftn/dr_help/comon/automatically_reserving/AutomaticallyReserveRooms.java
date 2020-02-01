@@ -37,7 +37,7 @@ public class AutomaticallyReserveRooms {
 	@Autowired
 	private DoctorService doctorService;
 	
-	@Scheduled(cron="00 12 23 * * ?")
+	@Scheduled(cron="59 59 23 * * ?")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void runAtMidnight() {
 		/*
