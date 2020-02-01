@@ -17,6 +17,7 @@ class DoctorRequestCalendar extends React.Component {
     
     state = {
         appointments: [],
+        operations: [],
         businessHours: [],
         showRequestModal: false,
         selectedDates: {},
@@ -53,7 +54,10 @@ class DoctorRequestCalendar extends React.Component {
             loading: false
             })
         })
-
+        axios.get('http://localhost:8080/api/operations/all-approved/doctor='+this.context.doctor.id)
+        .then(response => {
+          this.setState({operations: response.data})
+        })
         axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id+'/business-hours')
         .then(response => {
         this.setState({businessHours: response.data}, () => {
@@ -86,6 +90,25 @@ class DoctorRequestCalendar extends React.Component {
         return events
     }
 
+    generateOperationsList = () => {
+      let events = []
+      for(let i = 0; i < this.state.operations.length; i++) {
+        let operation = this.state.operations[i]
+  
+        let start = new Date(operation.startDate).toISOString()
+        let end = new Date(operation.endDate).toISOString()
+        let color = '#4B0082' //purple
+        let event = {
+          title: operation.roomName + ' ' + operation.roomNumber,
+          start: start,
+          end: end,
+          color: color,
+          allDay: true
+        }
+        events.push(event)
+      }
+      return events
+    }
 
     handleSelectedDates = (info) => {
         this.setState({showRequestModal: true, selectedDates: info}, () => { console.log('selected ' + info.startStr + ' to ' + info.endStr)})
@@ -134,7 +157,12 @@ class DoctorRequestCalendar extends React.Component {
                     select={ //aktivira modal kojem prosledjuje datume koji su selektovani
                           this.handleSelectedDates
                     }
-                    events = {this.generateEventList()}
+                    eventSources={
+                      [
+                        this.generateEventList(),
+                        this.generateOperationsList()
+                      ]
+                    }
                     eventLimit = {true}
                     eventRender={this.handleEventRender}
                     eventClick={this.handleEventClick}
@@ -145,6 +173,7 @@ class DoctorRequestCalendar extends React.Component {
                       && <LeaveRequestModal modal={this.state.showRequestModal} 
                                             toggle={this.toggle}
                                             appointments={this.state.appointments}
+                                            operations={this.state.operations}
                                             selectedDates={this.state.selectedDates}
                                             id={this.context.doctor.id}
                                             role='DOCTOR'/>}

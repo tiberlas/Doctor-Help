@@ -31,9 +31,9 @@ public class PerscriptionService {
 	private NurseRepository nurseRepository;
 	
 	
-	public List<SignOffDTO> findAllPendingPerscriptions() {
+	public List<SignOffDTO> findAllPendingPerscriptions(Long nurse_id) {
 		
-		List<PerscriptionPOJO> perscriptions = perscriptionRepository.findAllPendingPerscriptions();
+		List<PerscriptionPOJO> perscriptions = perscriptionRepository.findAllPendingPerscriptions(nurse_id);
 		
 		List<SignOffDTO> list = new ArrayList<SignOffDTO>();
 		

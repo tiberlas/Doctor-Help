@@ -95,15 +95,11 @@ public class ClinicAdministratorController {
 
 		@GetMapping(value = "/all")
 		@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
-		public ResponseEntity<List<ClinicAdministratorPOJO>> getAllCentreAdministrators() {
+		public ResponseEntity<List<ClinicAdminDTO>> getAllClinicAdministrators() {
 
-			List<ClinicAdministratorPOJO> admins = clinicAdministratorService.findAll();
-			List<ClinicAdministratorPOJO> adminDTO = new ArrayList<>();
-			for (ClinicAdministratorPOJO s : admins) {
-				adminDTO.add(s);
-			}
+			List<ClinicAdminDTO> admins = clinicAdministratorService.findAll();
 
-			return new ResponseEntity<>(adminDTO, HttpStatus.OK);
+			return new ResponseEntity<>(admins, HttpStatus.OK);
 		}
 
 		@GetMapping(value = "/name")

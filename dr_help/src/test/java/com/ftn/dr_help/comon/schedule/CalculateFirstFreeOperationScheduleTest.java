@@ -1,6 +1,6 @@
 package com.ftn.dr_help.comon.schedule;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,11 +9,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
@@ -156,7 +156,7 @@ public class CalculateFirstFreeOperationScheduleTest {
 			time.set(Calendar.SECOND, 0);
 			time.set(Calendar.MILLISECOND, 0);
 			
-			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, time);
 			Calendar expected = convertor.stringToDate("2020-01-17 16:35");
 			expected.set(Calendar.SECOND, 0);
 			expected.set(Calendar.MILLISECOND, 0);
@@ -175,7 +175,7 @@ public class CalculateFirstFreeOperationScheduleTest {
 			time.set(Calendar.SECOND, 0);
 			time.set(Calendar.MILLISECOND, 0);
 			
-			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, time);
 			Calendar expected = convertor.stringToDate("2020-01-16 22:00");
 			expected.set(Calendar.SECOND, 0);
 			expected.set(Calendar.MILLISECOND, 0);
@@ -194,7 +194,7 @@ public class CalculateFirstFreeOperationScheduleTest {
 			time.set(Calendar.SECOND, 0);
 			time.set(Calendar.MILLISECOND, 0);
 			
-			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, time);
 			Calendar expected = convertor.stringToDate("2020-01-16 22:00");
 			expected.set(Calendar.SECOND, 0);
 			expected.set(Calendar.MILLISECOND, 0);
@@ -218,7 +218,7 @@ public class CalculateFirstFreeOperationScheduleTest {
 			
 			dates0.add(cal.getTime());
 			
-			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, time);
 			Calendar expected = convertor.stringToDate("2020-01-17 16:00");
 			expected.set(Calendar.SECOND, 0);
 			expected.set(Calendar.MILLISECOND, 0);
@@ -242,7 +242,167 @@ public class CalculateFirstFreeOperationScheduleTest {
 			
 			dates0.add(cal.getTime());
 			
-			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, time);
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, time);
+			Calendar expected = convertor.stringToDate("2020-01-17 16:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testVacation1() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 2:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2020, 0, 16, 23, 0);
+			
+			dates0.add(cal.getTime());
+			
+			Calendar beginning = Calendar.getInstance();
+			Calendar ending = Calendar.getInstance();
+			
+			List<AbsenceInnerDTO> absence0 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence1 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence2 = new ArrayList<AbsenceInnerDTO>();
+			
+			beginning.set(2020, 0, 15);
+			ending.set(2020, 0, 21);
+			absence0.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+
+			beginning.set(2020, 0, 16);
+			ending.set(2020, 0, 23);
+			absence1.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, absence0, absence1, absence2, time);
+			Calendar expected = convertor.stringToDate("2020-01-24 16:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testVacation2() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 2:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2020, 0, 16, 23, 0);
+			
+			dates0.add(cal.getTime());
+			
+			Calendar beginning = Calendar.getInstance();
+			Calendar ending = Calendar.getInstance();
+			
+			List<AbsenceInnerDTO> absence0 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence1 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence2 = new ArrayList<AbsenceInnerDTO>();
+			
+			beginning.set(2020, 0, 15);
+			ending.set(2020, 0, 21);
+			absence2.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, absence0, absence1, absence2, time);
+			Calendar expected = convertor.stringToDate("2020-01-23 16:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testVacation3() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 2:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2020, 0, 16, 23, 0);
+			
+			dates0.add(cal.getTime());
+			
+			Calendar beginning = Calendar.getInstance();
+			Calendar ending = Calendar.getInstance();
+			
+			List<AbsenceInnerDTO> absence0 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence1 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence2 = new ArrayList<AbsenceInnerDTO>();
+			
+			beginning.set(2020, 0, 15);
+			ending.set(2020, 0, 21);
+			absence0.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+
+			beginning.set(2020, 0, 16);
+			ending.set(2020, 0, 23);
+			absence1.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+			
+			beginning.set(2020, 0, 20);
+			ending.set(2020, 0, 23);
+			absence2.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, absence0, absence1, absence2, time);
+			Calendar expected = convertor.stringToDate("2020-01-24 16:00");
+			expected.set(Calendar.SECOND, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testVacation4() {
+		try {
+			
+			Calendar time = convertor.stringToDate("2020-01-16 2:00");
+			time.set(Calendar.SECOND, 0);
+			time.set(Calendar.MILLISECOND, 0);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2020, 0, 16, 23, 0);
+			
+			dates0.add(cal.getTime());
+			
+			Calendar beginning = Calendar.getInstance();
+			Calendar ending = Calendar.getInstance();
+			
+			List<AbsenceInnerDTO> absence0 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence1 = new ArrayList<AbsenceInnerDTO>();
+			List<AbsenceInnerDTO> absence2 = new ArrayList<AbsenceInnerDTO>();
+			
+			beginning.set(2020, 0, 14);
+			ending.set(2020, 0, 16);
+			absence0.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+
+			beginning.set(2020, 0, 15);
+			ending.set(2020, 0, 15);
+			absence1.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+			
+			beginning.set(2020, 0, 20);
+			ending.set(2020, 0, 23);
+			absence2.add(new AbsenceInnerDTO(beginning.getTime(), ending.getTime()));
+			
+			Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, absence0, absence1, absence2, time);
 			Calendar expected = convertor.stringToDate("2020-01-17 16:00");
 			expected.set(Calendar.SECOND, 0);
 			expected.set(Calendar.MILLISECOND, 0);

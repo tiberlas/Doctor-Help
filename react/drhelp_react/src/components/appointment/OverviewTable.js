@@ -32,9 +32,7 @@ class OverviewTable extends Component {
             time: time
         })
         this.secondsToHms(seconds)
-        // let duration = new Date(this.props.data.end)
-        // duration = duration.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
-        // duration = duration.substr(0, duration.length-3)
+
         console.log(this.state.duration)  
     }
 
@@ -56,18 +54,33 @@ class OverviewTable extends Component {
     }
 
     render() {
-        
         return(
+            <Fragment>
+            <div class="row d-flex justify-content-center">
+                <div class='col-md-4'>
+                    <h2> Overview  </h2>
+                </div>
+            </div>
+            <br/>
+            <br/>
             <div class="row d-flex justify-content-center">
                 <div class='col-md-11'>
                 <table class="table table-hover">
                     <tbody>
                         <tr>
-                            <th scope="row">Date: </th>
+                            <th scope="row">Started at: </th>
                                 <td>{this.state.dateStart} at {this.state.time}</td>
+                        </tr>  
+                        <tr> 
+                            <th scope="row"> Assigned nurse:</th>
+                            <td>{this.props.data.nurse}</td>
+                        </tr>
+                        <tr> 
+                            <th scope="row"> Assigned room:</th>
+                            <td>{this.props.data.title}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Type: </th>
+                            <th scope="row">Procedure: </th>
                             <td>{this.props.data.procedure}</td>
                         </tr>
                         <tr>
@@ -82,6 +95,7 @@ class OverviewTable extends Component {
                 </table> 
                 </div>
             </div>
+            </Fragment>
         )
     }
 }

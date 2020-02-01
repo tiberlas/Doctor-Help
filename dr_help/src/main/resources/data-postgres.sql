@@ -128,17 +128,29 @@ values(
 	'Gabriel', 'Garic', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'ggarica@gmail', '555559', 
 	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 7, false, 'NONE', 'NONE', 'NONE', 'SECOND', 'SECOND', 'THIRD', 'SECOND'
 );
-
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
+values(
+	'Danijela', 'Despotic', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'ddespot@gmail', '555559', 
+	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 7, false, 'NONE', 'NONE', 'NONE', 'SECOND', 'SECOND', 'THIRD', 'SECOND'
+);
+insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
+values(
+	'Ivan', 'Fish', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'ifish@gmail', '555559', 
+	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 2, false, 'NONE', 'NONE', 'NONE', 'SECOND', 'SECOND', 'THIRD', 'SECOND'
+);
 
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Psihoterapija', 25, false, 1, 1);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('Opšta A', 30, false, 1, 2);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('Opšta B', 31, false, 1, 1);
+	values('Opšta B', 31, false, 1, 2);
 insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
 	values('OPERACIONA SALA', 101, false, 1, 7);
+insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
+	values('OPERACIONA SALA', 102, false, 1, 7);
 
+	
 	--operacije 
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
 	values('2020-01-19 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
@@ -147,9 +159,11 @@ insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, s
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
 	values('2020-01-18 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
+	values('2020-01-21 17:00', 2, 2, 9, 7, 8, 5, 7, 'REQUESTED', false);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
 	values('2020-01-18 13:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
 insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-21 17:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
+	values('2020-01-21 08:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
 			
 	
 	
@@ -184,33 +198,33 @@ insert into appointments (date, discount, status, doctor_id, examination_report_
 values ('2019-11-24', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
 --novi podaci
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-20 15:30:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
+values ('2020-02-01 15:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 08:00:00', 0, 'APPROVED', 2, null, 1, 2, 2, 2, false);
+values ('2020-02-02 08:00:00', 0, 'APPROVED', 2, null, 1, 2, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 09:00:00', 0, 'APPROVED', 2, null, 1, 3, 2, 2, false);
+values ('2020-02-02 09:00:00', 0, 'APPROVED', 1, null, 1, 3, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 09:30:00', 20, 'APPROVED', 2, null, 1, 4, 2, 2, false);
+values ('2020-02-03 09:30:00', 20, 'APPROVED', 2, null, 1, 4, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 10:30:00', 0, 'APPROVED', 2, null, 1, 1, 2, 2, false);
+values ('2020-02-03 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-20 15:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
+values ('2020-02-04 15:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 08:00:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
+values ('2020-02-04 08:00:00', 0, 'REQUESTED', 1, null, 1, 3, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 09:00:00', 0, 'REQUESTED', 2, null, 1, 4, 2, 2, false);
+values ('2020-02-04 09:00:00', 0, 'REQUESTED', 2, null, 1, 4, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 09:30:00', 20, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
+values ('2020-02-05 09:30:00', 20, 'REQUESTED', 1, null, 1, 3, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 10:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
+values ('2020-02-05 10:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
 
 --for requesting a new appointment as doctor
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-18 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-02-06 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-19 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-02-06 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-20 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
+values ('2020-02-06 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
 --podaci za otkazivanje appointmenta
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-1-20 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
@@ -351,18 +365,18 @@ insert into clinic_rewiew (rating, clinic_id, patient_id)
 values (4, 1, 3);
 insert into clinic_rewiew (rating, clinic_id, patient_id)
 values (3, 1, 4);
-insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
-	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'أنا أعرف القليل من اللغة العربية ، كافر', 'DOCTOR', 1, null);
+insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
+	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'أنا أعرف القليل من اللغة العربية ، كافر', 'DOCTOR', 1, null, 0);
 	
-	insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
-	values ('2020-01-01', '2020-01-5', 'REQUESTED', 'ANNUAL', 'Vucic是我们的最高领导者', 'DOCTOR', 1, null);
+	insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
+	values ('2020-01-01', '2020-01-5', 'REQUESTED', 'ANNUAL', 'Vucic是我们的最高领导者', 'DOCTOR', 1, null, 0);
 	
-insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
-	values ('2020-03-01', '2020-03-12', 'REQUESTED', 'ANNUAL', 'Please let me go, Ive been working for 45 days now.', 'DOCTOR', 1, null);
+insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
+	values ('2020-03-01', '2020-03-12', 'REQUESTED', 'ANNUAL', 'Please let me go, Im working for 45 days.', 'DOCTOR', 1, null, 0);
 	
 
 
-insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id)
-	values ('2020-02-01', '2020-02-04', 'REQUESTED', 'PERSONAL', 'release me from my flesh prison', 'NURSE', null, 1);
+insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
+	values ('2020-02-01', '2020-02-04', 'REQUESTED', 'PERSONAL', 'release me from my flesh prison', 'NURSE', null, 1, 0);
 
 

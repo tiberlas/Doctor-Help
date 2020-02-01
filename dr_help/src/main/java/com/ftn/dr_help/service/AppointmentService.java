@@ -14,12 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
-import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
+import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
@@ -27,6 +29,7 @@ import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.DoctorRequestedAppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ExaminationReportPOJO;
 import com.ftn.dr_help.model.pojo.MedicationPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
@@ -77,6 +80,11 @@ public class AppointmentService {
 	@Autowired
 	private CalculateFirstFreeSchedule calculateSchedule;
 	
+	@Autowired
+	private WorkScheduleAdapter workSchedule;
+	
+	@Autowired
+	private LeaveRequestService leaveRequestService;
 	
 	public List<DoctorAppointmentDTO> findDoctorAppointments(Long doctor_id) {
 		
@@ -318,6 +326,16 @@ public class AppointmentService {
 		dto.setDoctorFirstName(doctor.getFirstName());
 		dto.setDoctorLastName(doctor.getLastName());
 		
+		if(appointment.getStatus().equals(AppointmentStateEnum.APPROVED) 
+				|| appointment.getStatus().equals(AppointmentStateEnum.AVAILABLE)
+				|| appointment.getStatus().equals(AppointmentStateEnum.DONE)) {
+			NursePOJO nurse = appointment.getNurse();
+			dto.setNurseFirstName(nurse.getFirstName());
+			dto.setNurseLastName(nurse.getLastName());
+			System.out.println("+++++++++++++++++NURSE JE: " + nurse.getFirstName());
+		}
+		
+		
 		PatientPOJO patient = appointment.getPatient();
 		if(patient == null) {
 			dto.setPatientFirstName("-");
@@ -357,8 +375,11 @@ public class AppointmentService {
 		dto.setStatus(String.valueOf(appointment.getStatus()));
 		
 		dto.setIsOperation(pt.isOperation());
-		dto.setRoomName(appointment.getRoom().getName());
-		dto.setRoomNumber(String.valueOf(appointment.getRoom().getNumber()));
+		
+		if(!appointment.getStatus().equals(AppointmentStateEnum.DOCTOR_REQUESTED_APPOINTMENT)) {
+			dto.setRoomName(appointment.getRoom().getName());
+			dto.setRoomNumber(String.valueOf(appointment.getRoom().getNumber()));
+		}
 		
 		dto.setAppointment_id(appointment.getId());
 		
@@ -370,11 +391,12 @@ public class AppointmentService {
 	public void delete (Long appointmentId) {
 		appointmentRepository.deleteAppointment (appointmentId);
 	}
+	
 	public boolean doctorRequestAppointment(DoctorRequestAppointmentDTO request) {
 		try {
 			
 			AppointmentPOJO old = appointmentRepository.findOneById(request.getOldAppointmentID());
-			System.out.println("KILLING");
+			System.out.println("REQUESTED");
 			System.out.println(request.getOldAppointmentID());
 			System.out.println(old == null);
 			System.out.println(old.getId());
@@ -384,7 +406,8 @@ public class AppointmentService {
 			
 			//provera da li je doca slobodan
 			List<Date> dates = doctorRepository.findAllReservedAppointments(old.getDoctor().getId());
-			Calendar retVal = calculateSchedule.checkScheduleOrFindFirstFree(old.getDoctor(), date, dates);
+			List<AbsenceInnerDTO> absence = leaveRequestService.getAllDoctorAbsence(old.getDoctor().getId());
+			Calendar retVal = calculateSchedule.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(old.getDoctor()), date, dates, absence);
 			if(!retVal.equals(date)) {
 				return false;
 			}
@@ -478,6 +501,9 @@ public class AppointmentService {
 					nurse = request.getNurse().getEmail();
 				}
 				
+				Calendar duration = Calendar.getInstance();
+				duration.setTime(request.getProcedureType().getDuration());
+				
 				requests.add(new RequestingAppointmentDTO( 
 						request.getId(), 
 						dateConverter.dateForFrontEndString(request.getDate()), 
@@ -485,7 +511,8 @@ public class AppointmentService {
 						request.getDoctor().getEmail(), 
 						nurse, 
 						request.getPatient().getEmail(),
-						request.getProcedureType().getId()));
+						request.getProcedureType().getId(),
+						dateConverter.timeToString(duration)));
 			}
 			
 			return requests;
@@ -500,6 +527,9 @@ public class AppointmentService {
 			
 			AppointmentPOJO finded = appointmentRepository.getOne(id);
 			
+			Calendar duration = Calendar.getInstance();
+			duration.setTime(finded.getProcedureType().getDuration());
+			
 			return new RequestingAppointmentDTO(
 					finded.getId(),
 					dateConverter.dateForFrontEndString(finded.getDate()), 
@@ -507,7 +537,8 @@ public class AppointmentService {
 					finded.getDoctor().getEmail(), 
 					finded.getNurse().getEmail(), 
 					finded.getPatient().getEmail(),
-					finded.getProcedureType().getId());
+					finded.getProcedureType().getId(),
+					dateConverter.timeToString(duration));
 		} catch(Exception e) {
 			return null;
 		}

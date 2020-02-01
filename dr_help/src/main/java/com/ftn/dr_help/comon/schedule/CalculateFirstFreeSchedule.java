@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.MedicalStaffWorkSchedularPOJO;
 
 @Service
 public class CalculateFirstFreeSchedule {
@@ -20,24 +23,29 @@ public class CalculateFirstFreeSchedule {
 	private CheckShift shift;
 	
 	@Autowired
+	private WorkScheduleAdapter workSchedule;
+	
+	@Autowired
 	private DateConverter convert; // for debug only
 	
-	public Calendar checkScheduleOrFindFirstFree(DoctorPOJO doctor, Calendar begin, List<Date> dates) {
-		
-		Calendar check = findFreeSchedule(doctor, begin, dates, true);
-		
+	public Calendar checkScheduleOrFindFirstFree(MedicalStaffWorkSchedularPOJO medicalEmploie, Calendar begin, List<Date> dates, List<AbsenceInnerDTO> absenceDates) {
+		/**
+		 * proverava da li trazeni datum pregleda(begin) odgovara lekaru
+		 * uzima u obzir dates-lista zakazanih pregleda i absenceDates-lista ne radnih dana
+		 * */
+		Calendar check = findFreeSchedule(medicalEmploie, begin, dates, absenceDates, true);
 		if(check == null) {
 			//trazeni datum je zauzet; sad ponuditi prvi sledeci slobodan
 			Calendar newBegin = Calendar.getInstance();
 			newBegin.setTime(begin.getTime());
 			newBegin.clear(Calendar.SECOND);
 			newBegin.clear(Calendar.MILLISECOND);
-			niceBeginning.setNiceScheduleBeginning(doctor, newBegin);
+			niceBeginning.setNiceScheduleBeginning(medicalEmploie, newBegin);
 			
 			//provera da novi pocetak ne pocne pre trazenog termina
 			while(newBegin.compareTo(begin) < 0) {
 				Calendar duration = Calendar.getInstance();
-				duration.setTime(doctor.getProcedureType().getDuration());
+				duration.setTime(medicalEmploie.getDuration().getTime());
 				int hours = duration.get(Calendar.HOUR);
 				int minutes = duration.get(Calendar.MINUTE);
 				
@@ -46,7 +54,7 @@ public class CalculateFirstFreeSchedule {
 				System.out.println("uvecaj " + convert.dateAndTimeToString(newBegin));
 			}
 			
-			return findFreeSchedule(doctor, newBegin, dates, false);
+			return findFreeSchedule(medicalEmploie, newBegin, dates, absenceDates, false);
 		} else {
 			return check;
 		}
@@ -56,31 +64,23 @@ public class CalculateFirstFreeSchedule {
 	 * function uses doctor and schedule(begin) to check if it is free
 	 * if the schedule(begin) is not free return the first free schedule after the given schedule(begin)
 	 * */
-	public Calendar findFirstScheduleForDoctor(DoctorPOJO doctor, Calendar begin, List<Date> dates) {
-		if(niceBeginning == null) {
-			niceBeginning = new NiceScheduleBeginning();
-		}
-		
+	public Calendar findFirstScheduleForDoctor(MedicalStaffWorkSchedularPOJO doctor, Calendar begin, List<Date> dates, List<AbsenceInnerDTO> absenceDates) {	
 		//provera da li je begin schedule u dobroj smeni i u okruglom vremenu
-		niceBeginning.setNiceScheduleBeginning(doctor, begin);
+		//niceBeginning.setNiceScheduleBeginning(doctor, begin);
 		
 		//vrati prvi slobodan termin
-		return findFreeSchedule(doctor, begin, dates, false);
+		return findFreeSchedule(doctor, begin, dates, absenceDates, false);
 	}
 	
-	private Calendar findFreeSchedule(DoctorPOJO doctor, Calendar begin, List<Date> dates, boolean justCheckDate) {
-		if(!checkWorkingDay(doctor, begin)) {
-			if(justCheckDate) {
-				return null;
-			} else {
-				begin.add(Calendar.DAY_OF_MONTH, 1);
-				niceBeginning.setNiceScheduleBeginning(doctor, begin);
-			}
-		}
+	private Calendar findFreeSchedule(MedicalStaffWorkSchedularPOJO doctor, Calendar start, List<Date> dates, List<AbsenceInnerDTO> absenceDates, boolean justCheckDate) {
+		System.out.println("krenuo od " + convert.dateForFrontEndString(start));
+		
+		Calendar begin = Calendar.getInstance();
+		begin = setWorkingDay(doctor, start, absenceDates);
 		
 		//nadje trajanje za schedule
 		Calendar duration = Calendar.getInstance();
-		duration.setTime(doctor.getProcedureType().getDuration());
+		duration.setTime(doctor.getDuration().getTime());
 		int hours = duration.get(Calendar.HOUR);
 		int minutes = duration.get(Calendar.MINUTE);
 		
@@ -132,13 +132,15 @@ public class CalculateFirstFreeSchedule {
 				if(justCheckDate) return null;
 				
 				//provera da li je termin posle tekuceg u radnom vremenu
-				if(!checkWorkingDay(doctor, currentEnd)) {
+				if(!checkWorkingDay(doctor, currentEnd, absenceDates)) {
 					niceBeginning.setNiceScheduleBeginning(doctor, currentEnd);
+					//currentEnd = setWorkingDay(doctor, currentEnd, absenceDates);
 					
 					if(currentEnd.compareTo(begin) <= 0) {
 						//vratio je za prethodni dan
 						currentEnd.add(Calendar.DAY_OF_MONTH, 1);
 						niceBeginning.setNiceScheduleBeginning(doctor, currentEnd);
+					//	currentEnd = setWorkingDay(doctor, currentEnd, absenceDates);
 					}
 				}
 				
@@ -154,12 +156,67 @@ public class CalculateFirstFreeSchedule {
 		return begin;
 	}
 	
-	/**
-	 * provera da li doctor radi tog dana i da li je smena dobra
-	 * */
-	private boolean checkWorkingDay(DoctorPOJO doctor, Calendar schedule) {
+	private Calendar setWorkingDay(MedicalStaffWorkSchedularPOJO doctor, Calendar schedule, List<AbsenceInnerDTO> absenceDates) {
+		/*
+		 * proveri da li doktor radi za dan schedule; ako ne vrati prvi radni, slobodan dan
+		 * */
+		
+		Calendar date = (Calendar) schedule.clone();
+		
+		if(checkWorkingDay(doctor, date, absenceDates)) {
+			//datum je dobar
+			return date;
+		}
+		
+		Calendar before = Calendar.getInstance();
+		do {
+			before = (Calendar) date.clone();
+			niceBeginning.setNiceScheduleBeginning(doctor, date);
+			
+			if(before.equals(date)) {
+				date.add(Calendar.DAY_OF_MONTH, 1);
+				date.set(Calendar.AM_PM, Calendar.AM);
+				date.set(Calendar.HOUR, 0);
+				date.set(Calendar.MINUTE, 0);
+				date.set(Calendar.MILLISECOND, 0);
+				date.set(Calendar.SECOND, 0);
+				niceBeginning.setNiceScheduleBeginning(doctor, date);
+			}
+		} while(!checkWorkingDay(doctor, date, absenceDates));
+			
+		return date;
+	}
+	
+	private boolean checkWorkingDay(MedicalStaffWorkSchedularPOJO doctor, Calendar schedule, List<AbsenceInnerDTO> absenceDates) {
+		/**
+		 * provera da li doctor radi tog dana i da li je smena dobra
+		 * */
+		Calendar begin = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		if(absenceDates != null) {
+			for(AbsenceInnerDTO absence : absenceDates) {
+				begin.setTime(absence.getBeginning());
+				begin.set(Calendar.AM_PM, Calendar.AM);
+				begin.set(Calendar.HOUR, 0);
+				begin.set(Calendar.MINUTE, 0);
+				begin.set(Calendar.SECOND, 0);
+				begin.set(Calendar.MILLISECOND, 0);
+				
+				end.setTime(absence.getEnding());
+				end.set(Calendar.AM_PM, Calendar.PM);
+				end.set(Calendar.HOUR, 11);
+				end.set(Calendar.MINUTE, 59);
+				end.set(Calendar.SECOND, 59);
+				end.set(Calendar.MILLISECOND, 59);
+				
+				if(schedule.compareTo(begin) >= 0 && schedule.compareTo(end) <= 0) {
+					return false;
+				}
+			}
+		}
+		
 		Calendar duration = Calendar.getInstance();
-		duration.setTime(doctor.getProcedureType().getDuration());
+		duration.setTime(doctor.getDuration().getTime());
 		int hours = duration.get(Calendar.HOUR);
 		int minutes = duration.get(Calendar.MINUTE);
 		
@@ -169,10 +226,6 @@ public class CalculateFirstFreeSchedule {
 		endSchedule.add(Calendar.MINUTE, minutes-1);
 		
 		int day = schedule.get(Calendar.DAY_OF_WEEK);
-		
-		if(shift == null) {
-			shift = new CheckShift();
-		}
 		
 		switch(day) {
 		case Calendar.MONDAY:
@@ -196,7 +249,7 @@ public class CalculateFirstFreeSchedule {
 	}
 	
 	//OPERATION
-	public Calendar findFirstScheduleForOperation(DoctorPOJO dr0, DoctorPOJO dr1, DoctorPOJO dr2, List<Date> dates0, List<Date> dates1, List<Date> dates2, Calendar begin) {
+	public Calendar findFirstScheduleForOperation(DoctorPOJO dr0, DoctorPOJO dr1, DoctorPOJO dr2, List<Date> dates0, List<Date> dates1, List<Date> dates2, List<AbsenceInnerDTO> absenceDates0, List<AbsenceInnerDTO> absenceDates1, List<AbsenceInnerDTO> absenceDates2, Calendar begin) {
 		/*
 		 * vraca prvi datum koji odgovara svim lekarima
 		 * 
@@ -228,9 +281,9 @@ public class CalculateFirstFreeSchedule {
 			Calendar free1 = null;
 			Calendar free2 = null;
 			
-			Calendar check0 = findFreeSchedule(dr0, begin0, dates0, true);
-			Calendar check1 = findFreeSchedule(dr1, begin0, dates1, true);
-			Calendar check2 = findFreeSchedule(dr2, begin0, dates2, true);
+			Calendar check0 = findFreeSchedule(workSchedule.fromDoctor(dr0), begin0, dates0, absenceDates0, true);
+			Calendar check1 = findFreeSchedule(workSchedule.fromDoctor(dr1), begin0, dates1, absenceDates1, true);
+			Calendar check2 = findFreeSchedule(workSchedule.fromDoctor(dr2), begin0, dates2, absenceDates2, true);
 			
 			if(check0 != null && check1 != null && check2 != null) {
 				//dati termin valja
@@ -253,9 +306,9 @@ public class CalculateFirstFreeSchedule {
 					if(shift.isInShift(begin0, equalWorkDays)) {
 						//ovo je najveci datim sa zajednickim smenama
 						//provera da li svim lekarima odgovara ova datum
-						check0 = findFreeSchedule(dr0, begin0, dates0, true);
-						check1 = findFreeSchedule(dr1, begin0, dates1, true);
-						check2 = findFreeSchedule(dr2, begin0, dates2, true);
+						check0 = findFreeSchedule(workSchedule.fromDoctor(dr0), begin0, dates0, absenceDates0, true);
+						check1 = findFreeSchedule(workSchedule.fromDoctor(dr1), begin0, dates1, absenceDates1, true);
+						check2 = findFreeSchedule(workSchedule.fromDoctor(dr2), begin0, dates2, absenceDates2, true);
 						
 						if(check0 != null && check1 != null && check2 != null) {
 							//svim lekarima odgovara nadjeni datim
@@ -272,9 +325,9 @@ public class CalculateFirstFreeSchedule {
 					begin2.setTime(begin0.getTime());
 				}
 				
-				free0 = findFirstScheduleForDoctor(dr0, begin0, dates0);
-				free1 = findFirstScheduleForDoctor(dr1, begin1, dates1);
-				free2 = findFirstScheduleForDoctor(dr2, begin2, dates2);
+				free0 = findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin0, dates0, absenceDates0);
+				free1 = findFirstScheduleForDoctor(workSchedule.fromDoctor(dr1), begin1, dates1, absenceDates1);
+				free2 = findFirstScheduleForDoctor(workSchedule.fromDoctor(dr2), begin2, dates2, absenceDates2);
 				
 				System.out.println("DEBUG FOR OPERATION");
 				System.out.println(convert.dateForFrontEndString(free0));
@@ -282,145 +335,11 @@ public class CalculateFirstFreeSchedule {
 				System.out.println(convert.dateForFrontEndString(free2));
 			} while(! (free0.equals(free1) && free1.equals(free2)) );
 		
-			return begin0;
+			return free0;
 		} catch(Error e) {
 			e.printStackTrace();
 			return null;
 		}
 	} 
-	
-//	private Calendar findFreeOperationSchedule(DoctorPOJO doctor, Calendar start, List<Date> dates, List<EqualDoctorShifts> equalWorkDays, boolean justCheckDate) {
-//		
-//		Calendar begin = niceBeginning.setNiceOperationBegin(equalWorkDays, start);
-//		
-//		//nadje trajanje za schedule
-//		Calendar duration = Calendar.getInstance();
-//		duration.setTime(doctor.getProcedureType().getDuration());
-//		int hours = duration.get(Calendar.HOUR);
-//		int minutes = duration.get(Calendar.MINUTE);
-//		
-//		//najmanja jediniza za schedule je minuta 
-//		begin.set(Calendar.SECOND, 0);
-//		begin.set(Calendar.MILLISECOND, 0);
-//
-//		//kraj schedula
-//		Calendar end = Calendar.getInstance();
-//		end.setTime(begin.getTime());
-//		end.set(Calendar.SECOND, 0);
-//		end.set(Calendar.MILLISECOND, 0);
-//		end.add(Calendar.HOUR, hours);
-//		end.add(Calendar.MINUTE, minutes);
-//		
-//		Calendar currentBegin = Calendar.getInstance();
-//		Calendar currentEnd = Calendar.getInstance();
-//		
-//		for(Date date : dates) {
-//			//iteriramo kroz zakazane termine; termini su sortirani 
-//			currentBegin.setTime(date);
-//			currentEnd.setTime(date);
-//			currentEnd.add(Calendar.HOUR, hours);
-//			currentEnd.add(Calendar.MINUTE, minutes);
-//			currentBegin.set(Calendar.SECOND, 0);
-//			currentBegin.set(Calendar.MILLISECOND, 0);
-//			currentEnd.set(Calendar.SECOND, 0);
-//			currentEnd.set(Calendar.MILLISECOND, 0);
-//			
-//			if(convert == null) {
-//				convert = new DateConverter();
-//			}
-//			
-//			System.out.println("----------------------------------------------------");
-//			System.out.println("BEGIN: " + convert.dateForFrontEndString(begin));
-//			System.out.println("END: " + convert.dateForFrontEndString(end));
-//			System.out.println("CURRENT BEGIN: " + convert.dateForFrontEndString(currentBegin));
-//			System.out.println("CURRENT END: " + convert.dateForFrontEndString(currentEnd));
-//			
-//			if(begin.compareTo(currentEnd) > 0)
-//				continue;
-//			
-//			//provera da li je termin zauzet
-//			if(end.compareTo(currentBegin) <= 0) {
-//				//termin je pre pocetka od tekucek zakazanog termina
-//				return begin;
-//			} else {
-//				//uzima se termin posle tekuceg zakazanog ili ako je u rezimu provere termina vrati null
-//				if(justCheckDate) return null;
-//				
-//				//provera da li je termin posle tekuceg u radnom vremenu
-//				if(!checkWorkingDayForOperation(currentEnd, equalWorkDays)) {
-//					currentEnd = niceBeginning.setNiceOperationBegin(equalWorkDays, currentEnd);
-//					
-//					if(currentEnd.compareTo(begin) < 0) {
-//						//vratio je za prethodni dan
-//						currentEnd.add(Calendar.DAY_OF_MONTH, 1);
-//						currentEnd = niceBeginning.setNiceOperationBegin(equalWorkDays, currentEnd);					}
-//				}
-//				
-//				//postavi prvi slobodan termin za proveru
-//				begin.setTime(currentEnd.getTime());
-//				end.setTime(currentEnd.getTime());
-//				end.add(Calendar.HOUR, hours);
-//				end.add(Calendar.MINUTE, minutes);
-//				
-//			}
-//		}
-//		
-//		return begin;
-//	}
-//	
-//	private boolean checkWorkingDayForOperation(Calendar date, List<EqualDoctorShifts> equalWorkDays) {
-//		/*
-//		 * returns true if the date is OK(on work day and in work shift)
-//		 * */
-//		
-//		for(EqualDoctorShifts days :equalWorkDays) {
-//			if(date.get(Calendar.DAY_OF_WEEK) == days.getDay().getValue()) {
-//				Calendar begin = Calendar.getInstance();
-//				Calendar end = Calendar.getInstance();
-//				
-//				begin.setTime(date.getTime());
-//				end.setTime(date.getTime());
-//				
-//				begin.set(Calendar.SECOND, 0);
-//				begin.set(Calendar.MILLISECOND, 0);
-//				begin.set(Calendar.MINUTE, 0);
-//				end.set(Calendar.SECOND, 0);
-//				end.set(Calendar.MILLISECOND, 0);
-//				end.set(Calendar.MINUTE, 0);
-//				
-//				switch(days.getShift()) {
-//					case FIRST: 
-//						begin.set(Calendar.HOUR, 8);
-//						begin.set(Calendar.AM_PM, Calendar.AM);
-//						end.set(Calendar.HOUR, 16);
-//						end.set(Calendar.AM_PM, Calendar.PM);
-//						break;
-//					case SECOND: 
-//						begin.set(Calendar.HOUR, 16);
-//						begin.set(Calendar.AM_PM, Calendar.PM);
-//						end.set(Calendar.HOUR, 00);
-//						end.set(Calendar.AM_PM, Calendar.AM);
-//						break;
-//					case THIRD: 
-//						begin.set(Calendar.HOUR, 00);
-//						begin.set(Calendar.AM_PM, Calendar.AM);
-//						end.set(Calendar.HOUR, 8);
-//						end.set(Calendar.AM_PM, Calendar.AM);
-//						break;
-//					default:
-//						return false;
-//				}
-//				
-//				if(date.compareTo(begin) >= 0 && date.compareTo(end) <= 0) {
-//					return true;
-//				} else {
-//					return false;
-//				}
-//			}
-//			
-//		}
-//		
-//		return false;
-//	}
 	
 }

@@ -27,6 +27,13 @@ class NurseAppointmentInfoModal extends React.Component {
         })
     }
 
+    displayStatus = () => {
+        let firstCharacter = this.props.event.status.substr(0,1)
+        let restOfCharacters = this.props.event.status.substr(1, this.props.event.status.length).toLowerCase().replace(/\_/g,' ')
+        return firstCharacter + restOfCharacters
+    }
+
+
     render() {
         let profileUrl = '/profile/' + this.props.event.patientInsurance
         return (
@@ -40,14 +47,13 @@ class NurseAppointmentInfoModal extends React.Component {
                 </ModalHeader>
                 <ModalBody>
                 <div>
-                    Development: Appointment ID - {this.props.event.id} <br/>
-                    <Link to = {profileUrl}> Patient: {this.props.event.patient} </Link> <br/>
+                    Patient:  <Link to = {profileUrl}>  {this.props.event.patient} </Link> <br/>
                     Doctor: {this.props.event.doctor} <br/>
-                    Status: {this.props.event.status} <br/>
+                    Status: <strong>{this.displayStatus()}</strong> <br/>
                     Procedure: {this.props.event.procedure} <br/>
                     Price: {this.props.event.price} <br/>
                     Discount: {this.props.event.discount}% <br/>
-                    Total: {this.props.event.price * (1 - (this.props.event.discount / 100))} <br/>
+                    Total: {(this.props.event.price * (1 - (this.props.event.discount / 100))).toFixed(2)} <br/>
                 </div>
                 <div> 
                 {this.state.showReport && <ShowExaminationReport

@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import com.ftn.dr_help.model.enums.LeaveStatusEnum;
 import com.ftn.dr_help.model.enums.LeaveTypeEnum;
@@ -63,6 +64,10 @@ public class LeaveRequestPOJO implements Serializable{
 	
 	@Column(name = "requestNote", nullable = true)
 	private String requestNote;
+	
+	@Version
+	@Column(name="version", unique=false, nullable=false)
+	private Long version;
 	
 	
 	public LeaveRequestPOJO() {

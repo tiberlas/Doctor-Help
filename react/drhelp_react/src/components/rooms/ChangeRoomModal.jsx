@@ -68,7 +68,7 @@ class ChangeRoomModal extends Component {
             if(this.state.typeId === this.state.procedureList[i].id) {
                 items.push(<option key={i} name = "procedureTypeId" selected="selected" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].price} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);
             } else {
-                items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].name} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}</option>);
+                items.push(<option key={i} name = "procedureTypeId" value={this.state.procedureList[i].id+'-'+this.state.procedureList[i].name} >{this.state.procedureList[i].name}: {this.state.procedureList[i].price}&#x20bf;</option>);
             }
         }
         return items;
@@ -89,25 +89,40 @@ class ChangeRoomModal extends Component {
                     <Modal.Body>
                         <div className={`form-group ${this.state.errorName? 'has-danger': ''}`}>
                             <label class="form-control-label" for="name">name:</label>
-                            <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
+                            <div class="input-group">
+                                <div class="input-group-preppend">
+                                    <span class="input-group-text">&#9963;</span>
+                                </div>
+                                    <input type='text' name='name' id='name' className={`form-control ${this.state.errorName? 'is-invalid': 'is-valid'}`} value={this.state.name} onChange={this.handlerChange} />
+                                </div>
                         </div>
 
                         <div className={`form-group ${this.state.errorNumber? 'has-danger': ''}`}>
                             <label class="form-control-label" for="number">number:</label>
-                            <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': 'is-valid'}`} value={this.state.number} onChange={this.handlerChange} />
+                            <div class="input-group">
+                                <div class="input-group-preppend">
+                                    <span class="input-group-text">&#x2116;</span>
+                                </div>
+                                    <input type='number' name='number' id='number' className={`form-control ${this.state.errorNumber? 'is-invalid': 'is-valid'}`} value={this.state.number} onChange={this.handlerChange} />
+                                </div>
                             {(this.state.errorNumber) && <div class="invalid-feedback"> Room number already exists. </div>}
                         </div>
 
                         <div class='form-group'>
                         <label for="procedureTypeId">appointment type</label>
+                        <div class="input-group">
+                            <div class="input-group-preppend">
+                                <span class="input-group-text">&#9815;</span>
+                            </div>
                         <select multiple="" class='form-control' id="procedureTypeId" name='procedureTypeId' onChange={this.handlerChangeProcedureType} >
                             {this.createProcedureItems()}
                         </select>
+                        </div>
                     </div>
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <input type="submit" class="btn btn-primary" disabled={this.state.errorName || this.state.errorNumber} value="submit"/>
+                        <input type="submit" class="btn btn-success" disabled={this.state.errorName || this.state.errorNumber} value="submit"/>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={this.props.onHide}>Close</button>
                     </Modal.Footer>
                 </form>

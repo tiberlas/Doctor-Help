@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import CentreAdminHeader from './CentreAdminHeader'
 import {Route} from 'react-router-dom'
 import {Switch} from 'react-router-dom'
-import NewClinicForm from './NewClinicForm'
-import NewAdminForm from './NewAdminForm'
 import PatientRequests from './PatientRequests';
-import NewMedicationForm from '../medication/NewMedicationForm';
 import CentreAdminProfile from './CentreAdminProfile'
 import axios from 'axios'
 import CentreAdminContextProvider from '../../context/CentreAdminContextProvider';
 import CentreAdminChangeProfile from './CentreAdminChangeProfile'
 import CentreAdminChangePassword from './CentreAdminChangePassword'
-import NewDiagnosisForm from '../diagnoses/NewDiagnosisForm'
+import CentreAdminDashboard from './CentreAdminDashboard'
+import { ClinicOverview } from './dashboard/clinics/ClinicOverview'
+import { AdminOverview } from './dashboard/admins/AdminOverview'
+import HomeLanding from './home_page/HomeLanding'
 
 class CenterAdministrator extends Component {
     state = {
@@ -61,12 +61,12 @@ handleCentreAdmin = () => {
                     <Route exact path="/centreAdministrator/profile" ><CentreAdminProfile /> </Route>
                     <Route exact path="/centreAdministrator/profile/change" ><CentreAdminChangeProfile  handleUpdate={this.handleCentreAdmin}/> </Route>
                     <Route exact path='/centreAdministrator/profile/change/password'> <CentreAdminChangePassword first={false}/> </Route>
-                    <Route path="/clinic/add" ><NewClinicForm /> </Route>
-                    <Route path="/admin/add" ><NewAdminForm /> </Route>
+                    <Route path="/admin/dashboard/c" ><ClinicOverview /> </Route>
+                    <Route path="/admin/dashboard/a" ><AdminOverview /> </Route>
+                    <Route path="/admin/dashboard/d-m" ><CentreAdminDashboard /> </Route>
                     <Route path = "/admin/requests"> <PatientRequests/> </Route>
-                    <Route path = "/medication/new"> <NewMedicationForm/> </Route>
-                    <Route path = "/diagnosis/new"> <NewDiagnosisForm/> </Route>
-                    
+                    <Route path="/home"> <HomeLanding/> </Route>
+                   
                 </Switch>
                 </CentreAdminContextProvider>
             </div>

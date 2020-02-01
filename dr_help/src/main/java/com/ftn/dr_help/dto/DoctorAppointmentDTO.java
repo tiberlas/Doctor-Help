@@ -13,6 +13,15 @@ public class DoctorAppointmentDTO {
 	private String patientFirstName;
 	private String patientLastName;
 	
+	private String nurseFirstName;
+	private String nurseLastName;
+	
+	//za operaciju
+	private String firstDoctor;
+	private String secondDoctor;
+	private String thirdDoctor;
+	//
+	
 	private Date startDate;
 	private Date endDate;
 	
@@ -26,7 +35,6 @@ public class DoctorAppointmentDTO {
 	private String discount;
 	
 	private String status;
-	
 	private String insuranceNumber;
 	
 	public DoctorAppointmentDTO() {
@@ -165,6 +173,46 @@ public class DoctorAppointmentDTO {
 
 	public void setDoctorLastName(String doctorLastName) {
 		this.doctorLastName = doctorLastName;
+	}
+
+	public String getNurseFirstName() {
+		return nurseFirstName;
+	}
+
+	public void setNurseFirstName(String nurseFirstName) {
+		this.nurseFirstName = nurseFirstName;
+	}
+
+	public String getNurseLastName() {
+		return nurseLastName;
+	}
+
+	public void setNurseLastName(String nurseLastName) {
+		this.nurseLastName = nurseLastName;
+	}
+
+	public String getFirstDoctor() {
+		return firstDoctor;
+	}
+
+	public void setFirstDoctor(String firstDoctor) {
+		this.firstDoctor = firstDoctor;
+	}
+
+	public String getSecondDoctor() {
+		return secondDoctor;
+	}
+
+	public void setSecondDoctor(String secondDoctor) {
+		this.secondDoctor = secondDoctor;
+	}
+
+	public String getThirdDoctor() {
+		return thirdDoctor;
+	}
+
+	public void setThirdDoctor(String thirdDoctor) {
+		this.thirdDoctor = thirdDoctor;
 	}
 	
 	

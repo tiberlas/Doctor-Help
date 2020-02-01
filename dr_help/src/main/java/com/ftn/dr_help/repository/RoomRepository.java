@@ -18,7 +18,21 @@ public interface RoomRepository extends JpaRepository <RoomPOJO, Long>{
 	Optional<RoomPOJO> findOneByName(String name);
 	Optional<RoomPOJO> findOneByNumber(int number);
 	
-	@Query(value = "select distinct r.* from room r inner join appointments a on r.id = a.room_id where a.status <> 'DONE' and a.deleted = FALSE", nativeQuery = true)
+	RoomPOJO findOneById(Long roomId);
+	
+	@Query(value = "select distinct r.* " + 
+			"from room r " + 
+			"inner join appointments a " + 
+			"on r.id = a.room_id " + 
+			"where ((a.status = 'APPROVED' or a.status = 'BLESSED') and a.deleted = false) " + 
+			"and r.deleted = false " + 
+			"union " + 
+			"select distinct r.* " + 
+			"from room r " + 
+			"inner join operations o " + 
+			"on r.id = o.room_id " + 
+			"where (o.status = 'APPROVED' and o.deleted = false) " + 
+			"and r.deleted = false", nativeQuery = true)
 	List<RoomPOJO> getAllReservedRooms();
 
 	@Query(value = "select r.* \n" + 
@@ -28,4 +42,8 @@ public interface RoomRepository extends JpaRepository <RoomPOJO, Long>{
 			"and r.deleted = false \n" + 
 			"and ca.email = ?1", nativeQuery = true)
 	List<RoomPOJO> findAllWithType(String adminEmail, Long proceduretypeId);
+	
+	@Query(value = "select * from room r where r.clinic_id= ?1 and r.proceduras_types_id= ?2", nativeQuery = true)
+	public List<RoomPOJO> getAllRoomFromClinicWithProcedure(Long clinicId, Long procedureId);
+	
 }

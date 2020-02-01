@@ -56,7 +56,7 @@ class ChangePassword extends Component {
                     <input type='password'name='newPassword' id='newPassword' className={`form-control ${this.state.error? 'is-invalid': ''}`} onChange={this.handlerChange} />
                 </div>
                 <div className={`form-group ${this.state.error? 'has-danger': ''}`}>
-                    <label class="form-control-label" for="newPassword1">Enter your old password:</label>
+                    <label class="form-control-label" for="newPassword1">Confirm your new password:</label>
                     <input type='password'name='newPassword1' id='newPassword1' className={`form-control ${this.state.error? 'is-invalid': ''}`} onChange={this.handlerChange} />
                     <div class="invalid-feedback">Passwords did not match</div>
                 </div>

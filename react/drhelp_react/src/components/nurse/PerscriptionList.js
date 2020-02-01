@@ -16,7 +16,7 @@ class PerscriptionList extends Component {
     static contextType = NurseContext
 
     componentDidMount () {
-		axios.get('http://localhost:8080/api/nurses/pendingPerscriptions')
+		axios.get('http://localhost:8080/api/nurses/pendingPerscriptions/nurse='+this.context.nurse.id)
 		.then (response => {
 			this.setState ({
 				perscriptions: response.data
@@ -27,7 +27,6 @@ class PerscriptionList extends Component {
     handleClick = (event) => {
         event.preventDefault()
         let url = 'http://localhost:8080/api/nurses/signOff/' + this.context.nurse.id + '/' + event.target.value
-        alert(url)
         axios.put (url)
 		.then (response => {
             console.log("response data" + response.data)
@@ -37,13 +36,11 @@ class PerscriptionList extends Component {
 
     handleUpdate = (key) => {
         const items = this.state.perscriptions.filter(item => item.perscriptionId !== key);
-        console.log('items', items)
-        this.setState({ perscriptions: items});
-        console.log("state", this.state.perscriptions)
+
+        this.setState({ perscriptions: items});    
     }
 
     generatePerscriptionRows(row) {
-        console.log("rowmeds" + row.medicationList)
                 const meds = row.medicationList.map(item => item.medicationName)
                 let medString = ""
                 for(let i = 0; i < meds.length; i++) {

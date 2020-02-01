@@ -1,17 +1,13 @@
 package com.ftn.dr_help.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +25,7 @@ import com.ftn.dr_help.dto.CentreAdminProfileDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
-import com.ftn.dr_help.model.enums.RoleEnum;
 import com.ftn.dr_help.model.pojo.CentreAdministratorPOJO;
-import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.UserRequestPOJO;
 import com.ftn.dr_help.service.CentreAdministratorService;
 import com.ftn.dr_help.service.PatientService;
@@ -47,10 +41,6 @@ public class CentreAdministratorController {
 	
 	@Autowired
 	private PatientService patientService;
-	
-
-	@Autowired
-    private JavaMailSender javaMailSender;
 	
 	@Autowired
 	private AppPasswordEncoder encoder;
@@ -73,28 +63,8 @@ public class CentreAdministratorController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		CentreAdministratorPOJO admin = new CentreAdministratorPOJO();
-		admin.setFirstName(centreAdminDTO.getFirstName());
-		admin.setLastName(centreAdminDTO.getLastName());
-		admin.setEmail(centreAdminDTO.getEmail());
-		admin.setAddress("...");
-		admin.setCity("...");
-		admin.setPhoneNumber("...");
-		admin.setState("...");
-		Calendar birthday = Calendar.getInstance();
-		birthday.setTime(centreAdminDTO.getBirthday());
-		admin.setBirthday(birthday);
-		String password = "coolpassword";
+		CentreAdministratorPOJO admin = centreAdministratorService.createNewAdmin(centreAdminDTO);
 		
-		String encoded = encoder.getEncoder().encode(password);
-		//p.setPassword(encoded);
-		admin.setPassword(encoded);
-		mail.sendAccountInfoEmail(admin.getEmail(), password, admin.getFirstName(), admin.getLastName(), RoleEnum.CENTRE_ADMINISTRATOR);
-		System.out.println("Successfully sent account info email.");
-		
-		admin.setMustChangePassword(true);
-		
-		admin = centreAdministratorService.save(admin);
 		return new ResponseEntity<>(new CentreAdminDTO(admin), HttpStatus.CREATED);
 	}
 	
@@ -173,75 +143,35 @@ public class CentreAdministratorController {
 	
 	@PostMapping(value = "/declineRequest", consumes = "application/json")
 	public ResponseEntity<UserRequestPOJO> declineUserRequest(@RequestBody PatientRequestDTO patientDTO){
-		 UserRequestPOJO requested = patientService.findByEmail(patientDTO.getEmail());
-		 System.out.println("info " + requested.getEmail() + " " + patientDTO.getDeclinedDescription());
-		 //TODO: remove the requested from database, send email
 		
-		mail.sendDeclineEmail(patientDTO.getEmail(), patientDTO.getDeclinedDescription(), requested.getFirstName(), requested.getLastName());
-		System.out.println("Declination mail successfully sent.");
+		UserRequestPOJO request = null;
+				
+		try {
+			request = centreAdministratorService.declineRequest(patientDTO);
+		} catch(Exception e) {
+			System.out.println("Optimistic lock exception");
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		
-		patientService.remove(requested);
-		System.out.println("Request successfully deleted");
-		
-		return new ResponseEntity<>(requested, HttpStatus.OK);
+		return new ResponseEntity<>(request, HttpStatus.OK);
 		
 	}
 	
 	
 	@PostMapping(value = "/acceptRequest", consumes = "application/json")
 	public ResponseEntity<UserRequestPOJO> acceptUserRequest(@RequestBody PatientRequestDTO patientDTO) {
-		System.out.println("MY EMAIL IS" + patientDTO.getEmail());
-		UserRequestPOJO requested = patientService.findByEmail(patientDTO.getEmail());
 		
-		PatientPOJO p = new PatientPOJO();
-		p.setActivated(false);
-		p.setEmail(requested.getEmail());
-		p.setFirstName(requested.getFirstName());
-		p.setLastName(requested.getLastName());
-		p.setAddress(requested.getAddress());
-		p.setCity(requested.getCity());
-		p.setState(requested.getState());
-		p.setBirthday(requested.getBirthday());
-		p.setInsuranceNumber(requested.getInsuranceNumber());
-		p.setPhoneNumber(requested.getPhoneNumber());
-		System.out.println(p);
-		
-		//PasswordEncoder passwordEncoder = AppPasswordEncoder.getEncoder();
-		System.out.println("Password is " + requested.getPassword());
-		String encoded = encoder.getEncoder().encode(requested.getPassword());
-		p.setPassword(encoded);
-
-		
-	/*	PasswordValidateInterface validate = new PasswordValidate();
-		
-		if(validate.isValid(requested.getPassword(), patientDTO.getPassword())) {
-			String encoded = AppPasswordEncoder.getEncoder().encode(password.getNewPassword());
-			c.setPassword(encoded);*/
-		
-		
-		patientService.save(p);
-		System.out.println("Patient successfully registered.");
-		
+		UserRequestPOJO requested = null;
 		try {
-			mail.sendAcceptEmail(p.getEmail(), p.getFirstName(), p.getLastName());
-		} catch (MessagingException e) {
+			 requested = centreAdministratorService.acceptRequest(patientDTO);
+		} catch(Exception e) {
+			System.out.println("Optimistic lock exception");
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
-		System.out.println("Successfully sent email.");
+			return new ResponseEntity<>(requested, HttpStatus.OK);
 		
-		patientService.remove(requested);
-		System.out.println("Request successfully deleted");
-		
-
-		return new ResponseEntity<>(requested, HttpStatus.OK);
 	}
-	
-	
-	
-
-	
 	
 	
 }
