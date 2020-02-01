@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import axios from 'axios'
 import Select from 'react-select'
-
+import Button from 'react-bootstrap/Button'
 const fontStyles = {
     option: provided => ({
     ...provided,
@@ -24,6 +24,7 @@ class ExaminationReport extends React.Component {
         medicationList: {},
         diagnosisOptions: [],
         medicationOptions: [],
+        showNote: false
         
     }
 
@@ -72,6 +73,18 @@ class ExaminationReport extends React.Component {
         })
     }
 
+    /*  <div class="row d-flex justify-content-center">
+                        <div class='col-md-11'>
+                           {this.state.showNote === false && <Button className="btn btn-info " onClick={()=>{this.setState({showNote: true})}}>Add note</Button>}
+                            {this.state.showNote === true 
+                            && <textarea name="note" onChange={this.handleChange} 
+                                                    placeholder="Aditional note will make your request better!" 
+                                                    maxLength={50}
+                                                    style={{resize: "none"}}/>}
+
+                        </div>
+                    </div>*/
+
 
     render() {
         return (
@@ -103,10 +116,19 @@ class ExaminationReport extends React.Component {
                         styles={fontStyles}
                     />
 
-                    <br/>   
-                    <label for="doctorNotes"> Additional notes </label>
-                    <br/>
-                    <textarea id="doctorNotes" placeholder="Write any appointment notes here..." onChange={this.props.handleNotesChange}/>
+                <br/>
+                <br/>
+                <br/>
+
+                {this.state.showNote === false && <Button className="btn btn-info " onClick={()=>{this.setState({showNote: true})}}>Add note</Button>}
+                            {this.state.showNote === true 
+                            &&  <Fragment>
+                                <label for='doctorNotes'> Additional notes</label>
+                                <br/>
+                            <textarea id="doctorNotes" placeholder="Write any appointment notes here..." onChange={this.props.handleNotesChange} style={{resize: "none"}}/>
+                            </Fragment>
+                            }
+                   
                     </div>
                 </div>
                 </form>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from "@fullcalendar/timegrid"
@@ -149,12 +149,6 @@ class DoctorCalendar extends React.Component {
     for(let i = 0; i < this.state.appointments.length; i++) {
         let appointment = this.state.appointments[i]
 
-        // if (appointment.isOperation) {
-        //   info = 'Operation\n'
-        // } else {
-        //   info = 'Appointment\n'
-        // }
-
         info = appointment.roomName + ' ' + appointment.roomNumber
         let start = new Date(appointment.startDate).toISOString()
         let end = new Date(appointment.endDate).toISOString()
@@ -276,7 +270,10 @@ class DoctorCalendar extends React.Component {
   render() {
       return (
         <div className='demo-app-calendar'>
-          {this.props.regime==='schedule' &&  <FullCalendar id="FullCalendar" defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
+          {this.props.regime==='schedule' &&  
+          <Fragment> 
+            <br/>
+          <FullCalendar id="FullCalendar" defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
           header={{
             left: "prev,next today",
             center: "title",
@@ -303,7 +300,8 @@ class DoctorCalendar extends React.Component {
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}
           plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
-          themeSystem = 'bootstrap' />} 
+          themeSystem = 'bootstrap' /> 
+          </Fragment> } 
 
         {this.props.regime ==='profile' && this.generateEventList().length > 0 && <FullCalendar defaultView="listWeek" //ako si na stranici pacijenta, list view
           header={{
@@ -318,8 +316,8 @@ class DoctorCalendar extends React.Component {
           eventClick={this.handleEventClick}
           plugins={[ listPlugin, bootstrapPlugin, interaction]} 
           themeSystem = 'bootstrap' />} {
-          this.props.regime === 'profile' && this.generateEventList().length === 0 && <h2>No upcoming appointments. </h2> 
-          }
+          (this.props.regime === 'profile' && this.generateOperationList().length === 0 && this.generateEventList().length === 0) && <h2>No upcoming appointments. </h2> 
+         }
 
           {this.props.regime==='history' &&  <FullCalendar defaultView="listYear" //ako si na stranici pacijenta za history, list view
           header={{

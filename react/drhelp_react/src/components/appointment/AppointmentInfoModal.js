@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {DoctorContext} from '../../context/DoctorContextProvider'
 import DoctorShowExaminationReport from './DoctorShowExaminationReport'
+import BootstrapButton from 'react-bootstrap/Button'
 
 class AppointmentInfoModal extends React.Component {
 
@@ -147,7 +148,7 @@ class AppointmentInfoModal extends React.Component {
          : 
          this.props.event.status === 'APPROVED' && 
          <Fragment> 
-         <Button disabled>Start</Button>
+         <BootstrapButton variant = 'outline-success' disabled>Start</BootstrapButton>
          <p> You can only start the appointment on {appStart}</p> 
          </Fragment> } </Fragment> :  <Fragment>
               <p> You are about to start an appointment with {this.props.event.patient}. &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;

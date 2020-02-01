@@ -122,6 +122,15 @@ class NurseCalendar extends React.Component {
             let priceInfo = appointment.price
             let discountInfo = appointment.discount
             let insuranceInfo = appointment.insuranceNumber
+
+            let color = ''
+            if(statusInfo === 'AVAILABLE') {
+              color = '#999900'
+            } else if(statusInfo === 'APPROVED') {
+              color = '#3CB371'
+            } else if(statusInfo === 'DONE') {
+              color = '#FF4500'
+            }
     
             let event = { 
               id: appointment.appointment_id,
@@ -134,7 +143,8 @@ class NurseCalendar extends React.Component {
               procedure: procedureInfo,
               price: priceInfo,
               discount: discountInfo,
-              patientInsurance: insuranceInfo
+              patientInsurance: insuranceInfo,
+              color: color
             }
     
             events.push(event)
