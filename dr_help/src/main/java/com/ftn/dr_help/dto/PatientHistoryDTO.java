@@ -122,6 +122,9 @@ public class PatientHistoryDTO {
 			case REQUESTED: 
 				this.status = "Requested";
 				break;
+			case DOCTOR_REQUESTED_APPOINTMENT:
+				this.status = "Perscribed";
+				break;
 			default:
 				this.status = "Unknown";
 				break;
@@ -138,6 +141,19 @@ public class PatientHistoryDTO {
 		if (date.split(":")[1].length() < 2) {
 			date = date.split(":")[0] + ":0" + date.split(":")[1];
 		}
+		
+		String[] segments = date.split("[.]");
+		if (segments.length > 2) {
+			if (segments[1].length() < 2) {
+				date = segments[0] + ".0" + segments[1] + "." + segments[2] + "." + segments[3];
+			}
+			if (segments[0].length() < 2) {
+				System.out.println(segments[0]);
+				date = "0" + date;
+			}
+		}
+		
+		
 //		System.out.println("Date is: " + date);
 //		String[] parts = date.split(" ");
 //		parts = parts[0].split(".");
@@ -207,6 +223,30 @@ public class PatientHistoryDTO {
 		return date;
 	}
 	public void setDate(String date) {
+		
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("     Date : " + date);
+//		System.out.println("");
+//		System.out.println("");
+		
+		if (date.split(" ")[1].split(":")[0].length() < 2) {
+			date = date.split(" ")[0] + " 0" + date.split(" ")[1];
+		}
+		if (date.split(":")[1].length() < 2) {
+			date = date.split(":")[0] + ":0" + date.split(":")[1];
+		}
+		
+		String[] segments = date.split("[.]");
+		if (segments.length > 2) {
+			if (segments[1].length() < 2) {
+				date = segments[0] + ".0" + segments[1] + "." + segments[2] + "." + segments[3];
+			}
+			if (segments[0].length() < 2) {
+				System.out.println(segments[0]);
+				date = "0" + date;
+			}
+		}
 		this.date = date;
 	}
 	public String getProcedureType() {

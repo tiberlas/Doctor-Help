@@ -540,44 +540,7 @@ class ClinicListing extends Component {
 						</TableHead>
 						<TableBody>
 				
-							{/* <p>Min rating</p>
-							<Slider 
-								defaultValue={0}
-								// getAriaValueText={valuetext}
-								aria-labelledby="discrete-slider"
-								valueLabelDisplay="auto"
-								step={1}
-								marks
-								min={1}
-								max={5}
-								onChange = {(event, value) => this.handleMinRatingFilter(value)}
-							/>
-							<p>Max rating</p>
-							<Slider 
-								defaultValue={5}
-								// getAriaValueText={valuetext}
-								aria-labelledby="discrete-slider"
-								valueLabelDisplay="auto"
-								step={1}
-								marks
-								min={1}
-								max={5}
-								onChange = {(event, value) => this.handleMaxRatingFilter(value)}
-							/>
-
-							<p>Min price</p>
-							<FormControl type="number" 
-								onChange = {(event, text) => this.handleMinPriceFilter()}
-								id = "id_min_price"
-								placeholder="Minimal price" 
-							/>
-
-							<p>Max price</p>
-							<FormControl type="number" 
-								onChange = {(event, text) => this.handleMaxPriceFilter()}
-								id = "id_max_price"
-								placeholder="Maximal price" 
-							/> */}
+							
 							
 
 

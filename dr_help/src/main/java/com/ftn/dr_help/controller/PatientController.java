@@ -177,27 +177,27 @@ public class PatientController {
 		return new ResponseEntity<HealthRecordDTO> (retVal, HttpStatus.OK);
 	}
 	
-	@GetMapping (value="/history")
+	@GetMapping (value="/history/doctor={dr_id}/procedure_type={proc_type_id}/clinic={clinic_id}/date={app_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")	
-	public ResponseEntity<AppointmentListDTO> getHistory () {
-		AppointmentListDTO retVal = new AppointmentListDTO ();
-		List<PatientHistoryDTO> appointmentList = patientService.getHistory(currentUser.getEmail());
-		if (appointmentList == null) {
-			appointmentList = new ArrayList<PatientHistoryDTO> ();
+	public ResponseEntity<AppointmentListDTO> getHistory (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
+			@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
+		
+		AppointmentListDTO retVal = patientService.getHistory(currentUser.getEmail(), date, doctorId, clinicId, procedureTypeId);
+		if (retVal.getAppointmentList() == null) {
+			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
-		retVal.setAppointmentList(appointmentList);
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
-	@GetMapping (value="/pending")
+	@GetMapping (value="/pending/doctor={dr_id}/procedure_type={proc_type_id}/clinic={clinic_id}/date={app_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")	
-	public ResponseEntity<AppointmentListDTO> getPendingAppointments () {
-		AppointmentListDTO retVal = new AppointmentListDTO();
-		List<PatientHistoryDTO> appointmentList = patientService.getPending(currentUser.getEmail());
-		if (appointmentList == null) {
-			appointmentList = new ArrayList<PatientHistoryDTO> ();
+	public ResponseEntity<AppointmentListDTO> getPendingAppointments (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
+			@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
+
+		AppointmentListDTO retVal = patientService.getPending(currentUser.getEmail(), date, doctorId, clinicId, procedureTypeId);
+		if (retVal.getAppointmentList() == null) {
+			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
-		retVal.setAppointmentList(appointmentList);
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
