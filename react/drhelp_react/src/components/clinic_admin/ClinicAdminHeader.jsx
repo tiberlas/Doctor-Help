@@ -53,6 +53,14 @@ class ClinicAdminHeader extends Component {
                     <DropdownItem >Change</DropdownItem>
                     </LinkContainer>
 
+                    <LinkContainer exact to='/clinic-administrator/clinic/income'>
+                    <DropdownItem >Income</DropdownItem>
+                    </LinkContainer>
+
+                    <LinkContainer exact to='/clinic-administrator/heald-appointemtns'>
+                    <DropdownItem >Held&nbsp;Appointments</DropdownItem>
+                    </LinkContainer>
+
                     </DropdownMenu>
                 </UncontrolledDropdown>
                 </Nav>

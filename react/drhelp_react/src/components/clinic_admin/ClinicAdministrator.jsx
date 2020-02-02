@@ -23,6 +23,8 @@ import ClinicAdminAppointmentRequests from './ClinicAdminAppointmentRequests';
 import ClinicAdminOperationRequest from './ClinicAdminOperationRequest';
 import RequestedAppointment from '../requesting_appointment/RequestedAppointment';
 import RequestedOpration from '../requesting_operations/RequestedOperation.jsx';
+import ClinicAdminHeldAppointments from './ClinicAdminHeldAppointments';
+import ClinicAdminClinicIncome from './ClinicAdminClinicIncome';
 
 class ClinicAdministrator extends Component {
     state = {
@@ -74,6 +76,8 @@ class ClinicAdministrator extends Component {
                 <Switch>
                     <Route exact path="/clinic-administrator/clinic" ><Clinic clinicId={this.state.clinicId}/> </Route>
                     <Route exact path="/clinic-administrator/clinic/change" ><ClinicChangeProfile clinicId={this.state.clinicId}/> </Route>
+                    <Route exact path="/clinic-administrator/clinic/income" ><ClinicAdminClinicIncome /> </Route>
+                    <Route exact path="/clinic-administrator/heald-appointemtns" ><ClinicAdminHeldAppointments /> </Route>
                     <Route exact path="/clinic-administrator/profile" ><ClinicAdminProfile /> </Route>
                     <Route exact path="/clinic-administrator/" ><ClinicAdminProfile /> </Route>
                     <Route exact path="/clinic-administrator/profile/change" ><ClinicAdminChangeProfile  handleUpdate={this.handleClinicAdmin}/> </Route>

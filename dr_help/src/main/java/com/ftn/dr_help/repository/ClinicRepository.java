@@ -1,5 +1,6 @@
 package com.ftn.dr_help.repository;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,13 @@ public interface ClinicRepository extends JpaRepository<ClinicPOJO, Long>{
 	@Query (value = "select distinct c.* from clinic c inner join procedures_type pt on pt.clinic_id = c.id where pt.\"name\" = ?1", nativeQuery = true)
 	public List<ClinicPOJO> filterByAppointmentType (String procedureType);
 	
+	@Query(value = "select SUM(pt.price) \n" + 
+			"from appointments a inner join procedures_type pt \n" + 
+			"on a.procedure_type_id = pt.id \n" + 
+			"where a.status = 'DONE' \n" + 
+			"and pt.clinic_id = ?1 \n" + 
+			"and a.date >= ?2 \n" + 
+			"and a.date <= ?3", nativeQuery = true)
+	public Float getIncome(Long clinicId, Calendar startDate, Calendar endDate);
 }
  

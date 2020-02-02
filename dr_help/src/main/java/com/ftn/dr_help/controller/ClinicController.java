@@ -23,6 +23,7 @@ import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicListingDTO;
 import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.dto.ClinicRatingDTO;
+import com.ftn.dr_help.dto.DatePeriodDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.ClinicReviewPOJO;
@@ -201,4 +202,13 @@ public class ClinicController {
 		return new ResponseEntity<> (retVal, HttpStatus.OK); 
 	}
 	
+	@PostMapping(value = "/income", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<Float> getIncome(@RequestBody DatePeriodDTO datePeriod) {
+		String email = currentUser.getEmail();
+		
+		Float income = clinicService.getIncome(email, datePeriod);
+		
+		return new ResponseEntity<>(income, HttpStatus.OK);
+	}
 }

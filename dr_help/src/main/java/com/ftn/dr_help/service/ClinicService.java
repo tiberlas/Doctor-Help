@@ -10,10 +10,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DailySchedule;
 import com.ftn.dr_help.dto.ClinicDTO;
+import com.ftn.dr_help.dto.DatePeriodDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
@@ -215,6 +217,31 @@ public class ClinicService {
 		}
 		else {
 			clinicReviewRepository.updateReview(review, patientId, clinicId);
+		}
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Float getIncome(String email, DatePeriodDTO datePeriod) {
+		try {
+			Long clinicId = adminRepository.findOneByEmail(email).getClinic().getId();
+			
+			Calendar start = Calendar.getInstance();
+			start.setTime(datePeriod.getBeginDate());
+			start.set(Calendar.HOUR_OF_DAY, 0);
+			start.set(Calendar.MINUTE, 0);
+			start.set(Calendar.SECOND, 0);
+			start.set(Calendar.MILLISECOND, 0);
+			
+			Calendar end = Calendar.getInstance();
+			end.setTime(datePeriod.getEndDate());
+			end.set(Calendar.HOUR_OF_DAY, 0);
+			end.set(Calendar.MINUTE, 0);
+			end.set(Calendar.SECOND, 0);
+			end.set(Calendar.MILLISECOND, 0);
+			
+			return repository.getIncome(clinicId, start, end);
+		} catch(Exception e) {
+			return null;
 		}
 	}
 	
