@@ -59,10 +59,10 @@ ul li .check::before {
   position: absolute;
 	content: '';
   border-radius: 100%;
-  height: 15px;
-  width: 15px;
-  top: 5px;
-	left: 5px;
+  height: 13px;
+  width: 13px;
+  top: 0.6px;
+	left: 0.6px;
   margin: auto;
 	transition: background 0.25s linear;
 	-webkit-transition: background 0.25s linear;
@@ -135,7 +135,7 @@ input[type=radio]:checked ~ label{
 /* Styles for alert... 
 by the way it is so weird when you look at your code a couple of years after you wrote it XD */
 
-.alert {
+/* .alert {
 	box-sizing: border-box;
 	background-color: #BDFFE1;
 	width: 100%;
@@ -161,4 +161,4 @@ by the way it is so weird when you look at your code a couple of years after you
 .alert a {
 	color: #232323;
 	font-weight: bold;
-}
+} */

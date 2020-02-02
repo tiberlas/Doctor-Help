@@ -26,7 +26,7 @@ class ClinicAdminHeader extends Component {
               <Nav> 
                   <Nav.Link>
                     <Link exact to = '/home' class="nav-link">
-                      <strong class="text-danger" style={{fontFamily: "serif", fontSize: "40px", textAlign: "center", webkitTextStrokeWidth: "2px", webkitTextStrokeColor: "white"}}> drHelp </strong>
+                      <strong class="text-success" style={{fontFamily: "serif", fontSize: "40px", textAlign: "center"}}> drHelp </strong>
                       <img src={cross} height="45px" width="45px" style={{alignContent: "up"}}/>
                       <img src={cross} height="45px" width="45px"/>
                     </Link>
