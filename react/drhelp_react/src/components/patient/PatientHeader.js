@@ -6,9 +6,14 @@ import {Link} from 'react-router-dom';
 import {DropdownItem} from  'react-bootstrap'
 import {DropdownToggle, DropdownMenu, NavbarToggler, Collapse, UncontrolledDropdown, NavItem} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+
 
 class PatientHeader extends Component {
-    state = {  }
+    state = { 
+        showAppointmentsDropdown : false, 
+        isOpenManage: false
+     }
  
     static contextType = PatientContext;
 
@@ -16,9 +21,25 @@ class PatientHeader extends Component {
         alert ("Collapsing")
     }
 
+    handleMouseEnter () {
+        // alert ("Entering")
+        this.setState ({
+            showAppointmentsDropdown : false
+        })
+    }
+
+    handleOpenManage = () => {
+        this.setState({ isOpenManage: true })
+      }
+    
+      handleCloseManage = () => {
+         this.setState({ isOpenManage: false })
+      }
+
+
     render() { 
         return ( 
-            <Navbar bg="light" expand="lg" id="navbarColor01">
+            <Navbar bg="dark" expand="sm" id="navbarColor01">
                 <Navbar.Brand >
                     <Nav> 
                         <Nav.Link>
@@ -37,34 +58,26 @@ class PatientHeader extends Component {
 
                     <Collapse isOpen={true} navbar className="collapse">
                         <Nav>
-                            <UncontrolledDropdown nav inNavbar={true}>
-                                <DropdownToggle nav caret >
-                                    Appointments
-                                </DropdownToggle>
-                                <DropdownMenu width="1000" >
-                                    <LinkContainer exact to='/patient/appointmentList' class="nav-link" >
-                                        <DropdownItem >
-                                            Pending Appointments
-                                        </DropdownItem>
-                                    </LinkContainer>
-                                    <LinkContainer  exact to='/patient/history' class="nav-link">
-                                        <DropdownItem onClick={this.toggle}>
-                                            Patient History
-                                        </DropdownItem>
-                                    </LinkContainer>
-                                    <LinkContainer  exact to='/patient/predefined' class="nav-link">
-                                        <DropdownItem onClick={this.toggle}>
-                                            Book predefined
-                                        </DropdownItem>
-                                    </LinkContainer>
-                                </DropdownMenu>
-                            </UncontrolledDropdown>
+                            <NavDropdown
+                                onMouseEnter = { this.handleOpenManage }
+                                onMouseLeave = { this.handleCloseManage }
+                                show={ this.state.isOpenManage }
+                                noCaret
+                                id="language-switcher-container"
+                                title="Appointments"
+                            >
+                                <LinkContainer exact to="/patient/appointmentList">
+                                    <DropdownItem >Pending apppointments</DropdownItem>
+                                </LinkContainer>
+                                <LinkContainer exact to="/patient/history">
+                                    <DropdownItem> History</DropdownItem>
+                                </LinkContainer>
+                                <LinkContainer exact to="/patient/predefined">
+                                    <DropdownItem >Book predefined appointment</DropdownItem>
+                                </LinkContainer>                
+                            </NavDropdown>
                         </Nav>
                     </Collapse>
-
-                    
-                    
-                    
                     <Nav.Link>
                         <Link exact to='/patient/health-record' class="nav-link">Health record</Link>
                     </Nav.Link>

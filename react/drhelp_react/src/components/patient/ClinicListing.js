@@ -137,15 +137,28 @@ class ClinicListing extends Component {
 		profileUrl += '/' + this.state.selectedDate;
 		return (
             <Fragment>
-                <TableCell width="350px"><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
-				<TableCell width="100px"><p class='text-white'>{row.address}</p></TableCell>
-				<TableCell width="100px"><p class='text-white'>{row.city}</p></TableCell>
-				<TableCell width="50px"><p class='text-white'>{row.state}</p></TableCell>
-				<TableCell width="50px"><p class='text-white'>{row.rating}</p></TableCell>
-				<TableCell width="75px"><p class='text-white'>{row.price}</p></TableCell>
-                <TableCell width="50px">< Link exact to = {profileUrl} hidden={this.state.cantReserve} >Reserve</Link></TableCell>
+                <TableCell width="150" class="text-white"><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
+				<TableCell width="100px" class="textext-whitet">{row.address}</TableCell>
+				<TableCell width="75px" class="text-white">{row.city}</TableCell>
+				<TableCell width="50px" class="text-white">{row.state}</TableCell>
+				<TableCell width="50px" class="text-white">{row.rating}</TableCell>
+				<TableCell width="50px" class="text-white">{row.price}</TableCell>
+                <TableCell width="50px" class="text-white">< Link exact to = {profileUrl} hidden={this.state.cantReserve} >Reserve</Link></TableCell>
 				{/* <TableCell hidden={this.state.cantReserve}><Form onSubmit={newUrl}><p class='text-white'><Button type="submit" onClick={alert (profileUrl)} >Reserve</Button></p></Form></TableCell> */}
-		     </Fragment>
+		    </Fragment>
+
+			// <Fragment>
+            //     <TableCell width="350px"><Link exact to = {profileUrl} >{row.name}</Link></TableCell>
+			// 	<TableCell width="100px"><p class='text-white'>{row.address}</p></TableCell>
+			// 	<TableCell width="100px"><p class='text-white'>{row.city}</p></TableCell>
+			// 	<TableCell width="50px"><p class='text-white'>{row.state}</p></TableCell>
+			// 	<TableCell width="50px"><p class='text-white'>{row.rating}</p></TableCell>
+			// 	<TableCell width="75px"><p class='text-white'>{row.price}</p></TableCell>
+            //     <TableCell width="50px">< Link exact to = {profileUrl} hidden={this.state.cantReserve} >Reserve</Link></TableCell>
+			// 	{/* <TableCell hidden={this.state.cantReserve}><Form onSubmit={newUrl}><p class='text-white'><Button type="submit" onClick={alert (profileUrl)} >Reserve</Button></p></Form></TableCell> */}
+		    // </Fragment>
+
+
         )
     }
 
@@ -394,7 +407,7 @@ class ClinicListing extends Component {
 		let numberOfTypes = this.state.appointmentTypes.length;
 		return (
 			<div class="row d-flex justify-content-center">
-                <div class='col-md-10'>
+                <div class='col-md-8'>
 
 				<Modal show={this.state.showModal} onHide={() => this.switchDialog()}>
 					<Modal.Header closeButton>
@@ -469,7 +482,7 @@ class ClinicListing extends Component {
 								<TableCell colSpan="20">
 									Minimal rating: 
 									<Slider 
-										style = {{color : "#18BC9C"}}
+										style = {{color : "#5bc0de"}}
 										defaultValue={(this.state.minRat === 'unfiltered') ? (1) : (this.state.minRat)}
 										aria-labelledby="discrete-slider"
 										valueLabelDisplay="auto"
@@ -481,7 +494,7 @@ class ClinicListing extends Component {
 									/>
 									Maximal rating: 
 									<Slider 
-										style = {{color : "#18BC9C"}}
+										style = {{color : "#5bc0de"}}
 										defaultValue={(this.state.maxRat === 'unfiltered') ? (5) : (this.state.maxRat)}
 										aria-labelledby="discrete-slider"
 										valueLabelDisplay="auto"
@@ -522,26 +535,21 @@ class ClinicListing extends Component {
 
 					
 
-					<Table>
+					<Table >
 						<TableHead>
 							<TableRow> 
-								<TableCell width="350px"><p class='text-success'>Clinic Name</p></TableCell>
-								<TableCell width="100px"><p class='text-success'>Address</p></TableCell>
-								<TableCell width="100px"><p class='text-success'>City</p></TableCell>
-								<TableCell width="50px"><p class='text-success'>State</p></TableCell>
-								<TableCell width="50px"><p class='text-success'>Rating</p></TableCell>
-								<TableCell width="75px"><p class='text-success'>Price</p></TableCell>
-								{/* <TableCell  hidden={this.state.cantReserve}> */}
-								<TableCell width="50px">
-									<button onClick={() => this.switchDialog()} 
-										// type="button"
-										// style = {{background : "#2C3E50"}}
+								<TableCell width="150px" class="text-success">Clinic Name</TableCell>
+								<TableCell width="100px" class="text-success">Address</TableCell>
+								<TableCell width="75px" class="text-success">City</TableCell>
+								<TableCell width="50px" class="text-success">State</TableCell>
+								<TableCell width="50px" class="text-success">Rating</TableCell>
+								<TableCell width="50px" class="text-success">Price</TableCell>
+								<TableCell width="50px" class="text-success">
+									<Button onClick={() => this.switchDialog()} 
 										type = "button"
-										class="btn btn-info"
 									>	
 										Filter
-									</button>
-									{/* <p class='text-success'>Reserve</p> */}
+									</Button>
 								</TableCell>
 							</TableRow>
 						</TableHead>
@@ -555,6 +563,7 @@ class ClinicListing extends Component {
 							}
 						</TableBody>
 					</Table>
+
 				</div>
 			</div>
 		);

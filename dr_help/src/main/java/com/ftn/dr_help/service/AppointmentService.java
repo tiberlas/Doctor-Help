@@ -619,13 +619,21 @@ public class AppointmentService {
 			
 			Calendar duration = Calendar.getInstance();
 			duration.setTime(finded.getProcedureType().getDuration());
+			String nurse;
+			
+			if (finded.getNurse() == null) {
+				nurse = "UNDEFINED";
+			}
+			else {
+				nurse = finded.getNurse().getEmail();
+			}
 			
 			return new RequestingAppointmentDTO(
 					finded.getId(),
 					dateConverter.dateForFrontEndString(finded.getDate()), 
 					finded.getProcedureType().getName(), 
 					finded.getDoctor().getEmail(), 
-					finded.getNurse().getEmail(), 
+					nurse, 
 					finded.getPatient().getEmail(),
 					finded.getProcedureType().getId(),
 					dateConverter.timeToString(duration));
