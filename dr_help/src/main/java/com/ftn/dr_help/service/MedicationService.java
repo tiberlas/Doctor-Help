@@ -1,10 +1,12 @@
 package com.ftn.dr_help.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.dto.MedicationDTO;
 import com.ftn.dr_help.model.pojo.MedicationPOJO;
 import com.ftn.dr_help.repository.MedicationRepository;
 
@@ -16,9 +18,30 @@ public class MedicationService {
 	
 	
 	
-	public List<MedicationPOJO> findAll() {
-		return medicationRepository.findAll();
+	public List<MedicationDTO> findAll() {
+		
+		List<MedicationPOJO> list = medicationRepository.findAll();
+		List<MedicationDTO> dtoList = new ArrayList<MedicationDTO>();
+		
+		for (MedicationPOJO medicationPOJO : list) {
+			MedicationDTO dto = new MedicationDTO(medicationPOJO);
+			Integer count = medicationRepository.findMedicationOccurencesInPerscriptions(medicationPOJO.getId());
+			if(count == 0) {
+				dto.setReserved(false);
+			} else {
+				dto.setReserved(true);
+			}
+			
+			dto.setId(medicationPOJO.getId());
+			dtoList.add(dto);
+		}
+		return dtoList;
 	}
+	
+	public void delete(Long id) {
+		medicationRepository.deleteById(id);
+	}
+	
 	
 	
 	public MedicationPOJO save(MedicationPOJO med) {

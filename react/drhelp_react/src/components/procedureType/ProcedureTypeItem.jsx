@@ -52,17 +52,17 @@ class ProcedureTypeItem extends Component {
     }
 
     render() { 
-
-        return ( 
+        let durationParts = this.state.duration.split(':');
+        return (
             <Fragment>
                 <TableCell class="text-white">{this.state.name}</TableCell>
-                <TableCell class="text-white">{this.state.duration}</TableCell>
+                <TableCell class="text-white">{durationParts[0]}:{durationParts[1]}H</TableCell>
                 <TableCell class="text-white"><Checkbox checked={this.state.operation} name='operation' value='operation' disabled/></TableCell>
-                <TableCell class="text-white">{this.state.price}</TableCell>
+                <TableCell class="text-white">{this.state.price}&#x20bf;</TableCell>
                 <TableCell class="text-white"><button onClick={this.onDelite} class='btn btn-danger' disabled={this.state.canChange}>delete</button></TableCell>
                 <TableCell>
                     <ButtonToolbar>
-                        <Button variant="primary" onClick={this.setModalShow} disabled={this.state.canChange}>
+                        <Button variant="success" onClick={this.setModalShow} disabled={this.state.canChange}>
                             change
                         </Button>
 

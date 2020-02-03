@@ -129,54 +129,63 @@ class UpdateHealthRecord extends React.Component {
     render() {
         return (
             <div>
-                <h2> {this.props.data.patient} </h2>
-                <br/>
-                <form onSubmit = {this.handleSubmit}>
-                <div class="table-responsive">
-                <table class="table table-hover">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Height: </th>
-                            <td><input name="height" type="number" step="any" defaultValue = {this.heightDisplay()} onChange={this.handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Weight:</th>
-                                <td><input name="weight" type="number" step="any" defaultValue={this.weightDisplay()} onChange={this.handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Diopter:</th>
-                                <td><input name="diopter" type="number" step="any" defaultValue={this.diopterDisplay()} onChange={this.handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Allergies:</th>
-                                <td>
-                                    <input id="allergyInput" name="allergy" type="text" 
-                                defaultValue={this.allergyDisplay()} 
-                                onChange={this.handleChange}/>
-                                {!this.state.errorAllergy ? <div> <br/><br/> </div>
-                                     :  <div class="invalid-feedback d-block"> Invalid allergy format. <br/>Allergies are seperated by a comma.</div>}
-                                </td>
-                               
-                        </tr>
+                <div class="row d-flex justify-content-center">
+                    <div class='col-md-6'> 
+                    <h2> {this.props.data.patient} </h2>
+                    </div>
+                    </div>
 
-                        <tr>
-                            <th scope="row">Blood type:</th>
-                                <td>
-                                    <select id="selectBloodType" name="bloodType" onChange={this.handleChange}>
-                                        {this.generateSelect()}
-                                    </select>
-                                </td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-                </div>
-                <div>
-                <Button className = "btn" onClick = {this.props.toggleUpdate}> Back</Button>
-                &nbsp;&nbsp;
-                <input type = "submit" value = "Confirm" className = "btn btn-success" className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
-                </div>
-                </form>
+                    <div class="row d-flex justify-content-center">
+                    <div class='col-md-11'> 
+                    <br/>
+                    <form onSubmit = {this.handleSubmit}>
+                    <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Height: </th>
+                                <td><input name="height" type="number" step="any" defaultValue = {this.heightDisplay()} onChange={this.handleChange}/></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Weight:</th>
+                                    <td><input name="weight" type="number" step="any" defaultValue={this.weightDisplay()} onChange={this.handleChange}/></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Diopter:</th>
+                                    <td><input name="diopter" type="number" step="any" defaultValue={this.diopterDisplay()} onChange={this.handleChange}/></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Allergies:</th>
+                                    <td>
+                                        <input id="allergyInput" name="allergy" type="text" 
+                                    defaultValue={this.allergyDisplay()} 
+                                    onChange={this.handleChange}/>
+                                    {!this.state.errorAllergy ? <div> <br/><br/> </div>
+                                        :  <div class="invalid-feedback d-block"> Invalid allergy format. <br/>Allergies are seperated by a comma.</div>}
+                                    </td>
+                                
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Blood type:</th>
+                                    <td>
+                                        <select id="selectBloodType" name="bloodType" onChange={this.handleChange}>
+                                            {this.generateSelect()}
+                                        </select>
+                                    </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    </div>
+                    <div>
+                    <button type='button' class = "btn btn-secondary" onClick = {this.props.toggleUpdate}> Back</button>
+                    &nbsp;&nbsp;
+                    <input type = "submit" value = "Confirm" className = "btn btn-success" className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
+                    </div>
+                    </form>
+                    </div>
+                    </div>
                 </div>
         )
     }

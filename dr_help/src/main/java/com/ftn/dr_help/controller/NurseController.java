@@ -139,9 +139,9 @@ public class NurseController {
 	}
 	
 	
-	@GetMapping(value = "/pendingPerscriptions")
-	public ResponseEntity<List<SignOffDTO>> listPendingPerscriptions() {
-		List<SignOffDTO> dtoList = perscriptionService.findAllPendingPerscriptions();
+	@GetMapping(value = "/pendingPerscriptions/nurse={id}")
+	public ResponseEntity<List<SignOffDTO>> listPendingPerscriptions(@PathVariable("id") Long nurse_id) {
+		List<SignOffDTO> dtoList = perscriptionService.findAllPendingPerscriptions(nurse_id);
 		
 		return new ResponseEntity<>(dtoList, HttpStatus.OK);
 		

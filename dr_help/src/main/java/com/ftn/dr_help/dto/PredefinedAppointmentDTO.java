@@ -40,7 +40,7 @@ public class PredefinedAppointmentDTO {
 	public PredefinedAppointmentDTO(AppointmentPOJO pojo) {
 		super();
 		this.id = pojo.getId();
-		this.dateAndTime = dateConverter.dateAndTimeToString(pojo.getDate());
+		this.dateAndTime = dateConverter.dateForFrontEndString(pojo.getDate());
 		this.procedureTypeId = pojo.getProcedureType().getId();
 		this.roomId = pojo.getRoom().getId();
 		this.doctorId = pojo.getDoctor().getId();

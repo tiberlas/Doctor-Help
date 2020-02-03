@@ -8,13 +8,12 @@ import {Switch} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootswatch/dist/darkly/bootstrap.css';
-//import 'font-awesome/css/font-awesome.min.css'; ne diraj, ovo je za ikonice
+//import 'font-awesome/css/font-awesome.min.css'; //za ikonice
 import UserContextProvider from './context/UserContextProvider';
-import RegistrationPage from './components/RegistrationPage';
-import PatientProfile from './components/patient/PatientProfile';
 import interceptor from './Interseptor.js';
-import axios from "axios"
 import FirstTimePasswordChange from './components/FirstTimePasswordChange'
+import ActivatePatient from './components/activate/ActivatePatient'
+
 
 
 class App extends Component {
@@ -83,33 +82,17 @@ class App extends Component {
   render() {
 
 
-    console.log("href " + this.state.currentUrl)
-    if(this.state.currentUrl === 'http://localhost:3000/activate') {
-      console.log("bingo" + window.location.href.split('=')[1] )
-      fetch('http://localhost:8080/api/patients/confirmAccount', {
-            method: 'put',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              email: window.location.href.split('=')[1]
-            })
-     }).then(console.log("done"))
-        return (
-          <div> 
-             <div class="row d-flex justify-content-center">
-                <div class='col-md-3'>
-                  <h2> Your account has been confirmed. <br/>Click the <a href="http://localhost:3000/login"> link </a> 
-                  to log in with your credentials. </h2>
-                  </div>
-              </div>
-
-        </div>
-        )
+    if(this.state.currentUrl === 'http://localhost:3000/activate') { //if you're activating the account, dont render the login page
+        let urlEmail = window.location.href.split('=')[1] //email from the url
+        return(<ActivatePatient email={urlEmail}/>)
     }
 
       return (
         <div>
+          <link 
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/> {/* za fontawesome ikonice*/}
           <BrowserRouter >
             <Switch>
                 { this.state.passwordChange?

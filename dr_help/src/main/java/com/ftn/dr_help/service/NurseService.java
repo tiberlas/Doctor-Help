@@ -2,6 +2,7 @@ package com.ftn.dr_help.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,17 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.EmailCheck;
+import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.MedicalStaffProfileDTO;
 import com.ftn.dr_help.dto.MedicalStaffSaveingDTO;
+import com.ftn.dr_help.dto.NurseCheckIfAvailableInnerDTO;
+import com.ftn.dr_help.dto.NurseWIthFirstFreeDateInnerDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
@@ -42,6 +48,15 @@ public class NurseService {
 	
 	@Autowired
 	private EmailCheck check;
+	
+	@Autowired
+	private WorkScheduleAdapter workSchedule;
+	
+	@Autowired
+	private CalculateFirstFreeSchedule calculate;
+	
+	@Autowired
+	private LeaveRequestService leaveRequestService;
 	
 	public List<MedicalStaffProfileDTO> getAll(String email) {
 		
@@ -311,7 +326,60 @@ public class NurseService {
 		}
 		
 		
-		return businessDayList;
+		return businessDayList;	
+	}
+	
+	public NursePOJO findOneByEmail(String email) {
+		try {
+			
+			return repository.findOneByEmail(email);
+			
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public NurseCheckIfAvailableInnerDTO checkSchedue(NursePOJO nurse, Calendar requestedSchedule, Calendar duration) {
 		
+		List<Date> dates = repository.findAllReservedAppointments(nurse.getId());
+		List<AbsenceInnerDTO> absence = leaveRequestService.getAllNurseAbsence(nurse.getId());
+		Calendar firstFree = calculate.checkScheduleOrFindFirstFree(workSchedule.fromNurse(nurse, duration), requestedSchedule, dates, absence);
+		
+		if(firstFree.getTime().equals(requestedSchedule.getTime())) {
+			return new NurseCheckIfAvailableInnerDTO(true, requestedSchedule);
+		} else {
+			return new NurseCheckIfAvailableInnerDTO(false, firstFree);
+		}
+	}
+	
+	public NurseWIthFirstFreeDateInnerDTO findFreeNurse(Calendar appointmentDate, Calendar duration, Long clinicId) {
+		try {
+			
+			List<NursePOJO> nurses = repository.findAllByClinic_id(clinicId);
+			List<NurseWIthFirstFreeDateInnerDTO> nurseDates = new ArrayList<>();
+			
+			for(NursePOJO nurse : nurses) {
+				NurseCheckIfAvailableInnerDTO check = checkSchedue(nurse, appointmentDate, duration);
+				if(check.isFree()) {
+					return new NurseWIthFirstFreeDateInnerDTO(appointmentDate, nurse);
+				} else {
+					nurseDates.add(new NurseWIthFirstFreeDateInnerDTO(check.getFirstFree(), nurse));
+				}
+			}
+			
+			//ni jedan sestra ne moze da radi za trazeni dan pa se daje prva slobodan sestra
+			NurseWIthFirstFreeDateInnerDTO retVal = nurseDates.get(0);
+			for(int i=0; i<nurseDates.size(); ++i) {
+				for(int j=i+1; j<nurseDates.size(); ++j) {
+					if(retVal.getFirstFreeDate().after(nurseDates.get(j).getFirstFreeDate())) {
+						retVal = nurseDates.get(j);
+					}
+				}
+			}
+			
+			return retVal;
+		} catch(Exception e) {
+			return null;
+		}
 	}
 }

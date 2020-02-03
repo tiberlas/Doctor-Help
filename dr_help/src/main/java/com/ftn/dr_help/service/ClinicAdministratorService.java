@@ -1,5 +1,6 @@
 package com.ftn.dr_help.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
+import com.ftn.dr_help.dto.ClinicAdminDTO;
 import com.ftn.dr_help.dto.ClinicAdminNameDTO;
 import com.ftn.dr_help.dto.ClinicAdminProfileDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
@@ -71,8 +73,25 @@ public class ClinicAdministratorService {
 		return clinicAdministratorRepository.findOneByEmail(mail);
 	}
 	
-	public List<ClinicAdministratorPOJO> findAll() {
-		return clinicAdministratorRepository.findAll();
+	public List<ClinicAdminDTO> findAll() {
+		
+		List<ClinicAdministratorPOJO> list = clinicAdministratorRepository.findAll();
+		List<ClinicAdminDTO> dtoList = new ArrayList<ClinicAdminDTO>();
+		for (ClinicAdministratorPOJO clinicAdministratorPOJO : list) {
+			ClinicAdminDTO dto = new ClinicAdminDTO();
+			dto.setBirthday(clinicAdministratorPOJO.getBirthday().getTime());
+			dto.setClinicName(clinicAdministratorPOJO.getClinic().getName());
+			dto.setEmail(clinicAdministratorPOJO.getEmail());
+			dto.setFirstName(clinicAdministratorPOJO.getFirstName());
+			dto.setId(clinicAdministratorPOJO.getId());
+			dto.setLastName(clinicAdministratorPOJO.getLastName());
+			
+			dtoList.add(dto);
+		}
+		
+		return dtoList;
+		
+		
 	}
 	
 	public Page<ClinicAdministratorPOJO> findAll(Pageable page) {

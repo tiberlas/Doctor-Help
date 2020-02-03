@@ -1,5 +1,6 @@
 package com.ftn.dr_help.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,11 @@ public interface NurseRepository extends JpaRepository<NursePOJO, Long>{
 		//sluzi za prikaz health-recorda na front endu
 	@Query(value="select distinct count(a.*) from appointments a where a.nurse_id = ?1 and a.patient_id = ?2 and a.status = 'DONE' and deleted = false", nativeQuery=true)
 	public Integer findDoneAppointmentForNurseCount(Long nurse_id, Long patient_id);
+
+	@Query(value = "select a.date from appointments a "+
+					"where (a.status = 'APPROVED' " + 
+					"or a.status = 'BLESSED') "+
+					"and a.deleted = FALSE "+
+					"and a.nurse_id = ?1 order by a.date", nativeQuery = true)
+	public List<Date> findAllReservedAppointments(Long nurseId);
 }

@@ -63,8 +63,6 @@ class AppointmentHealthRecord extends React.Component {
     render() {
         return (
             <Fragment>
-                  <div class="row d-flex justify-content-center">
-                    <div class='col-md-11'>
             {!this.state.updating ?  <ShowHealthRecord data = {this.props.data} 
                                         toggleUpdate = {this.toggleUpdate}
                                         health_record = {this.state.health_record}
@@ -72,8 +70,7 @@ class AppointmentHealthRecord extends React.Component {
                                         update = {this.update}
                                         toggleUpdate = {this.toggleUpdate}
                                         health_record={this.state.health_record} />}
-                        </div>
-                    </div>
+
             </Fragment>
         )
     }

@@ -12,6 +12,9 @@ public class ClinicDTO {
 	private String description;
 	private boolean haveInteracted = false;
 	private String rating;
+	
+	private Boolean hasAdmin;
+	
 	public ClinicDTO() {
 		
 	}
@@ -87,6 +90,14 @@ public class ClinicDTO {
 
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+
+	public Boolean getHasAdmin() {
+		return hasAdmin;
+	}
+
+	public void setHasAdmin(Boolean hasAdmin) {
+		this.hasAdmin = hasAdmin;
 	}
 
 }

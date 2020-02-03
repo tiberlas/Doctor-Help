@@ -25,7 +25,7 @@ class ModalMessage extends Component {
               show={this.props.show}
             >
               <Modal.Header closeButton onClick={this.props.onHide}>
-        <Modal.Title id="contained-modal-title-vcenter">{this.state.title}</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">{this.state.title}</Modal.Title>
               </Modal.Header>
                     <Modal.Body>
                             <p>{this.state.message}</p>
