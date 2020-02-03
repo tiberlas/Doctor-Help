@@ -111,32 +111,13 @@ public class PatientController {
 	
 	@PutMapping(value = "/confirmAccount", consumes = "application/json")
 	public ResponseEntity<PatientPOJO> confirmPatientAccount(@RequestBody PatientRequestDTO patient) {
-		//String email = currentUser.getEmail();
 		
-		PatientPOJO p = patientService.findPatientByEmail(patient.getEmail());
+		PatientPOJO p = patientService.confirmAccount(patient.getEmail());
 		
 		if(p == null) {
 			
 			return new ResponseEntity<PatientPOJO>(HttpStatus.NOT_FOUND);
 		}
-		
-		
-		HealthRecordPOJO healthRecord = new HealthRecordPOJO();
-		healthRecord.setDiopter(0); //generic health record
-		healthRecord.setHeight(0);
-		healthRecord.setWeight(0);
-		healthRecord.setBloodType(BloodTypeEnum.O_POSITIVE);
-		healthRecord.setAlergyList(new ArrayList<AllergyPOJO>());
-		
-		p.setActivated(true);
-		p.setHealthRecord(healthRecord);
-		
-		patientService.save(p);
-		healthRecord.setPatient(p);
-		healthRecordService.save(healthRecord);
-		
-		System.out.println("Health record created.");
-		
 		
 		return new ResponseEntity<PatientPOJO>(p, HttpStatus.OK);
 	}

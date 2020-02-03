@@ -469,6 +469,7 @@ class ClinicListing extends Component {
 								<TableCell colSpan="20">
 									Minimal rating: 
 									<Slider 
+										style = {{color : "#18BC9C"}}
 										defaultValue={(this.state.minRat === 'unfiltered') ? (1) : (this.state.minRat)}
 										aria-labelledby="discrete-slider"
 										valueLabelDisplay="auto"
@@ -480,6 +481,7 @@ class ClinicListing extends Component {
 									/>
 									Maximal rating: 
 									<Slider 
+										style = {{color : "#18BC9C"}}
 										defaultValue={(this.state.maxRat === 'unfiltered') ? (5) : (this.state.maxRat)}
 										aria-labelledby="discrete-slider"
 										valueLabelDisplay="auto"
@@ -513,7 +515,7 @@ class ClinicListing extends Component {
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="primary" onClick={() => this.switchDialog()}>Save filters</Button>
+						<Button variant="secondary" onClick={() => this.switchDialog()}>Close</Button>
 					</Modal.Footer>
 				</Modal>
 
@@ -531,9 +533,14 @@ class ClinicListing extends Component {
 								<TableCell width="75px"><p class='text-success'>Price</p></TableCell>
 								{/* <TableCell  hidden={this.state.cantReserve}> */}
 								<TableCell width="50px">
-									<Button onClick={() => this.switchDialog()}>
+									<button onClick={() => this.switchDialog()} 
+										// type="button"
+										// style = {{background : "#2C3E50"}}
+										type = "button"
+										class="btn btn-info"
+									>	
 										Filter
-									</Button>
+									</button>
 									{/* <p class='text-success'>Reserve</p> */}
 								</TableCell>
 							</TableRow>
@@ -542,8 +549,6 @@ class ClinicListing extends Component {
 				
 							
 							
-
-
 							{
 								size > 0 ? this.state.clinics.map (row => (
 									<TableRow key={row.id}>
@@ -560,4 +565,4 @@ class ClinicListing extends Component {
 
 }
 
-export default ClinicListing;
+export default  ClinicListing; 

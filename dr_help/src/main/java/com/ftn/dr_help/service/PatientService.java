@@ -20,6 +20,7 @@ import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
+import com.ftn.dr_help.model.enums.BloodTypeEnum;
 import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
@@ -737,4 +738,37 @@ public class PatientService {
 		retVal.setAllergyList(list);
 		return retVal;
 	}
+	
+	
+	public PatientPOJO confirmAccount(String email){
+		
+		PatientPOJO p = patientRepository.findOneByEmail(email);
+		
+		if(p == null) {
+			
+			return null;
+		}
+		
+		HealthRecordPOJO healthRecord = new HealthRecordPOJO();
+		healthRecord.setDiopter(0); //generic health record
+		healthRecord.setHeight(0);
+		healthRecord.setWeight(0);
+		healthRecord.setBloodType(BloodTypeEnum.O_POSITIVE);
+		healthRecord.setAlergyList(new ArrayList<AllergyPOJO>());
+		
+		p.setActivated(true);
+		p.setHealthRecord(healthRecord);
+		
+		patientRepository.save(p);
+		healthRecord.setPatient(p);
+		healthRecordRepository.save(healthRecord);
+		
+		System.out.println("Health record created.");
+		return p;
+	}
+	
+	
+	
+	
+	
 }

@@ -22,5 +22,10 @@ public interface ClinicRepository extends JpaRepository<ClinicPOJO, Long>{
 	
 	
 	
+	
+	//for centre admin CRUD
+	@Query(value="select count(ca.*) from clinic_administrator ca where clinic_id = ?1", nativeQuery=true)
+	public Integer findAdminOccurencesInClinic(Long clinic_id);
+	
 }
  
