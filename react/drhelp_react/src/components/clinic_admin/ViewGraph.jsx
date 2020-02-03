@@ -31,6 +31,8 @@ function ViewGraph(props) {
 
     return (
         <div
+        class="jumbotron"
+
       style={{
         width: '800px',
         height: '600px'
