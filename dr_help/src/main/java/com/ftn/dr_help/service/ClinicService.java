@@ -19,10 +19,12 @@ import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.DatePeriodDTO;
 import com.ftn.dr_help.dto.HeldAppointmentsChartDataDTO;
 import com.ftn.dr_help.dto.HeldAppointmentsRequestDTO;
+import com.ftn.dr_help.dto.DiagnosisDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.ClinicReviewPOJO;
+import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
@@ -79,6 +81,32 @@ public class ClinicService {
 		return new ClinicDTO(ret); 	
 	}
 	
+	public List<ClinicDTO> findAdminAll() {
+		List<ClinicPOJO> list =  repository.findAll();
+		
+		List<ClinicDTO> dDTO = new ArrayList<ClinicDTO>();
+		
+		for(ClinicPOJO pojo : list) {
+			ClinicDTO dto = new ClinicDTO(pojo);
+			Integer count = repository.findAdminOccurencesInClinic(pojo.getId());
+			if(count == 0) {
+				dto.setHasAdmin(false);
+			} else {
+				dto.setHasAdmin(true);
+			}
+			
+			dDTO.add(dto);
+		}
+		
+		return dDTO;
+	}
+	
+
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
+	
+	
 	public List<ClinicPOJO> findAll() {
 		return repository.findAll();
 	}
@@ -91,6 +119,8 @@ public class ClinicService {
 		
 		return repository.save(clinic);
 	}
+	
+	
 	
 	public ClinicDTO save(ClinicDTO clinic, String email) {
 		if(email == null) {
@@ -137,10 +167,7 @@ public class ClinicService {
 		String dateMinString = dateString + " 00:00:00";
 		String dateMaxString = dateString + " 23:59:59";
 		
-		
-//		System.out.println("Date min string: " + dateMinString);
-//		System.out.println("Date max string: " + dateMaxString);
-		
+
 		Date dateMin = sdf.parse (dateMinString);
 		Date dateMax = sdf.parse (dateMaxString);
 		
@@ -151,12 +178,6 @@ public class ClinicService {
 		calendarMax.setTime(dateMax);
 		
 		List<ClinicPOJO> retVal = new ArrayList<ClinicPOJO> ();
-// 		List<ClinicPOJO> clinics = repository.filterByAppointmentType (procedureType);
-//		if (clinics.size() == 0) {
-//			System.out.println("Nisam nasao appointment");
-//			//clinics = repository.fliterByProcedure();
-//			return inputList;
-//		}
 		System.out.println("Input list size: " + inputList.size());
  		for (ClinicPOJO c : inputList) {
 			List<DoctorPOJO> doctors;
@@ -420,4 +441,5 @@ public class ClinicService {
 		
 		return basicPoints;
 	}
+	
 }

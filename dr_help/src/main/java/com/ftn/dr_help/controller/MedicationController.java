@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,14 +61,15 @@ public class MedicationController {
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR') or hasAuthority('DOCTOR')")
 	public ResponseEntity<List<MedicationDTO>> getAllMedication() {
 
-		List<MedicationPOJO> meds = medicationService.findAll();
-
-		List<MedicationDTO> medsDTO = new ArrayList<>();
-		for (MedicationPOJO a : meds) {
-			medsDTO.add(new MedicationDTO(a));
-		}
+		List<MedicationDTO> meds = medicationService.findAll();
 		
-		return new ResponseEntity<>(medsDTO, HttpStatus.OK);
+		return new ResponseEntity<List<MedicationDTO>>(meds, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value="delete={id}")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
+	public void deleteMedication(@PathVariable("id") Long id) {
+		medicationService.delete(id);
 	}
 
 }

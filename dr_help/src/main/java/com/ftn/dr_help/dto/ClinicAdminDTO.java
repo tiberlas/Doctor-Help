@@ -13,6 +13,8 @@ public class ClinicAdminDTO {
 	
 	private Date birthday;
 	
+	private String clinicName;
+	
 	public ClinicAdminDTO() {
 		
 	}
@@ -26,16 +28,17 @@ public class ClinicAdminDTO {
 	}
 	
 	
-	public ClinicAdminDTO(String email, String firstName, String lastName, Long id) {
+	public ClinicAdminDTO(String email, String firstName, String lastName, Long id, Date birthday) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.id = id;
+		this.birthday = birthday;
 	}
 
 	public ClinicAdminDTO(ClinicAdministratorPOJO admin) {
-		this(admin.getEmail(), admin.getFirstName(), admin.getLastName(), admin.getClinic().getId());
+		this(admin.getEmail(), admin.getFirstName(), admin.getLastName(), admin.getClinic().getId(), admin.getBirthday().getTime());
 	}
 
 	public String getEmail() {
@@ -76,5 +79,13 @@ public class ClinicAdminDTO {
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	public String getClinicName() {
+		return clinicName;
+	}
+
+	public void setClinicName(String clinicName) {
+		this.clinicName = clinicName;
 	}
 }

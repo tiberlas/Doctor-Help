@@ -9,8 +9,7 @@ import {Link} from 'react-router-dom';
 import { Dropdown, FormControl } from 'react-bootstrap';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/DropdownToggle';
-import DropdownItem from 'react-bootstrap/DropdownItem';
-import { MenuItem, Menu } from '@material-ui/core';
+import { MenuItem} from '@material-ui/core';
 
 
 class ClinicListing extends Component {
@@ -97,8 +96,6 @@ class ClinicListing extends Component {
 	}
 
 	fetchData (dil, dat) {
-		let text = this.state.activeFilter;
-		let date = this.state.selectedDate;
 		let requestPartOne = 'http://localhost:8080/api/clinics/listing/';
 		let requestPartTwo = dil + '/' + dat;
 		let wholeRequest = requestPartOne + requestPartTwo;
@@ -108,7 +105,6 @@ class ClinicListing extends Component {
 			this.setState ({
 				clinics: response.data.clinicList, 
 				appointmentTypes: response.data.procedureType, 
-				// activeFilter: text
 			})
 		})
 	}

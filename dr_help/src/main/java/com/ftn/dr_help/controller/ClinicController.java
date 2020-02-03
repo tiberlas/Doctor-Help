@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,6 +75,15 @@ public class ClinicController {
 
 		clinic = clinicService.save(clinic);
 		return new ResponseEntity<>(new ClinicDTO(clinic) , HttpStatus.CREATED);
+	}
+	
+	@GetMapping(value = "/admin-all")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
+	public ResponseEntity<List<ClinicDTO>> getAllAdminClinics() {
+
+		List<ClinicDTO> clinics = clinicService.findAdminAll();
+
+		return new ResponseEntity<List<ClinicDTO>>(clinics, HttpStatus.OK);
 	}
 
 	
@@ -173,10 +183,7 @@ public class ClinicController {
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<String> addReview (@PathVariable("patient") Long patientId, 
 				@PathVariable("clinic") Long clinicId, @PathVariable("rating") Integer rating) {
-		
-//		System.out.println("Patient id: " + patientId);
-//		System.out.println("Clinic id: " + clinicId);
-//		System.out.println("Rating: " + rating);
+
 		clinicService.addReview(patientId, clinicId, rating);
 		
 		return new ResponseEntity<> ("All is swell, gentlmen", HttpStatus.OK); 
@@ -188,8 +195,7 @@ public class ClinicController {
 				@PathVariable("clinic") Long clinicId) {
 		
 		ClinicRatingDTO retVal = new ClinicRatingDTO();
-//		System.out.println("Patient id: " + patientId);
-//		System.out.println("Clinic id: " + clinicId);
+
 		List<AppointmentPOJO> appointments = appointmentRepository.getPatientsPastAppointmentsForClinic(patientId, clinicId);
 		if (appointments.size() > 0) {
 			retVal.setHaveInteracted(true);;
@@ -227,4 +233,11 @@ public class ClinicController {
 			return new ResponseEntity<>(finded, HttpStatus.OK);
 		}
 	}
+	@DeleteMapping(value="delete={id}")
+	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
+	public void deleteClinic(@PathVariable("id") Long id) {
+		clinicService.delete(id);
+	}
+	
+
 }

@@ -14,20 +14,22 @@ class NewMedicationForm extends React.Component {
             errorMedicationName: true,
             errorMedicationResponse: false,
             errorDescription: true,
-            success: false
+            success: false,
+            loading: false
         }
       
     }
 
 
     validate = () => {
-        this.setState({error: false, errorMedicationResponse: false, errorDescription: false, errorMedicationName: false, success: false})
+        this.setState({error: false, errorMedicationResponse: false, errorDescription: false, errorMedicationName: false, success: false}, 
+           () => this.props.disabledOff(false))
         if(!this.state.medicationName.trim() || this.state.medicationName.length < 3) {
-            this.setState({error: true, errorMedicationName: true})
+            this.setState({error: true, errorMedicationName: true}, ()=>{this.props.disabledOn()})
         }
 
         if(!this.state.medicationDescription.trim() || this.state.medicationDescription.length < 3) {
-            this.setState({error: true, errorDescription: true})
+            this.setState({error: true, errorDescription: true}, ()=>{this.props.disabledOn()})
         }
 
     }
@@ -38,12 +40,18 @@ class NewMedicationForm extends React.Component {
         }, () => {this.validate()})
     }
 
-    handleSubmit = (event) => {
-        event.preventDefault()
+    handleSubmit = () => {
 
         if(this.state.error)
             return
 
+        this.setState({loading: true}, () => {
+            this.submitMedication()
+        })
+       
+    }
+
+    submitMedication = () => {
         axios.post('http://localhost:8080/api/medication/new', { 
 
             name: this.state.medicationName,
@@ -51,13 +59,14 @@ class NewMedicationForm extends React.Component {
         })
             .then(res => {
                 // alert("Successfully added new medication.");
-                this.setState({success: true, error: false, errorMedicationResponse: false})
+                this.setState({success: true, error: false, errorMedicationResponse: false, loading: false}, ()=>{this.props.disabledOff(true)})
             }).catch(error => {
                 this.setState({
                     errorMedicationResponse: true,
                     success: false,
-                    error: true
-                })
+                    error: true,
+                    loading: false
+                }, ()=>{this.props.disabledOn()})
             })
     }
 
@@ -65,8 +74,7 @@ class NewMedicationForm extends React.Component {
         return (
             <div> 
             <div class="row d-flex justify-content-center">
-                <div class='col-md-3'>
-                    <h1>>New medication </h1>
+                <div class='col-md-11'>
                    
                     <Form onSubmit = {this.handleSubmit}>
                     <div className={`form-group ${(this.state.errorMedicationName || this.state.errorMedicationResponse)? 'has-danger': ''}`}>
@@ -81,13 +89,12 @@ class NewMedicationForm extends React.Component {
                     <Form.Group controlId="formMedicationDescription">
                         <Form.Control type="text" name = "medicationDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': 'is-valid'}`}/>
                         {this.state.success && 
-                             <div class="valid-feedback"> Ultra success, added new medication! </div>
+                             <div class="valid-feedback"> Ultra success, added new medication! </div>}
                              
-                            }
+                            {this.state.loading && <div> <p class="text-info">Loading... </p> </div>} 
                     </Form.Group>
                     </div>
 
-                    <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
 
                     </Form>
                 </div>

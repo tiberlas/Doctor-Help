@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 
 
@@ -56,6 +57,10 @@ public class UserRequestPOJO implements Serializable {
 	
 	@Column (name = "insuranceNumber", nullable = false)
 	private Long insuranceNumber;
+	
+	@Version
+	@Column(name="version", unique=false, nullable=false)
+	private Long version;
 	
 	public UserRequestPOJO() {
 		

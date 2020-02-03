@@ -15,19 +15,22 @@ class NewDiagnosisForm extends React.Component {
             errorDiagnosisName: true,
             errorDiagnosisResponse: false,
             errorDescription: true,
-            success: false
+            success: false,
+            loading: false
         }
       
     }
 
     validate = () => {
-        this.setState({error: false, errorDiagnosisName: false, errorDiagnosisResponse: false, errorDescription: false, success: false})
+        this.setState({error: false, errorDiagnosisName: false, errorDiagnosisResponse: false, errorDescription: false, success: false}, ()=>{
+            this.props.disabledOff(false)
+        })
         if(!this.state.diagnosisName.trim() || this.state.diagnosisName.length < 3) {
-            this.setState({error: true, errorDiagnosisName: true})
+            this.setState({error: true, errorDiagnosisName: true}, ()=>{this.props.disabledOn()})
         }
 
         if(!this.state.diagnosisDescription.trim() || this.state.diagnosisDescription.length < 3) {
-            this.setState({error: true, errorDescription: true})
+            this.setState({error: true, errorDescription: true}, ()=>{this.props.disabledOn()})
         }
 
     }
@@ -38,31 +41,37 @@ class NewDiagnosisForm extends React.Component {
         }, ()=> {this.validate()})
     }
 
-    handleSubmit = (event) => {
-        event.preventDefault()
-
+    handleSubmit = () => {
         if(this.state.error) {
             return 
         }
 
+        this.setState({loading: true}, () => {
+            this.submitDiagnosis()
+        })
+        
+    }
+
+    submitDiagnosis = () => {
         axios.post('http://localhost:8080/api/diagnoses/new', { 
 
             name: this.state.diagnosisName,
             description: this.state.diagnosisDescription
         })
             .then(res => {
-                // alert("Successfully added new diagnosis.");
                 this.setState({
                     success: true,
                     errorDiagnosisResponse: false,
-                    error: false
-                })
+                    error: false,
+                    loading: false
+                }, ()=>{this.props.disabledOff(true)})
             }).catch(error => {
                 this.setState({
                     errorDiagnosisResponse: true,
                     success: false,
-                    error: true
-                })
+                    error: true,
+                    loading: false
+                }, ()=>{this.props.disabledOn()})
             })
     }
 
@@ -70,8 +79,8 @@ class NewDiagnosisForm extends React.Component {
         return (
             <div> 
             <div class="row d-flex justify-content-center">
-                <div class='col-md-3'>
-                <h1>>New diagnosis </h1>
+                <div class='col-md-11'>
+                {/* <h1>>New diagnosis </h1> */}
                 <Form onSubmit = {this.handleSubmit}>
                 <div className={`form-group ${(this.state.errorDiagnosisName || this.state.errorDiagnosisResponse)? 'has-danger': ''}`}>
                 <Form.Group controlId="formDiagnosisName">
@@ -85,12 +94,12 @@ class NewDiagnosisForm extends React.Component {
                     <Form.Control type="text" name = "diagnosisDescription" placeholder="Description" onChange = {this.handleChange} className={`form-control ${(this.state.errorDescription) ? 'is-invalid': 'is-valid'}`}/>
                     {this.state.success && 
                              <div class="valid-feedback"> Good success, added new diagnosis! </div>
-                             
                             }
+                     {this.state.loading && <div> <p class="text-info">Loading... </p> </div>} 
                 </Form.Group>
                 </div>
 
-                <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/>
+                {/* <input type='submit' value='Create' className={`btn btn-success ${this.state.error ? 'disabled': ''}`}/> */}
                 </Form>
                </div>
             </div>

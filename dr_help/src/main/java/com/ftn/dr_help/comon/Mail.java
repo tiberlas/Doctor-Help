@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.model.enums.RoleEnum;
@@ -54,7 +55,7 @@ public class Mail {
     }
 	
 	
-	
+	@Async
 	public void sendAcceptEmail(String sendTo, String firstName, String lastName) throws MessagingException, IOException  {
 		
 		MimeMessage msg = javaMailSender.createMimeMessage();
@@ -70,7 +71,7 @@ public class Mail {
        javaMailSender.send(msg);
 	}
 
-
+	@Async
 	public void sendDeclineEmail(String sendTo, String description, String firstName, String lastName) {
 
 	    SimpleMailMessage msg = new SimpleMailMessage();
@@ -115,6 +116,26 @@ public class Mail {
 	    javaMailSender.send(msg);
 	}
 	
+
+	@Async
+	public void sendDeclineLeaveRequestEmail(String sendTo, String description, String firstName, String lastName, String leaveType, String fromDate, String toDate) {
+
+	    SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(sendTo);
+	
+	    msg.setSubject("DrHelp leave request");
+	    String text = "Dear " + firstName + " " + lastName + "," + '\n';
+	    text += "Your " + leaveType + " leave request from " + fromDate + " to " +toDate + " has been declined with an administrator message attached:";
+	    text += "\n\n\n" + description;
+	    
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    msg.setText(text);
+	    javaMailSender.send(msg);
+	    
+	}
+	    
+	    
+
 	public void sendAppointmentBlessedEmail(AppointmentPOJO appointment) {
 		
 		SimpleMailMessage msg = new SimpleMailMessage();
@@ -134,6 +155,25 @@ public class Mail {
 	    msg.setText(text);
 	
 	    javaMailSender.send(msg);
+	    System.out.println("Sent leave request declination mail to nurse.");
+	}
+	
+	
+	@Async
+	public void sendAcceptLeaveRequestEmail(String sendTo, String firstName, String lastName, String leaveType, String fromDate, String toDate) {
+
+	    SimpleMailMessage msg = new SimpleMailMessage();
+	    msg.setTo(sendTo);
+	
+	    msg.setSubject("DrHelp leave request");
+	    String text = "Dear " + firstName + " " + lastName + "," + '\n';
+	    text += "Your " + leaveType + " leave request from " + fromDate + " to " +toDate + " has been accepted!";
+	    text += "\nWe wish you the best during your absence, you deserve it.";
+	    msg.setText(text);
+	    
+	    text += "\n\n\n" + "Forever helping, drHelp.";
+	    javaMailSender.send(msg);
+
 	}
 	
 	public void sendAppointmentApprovedToPatientEmail(AppointmentPOJO appointment) {
@@ -182,11 +222,13 @@ public class Mail {
 	    		" you have an appointemnt on "+
 	    		dateConvertor.dateForFrontEndString(appointment.getDate())+", in room "+
 			    appointment.getRoom().getName()+" number "+appointment.getRoom().getNumber();
-	    
+
 	    text += "\n\n\n" + "Forever helping, drHelp.";
 	    msg.setText(text);
 	
 	    javaMailSender.send(msg);
+
+	    System.out.println("Sent leave request declination mail to nurse.");
 	}
 	
 	public void sendOperationApprovedToDoctorsEmail(DoctorPOJO doctor, OperationPOJO operation) {
@@ -194,11 +236,16 @@ public class Mail {
 		SimpleMailMessage msg = new SimpleMailMessage();
 	    msg.setTo(doctor.getEmail());
 	
-	    msg.setSubject("DrHelp operation scheduled");
-	    String text = "Dear " + doctor.getFirstName() +" "+doctor.getLastName()+ 
+	msg.setSubject("DrHelp operation scheduled");
+	  String text = "Dear " + doctor.getFirstName() +" "+doctor.getLastName()+ 
 	    		" you have an operation on "+
-	    		dateConvertor.dateForFrontEndString(operation.getDate())+", in room "+
-			    operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+	    		dateConvertor.dateForFrontEndString(operation.getDate())+", in";
+	  	if(operation.getRoom() != null) {
+	    	text += " room " + operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+	    } else {
+	    	text += "undefined room";
+	    }
+	  
 	    
 	    text += "\n\n\n" + "Forever helping, drHelp.";
 	    msg.setText(text);
@@ -210,12 +257,17 @@ public class Mail {
 			
 			SimpleMailMessage msg = new SimpleMailMessage();
 		    msg.setTo(operation.getPatient().getEmail());
-		
-		    msg.setSubject("DrHelp operation scheduled");
 		    String text = "Dear " + operation.getPatient().getFirstName() +" "+operation.getPatient().getLastName()+ 
-		    		" your operation for " +operation.getOperationType().getName()+" has been schedule for "+
-		    		dateConvertor.dateForFrontEndString(operation.getDate())+", in room "+
-		    		operation.getRoom().getName()+" number "+operation.getRoom().getNumber()+
+		    		" your operation for " +operation.getOperationType().getName()+" has been schedule for ";
+		    
+		    if(operation.getRoom() != null) {
+		    	text +=  "in room "+
+			    		operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+		    } else {
+		    	text += "in undefined room";
+		    }
+		    msg.setSubject("DrHelp operation scheduled");
+		    text += dateConvertor.dateForFrontEndString(operation.getDate())+"," +
 		    		". Operation will be executed by dr. "+operation.getFirstDoctor().getFirstName()+" "+operation.getFirstDoctor().getLastName()+
 		    		", dr. "+operation.getSecondDoctor().getFirstName()+" "+operation.getSecondDoctor().getLastName()+
 		    		" and dr. "+operation.getThirdDoctor().getFirstName()+" "+operation.getThirdDoctor().getLastName()+".";

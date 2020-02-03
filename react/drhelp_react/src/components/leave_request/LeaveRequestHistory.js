@@ -51,9 +51,10 @@ class LeaveRequestHistory extends React.Component {
             <Fragment> 
                 <h3> Request history </h3>
                 <br/>
-                {this.state.requests.length > 0 ? <Table class="table table-hover ">
-                    <TableHead class="table-active">
-                        <TableRow class="table-active">
+                {this.state.requests.length > 0 ? 
+                <Table class="table table-hover ">
+                    <TableHead>
+                        <TableRow>
                             <TableCell class='text-success'>Start</TableCell>
                             <TableCell class='text-success'>End</TableCell>
                             <TableCell class='text-success'>Type</TableCell>

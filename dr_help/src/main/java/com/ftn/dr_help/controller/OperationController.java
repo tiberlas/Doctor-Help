@@ -21,6 +21,7 @@ import com.ftn.dr_help.dto.OperationBlessingInnerDTO;
 import com.ftn.dr_help.dto.OperationDoctorRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestDTO;
 import com.ftn.dr_help.dto.OperationRequestInfoDTO;
+import com.ftn.dr_help.dto.operations.DoctorOperationDTO;
 import com.ftn.dr_help.dto.ThreeDoctorsIdDTO;
 import com.ftn.dr_help.service.OperationService;
 
@@ -86,6 +87,15 @@ public class OperationController {
 		}
 	}
 	
+
+	@GetMapping(value="/all-approved/doctor={id}")
+	@PreAuthorize("hasAuthority('DOCTOR')")
+	public ResponseEntity<List<DoctorOperationDTO>> getDoctorApprovedOperations(@PathVariable("id") Long doctor_id) {
+		List<DoctorOperationDTO> list = operationServie.findDoctorOperations(doctor_id);
+		
+		return new ResponseEntity<List<DoctorOperationDTO>>(list, HttpStatus.OK);
+	}
+
 	@PostMapping(value = "/schedules/bless", produces = "application/json", consumes = "application/json")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> blessOperation(@RequestBody OperationBlessingDTO request) {

@@ -7,6 +7,7 @@ public class DiagnosisDTO {
 	Long id;
 	private String name;
 	private String description;
+	private Boolean reserved;
 	
 	
 	public DiagnosisDTO() {
@@ -55,5 +56,13 @@ public class DiagnosisDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Boolean getReserved() {
+		return reserved;
+	}
+
+	public void setReserved(Boolean reserved) {
+		this.reserved = reserved;
 	}
 }

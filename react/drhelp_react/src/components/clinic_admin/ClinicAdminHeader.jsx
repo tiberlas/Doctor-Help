@@ -11,7 +11,7 @@ import cross from '../../images/reed_cross.gif';
 class ClinicAdminHeader extends Component {
     static contextType = ClinicAdminContext
  
-    state= {
+    state = {
         dropdownAdd: false
     }
 
@@ -96,6 +96,10 @@ class ClinicAdminHeader extends Component {
                     
                     <LinkContainer exact to='/clinic-administrator/requests/operations'>
                     <DropdownItem >Operations</DropdownItem>
+                    </LinkContainer>
+
+                    <LinkContainer exact to='/clinic-administrator/requests/leaves'>
+                    <DropdownItem >Leaves</DropdownItem>
                     </LinkContainer>
 
                     </DropdownMenu>

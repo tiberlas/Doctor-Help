@@ -29,6 +29,7 @@ import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.DoctorRequestedAppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ExaminationReportPOJO;
 import com.ftn.dr_help.model.pojo.MedicationPOJO;
+import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
@@ -325,6 +326,16 @@ public class AppointmentService {
 		dto.setDoctorFirstName(doctor.getFirstName());
 		dto.setDoctorLastName(doctor.getLastName());
 		
+		if(appointment.getStatus().equals(AppointmentStateEnum.APPROVED) 
+				|| appointment.getStatus().equals(AppointmentStateEnum.AVAILABLE)
+				|| appointment.getStatus().equals(AppointmentStateEnum.DONE)) {
+			NursePOJO nurse = appointment.getNurse();
+			dto.setNurseFirstName(nurse.getFirstName());
+			dto.setNurseLastName(nurse.getLastName());
+			System.out.println("+++++++++++++++++NURSE JE: " + nurse.getFirstName());
+		}
+		
+		
 		PatientPOJO patient = appointment.getPatient();
 		if(patient == null) {
 			dto.setPatientFirstName("-");
@@ -364,8 +375,11 @@ public class AppointmentService {
 		dto.setStatus(String.valueOf(appointment.getStatus()));
 		
 		dto.setIsOperation(pt.isOperation());
-		dto.setRoomName(appointment.getRoom().getName());
-		dto.setRoomNumber(String.valueOf(appointment.getRoom().getNumber()));
+		
+		if(!appointment.getStatus().equals(AppointmentStateEnum.DOCTOR_REQUESTED_APPOINTMENT)) {
+			dto.setRoomName(appointment.getRoom().getName());
+			dto.setRoomNumber(String.valueOf(appointment.getRoom().getNumber()));
+		}
 		
 		dto.setAppointment_id(appointment.getId());
 		

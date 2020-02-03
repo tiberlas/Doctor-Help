@@ -1,17 +1,11 @@
-import React, { Component, useState } from 'react';
-import Button from 'react-bootstrap/Button'
+import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import NavLink from 'react-bootstrap/NavLink'
 import Navbar from 'react-bootstrap/Navbar'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 import {Link} from 'react-router-dom'
 import {CentreAdminContext} from '../../context/CentreAdminContextProvider';
 import {DropdownItem} from  'react-bootstrap'
-import {DropdownToggle, DropdownMenu, NavbarToggler, Collapse,
-  UncontrolledDropdown, NavItem} from 'reactstrap'
+import {NavbarToggler, Collapse} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
 
 
@@ -19,11 +13,21 @@ class CentreAdminHeader extends Component {
   static contextType = CentreAdminContext;
     
   state = {
-    dropdownAdd: false
+    dropdownAdd: false,
+    isOpenManage: false
   }
 
   toogle = () => {
     this.setState({dropdownAdd:!this.state.dropdownAdd});
+  }
+
+  
+  handleOpenManage = () => {
+    this.setState({ isOpenManage: true })
+  }
+
+  handleCloseManage = () => {
+     this.setState({ isOpenManage: false })
   }
 
     render() { 
@@ -31,6 +35,7 @@ class CentreAdminHeader extends Component {
       
         return ( 
             <Navbar bg="light" expand="lg" id="navbarColor01">
+              {/* <div class="navbar-inner" style={{background: "transparent"}}> */}
             <Navbar.Brand >
               <Nav> 
                   <Nav.Link>
@@ -41,43 +46,39 @@ class CentreAdminHeader extends Component {
                 </Nav>
             </Navbar.Brand>
             <NavbarToggler aria-controls="basic-navbar-nav"/>
-            <Collapse id="basic-navbar-nav" isOpen={this.state.dropdownAdd} navbar className="collapse">
-            <Nav className="mr-auto">
-              
-                <NavbarToggler onClick={this.toggle}/>
-                  <Collapse isOpen={this.state.dropdownAdd} navbar className="collapse">
-                      <Nav className="mr-auto" navbar pullRight>
-                        <UncontrolledDropdown nav inNavbar>
-                          <DropdownToggle nav caret>
-                            Add
-                          </DropdownToggle>
-                          <DropdownMenu className='dropdown-menu'>
-                          <LinkContainer exact to="/clinic/add">
-                            <DropdownItem >New clinic</DropdownItem>
+            <Collapse id="basic-navbar-nav" isOpenManage={this.state.dropdownAdd} navbar className="collapse">
+            
+            <Nav>
+              <NavDropdown
+                onMouseEnter = { this.handleOpenManage }
+                onMouseLeave = { this.handleCloseManage }
+                show={ this.state.isOpenManage }
+                noCaret
+                id="language-switcher-container"
+                title="Dashboard"
+              >
+                <LinkContainer exact to="/admin/dashboard/d-m">
+                            <DropdownItem >Diagnoses and medication</DropdownItem>
                           </LinkContainer>
 
-                          <LinkContainer exact to="/admin/add">
-                            <DropdownItem >New administrator</DropdownItem>
+                          <LinkContainer exact to="/admin/dashboard/c">
+                            <DropdownItem >Clinics</DropdownItem>
                           </LinkContainer>
 
-                          <LinkContainer exact to="/medication/new">
-                            <DropdownItem >New medication</DropdownItem>
+                          <LinkContainer exact to="/admin/dashboard/a">
+                            <DropdownItem >Administrators</DropdownItem>
                           </LinkContainer>
-
-                          <LinkContainer exact to="/diagnosis/new">
-                            <DropdownItem >New diagnosis</DropdownItem>
-                          </LinkContainer>
-
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </Nav>
-            </Collapse>
                 
+              </NavDropdown>
+            </Nav>
+
+            
+            <Nav className="mr-auto">
                 <Nav.Link>
                   <Link exact to = '/admin/requests' class="nav-link"> Patient requests </Link>
                 </Nav.Link>
-
             </Nav>
+
             <Nav className="justify-content-end" >
 
                 <Nav.Link>
@@ -91,6 +92,7 @@ class CentreAdminHeader extends Component {
                 </Nav.Link>
             </Nav>
         </Collapse>
+        {/* </div> */}
         </Navbar>
          );
     }
