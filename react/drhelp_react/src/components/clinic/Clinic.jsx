@@ -5,6 +5,8 @@ import StarRatingComponent from 'react-star-rating-component';
 import { Button } from 'reactstrap';
 import { UserContext } from '../../context/UserContextProvider'
 import Axios from 'axios';
+import { useHistory, Redirect } from "react-router-dom";
+
 
 class Clinic extends Component {
 
@@ -18,7 +20,8 @@ class Clinic extends Component {
         description: "",
         haveInteracted : false, 
         myRating : 0, 
-        rating : "/"
+        rating : "/", 
+        redirectToPredef : false
      }
 
      componentDidMount() {
@@ -70,63 +73,94 @@ class Clinic extends Component {
         })
     }
 
+    goToPredef() {
+        //let history = useHistory();
+        this.setState ({
+            redirectToPredef : true
+        })
+        // alert ("Going to predef")
+    }
+
     render() {
         const divMapStyle = {
             'height': '400px',
             'margin': 'auto'
         }; 
-        return ( 
-            <div class="row d-flex justify-content-center">
-                <div class='col-md-10'>
-                    <br/>
-                    <br/>
 
-                    <div class="card">
+        
+            return ( 
+                <div class="row d-flex justify-content-center">
+                    <div class='col-md-10'>
 
-                        <div class="card-body">
-                            <h4 class="card-title">{this.state.name}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">location for healing: {this.state.address}, {this.state.city}, {this.state.state}</h6>
-                            <p class="card-text">{this.state.description}</p>
-                            <p class="card-text">Average rating: {this.state.rating}</p>
-                            
-                            <div hidden={!this.state.haveInteracted}>
-                                <StarRatingComponent starCount={5} value={this.state.myRating} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
+                        {
+                            this.state.redirectToPredef &&
+                            <Redirect to={'/patient/predefined/' + this.state.name}/>
+                        }
+
+                        <br/>
+                        <br/>
+
+                        <div class="card">
+
+                            <div class="card-body">
+                                <h4 class="card-title">{this.state.name}</h4>
+                                <h6 class="card-subtitle mb-2 text-muted">location for healing: {this.state.address}, {this.state.city}, {this.state.state}</h6>
+                                <p class="card-text">{this.state.description}</p>
+                                <p class="card-text">Average rating: {(this.state.rating === null) ? ("/") : (this.state.rating)}</p>
+                                
+                                <div hidden={!this.state.haveInteracted}>
+                                    <StarRatingComponent starCount={5} value={this.state.myRating} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
+                                </div>
+
+                                <div>
+                                    <div hidden={!this.state.haveInteracted}>
+                                        <Button  onClick={() => this.handleClear()} disabled={false}>
+                                            Clear rating
+                                        </Button>
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <Button onClick={() => this.goToPredef()}>
+                                            Predefined appointments
+                                        </Button>
+                                    </div>
+                                    <br />
+                                </div>
+
+                                <div style={divMapStyle}>
+                                    <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
+                                </div>
+
+                                
+                                
+                                {/* <div hidden={!this.state.haveInteracted}>
+                                <div>
+                                    <StarRatingComponent starCount={5} value={this.state.myRating} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
+                                </div>
+
+                                {/* <div hidden={!this.state.haveInteracted}> */}
+                                {/* <div>
+                                    <Button  onClick={() => this.handleClear.bind(this)} disabled={false}>
+                                        Clear rating
+                                    </Button>
+                                </div>
+                                <a class="btn btn-primary" onClick={() => this.handleClick()} disabled={false}>
+                                    Klik
+                                </a> */} 
+
+
+
                             </div>
-
-                            <div hidden={!this.state.haveInteracted}>
-                                <Button  onClick={() => this.handleClear()} disabled={false}>
-                                    Clear rating
-                                </Button>
-                            </div>
-
-
-                            <div style={divMapStyle}>
-                                <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
-                            </div>
-
-                            
-                            {/* <div hidden={!this.state.haveInteracted}>
-                            <div>
-                                <StarRatingComponent starCount={5} value={this.state.myRating} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
-                            </div>
-
-                            {/* <div hidden={!this.state.haveInteracted}> */}
-                            {/* <div>
-                                <Button  onClick={() => this.handleClear.bind(this)} disabled={false}>
-                                    Clear rating
-                                </Button>
-                            </div>
-                            <a class="btn btn-primary" onClick={() => this.handleClick()} disabled={false}>
-                                Klik
-                            </a> */} 
-
-
-
                         </div>
                     </div>
                 </div>
-            </div>
-         );
+            );
+            return (
+                <div>
+                    <p>Evo mene, eto vas, rat hukovima!</p>
+                </div>
+            );
+        
     }
 }
  

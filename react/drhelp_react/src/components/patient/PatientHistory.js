@@ -55,7 +55,8 @@ class PatientHistory extends Component {
 		waiting : false, 
 		reservedAppointment : [], 
 		dateOptions : [], 
-		showFilters : false
+		showFilters : false, 
+
 	}
 
     static contextType = UserContext
@@ -271,7 +272,15 @@ class PatientHistory extends Component {
 			);
 		}
 		else if (this.props.filter === 'PREDEFINED') {
-			axios.get('http://localhost:8080/api/appointments/predefined/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter)
+			let tempClinicFilter = this.state.activeClinicFilter;
+			if (window.location.href.split('/').length > 5) {
+				// alert ("Clinic id is " + window.location.href.split('/')[5])
+				this.setState ({
+					activeClinicFilter : window.location.href.split('/')[5]
+				})
+				tempClinicFilter = window.location.href.split('/')[5];
+			}
+			axios.get('http://localhost:8080/api/appointments/predefined/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + tempClinicFilter + '/date=' + this.state.activeDateFilter)
 			.then (response => {
 				this.setState ({
 					reports : response.data.appointmentList,
@@ -824,59 +833,7 @@ class PatientHistory extends Component {
 							</Modal.Footer>
 						</Modal>
 
-						{/* <div hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}> */}
-						{/* <div>
-							<Table>
-								<TableRow>
-									<TableCell>
-										<FormControl class='text-success'>
-											<Select 
-												style="width:500px"
-												styles={crniFont}
-												onChange = {this.handleDateFilter.bind(this)}
-												options={this.state.dates}
-											></Select>
-											<FormHelperText class='text-success'>Date filter</FormHelperText>
-										</FormControl>
-									</TableCell>
-									<TableCell>
-										<FormControl class='text-success'>
-											<Select 
-												style="width:500px"
-												styles={crniFont}
-												onChange = {this.handleDoctorFilter.bind(this)}
-												options={this.state.doctors}
-											></Select>
-											<FormHelperText class='text-success'>Doctor filter</FormHelperText>
-										</FormControl>
-									</TableCell>
-									<TableCell>
-										<FormControl class='text-success'>
-											<Select 
-												style="width:500px"
-												styles={crniFont}
-												onChange = {this.handleClinicFilter.bind(this)}
-												options={this.state.clinics}
-											></Select>
-											<FormHelperText class='text-success'>Clinic filter</FormHelperText>
-										</FormControl>
-									</TableCell>
-									<TableCell>
-										<FormControl class='text-success'>
-											<Select 
-												style="width:500px"
-												styles={crniFont}
-												onChange = {this.handleTypeFilter.bind(this)}
-												// options={this.state.types.map(opt => ({ label: opt, value: opt }))}
-												options={this.state.types}
-											></Select>
-											<FormHelperText class='text-success'>Appointment type filter</FormHelperText>
-										</FormControl>
-									</TableCell>
-								</TableRow>
-							</Table>
-						</div> */}
-
+						
 						<Table>
 							<TableHead>
 								<TableRow>

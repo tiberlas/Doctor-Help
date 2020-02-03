@@ -98,12 +98,12 @@ public class AppointmentController {
 	@PostMapping (value = "add", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<Boolean> add (@RequestBody AddAppointmentDTO dto) throws NumberFormatException, ParseException {
-		try {
-			TimeUnit.SECONDS.sleep(10);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			TimeUnit.SECONDS.sleep(10);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		String dateString = dto.getDate() + " " + dto.getTime() + ":00";
 
 		Boolean retVal = appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));
@@ -266,7 +266,7 @@ public class AppointmentController {
 	@PostMapping (value = "/predefined/reserve")
 	@PreAuthorize("hasAuthority('PATIENT')")	
 	public ResponseEntity<Boolean> reservePredefined (@RequestBody AppointmentDeleteDTO input) {
-		System.out.println("Trying to book appointment: " + input.getAppointmentId() + "; for patient with id: " + input.getPatientId());
+//		System.out.println("Trying to book appointment: " + input.getAppointmentId() + "; for patient with id: " + input.getPatientId());
 		Boolean retVal = appointmentService.reserveAppointment(input.getAppointmentId(), input.getPatientId());
 		
 		

@@ -843,13 +843,13 @@ public class AppointmentService {
 	public Boolean reserveAppointment (Long appointmentId, Long patientId) {
 		AppointmentPOJO appointment = appointmentRepository.getOne(appointmentId);
 
-		try {
-			TimeUnit.SECONDS.sleep(10);
-			System.out.println("OI, I just woke up, egg");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			return false;
-		}
+//		try {
+//			TimeUnit.SECONDS.sleep(0);
+//			System.out.println("OI, I just woke up, egg");
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
 		if (appointment.getStatus() == AppointmentStateEnum.AVAILABLE) {
 			appointmentRepository.reserveAppointment(appointmentId, patientId);
 			return true;
