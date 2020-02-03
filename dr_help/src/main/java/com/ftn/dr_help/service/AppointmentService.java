@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -722,10 +721,34 @@ public class AppointmentService {
 		AppointmentListDTO retVal = new AppointmentListDTO ();
 		List<AppointmentPOJO> appointmentList = new ArrayList<AppointmentPOJO>();
 		
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+
+		System.out.println("");
+		System.out.println("");
 		appointmentList = appointmentRepository.getAllPredefinedAppointments();
 		for (AppointmentPOJO app : appointmentList) {
-			retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+			if(app.getDate().get(Calendar.YEAR) < now.get(Calendar.YEAR)){
+				
+	        }else if (app.getDate().get(Calendar.YEAR) > now.get(Calendar.YEAR)){
+	        	retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+	        }else{
+	            if(app.getDate().get(Calendar.MONTH) > now.get(Calendar.MONTH)){
+	            	retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+	            }else if(app.getDate().get(Calendar.MONTH) < now.get(Calendar.MONTH)){
+	            	
+	            }else{
+	                if(app.getDate().get(Calendar.DAY_OF_MONTH) < now.get(Calendar.DAY_OF_MONTH)){
+	                
+	                }
+	                else {
+	                	retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+	                }
+	            }
+	        }
 		}
+		System.out.println("");
+		System.out.println("");
 		
 		List<String> dateList = new ArrayList<String>();
 		dateList.add("unfiltered");

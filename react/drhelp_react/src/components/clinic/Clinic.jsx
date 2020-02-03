@@ -6,6 +6,8 @@ import { Button } from 'reactstrap';
 import { UserContext } from '../../context/UserContextProvider'
 import Axios from 'axios';
 import { useHistory, Redirect } from "react-router-dom";
+import { TableRow } from '@material-ui/core';
+import Table from '@material-ui/core/Table';
 
 
 class Clinic extends Component {
@@ -124,31 +126,12 @@ class Clinic extends Component {
                                             Predefined appointments
                                         </Button>
                                     </div>
-                                    <br />
+                                    <br />    
                                 </div>
 
                                 <div style={divMapStyle}>
                                     <MapContainer name={this.state.name} address={this.state.address}  city={this.state.city} state={this.state.state}/>
                                 </div>
-
-                                
-                                
-                                {/* <div hidden={!this.state.haveInteracted}>
-                                <div>
-                                    <StarRatingComponent starCount={5} value={this.state.myRating} value={this.state.myRating} onStarClick={this.handleClick.bind(this)}/>
-                                </div>
-
-                                {/* <div hidden={!this.state.haveInteracted}> */}
-                                {/* <div>
-                                    <Button  onClick={() => this.handleClear.bind(this)} disabled={false}>
-                                        Clear rating
-                                    </Button>
-                                </div>
-                                <a class="btn btn-primary" onClick={() => this.handleClick()} disabled={false}>
-                                    Klik
-                                </a> */} 
-
-
 
                             </div>
                         </div>
