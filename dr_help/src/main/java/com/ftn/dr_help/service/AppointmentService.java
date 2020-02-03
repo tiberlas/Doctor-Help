@@ -871,7 +871,7 @@ public class AppointmentService {
 		}
 		
 		if (!clinicId.contentEquals(("unfiltered"))) {
-			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> (); 
 			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
 				if (p.getClinicName().equals(clinicId)) {
 					tempList.add(p);
