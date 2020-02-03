@@ -4,6 +4,9 @@ import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.Mail;
@@ -51,6 +54,7 @@ public class AppointmentBlessingService {
 	@Autowired
 	private Mail mailSender;
 	
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, isolation = Isolation.REPEATABLE_READ)
 	public AppointmentInternalBlessedDTO blessing(AppointmentForSchedulingDTO requested, String adminMeil) {
 		/**
 		 * provera da li requested appointment odgovara sobi i doktoru; 
@@ -97,7 +101,6 @@ public class AppointmentBlessingService {
 			
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.BLESSED, "BLESSING RECIVED");
 		} catch(Exception e) {
-			e.printStackTrace();
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.REFFUSED, "NOT WORTHY");
 		}
 	}

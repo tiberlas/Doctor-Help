@@ -295,8 +295,8 @@ public class NiceScheduleBeginningTest {
 		Calendar expected = Calendar.getInstance();
 		expected.set(Calendar.MONTH, Calendar.JANUARY);
 		expected.set(Calendar.DAY_OF_MONTH, 16); 
-		expected.set(Calendar.HOUR, 10);
-		expected.set(Calendar.MINUTE, 32);
+		expected.set(Calendar.HOUR_OF_DAY, 8);
+		expected.set(Calendar.MINUTE, 0);
 		expected.set(Calendar.SECOND, 0);
 		expected.set(Calendar.MILLISECOND, 0);
 		
