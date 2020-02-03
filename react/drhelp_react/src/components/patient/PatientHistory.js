@@ -754,6 +754,7 @@ class PatientHistory extends Component {
 												styles={crniFont}
 												onChange = {this.handleDateFilter.bind(this)}
 												options={this.state.dates}
+												placeholder={(this.state.activeDateFilter === 'unfiltered') ? ('-') : (this.state.activeDateFilter)}
 											></Select>
 											<FormHelperText class='text-success'>Date filter</FormHelperText>
 										</FormControl>
@@ -765,6 +766,7 @@ class PatientHistory extends Component {
 												styles={crniFont}
 												onChange = {this.handleDoctorFilter.bind(this)}
 												options={this.state.doctors}
+												placeholder={(this.state.activeDoctorFilter === 'unfiltered') ? ('-') : (this.state.activeDoctorFilter)}
 											></Select>
 											<FormHelperText class='text-success'>Doctor filter</FormHelperText>
 										</FormControl>
@@ -776,6 +778,7 @@ class PatientHistory extends Component {
 												styles={crniFont}
 												onChange = {this.handleClinicFilter.bind(this)}
 												options={this.state.clinics}
+												placeholder={(this.state.activeClinicFilter === 'unfiltered') ? ('-') : (this.state.activeClinicFilter)}
 											></Select>
 											<FormHelperText class='text-success'>Clinic filter</FormHelperText>
 										</FormControl>
@@ -787,6 +790,7 @@ class PatientHistory extends Component {
 												styles={crniFont}
 												onChange = {this.handleTypeFilter.bind(this)}
 												options={this.state.types}
+												placeholder={(this.state.activeTypeFilter === 'unfiltered') ? ('-') : (this.state.activeTypeFilter)}
 											></Select>
 											<FormHelperText class='text-success'>Appointment type filter</FormHelperText>
 										</FormControl>
@@ -798,6 +802,7 @@ class PatientHistory extends Component {
 												styles={crniFont}
 												onChange = {this.handleStatusFilter.bind(this)}
 												options={this.state.statuses}
+												placeholder={(this.state.activeStatusFilter === 'unfiltered') ? ('-') : (this.state.activeStatusFilter)}
 											></Select>
 											<FormHelperText class='text-success'>Status filter</FormHelperText>
 										</FormControl>
