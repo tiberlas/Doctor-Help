@@ -80,7 +80,7 @@ input[type=radio]:checked ~ label{
   color: #0DFF92;
 }
 
-.signature {
+/* .signature {
 	margin: 10px auto;
 	padding: 10px 0;
 	width: 100%;
@@ -129,36 +129,5 @@ input[type=radio]:checked ~ label{
 	color: #AAAAAA;
 	text-decoration: none;
 	font-weight: bold;
-}
-
-
-/* Styles for alert... 
-by the way it is so weird when you look at your code a couple of years after you wrote it XD */
-
-/* .alert {
-	box-sizing: border-box;
-	background-color: #BDFFE1;
-	width: 100%;
-	position: relative; 
-	top: 0;
-	left: 0;
-	z-index: 300;
-	padding: 20px 40px;
-	color: #333;
-}
-
-.alert h2 {
-	font-size: 22px;
-	color: #232323;
-	margin-top: 0;
-}
-
-.alert p {
-	line-height: 1.6em;
-	font-size:18px;
-}
-
-.alert a {
-	color: #232323;
-	font-weight: bold;
 } */
+

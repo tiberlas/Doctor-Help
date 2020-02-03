@@ -99,6 +99,7 @@ class CLinicAdminClinicIncome extends Component {
                         <p class="text text-danger">End date must be after start date.</p>
                     }
 
+                    <br />
                     <div>
                         <div class="input-group">
                             <label for='date'>Income&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>

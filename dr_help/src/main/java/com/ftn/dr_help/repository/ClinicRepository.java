@@ -1,6 +1,7 @@
 package com.ftn.dr_help.repository;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,5 +29,13 @@ public interface ClinicRepository extends JpaRepository<ClinicPOJO, Long>{
 			"and a.date >= ?2 \n" + 
 			"and a.date <= ?3", nativeQuery = true)
 	public Float getIncome(Long clinicId, Calendar startDate, Calendar endDate);
+
+	@Query(value = "select a.date \n" + 
+			"from appointments a \n" + 
+			"where a.status='DONE' \n" + 
+			"and a.date >= ?1 \n" + 
+			"and a.date <= ?2 \n" + 
+			"order by a.date", nativeQuery = true)
+	public List<Date> findAllDoneAppointmentsInADatePeriod(Calendar beginDate, Calendar endDate);
 }
  
