@@ -549,12 +549,7 @@ public class PatientService {
 		}
 	}
 
-	public AppointmentListDTO getPending(String email, String date, String doctorId, String clinicId, String procedureTypeId) {
-		
-		
-		
-		
-		
+	public AppointmentListDTO getPending(String email, String date, String doctorId, String clinicId, String procedureTypeId, String appointmentStatus) {
 		
 		AppointmentListDTO retVal = new AppointmentListDTO ();
 		List<AppointmentPOJO> appointments = appointmentRepository.getPatientsPendingAppointments(patientRepository.findOneByEmail(email).getId());
@@ -629,10 +624,26 @@ public class PatientService {
 		}
 		retVal.setPossibleTypes(typeList);
 		
+		List<String> stateList = new ArrayList<String> ();
+		stateList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : stateList) {
+				if (str.equals (p.getStatus())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				stateList.add(p.getStatus());
+			}
+		}
+		retVal.setPossibleStatuses(stateList);
+		
 		if (!date.equals("unfiltered")) {
 			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
 			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
-				if (p.getDate().split(" ")[0].equals(date + ".")) {
+				if (p.getDate().split(" ")[0].equals(date)) {
 					tempList.add(p);
 				}
 			}
@@ -663,6 +674,16 @@ public class PatientService {
 			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
 			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
 				if (p.getProcedureType().equals(procedureTypeId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!appointmentStatus.equals ("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getStatus().equals(appointmentStatus)) {
 					tempList.add(p);
 				}
 			}

@@ -117,13 +117,16 @@ public class PatientHistoryDTO {
 				this.status = "Available";
 				break;
 			case APPROVED: 
-				this.status = "Approved";
+				this.status = "Confirmed";
 				break;
 			case REQUESTED: 
 				this.status = "Requested";
 				break;
 			case DOCTOR_REQUESTED_APPOINTMENT:
 				this.status = "Perscribed";
+				break;
+			case BLESSED:
+				this.status = "Approved";
 				break;
 			default:
 				this.status = "Unknown";

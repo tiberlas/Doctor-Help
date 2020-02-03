@@ -52,7 +52,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 	@Query (value = "select a.* from appointments a inner join room r on a.room_id = r.id where a.deleted = false and status = 'DONE' and a.patient_id = ?1 and r.clinic_id = ?2", nativeQuery = true)
 	public List<AppointmentPOJO> getPatientsPastAppointmentsForClinic (Long patientId, Long clinicId);
 	
-	@Query (value = "select * from appointments a where a.patient_id = ?1 and a.status in ('REQUESTED', 'APPROVED', 'DOCTOR_REQUESTED_APPOINTMENT') and a.deleted = false", nativeQuery = true)
+	@Query (value = "select * from appointments a where a.patient_id = ?1 and a.status in ('REQUESTED', 'APPROVED', 'DOCTOR_REQUESTED_APPOINTMENT', 'BLESSED') and a.deleted = false", nativeQuery = true)
 	public List<AppointmentPOJO> getPatientsPendingAppointments (Long patientId);
 	
 	@Modifying
@@ -122,4 +122,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 			"and a.deleted = false " + 
 			"and r.id = ?1", nativeQuery = true)
 	public List<AppointmentPOJO> findAllScheduledAppointmentsInRoom(Long roomId);
+	
+	@Modifying
+	@Query (value = "update appointments set status = 'APPROVED' where id = ?1", nativeQuery = true)
+	public void confirmAppointment (Long appointmentId);
+	
+	
 }

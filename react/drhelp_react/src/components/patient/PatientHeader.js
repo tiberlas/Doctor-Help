@@ -35,7 +35,6 @@ class PatientHeader extends Component {
                         <Link exact to='/patient/clinicList' class="nav-link">Clinics</Link>
                     </Nav.Link>
 
-                    
                     <Collapse isOpen={true} navbar className="collapse">
                         <Nav>
                             <UncontrolledDropdown nav inNavbar={true}>
@@ -45,7 +44,7 @@ class PatientHeader extends Component {
                                 <DropdownMenu width="1000" >
                                     <LinkContainer exact to='/patient/appointmentList' class="nav-link" >
                                         <DropdownItem >
-                                            Pending Appintments
+                                            Pending Appointments
                                         </DropdownItem>
                                     </LinkContainer>
                                     <LinkContainer  exact to='/patient/history' class="nav-link">

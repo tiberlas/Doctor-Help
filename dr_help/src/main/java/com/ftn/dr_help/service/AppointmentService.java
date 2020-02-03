@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
-import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
@@ -911,4 +911,10 @@ public class AppointmentService {
 
 		return false;
 	}
+	
+	@Transactional (isolation = Isolation.READ_COMMITTED)
+	public void confirmAppointment (Long appointmentId) {
+		appointmentRepository.confirmAppointment(appointmentId);
+	}
+	
 }

@@ -298,4 +298,15 @@ public class AppointmentController {
 		}
 	}
 	
+	@PostMapping (value="/confirm", produces="application/json", consumes="application/json")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> confirmAppointment (@RequestBody AppointmentDeleteDTO dto) {
+		
+		appointmentService.confirmAppointment(dto.getAppointmentId());
+		
+		return null;
+	}
+	
+	
+	
 }

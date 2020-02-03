@@ -22,6 +22,7 @@ public class AppointmentListDTO {
 	private List<String> possibleDoctors;
 	private List<String> possibleClinics;
 	private List<String> possibleTypes;
+	private List<String> possibleStatuses; 
 	
 	public List<PatientHistoryDTO> getAppointmentList() {
 		return appointmentList;
@@ -52,6 +53,12 @@ public class AppointmentListDTO {
 	}
 	public void setPossibleTypes(List<String> possibleTypes) {
 		this.possibleTypes = possibleTypes;
+	}
+	public List<String> getPossibleStatuses() {
+		return possibleStatuses;
+	}
+	public void setPossibleStatuses(List<String> possibleStatuses) {
+		this.possibleStatuses = possibleStatuses;
 	}
 	
 	

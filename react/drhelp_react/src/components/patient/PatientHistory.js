@@ -45,10 +45,12 @@ class PatientHistory extends Component {
 		clinics : [], 
 		doctors : [], 
 		types : [], 
+		statuses : [],
 		activeDateFilter : "unfiltered", 
 		activeClinicFilter : "unfiltered",
 		activeDoctorFilter : "unfiltered", 
 		activeTypeFilter : "unfiltered",  
+		activeStatusFilter : "unfiltered",
 		show : false, 
 		reservationMessage : "", 
 		modalTitle : "", 
@@ -169,7 +171,7 @@ class PatientHistory extends Component {
 			});
 		}
 		else if (this.props.filter === 'PENDING') {
-			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter)
+			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter + '/status=' + this.state.activeStatusFilter)
 			.then (response => {
 				this.setState ({
 					reports : response.data.appointmentList,
@@ -252,12 +254,30 @@ class PatientHistory extends Component {
 					}
 				}
 				
+				let statusList = [];
+				let statusSize = 0;
+				if (response.data.possibleStatuses !== null) {
+					statusSize = response.data.possibleStatuses.length;
+				}
+				if (statusSize > 0) {
+					statusList.push ({
+						label : "-", 
+						value : "unfiltered"
+					})
+					for (let i = 1; i < statusSize; ++i) {
+						statusList.push ({
+							label: response.data.possibleStatuses[i], 
+							value: response.data.possibleStatuses[i], 
+						})
+					}
+				}
 				
 				this.setState ({
 					dates : dateList,
 					doctors : doctorList,
 					clinics : clinicList, 
-					types : typeList
+					types : typeList, 
+					statuses : statusList
 				})
 
 			})
@@ -423,7 +443,7 @@ class PatientHistory extends Component {
 			});
 		}
 		else if (this.props.filter === 'PENDING') {
-			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + option.value)
+			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + option.value  + '/status=' + this.state.activeStatusFilter)
 			.then (response => {
 				this.setState ({
 					reports : response.data.appointmentList,
@@ -477,7 +497,7 @@ class PatientHistory extends Component {
 			});
 		}
 		else if (this.props.filter === 'PENDING') {
-			axios.get('http://localhost:8080/api/patients/pending/doctor=' + option.value + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter)
+			axios.get('http://localhost:8080/api/patients/pending/doctor=' + option.value + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter  + '/status=' + this.state.activeStatusFilter)
 			.then (response => {
 				this.setState ({
 					reports : response.data.appointmentList,
@@ -531,7 +551,7 @@ class PatientHistory extends Component {
 			});
 		}
 		else if (this.props.filter === 'PENDING') {
-			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + option.value + '/date=' + this.state.activeDateFilter)
+			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + option.value + '/date=' + this.state.activeDateFilter + '/status=' + this.state.activeStatusFilter)
 			.then (response => {
 				this.setState ({
 					reports : response.data.appointmentList,
@@ -585,7 +605,7 @@ class PatientHistory extends Component {
 			});
 		}
 		else if (this.props.filter === 'PENDING') {
-			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + option.value + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter)
+			axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + option.value + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter + '/status=' + this.state.activeStatusFilter)
 			.then (response => {
 				this.setState ({
 					reports : response.data.appointmentList,
@@ -650,6 +670,24 @@ class PatientHistory extends Component {
 		});
 	}
 
+	handleStatusFilter = (option) => {
+		axios.get('http://localhost:8080/api/patients/pending/doctor=' + this.state.activeDoctorFilter + '/procedure_type=' + this.state.activeTypeFilter + '/clinic=' + this.state.activeClinicFilter + '/date=' + this.state.activeDateFilter + '/status=' + option.value)
+		.then (response => {
+			this.setState ({
+				reports : response.data.appointmentList,
+				isUpToDate : false, 
+				activeStatusFilter : option.value
+			})
+		})
+		.catch ( response => {
+			this.setState ({
+				reports : [],
+				isUpToDate : false, 
+				activeStatusFilter : option.value
+			})
+		});
+	}
+
 	handleClose =  () => {
 		this.setState ({
 			show : false
@@ -668,6 +706,30 @@ class PatientHistory extends Component {
 			})
 		}
 	}
+
+	confirmAppointment (row) {
+		// alert ("Confirming an appointment " + row.appointmentId)
+		axios.post ("http://localhost:8080/api/appointments/confirm", {
+			appointmentId : row.appointmentId, 
+			patientId : this.state.patientId
+		})
+		.then (response => {
+			this.updateComponent();
+		});
+	}
+
+	// handleCancel (appointmentId, appointmentDate) {
+	// 	axios.delete ("http://localhost:8080/api/appointments/delete", {
+	// 		data: {
+	// 			appointmentId : appointmentId
+	// 		}
+	// 	})
+	// 	.then (date => {
+	// 		this.updateComponent();
+	// 	});
+	// }
+
+
 
 	render () {
 		
@@ -724,10 +786,20 @@ class PatientHistory extends Component {
 												style="width:500px"
 												styles={crniFont}
 												onChange = {this.handleTypeFilter.bind(this)}
-												// options={this.state.types.map(opt => ({ label: opt, value: opt }))}
 												options={this.state.types}
 											></Select>
 											<FormHelperText class='text-success'>Appointment type filter</FormHelperText>
+										</FormControl>
+									</TableRow>
+									<TableRow hidden={this.props.filter !== 'PENDING'}>
+										<FormControl class='text-success'>
+											<Select 
+												style="width:500px"
+												styles={crniFont}
+												onChange = {this.handleStatusFilter.bind(this)}
+												options={this.state.statuses}
+											></Select>
+											<FormHelperText class='text-success'>Status filter</FormHelperText>
 										</FormControl>
 									</TableRow>
 								</Table>
@@ -870,7 +942,13 @@ class PatientHistory extends Component {
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.price}</p></TableCell>
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p style={{ color: '#E99002' }}>{row.discount}%</p></p></TableCell>
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} onClick={() => this.handleReservationClick(row)} > <Button disabled={this.state.waiting}>Reserve</Button> </p></TableCell>
-												<TableCell></TableCell>
+												<TableCell>
+													<p hidden={row.status !== "Approved"}>
+														<Button onClick={() => this.confirmAppointment(row)}>
+															Confirm
+														</Button>
+													</p>
+												</TableCell>
 											</TableRow>
 										</TableBody>
 									))

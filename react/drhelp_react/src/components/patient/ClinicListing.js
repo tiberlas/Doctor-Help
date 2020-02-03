@@ -546,9 +546,6 @@ class ClinicListing extends Component {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-				
-							
-							
 							{
 								size > 0 ? this.state.clinics.map (row => (
 									<TableRow key={row.id}>
