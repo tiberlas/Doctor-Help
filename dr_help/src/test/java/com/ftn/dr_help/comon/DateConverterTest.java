@@ -6,10 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.text.ParseException;
 import java.util.Calendar;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class DateConverterTest {
 
@@ -17,7 +20,7 @@ public class DateConverterTest {
 	private DateConverter convertor;
 	
 	@Test
-	void testPMShouldPass() {
+	public void testPMShouldPass() {
 		try {
 			Calendar date = convertor.stringToDate("2020-05-13 20:30");
 			Calendar expected = Calendar.getInstance();
@@ -39,7 +42,7 @@ public class DateConverterTest {
 	}
 
 	@Test
-	void testAMShouldPass() {
+	public void testAMShouldPass() {
 		try {
 			Calendar date = convertor.stringToDate("2020-05-13 9:36");
 			Calendar expected = Calendar.getInstance();

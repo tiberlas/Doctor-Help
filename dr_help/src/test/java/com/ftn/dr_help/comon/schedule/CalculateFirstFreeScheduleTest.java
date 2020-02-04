@@ -7,10 +7,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
@@ -20,6 +22,7 @@ import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class CalculateFirstFreeScheduleTest {
 
@@ -38,7 +41,7 @@ public class CalculateFirstFreeScheduleTest {
 	private Calendar begin = Calendar.getInstance();
 	private List<Date> dates = new ArrayList<Date>();
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		//ProceduresTypePOJO procedure = new ProceduresTypePOJO();
 		Calendar duration = Calendar.getInstance();
@@ -85,7 +88,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testInMiddleShouldPass() {
+	public void testInMiddleShouldPass() {
 		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, null);
 		String reserved = convert.dateAndTimeToString(finded);
 		if(finded.get(Calendar.AM_PM) == Calendar.AM) {
@@ -98,7 +101,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testOnBeginningShouldPass() {
+	public void testOnBeginningShouldPass() {
 		try {
 			begin = convert.stringToDate("2020-1-8 08:00");
 		} catch(Exception e) {
@@ -117,7 +120,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testOnBeginningNurseShouldPass() {
+	public void testOnBeginningNurseShouldPass() {
 		try {
 			begin = convert.stringToDate("2020-1-8 08:00");
 		} catch(Exception e) {
@@ -138,7 +141,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testOnEndShouldPass() {
+	public void testOnEndShouldPass() {
 		try {
 			Calendar day = convert.stringToDate("2020-01-9 10:00");
 			dates.add(2, day.getTime());
@@ -158,7 +161,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testSecondShiftShouldPass() {
+	public void testSecondShiftShouldPass() {
 		doctor.setWednesday(Shift.SECOND);
 		System.out.println("SECOND");
 		
@@ -188,7 +191,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testJumpWeekendShouldPass() {
+	public void testJumpWeekendShouldPass() {
 		doctor.setFriday(Shift.NONE);
 		doctor.setMonday(Shift.THIRD);
 		
@@ -219,7 +222,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 
 	@Test
-	void testJumpShiftShouldPass() {
+	public void testJumpShiftShouldPass() {
 		doctor.setMonday(Shift.THIRD);
 		doctor.setTuesday(Shift.SECOND);
 		
@@ -274,7 +277,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testJumpFirstToThirdShiftShouldPass() {
+	public void testJumpFirstToThirdShiftShouldPass() {
 		doctor.setTuesday(Shift.FIRST);
 		doctor.setWednesday(Shift.THIRD);
 		
@@ -327,7 +330,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testJumpFirstToThirdShiftVacationShouldPass() {
+	public void testJumpFirstToThirdShiftVacationShouldPass() {
 		doctor.setTuesday(Shift.FIRST);
 		doctor.setWednesday(Shift.THIRD);
 		
@@ -387,7 +390,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testAfterAbsenceShouldPass() {
+	public void testAfterAbsenceShouldPass() {
 		begin.set(2020, 0, 6, 10, 30, 0);
 		List<AbsenceInnerDTO> absence = new ArrayList<AbsenceInnerDTO>();
 		
@@ -410,7 +413,7 @@ public class CalculateFirstFreeScheduleTest {
 	}
 	
 	@Test
-	void testBeforeAbsenceShouldPass() {
+	public void testBeforeAbsenceShouldPass() {
 		begin.set(2020, 0, 9, 10, 30, 0);
 		List<AbsenceInnerDTO> absence = new ArrayList<AbsenceInnerDTO>();
 		

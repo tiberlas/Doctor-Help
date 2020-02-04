@@ -1,5 +1,6 @@
 package com.ftn.dr_help.comon.schedule;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -7,10 +8,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
@@ -18,6 +21,7 @@ import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class CalculateFirstFreeOperationScheduleTest {
 
@@ -35,7 +39,7 @@ public class CalculateFirstFreeOperationScheduleTest {
 	private List<Date> dates1;
 	private List<Date> dates2;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
         Calendar duration = Calendar.getInstance();
         duration.set(2000, 2, 15, 2, 0);
