@@ -295,6 +295,18 @@ public class AppointmentService {
 			
 		AppointmentPOJO newAppointment = new AppointmentPOJO ();
 		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+//		
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("Date string: ");
+//		System.out.println(dateString);
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("");
+//		
+//		
+		
 		Date date = sdf.parse(dateString);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -369,14 +381,9 @@ public class AppointmentService {
 			endTime.set(Calendar.SECOND, 59);
 		}
 		
-/////////////////////////////////////////////////////////////////////////
 		if (insertNewAppointment(newAppointment, shift, doctor, startTime, endTime)) {
-//			System.out.println("Mogu da dodam ovo");
 			return true;
 		} 
-		else {
-//			System.out.println("E ipak ne mogi...");
-		}
 		
 		return false;
 	}
@@ -912,6 +919,10 @@ public class AppointmentService {
 //			e.printStackTrace();
 //			return false;
 //		}
+		if (appointment == null) {
+			return false;
+		}
+		
 		if (appointment.getStatus() == AppointmentStateEnum.AVAILABLE) {
 			appointmentRepository.reserveAppointment(appointmentId, patientId);
 			return true;
