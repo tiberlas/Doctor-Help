@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button';
 import '../../customRadioButton.css';
 import CreateMedicalStaff from './CreateMedicalStaff';
+import { relativeTimeThreshold } from 'moment';
 
 const sortTypes = {
     first_up: {
@@ -35,6 +36,12 @@ const sortTypes = {
     },
     role_down: {
         fn: (a, b) => a.role.localeCompare(b.role)
+    },
+    rating_up: {
+        fn: (a, b) => b.rating - a.rating
+    },
+    rating_down: {
+        fn: (a, b) => a.rating - b.rating
     },
     default: {
         fn: (a, b) => a
@@ -95,6 +102,10 @@ class ClinicAdminMedicalStaff extends Component {
             if (currentSort === 'email_down') nextSort = 'email_up';
             else if (currentSort === 'email_up') nextSort = 'default';
             else nextSort = 'email_down';
+        } else if(name === 'rating') {
+            if (currentSort === 'rating_down') nextSort = 'rating_up';
+            else if (currentSort === 'rating_up') nextSort = 'default';
+            else nextSort = 'rating_down';
         } else {
             if (currentSort === 'role_down') nextSort = 'role_up';
             else if (currentSort === 'role_up') nextSort = 'default';
@@ -108,6 +119,7 @@ class ClinicAdminMedicalStaff extends Component {
             this.renderArrowLast()
             this.renderArrowEmail()
             this.renderArrowRole()
+            this.renderArrowRating()
         });
     };
 
@@ -145,6 +157,16 @@ class ClinicAdminMedicalStaff extends Component {
         if (this.state.currentSort === 'role_up') {
             return '\u2191'
         } else if (this.state.currentSort === 'role_down') {
+            return '\u2193'
+        } else {
+            return ''
+        }
+    }
+
+    renderArrowRating = () => {
+        if (this.state.currentSort === 'rating_up') {
+            return '\u2191'
+        } else if (this.state.currentSort === 'rating_down') {
             return '\u2193'
         } else {
             return ''
@@ -276,7 +298,7 @@ class ClinicAdminMedicalStaff extends Component {
                                         </li>
                                     </ul>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell colSpan='2'>
                                     <input type="text" placeholder="Filter..." name="filterString" onChange={this.handleChange} />
                                 </TableCell>
                                 <TableCell>
@@ -288,6 +310,7 @@ class ClinicAdminMedicalStaff extends Component {
                                 <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('last')}>last name{this.renderArrowLast()}</TableCell>
                                 <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('email')}>email{this.renderArrowEmail()}</TableCell>
                                 <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('role')}>role{this.renderArrowRole()}</TableCell>
+                                <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('rating')}>rating{this.renderArrowRating()}</TableCell>
                                 <TableCell class="text-success"></TableCell>
                             </TableRow>
                         </TableHead>

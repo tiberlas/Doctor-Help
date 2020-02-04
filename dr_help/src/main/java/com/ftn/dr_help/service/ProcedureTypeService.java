@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.dto.ProcedureTypeDTO;
 import com.ftn.dr_help.dto.ProcedureTypeFilterDTO;
@@ -64,6 +65,7 @@ public class ProcedureTypeService {
         return ret;
     }
 
+    @Transactional(readOnly = true)
     public ProcedureTypeDTO getOne(Long id) {
     	if( id == null) {
     		return null;

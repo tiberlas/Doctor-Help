@@ -23,7 +23,7 @@ insert into clinic_administrator(first_name, last_name, password, status, email,
 	);
 
 --password: maxBezbedno
-insert into clinic_administrator (address, birthday, city, email, first_name, last_name, "password", phone_number, status, state, clinic_id) 
+insert into clinic_administrator (address, birthday, city, email, first_name, last_name, password, phone_number, status, state, clinic_id) 
 	values (
 		'Stevana Milovanova 6', '1967-05-17', 'Novi Sad', 'mikiveliki@yahoo.com', 'Milorad', 'Vucković', 
 		'$2y$10$OjRFtBABOOg/9fL4iQHqjeJ/PGK/b0xJDW10/XwO8urdDbXhKJ7sm', '860415301', 'CLINICAL_ADMINISTRATOR', 'Serbia', '1'
@@ -32,26 +32,26 @@ insert into clinic_administrator (address, birthday, city, email, first_name, la
 
 --password: whoppa42
 insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
 ) values (
 	'Bajić i Vlahović soba 11', '1998-07-21', 'Novi Sad', 'happymeal@gmail.com', 'Tanja', 434, true, 'Blejić', 
 	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '06216684654', 'PATIENT', 'Serbia', null
 );
 insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
 ) values (
 	'Grobljanska 5', '1983-11-12', 'Beograd', 'gmail@gmail.com', 'Borislav', 433, true, 'Rašeta', 
 	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '0656152164', 'PATIENT', 'Serbia', null
 );
 insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
 ) values (
 	'Brace Ribnikar 16a', '1987-01-23', 'Novi Sad', 'digimon@gmail.com', 'Milivoje', 43223, true, 'Radulović', 
 	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '0656152164', 'PATIENT', 'Serbia', null
 );
 --password: imejl
 insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, "password", phone_number, status, state, health_record_id
+address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
 ) values (
 	'Stevana Milovanova 17', '1985-03-29', 'Novi Sad', 'enekadresa@gmail.com', 'Jovan', 123321, false, 'Matic', 
 	'$2y$10$vjb/stdBU46vh74lsuHoWuIjYcDCwqpESS3I2ukf0C07p6AfNcvl2', '860484061105', 'PATIENT', 'Serbia', null
