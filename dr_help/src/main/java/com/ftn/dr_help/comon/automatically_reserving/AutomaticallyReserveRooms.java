@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.dto.NurseWIthFirstFreeDateInnerDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
+import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
+import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.service.AppointmentBlessingService;
 import com.ftn.dr_help.service.DoctorService;
 import com.ftn.dr_help.service.NurseService;
@@ -21,6 +23,9 @@ public class AutomaticallyReserveRooms {
 	
 	@Autowired 
 	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private OperationRepository operationRepository;
 	
 	@Autowired
 	private CheckDoctorsInterface checkDoctors;
@@ -97,8 +102,45 @@ public class AutomaticallyReserveRooms {
 			}
 		
 		} catch(Exception e) {
-			System.out.println("CHRON FAILD");
+			System.out.println("CHRON FAILED");
 			e.printStackTrace();
 		}
 	}
+	
+	@Scheduled(cron="45 30 21 * * ?")
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void runOperationsAtMidnight() {
+		
+		List<OperationPOJO> operations = operationRepository.getAllOperationRequests();
+		for (OperationPOJO operation : operations) {
+			Long clinicId = operation.getOperationType().getClinic().getId();
+			Long procedureId = operation.getOperationType().getId();
+			
+			Calendar requestedTime = operation.getDate();
+			Calendar duration = Calendar.getInstance();
+			duration.setTime(operation.getOperationType().getDuration());
+			
+			FreeDoctorForAutomaticallyReserving doctorsWithDate = null;
+			
+			doctorsWithDate = checkDoctors.findFreeDoctors(requestedTime, clinicId, procedureId);
+			if(doctorsWithDate.getRecomendedDate() != null) {
+				//definisemo novo vreme
+				requestedTime = (Calendar) doctorsWithDate.getRecomendedDate().clone();
+			}
+			
+			FreeRoomWithDate freeRoomWithDate =  checkRooms.findFirstFreeRoom(requestedTime, clinicId, procedureId);
+			if(freeRoomWithDate.getRecomendedDate() != null) {
+				requestedTime = (Calendar) freeRoomWithDate.getRecomendedDate().clone();
+			}
+			
+			blessing.scheduleOperationAndSendMail(operation, 
+					doctorsWithDate.getDoctor1(), 
+					doctorsWithDate.getDoctor2(), 
+					doctorsWithDate.getDoctor3(), 
+					freeRoomWithDate.getFreeRoom(), 
+					requestedTime);
+		}
+	}
+	
+	
 }

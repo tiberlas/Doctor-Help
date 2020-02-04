@@ -92,7 +92,7 @@ class ExaminationReport extends React.Component {
                 <form>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                    <label for="diagnosisSelect">Diagnosis</label>
+                    <label for="diagnosisSelect"><i class="fas fa-stethoscope"></i> Diagnosis</label>
                     <Select 
                         id="diagnosisSelect" 
                         styles={fontStyles} 
@@ -104,7 +104,7 @@ class ExaminationReport extends React.Component {
                         onChange = {this.props.handleDiagnosisChange}
                     />
                     <br/>
-                    <label for="medicationSelect"> Medication </label>
+                    <label for="medicationSelect"> <i class="fas fa-capsules"></i> Medication </label>
                     <Select
                         id="medicationSelect"
                         isMulti

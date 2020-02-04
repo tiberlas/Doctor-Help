@@ -55,11 +55,11 @@ class LeaveRequestHistory extends React.Component {
                 <Table class="table table-hover ">
                     <TableHead>
                         <TableRow>
-                            <TableCell class='text-success'>Start</TableCell>
-                            <TableCell class='text-success'>End</TableCell>
-                            <TableCell class='text-success'>Type</TableCell>
-                            <TableCell class='text-success '>Note</TableCell>
-                            <TableCell class='text-success '>Status</TableCell>
+                            <TableCell class='text-success'><i class="fas fa-calendar-minus"></i> Start</TableCell>
+                            <TableCell class='text-success'><i class="fas fa-calendar-plus"></i> End</TableCell>
+                            <TableCell class='text-success'><i class="fas fa-sign-out-alt"></i> Type</TableCell>
+                            <TableCell class='text-success '><i class="far fa-sticky-note"></i> Note</TableCell>
+                            <TableCell class='text-success '> <i class="fas fa-clock"></i> Status</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

@@ -47,13 +47,13 @@ class NurseAppointmentInfoModal extends React.Component {
                 </ModalHeader>
                 <ModalBody>
                 <div>
-                    Patient:  <Link to = {profileUrl}>  {this.props.event.patient} </Link> <br/>
-                    Doctor: {this.props.event.doctor} <br/>
-                    Status: <strong>{this.displayStatus()}</strong> <br/>
-                    Procedure: {this.props.event.procedure} <br/>
-                    Price: {this.props.event.price} <br/>
-                    Discount: {this.props.event.discount}% <br/>
-                    Total: {(this.props.event.price * (1 - (this.props.event.discount / 100))).toFixed(2)} <br/>
+                <i class="fas fa-user-injured"></i> Patient:  <Link to = {profileUrl}>  {this.props.event.patient} </Link> <br/>
+                <i class="fas fa-user-md"></i> Doctor: {this.props.event.doctor} <br/>
+                <i class="fas fa-sign-out-alt"></i> Status: <strong>{this.displayStatus()}</strong> <br/>
+                <i class="fas fa-procedures"></i>  Procedure: {this.props.event.procedure} <br/>
+                <i class="fab fa-bitcoin"></i> Price: {this.props.event.price} <br/>
+                <i class="fas fa-hand-holding-usd"></i> Discount: {this.props.event.discount}% <br/>
+                    <i class="fab fa-bitcoin"></i> Total: {(this.props.event.price * (1 - (this.props.event.discount / 100))).toFixed(2)} <br/>
                 </div>
                 <div> 
                 {this.state.showReport && <ShowExaminationReport

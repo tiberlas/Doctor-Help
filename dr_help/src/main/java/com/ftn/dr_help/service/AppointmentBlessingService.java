@@ -12,13 +12,16 @@ import com.ftn.dr_help.dto.AppointmentInternalBlessedDTO;
 import com.ftn.dr_help.dto.NurseWIthFirstFreeDateInnerDTO;
 import com.ftn.dr_help.model.enums.AppointmentBlessing;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
+import com.ftn.dr_help.model.enums.OperationStatus;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
+import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
 
 @Service
@@ -26,6 +29,9 @@ public class AppointmentBlessingService {
 
 	@Autowired
 	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private OperationRepository operationRepository;
 	
 	@Autowired
 	private DateConverter dateConverter;
@@ -125,5 +131,19 @@ public class AppointmentBlessingService {
 			mailSender.sendAppointmentApprovedToPatientEmail(appointment);
 		}			
 		appointmentRepository.save(appointment);
+	}
+	
+	public void scheduleOperationAndSendMail(OperationPOJO operation, DoctorPOJO doctor1, DoctorPOJO doctor2, DoctorPOJO doctor3, RoomPOJO room, Calendar date) {
+		operation.setDate(date);
+		operation.setFirstDoctor(doctor1);
+		operation.setSecondDoctor(doctor2);
+		operation.setThirdDoctor(doctor3);
+		
+		operation.setRoom(room);
+		operation.setDeleted(false);
+		operation.setStatus(OperationStatus.APPROVED);
+		
+		operationRepository.save(operation);
+		
 	}
 }

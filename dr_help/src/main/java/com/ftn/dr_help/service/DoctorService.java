@@ -733,6 +733,44 @@ public class DoctorService {
 		}
 		
 		
+		if(!doctor.getSaturday().toString().equals("NONE")) { //ako radi petkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(6); //5 == Friday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getSaturday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getSaturday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getSaturday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		if(!doctor.getSunday().toString().equals("NONE")) { //ako radi petkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(7); //5 == Friday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getSunday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getSunday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getSunday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
 		return businessDayList;
 		
 	}
