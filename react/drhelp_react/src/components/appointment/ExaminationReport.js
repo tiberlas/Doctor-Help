@@ -73,18 +73,6 @@ class ExaminationReport extends React.Component {
         })
     }
 
-    /*  <div class="row d-flex justify-content-center">
-                        <div class='col-md-11'>
-                           {this.state.showNote === false && <Button className="btn btn-info " onClick={()=>{this.setState({showNote: true})}}>Add note</Button>}
-                            {this.state.showNote === true 
-                            && <textarea name="note" onChange={this.handleChange} 
-                                                    placeholder="Aditional note will make your request better!" 
-                                                    maxLength={50}
-                                                    style={{resize: "none"}}/>}
-
-                        </div>
-                    </div>*/
-
 
     render() {
         return (
@@ -123,7 +111,7 @@ class ExaminationReport extends React.Component {
                 {this.state.showNote === false && <Button className="btn btn-info " onClick={()=>{this.setState({showNote: true})}}>Add note</Button>}
                             {this.state.showNote === true 
                             &&  <Fragment>
-                                <label for='doctorNotes'> Additional notes</label>
+                                <label for='doctorNotes'> <i class="fas fa-sticky-note"></i> Additional notes</label>
                                 <br/>
                             <textarea id="doctorNotes" placeholder="Write any appointment notes here..." onChange={this.props.handleNotesChange} style={{resize: "none"}}/>
                             </Fragment>

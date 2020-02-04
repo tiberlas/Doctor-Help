@@ -10,13 +10,14 @@ public class MedicalStaffInfoDTO {
 	private boolean canDelete;
 	private RoleEnum role;
 	private Long id;
+	private Float rating;
 	
 	
 	public MedicalStaffInfoDTO() {
 		super();
 	}
 	
-	public MedicalStaffInfoDTO(String email, String firstName, String lastName, boolean canDelete, RoleEnum role, Long id) {
+	public MedicalStaffInfoDTO(String email, String firstName, String lastName, boolean canDelete, RoleEnum role, Long id, Float rating) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
@@ -24,6 +25,7 @@ public class MedicalStaffInfoDTO {
 		this.canDelete = canDelete;
 		this.role = role;
 		this.id = id;
+		this.rating = rating;
 	}
 	
 	public Long getId() {
@@ -64,6 +66,11 @@ public class MedicalStaffInfoDTO {
 	public void setRole(RoleEnum role) {
 		this.role = role;
 	}
-	
+	public Float getRating() {
+		return rating;
+	}
+	public void setRating(Float rating) {
+		this.rating = rating;
+	}
 	
 }

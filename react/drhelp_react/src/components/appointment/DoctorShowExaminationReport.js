@@ -75,7 +75,7 @@ class DoctorShowExaminationReport extends React.Component {
                     <i class="far fa-sticky-note"></i> Doctor notes: <br/>
                     <textarea name="note" defaultValue={this.props.report.note} onChange={this.handleChange}/>
                     <br/>
-                    <Button class="secondary" onClick={()=>{this.setState({showUpdate: false})}}>Cancel</Button> &nbsp;&nbsp;
+                    <button type="button" class = "btn btn-secondary" onClick={()=>{this.setState({showUpdate: false})}}>Cancel</button> &nbsp;&nbsp;
                     <Button className="btn btn-success" onClick={this.handleUpdate}>Confirm</Button>
                    </Fragment> 
                    : <Fragment> 

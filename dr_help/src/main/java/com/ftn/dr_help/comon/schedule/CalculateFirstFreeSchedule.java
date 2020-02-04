@@ -85,14 +85,14 @@ public class CalculateFirstFreeSchedule {
 		int minutes = duration.get(Calendar.MINUTE);
 		
 		//najmanja jediniza za schedule je minuta 
-		begin.clear(Calendar.SECOND);
-		begin.clear(Calendar.MILLISECOND);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
 
 		//kraj schedula
 		Calendar end = Calendar.getInstance();
 		end.setTime(begin.getTime());
-		end.clear(Calendar.SECOND);
-		end.clear(Calendar.MILLISECOND);
+		end.set(Calendar.SECOND, 0);
+		end.set(Calendar.MILLISECOND, 0);
 		end.add(Calendar.HOUR, hours);
 		end.add(Calendar.MINUTE, minutes);
 		
@@ -105,10 +105,10 @@ public class CalculateFirstFreeSchedule {
 			currentEnd.setTime(date);
 			currentEnd.add(Calendar.HOUR, hours);
 			currentEnd.add(Calendar.MINUTE, minutes);
-			currentBegin.clear(Calendar.SECOND);
-			currentBegin.clear(Calendar.MILLISECOND);
-			currentEnd.clear(Calendar.SECOND);
-			currentEnd.clear(Calendar.MILLISECOND);
+			currentBegin.set(Calendar.SECOND, 0);
+			currentBegin.set(Calendar.MILLISECOND, 0);
+			currentEnd.set(Calendar.SECOND, 0);
+			currentEnd.set(Calendar.MILLISECOND, 0);
 			
 			if(convert == null) {
 				convert = new DateConverter();
@@ -140,8 +140,8 @@ public class CalculateFirstFreeSchedule {
 					if(currentEnd.compareTo(begin) <= 0) {
 						//vratio je za prethodni dan
 						currentEnd.add(Calendar.DAY_OF_MONTH, 1);
-						niceBeginning.setNiceScheduleBeginning(doctor, currentEnd);
-					//	currentEnd = setWorkingDay(doctor, currentEnd, absenceDates);
+						//niceBeginning.setNiceScheduleBeginning(doctor, currentEnd);
+						currentEnd = setWorkingDay(doctor, currentEnd, absenceDates);
 					}
 				}
 				
@@ -273,6 +273,7 @@ public class CalculateFirstFreeSchedule {
 
 			//pocetak mora biti u okviru radnog dana
 			Calendar begin0 = niceBeginning.setNiceOperationBegin(equalWorkDays, begin);
+
 			Calendar begin1 = Calendar.getInstance();
 			begin1.setTime(begin0.getTime());
 			Calendar begin2 = Calendar.getInstance();

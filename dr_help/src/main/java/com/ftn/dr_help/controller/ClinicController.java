@@ -24,6 +24,9 @@ import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicListingDTO;
 import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.dto.ClinicRatingDTO;
+import com.ftn.dr_help.dto.DatePeriodDTO;
+import com.ftn.dr_help.dto.HeldAppointmentsChartDataDTO;
+import com.ftn.dr_help.dto.HeldAppointmentsRequestDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.ClinicReviewPOJO;
@@ -207,10 +210,34 @@ public class ClinicController {
 		return new ResponseEntity<> (retVal, HttpStatus.OK); 
 	}
 	
+	@PostMapping(value = "/income", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<Float> getIncome(@RequestBody DatePeriodDTO datePeriod) {
+		String email = currentUser.getEmail();
+		
+		Float income = clinicService.getIncome(email, datePeriod);
+		
+		return new ResponseEntity<>(income, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/held_appointments", consumes = "application/json", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<HeldAppointmentsChartDataDTO>> getDataForChart(@RequestBody HeldAppointmentsRequestDTO request) {
+		String email = currentUser.getEmail();
+		
+		List<HeldAppointmentsChartDataDTO> finded = clinicService.getDataForChart(email, request);
+		
+		if(finded == null || finded.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(finded, HttpStatus.OK);
+		}
+	}
 	@DeleteMapping(value="delete={id}")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public void deleteClinic(@PathVariable("id") Long id) {
 		clinicService.delete(id);
 	}
 	
+
 }

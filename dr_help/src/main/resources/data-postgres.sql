@@ -191,11 +191,27 @@ insert into allergypojo (allergy, health_record_id)
 values ('Pollen', 2);
 
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-11', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
+values ('2020-01-11 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-01', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
+values ('2020-01-01 16:16:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-24', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+values ('2020-01-02 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-03 15:00:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-04 15:32:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-04 08:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-04 16:16:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-04 14:32:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-05 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-05 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
+values ('2020-01-05 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
 --novi podaci
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
 values ('2020-02-01 15:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);

@@ -48,14 +48,14 @@ class PerscriptionList extends Component {
                 }
                 medString = medString.substring(0, medString.length - 1)
         return (
-            <Fragment>
+            <tr>
                 
-                <TableCell><p class='text-white'>{row.doctor}</p></TableCell>
-                <TableCell><p class='text-white'>{row.patient}</p></TableCell>
-                <TableCell><p class='text-white'>{row.diagnosis}</p></TableCell>
-                <TableCell><p class='text-white'>{medString}</p></TableCell>
-                <TableCell><Button name = "perscriptionId" value = {row.perscriptionId} className ="btn btn-success" onClick = {this.handleClick}> Sign off</Button></TableCell>
-             </Fragment>
+                <td>{row.doctor}</td>
+                <td>{row.patient}</td>
+                <td>{row.diagnosis}</td>
+                <td>{medString}</td>
+                <td><Button name = "perscriptionId" value = {row.perscriptionId} class="primary" onClick = {this.handleClick}> Sign off</Button></td>
+             </tr>
         )
     }
 
@@ -65,26 +65,27 @@ class PerscriptionList extends Component {
          let size = this.state.perscriptions.length
 		return (
 			<div>
+                <br/>
                 <div class="row d-flex justify-content-center">
-                    <div class='col-md-8'>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell><p class='text-success'>Doctor</p></TableCell>
-                                        <TableCell><p class='text-success'>Patient</p></TableCell>
-                                        <TableCell><p class='text-success'>Diagnosis</p></TableCell>
-                                        <TableCell><p class='text-success'>Perscribed medication</p></TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
+                    <div class='col-md-11'>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class='text-success'><i class="fas fa-user-md"></i> Doctor</th>
+                                        <th class='text-success'><i class="fas fa-user-injured"></i>  Patient</th>
+                                        <th class='text-success'><i class="fas fa-stethoscope"></i> Diagnosis</th>
+                                        <th class='text-success'><i class="fas fa-capsules"></i>  Perscribed medication</th>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     {size > 0 ? this.state.perscriptions.map (row => (
-                                        <TableRow key={row.id}>
-                                            {this.generatePerscriptionRows(row)}
-                                        </TableRow>
-                                    )) : <h3> No pending perscriptions found. </h3> }
-                                </TableBody>
-                            </Table>
+                                            this.generatePerscriptionRows(row)
+                                    )) : <tr>
+                                        <td colSpan="5"> <h3> No unsigned perscriptions yet. </h3>  </td>
+                                         </tr>}
+                                </tbody>
+                            </table>
                     </div>
                 </div>
 			</div>

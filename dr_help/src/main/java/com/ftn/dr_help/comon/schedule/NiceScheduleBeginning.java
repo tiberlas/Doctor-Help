@@ -1,16 +1,27 @@
 package com.ftn.dr_help.comon.schedule;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.Shift;
+import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.MedicalStaffWorkSchedularPOJO;
+import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
 @Service
 public class NiceScheduleBeginning {
 
+	@Autowired
+	private CheckShift checkShift;
+	
+	@Autowired
+	private WorkScheduleAdapter workSchedule;
+	
 	/*
 	 * stavi da pocetak bude shodno radnoj smeni
 	 * npr ake je prva smena onda je pocetak u 8 ujutru;
@@ -86,10 +97,14 @@ public class NiceScheduleBeginning {
 			int day = niceBegin.get(Calendar.DAY_OF_WEEK);
 
 			if(day == equalShifts.get(i).getDay().getValue()) {
+				
+				setNiceShift(equalShifts, niceBegin);
 				return niceBegin;
 			} else if(day < equalShifts.get(i).getDay().getValue()) {
 				int goInFuture = equalShifts.get(i).getDay().getValue() - day;
 				niceBegin.add(Calendar.DAY_OF_MONTH, goInFuture);
+				
+				setNiceShift(equalShifts, niceBegin);
 				return niceBegin;
 			} else {
 				if(i >= (equalShifts.size() - 1)) {
@@ -100,6 +115,46 @@ public class NiceScheduleBeginning {
 			}
 		}
 		
+		setNiceShift(equalShifts, niceBegin);
 		return niceBegin;
+	}
+	
+	private void setNiceShift(List<EqualDoctorShifts> equalShifts, Calendar begin) {
+		for(EqualDoctorShifts doctorShift : equalShifts) {
+			if(!checkShift.check(begin, doctorShift.getShift())) {
+				DoctorPOJO doctorMock = new DoctorPOJO();
+				ProceduresTypePOJO procedureMock = new ProceduresTypePOJO();
+				procedureMock.setDuration(new Date());
+				doctorMock.setProcedureType(procedureMock);
+				
+				for(EqualDoctorShifts forMocking : equalShifts) {
+					switch(forMocking.getDay()) {
+						case MONDAY:
+							doctorMock.setMonday(forMocking.getShift());
+							break;
+						case TUESDAY:
+							doctorMock.setTuesday(forMocking.getShift());
+							break;
+						case WEDNESDAY:
+							doctorMock.setWednesday(forMocking.getShift());
+							break;
+						case THURSDAY:
+							doctorMock.setThursday(forMocking.getShift());
+							break;
+						case FRIDAY:
+							doctorMock.setFriday(forMocking.getShift());
+							break;
+						case SATURDAY:
+							doctorMock.setSaturday(forMocking.getShift());
+							break;
+						case SUNDAY:
+							doctorMock.setSunday(forMocking.getShift());
+							break;
+					}
+				}
+				
+				setNiceScheduleBeginning(workSchedule.fromDoctor(doctorMock), begin);
+			}
+		}
 	}
 }

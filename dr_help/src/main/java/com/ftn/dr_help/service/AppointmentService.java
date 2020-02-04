@@ -488,6 +488,7 @@ public class AppointmentService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public List<RequestingAppointmentDTO> getAllRequests(String email) {
 		try {
 			List<AppointmentPOJO> finded = appointmentRepository.getAllRequests(email);
@@ -522,6 +523,7 @@ public class AppointmentService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public RequestingAppointmentDTO getOneRequests(Long id) {
 		try {
 			

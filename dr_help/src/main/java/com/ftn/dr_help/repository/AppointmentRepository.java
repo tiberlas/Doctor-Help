@@ -114,4 +114,5 @@ public interface AppointmentRepository extends JpaRepository<AppointmentPOJO, Lo
 			"and a.deleted = false " + 
 			"and r.id = ?1", nativeQuery = true)
 	public List<AppointmentPOJO> findAllScheduledAppointmentsInRoom(Long roomId);
+	
 }

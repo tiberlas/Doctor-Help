@@ -107,7 +107,7 @@ public class AutomaticallyReserveRooms {
 		}
 	}
 	
-	@Scheduled(cron="45 30 21 * * ?")
+	@Scheduled(cron="59 59 23 * * ?")
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void runOperationsAtMidnight() {
 		

@@ -550,6 +550,7 @@ public class DoctorService {
 		return calculate.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(doctor), requestedSchedule, reservedDates, absenceDates);
 	}
 	
+	@Transactional(readOnly = true)
 	public List<MedicalStaffNameDTO> getSpecializedDoctors(Long procedureTypeId) {
 		try {
 			
