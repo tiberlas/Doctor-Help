@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.Mail;
+import com.ftn.dr_help.dto.AppointmentReqiestDoctorsDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.DateAndTimeDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
@@ -35,6 +36,8 @@ import com.ftn.dr_help.dto.RequestedOperationScheduleDTO;
 import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.enums.RoleEnum;
+import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.service.DoctorService;
 
 @RestController
@@ -47,6 +50,9 @@ public class DoctorController {
 	
 	@Autowired
 	private CurrentUser currentUser;
+	
+	@Autowired
+	private ClinicRepository clinicRepository;
 	
 	@Autowired
 	private Mail mailSender;
@@ -117,22 +123,32 @@ public class DoctorController {
 		
 	} 
 	
-	@GetMapping (value = "/listing/{clinic_id}/{appointment_type}/{appointment_date}")
+	@GetMapping (value = "/listing/clinic={clinic_id}&appointment={appointment_type}&date={appointment_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<List<DoctorListingDTO>> getDoctorListing (@PathVariable("clinic_id") Long clinicId, 
+	public ResponseEntity<AppointmentReqiestDoctorsDTO> getDoctorListing (@PathVariable("clinic_id") Long clinicId, 
 				@PathVariable("appointment_type") String appointmentType, @PathVariable("appointment_date") String appointmentDate) throws ParseException {
 
-		System.out.println("Appointment type: " + appointmentType);
-		System.out.println("Clinic id: " + clinicId);
-		System.out.println("Date: " + appointmentDate);
 		
-		if (appointmentType.equals("unfiltered") || appointmentDate.contentEquals("unfiltered")) {
+		AppointmentReqiestDoctorsDTO retVal = new AppointmentReqiestDoctorsDTO();
+		
+		ClinicPOJO clinic = clinicRepository.getOne(clinicId);
+		retVal.setClinicName(clinic.getName());
+		retVal.setAddress(clinic.getAddress());
+		//		System.out.println("Appointment type: " + appointmentType);
+
+		
+		
+		//		System.out.println("Clinic id: " + clinicId);
+//		System.out.println("Date: " + appointmentDate);
+		
+		if (appointmentType.equals("unfiltered") || appointmentDate.equals("unfiltered")) {
 			List<DoctorListingDTO> doctors = service.filterByClinic(clinicId);
-			return new ResponseEntity<> (doctors, HttpStatus.OK);
+			retVal.setDoctorListing(doctors);
+			return new ResponseEntity<> (retVal, HttpStatus.OK);
 		} else {
 			List<DoctorListingDTO> doctors = service.filterByClinicDateProcedureType(clinicId, appointmentType.replace('_', ' '), appointmentDate);
-			
-			return new ResponseEntity<> (doctors, HttpStatus.OK);
+			retVal.setDoctorListing(doctors);
+			return new ResponseEntity<> (retVal, HttpStatus.OK);
 		}
 	}
 	

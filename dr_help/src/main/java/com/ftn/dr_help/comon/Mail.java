@@ -143,13 +143,15 @@ public class Mail {
 	
 	    msg.setSubject("DrHelp requesting appointment");
 	    String text = "Dear " + appointment.getPatient().getFirstName() +" "+appointment.getPatient().getLastName()+ 
-	    		" your appointemnt for " +appointment.getProcedureType().getName()+" has been schedule for "+
+	    		" your appointemnt for " +appointment.getProcedureType().getName()+" has been scheduled for "+
 	    		dateConvertor.dateForFrontEndString(appointment.getDate())+", in room "+
 	    		appointment.getRoom().getName()+" number "+appointment.getRoom().getNumber()+
 	    		". Dr "+appointment.getDoctor().getFirstName()+
 	    		" "+appointment.getDoctor().getLastName()+" will examin you.";
 	    
 	    //NIKOLA OVDE TI DODAS LINK KA ODOBRAVANJU PREGLEDA
+//	    text += "http://localhost:3000/activate=" + sendTo;
+	    
 	    
 	    text += "\n\n\n" + "Forever helping, drHelp.";
 	    msg.setText(text);
@@ -278,5 +280,7 @@ public class Mail {
 		
 		    javaMailSender.send(msg);
 	}
+	
+	
 	
 }

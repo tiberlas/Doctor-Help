@@ -20,6 +20,9 @@ public interface ClinicRepository extends JpaRepository<ClinicPOJO, Long>{
 	
 	@Query (value = "select distinct c.* from clinic c inner join procedures_type pt on pt.clinic_id = c.id where pt.\"name\" = ?1", nativeQuery = true)
 	public List<ClinicPOJO> filterByAppointmentType (String procedureType);
+
+	
+	
 	
 	@Query(value = "select SUM(pt.price) \n" + 
 			"from appointments a inner join procedures_type pt \n" + 

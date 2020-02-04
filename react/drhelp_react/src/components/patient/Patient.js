@@ -102,6 +102,11 @@ class Patient extends Component {
                             <Route path="/clinic/">
                                 <DoctorListing />
                             </Route>
+                            <Route path="/patient/predefined">
+                                <div></div>
+                                <PatientHistory filter="PREDEFINED" />
+                                <div></div>
+                            </Route>
                             <Route path="/patient/appointmentList">
                                 <div>
                                     <PatientHistory filter="PENDING" />

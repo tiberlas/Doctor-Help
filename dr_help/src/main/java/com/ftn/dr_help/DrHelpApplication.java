@@ -9,8 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
-
 @SpringBootApplication
 @EnableScheduling
 @ComponentScan(basePackages={"com.ftn.dr_help"})

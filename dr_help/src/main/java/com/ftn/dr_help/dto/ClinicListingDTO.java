@@ -17,10 +17,16 @@ public class ClinicListingDTO {
 	}
 
 
-	private List<ClinicPreviewDTO> clinicList;
-	private List<String> procedureType;
 	private String procedureTypeString;
 	private String dateString;
+	private String stateString;
+	private String cityString;
+	private String addressString;
+	private List<ClinicPreviewDTO> clinicList;
+	private List<String> procedureType;
+	private List<String> stateList;
+	private List<String> cityList;
+	private List<String> addressList;
 	
 	public ClinicListingDTO () {
 		clinicList = new ArrayList<ClinicPreviewDTO> ();
@@ -62,6 +68,66 @@ public class ClinicListingDTO {
 
 	public void setDateString(String dateString) {
 		this.dateString = dateString;
+	}
+
+
+	public List<String> getStateList() {
+		return stateList;
+	}
+
+
+	public void setStateList(List<String> stateList) {
+		this.stateList = stateList;
+	}
+
+
+	public String getStateString() {
+		return stateString;
+	}
+
+
+	public void setStateString(String stateString) {
+		this.stateString = stateString;
+	}
+
+
+	public String getCityString() {
+		return cityString;
+	}
+
+
+	public void setCityString(String cityString) {
+		this.cityString = cityString;
+	}
+
+
+	public List<String> getCityList() {
+		return cityList;
+	}
+
+
+	public void setCityList(List<String> cityList) {
+		this.cityList = cityList;
+	}
+
+
+	public List<String> getAddressList() {
+		return addressList;
+	}
+
+
+	public void setAddressList(List<String> addressList) {
+		this.addressList = addressList;
+	}
+
+
+	public String getAddressString() {
+		return addressString;
+	}
+
+
+	public void setAddressString(String addressString) {
+		this.addressString = addressString;
 	}
 	
 	

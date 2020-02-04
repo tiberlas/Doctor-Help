@@ -9,6 +9,8 @@ import {Switch} from 'react-router-dom';
 import RegistrationPage from './components/RegistrationPage.js';
 import { Link } from 'react-router-dom';
 import FirstTimePasswordChange from './components/FirstTimePasswordChange'
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import { Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 
 
 class LoginPage extends React.Component {
@@ -23,7 +25,9 @@ class LoginPage extends React.Component {
 		this.state = {
 			loggedIn: false,
 			userRole: 'guest', 
-			error: false
+			error: false, 
+			shortPassword : false, 
+			shortUsername : false
 		}
 
 	}
@@ -102,18 +106,20 @@ class LoginPage extends React.Component {
 					}
 				});
 			}
-		else {
-			alert ('Password too short');
+			else {
+				// alert ('Password too short');
 				this.setState (() => ({
-					loggedIn: false
+					loggedIn: false, 
 				}))
+				this.switchPasswordMessage();
 			}
 		}
 		else  {
-			alert ('Username too short');
+			// alert ('Username too short');
 			this.setState (() => ({
 					loggedIn: false
 			}))
+			this.switchUsernameMessage ();
 		}	
 	}
 
@@ -122,6 +128,32 @@ class LoginPage extends React.Component {
 			loggedIn: true
 		})
 	}
+
+	switchPasswordMessage () {
+		if (this.state.shortPassword) {
+			this.setState ({
+				shortPassword : false
+			})
+		}
+		else {
+			this.setState ({
+				shortPassword : true
+			})
+		}
+	}
+
+	switchUsernameMessage () {
+		if (this.state.shortUsername) {
+			this.setState ({
+				shortUsername : false
+			})
+		}
+		else {
+			this.setState ({
+				shortUsername : true
+			})
+		}
+	}
 	
 	render () {
 
@@ -129,6 +161,34 @@ class LoginPage extends React.Component {
 			<div>
 
 				<br/>
+
+				<Modal show={this.state.shortPassword} onHide={() => this.switchPasswordMessage()}>
+					<ModalHeader closeButton>
+						Warning!
+					</ModalHeader>
+					<ModalBody>
+						Password must be longer
+					</ModalBody>
+					<ModalFooter>
+						<Button onClick={() => this.switchPasswordMessage()}>
+							Ok
+						</Button>
+					</ModalFooter>
+				</Modal>
+
+				<Modal show={this.state.shortUsername} onHide={() => this.switchUsernameMessage()}>
+					<ModalHeader closeButton>
+						Warning!
+					</ModalHeader>
+					<ModalBody>
+						Username must be longer
+					</ModalBody>
+					<ModalFooter>
+						<Button onClick={() => this.switchUsernameMessage()}>
+							Ok
+						</Button>
+					</ModalFooter>
+				</Modal>
 
 
 				<Switch>

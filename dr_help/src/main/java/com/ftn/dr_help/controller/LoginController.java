@@ -34,9 +34,6 @@ public class LoginController {
 	 * it uses JWT's service
 	 * */
 	
-//	@Autowired
-//	private LoginService loginService;
-	
 	@Autowired
 	JwtTokenUtil tokenUtils;
 	
@@ -49,7 +46,6 @@ public class LoginController {
 		TokenDTO t = new TokenDTO();
 		System.out.println("i am here");
 		
-//		if(tokenUtils.i)
 		if(tokenUtils.canTokenBeRefreshed(token.getJwtToken())) {
 			String jwt = tokenUtils.refreshToken(token.getJwtToken());
 			t.setJwtToken(jwt);
@@ -83,76 +79,6 @@ public class LoginController {
 		
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return ResponseEntity.ok(ret);
-	
-		
-//		PatientPOJO patientResponse =  loginService.getPatientLoginResponse(loginRequest.getEmail());
-//		if (patientResponse != null) {
-//			if (!patientResponse.getPassword ().equals (loginRequest.getPassword())) {
-//				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
-//			}
-//			if (!patientResponse.isActivated()) {
-//				return new ResponseEntity<> (HttpStatus.PRECONDITION_REQUIRED);
-//			}
-//			LoginResponseDTO retVal = new LoginResponseDTO ();
-//			retVal.setId (patientResponse.getId ());
-//			retVal.setUserRole (patientResponse.getRole ());
-//			
-//			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
-//		}
-//		
-//		DoctorPOJO doctorResponse = loginService.getDoctorLoginResponse (loginRequest.getEmail());
-//		if (doctorResponse != null) {
-//			if (!doctorResponse.getPassword ().equals (loginRequest.getPassword ())) {
-//				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
-//			}
-//			LoginResponseDTO retVal = new LoginResponseDTO ();
-//			retVal.setId(doctorResponse.getId ());
-//			retVal.setUserRole(doctorResponse.getRole ());
-//		
-//			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
-//		}
-//		
-//		CentreAdministratorPOJO centreAdministratorResponse = loginService.getCentreAdministratorLoginResponse (loginRequest.getEmail ());
-//		if (centreAdministratorResponse != null) {
-//			if (!centreAdministratorResponse.getPassword ().equals (loginRequest.getPassword ())) {
-//				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
-//			}
-//			LoginResponseDTO retVal = new LoginResponseDTO ();
-//			retVal.setId(centreAdministratorResponse.getId ());
-//			retVal.setUserRole(centreAdministratorResponse.getRole());
-//			
-//			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
-//		}
-//		
-//		ClinicAdministratorPOJO clinicAdministratorResponse = loginService.getClinicAdministratorLoginResponse (loginRequest.getEmail ());
-//		if (clinicAdministratorResponse != null) {
-//			if (!clinicAdministratorResponse.getPassword ().equals (loginRequest.getPassword ())) {
-//				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
-//			}
-//			LoginResponseDTO retVal = new LoginResponseDTO ();
-//			retVal.setId(clinicAdministratorResponse.getId ());
-//			retVal.setUserRole(clinicAdministratorResponse.getRole());
-//			
-//			System.out.println(loginRequest.getEmail() + "   " + loginRequest.getPassword());
-//			
-//			
-//			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
-//		}
-//		
-//		NursePOJO nurseResponse = loginService.getNurseLoginResponse (loginRequest.getEmail ());
-//		if (nurseResponse != null) {
-//			if (!nurseResponse.getPassword ().equals (loginRequest.getPassword ())) {
-//				return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
-//			}
-//			LoginResponseDTO retVal = new LoginResponseDTO ();
-//			retVal.setId(nurseResponse.getId ());
-//			retVal.setUserRole(nurseResponse.getRole());
-//			
-//			return new ResponseEntity<LoginResponseDTO> (retVal, HttpStatus.OK);
-//		}
-//		
-//		return new ResponseEntity<> (HttpStatus.UNAUTHORIZED);
-		
 	}
 	
 }
