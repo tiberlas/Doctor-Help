@@ -35,8 +35,8 @@ public class LeaveRequestPOJO implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "doctor_id", referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "doctor_id", referencedColumnName = "id")
 	DoctorPOJO doctor;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
