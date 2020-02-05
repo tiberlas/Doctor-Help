@@ -19,7 +19,7 @@ class LeaveRequestItem extends React.Component {
         let i = 0
         return(
             <Fragment>
-                 <tr className={(++i)%2? `table-dark` : ``} style={{cursor:"pointer"}} onClick={this.handleRequestClick}> 
+                 <tr className={(++i)%2 ? `table-inverse` : ``} style={{cursor:"pointer"}} onClick={this.handleRequestClick}> 
                                     <td>{this.props.userRequest.firstName}&nbsp;{this.props.userRequest.lastName}</td>
                                     <td>{this.staffRoleDisplay()}</td>
                                     <td>{this.leaveTypeDisplay()}</td>

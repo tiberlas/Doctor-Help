@@ -96,50 +96,86 @@ class DoctorCalendar extends React.Component {
 
   componentDidMount() {
     if(this.props.regime === 'schedule') {
-        this.setState({regime: 'schedule'})
-        let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.context.doctor.id 
-        axios.get(url).then((response) => {
-            this.setState({
-              appointments: response.data
-            })
+        this.setState({regime: 'schedule'}, ()=> {
+          this.getScheduleData()
         })
-
-        axios.get('http://localhost:8080/api/operations/all-approved/doctor='+this.context.doctor.id).then(response => {
-          this.setState({operations: response.data})
-        })
-
-        axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id +'/business-hours')
-            .then(response => {
-              this.setState({businessHours: response.data}, () => {
-              })
-            })
-
-        axios.get('http://localhost:8080/api/leave-requests/get-approved/doctor='+this.context.doctor.id)
-            .then(response => {this.setState({approvedLeaves: response.data})})
-
-      }
+    }
   }
 
   componentWillReceiveProps(props){
     if(this.props.regime === 'profile') {
-      this.setState({regime: 'profile'})
-      let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
-      let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+this.context.doctor.id+'/patient='+id
-      axios.get(url).then((response) => {
-        this.setState({
-          appointments: response.data
-        })
+      this.setState({regime: 'profile'}, ()=>{
+        this.getProfileData()
       })
+      
     }
     
     if(this.props.regime === 'history') {
-      let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
-      let url = 'http://localhost:8080/api/appointments/done_appointments/doctor/patient='+id
-      axios.get(url).then((response) => {
+      this.getHistory()
+    }
+  }
+
+
+  getScheduleData = () => {
+    let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.context.doctor.id 
+    axios.get(url).then((response) => {
         this.setState({
           appointments: response.data
         })
+    })
+
+    axios.get('http://localhost:8080/api/operations/all-approved/doctor='+this.context.doctor.id).then(response => {
+      this.setState({operations: response.data})
+    })
+
+    axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id +'/business-hours')
+        .then(response => {
+          this.setState({businessHours: response.data}, () => {
+          })
+        })
+
+    axios.get('http://localhost:8080/api/leave-requests/get-approved/doctor='+this.context.doctor.id)
+        .then(response => {this.setState({approvedLeaves: response.data})})
+
+  } 
+
+  getProfileData = () => {
+    let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
+    let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+this.context.doctor.id+'/patient='+id
+    axios.get(url).then((response) => {
+      this.setState({
+        appointments: response.data
       })
+    })
+  }
+
+  getHistory = () => {
+    let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
+    let url = 'http://localhost:8080/api/appointments/done_appointments/doctor/patient='+id
+    axios.get(url).then((response) => {
+      this.setState({
+        appointments: response.data
+      })
+    })
+  }
+
+  update = () => {
+    if(this.props.regime === 'schedule') {
+      this.setState({regime: 'schedule'}, ()=> {
+        this.getScheduleData()
+      })
+    
+    }
+
+    if(this.props.regime === 'profile') {
+      this.setState({regime: 'profile'}, ()=>{
+        this.getProfileData()
+      })
+    
+    }
+    
+    if(this.props.regime === 'history') {
+      this.getHistory()
     }
   }
 
@@ -279,12 +315,19 @@ class DoctorCalendar extends React.Component {
             center: "title",
             right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
           }}
-          buttonText={
+          // buttonText={
+          //   {
+          //     prev: '<',
+          //     next: '>'
+          //   }
+          // }  
+
+          buttonIcons={
             {
-              prev: '<',
-              next: '>'
+              prev: 'left-single-arrow',
+              next: 'right-single-arrow'
             }
-          }  
+          }
           businessHours = { 
             this.state.businessHours
           }
@@ -326,12 +369,18 @@ class DoctorCalendar extends React.Component {
             center: "title",
             right: "prev, next"
           }}
-          buttonText={
+          // buttonText={
+          //   {
+          //     prev: '<',
+          //     next: '>'
+          //   }
+          // } 
+          buttonIcons={
             {
-              prev: '<',
-              next: '>'
+              prev: 'left-single-arrow',
+              next: 'right-single-arrow'
             }
-          } 
+          }
           titleFormat={
             {
              year: 'numeric'
@@ -358,6 +407,7 @@ class DoctorCalendar extends React.Component {
             showConfirmAppointment = {this.state.showConfirmAppointment} 
             modal = {this.state.appointmentModal} 
             toggleAppointment = {this.toggleAppointment}
+            update = {this.update}
           />
 
         </div>

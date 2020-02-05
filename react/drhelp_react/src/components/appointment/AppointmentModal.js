@@ -46,7 +46,7 @@ class AppointmentModal extends React.Component {
 
     handleFinish = () => {
 
-        this.props.toggleAppointment()
+        
         let url = 'http://localhost:8080/api/appointments/done=' + this.props.event.id
         axios.put(url, {
             diagnosis: this.state.selectedDiagnosis,
@@ -54,7 +54,8 @@ class AppointmentModal extends React.Component {
             note: this.state.note,
             dateStart: this.state.startAppointment
         }).then(response => {
-            alert("ya boy.")
+            this.props.update()
+            this.props.toggleAppointment()
         })
 
         

@@ -83,27 +83,27 @@ class AppointmentInfoModal extends React.Component {
         let profileUrl = '/profile/' + this.props.event.patientInsurance
         return <Fragment> 
                     <br/>
-                     Patient:  {this.props.event.patient.trim() === '-' 
+                    <i class="fas fa-user-injured"></i>  Patient:  {this.props.event.patient.trim() === '-' 
                      ? <span style={{fontStyle: "italic", color: "#cdcdcd"}}> unassigned </span> : <Fragment> <Link to = {profileUrl}> {this.props.event.patient} </Link> </Fragment> }
                      <br/>
-                    Nurse: {this.props.event.nurse} <br/>
-                    Status: <strong> {this.displayStatus()} </strong> <br/>
-                    Procedure: {this.props.event.procedure}<br/>
-                    Price: {this.props.event.price}<br/>
-                    Discount: {this.props.event.discount}% <br/>
-                    Total: {(this.props.event.price * (1 - (this.props.event.discount / 100)).toFixed(2))}<br/>
+                     <i class="fas fa-user-nurse"></i> Nurse: {this.props.event.nurse} <br/>
+                     <i class="fas fa-sign-out-alt"></i> Status: <strong> {this.displayStatus()} </strong> <br/>
+                    <i class="fas fa-procedures"></i> Procedure: {this.props.event.procedure}<br/>
+                    <i class="fab fa-bitcoin"></i> Price: {this.props.event.price}<br/>
+                    <i class="fas fa-hand-holding-usd"></i> Discount: {this.props.event.discount}% <br/>
+                    <i class="fab fa-bitcoin"></i> Total: {(this.props.event.price * (1 - (this.props.event.discount / 100)).toFixed(2))}<br/>
         </Fragment>
     }
 
     showOperationInfo = () => {
         let profileUrl = '/profile/' + this.props.event.patientInsurance
         return <Fragment> 
-             Patient: <Link to = {profileUrl}> {this.props.event.patient} </Link> <br/>
-             Doctor #1: {this.props.event.firstDoctor} <br/>
-             Doctor #2: {this.props.event.secondDoctor} <br/>
-             Doctor #3: {this.props.event.thirdDoctor} <br/>
-             Procedure: {this.props.event.procedure}<br/>
-             Price: {this.props.event.price}<br/>
+             <i class="fas fa-user-injured"></i> Patient: <Link to = {profileUrl}> {this.props.event.patient} </Link> <br/>
+             <i class="fas fa-user-md"></i> Doctor #1: {this.props.event.firstDoctor} <br/>
+             <i class="fas fa-user-md"></i> Doctor #2: {this.props.event.secondDoctor} <br/>
+             <i class="fas fa-user-md"></i> Doctor #3: {this.props.event.thirdDoctor} <br/>
+             <i class="fas fa-procedures"></i> Procedure: {this.props.event.procedure}<br/>
+             <i class="fab fa-bitcoin"></i> Price: {this.props.event.price}<br/>
         </Fragment>
     }
 

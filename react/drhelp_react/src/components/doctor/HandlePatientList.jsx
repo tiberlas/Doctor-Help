@@ -103,9 +103,9 @@ class HandlePatientList extends Component {
 
     renderArrowFirst = () => {
         if(this.state.currentSort === 'first_up') {
-            return '\u2191'
+            return <i class="fas fa-long-arrow-alt-up fa-lg"></i>
         } else if(this.state.currentSort === 'first_down') {
-            return '\u2193'
+            return <i class="fas fa-long-arrow-alt-down fa-lg"></i>
         } else {
             return ''
         }
@@ -160,7 +160,7 @@ class HandlePatientList extends Component {
         let i = 0; 
         return (
             <div class='row d-flex justify-content-center'>
-            <div class='col-md-7'>
+            <div class='col-md-11'>
 
                 <br/>
                 <br/>
@@ -177,7 +177,7 @@ class HandlePatientList extends Component {
                             </TableCell>
                         </TableRow>
                         <TableRow class="table-active">
-                            <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('firstName')}>first name{this.renderArrowFirst()}</TableCell>
+                            <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('firstName')}>   {this.renderArrowFirst()}  First name   </TableCell>
                             <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('lastName')}>last name{this.renderArrowLast()}</TableCell>
                             <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('email')}>email{this.renderArrowEmail()}</TableCell>
                             <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('insurance')}>insurance number{this.renderArrowInsurance()}</TableCell>

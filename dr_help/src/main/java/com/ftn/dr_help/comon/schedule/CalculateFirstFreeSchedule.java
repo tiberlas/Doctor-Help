@@ -134,6 +134,7 @@ public class CalculateFirstFreeSchedule {
 			//provera da li je termin zauzet
 			if(end.compareTo(currentBegin) <= 0) {
 				//termin je pre pocetka od tekucek zakazanog termina
+				System.out.println("Ovo je lepo---" + begin.getTime());
 				return begin;
 			} else {
 				//uzima se termin posle tekuceg zakazanog ili ako je u rezimu provere termina vrati null
@@ -161,11 +162,12 @@ public class CalculateFirstFreeSchedule {
 			}
 		}
 		
-//		if(!shift.checkShift(begin, doctor) || !shift.checkShift(end, doctor)) {
-//			begin.add(Calendar.DAY_OF_MONTH, 1);
-//			return findFreeSchedule(doctor, begin, dates, absenceDates, false);		
-//		}
+		//if(!shift.checkShift(begin, doctor) || !shift.checkShift(end, doctor)) {
+		//	begin.add(Calendar.DAY_OF_MONTH, 1);
+		//	return findFreeSchedule(doctor, begin, dates, absenceDates, false);		
+		//}
 			
+		System.out.println("Ovde je kraj---" + begin.getTime());
 		return begin;
 	}
 	
@@ -309,8 +311,8 @@ public class CalculateFirstFreeSchedule {
 	
 	//OPERATION
 	public Calendar findFirstScheduleForOperation(DoctorPOJO dr0, DoctorPOJO dr1, DoctorPOJO dr2, List<Date> dates0, List<Date> dates1, List<Date> dates2, List<AbsenceInnerDTO> absenceDates0, List<AbsenceInnerDTO> absenceDates1, List<AbsenceInnerDTO> absenceDates2, Calendar begin) {
-		/*
-		 * vraca prvi datum koji odgovara svim lekarima
+		/*ulaz: 3 doktora, liste zakazanih termine, liste leave-requestova, datum kada treba da se zakaze trenutna operacija
+		 * izlaz: vraca prvi datum koji odgovara svim lekarima
 		 * 
 		 * */
 		try {
@@ -397,6 +399,7 @@ public class CalculateFirstFreeSchedule {
 				System.out.println(convert.dateForFrontEndString(free0));
 				System.out.println(convert.dateForFrontEndString(free1));
 				System.out.println(convert.dateForFrontEndString(free2));
+				
 			} while(! (free0.equals(free1) && free1.equals(free2)) );
 		
 			return free0;
