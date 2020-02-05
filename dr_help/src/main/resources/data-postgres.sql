@@ -1,449 +1,105 @@
---SQL skripta koja se pokrece sa Spring boot app i daje dummy podatke
--- enkripcija sa sajta: https://bcrypt-generator.com/
+----SQL skripta koja se pokrece sa Spring boot app i daje dummy podatke
+---- enkripcija sa sajta: https://bcrypt-generator.com/
 
-insert into clinic(address, city, state, name, description) values('7A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Klinika zdravog uma', 'Klinika je namenjena za kreativne opise. ');
-insert into clinic(address, city, state, name, description) values('7 Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Arkham', 'Assylum for the criminally insane.');
-insert into clinic(address, city, state, name, description) values('5A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic.');
-insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
-insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Podgorica', 'Montenegro', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
+
 
 --password: sifra
-insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday) 
-	values(
-		'Đura','Đurić', '$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG', 'CENTRE_ADMINISTRATOR', 'glavni@sef',
-		 '06555555', 'Serbia', 'Novi Sad', 'A dom', '2003-2-1'::timestamp
-	);
+INSERT INTO public.centre_administrator (address,birthday,city,email,first_name,last_name,must_change_password,"password",phone_number,status,state) VALUES 
+('A dom','2003-02-01 00:00:00.000','Novi Sad','glavni_sef@maildrop.cc','Đura','Đurić',NULL,'$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG','06555555','CENTRE_ADMINISTRATOR','Serbia')
+,('6A Stevana Milovanova','1991-02-04 01:00:00.000','Novi Sad','sporedni_sef@maildrop.cc','Goran','Betić',false,'$2y$10$T3JRn/kzupvZCVjfGqepsOYGWrfbdt2Yb6y3YeVGjQyAz6EU/uBr.','0623082357','CENTRE_ADMINISTRATOR','Serbia')
+;
 
-	 
+
+INSERT INTO public.clinic (address,city,description,"name",state) VALUES 
+('75 Bulevar cara Lazara','Novi Sad','Limanski dom zdravlja opste namene','Dom zdravlja Liman','Serbia')
+,('24 Zmaj Ognjena Vuka','Novi Sad','Lečenje od bolesti zavisnosti','Dom Zdravlja','Serbia')
+,('7A Bulevar Cara Lazara','Novi Sad','Privatna zubarska klinika','Poliklinika Pepic','Serbia')
+,('27 Dobračina','Belgrade','Privatna oftalmoloska klinika','Sveti Vid','Serbia')
+,('2 Gyulai Pál u. ','Budapest','Néhány magyar leírás','Szent Rókus','Hungary')
+;
+
 --password: 1234
-insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
-	values(
-		'Borislav','Borisavljević', '$2y$10$5ozpUNr/gCI4YGtih/eSiuWZ6C8L6FLlt4sGuJJbkbD0WxCQe3Mqe', 'CLINICAL_ADMINISTRATOR', 
-		'admin@admin', '06555555', 'Serbia', 'Novi Sad', 'Dom Kulture', '2003-2-1'::timestamp, 1 
-	);
-
---password: maxBezbedno
-insert into clinic_administrator (address, birthday, city, email, first_name, last_name, password, phone_number, status, state, clinic_id) 
-	values (
-		'Stevana Milovanova 6', '1967-05-17', 'Novi Sad', 'mikiveliki@yahoo.com', 'Milorad', 'Vucković', 
-		'$2y$10$OjRFtBABOOg/9fL4iQHqjeJ/PGK/b0xJDW10/XwO8urdDbXhKJ7sm', '860415301', 'CLINICAL_ADMINISTRATOR', 'Serbia', '1'
-	);
-	
-
---password: whoppa42
-insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
-) values (
-	'Bajić i Vlahović soba 11', '1998-07-21', 'Novi Sad', 'happymeal@gmail.com', 'Tanja', 434, true, 'Blejić', 
-	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '06216684654', 'PATIENT', 'Serbia', null
-);
-insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
-) values (
-	'Grobljanska 5', '1983-11-12', 'Beograd', 'gmail@gmail.com', 'Borislav', 433, true, 'Rašeta', 
-	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '0656152164', 'PATIENT', 'Serbia', null
-);
-insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
-) values (
-	'Brace Ribnikar 16a', '1987-01-23', 'Novi Sad', 'digimon@gmail.com', 'Milivoje', 43223, true, 'Radulović', 
-	'$2y$10$ILLsTus2GDQ7735uE36xd.g89zdP.QXDqYTYSznl9XGZlQ5EQUFBy', '0656152164', 'PATIENT', 'Serbia', null
-);
---password: imejl
-insert into patiens (
-address, birthday, city, email, first_name, insurance_number, is_activated, last_name, password, phone_number, status, state, health_record_id
-) values (
-	'Stevana Milovanova 17', '1985-03-29', 'Novi Sad', 'enekadresa@gmail.com', 'Jovan', 123321, false, 'Matic', 
-	'$2y$10$vjb/stdBU46vh74lsuHoWuIjYcDCwqpESS3I2ukf0C07p6AfNcvl2', '860484061105', 'PATIENT', 'Serbia', null
-);
-
-	
-	
---password: 1234
-insert into nurse(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Ana', 'Anica', '$2y$10$xF3sVXDDtuqCmpL2aI7pK.4/qJYA7r/vlmIIONs5XDfEwTqCLRIHe', 'NURSE', 'ana@gmail', '555555', 
-	'Serbia', 'Novi Sad', 'Ulica 8', '2003-2-1'::timestamp, 1, false, 'NONE', 'FIRST', 'SECOND', 'THIRD', 'NONE', 'NONE', 'NONE'
-);
---password: 1234
-insert into nurse(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Mila', 'Milić', '$2y$10$xF3sVXDDtuqCmpL2aI7pK.4/qJYA7r/vlmIIONs5XDfEwTqCLRIHe', 'NURSE', 'mila@gmail', '555555', 
-	'Srbija', 'Novi Sad', 'Jovana Petrovica 9', '2003-2-1'::timestamp, 1, false, 'FIRST', 'SECOND', 'THIRD', 'NONE', 'NONE', 'NONE', 'NONE'
-);
+INSERT INTO clinic_administrator (address,birthday,city,email,first_name,last_name,must_change_password,"password",phone_number,status,state,clinic_id) VALUES 
+('4 Jovana Vukovića','1978-10-12 01:00:00.000','Novi Sad','admin2@maildrop.cc','Nikola','Jovanović',false,'$2y$10$RJDMkHuJE1ld.2gc5v1ui.Y0L8gkTjgBavLb2FhmfLYAVnQAPYcna','06722252552','CLINICAL_ADMINISTRATOR','Serbia',2)
+,('50 Balzakova','1950-04-19 01:00:00.000','Novi Sad','admin3@maildrop.cc','Pero','Kovačević',false,'$2y$10$FVB78sFVqxnGPJEKf1IF1uEuLxKjlK.bGuxVewae9I8FMT2XfIZvu','066841651','CLINICAL_ADMINISTRATOR','Serbia',3)
+,('48 Gyáli út','1970-05-21 01:00:00.000','Budapest','admin4@maildrop.cc','Ištvan','Moč',false,'$2y$10$2cqlRcaQM9fLrfViyYo7AuuURRhjlUd5EPAHBE3dFHLivApueiS/e','06061641551','CLINICAL_ADMINISTRATOR','Hungary',5)
+,('8 Knjaz Miloševa','1985-08-05 02:00:00.000','Belgrade','admin5@maildrop.cc','Jelena','Anđelić',false,'$2y$10$.Kyidj8fG1cp0uqFtDctyu4WLw0T1FiQSYy5FBhAikNA5EeHAPfHC','0628415051','CLINICAL_ADMINISTRATOR','Serbia',4)
+,('1 Trg Slobodana Miloševića','1992-03-10 01:00:00.000','Novi Sad','admin1@maildrop.cc','Stefan','Bojanić',false,'$2y$10$GbF7jIA6aILaRrjk9LFA4e5Qx5Kg/L2IMJw0BT2jtE1na0RHSWX.a','0618525825','CLINICAL_ADMINISTRATOR','Serbia',1)
+;
 
 
-insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
-values('psiho analiza', 255, false, '01:00:00'::time, 1, false);
-insert into procedures_type(name, price, is_operation, duration, clinic_id, deleted) 
-values('opsti pregled', 25, false, '00:30:00'::time, 1, false);
-insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('01:00:00', false, 'Pregled opste prakse', 330, 3, false);
-insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('01:00:00', false, 'Pregled opste prakse', 350, 2, false);
-insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('01:15:00', false, 'Pregled opste prakse', 250, 1, false);
-insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('02:00:00', false, 'Pregled dermatologa', 630, 2, false);
-insert into procedures_type(duration, is_operation, name, price, clinic_id, deleted) 
-values ('06:00:00', true, 'Lobotomija', 2200, 1, false);
-	
---password: doca 	
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Pera', 'Perić', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'pera@gmail', '555555', 
-	'Serbia', 'Novi Sad', 'Pap Pavla 3', '2003-2-1'::timestamp, 1, 1, false, 'FIRST', 'SECOND', 'THIRD', 'NONE', 'NONE', 'NONE', 'NONE'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Jovan', 'Milinković', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'j.milinkovic@gmail', '555556', 
-	'Serbia', 'Novi Sad', 'Pere Milića 3', '2001-3-15'::timestamp, 1, 2, false, 'NONE', 'FIRST', 'SECOND', 'THIRD', 'NONE', 'NONE', 'NONE'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Đorđe', 'Bogdanović', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'djokica@gmail', '555557', 
-	'Serbia', 'Novi Sad', 'Narodnih heroja 13', '1994-7-19'::timestamp, 1, 1, false, 'NONE', 'FIRST', 'SECOND', 'THIRD', 'NONE', 'NONE', 'NONE'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Relja', 'Đurić', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'rekulj@gmail', '555558', 
-	'Serbia', 'Novi Sad', 'Gundulićeva 23', '1997-6-3'::timestamp, 2, 4, false, 'NONE', 'FIRST', 'SECOND', 'THIRD', 'NONE', 'NONE', 'NONE'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Dušan', 'Glamočanin', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'malimocha@gmail', '555559', 
-	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 3, 3, false, 'NONE', 'NONE', 'NONE', 'FIRST', 'SECOND', 'THIRD', 'NONE'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Predrag', 'Djordjevic', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'djpredrag@gmail', '555559', 
-	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 7, false, 'NONE', 'NONE', 'FIRST', 'FIRST', 'NONE', 'THIRD', 'SECOND'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Milovan', 'Micic', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'mmica@gmail', '555559', 
-	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 7, false, 'NONE', 'NONE', 'NONE', 'FIRST', 'SECOND', 'THIRD', 'SECOND'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Gabriel', 'Garic', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'ggarica@gmail', '555559', 
-	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 7, false, 'NONE', 'NONE', 'NONE', 'SECOND', 'SECOND', 'THIRD', 'SECOND'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Danijela', 'Despotic', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'ddespot@gmail', '555559', 
-	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 7, false, 'NONE', 'NONE', 'NONE', 'SECOND', 'SECOND', 'THIRD', 'SECOND'
-);
-insert into doctors(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, procedure_type_id, deleted, monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-values(
-	'Ivan', 'Fish', '$2y$10$6NDf1Bm3cHFYdZEJwUE9MOrr6CZOSTqrvqvTTkXETVy18yr8eZuGe', 'DOCTOR', 'ifish@gmail', '555559', 
-	'Serbia', 'Novi Sad', 'Kosovke Djeve 3', '1998-11-12'::timestamp, 1, 2, false, 'NONE', 'NONE', 'NONE', 'SECOND', 'SECOND', 'THIRD', 'SECOND'
-);
+INSERT INTO public.diagnosispojo (description,diagnosis) VALUES 
+('Rhino virus, caused by seasonal drop of immunity','Common Cold')
+,('You are a hypocondriac. Chill out. ','No diagnosis')
+,('Femeral bone broken, probabbly due to an immense physical trauma','Broken left femur')
+,('Patient seems severely sleep deprieved. Is he maybe a student?','Sleep deprivation')
+;
 
-insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('Psihoterapija', 25, false, 1, 1);
-insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('Opšta A', 30, false, 1, 2);
-insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('Opšta B', 31, false, 1, 2);
-insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('OPERACIONA SALA', 101, false, 1, 7);
-insert into room(name, number, deleted, clinic_id, proceduras_types_id) 
-	values('OPERACIONA SALA', 102, false, 1, 7);
 
-	
-	--operacije 
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-19 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-19 12:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', true);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-18 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-21 17:00', 2, 2, 9, 7, 8, 5, 7, 'REQUESTED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-18 13:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-21 08:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
-			
-	
-	
-insert into healthrecord (blood_type, diopter, height, weight)
-values (
-	'A_NEGATIVE', 1.15, 1.75, 73
-);
-update patiens 
-set health_record_id = 1
-where patiens.id = 1;
+INSERT INTO public.medicationpojo (med_description,medication_name) VALUES 
+('Vitamin that boost the immune system','Vitamin C')
+,('They kill off the unwanted bacteria in a patients system','Antibiotics')
+,('Aids most symptoms of the common cold','Caffetin 250mg')
+,('Relax, bro','Chill pill')
+,('Strong perscription painkiller','Vicodin')
+,('Pills with a daily reccomended dose of calcium','Calcium 500mg')
+,('A perscription strength sleeping pill','Xanax 0.25mg')
+;
 
-insert into healthrecord (blood_type, diopter, height, weight)
-values (
-	'O_POSITIVE', -3.2, 1.83, 86
-);
-update patiens 
-set health_record_id = 2
-where patiens.id = 2;
-insert into healthrecord (blood_type, diopter, height, weight)
-values (
-	'A_NEGATIVE', 1.15, 1.75, 73
-);
-update patiens 
-set health_record_id = 3
-where patiens.id = 3;
 
-insert into healthrecord (blood_type, diopter, height, weight)
-values (
-	'O_POSITIVE', -3.2, 1.83, 86
-);
-update patiens 
-set health_record_id = 4
-where patiens.id = 4;
+INSERT INTO procedures_type (deleted,duration,is_operation,"name",price,clinic_id) VALUES 
+(false,'00:15:00',false,'General exam',15,1)
+,(false,'01:00:00',false,'Orthopetic exam',25,1)
+,(false,'01:00:00',false,'Psychotherapy',30,1)
+,(false,'01:15:00',false,'Psychotherapy',35,2)
+,(false,'00:30:00',false,'General exam',20,2)
+,(false,'01:30:00',false,'Hearing exam',40,2)
+,(false,'00:45:00',false,'Psychotherapy',35,5)
+;
 
-insert into allergypojo (allergy, health_record_id)
-values ('Nuts', 1);
-insert into allergypojo (allergy, health_record_id)
-values ('Cats', 1);
-insert into allergypojo (allergy, health_record_id)
-values ('Pollen', 2);
+--password: doca
+INSERT INTO doctors (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,"password",phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id,procedure_type_id) VALUES 
+('3 Branislava Nušića','1992-05-06 02:00:00.000','Novi Sad',false,'jocka@maildrop.cc','Jovana','SECOND','Bratić','NONE',false,'$2y$10$5BqVCpktyTaXtJhdcncd2.ICUS.20RaDu9N/wdp/m9w/pZ60pZ9Fm','06636268024','DOCTOR','NONE','Serbia','THIRD','NONE','SECOND','THIRD',1,1)
+,('15A Bore Prodanovića','1991-10-15 01:00:00.000','Novi Sad',false,'boki@maildrop.cc','Bogdan','FIRST','Karamarković','FIRST',false,'$2y$10$BG2D4qD6qNbq0gmOBT8vN.UgQFiP5.XecMWsPeyAKHOJLTI24BMSq','066804610','DOCTOR','FIRST','Serbia','NONE','NONE','FIRST','NONE',1,1)
+,('160 Cara Lazara','1967-09-28 01:00:00.000','Futog',false,'mile@maildrop.cc','Miladtin','FIRST','Borojević','NONE',false,'$2y$10$w2l01qOqLM7LGncVKqyfzeZnl4bJt6aQLARA0KACGFwHQP0CJge66','02168466','DOCTOR','SECOND','Serbia','FIRST','SECOND','NONE','FIRST',1,2)
+,('3 Zmaj Jovina','1983-11-08 01:00:00.000','Novi Sad',false,'milunka@maildrop.cc','Milunka','NONE','Alempić','FIRST',false,'$2y$10$OKo/z0Lpd2OFVPyJW7kPjeLobciEDgp5dz7fcA6DE6JqQurIkMbee','067051658','DOCTOR','NONE','Serbia','NONE','FIRST','FIRST','FIRST',1,3)
+,('7 Nikole Pašića','1984-10-09 01:00:00.000','Novi Sad',false,'stojan@maildrop.cc','Stojan','FIRST','Ostojić','FIRST',false,'$2y$10$c1UwgYTtS7fR.5gkNjoJ4.NKyvPpLIQHNzQ1qMAs.5LX0Mb0GSL6u','0632525805','DOCTOR','NONE','Serbia','NONE','FIRST','FIRST','FIRST',2,4)
+,('12 Turgenjeva','1989-05-16 02:00:00.000','Novi Sad',false,'akica@maildrop.cc','Aleksandra','FIRST','Jović','NONE',false,'$2y$10$LsUE7k5QbmvTWoCDYmDiXON8/zMaunviQcRuPODD88BDUjj0nRno2','06825535525','DOCTOR','FIRST','Serbia','THIRD','FIRST','NONE','NONE',2,5)
+,('19 Bulevar Oslobođenja','1959-05-14 01:00:00.000','Novi Sad',false,'zivko@maildrop.cc','Živojin','NONE','Karađorđević','NONE',false,'$2y$10$HuKLwN.sEffouqqzZU0KHePvcEliMo.nWTjHSka3G/eQV0C3gsAmi','060289029','DOCTOR','NONE','Serbia','THIRD','THIRD','THIRD','THIRD',2,6)
+,('24 Harmat u. ','1994-02-03 01:00:00.000','Budapest',false,'isa@maildrop.cc','Isztvan','NONE','Balasz','FIRST',false,'$2y$10$sUnjqDY8rkJFASMZ5ghsIuTz.uNFCAaWi7x2x4pRBFlUlS843fohu','406165320166','DOCTOR','NONE','Hungary','NONE','NONE','FIRST','FIRST',5,7)
+;
 
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-11 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-01 16:16:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-02 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-03 15:00:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-04 15:32:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-04 08:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-04 16:16:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-04 14:32:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-05 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-05 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-01-05 15:32:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
-values ('2019-11-11 14:30:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-01 16:30:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-24 19:30:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
+
+INSERT INTO room (deleted,"name","number",clinic_id,proceduras_types_id) VALUES 
+(false,'Orthopedic room',1,1,2)
+,(false,'Psychollogy',2,1,3)
+,(false,'General intake',3,1,1)
+,(false,'Psych room',1,2,4)
+,(false,'Psych room',2,2,4)
+,(false,'Exam room',3,2,5)
+,(false,'Exam room',4,2,5)
+,(false,'Exam room',5,2,5)
+,(false,'Ortorhinolaringology',6,2,6)
+,(false,'pszichoterápiás szoba',1,5,7)
+;
+INSERT INTO room (deleted,"name","number",clinic_id,proceduras_types_id) VALUES 
+(false,'pszichoterápiás szoba',2,5,7)
+;
+
+--password: 4321
+INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,"password",phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id) VALUES 
+('8 Jevrejska','1982-04-20 01:00:00.000','Novi Sad',false,'erzi@maildrop.cc','Eržebet','FIRST','Anđelić','FIRST',false,'$2y$10$NObeGyGkY5gD5dB1AqGUledF314v6C93dtVcT83/Y2Cpt4Fa./Mzi','066704035','NURSE','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',1)
+,('3 Miletićeva','1983-09-04 02:00:00.000','Novi Sad',false,'simona@maildrop.cc','Simona','THIRD','Bašić','THIRD',false,'$2y$10$f.Umhw9GYabu4pGwhQgoTuCPNXzNufvhaUHuqkt0f/g4i6nespDme','064851515522','NURSE','THIRD','Serbia','THIRD','THIRD','THIRD','THIRD',1)
+,('3 Aleksandra Tišme','1985-08-30 02:00:00.000','Novi Sad',false,'dragana@maildrop.cc','Dragana','SECOND','Crnogorac','SECOND',false,'$2y$10$D4f5Szywhr6s0jNcqfX.fu89e6/avSGulHH.dyVDAx9N.UBw0ulT2','2196761','NURSE','SECOND','Serbia','SECOND','SECOND','SECOND','SECOND',1)
+,('7 Novosadskog Sajma','1984-12-03 01:00:00.000','Novi Sad',false,'aca@maildrop.cc','Aleksandar','FIRST','Milošević','FIRST',false,'$2y$10$6V67ngsX.aXf.u5IhqjnN.LFtyl9nDZ1LB2IeULOCYLUhMnRY8Jw6','0625814512','NURSE','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',2)
+,('2 Stevana Musića','1985-04-12 02:00:00.000','Novi Sad',false,'acka@maildrop.cc','Aleksandra','SECOND','Milošev','SECOND',false,'$2y$10$13gnvIT.d9SGAHyLSGyId.EppNiX/fwjT0mEwcEkChRm/InEi1h/e','02165101','NURSE','SECOND','Serbia','SECOND','SECOND','SECOND','SECOND',2)
+,('2 Albertirsai köz','1999-03-01 01:00:00.000','Budapest',false,'vesna@maildrop.cc','Veszna','NONE','Korosi','FIRST',false,'$2y$10$b3cvXf00D8ArvSobhoObxOeAj8QYHI62Pdw9F5Qxffs36mF1NlZli','640646441','NURSE','NONE','Hungary','NONE','NONE','FIRST','FIRST',5)
+;
 
 
 
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-06-06 14:30:00', 1, 'BLESSED', 1, null, 1, 1, 1, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-06-06 16:30:00', 1, 'BLESSED', 1, null, 1, 1, 2, 1, true);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-06-06 19:30:00', 1, 'BLESSED', 1, null, 1, 1, 1, 2, false);
-
-
---novi podaci
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-11 14:30:00', 1, 'DONE', 1, null, 1, 1, 1, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-01 16:30:00', 1, 'DONE', 1, null, 1, 1, 2, 1, true);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2019-11-24 19:30:00', 1, 'DONE', 1, null, 1, 1, 1, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-03 09:30:00', 20, 'APPROVED', 2, null, 1, 4, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-03 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-04 15:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-04 08:00:00', 0, 'REQUESTED', 1, null, 1, 3, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-04 09:00:00', 0, 'REQUESTED', 2, null, 1, 4, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-05 09:30:00', 20, 'REQUESTED', 1, null, 1, 3, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 10:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-03-28 10:00:00', 1, 'AVAILABLE', 1, null, 1, null, 1, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-03-27 00:00:00', 1, 'AVAILABLE', 1, null, 1, null, 2, 1, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-03-03 04:00:00', 1, 'AVAILABLE', 1, null, 1, null, 1, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-03-03 02:00:00', 30, 'AVAILABLE', 4, null, 1, null, 1, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-03-03 06:00:00', 1, 'AVAILABLE', 3, null, 1, null, 1, 2, false);
-
---for requesting a new appointment as doctor
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-06 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-06 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-02-06 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
---podaci za otkazivanje appointmenta
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-20 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-21 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-22 12:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false);
---podaci za rezervisanje sala
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-31 12:30:00', 0, 'DOCTOR_REQUESTED_APPOINTMENT', 1, null, 1, 1, 2, null, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-1-30 12:30:00', 0, 'DOCTOR_REQUESTED_APPOINTMENT', 1, null, 1, 1, 2, null, false);
-insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted)
-values ('2020-2-1 12:30:00', 0, 'REQUESTED', 1, null, 2, 1, 2, null, false);
 
 
 
---veza doktor - requested appointment
-insert into doctor_requested(doctor_id, appointment_id)
-	values(1, 12);
-insert into doctor_requested(doctor_id, appointment_id)
-	values(1, 13);
-insert into doctor_requested(doctor_id, appointment_id)
-	values(1, 14);
-
-insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
-values (3, 1, 1);
-insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
-values (1, 1, 1);
-insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
-values (2, 1, 2);
-insert into examination_reportpojo (appointment_id, clinic_id, health_record_id)
-values (4, 1, 1);
-
-update appointments 
-set examination_report_id = 1
-where id = 1;
-update appointments 
-set examination_report_id = 2
-where id = 2;
-update appointments 
-set examination_report_id = 3
-where id = 3;
-update appointments 
-set examination_report_id = 4
-where id = 4;
-
-update examination_reportpojo
-set health_record_id = 1
-where id = 1;
-update examination_reportpojo
-set health_record_id = 1
-where id = 2;
-update examination_reportpojo
-set health_record_id = 1
-where id = 3;
-
-insert into diagnosispojo (description, diagnosis)
-values ('U are fine', 'Hypohondriac');
-insert into diagnosispojo (description, diagnosis)
-values ('What you get from too much reddit', 'Brain Cancer');
-insert into diagnosispojo (description, diagnosis)
-values ('Dubstep.', 'Ear Cancer');
-
-insert into therapypojo (advice)
-values ('Go out more');
-insert into therapypojo (advice)
-values ('Git gud, n00b');
-insert into therapypojo (advice)
-values ('Drugs are bad, mkay?');
-
-insert into medicationpojo (med_description, medication_name)
-values ('It makes you feel good', 'Cocain');
-insert into medicationpojo (med_description, medication_name)
-values ('Gives you wings', 'Reed bool');
-insert into medicationpojo (med_description, medication_name)
-values ('For the missus, wink wink nudge nudge', 'Vaseline');
-
-insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
-values (1, 1, 1, 1);
-insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
-values (2, 2, 1, 2);
-insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
-values (3, 2, 1, null);
-
-insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
-values (2, 1, null, 1);
-insert into perscriptionpojo (diagnosis_id, examination_report_id, signing_nurse_id, therapy_id)
-values (3, 2, null, 2);
-
-
-
-update examination_reportpojo
-set perscription_id = 1
-where id = 1;
-update examination_reportpojo
-set perscription_id = 2
-where id = 2;
-update examination_reportpojo
-set perscription_id = 3
-where id = 3;
-
-insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
-values (1, 1);
-insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
-values (2, 1);
-insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
-values (3, 1);
-
-insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
-values (1, 4);
-
-
-insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
-values (2, 5);
-
-
-insert into perscriptionpojo_medication_list (medication_list_id, perscription_id)
-values (1, 5);
-
-
-insert into doctor_reviewpojo (rating, doctor_id, patient_id)
-values (2, 2, 2);
-insert into doctor_reviewpojo (rating, doctor_id, patient_id)
-values (3, 2, 2);
-insert into doctor_reviewpojo (rating, doctor_id, patient_id)
-values (4, 2, 3);
-insert into doctor_reviewpojo (rating, doctor_id, patient_id)
-values (1, 2, 4);
-insert into doctor_reviewpojo (rating, doctor_id, patient_id)
-values (1, 1, 2);
-
-insert into clinic_rewiew (rating, clinic_id, patient_id)
-values (3, 1, 1);
-insert into clinic_rewiew (rating, clinic_id, patient_id)
-values (5, 1, 2);
-insert into clinic_rewiew (rating, clinic_id, patient_id)
-values (4, 1, 3);
-insert into clinic_rewiew (rating, clinic_id, patient_id)
-values (3, 1, 4);
-insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
-	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'أنا أعرف القليل من اللغة العربية ، كافر', 'DOCTOR', 1, null, 0);
-insert into clinic_rewiew (rating, clinic_id, patient_id)
-values (1, 2, 3);
-insert into clinic_rewiew (rating, clinic_id, patient_id)
-values (2, 2, 4);
-
-
-
-insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
-	values ('2020-02-03', '2020-02-04', 'APPROVED', 'PERSONAL', 'أنا أعرف القليل من اللغة العربية ، كافر', 'DOCTOR', 1, null, 0);
-	
-	insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
-	values ('2020-01-01', '2020-01-5', 'REQUESTED', 'ANNUAL', 'Vucic是我们的最高领导者', 'DOCTOR', 1, null, 0);
-	
-insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
-	values ('2020-03-01', '2020-03-12', 'REQUESTED', 'ANNUAL', 'Please let me go, Im working for 45 days.', 'DOCTOR', 1, null, 0);
-	
-
-
-insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
-	values ('2020-02-01', '2020-02-04', 'REQUESTED', 'PERSONAL', 'release me from my flesh prison', 'NURSE', null, 1, 0);
 
 

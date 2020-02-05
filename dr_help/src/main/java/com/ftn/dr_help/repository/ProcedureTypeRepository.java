@@ -18,6 +18,8 @@ public interface ProcedureTypeRepository extends JpaRepository<ProceduresTypePOJ
 	public Double getPrice (Long clinicId, String procedureName);
 	
 	Optional<ProceduresTypePOJO> findOneByName(String name);
+	
+	
     Optional<ProceduresTypePOJO> findByIdAndClinic_id(Long id, Long clinic_id);
 	
     @Query (value = "select pt.* from procedures_type pt where pt.deleted <> true and pt.clinic_id = ?1 and pt.is_operation = true", nativeQuery = true)
@@ -30,4 +32,10 @@ public interface ProcedureTypeRepository extends JpaRepository<ProceduresTypePOJ
     		"and pt.deleted = false \n" + 
     		"and pt.is_operation = false", nativeQuery = true)
     List<ProceduresTypePOJO> getAllNotOperations(String adminEmail);
+    
+    
+
+	@Query (value = "select * from procedures_type pt where pt.\"name\" = ?1 and pt.deleted <> true", nativeQuery = true)
+	public List<ProceduresTypePOJO> findAllByName (String namew);
+    
 }
