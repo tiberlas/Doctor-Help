@@ -1,16 +1,20 @@
-//package com.ftn.dr_help.comon;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//@SpringBootTest
-//public class DailyScheduleTest {
-//
-//	@Test
-//	public void test() {
-//		fail("Not yet implemented");
-//	}
-//
-//}
+
+package com.ftn.dr_help.comon;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class DailyScheduleTest {
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
+
+}

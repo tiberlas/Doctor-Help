@@ -22,6 +22,9 @@ public class NiceScheduleBeginning {
 	@Autowired
 	private WorkScheduleAdapter workSchedule;
 	
+	@Autowired
+	private RoundUntilMonday round;
+	
 	/*
 	 * stavi da pocetak bude shodno radnoj smeni
 	 * npr ake je prva smena onda je pocetak u 8 ujutru;
@@ -109,8 +112,7 @@ public class NiceScheduleBeginning {
 			} else {
 				if(i >= (equalShifts.size() - 1)) {
 					//pomeri se za nedelju dana
-					int goInFuture = day - equalShifts.get(0).getDay().getValue() + 1;
-					niceBegin.add(Calendar.DAY_OF_MONTH, goInFuture);
+					niceBegin = round.round(niceBegin);
 				}					
 			}
 		}

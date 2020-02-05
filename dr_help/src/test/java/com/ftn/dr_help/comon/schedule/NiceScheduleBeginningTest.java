@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.DayEnum;
@@ -19,6 +21,7 @@ import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class NiceScheduleBeginningTest {
 
@@ -32,7 +35,7 @@ public class NiceScheduleBeginningTest {
 	
 	private Calendar cal = Calendar.getInstance();
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		cal.clear(Calendar.SECOND);
 		cal.clear(Calendar.MILLISECOND);
@@ -145,13 +148,9 @@ public class NiceScheduleBeginningTest {
 	}
 	
 	@Test
-	public void testOperation1() {
+	public void testOperationFindFreeDate() {
 		Calendar begin = Calendar.getInstance();
-		begin.set(Calendar.MONTH, Calendar.JANUARY);
-		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
-		begin.set(Calendar.HOUR, 0);
-		begin.set(Calendar.MINUTE, 0);
-		begin.set(Calendar.SECOND, 0);
+		begin.set(2020, 0, 16, 0, 0, 0);//thusday
 		begin.set(Calendar.MILLISECOND, 0);
 		
 		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
@@ -161,24 +160,16 @@ public class NiceScheduleBeginningTest {
 		
 		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
 		Calendar expected = Calendar.getInstance();
-		expected.set(Calendar.MONTH, Calendar.JANUARY);
-		expected.set(Calendar.DAY_OF_MONTH, 20); //ponedeljak
-		expected.set(Calendar.HOUR, 0);
-		expected.set(Calendar.MINUTE, 0);
-		expected.set(Calendar.SECOND, 0);
+		expected.set(2020, 0, 20, 8, 0, 0);//monday
 		expected.set(Calendar.MILLISECOND, 0);
 		
 		assertEquals(expected, finded);
 	}
 	
 	@Test
-	public void testOperation2() {
+	public void testOperationFindFreeDate2() {
 		Calendar begin = Calendar.getInstance();
-		begin.set(Calendar.MONTH, Calendar.JANUARY);
-		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
-		begin.set(Calendar.HOUR, 0);
-		begin.set(Calendar.MINUTE, 0);
-		begin.set(Calendar.SECOND, 0);
+		begin.set(2020, 0, 16, 0, 0, 0);//thursday
 		begin.set(Calendar.MILLISECOND, 0);
 		
 		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
@@ -187,24 +178,16 @@ public class NiceScheduleBeginningTest {
 		
 		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
 		Calendar expected = Calendar.getInstance();
-		expected.set(Calendar.MONTH, Calendar.JANUARY);
-		expected.set(Calendar.DAY_OF_MONTH, 17); //ponedeljak
-		expected.set(Calendar.HOUR, 0);
-		expected.set(Calendar.MINUTE, 0);
-		expected.set(Calendar.SECOND, 0);
+		expected.set(2020, 0, 17, 8, 0, 0);//friday
 		expected.set(Calendar.MILLISECOND, 0);
 		
 		assertEquals(expected, finded);
 	}
 	
 	@Test
-	public void testOperation3() {
+	public void testOperationFindFreeDate3() {
 		Calendar begin = Calendar.getInstance();
-		begin.set(Calendar.MONTH, Calendar.JANUARY);
-		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
-		begin.set(Calendar.HOUR, 0);
-		begin.set(Calendar.MINUTE, 0);
-		begin.set(Calendar.SECOND, 0);
+		begin.set(2020, 0, 16, 0, 0, 0);//thursday
 		begin.set(Calendar.MILLISECOND, 0);
 		
 		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
@@ -213,51 +196,36 @@ public class NiceScheduleBeginningTest {
 		
 		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
 		Calendar expected = Calendar.getInstance();
-		expected.set(Calendar.MONTH, Calendar.JANUARY);
-		expected.set(Calendar.DAY_OF_MONTH, 19); 
-		expected.set(Calendar.HOUR, 0);
-		expected.set(Calendar.MINUTE, 0);
-		expected.set(Calendar.SECOND, 0);
+		expected.set(2020, 0, 19, 8, 0, 0);
 		expected.set(Calendar.MILLISECOND, 0);
 		
 		assertEquals(expected, finded);
 	}
 	
 	@Test
-	public void testOperation4() {
+	public void testOperationRequestInDateSecondShift() {
 		Calendar begin = Calendar.getInstance();
 		begin.set(Calendar.MONTH, Calendar.JANUARY);
-		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
-		begin.set(Calendar.HOUR, 0);
-		begin.set(Calendar.MINUTE, 0);
-		begin.set(Calendar.SECOND, 0);
+		begin.set(2020, 0, 16, 0, 0, 0);//thusday
 		begin.set(Calendar.MILLISECOND, 0);
 		
 		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
 		equalShifts.add(new EqualDoctorShifts(DayEnum.MONDAY, Shift.FIRST));
-		equalShifts.add(new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.THURSDAY, Shift.SECOND));
 		equalShifts.add(new EqualDoctorShifts(DayEnum.SATURDAY, Shift.FIRST));
 		
 		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
 		Calendar expected = Calendar.getInstance();
-		expected.set(Calendar.MONTH, Calendar.JANUARY);
-		expected.set(Calendar.DAY_OF_MONTH, 18);
-		expected.set(Calendar.HOUR, 0);
-		expected.set(Calendar.MINUTE, 0);
-		expected.set(Calendar.SECOND, 0);
+		expected.set(2020, 0, 16, 16, 0, 0);//thusday
 		expected.set(Calendar.MILLISECOND, 0);
 		
 		assertEquals(expected, finded);
 	}
 	
 	@Test
-	public void testOperation5() {
+	public void testOperationRequestInDateFirstShift() {
 		Calendar begin = Calendar.getInstance();
-		begin.set(Calendar.MONTH, Calendar.JANUARY);
-		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
-		begin.set(Calendar.HOUR, 0);
-		begin.set(Calendar.MINUTE, 0);
-		begin.set(Calendar.SECOND, 0);
+		begin.set(2020, 0, 16, 0, 0, 0);//thusday
 		begin.set(Calendar.MILLISECOND, 0);
 		
 		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
@@ -267,24 +235,16 @@ public class NiceScheduleBeginningTest {
 		
 		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
 		Calendar expected = Calendar.getInstance();
-		expected.set(Calendar.MONTH, Calendar.JANUARY);
-		expected.set(Calendar.DAY_OF_MONTH, 16); 
-		expected.set(Calendar.HOUR, 0);
-		expected.set(Calendar.MINUTE, 0);
-		expected.set(Calendar.SECOND, 0);
+		expected.set(2020, 0, 16, 8, 0, 0);//thusday
 		expected.set(Calendar.MILLISECOND, 0);
 		
 		assertEquals(expected, finded);
 	}
 	
 	@Test
-	public void testOperation6() {
+	public void testOperationRequestInSchedule() {
 		Calendar begin = Calendar.getInstance();
-		begin.set(Calendar.MONTH, Calendar.JANUARY);
-		begin.set(Calendar.DAY_OF_MONTH, 16); //thursday
-		begin.set(Calendar.HOUR, 10);
-		begin.set(Calendar.MINUTE, 32);
-		begin.set(Calendar.SECOND, 0);
+		begin.set(2020, 0, 16, 10, 32, 0);//thusday
 		begin.set(Calendar.MILLISECOND, 0);
 		
 		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
@@ -294,11 +254,25 @@ public class NiceScheduleBeginningTest {
 		
 		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
 		Calendar expected = Calendar.getInstance();
-		expected.set(Calendar.MONTH, Calendar.JANUARY);
-		expected.set(Calendar.DAY_OF_MONTH, 16); 
-		expected.set(Calendar.HOUR_OF_DAY, 8);
-		expected.set(Calendar.MINUTE, 0);
-		expected.set(Calendar.SECOND, 0);
+		expected.set(2020, 0, 16, 10, 32, 0);//thusday
+		expected.set(Calendar.MILLISECOND, 0);
+		
+		assertEquals(expected, finded);
+	}
+	
+	@Test
+	public void testOperationFindInThirdShift() {
+		Calendar begin = Calendar.getInstance();
+		begin.set(2020, 0, 16, 0, 0, 0);//thusday
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		List<EqualDoctorShifts> equalShifts = new ArrayList<>();
+		equalShifts.add(new EqualDoctorShifts(DayEnum.TUESDAY, Shift.FIRST));
+		equalShifts.add(new EqualDoctorShifts(DayEnum.SUNDAY, Shift.THIRD));
+		
+		Calendar finded = schedule.setNiceOperationBegin(equalShifts, begin);
+		Calendar expected = Calendar.getInstance();
+		expected.set(2020, 0, 19, 0, 0, 0);//sunday
 		expected.set(Calendar.MILLISECOND, 0);
 		
 		assertEquals(expected, finded);
