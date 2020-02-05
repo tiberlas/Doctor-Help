@@ -100,7 +100,7 @@ class NewRoom extends Component {
                 show={this.props.show}
             >
                 <Modal.Header>
-                    <h5>Add new room</h5>
+                    <h5>Add new room: </h5>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={this.handleSubmit}>
