@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(basePackages={"com.ftn.dr_help"})
 @EnableTransactionManagement
 @EnableJpaRepositories
 @EnableAsync

@@ -475,15 +475,6 @@ public class DoctorService {
 					schedule = new DailySchedule (calendarMin, d.getSunday(), d.getId(), leaveRequestRepository);
 					break;
 			}
-			if (d == null) {
-				System.out.println("");
-				System.out.println("");
-				System.out.println("");
-				System.out.println("Doktor ti je null :p ");
-				System.out.println("");
-				System.out.println("");
-				System.out.println("");
-			}
 			List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(d.getId(), calendarMin, calendarMax);
 			for (AppointmentPOJO a : appointments) {
 				schedule.addAppointment(a);
