@@ -57,8 +57,8 @@ class DoctorShowExaminationReport extends React.Component {
                 <hr/>
                 <h4> Examination report: </h4>
                 <br/>
-                Diagnosis: {this.props.report.diagnosis} <br/>
-                Medication:  <br/>
+                <i class="fas fa-stethoscope"></i> Diagnosis: {this.props.report.diagnosis} <br/>
+                <i class="fas fa-capsules"></i> Medication:  <br/>
                 <p style = {this.props.report.nurseSigned ? completedStyle : null}> 
                 {this.generateMedicationArray()} </p>
 
@@ -67,15 +67,15 @@ class DoctorShowExaminationReport extends React.Component {
 
                 <div class="text-muted" style={{fontStyle: 'italic'}}>Examined by {this.props.event.doctor}</div>
                 <br/>
-                {!this.state.showUpdate && <Fragment>Doctor notes: {this.props.report.note} </Fragment>}
+                {!this.state.showUpdate && <Fragment> <i class="far fa-sticky-note"></i> Doctor notes: {this.props.report.note} </Fragment>}
                 <br/>
 
                 {this.state.showUpdate 
                 ? <Fragment> 
-                    Doctor notes: <br/>
+                    <i class="far fa-sticky-note"></i> Doctor notes: <br/>
                     <textarea name="note" defaultValue={this.props.report.note} onChange={this.handleChange}/>
                     <br/>
-                    <Button className="btn" onClick={()=>{this.setState({showUpdate: false})}}>Cancel</Button> &nbsp;&nbsp;
+                    <button type="button" class = "btn btn-secondary" onClick={()=>{this.setState({showUpdate: false})}}>Cancel</button> &nbsp;&nbsp;
                     <Button className="btn btn-success" onClick={this.handleUpdate}>Confirm</Button>
                    </Fragment> 
                    : <Fragment> 

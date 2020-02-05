@@ -4,6 +4,9 @@ import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.Mail;
@@ -12,13 +15,16 @@ import com.ftn.dr_help.dto.AppointmentInternalBlessedDTO;
 import com.ftn.dr_help.dto.NurseWIthFirstFreeDateInnerDTO;
 import com.ftn.dr_help.model.enums.AppointmentBlessing;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
+import com.ftn.dr_help.model.enums.OperationStatus;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
+import com.ftn.dr_help.model.pojo.OperationPOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
 
 @Service
@@ -26,6 +32,9 @@ public class AppointmentBlessingService {
 
 	@Autowired
 	private AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	private OperationRepository operationRepository;
 	
 	@Autowired
 	private DateConverter dateConverter;
@@ -51,6 +60,7 @@ public class AppointmentBlessingService {
 	@Autowired
 	private Mail mailSender;
 	
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, isolation = Isolation.REPEATABLE_READ)
 	public AppointmentInternalBlessedDTO blessing(AppointmentForSchedulingDTO requested, String adminMeil) {
 		/**
 		 * provera da li requested appointment odgovara sobi i doktoru; 
@@ -97,7 +107,6 @@ public class AppointmentBlessingService {
 			
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.BLESSED, "BLESSING RECIVED");
 		} catch(Exception e) {
-			e.printStackTrace();
 			return new AppointmentInternalBlessedDTO(AppointmentBlessing.REFFUSED, "NOT WORTHY");
 		}
 	}
@@ -125,5 +134,25 @@ public class AppointmentBlessingService {
 			mailSender.sendAppointmentApprovedToPatientEmail(appointment);
 		}			
 		appointmentRepository.save(appointment);
+	}
+	
+	public void scheduleOperationAndSendMail(OperationPOJO operation, DoctorPOJO doctor1, DoctorPOJO doctor2, DoctorPOJO doctor3, RoomPOJO room, Calendar date) {
+		operation.setDate(date);
+		operation.setFirstDoctor(doctor1);
+		operation.setSecondDoctor(doctor2);
+		operation.setThirdDoctor(doctor3);
+		
+		operation.setRoom(room);
+		operation.setDeleted(false);
+		operation.setStatus(OperationStatus.APPROVED);
+		
+		mailSender.sendOperationApprovedToDoctorsEmail(doctor1, operation);
+		mailSender.sendOperationApprovedToDoctorsEmail(doctor2, operation);
+		mailSender.sendOperationApprovedToDoctorsEmail(doctor3, operation);
+		
+		mailSender.sendOperationApprovedToPatientEmail(operation);
+		
+		operationRepository.save(operation);
+		
 	}
 }

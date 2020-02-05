@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from "@fullcalendar/timegrid"
@@ -183,16 +183,23 @@ class NurseCalendar extends React.Component {
 
         return(
             <div className='demo-app-calendar'> 
-                  {this.props.regime === 'schedule' && <FullCalendar defaultView="dayGridMonth" 
+            
+                  {this.props.regime === 'schedule' && <Fragment> <br/> <FullCalendar defaultView="dayGridMonth" 
               header={{
                   left: "prev,next, today",
                   center: "title",
                   right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
               }}
-              buttonText={
+              // buttonText={
+              //   {
+              //     prev: '<',
+              //     next: '>'
+              //   }
+              // }
+              buttonIcons={
                 {
-                  prev: '<',
-                  next: '>'
+                  prev: 'left-single-arrow',
+                  next: 'right-single-arrow'
                 }
               }
               businessHours = { 
@@ -208,7 +215,7 @@ class NurseCalendar extends React.Component {
               eventRender={this.handleEventRender}
               eventClick={this.handleEventClick}
               plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
-              themeSystem = 'bootstrap' /> }
+              themeSystem = 'bootstrap' /> </Fragment>}
 
 
               {this.props.regime === 'history' && <FullCalendar defaultView="listYear" //ako si na stranici pacijenta za history, list view
@@ -217,12 +224,18 @@ class NurseCalendar extends React.Component {
             center: "title",
             right: "prev, next"
           }}
-          buttonText={
+          // buttonText={
+          //   {
+          //     prev: '<',
+          //     next: '>'
+          //   }
+          // } 
+          buttonIcons={
             {
-              prev: '<',
-              next: '>'
+              prev: 'left-single-arrow',
+              next: 'right-single-arrow'
             }
-          } 
+          }
           titleFormat={
             {
              year: 'numeric'

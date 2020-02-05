@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.dr_help.model.enums.DayEnum;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.MedicalStaffWorkSchedularPOJO;
 
 @Service
 public class CheckShift {
@@ -28,6 +29,10 @@ public class CheckShift {
 		
 		upper.set(Calendar.MINUTE, 0);
 		lower.set(Calendar.MINUTE, 0);
+		upper.set(Calendar.SECOND, 0);
+		lower.set(Calendar.SECOND, 0);
+		upper.set(Calendar.MILLISECOND, 0);
+		lower.set(Calendar.MILLISECOND, 0);
 		
 		switch(shift) {
 		case FIRST:
@@ -60,6 +65,28 @@ public class CheckShift {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean checkShift(Calendar schedule, MedicalStaffWorkSchedularPOJO medicalEmploie) {
+		
+		int day = schedule.get(Calendar.DAY_OF_WEEK);
+		switch(day) {
+			case Calendar.SUNDAY:
+				return check(schedule, medicalEmploie.getSunday());
+			case Calendar.MONDAY:
+				return check(schedule, medicalEmploie.getMonday());
+			case Calendar.TUESDAY:
+				return check(schedule, medicalEmploie.getTuesday());
+			case Calendar.WEDNESDAY:
+				return check(schedule, medicalEmploie.getWednesday());
+			case Calendar.THURSDAY:
+				return check(schedule, medicalEmploie.getThursday());
+			case Calendar.FRIDAY:
+				return check(schedule, medicalEmploie.getFriday());
+			case Calendar.SATURDAY:
+				return check(schedule, medicalEmploie.getSaturday());	
+		}
+		return false;
 	}
 
 	public List<EqualDoctorShifts> FindEqualDoctorShifts(DoctorPOJO dr0, DoctorPOJO dr1, DoctorPOJO dr2) {

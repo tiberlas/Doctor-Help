@@ -1,22 +1,25 @@
 package com.ftn.dr_help.comon.schedule;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.model.enums.DayEnum;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+import com.ftn.dr_help.model.pojo.MedicalStaffWorkSchedularPOJO;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class CheckShiftTest {
 
@@ -26,7 +29,7 @@ public class CheckShiftTest {
 	private Calendar cal = Calendar.getInstance();
 	
 	@Test
-	void shiftShouldPass() {
+	public void shiftShouldPass() {
 		cal.set(Calendar.HOUR, 9);
 		cal.set(Calendar.AM_PM, Calendar.AM);
 		
@@ -36,7 +39,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftLowerBoundryShouldPass() {
+	public void shiftLowerBoundryShouldPass() {
 		cal.set(Calendar.HOUR, 8);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -49,7 +52,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftCloseToUpperBoundryShouldPass() {
+	public void shiftCloseToUpperBoundryShouldPass() {
 		cal.set(Calendar.HOUR, 3);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -62,7 +65,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftUpperBoundryShouldPass() {
+	public void shiftUpperBoundryShouldPass() {
 		cal.set(Calendar.HOUR, 4);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -75,7 +78,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftUpperBoundryShouldFAIL() {
+	public void shiftUpperBoundryShouldFAIL() {
 		cal.set(Calendar.HOUR, 4);
 		cal.set(Calendar.MINUTE, 1);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -88,7 +91,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftLowerBoundryShouldFAIL() {
+	public void shiftLowerBoundryShouldFAIL() {
 		cal.set(Calendar.HOUR, 7);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -101,7 +104,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftShouldFAIL() {
+	public void shiftShouldFAIL() {
 		cal.set(Calendar.HOUR, 9);
 		cal.set(Calendar.MINUTE, 30);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -114,7 +117,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftSecondShouldFAIL() {
+	public void shiftSecondShouldFAIL() {
 		cal.set(Calendar.HOUR, 2);
 		cal.set(Calendar.MINUTE, 15);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -127,7 +130,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftSecondShouldPass() {
+	public void shiftSecondShouldPass() {
 		cal.set(Calendar.HOUR, 6);
 		cal.set(Calendar.MINUTE, 15);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -140,7 +143,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftSecondCloseToMidthNightShouldPass() {
+	public void shiftSecondCloseToMidthNightShouldPass() {
 		cal.set(Calendar.HOUR, 11);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -153,7 +156,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftSecondMidthNightShouldFAIL() {
+	public void shiftSecondMidthNightShouldFAIL() {
 		cal.set(Calendar.HOUR, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.AM_PM, Calendar.PM);
@@ -166,7 +169,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftSecondAfterMidthNightShouldFAIL() {
+	public void shiftSecondAfterMidthNightShouldFAIL() {
 		cal.set(Calendar.HOUR, 0);
 		cal.set(Calendar.MINUTE, 1);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -179,7 +182,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftThirdUpperShouldFAIL() {
+	public void shiftThirdUpperShouldFAIL() {
 		cal.set(Calendar.HOUR, 11);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -192,7 +195,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftThirdLowerShouldFAIL() {
+	public void shiftThirdLowerShouldFAIL() {
 		cal.set(Calendar.HOUR, 8);
 		cal.set(Calendar.MINUTE, 1);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -205,7 +208,7 @@ public class CheckShiftTest {
 	}
 
 	@Test
-	void shiftThirdUpperShouldPass() {
+	public void shiftThirdUpperShouldPass() {
 		cal.set(Calendar.HOUR, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -218,7 +221,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftThirdLowerShouldPass() {
+	public void shiftThirdLowerShouldPass() {
 		cal.set(Calendar.HOUR, 8);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -231,7 +234,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftThirdShouldPass() {
+	public void shiftThirdShouldPass() {
 		cal.set(Calendar.HOUR, 3);
 		cal.set(Calendar.MINUTE, 30);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -244,7 +247,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftThirdAgainShouldPass() {
+	public void shiftThirdAgainShouldPass() {
 		cal.set(Calendar.HOUR, 0);
 		cal.set(Calendar.MINUTE, 30);
 		cal.set(Calendar.AM_PM, Calendar.AM);
@@ -257,7 +260,7 @@ public class CheckShiftTest {
 	}
 
 	@Test
-	void shiftOperation1Test() {
+	public void shiftOperation1Test() {
 		DoctorPOJO dr1 = new DoctorPOJO();
 		DoctorPOJO dr2 = new DoctorPOJO();
 		DoctorPOJO dr3 = new DoctorPOJO();
@@ -307,7 +310,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftOperation2Test() {
+	public void shiftOperation2Test() {
 		DoctorPOJO dr1 = new DoctorPOJO();
 		DoctorPOJO dr2 = new DoctorPOJO();
 		DoctorPOJO dr3 = new DoctorPOJO();
@@ -342,7 +345,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftOperation3Test() {
+	public void shiftOperation3Test() {
 		DoctorPOJO dr1 = new DoctorPOJO();
 		DoctorPOJO dr2 = new DoctorPOJO();
 		DoctorPOJO dr3 = new DoctorPOJO();
@@ -391,7 +394,7 @@ public class CheckShiftTest {
 	}
 	
 	@Test
-	void shiftOperation4Test() {
+	public void shiftOperation4Test() {
 		DoctorPOJO dr1 = new DoctorPOJO();
 		DoctorPOJO dr2 = new DoctorPOJO();
 		DoctorPOJO dr3 = new DoctorPOJO();
@@ -542,5 +545,365 @@ public class CheckShiftTest {
 		boolean ret = calculate.isInShift(time, equalShifts);
 		
 		assertTrue(ret);
+	}
+	
+	@Test
+	public void checkShiftBeginShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 8, 0, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
+	}
+	
+	@Test
+	public void checkShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 10, 23, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
+	}
+	
+	@Test
+	public void checkShiftEndShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 16, 0, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
+	}
+	
+	@Test
+	public void checkShiftAlmostEndShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 15, 59, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
+	}
+	
+	@Test
+	public void checkShiftAfterEndShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 16, 0, 1);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertFalse(actual);
+	}
+	
+	@Test
+	public void checkShiftAfterEndShiftTest2() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 16, 10, 1);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertFalse(actual);
+	}
+	
+	@Test
+	public void checkShiftAfterEndShiftTest3() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 18, 0, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertFalse(actual);
+	}
+	
+	@Test
+	public void checkShiftBeforeStartShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 5, 7, 59, 1);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertFalse(actual);
+	}
+	
+	@Test
+	public void checkShiftNotTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 9, 16, 0, 1);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.FIRST, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertFalse(actual);
+	}
+	
+	@Test
+	public void checkThirdShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 12, 6, 0, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.THIRD, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
+	}
+	
+	@Test
+	public void checkAfterThirdShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 12, 8, 2, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.THIRD, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertFalse(actual);
+	}
+	
+	@Test
+	public void checkBeforeThirdShiftTest() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 12, 23, 59, 59);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.THIRD, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertFalse(actual);
+	}
+	
+	@Test
+	public void checkThirdShiftTest1() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 12, 1, 59, 59);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.THIRD, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
+	}
+	
+	@Test
+	public void checkThirdShiftTest2() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 12, 0, 0, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.THIRD, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
+	}
+	
+	@Test
+	public void checkThirdShiftTest3() {
+		Calendar time = Calendar.getInstance();
+		time.set(2020, 1, 12, 0, 10, 1);
+		time.set(Calendar.MILLISECOND, 0);
+		
+		Calendar duration = Calendar.getInstance();
+		duration.set(2020, 0, 1, 1, 0, 0);//1h
+		duration.set(Calendar.MILLISECOND, 0);
+		MedicalStaffWorkSchedularPOJO medicalEmploie = new MedicalStaffWorkSchedularPOJO(
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.THIRD, 
+										Shift.NONE,
+										Shift.NONE, 
+										Shift.NONE, 
+										Shift.NONE, 
+										duration);
+		
+		boolean actual = calculate.checkShift(time, medicalEmploie);
+		
+		assertTrue(actual);
 	}
 }

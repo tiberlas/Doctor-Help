@@ -1,6 +1,7 @@
 package com.ftn.dr_help.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.dr_help.comon.AppPasswordEncoder;
 import com.ftn.dr_help.comon.DateConverter;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
@@ -261,7 +263,7 @@ public class PatientService {
 		return retVal;
 	}
 	
-	public List<PatientHistoryDTO> getHistory (String email) {
+	public AppointmentListDTO getHistory (String email, String dateFilter, String doctorId, String clinicId, String procedureTypeId) {
 		PatientPOJO patient = patientRepository.findOneByEmail(email);
 		HealthRecordPOJO healthRecord = patient.getHealthRecord();
 		if (healthRecord == null) {
@@ -269,27 +271,140 @@ public class PatientService {
 		}
 		List<ExaminationReportPOJO> examinationReports = examinationReportRepository.findAllByHealthRecordId(patient.getHealthRecord().getId());
 		
-		DateConverter dateConverter = new DateConverter ();
-		
-		List<PatientHistoryDTO> retVal = new ArrayList<PatientHistoryDTO>();
+		AppointmentListDTO retVal = new AppointmentListDTO();
+		List<PatientHistoryDTO> appointments= new ArrayList<PatientHistoryDTO>();
 		for (ExaminationReportPOJO report : examinationReports) {
 			PatientHistoryDTO retValItem = new PatientHistoryDTO ();
 			AppointmentPOJO appointment = report.getAppointment();
 			retValItem.setExaminationReportId(report.getId());
 			
-			retValItem.setDate(dateConverter.toString(appointment.getDate()));
+			String date = "" + appointment.getDate().get(Calendar.DAY_OF_MONTH) + ".";
+			date += (appointment.getDate().get(Calendar.MONTH) + 1) + ".";
+			date += appointment.getDate().get(Calendar.YEAR) + ". ";
+			date += appointment.getDate().get(Calendar.HOUR_OF_DAY) + ":";
+			date += appointment.getDate().get(Calendar.MINUTE);
+			
+			retValItem.setDate(date);
 			retValItem.setProcedureType(appointment.getProcedureType().getName());
 			retValItem.setDoctor(appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName());
 			retValItem.setNurse(appointment.getNurse().getFirstName() + " " + appointment.getNurse().getLastName());
 			retValItem.setClinicName(report.getClinic().getName());
 			retValItem.setClinicId(report.getClinic().getId());
 			retValItem.setDoctorId(appointment.getDoctor().getId());
-			retVal.add(retValItem);
+			appointments.add(retValItem);
 		}
-		if (retVal.size() > 0) {
+		
+		if (appointments.size() > 0) {
+			retVal.setAppointmentList(appointments);
+			
+			List<String> dateList = new ArrayList<String> ();
+			dateList.add("unfiltered");
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				boolean isThere = false;
+				for (String str : dateList) {
+					if (str.split(" ")[0].equals(p.getDate().split(" ")[0])) {
+						isThere = true;
+						break;
+					}
+				}
+				if (!isThere) {
+					dateList.add(p.getDate().split(" ")[0]);
+				}
+			}
+			retVal.setPossibleDates (dateList);
+			
+			List<String> doctorList = new ArrayList<String> ();
+			doctorList.add("unfiltered");
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				boolean isThere = false;
+				for (String str : doctorList) {
+					if (str.equals(p.getDoctor())) {
+						isThere = true;
+						break;
+					}
+				}
+				if (!isThere) {
+					doctorList.add(p.getDoctor ());
+				}
+			}
+			retVal.setPossibleDoctors(doctorList);
+			
+			List<String> clinicList = new ArrayList<String> ();
+			clinicList.add("unfiltered");
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				boolean isThere = false;
+				for (String str : clinicList) {
+					if (str.equals (p.getClinicName())) {
+						isThere = true;
+						break;
+					}
+				}
+				if (!isThere) {
+					clinicList.add(p.getClinicName());
+				}
+			}
+			retVal.setPossibleClinics(clinicList);
+			
+			List<String> typeList = new ArrayList<String> ();
+			typeList.add("unfiltered");
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				boolean isThere = false;
+				for (String str : typeList) {
+					if (str.equals(p.getProcedureType())) {
+						isThere = true;
+						break;
+					}
+				}
+				if (!isThere) {
+					typeList.add(p.getProcedureType());
+				}
+			}
+			retVal.setPossibleTypes(typeList);
+			
+			if (!dateFilter.equals("unfiltered")) {
+				List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+				for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+					if (p.getDate().split(" ")[0].equals(dateFilter + ".")) {
+						tempList.add(p);
+					}
+				}
+				retVal.setAppointmentList(tempList);
+			}
+			
+			if (!doctorId.equals("unfiltered")) {
+				List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+				for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+					if (p.getDoctor().equals(doctorId)) {
+						tempList.add(p);
+					}
+				}
+				retVal.setAppointmentList(tempList);
+			}
+			
+			if (!clinicId.contentEquals(("unfiltered"))) {
+				List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+				for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+					if (p.getClinicName().equals(clinicId)) {
+						tempList.add(p);
+					}
+				}
+				retVal.setAppointmentList(tempList);
+			}
+			
+			if (!procedureTypeId.equals("unfiltered")) {
+				List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+				for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+					if (p.getProcedureType().equals(procedureTypeId)) {
+						tempList.add(p);
+					}
+				}
+				retVal.setAppointmentList(tempList);
+			}
+			
 			return retVal;
 		}
-		return null;
+		retVal.setAppointmentList(null);
+		return retVal;
 	}
 	
 	public PerscriptionDisplayDTO getPerscription (Long examinationReportId) {
@@ -370,10 +485,8 @@ public class PatientService {
 		PatientPOJO patient = patientRepository.findByInsuranceNumber(insuranceNumber);
 		HealthRecordPOJO recordPOJO = patient.getHealthRecord();
 		
-		
 		System.out.println("karton:" + patient.getHealthRecord().getBloodType());
 		System.out.println("dto:" + dto.getAllergyList());
-		
 		
 		List<AllergyPOJO> existingAllergies = allergyRepository.findAllByHealthRecordId(recordPOJO.getId());
 		if(!existingAllergies.isEmpty()) //ako su vec postojale alergije za tog pacijenta, obrisi ih
@@ -401,11 +514,7 @@ public class PatientService {
 		healthRecordRepository.save(recordPOJO);
 		patientRepository.save(patient);
 		
-		
 		return dto;
-		
-		
-		
 	}
 	
 	
@@ -440,13 +549,147 @@ public class PatientService {
 		}
 	}
 
-	public List<PatientHistoryDTO> getPending(String email) {
+	public AppointmentListDTO getPending(String email, String date, String doctorId, String clinicId, String procedureTypeId, String appointmentStatus) {
+		
+		AppointmentListDTO retVal = new AppointmentListDTO ();
 		List<AppointmentPOJO> appointments = appointmentRepository.getPatientsPendingAppointments(patientRepository.findOneByEmail(email).getId());
-		List<PatientHistoryDTO> retVal = new ArrayList<PatientHistoryDTO> ();
+		List<PatientHistoryDTO> historyList = new ArrayList<PatientHistoryDTO> ();
 		for (AppointmentPOJO a : appointments) {
 			PatientHistoryDTO temp = new PatientHistoryDTO (a);
-			retVal.add(temp);
+			historyList.add(temp);
 		}
+		retVal.setAppointmentList(historyList);
+		
+		List<String> dateList = new ArrayList<String> ();
+		dateList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : dateList) {
+				if (str.split(" ")[0].equals(p.getDate().split(" ")[0])) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				dateList.add(p.getDate().split(" ")[0]);
+			}
+		}
+		retVal.setPossibleDates(dateList);
+		
+		List<String> doctorList = new ArrayList<String> ();
+		doctorList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : doctorList) {
+				if (str.equals(p.getDoctor())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				doctorList.add(p.getDoctor());
+			}
+		}
+		retVal.setPossibleDoctors(doctorList);
+		
+		List<String> clinicList = new ArrayList<String> ();
+		clinicList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : clinicList) {
+				if (str.equals (p.getClinicName())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				clinicList.add(p.getClinicName());
+			}
+		}
+		retVal.setPossibleClinics(clinicList);
+		
+		List<String> typeList = new ArrayList<String> ();
+		typeList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : typeList) {
+				if (str.equals (p.getProcedureType())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				typeList.add(p.getProcedureType());
+			}
+		}
+		retVal.setPossibleTypes(typeList);
+		
+		List<String> stateList = new ArrayList<String> ();
+		stateList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : stateList) {
+				if (str.equals (p.getStatus())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				stateList.add(p.getStatus());
+			}
+		}
+		retVal.setPossibleStatuses(stateList);
+		
+		if (!date.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getDate().split(" ")[0].equals(date)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!doctorId.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getDoctor().equals(doctorId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!clinicId.contentEquals(("unfiltered"))) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getClinicName().equals(clinicId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!procedureTypeId.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getProcedureType().equals(procedureTypeId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!appointmentStatus.equals ("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getStatus().equals(appointmentStatus)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
 		return retVal;
 	}
 	
@@ -489,15 +732,21 @@ public class PatientService {
 		}
 		
 		HealthRecordPOJO healthRecord = patient.getHealthRecord();
-		List<AllergyPOJO> allergies= healthRecord.getAllergyList();
-		
+		List<AllergyPOJO> allergies;
 		ArrayList<String> list = new ArrayList<String>();
 		
-		for (AllergyPOJO allergy : allergies) {
-			list.add(allergy.getAllergy());
-		}
-
 		
+		if (healthRecord != null) {
+			allergies = healthRecord.getAllergyList();
+			for (AllergyPOJO allergy : allergies) {
+				list.add(allergy.getAllergy());
+			}
+		}
+		else {
+			allergies = null;
+		}
+		
+				
 		PatientHealthRecordDTO retVal = new PatientHealthRecordDTO();
 		
 		retVal.setBirthday(patient.getBirthday().getTime());

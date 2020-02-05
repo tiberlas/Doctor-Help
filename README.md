@@ -21,3 +21,6 @@ testiranje:
 npm install --save-dev jest-dom
 npm install --save-dev react-test-renderer
 npm install --save-dev @testing-library/react
+
+react chart
+npm i react-charts --save

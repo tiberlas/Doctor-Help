@@ -55,7 +55,6 @@ class PatientRequests extends Component {
         if(this._isMounted)
             return(
                 <div> 
-                    <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet"></link>
                 <br/>
                 <br/>
                     <div class="row d-flex justify-content-center">

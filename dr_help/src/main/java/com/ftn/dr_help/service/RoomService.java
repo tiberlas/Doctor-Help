@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.ProcedureIdAndDateDTO;
@@ -51,6 +52,7 @@ public class RoomService {
 	@Autowired
 	private DateConverter dateConvertor;
 	
+	@Transactional(readOnly = true)
 	public List<RoomDTO> findAll(String email) {
 		
 		try {
@@ -88,6 +90,7 @@ public class RoomService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public RoomDTO findOne(Long roomID, String email) {
 		
 		Long clinicID = adminRepository.findOneByEmail(email).getClinic().getId();

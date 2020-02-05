@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.dto.ProcedureTypeDTO;
 import com.ftn.dr_help.dto.ProcedureTypeFilterDTO;
@@ -35,9 +36,9 @@ public class ProcedureTypeService {
 	}
 	
 	public Double getPrice (Long clinicId, String procedureName) {
-		System.out.println("PROCEDURE TYPE, get price, clinic id: " + clinicId + "; Procedure name: " + procedureName);
+		//System.out.println("PROCEDURE TYPE, get price, clinic id: " + clinicId + "; Procedure name: " + procedureName);
 		Double retVal = procedureTypeRepository.getPrice(clinicId, procedureName);
-		System.out.println("Procedure type service, evo sta sam iskopao iz baze: " + retVal);
+		//System.out.println("Procedure type service, evo sta sam iskopao iz baze: " + retVal);
 		return retVal;
 	}
 	
@@ -64,6 +65,7 @@ public class ProcedureTypeService {
         return ret;
     }
 
+    @Transactional(readOnly = true)
     public ProcedureTypeDTO getOne(Long id) {
     	if( id == null) {
     		return null;

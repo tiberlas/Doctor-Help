@@ -54,4 +54,6 @@ public interface DoctorRepository extends JpaRepository<DoctorPOJO, Long> {
 	@Query(value = "select * from doctors d where d.clinic_id = ?1 and d.procedure_type_id = ?2", nativeQuery = true)
 	public List<DoctorPOJO> getAllDoctorsFromClinicWithSpecialization(Long clinicId, Long procedureId);
 
+	@Query(value ="select avg(dr.rating) from doctor_reviewpojo dr where dr.doctor_id = ?1", nativeQuery = true)
+	public Float getAverageRatingFor(Long doctorId);
 }

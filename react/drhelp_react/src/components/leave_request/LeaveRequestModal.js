@@ -38,15 +38,17 @@ class LeaveRequestModal extends React.Component {
             }
         }
 
-        for(let i = 0; i < this.props.operations.length; i++) {
-            let operationStartDate = new Date(this.props.operations[i].startDate)
-            console.log('a', operationStartDate)
-            let selectedBeginDate = new Date(this.props.selectedDates.startStr)
+        if (typeof this.props.operations !== 'undefined') {
+            for(let i = 0; i < this.props.operations.length; i++) {
+                let operationStartDate = new Date(this.props.operations[i].startDate)
+                console.log('a', operationStartDate)
+                let selectedBeginDate = new Date(this.props.selectedDates.startStr)
 
-            let selectedEndDate = new Date(this.props.selectedDates.endStr)
-            if(Moment(operationStartDate).isAfter(selectedBeginDate) && Moment(operationStartDate).isBefore(selectedEndDate) || Moment(operationStartDate).isSame(selectedBeginDate, 'day')) { //are there any appointments between my selected dates?
-                able = false
-                this.setState({ableToRequest: false, operation: true})
+                let selectedEndDate = new Date(this.props.selectedDates.endStr)
+                if(Moment(operationStartDate).isAfter(selectedBeginDate) && Moment(operationStartDate).isBefore(selectedEndDate) || Moment(operationStartDate).isSame(selectedBeginDate, 'day')) { //are there any appointments between my selected dates?
+                    able = false
+                    this.setState({ableToRequest: false, operation: true})
+                }
             }
         }
 
@@ -86,9 +88,9 @@ class LeaveRequestModal extends React.Component {
                     <div class="row d-flex justify-content-center">
                         <div class='col-md-11'>
                           
-                            <strong> Start:  </strong>&emsp; {new Date(this.props.selectedDates.startStr).toLocaleDateString("en-US")}
+                            <strong> <i class="fas fa-calendar-minus"></i> Start:  </strong>&emsp; {new Date(this.props.selectedDates.startStr).toLocaleDateString("en-US")}
                             <br/>
-                            <strong> End: </strong> &emsp; {endDate.toLocaleDateString("en-US")}
+                            <strong> <i class="fas fa-calendar-plus"></i> End: </strong> &emsp; {endDate.toLocaleDateString("en-US")}
                         </div>
                     </div>
 

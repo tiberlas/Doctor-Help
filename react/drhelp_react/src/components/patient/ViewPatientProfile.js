@@ -27,7 +27,7 @@ class ViewPatientProfile extends Component {
 
 	render () {
 		return (
-            this.state.loading ? <h1> Loading... </h1> :
+            this.state.loading ? <h1> <i class="fas fa-circle-notch fa-spin"></i> Loading... </h1> :
 			<div>
                 {this.props.medical_staff.role === 'doctor' && <DoctorViewProfile //ako si doca, imas opcije za doktora
                                                                 patient={this.state.patient}

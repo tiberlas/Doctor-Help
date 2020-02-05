@@ -7,7 +7,7 @@ import com.ftn.dr_help.model.pojo.PerscriptionPOJO;
 
 public class PerscriptionDisplayDTO {
 
-	private String Diagnosis;
+	private String Diagnosis = "No diagnosis established";
 	private String Description;
 	private String Advice;
 	private List<MedicationDisplayDTO> medicationList;
@@ -15,7 +15,6 @@ public class PerscriptionDisplayDTO {
 	
 	public PerscriptionDisplayDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

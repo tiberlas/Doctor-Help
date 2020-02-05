@@ -45,6 +45,7 @@ import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.DoctorReviewRepository;
+import com.ftn.dr_help.repository.LeaveRequestRepository;
 import com.ftn.dr_help.repository.OperationRepository;
 import com.ftn.dr_help.repository.PatientRepository;
 import com.ftn.dr_help.repository.ProcedureTypeRepository;
@@ -95,6 +96,8 @@ public class DoctorService {
 	@Autowired
 	private PatientRepository patientRepository;
 	
+	@Autowired
+	private LeaveRequestRepository leaveRequestRepository;
 	@Autowired 
 	private LeaveRequestService leaveRequestsService;
 	
@@ -451,25 +454,25 @@ public class DoctorService {
 			DailySchedule schedule;
 			switch (calendarMin.get(Calendar.DAY_OF_WEEK)) {
 				case Calendar.MONDAY:
-					schedule = new DailySchedule (calendarMin, d.getMonday());
+					schedule = new DailySchedule (calendarMin, d.getMonday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.TUESDAY:
-					schedule = new DailySchedule (calendarMin, d.getTuesday());
+					schedule = new DailySchedule (calendarMin, d.getTuesday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.WEDNESDAY:
-					schedule = new DailySchedule (calendarMin, d.getWednesday());
+					schedule = new DailySchedule (calendarMin, d.getWednesday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.THURSDAY:
-					schedule = new DailySchedule (calendarMin, d.getThursday());
+					schedule = new DailySchedule (calendarMin, d.getThursday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.FRIDAY:
-					schedule = new DailySchedule (calendarMin, d.getFriday());
+					schedule = new DailySchedule (calendarMin, d.getFriday(), d.getId(), leaveRequestRepository);
 					break;
 				case Calendar.SATURDAY:
-					schedule = new DailySchedule (calendarMin, d.getSaturday());
+					schedule = new DailySchedule (calendarMin, d.getSaturday(), d.getId(), leaveRequestRepository);
 					break;
 				default:
-					schedule = new DailySchedule (calendarMin, d.getSunday());
+					schedule = new DailySchedule (calendarMin, d.getSunday(), d.getId(), leaveRequestRepository);
 					break;
 			}
 			List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(d.getId(), calendarMin, calendarMax);
@@ -484,6 +487,7 @@ public class DoctorService {
 			else {
 				temp.setRating ("/");
 			}
+			
 			List<Term> terms = schedule.getAvaliableTerms(d.getProcedureType());
 			List<String> times = new ArrayList<String> ();
 			for (Term t : terms) {
@@ -550,6 +554,7 @@ public class DoctorService {
 		return calculate.checkScheduleOrFindFirstFree(workSchedule.fromDoctor(doctor), requestedSchedule, reservedDates, absenceDates);
 	}
 	
+	@Transactional(readOnly = true)
 	public List<MedicalStaffNameDTO> getSpecializedDoctors(Long procedureTypeId) {
 		try {
 			
@@ -726,6 +731,44 @@ public class DoctorService {
 				businessDayHoursDTO.setStartTime("16:00");
 				businessDayHoursDTO.setEndTime("24:00");
 			} else if(doctor.getFriday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		if(!doctor.getSaturday().toString().equals("NONE")) { //ako radi petkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(6); //5 == Friday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getSaturday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getSaturday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getSaturday().toString().equals("THIRD")) {
+				businessDayHoursDTO.setStartTime("00:00");
+				businessDayHoursDTO.setEndTime("08:00");
+			}
+			businessDayList.add(businessDayHoursDTO);
+		}
+		
+		
+		if(!doctor.getSunday().toString().equals("NONE")) { //ako radi petkom = Shift != NONE
+			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
+			List<Integer> day = new ArrayList<Integer>();	
+			day.add(7); //5 == Friday
+			businessDayHoursDTO.setDaysOfWeek(day);
+			if(doctor.getSunday().toString().equals("FIRST")) { //ako radi prvu smenu
+				businessDayHoursDTO.setStartTime("08:00");
+				businessDayHoursDTO.setEndTime("16:00");
+			} else if(doctor.getSunday().toString().equals("SECOND")) {
+				businessDayHoursDTO.setStartTime("16:00");
+				businessDayHoursDTO.setEndTime("24:00");
+			} else if(doctor.getSunday().toString().equals("THIRD")) {
 				businessDayHoursDTO.setStartTime("00:00");
 				businessDayHoursDTO.setEndTime("08:00");
 			}

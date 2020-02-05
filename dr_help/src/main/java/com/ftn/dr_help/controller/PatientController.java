@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.dr_help.comon.CurrentUser;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.ChangePasswordDTO;
 import com.ftn.dr_help.dto.HealthRecordDTO;
 import com.ftn.dr_help.dto.PatientDTO;
@@ -157,23 +158,33 @@ public class PatientController {
 		return new ResponseEntity<HealthRecordDTO> (retVal, HttpStatus.OK);
 	}
 	
-	@GetMapping (value="/history")
+	@GetMapping (value="/history/doctor={dr_id}/procedure_type={proc_type_id}/clinic={clinic_id}/date={app_date}")
 	@PreAuthorize("hasAuthority('PATIENT')")	
-	public ResponseEntity<List<PatientHistoryDTO>> getHistory () {
-		List<PatientHistoryDTO> retVal = patientService.getHistory(currentUser.getEmail());
-		if (retVal == null) {
-			retVal = new ArrayList<PatientHistoryDTO> ();
+	public ResponseEntity<AppointmentListDTO> getHistory (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
+			@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
+		
+		AppointmentListDTO retVal = patientService.getHistory(currentUser.getEmail(), date, doctorId, clinicId, procedureTypeId);
+		if (retVal.getAppointmentList() == null) {
+			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
-	@GetMapping (value="/pending")
+	@GetMapping (value="/pending/doctor={dr_id}/procedure_type={proc_type_id}/clinic={clinic_id}/date={app_date}/status={appointment_status}")
 	@PreAuthorize("hasAuthority('PATIENT')")	
-	public ResponseEntity<List<PatientHistoryDTO>> getPendingAppointments () {
-		List<PatientHistoryDTO> retVal = patientService.getPending(currentUser.getEmail());
-		//System.out.println("Zilav sam!!!1!");
-		if (retVal == null) {
-			retVal = new ArrayList<PatientHistoryDTO> ();
+	public ResponseEntity<AppointmentListDTO> getPendingAppointments (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
+			@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date, @PathVariable("appointment_status") String appointmentStatus) {
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("    Appointment status is: " + appointmentStatus);
+		System.out.println("    Appointment date is:   " + date);
+		System.out.println("");
+		System.out.println("");
+		
+		AppointmentListDTO retVal = patientService.getPending(currentUser.getEmail(), date, doctorId, clinicId, procedureTypeId, appointmentStatus);
+		if (retVal.getAppointmentList() == null) {
+			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}

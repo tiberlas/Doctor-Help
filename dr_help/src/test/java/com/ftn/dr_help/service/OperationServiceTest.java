@@ -1,6 +1,7 @@
+
 package com.ftn.dr_help.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,14 +9,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.OperationBlessingDTO;
 import com.ftn.dr_help.dto.OperationBlessingInnerDTO;
@@ -27,6 +34,7 @@ import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.OperationRepository;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class OperationServiceTest {
 
@@ -46,6 +54,9 @@ public class OperationServiceTest {
 	@MockBean
 	private OperationRepository operationRepository;
 	
+	@MockBean
+	private Mail mailService;
+	
 	private OperationBlessingDTO operationRequestBlessing;
 	private DoctorPOJO dr0;
 	private DoctorPOJO dr1;
@@ -58,7 +69,7 @@ public class OperationServiceTest {
 	private List<AbsenceInnerDTO> absence2 = new ArrayList<>();
 	private ProceduresTypePOJO procedure;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		operationRequestBlessing = new OperationBlessingDTO(
 				1l, 
@@ -131,6 +142,8 @@ public class OperationServiceTest {
 	}
 	
 	@Test
+	@Transactional
+	@Rollback(true)
 	public void testShouldPass() {
 		
 		Mockito.when(this.doctorRepository.findById(1l)).thenReturn(Optional.of(dr0));
@@ -152,6 +165,10 @@ public class OperationServiceTest {
 		free.set(Calendar.MILLISECOND, 0);
 		Mockito.when(this.roomService.findFirstFreeScheduleFromDate(1l, free)).thenReturn("01/26/2020 05:00 PM");
 		
+		//ignorisi metode za slanje mejla
+		Mockito.doNothing().when(this.mailService).sendOperationApprovedToDoctorsEmail(Matchers.<DoctorPOJO>any(), Matchers.<OperationPOJO>any());
+		Mockito.doNothing().when(this.mailService).sendOperationApprovedToPatientEmail(Matchers.<OperationPOJO>any());
+
 		OperationBlessingInnerDTO actual = operationSevice.blessOperation(operationRequestBlessing);
 		
 		

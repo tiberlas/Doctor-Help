@@ -29,6 +29,16 @@ class App extends Component {
     }
   }
 
+
+  componentDidMount() {
+    const script = document.createElement("script"); //neophodno za font-awesome ikonice
+
+    script.src = "https://kit.fontawesome.com/2060984414.js";
+    script.crossOrigin = "anonymous"
+
+    document.body.appendChild(script);
+  }
+
   setDoctor () {
     this.setState ({
       loggedIn: true,
@@ -89,10 +99,11 @@ class App extends Component {
 
       return (
         <div>
-          <link 
+          {/* <script src="https://kit.fontawesome.com/2060984414.js" crossorigin="anonymous"></script> */}
+          {/* <link 
     rel="stylesheet"
     href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/> {/* za fontawesome ikonice*/}
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/> */}
           <BrowserRouter >
             <Switch>
                 { this.state.passwordChange?

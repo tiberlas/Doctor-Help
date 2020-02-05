@@ -24,6 +24,9 @@ import com.ftn.dr_help.dto.ClinicDTO;
 import com.ftn.dr_help.dto.ClinicListingDTO;
 import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.dto.ClinicRatingDTO;
+import com.ftn.dr_help.dto.DatePeriodDTO;
+import com.ftn.dr_help.dto.HeldAppointmentsChartDataDTO;
+import com.ftn.dr_help.dto.HeldAppointmentsRequestDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.ClinicReviewPOJO;
@@ -132,10 +135,23 @@ public class ClinicController {
 		return new ResponseEntity<ClinicDTO>(ret, HttpStatus.OK);
 	}
 
-	@GetMapping (value = "/listing/{filter}/{date_string}")
+	@GetMapping (value = "/listing/proc_type={filter}/date={date_string}/stat={state}/cit={city}/adr={address}/min_rat={minimal_rating}/max_rat={maximum_rating}/min_price={minimal_price}/max_price={maximal_price}")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter, @PathVariable("date_string") String dateString) throws ParseException {
+	public ResponseEntity <ClinicListingDTO> getClinicListing (@PathVariable("filter") String filter, @PathVariable("date_string") String dateString, @PathVariable("state") String state
+			, @PathVariable("city") String city, @PathVariable("address") String address, @PathVariable("minimal_rating") String minimalRating, @PathVariable("maximum_rating") String maximumRating
+			, @PathVariable("minimal_price") String minimalPrice, @PathVariable("maximal_price") String maximalPrice) throws ParseException {
 
+		System.out.println("Filtriram klinike: ");
+		System.out.println("   Tip procedure: " + filter);
+		System.out.println("   Datum procedure: " + dateString);
+		System.out.println("   Zemlja procedure: " + state);
+		System.out.println("   Grad procedure: " + city);
+		System.out.println("   Adresa procedure: " + address);
+		System.out.println("   Min rating: " + minimalRating);
+		System.out.println("   Max Rating: " + maximumRating);
+		System.out.println("   Min price: " + minimalPrice);
+		System.out.println("   Max price: " + maximalPrice);
+		
 		List<ClinicPOJO> clinicList = new ArrayList<ClinicPOJO>();
 		
 		if (filter.equals("unfiltered")) {
@@ -172,6 +188,10 @@ public class ClinicController {
 		List<String> procedureTypes = procedureTypeService.getProcedureTypes();
 		
 		ClinicListingDTO retVal = new ClinicListingDTO (clinicDTO, procedureTypes, filter, dateString);
+		retVal.setStateString(state);
+		retVal.setCityString(city);
+		retVal.setAddressString(address);
+		retVal = clinicService.doOtherFilters (retVal, state, city, address, minimalRating, maximumRating, minimalPrice, maximalPrice);
 		
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
@@ -207,10 +227,34 @@ public class ClinicController {
 		return new ResponseEntity<> (retVal, HttpStatus.OK); 
 	}
 	
+	@PostMapping(value = "/income", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<Float> getIncome(@RequestBody DatePeriodDTO datePeriod) {
+		String email = currentUser.getEmail();
+		
+		Float income = clinicService.getIncome(email, datePeriod);
+		
+		return new ResponseEntity<>(income, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/held_appointments", consumes = "application/json", produces="application/json")
+	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<HeldAppointmentsChartDataDTO>> getDataForChart(@RequestBody HeldAppointmentsRequestDTO request) {
+		String email = currentUser.getEmail();
+		
+		List<HeldAppointmentsChartDataDTO> finded = clinicService.getDataForChart(email, request);
+		
+		if(finded == null || finded.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(finded, HttpStatus.OK);
+		}
+	}
 	@DeleteMapping(value="delete={id}")
 	@PreAuthorize("hasAuthority('CENTRE_ADMINISTRATOR')")
 	public void deleteClinic(@PathVariable("id") Long id) {
 		clinicService.delete(id);
 	}
 	
+
 }

@@ -62,8 +62,12 @@ public class MedicalStuffService {
 				}
 				
 				Long count = doctorRepository.getDoctorsAppointmentsCount(doctor.getId());
-				
 				boolean canDelete = (count!=null && count>0)? false: true;
+				
+				Float rating = doctorRepository.getAverageRatingFor(doctor.getId());
+				if(rating == null) {
+					rating = new Float(0.0f);
+				}
 				
 				ret.add(new MedicalStaffInfoDTO(
 							doctor.getEmail(),
@@ -71,7 +75,8 @@ public class MedicalStuffService {
 							doctor.getLastName(),
 							canDelete,
 							RoleEnum.DOCTOR,
-							doctor.getId()
+							doctor.getId(),
+							rating
 						));
 			}
 		}
@@ -108,7 +113,8 @@ public class MedicalStuffService {
 							nurse.getLastName(),
 							canDelete,
 							RoleEnum.NURSE,
-							nurse.getId()
+							nurse.getId(),
+							0.0f
 						));
 			}
 		}

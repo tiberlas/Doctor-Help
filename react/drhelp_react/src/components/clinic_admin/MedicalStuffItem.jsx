@@ -25,13 +25,21 @@ class MedicalStuffItem extends Component {
         })
     };
     
-    render() { 
+    render() {
+        let role = this.props.value.role;
+        let rating = this.props.value.rating;
+
+        if(this.props.value.rating == 0) {
+            rating = '/';
+        }
+
         return ( 
             <Fragment>
                 <TableCell class="text-white">{this.props.value.firstName}</TableCell>
                 <TableCell class="text-white">{this.props.value.lastName}</TableCell>
                 <TableCell class="text-white">{this.props.value.email}</TableCell>
-                <TableCell class="text-white">{this.props.value.role}</TableCell>
+                <TableCell class="text-white">{role.toLowerCase()}</TableCell>
+                <TableCell class="text-danger">{rating}</TableCell>
                 <TableCell>
                     <Button variant="danger" onClick={this.onDelite} disabled={!this.props.value.canDelete}>
                         delete

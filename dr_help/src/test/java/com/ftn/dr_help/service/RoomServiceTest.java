@@ -1,26 +1,29 @@
+
 package com.ftn.dr_help.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
 import com.ftn.dr_help.repository.AppointmentRepository;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class RoomServiceTest {
 	
@@ -35,7 +38,7 @@ public class RoomServiceTest {
 	
 	private List<Date> schedules = new ArrayList<>();
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		
@@ -109,9 +112,8 @@ public class RoomServiceTest {
 	}
 
 	
-	@SuppressWarnings("restriction")
 	@Test
-	public void test1() {
+	public void findFirstFreeInDateTest() {
 		try {
 			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
 			
@@ -128,9 +130,8 @@ public class RoomServiceTest {
 		}
 	}
 	
-	@SuppressWarnings("restriction")
 	@Test
-	public void test2() {
+	public void findFirstFreeInDateTest2() {
 		try {
 			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
 			
@@ -147,9 +148,8 @@ public class RoomServiceTest {
 		}
 	}
 	
-	@SuppressWarnings("restriction")
 	@Test
-	public void test3() {
+	public void findFirstFreeInDateTest3() {
 		try {
 			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
 			
@@ -166,9 +166,8 @@ public class RoomServiceTest {
 		}
 	}
 	
-	@SuppressWarnings("restriction")
 	@Test
-	public void test4() {
+	public void findFirstFreeAfterTest() {
 		try {
 			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
 			
@@ -185,9 +184,26 @@ public class RoomServiceTest {
 		}
 	}
 	
-	@SuppressWarnings("restriction")
 	@Test
-	public void test5() {
+	public void findFirstFreeAfterTest2() {
+		try {
+			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
+			
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 15, 18, 36, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			String actual = roomService.findFirstFreeScheduleFromDate(room, begin);
+			String expected = "01/15/2020 08:10 PM";
+			
+			assertEquals(expected, actual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void findFirstFreeBeforeTest() {
 		try {
 			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
 			
@@ -204,9 +220,26 @@ public class RoomServiceTest {
 		}
 	}
 	
-	@SuppressWarnings("restriction")
 	@Test
-	public void testNextDay1() {
+	public void findFirstFreeBeforeTest2() {
+		try {
+			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
+			
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 15, 6, 2, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			String actual = roomService.findFirstFreeScheduleFromDate(room, begin);
+			String expected = "01/15/2020 06:02 AM";
+			
+			assertEquals(expected, actual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void testNextDay() {
 		try {
 			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
 			
@@ -223,7 +256,6 @@ public class RoomServiceTest {
 		}
 	}
 	
-	@SuppressWarnings("restriction")
 	@Test
 	public void testNextDay2() {
 		try {

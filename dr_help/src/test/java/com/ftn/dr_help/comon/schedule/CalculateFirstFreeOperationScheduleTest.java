@@ -1,16 +1,20 @@
+
 package com.ftn.dr_help.comon.schedule;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
@@ -18,6 +22,7 @@ import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class CalculateFirstFreeOperationScheduleTest {
 
@@ -35,7 +40,7 @@ public class CalculateFirstFreeOperationScheduleTest {
 	private List<Date> dates1;
 	private List<Date> dates2;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
         Calendar duration = Calendar.getInstance();
         duration.set(2000, 2, 15, 2, 0);
@@ -411,5 +416,46 @@ public class CalculateFirstFreeOperationScheduleTest {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void bugFixTest() {
+        dr0.setMonday(Shift.NONE);
+        dr0.setTuesday(Shift.NONE);
+        dr0.setWednesday(Shift.NONE);
+        dr0.setThursday(Shift.NONE);
+        dr0.setFriday(Shift.SECOND);
+        dr0.setSaturday(Shift.THIRD);
+        dr0.setSunday(Shift.SECOND);
+        
+        dr2.setMonday(Shift.NONE);
+        dr2.setTuesday(Shift.NONE);
+        dr2.setWednesday(Shift.NONE);
+        dr2.setThursday(Shift.NONE);
+        dr2.setFriday(Shift.SECOND);
+        dr2.setSaturday(Shift.THIRD);
+        dr2.setSunday(Shift.SECOND);
+        
+        dr1.setMonday(Shift.NONE);
+        dr1.setTuesday(Shift.NONE);
+        dr1.setWednesday(Shift.NONE);
+        dr1.setThursday(Shift.NONE);
+        dr1.setFriday(Shift.SECOND);
+        dr1.setSaturday(Shift.THIRD);
+        dr1.setSunday(Shift.SECOND);
+        
+        Calendar time = Calendar.getInstance();
+        time.set(2020, 1, 5, 11, 0, 0);
+        time.set(Calendar.MILLISECOND, 0);
+        
+		Calendar finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, time);
+		
+		Calendar expected = Calendar.getInstance();
+		expected.set(2020, 1, 7, 16, 0, 0);
+		expected.set(Calendar.MILLISECOND, 0);
+
+		System.out.println(convertor.dateForFrontEndString(finded));
+		
+		assertEquals(expected, finded);
 	}
 }
