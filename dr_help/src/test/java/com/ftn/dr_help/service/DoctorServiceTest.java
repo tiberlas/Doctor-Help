@@ -1,6 +1,5 @@
 package com.ftn.dr_help.service;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.ParseException;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,13 +21,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
-import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.DoctorReviewRepository;
@@ -58,6 +56,8 @@ public class DoctorServiceTest {
 	
 	@MockBean
 	private DoctorReviewRepository doctorReviewRepository;
+	
+	@MockBean AppointmentRepository appointmentRepository;
 	
 	private DoctorPOJO dr0 = new DoctorPOJO();
 	private DoctorPOJO dr1 = new DoctorPOJO();
@@ -670,7 +670,32 @@ public class DoctorServiceTest {
 		assertEquals("Pera", actual3.get(0).getFirstName());
 		assertEquals("Peric", actual3.get(0).getLastName());
 		assertEquals("3.8", actual3.get(0).getRating());
-		assertEquals(0, actual3.get(0).getTerms().size());
+		assertEquals(25, actual3.get(0).getTerms().size());
+		assertEquals("8:0", actual3.get(0).getTerms().get(0));
+		assertEquals("8:15", actual3.get(0).getTerms().get(1));
+		assertEquals("8:30", actual3.get(0).getTerms().get(2));
+		assertEquals("8:45", actual3.get(0).getTerms().get(3));
+		assertEquals("9:0", actual3.get(0).getTerms().get(4));
+		assertEquals("9:15", actual3.get(0).getTerms().get(5));
+		assertEquals("9:30", actual3.get(0).getTerms().get(6));
+		assertEquals("9:45", actual3.get(0).getTerms().get(7));
+		assertEquals("10:0", actual3.get(0).getTerms().get(8));
+		assertEquals("10:15", actual3.get(0).getTerms().get(9));
+		assertEquals("10:30", actual3.get(0).getTerms().get(10));
+		assertEquals("10:45", actual3.get(0).getTerms().get(11));
+		assertEquals("11:0", actual3.get(0).getTerms().get(12));
+		assertEquals("11:15", actual3.get(0).getTerms().get(13));
+		assertEquals("11:30", actual3.get(0).getTerms().get(14));
+		assertEquals("11:45", actual3.get(0).getTerms().get(15));
+		assertEquals("12:0", actual3.get(0).getTerms().get(16));
+		assertEquals("12:15", actual3.get(0).getTerms().get(17));
+		assertEquals("12:30", actual3.get(0).getTerms().get(18));
+		assertEquals("12:45", actual3.get(0).getTerms().get(19));
+		assertEquals("13:0", actual3.get(0).getTerms().get(20));
+		assertEquals("13:15", actual3.get(0).getTerms().get(21));
+		assertEquals("13:30", actual3.get(0).getTerms().get(22));
+		assertEquals("13:45", actual3.get(0).getTerms().get(23));
+		assertEquals("14:0", actual3.get(0).getTerms().get(24));
 		
 		assertEquals(0, actual4.size());
 
