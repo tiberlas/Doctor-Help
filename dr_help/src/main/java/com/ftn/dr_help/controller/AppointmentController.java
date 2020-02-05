@@ -2,6 +2,7 @@ package com.ftn.dr_help.controller;
 
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,13 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.AppointmentDeleteDTO;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.AppointmentForSchedulingDTO;
 import com.ftn.dr_help.dto.AppointmentInternalBlessedDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
+import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -99,13 +102,17 @@ public class AppointmentController {
 	
 	@PostMapping (value = "add", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<String> add (@RequestBody AddAppointmentDTO dto) throws NumberFormatException, ParseException {
-
+	public ResponseEntity<Boolean> add (@RequestBody AddAppointmentDTO dto) throws NumberFormatException, ParseException {
+//		try {
+//			TimeUnit.SECONDS.sleep(10);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		String dateString = dto.getDate() + " " + dto.getTime() + ":00";
-		System.out.println("Date string: " + dateString);
-		
-		appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));
-		return null;
+
+		Boolean retVal = appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));
+		return new ResponseEntity<Boolean> (retVal, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/done_appointments/doctor/patient={insuranceNumber}")
@@ -248,6 +255,30 @@ public class AppointmentController {
 		return new ResponseEntity<List<DoctorAppointmentDTO>>(appointments, HttpStatus.OK);
 	}
 	
+	@GetMapping (value="/predefined/doctor={dr_id}/procedure_type={proc_type_id}/clinic={clinic_id}/date={app_date}")
+	@PreAuthorize("hasAuthority('PATIENT')")	
+	public ResponseEntity<AppointmentListDTO> getPredefined (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
+				@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
+		AppointmentListDTO retVal = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
+		
+		if (retVal.getAppointmentList() == null) {
+			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
+		}
+		
+		return new ResponseEntity<> (retVal, HttpStatus.OK);
+	}
+	
+	@PostMapping (value = "/predefined/reserve")
+	@PreAuthorize("hasAuthority('PATIENT')")	
+	public ResponseEntity<Boolean> reservePredefined (@RequestBody AppointmentDeleteDTO input) {
+//		System.out.println("Trying to book appointment: " + input.getAppointmentId() + "; for patient with id: " + input.getPatientId());
+		Boolean retVal = appointmentService.reserveAppointment(input.getAppointmentId(), input.getPatientId());
+		
+		
+		return new ResponseEntity<Boolean> (retVal, HttpStatus.OK);
+	}
+	
+	
 	@PostMapping(value="/bless", produces="application/json", consumes="application/json")
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> checkAppointemnt(@RequestBody AppointmentForSchedulingDTO appointment) {
@@ -266,5 +297,16 @@ public class AppointmentController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping (value="/confirm", produces="application/json", consumes="application/json")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<String> confirmAppointment (@RequestBody AppointmentDeleteDTO dto) {
+		
+		appointmentService.confirmAppointment(dto.getAppointmentId());
+		
+		return null;
+	}
+	
+	
 	
 }

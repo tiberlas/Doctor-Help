@@ -1,9 +1,7 @@
 package com.ftn.dr_help.comon.schedule;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Calendar;
 
 import org.junit.Test;

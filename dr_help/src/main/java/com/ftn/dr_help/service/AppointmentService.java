@@ -10,19 +10,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
 import com.ftn.dr_help.dto.MedicationDisplayDTO;
+import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
+import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.DiagnosisPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
@@ -285,29 +289,122 @@ public class AppointmentService {
 		return dto;
 	}
 	
-	
-	
 	public boolean addAppointment (Long doctorId, String dateString, Long patientId) throws ParseException {
+
+		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
+			
 		AppointmentPOJO newAppointment = new AppointmentPOJO ();
 		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+//		
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("Date string: ");
+//		System.out.println(dateString);
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("");
+//		
+//		
+		
 		Date date = sdf.parse(dateString);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		newAppointment.setDate(calendar);
 		newAppointment.setDeleted(false);
-		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
 		newAppointment.setDoctor(doctor);
 		newAppointment.setPatient(patientRepository.getOne(patientId));
 		newAppointment.setStatus(AppointmentStateEnum.REQUESTED);
 		newAppointment.setProcedureType(doctor.getProcedureType());
 		newAppointment.setRoom(null);
 		newAppointment.setNurse(null);
-		newAppointment.setDiscount(0);
+		newAppointment.setDiscount(0.0);
 		newAppointment.setExaminationReport(null);
-		appointmentRepository.save(newAppointment);
+		
+		Shift shift = null;		
+		switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+			case Calendar.MONDAY: 
+				shift = doctor.getMonday();
+				break;
+			case Calendar.TUESDAY: 
+				shift = doctor.getTuesday();
+				break;
+			case Calendar.WEDNESDAY: 
+				shift = doctor.getWednesday();
+				break;
+			case Calendar.THURSDAY: 
+				shift = doctor.getThursday();
+				break;
+			case Calendar.FRIDAY: 
+				shift = doctor.getFriday();
+				break;
+			case Calendar.SATURDAY: 
+				shift = doctor.getSaturday();
+				break;
+			case Calendar.SUNDAY: 
+				shift = doctor.getSunday();
+				break;
+		}
+		
+///////////////////////////////////////////////////////////////////////////
+		
+		Date d = newAppointment.getProcedureType().getDuration();
+		
+		Calendar duration = Calendar.getInstance();
+		duration.setTime(d);
+		
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+		startTime.setTime(newAppointment.getDate().getTime());
+		endTime.setTime(newAppointment.getDate().getTime());
+		
+		startTime.add(Calendar.HOUR_OF_DAY, - duration.get(Calendar.HOUR_OF_DAY));
+		startTime.add(Calendar.MINUTE, - duration.get(Calendar.MINUTE) + 1);
+		
+		endTime.add(Calendar.HOUR_OF_DAY, duration.get(Calendar.HOUR_OF_DAY));
+		endTime.add(Calendar.MINUTE, duration.get(Calendar.MINUTE) - 1);
+		
+		if ((startTime.get(Calendar.YEAR) != newAppointment.getDate().get(Calendar.YEAR)) 
+					|| (startTime.get(Calendar.MONTH) != newAppointment.getDate().get(Calendar.MONTH)) 
+					|| (startTime.get(Calendar.DAY_OF_YEAR) != newAppointment.getDate().get(Calendar.DAY_OF_YEAR))) {				
+			startTime.add(Calendar.DAY_OF_MONTH, 1);
+			startTime.set(Calendar.HOUR_OF_DAY, 0);
+			startTime.set(Calendar.MINUTE, 0);
+			startTime.set(Calendar.SECOND, 0);
+		}
+		if ((endTime.get(Calendar.YEAR) != newAppointment.getDate().get(Calendar.YEAR)) 
+					|| (endTime.get(Calendar.MONTH) != newAppointment.getDate().get(Calendar.MONTH)) 
+					|| (endTime.get(Calendar.DAY_OF_YEAR) != newAppointment.getDate().get(Calendar.DAY_OF_YEAR))) {				
+			endTime.add(Calendar.DAY_OF_MONTH, -1);
+			endTime.set(Calendar.HOUR_OF_DAY, 23);
+			endTime.set(Calendar.MINUTE, 59);
+			endTime.set(Calendar.SECOND, 59);
+		}
+		
+		if (insertNewAppointment(newAppointment, shift, doctor, startTime, endTime)) {
+			return true;
+		} 
 		
 		return false;
 	}
+	
+	@Transactional (isolation = Isolation.READ_UNCOMMITTED)
+	private Boolean insertNewAppointment (AppointmentPOJO newAppointment, Shift shift, DoctorPOJO doctor, Calendar startTime, Calendar endTime) {
+		
+//		System.out.println("Definitive start time: " + startTime.getTime());
+//		System.out.println("Definitive end time: " + endTime.getTime());
+		
+		List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(doctor.getId(), startTime, endTime);
+		
+		if (appointments.size() == 0) {
+//			System.out.println("*****    Nemam nista => slobodan sam    *****");
+			appointmentRepository.save(newAppointment);
+			return true;
+		}
+		
+		return false;
+	}
+	
 	
 	
 	private DoctorAppointmentDTO convertAppointmentToDoctorDTO(AppointmentPOJO appointment) {
@@ -531,13 +628,21 @@ public class AppointmentService {
 			
 			Calendar duration = Calendar.getInstance();
 			duration.setTime(finded.getProcedureType().getDuration());
+			String nurse;
+			
+			if (finded.getNurse() == null) {
+				nurse = "UNDEFINED";
+			}
+			else {
+				nurse = finded.getNurse().getEmail();
+			}
 			
 			return new RequestingAppointmentDTO(
 					finded.getId(),
 					dateConverter.dateForFrontEndString(finded.getDate()), 
 					finded.getProcedureType().getName(), 
 					finded.getDoctor().getEmail(), 
-					finded.getNurse().getEmail(), 
+					nurse, 
 					finded.getPatient().getEmail(),
 					finded.getProcedureType().getId(),
 					dateConverter.timeToString(duration));
@@ -657,6 +762,180 @@ public class AppointmentService {
 		}
 		
 		return appointments;
+	}
+
+	public AppointmentListDTO getPredefinedAppointments(String doctorId, String procedureTypeId, String clinicId,
+			String date) {
+		AppointmentListDTO retVal = new AppointmentListDTO ();
+		List<AppointmentPOJO> appointmentList = new ArrayList<AppointmentPOJO>();
+		
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+
+		System.out.println("");
+		System.out.println("");
+		appointmentList = appointmentRepository.getAllPredefinedAppointments();
+		for (AppointmentPOJO app : appointmentList) {
+			if(app.getDate().get(Calendar.YEAR) < now.get(Calendar.YEAR)){
+				
+	        }else if (app.getDate().get(Calendar.YEAR) > now.get(Calendar.YEAR)){
+	        	retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+	        }else{
+	            if(app.getDate().get(Calendar.MONTH) > now.get(Calendar.MONTH)){
+	            	retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+	            }else if(app.getDate().get(Calendar.MONTH) < now.get(Calendar.MONTH)){
+	            	
+	            }else{
+	                if(app.getDate().get(Calendar.DAY_OF_MONTH) < now.get(Calendar.DAY_OF_MONTH)){
+	                
+	                }
+	                else {
+	                	retVal.getAppointmentList().add(new PatientHistoryDTO(app));
+	                }
+	            }
+	        }
+		}
+		System.out.println("");
+		System.out.println("");
+		
+		List<String> dateList = new ArrayList<String>();
+		dateList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : dateList) {
+				if (str.split(" ")[0].equals(p.getDate().split(" ")[0])) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				dateList.add(p.getDate().split(" ")[0]);
+			}
+		}
+		retVal.setPossibleDates(dateList);
+		
+		List<String> doctorList = new ArrayList<String> ();
+		doctorList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : doctorList) {
+				if (str.equals(p.getDoctor())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				doctorList.add(p.getDoctor());
+			}
+		}
+		retVal.setPossibleDoctors(doctorList);
+		
+		List<String> clinicList = new ArrayList<String> ();
+		clinicList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : clinicList) {
+				if (str.equals(p.getClinicName())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				clinicList.add(p.getClinicName());
+			}
+		}
+		retVal.setPossibleClinics(clinicList);
+		
+		List<String> typeList = new ArrayList<String> ();
+		typeList.add("unfiltered");
+		for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+			boolean isThere = false;
+			for (String str : typeList) {
+				if (str.equals(p.getProcedureType())) {
+					isThere = true;
+					break;
+				}
+			}
+			if (!isThere) {
+				typeList.add(p.getProcedureType());
+			}
+		}
+		retVal.setPossibleTypes(typeList);
+		
+		if (doctorId.equals("unfiltered") && doctorId.equals(procedureTypeId) && doctorId.equals(clinicId) && doctorId.equals(date)) {
+			System.out.println("Getting all predefined appointments");
+			return retVal;
+		}
+		
+		if (!date.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getDate().split(" ")[0].equals(date + ".")) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!doctorId.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getDoctor().equals(doctorId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!clinicId.contentEquals(("unfiltered"))) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> (); 
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getClinicName().equals(clinicId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		if (!procedureTypeId.equals("unfiltered")) {
+			List<PatientHistoryDTO> tempList = new ArrayList<PatientHistoryDTO> ();
+			for (PatientHistoryDTO p : retVal.getAppointmentList()) {
+				if (p.getProcedureType().equals(procedureTypeId)) {
+					tempList.add(p);
+				}
+			}
+			retVal.setAppointmentList(tempList);
+		}
+		
+		return retVal;
+	}
+	
+	@Transactional (isolation = Isolation.READ_UNCOMMITTED)
+	public Boolean reserveAppointment (Long appointmentId, Long patientId) {
+		AppointmentPOJO appointment = appointmentRepository.getOne(appointmentId);
+
+//		try {
+//			TimeUnit.SECONDS.sleep(0);
+//			System.out.println("OI, I just woke up, egg");
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+		if (appointment == null) {
+			return false;
+		}
+		
+		if (appointment.getStatus() == AppointmentStateEnum.AVAILABLE) {
+			appointmentRepository.reserveAppointment(appointmentId, patientId);
+			return true;
+		} 
+
+		return false;
+	}
+	
+	@Transactional (isolation = Isolation.READ_COMMITTED)
+	public void confirmAppointment (Long appointmentId) {
+		appointmentRepository.confirmAppointment(appointmentId);
 	}
 	
 }

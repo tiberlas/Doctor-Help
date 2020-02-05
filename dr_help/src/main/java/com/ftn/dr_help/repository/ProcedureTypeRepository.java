@@ -11,7 +11,7 @@ import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
 @Repository
 public interface ProcedureTypeRepository extends JpaRepository<ProceduresTypePOJO, Long>{
 
-	@Query (value = "select distinct pt.name from procedures_type pt inner join doctors d on pt.id = d.procedure_type_id", nativeQuery = true)
+	@Query (value = "select distinct pt.name from procedures_type pt inner join doctors d on pt.id = d.procedure_type_id where is_operation = false and pt.deleted = false", nativeQuery = true)
 	public List<String> getProcedureTypes ();
 	
 	@Query (value = "select price from procedures_type pt where pt.deleted <> true and clinic_id = ?1 and name = ?2", nativeQuery = true)

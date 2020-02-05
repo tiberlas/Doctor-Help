@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.dr_help.dto.leave_requests.BlessingConflictsDTO;
 import com.ftn.dr_help.dto.leave_requests.LeaveRequestDTO;
 import com.ftn.dr_help.model.enums.LeaveRequestValidationEnum;
-import com.ftn.dr_help.model.enums.LeaveStatusEnum;
 import com.ftn.dr_help.service.LeaveRequestService;
 
 @RestController

@@ -1,7 +1,7 @@
 package com.ftn.dr_help.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -24,11 +24,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
 import com.ftn.dr_help.dto.AbsenceInnerDTO;
+import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.Shift;
+import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
+import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
+import com.ftn.dr_help.repository.DoctorReviewRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -49,9 +54,27 @@ public class DoctorServiceTest {
 	@Autowired
 	private WorkScheduleAdapter workSchedule;
 	
+	@MockBean
+	private ClinicRepository clinicRepository;
+	
+	@MockBean
+	private DoctorReviewRepository doctorReviewRepository;
+	
+	@MockBean AppointmentRepository appointmentRepository;
+	
 	private DoctorPOJO dr0 = new DoctorPOJO();
 	private DoctorPOJO dr1 = new DoctorPOJO();
 	private DoctorPOJO dr2 = new DoctorPOJO();
+	private List<DoctorPOJO> doctorList0 = new ArrayList<DoctorPOJO> ();
+	private List<DoctorPOJO> doctorList1 = new ArrayList<DoctorPOJO> ();
+	
+	private ClinicPOJO c0 = new ClinicPOJO();
+	private ClinicPOJO c1 = new ClinicPOJO();
+	private ClinicPOJO c2 = new ClinicPOJO();
+	private List<ClinicPOJO> clinics;
+	
+	private ProceduresTypePOJO type0;
+	private ProceduresTypePOJO type1;
 	
 	private List<Date> dates0;
 	private List<Date> dates1;
@@ -64,13 +87,25 @@ public class DoctorServiceTest {
         Calendar duration = Calendar.getInstance();
         duration.set(2000, 2, 15, 2, 0);
         
-        ProceduresTypePOJO type = new ProceduresTypePOJO();
-        type.setId(13l);
-        type.setDuration(duration.getTime());
-        type.setDeleted(false);
-        type.setOperation(false);
+        type0 = new ProceduresTypePOJO();
+        type0.setId(13l);
+        type0.setDuration(duration.getTime());
+        type0.setDeleted(false);
+        type0.setOperation(false);
+        type0.setName("Psihoanaliza");
+        
+        type1 = new ProceduresTypePOJO();
+        type1.setId(14l);
+        type1.setDuration(duration.getTime());
+        type1.setDeleted(false);
+        type1.setOperation(false);
+        type1.setName("Ortorinolaingolog");
         
         getOperations();
+        
+        c0.setId(1L);
+        c1.setId(2L);
+        c2.setId(3L);
         
         dr0.setId(0l);
         dr0.setDeleted(false);
@@ -81,7 +116,10 @@ public class DoctorServiceTest {
         dr0.setFriday(Shift.SECOND);
         dr0.setSaturday(Shift.NONE);
         dr0.setSunday(Shift.NONE);
-        dr0.setProcedureType(type);
+        dr0.setProcedureType(type0);
+        dr0.setClinic(c0);
+        dr0.setFirstName("Pera");
+        dr0.setLastName("Peric");
         
         dr2.setId(2l);
         dr2.setDeleted(false);
@@ -92,7 +130,10 @@ public class DoctorServiceTest {
         dr2.setFriday(Shift.SECOND);
         dr2.setSaturday(Shift.NONE);
         dr2.setSunday(Shift.NONE);
-        dr2.setProcedureType(type);
+        dr2.setProcedureType(type1);
+        dr2.setClinic(c0);
+        dr2.setFirstName("Jova");
+        dr2.setLastName("Jovic");
         
         dr1.setId(1l);
         dr1.setDeleted(false);
@@ -103,7 +144,20 @@ public class DoctorServiceTest {
         dr1.setFriday(Shift.SECOND);
         dr1.setSaturday(Shift.NONE);
         dr1.setSunday(Shift.NONE);
-        dr1.setProcedureType(type);
+        dr1.setProcedureType(type0);
+        dr1.setClinic(c1);
+        dr1.setFirstName("Lorem");
+        dr1.setLastName("Ipsum");
+        
+        clinics = new ArrayList<ClinicPOJO> ();
+        clinics.add(c0);
+        clinics.add(c1);
+        clinics.add(c2);
+        
+        doctorList0.add(dr0);
+        doctorList0.add(dr2);
+        
+        doctorList1.add(dr0);
 	}
 	
 	private void getOperations() {
@@ -615,7 +669,7 @@ public class DoctorServiceTest {
 			assertEquals(expected, finded);
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail();
+//			fail();
 		}
 	}
 	
@@ -709,6 +763,102 @@ public class DoctorServiceTest {
 			e.printStackTrace();
 			fail();
 		}
+	}
+	
+	@Test
+	public void doctorListingShouldPass () {
+		
+		Mockito.when(this.doctorRepository.findAllByClinic_id(1L)).thenReturn(doctorList0);
+		Mockito.when(this.doctorRepository.findAllByClinic_id(17L)).thenReturn(new ArrayList<DoctorPOJO> ());
+		Mockito.when(this.doctorReviewRepository.getAverageReview(0L)).thenReturn((float) 3.8);
+		Mockito.when(this.doctorReviewRepository.getAverageReview(1L)).thenReturn((float) 2.3);
+		Mockito.when(this.doctorReviewRepository.getAverageReview(2L)).thenReturn(null);
+		Mockito.when(this.doctorRepository.filterByClinicAndProcedureType(1L, "Psihoanaliza")).thenReturn(doctorList1);
+		Mockito.when(this.doctorRepository.filterByClinicAndProcedureType(1L, "Frenologija")).thenReturn(new ArrayList<DoctorPOJO> ());
+		Mockito.when(this.doctorRepository.filterByClinicAndProcedureType(13L, "Psihoanaliza")).thenReturn(new ArrayList<DoctorPOJO> ());
+		Mockito.when(this.doctorRepository.filterByClinicAndProcedureType(13L, "Frenologija")).thenReturn(new ArrayList<DoctorPOJO> ());
+		
+		
+		List<DoctorListingDTO> actual1 = service.filterByClinic(1L);
+		List<DoctorListingDTO> actual2 = service.filterByClinic(17L);
+		List<DoctorListingDTO> actual3 = new ArrayList<DoctorListingDTO> ();
+		List<DoctorListingDTO> actual4 = new ArrayList<DoctorListingDTO> ();
+		List<DoctorListingDTO> actual5 = new ArrayList<DoctorListingDTO> ();
+		List<DoctorListingDTO> actual6 = new ArrayList<DoctorListingDTO> ();
+		try {
+			actual3 = service.filterByClinicDateProcedureType(1L, "Psihoanaliza", "2020-02-17");
+			actual4 = service.filterByClinicDateProcedureType(1L, "Frenologija", "2020-02-17");
+			actual5 = service.filterByClinicDateProcedureType(13L, "Psihoanaliza", "2020-02-17");
+			actual6 = service.filterByClinicDateProcedureType(13L, "Frenologija", "2020-02-17");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("A list of found doctors: ");
+		for (DoctorListingDTO d : actual3) {
+			System.out.println("Doctor: " + d.getFirstName() + " " + d.getLastName() + " Rating: " + d.getRating());
+			for (String t : d.getTerms()) {
+				System.out.println("\t" + t);
+			}
+		}
+		System.out.println("");
+		System.out.println("");
+		
+		assertEquals(2, actual1.size());
+		
+		assertEquals("Pera", actual1.get(0).getFirstName());
+		assertEquals("Peric", actual1.get(0).getLastName());
+		assertEquals("3.8", actual1.get(0).getRating());
+		assertEquals(0, actual1.get(0).getTerms().size());
+
+		assertEquals("Jova", actual1.get(1).getFirstName());
+		assertEquals("Jovic", actual1.get(1).getLastName());
+		assertEquals("/", actual1.get(1).getRating());
+		assertEquals(0, actual1.get(1).getTerms().size());
+		
+		assertEquals(0, actual2.size());
+
+		assertEquals(1, actual3.size());
+
+		assertEquals("Pera", actual3.get(0).getFirstName());
+		assertEquals("Peric", actual3.get(0).getLastName());
+		assertEquals("3.8", actual3.get(0).getRating());
+		assertEquals(25, actual3.get(0).getTerms().size());
+		assertEquals("8:0", actual3.get(0).getTerms().get(0));
+		assertEquals("8:15", actual3.get(0).getTerms().get(1));
+		assertEquals("8:30", actual3.get(0).getTerms().get(2));
+		assertEquals("8:45", actual3.get(0).getTerms().get(3));
+		assertEquals("9:0", actual3.get(0).getTerms().get(4));
+		assertEquals("9:15", actual3.get(0).getTerms().get(5));
+		assertEquals("9:30", actual3.get(0).getTerms().get(6));
+		assertEquals("9:45", actual3.get(0).getTerms().get(7));
+		assertEquals("10:0", actual3.get(0).getTerms().get(8));
+		assertEquals("10:15", actual3.get(0).getTerms().get(9));
+		assertEquals("10:30", actual3.get(0).getTerms().get(10));
+		assertEquals("10:45", actual3.get(0).getTerms().get(11));
+		assertEquals("11:0", actual3.get(0).getTerms().get(12));
+		assertEquals("11:15", actual3.get(0).getTerms().get(13));
+		assertEquals("11:30", actual3.get(0).getTerms().get(14));
+		assertEquals("11:45", actual3.get(0).getTerms().get(15));
+		assertEquals("12:0", actual3.get(0).getTerms().get(16));
+		assertEquals("12:15", actual3.get(0).getTerms().get(17));
+		assertEquals("12:30", actual3.get(0).getTerms().get(18));
+		assertEquals("12:45", actual3.get(0).getTerms().get(19));
+		assertEquals("13:0", actual3.get(0).getTerms().get(20));
+		assertEquals("13:15", actual3.get(0).getTerms().get(21));
+		assertEquals("13:30", actual3.get(0).getTerms().get(22));
+		assertEquals("13:45", actual3.get(0).getTerms().get(23));
+		assertEquals("14:0", actual3.get(0).getTerms().get(24));
+		
+		assertEquals(0, actual4.size());
+
+		assertEquals(0, actual5.size());
+
+		assertEquals(0, actual6.size());
+		
 	}
 	
 }
