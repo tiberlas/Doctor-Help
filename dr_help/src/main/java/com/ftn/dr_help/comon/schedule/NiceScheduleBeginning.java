@@ -23,7 +23,7 @@ public class NiceScheduleBeginning {
 	private WorkScheduleAdapter workSchedule;
 	
 	@Autowired
-	private RoundUntilMonday round;
+	private RoundUntil round;
 	
 	/*
 	 * stavi da pocetak bude shodno radnoj smeni
@@ -113,7 +113,7 @@ public class NiceScheduleBeginning {
 			} else {
 				if(i >= (equalShifts.size() - 1)) {
 					//pomeri se za nedelju dana
-					niceBegin = round.round(niceBegin);
+					niceBegin = round.roundToSunday(niceBegin);
 				}					
 			}
 		}
