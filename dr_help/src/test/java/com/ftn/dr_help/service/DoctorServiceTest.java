@@ -559,7 +559,7 @@ public class DoctorServiceTest {
 			fail();
 		}
 	}
-	
+	 
 	@Test
 	public void FindFirstEqualShiftOperation6Test() throws ParseException {
 		try {
