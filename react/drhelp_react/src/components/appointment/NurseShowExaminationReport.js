@@ -38,11 +38,11 @@ class NurseShowExaminationReport extends React.Component {
                 <hr/>
                 <h4> Examination report: </h4>
                 <br/>
-                Diagnosis: {this.props.report.diagnosis} <br/>
-                Perscriptions:  <br/>
+                <i class="fas fa-stethoscope"></i>  Diagnosis: {this.props.report.diagnosis} <br/>
+                <i class="fas fa-capsules"></i> Prescriptions:  <br/>
                 <p style = {this.state.isSigned ? completedStyle : null}> 
                 {this.generateMedicationList()} </p>
-                Additional doctor notes: {this.props.report.advice}
+                <i class="fas fa-sticky-note"></i>  Additional doctor notes: {this.props.report.advice}
                 <br/>
                 {!this.state.isSigned && <Button className="btn btn-success" onClick = {this.signOff}>Sign off</Button>}
 

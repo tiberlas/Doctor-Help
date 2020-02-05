@@ -343,11 +343,16 @@ public class DoctorServiceTest {
 			newDate.set(Calendar.MILLISECOND, 0);
 			dates0.add(1, newDate.getTime());
 			
+			System.out.println("LISTA DATUMA :)");
+			for(Date d : dates0) {
+				System.out.println(d.toString());
+			}
+			
 			Calendar finded;
 			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
 		
 			Calendar expected = Calendar.getInstance();
-			expected.set(2020, 0, 13, 14, 10, 0);
+			expected.set(2020, 0, 14, 8, 0, 0);
 			expected.set(Calendar.MILLISECOND, 0);
 			
 			assertEquals(expected, finded);

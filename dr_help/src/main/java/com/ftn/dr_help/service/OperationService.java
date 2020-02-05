@@ -351,7 +351,7 @@ public class OperationService {
 			List<AbsenceInnerDTO> absence2 = leaveRequestsService.getAllDoctorAbsence(drId2);
 			
 			Calendar firstEqualShift = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, absence0, absence1, absence2, begin);
-			
+			System.out.println("----------- first equal shift: " + firstEqualShift.getTime());
 			return firstEqualShift;
 		} catch(Exception e) {
 			System.out.println("EX1 " + e);

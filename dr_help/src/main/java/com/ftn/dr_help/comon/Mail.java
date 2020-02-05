@@ -238,10 +238,10 @@ public class Mail {
 		SimpleMailMessage msg = new SimpleMailMessage();
 	    msg.setTo(doctor.getEmail());
 	
-	msg.setSubject("DrHelp operation scheduled");
-	  String text = "Dear " + doctor.getFirstName() +" "+doctor.getLastName()+ 
-	    		" you have an operation on "+
-	    		dateConvertor.dateForFrontEndString(operation.getDate())+", in";
+		msg.setSubject("DrHelp operation scheduled");
+		  String text = "Dear " + doctor.getFirstName() +" "+doctor.getLastName()+ 
+		    		"\n "+ operation.getOperationType().getName() + " is scheduled at " + 
+		    		dateConvertor.dateForFrontEndString(operation.getDate())+", in";
 	  	if(operation.getRoom() != null) {
 	    	text += " room " + operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
 	    } else {
@@ -259,18 +259,19 @@ public class Mail {
 			
 			SimpleMailMessage msg = new SimpleMailMessage();
 		    msg.setTo(operation.getPatient().getEmail());
-		    String text = "Dear " + operation.getPatient().getFirstName() +" "+operation.getPatient().getLastName()+ 
-		    		" your operation for " +operation.getOperationType().getName()+" has been schedule for ";
+		    String text = "Dear " + operation.getPatient().getFirstName() +" "+operation.getPatient().getLastName()+"."+ 
+		    		"\n\nYour " +operation.getOperationType().getName() + " has been scheduled.";
 		    
 		    if(operation.getRoom() != null) {
-		    	text +=  "in room "+
-			    		operation.getRoom().getName()+" number "+operation.getRoom().getNumber();
+		    	text +=  "\n\nRoom: "+
+			    		operation.getRoom().getName()+"\nNumber: "+operation.getRoom().getNumber();
 		    } else {
-		    	text += "in undefined room";
+		    	text += "in an undefined room";
 		    }
 		    msg.setSubject("DrHelp operation scheduled");
-		    text += dateConvertor.dateForFrontEndString(operation.getDate())+"," +
-		    		". Operation will be executed by dr. "+operation.getFirstDoctor().getFirstName()+" "+operation.getFirstDoctor().getLastName()+
+		    text += "Operation held at: ";
+		    text += dateConvertor.dateForFrontEndString(operation.getDate())+"\n" +
+		    		"By: dr. "+operation.getFirstDoctor().getFirstName()+" "+operation.getFirstDoctor().getLastName()+
 		    		", dr. "+operation.getSecondDoctor().getFirstName()+" "+operation.getSecondDoctor().getLastName()+
 		    		" and dr. "+operation.getThirdDoctor().getFirstName()+" "+operation.getThirdDoctor().getLastName()+".";
 		    

@@ -23,7 +23,7 @@ public class NiceScheduleBeginning {
 	private WorkScheduleAdapter workSchedule;
 	
 	@Autowired
-	private RoundUntilMonday round;
+	private RoundUntil round;
 	
 	/*
 	 * stavi da pocetak bude shodno radnoj smeni
@@ -64,6 +64,7 @@ public class NiceScheduleBeginning {
 				break;
 			}
 			
+			
 			switch(shift) {
 			case FIRST:
 				begin.set(Calendar.HOUR, 8);
@@ -80,7 +81,7 @@ public class NiceScheduleBeginning {
 				begin.set(Calendar.MINUTE, 0);
 				begin.set(Calendar.AM_PM, Calendar.AM);
 				return;
-			case NONE:
+			default:
 				//ovaj dan nije radan
 				begin.add(Calendar.DAY_OF_MONTH, 1);
 			}
@@ -112,7 +113,7 @@ public class NiceScheduleBeginning {
 			} else {
 				if(i >= (equalShifts.size() - 1)) {
 					//pomeri se za nedelju dana
-					niceBegin = round.round(niceBegin);
+					niceBegin = round.roundToSunday(niceBegin);
 				}					
 			}
 		}
@@ -128,6 +129,13 @@ public class NiceScheduleBeginning {
 				ProceduresTypePOJO procedureMock = new ProceduresTypePOJO();
 				procedureMock.setDuration(new Date());
 				doctorMock.setProcedureType(procedureMock);
+				doctorMock.setMonday(Shift.NONE);
+				doctorMock.setTuesday(Shift.NONE);
+				doctorMock.setWednesday(Shift.NONE);
+				doctorMock.setThursday(Shift.NONE);
+				doctorMock.setFriday(Shift.NONE);
+				doctorMock.setSaturday(Shift.NONE);
+				doctorMock.setSunday(Shift.NONE);
 				
 				for(EqualDoctorShifts forMocking : equalShifts) {
 					switch(forMocking.getDay()) {

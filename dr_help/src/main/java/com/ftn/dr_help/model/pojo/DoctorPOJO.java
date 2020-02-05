@@ -123,7 +123,7 @@ public class DoctorPOJO implements Serializable{
 	@Column(name = "mustChangePassword", nullable = true)
 	private Boolean mustChangePassword = false;
 	
-	@OneToMany(mappedBy="doctor",  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="doctor",  fetch = FetchType.LAZY)
 	private List<LeaveRequestPOJO> leaveRequest;
 	
 	public DoctorPOJO() {

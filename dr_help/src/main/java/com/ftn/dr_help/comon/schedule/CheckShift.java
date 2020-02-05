@@ -29,6 +29,10 @@ public class CheckShift {
 		
 		upper.set(Calendar.MINUTE, 0);
 		lower.set(Calendar.MINUTE, 0);
+		upper.set(Calendar.SECOND, 0);
+		lower.set(Calendar.SECOND, 0);
+		upper.set(Calendar.MILLISECOND, 0);
+		lower.set(Calendar.MILLISECOND, 0);
 		
 		switch(shift) {
 		case FIRST:

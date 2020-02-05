@@ -1,3 +1,4 @@
+
 package com.ftn.dr_help.comon.schedule;
 
 import static org.junit.Assert.assertEquals;
@@ -293,9 +294,9 @@ public class CalculateFirstFreeScheduleTest {
 			Calendar day1 = convert.stringToDate("2020-01-7 9:0");
 			day1.set(Calendar.AM_PM, Calendar.AM);
 			dates.add(day1.getTime());
-			Calendar day2 = convert.stringToDate("2020-01-7 10:0");
-			day2.set(Calendar.AM_PM, Calendar.AM);
-			dates.add(day2.getTime());
+//			Calendar day2 = convert.stringToDate("2020-01-7 10:0");
+//			day2.set(Calendar.AM_PM, Calendar.AM);
+//			dates.add(day2.getTime());
 			day1 = convert.stringToDate("2020-01-7 11:0");
 			day1.set(Calendar.AM_PM, Calendar.AM);
 			dates.add(day1.getTime());

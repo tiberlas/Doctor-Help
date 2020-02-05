@@ -47,5 +47,8 @@ public interface OperationRepository extends JpaRepository<OperationPOJO, Long> 
 			"and r.deleted = false " + 
 			"and r.id = ?1", nativeQuery = true)
 	public List<OperationPOJO> findAllScheduledOperationsInRoom(Long roomId);
+	
+	@Query(value = "select o.* from operations o where o.status = 'REQUESTED' and o.deleted = false order by o.id;", nativeQuery = true)
+	public List<OperationPOJO> getAllOperationRequests();
 
 }
