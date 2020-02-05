@@ -134,7 +134,7 @@ public class CalculateFirstFreeSchedule {
 				if(justCheckDate) return null;
 				
 				//provera da li je termin posle tekuceg u radnom vremenu
-				if(!checkWorkingDay(doctor, currentBegin, absenceDates)) {
+				if(!checkWorkingDay(doctor, currentEnd, absenceDates)) {
 					niceBeginning.setNiceScheduleBeginning(doctor, currentEnd);
 					//currentEnd = setWorkingDay(doctor, currentEnd, absenceDates);
 					
@@ -155,6 +155,12 @@ public class CalculateFirstFreeSchedule {
 			}
 		}
 		
+//		if(!shift.checkShift(begin, doctor) || !shift.checkShift(end, doctor)) {
+//			begin.add(Calendar.DAY_OF_MONTH, 1);
+//			return findFreeSchedule(doctor, begin, dates, absenceDates, false);
+//		}
+			
+			
 		return begin;
 	}
 	
@@ -170,21 +176,21 @@ public class CalculateFirstFreeSchedule {
 			return date;
 		}
 		
-//		Calendar before = Calendar.getInstance();
-//		do {
-//			before = (Calendar) date.clone();
-//			niceBeginning.setNiceScheduleBeginning(doctor, date);
-//			
-//			if(before.after(date)) {
-//				date.add(Calendar.DAY_OF_MONTH, 1);
-//				date.set(Calendar.AM_PM, Calendar.AM);
-//				date.set(Calendar.HOUR, 0);
-//				date.set(Calendar.MINUTE, 0);
-//				date.set(Calendar.MILLISECOND, 0);
-//				date.set(Calendar.SECOND, 0);
-//				niceBeginning.setNiceScheduleBeginning(doctor, date);
-//			}
-//		} while(!checkWorkingDay(doctor, date, absenceDates));
+		//Calendar before = Calendar.getInstance();
+		//do {
+		//	before = (Calendar) date.clone();
+		//	niceBeginning.setNiceScheduleBeginning(doctor, date);
+		//	
+		//	if(before.after(date)) {
+		//		date.add(Calendar.DAY_OF_MONTH, 1);
+		//		date.set(Calendar.AM_PM, Calendar.AM);
+		//		date.set(Calendar.HOUR, 0);
+		//		date.set(Calendar.MINUTE, 0);
+		//		date.set(Calendar.MILLISECOND, 0);
+		//		date.set(Calendar.SECOND, 0);
+		//		niceBeginning.setNiceScheduleBeginning(doctor, date);
+		//	}
+		//} while(!checkWorkingDay(doctor, date, absenceDates));
 		
 		if(!shift.checkShift(date, doctor)) {
 			date.add(Calendar.DAY_OF_YEAR, 1);
