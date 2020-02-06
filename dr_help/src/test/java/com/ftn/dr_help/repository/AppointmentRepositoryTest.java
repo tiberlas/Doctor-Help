@@ -94,7 +94,7 @@ public class AppointmentRepositoryTest {
 			procedure.setPrice(20);
 			procedure.setDuration(Calendar.getInstance().getTime());
 			procedure.setOperation(false);
-			procedure.setName("Psihoanaliza");
+			procedure.setName("Procedure");
 		
 		patient = new PatientPOJO();
 			patient.setActivated(true);
@@ -160,8 +160,34 @@ public class AppointmentRepositoryTest {
 		predefined.forEach(afterReservePredefinedList::add);
 		
 		assertThat(afterReservePredefinedList).hasSize(beforeReservePredefinedList.size() - 1);
+	}
+	
+	@Test
+	public void testDeletingAPredefinedAppointment() { //brise predefined i proverava da li je obrisan
+		List<AppointmentPOJO> beforeDeleting = new ArrayList<>();
+		List<AppointmentPOJO> afterDeleting = new ArrayList<>();
 		
 		
+		Iterable<AppointmentPOJO> appointments = appointmentRepository.findAllPredefined();
+		
+		appointments.forEach(beforeDeleting::add);
+		
+		Long appId = null;
+		for (AppointmentPOJO appointment : beforeDeleting) {
+				appId = appointment.getId();
+		}
+		
+		if(appId != null) {
+			System.out.println("app id is" + appId);
+			AppointmentPOJO appointment = appointmentRepository.findOneById(appId);
+			appointment.setDeleted(true);
+			this.entityManager.merge(appointment);
+		} 
+		
+		appointments = appointmentRepository.findAllPredefined();
+		appointments.forEach(afterDeleting::add);
+		
+		assertThat(afterDeleting).hasSize(beforeDeleting.size() - 1);
 	}
 	
 	
