@@ -199,7 +199,7 @@ class LoginPage extends React.Component {
 							<br/>
 							<br/>
 							<br/>
-							<h2 class='text-success'>Sign in</h2>
+							<h2 class='text-success'>Sign in, get help</h2>
 							<br/>
 							<form onSubmit={this.handleSubmit}>
 							<div class="form-group ">

@@ -58,6 +58,7 @@
   },
   "scripts": {
     "test": "react-scripts test",
+    "build": "react-scripts build",
     "start": "node-env-run server --exec nodemon | pino-colada",
     "dev": "run-p server start"
   },
