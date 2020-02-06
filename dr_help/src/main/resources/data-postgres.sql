@@ -102,6 +102,12 @@ INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_
 ;
 
 
+INSERT INTO appointments ("date",deleted,discount,status,"version",doctor_id,examination_report_id,nurse_id,patient_id,procedure_type_id,room_id) VALUES 
+('2020-05-01 08:00:00.000',false,20,'AVAILABLE',0,2,NULL,1,NULL,1,3)
+,('2020-04-03 10:00:00.000',false,20,'AVAILABLE',0,2,NULL,1,NULL,1,3)
+,('2020-04-23 10:00:00.000',false,20,'AVAILABLE',0,4,NULL,1,NULL,3,2)
+,('2020-04-23 10:00:00.000',false,20,'AVAILABLE',0,4,NULL,1,NULL,3,2)
+;
 
 
 

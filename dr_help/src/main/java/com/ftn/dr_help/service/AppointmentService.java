@@ -487,7 +487,7 @@ public class AppointmentService {
 	@Transactional
 	public void delete (Long appointmentId) {
 		AppointmentPOJO appointment = appointmentRepository.findOneById(appointmentId);
-		if (appointment.getStatus() == AppointmentStateEnum.APPROVED) {
+		if (appointment.getStatus() != AppointmentStateEnum.APPROVED) {
 			appointmentRepository.deleteAppointment (appointmentId);
 		}
 		else {

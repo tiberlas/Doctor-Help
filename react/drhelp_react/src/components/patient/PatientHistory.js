@@ -718,19 +718,6 @@ class PatientHistory extends Component {
 		});
 	}
 
-	// handleCancel (appointmentId, appointmentDate) {
-	// 	axios.delete ("http://localhost:8080/api/appointments/delete", {
-	// 		data: {
-	// 			appointmentId : appointmentId
-	// 		}
-	// 	})
-	// 	.then (date => {
-	// 		this.updateComponent();
-	// 	});
-	// }
-
-
-
 	render () {
 		
 		// When viewing patient history, display a perscription Link;
