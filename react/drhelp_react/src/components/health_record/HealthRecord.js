@@ -92,7 +92,7 @@ class HealthRecord extends React.Component {
 
     bloodTypeDisplay = () => {
         
-        if (this.state.health_record.bloodType === undefined) {
+        if ((this.state.health_record.bloodType === undefined) || (this.state.health_record.bloodType === null)) {
             return;
         }
         let bloodType = ""

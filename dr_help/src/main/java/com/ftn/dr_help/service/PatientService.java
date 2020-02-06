@@ -750,12 +750,14 @@ public class PatientService {
 		PatientHealthRecordDTO retVal = new PatientHealthRecordDTO();
 		
 		retVal.setBirthday(patient.getBirthday().getTime());
-		retVal.setBloodType(healthRecord.getBloodType());
-		retVal.setDiopter(healthRecord.getDiopter());
+		if (healthRecord != null) {
+			retVal.setHeight(healthRecord.getHeight());
+			retVal.setBloodType(healthRecord.getBloodType());
+			retVal.setDiopter(healthRecord.getDiopter());
+			retVal.setWeight(healthRecord.getWeight());
+		}
 		retVal.setFirstName(patient.getFirstName());
-		retVal.setHeight(healthRecord.getHeight());
 		retVal.setLastName(patient.getLastName());
-		retVal.setWeight(healthRecord.getWeight());
 		retVal.setAllergyList(list);
 		return retVal;
 	}
@@ -781,8 +783,8 @@ public class PatientService {
 		p.setHealthRecord(healthRecord);
 		
 		patientRepository.save(p);
-		healthRecord.setPatient(p);
-		healthRecordRepository.save(healthRecord);
+//		healthRecord.setPatient(p);
+//		healthRecordRepository.save(healthRecord);
 		
 		System.out.println("Health record created.");
 		return p;

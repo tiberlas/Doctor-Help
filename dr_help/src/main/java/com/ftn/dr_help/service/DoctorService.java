@@ -340,8 +340,10 @@ public class DoctorService {
 		}
 		
 		HealthRecordPOJO healthRecord = patient.getHealthRecord();
-		List<AllergyPOJO> allergies= healthRecord.getAllergyList();
-		
+		List<AllergyPOJO> allergies = new ArrayList<AllergyPOJO> ();
+		if (healthRecord != null) {
+			allergies= healthRecord.getAllergyList();
+		}
 		ArrayList<String> list = new ArrayList<String>();
 		
 		for (AllergyPOJO allergy : allergies) {
@@ -352,12 +354,14 @@ public class DoctorService {
 		PatientHealthRecordDTO retVal = new PatientHealthRecordDTO();
 		
 		retVal.setBirthday(patient.getBirthday().getTime());
-		retVal.setBloodType(healthRecord.getBloodType());
-		retVal.setDiopter(healthRecord.getDiopter());
+		if (healthRecord != null) {
+			retVal.setHeight(healthRecord.getHeight());
+			retVal.setBloodType(healthRecord.getBloodType());
+			retVal.setDiopter(healthRecord.getDiopter());
+			retVal.setWeight(healthRecord.getWeight());
+		}
 		retVal.setFirstName(patient.getFirstName());
-		retVal.setHeight(healthRecord.getHeight());
 		retVal.setLastName(patient.getLastName());
-		retVal.setWeight(healthRecord.getWeight());
 		retVal.setAllergyList(list);
 		
 		System.out.println("FIRSTNAME: " + retVal.getFirstName() + "BIRTHDAY: " + retVal.getBirthday() + " BLOODTYPE: " + retVal.getBloodType() + "ALLERGYLIST: " + retVal.getAllergyList());

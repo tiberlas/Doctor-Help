@@ -4,13 +4,13 @@
 
 
 --password: sifra
-INSERT INTO public.centre_administrator (address,birthday,city,email,first_name,last_name,must_change_password,"password",phone_number,status,state) VALUES 
+INSERT INTO public.centre_administrator (address,birthday,city,email,first_name,last_name,must_change_password,password,phone_number,status,state) VALUES 
 ('A dom','2003-02-01 00:00:00.000','Novi Sad','glavni_sef@maildrop.cc','Đura','Đurić',NULL,'$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG','06555555','CENTRE_ADMINISTRATOR','Serbia')
 ,('6A Stevana Milovanova','1991-02-04 01:00:00.000','Novi Sad','sporedni_sef@maildrop.cc','Goran','Betić',false,'$2y$10$T3JRn/kzupvZCVjfGqepsOYGWrfbdt2Yb6y3YeVGjQyAz6EU/uBr.','0623082357','CENTRE_ADMINISTRATOR','Serbia')
 ;
 
 
-INSERT INTO public.clinic (address,city,description,"name",state) VALUES 
+INSERT INTO public.clinic (address,city,description,name,state) VALUES 
 ('75 Bulevar cara Lazara','Novi Sad','Limanski dom zdravlja opste namene','Dom zdravlja Liman','Serbia')
 ,('24 Zmaj Ognjena Vuka','Novi Sad','Lečenje od bolesti zavisnosti','Dom Zdravlja','Serbia')
 ,('7A Bulevar Cara Lazara','Novi Sad','Privatna zubarska klinika','Poliklinika Pepic','Serbia')
@@ -19,7 +19,7 @@ INSERT INTO public.clinic (address,city,description,"name",state) VALUES
 ;
 
 --password: 1234
-INSERT INTO clinic_administrator (address,birthday,city,email,first_name,last_name,must_change_password,"password",phone_number,status,state,clinic_id) VALUES 
+INSERT INTO clinic_administrator (address,birthday,city,email,first_name,last_name,must_change_password,password,phone_number,status,state,clinic_id) VALUES 
 ('4 Jovana Vukovića','1978-10-12 01:00:00.000','Novi Sad','admin2@maildrop.cc','Nikola','Jovanović',false,'$2y$10$RJDMkHuJE1ld.2gc5v1ui.Y0L8gkTjgBavLb2FhmfLYAVnQAPYcna','06722252552','CLINICAL_ADMINISTRATOR','Serbia',2)
 ,('50 Balzakova','1950-04-19 01:00:00.000','Novi Sad','admin3@maildrop.cc','Pero','Kovačević',false,'$2y$10$FVB78sFVqxnGPJEKf1IF1uEuLxKjlK.bGuxVewae9I8FMT2XfIZvu','066841651','CLINICAL_ADMINISTRATOR','Serbia',3)
 ,('48 Gyáli út','1970-05-21 01:00:00.000','Budapest','admin4@maildrop.cc','Ištvan','Moč',false,'$2y$10$2cqlRcaQM9fLrfViyYo7AuuURRhjlUd5EPAHBE3dFHLivApueiS/e','06061641551','CLINICAL_ADMINISTRATOR','Hungary',5)
@@ -47,7 +47,7 @@ INSERT INTO public.medicationpojo (med_description,medication_name) VALUES
 ;
 
 
-INSERT INTO procedures_type (deleted,duration,is_operation,"name",price,clinic_id) VALUES 
+INSERT INTO procedures_type (deleted,duration,is_operation,name,price,clinic_id) VALUES 
 (false,'00:15:00',false,'General exam',15,1)
 ,(false,'01:00:00',false,'Orthopetic exam',25,1)
 ,(false,'01:00:00',false,'Psychotherapy',30,1)
@@ -58,7 +58,7 @@ INSERT INTO procedures_type (deleted,duration,is_operation,"name",price,clinic_i
 ;
 
 --password: doca
-INSERT INTO doctors (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,"password",phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id,procedure_type_id) VALUES 
+INSERT INTO doctors (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,password,phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id,procedure_type_id) VALUES 
 ('3 Branislava Nušića','1992-05-06 02:00:00.000','Novi Sad',false,'jocka@maildrop.cc','Jovana','SECOND','Bratić','NONE',false,'$2y$10$5BqVCpktyTaXtJhdcncd2.ICUS.20RaDu9N/wdp/m9w/pZ60pZ9Fm','06636268024','DOCTOR','NONE','Serbia','THIRD','NONE','SECOND','THIRD',1,1)
 ,('15A Bore Prodanovića','1991-10-15 01:00:00.000','Novi Sad',false,'boki@maildrop.cc','Bogdan','FIRST','Karamarković','FIRST',false,'$2y$10$BG2D4qD6qNbq0gmOBT8vN.UgQFiP5.XecMWsPeyAKHOJLTI24BMSq','066804610','DOCTOR','FIRST','Serbia','NONE','NONE','FIRST','NONE',1,1)
 ,('160 Cara Lazara','1967-09-28 01:00:00.000','Futog',false,'mile@maildrop.cc','Miladtin','FIRST','Borojević','NONE',false,'$2y$10$w2l01qOqLM7LGncVKqyfzeZnl4bJt6aQLARA0KACGFwHQP0CJge66','02168466','DOCTOR','SECOND','Serbia','FIRST','SECOND','NONE','FIRST',1,2)
@@ -70,7 +70,7 @@ INSERT INTO doctors (address,birthday,city,deleted,email,first_name,friday,last_
 ;
 
 
-INSERT INTO room (deleted,"name","number",clinic_id,proceduras_types_id) VALUES 
+INSERT INTO room (deleted,name,number,clinic_id,proceduras_types_id) VALUES 
 (false,'Orthopedic room',1,1,2)
 ,(false,'Psychollogy',2,1,3)
 ,(false,'General intake',3,1,1)
@@ -82,12 +82,12 @@ INSERT INTO room (deleted,"name","number",clinic_id,proceduras_types_id) VALUES
 ,(false,'Ortorhinolaringology',6,2,6)
 ,(false,'pszichoterápiás szoba',1,5,7)
 ;
-INSERT INTO room (deleted,"name","number",clinic_id,proceduras_types_id) VALUES 
+INSERT INTO room (deleted,name,number,clinic_id,proceduras_types_id) VALUES 
 (false,'pszichoterápiás szoba',2,5,7)
 ;
 
 --password: 4321
-INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,"password",phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id) VALUES 
+INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,password,phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id) VALUES 
 ('8 Jevrejska','1982-04-20 01:00:00.000','Novi Sad',false,'erzi@maildrop.cc','Eržebet','FIRST','Anđelić','FIRST',false,'$2y$10$NObeGyGkY5gD5dB1AqGUledF314v6C93dtVcT83/Y2Cpt4Fa./Mzi','066704035','NURSE','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',1)
 ,('3 Miletićeva','1983-09-04 02:00:00.000','Novi Sad',false,'simona@maildrop.cc','Simona','THIRD','Bašić','THIRD',false,'$2y$10$f.Umhw9GYabu4pGwhQgoTuCPNXzNufvhaUHuqkt0f/g4i6nespDme','064851515522','NURSE','THIRD','Serbia','THIRD','THIRD','THIRD','THIRD',1)
 ,('3 Aleksandra Tišme','1985-08-30 02:00:00.000','Novi Sad',false,'dragana@maildrop.cc','Dragana','SECOND','Crnogorac','SECOND',false,'$2y$10$D4f5Szywhr6s0jNcqfX.fu89e6/avSGulHH.dyVDAx9N.UBw0ulT2','2196761','NURSE','SECOND','Serbia','SECOND','SECOND','SECOND','SECOND',1)
@@ -96,18 +96,48 @@ INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_na
 ,('2 Albertirsai köz','1999-03-01 01:00:00.000','Budapest',false,'vesna@maildrop.cc','Veszna','NONE','Korosi','FIRST',false,'$2y$10$b3cvXf00D8ArvSobhoObxOeAj8QYHI62Pdw9F5Qxffs36mF1NlZli','640646441','NURSE','NONE','Hungary','NONE','NONE','FIRST','FIRST',5)
 ;
 
+
+INSERT INTO healthrecord (blood_type,diopter,height,weight) VALUES 
+('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+,('O_POSITIVE',0,0,0)
+;
+INSERT INTO healthrecord (blood_type,diopter,height,weight) VALUES 
+('O_POSITIVE',0,0,0),
+('O_POSITIVE',0,0,0)
+;
+
 --password: whoppa42
-INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_activated,last_name,"password",phone_number,status,state,health_record_id) VALUES 
-('2 Simeona Simića','1997-12-03 01:00:00.000','Novi Sad','happymeal@maildrop.cc','Tanja',604,true,'Blejic','$2y$10$hlvthdh7lrpHPn3WDgmYLebFwr78p.B5MWzL0zC44QOovakT4vqWq','063870485510','PATIENT','Serbia',NULL)
+INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_activated,last_name,password,phone_number,status,state,health_record_id) VALUES 
+('2 Simeona Simića','1997-12-03 01:00:00.000','Novi Sad','happymeal@maildrop.cc','Tanja',604,true,'Blejic','$2y$10$hlvthdh7lrpHPn3WDgmYLebFwr78p.B5MWzL0zC44QOovakT4vqWq','063870485510','PATIENT','Serbia',1)
+,('9 Turgenjeva','1995-02-04 01:00:00.000','Novi Sad','juro@maildrop.cc','Juro',6454,true,'Joksimović','$2y$10$jcZESKu1emvnNuQ78KDX1uhrAANJfj4ExBaFvbrN2.1aGki2.zNpW','069560165','PATIENT','Serbia',2)
+,('9 Jovana Dučića','1995-03-07 01:00:00.000','Beograd','zeljko@maildrop.cc','Željko',547,true,'Stublić','$2y$10$CYLhk2wPxobNi2ha2WS1YeYjRYwzXxaV1r13l1UhB604ssHsUr5O.','066545605','PATIENT','Serbia',3)
+,('9 Trg Slobode','1998-03-05 01:00:00.000','Novi Sad','stole@maildrop.cc','Stojadin',684,false,'Milunović','$2y$10$m0s2dP6xXy0oNKpSp6tw..yhIeHF3DpwpUJdU/44oisJfWrJd0sTa','066846846486','PATIENT','Serbia',4)
+,('5 Stevana Sremca','1996-04-05 02:00:00.000','Novi Sad','milovan@maildrop.cc','Milovan',56046,true,'Borojević','$2y$10$0X5Dtp5A28luoka0eP1fbe/lWMVE2c2HVlRLd7ylC7jx276b45yVW','06680465416','PATIENT','Serbia',5)
+,('8 Laze Telečkog','1994-02-03 01:00:00.000','Novi Sad','borislav@maildrop.cc','Borislav',21,true,'Gajić','$2y$10$OYBaOnoA2otfDZ.DKROlqegSHdV9R4SVav9CHlQzHGHhkZH/mA.yi','066546564','PATIENT','Serbia',6)
+,('3 Bulevar Evrope','1985-02-06 01:00:00.000','Novi Sad','gavra@maildrop.cc','Dejan',6476,true,'Gavrilović','$2y$10$npbIU.sDfhV3Kar86ZQEdufO1KGetGwO7QCZ58FMqugB8S/JycP6a','06684684684','PATIENT','Serbia',7)
+,('9 Bulevar Evrope','1995-03-08 01:00:00.000','Novi Sad','goran@maildrop.cc','Goran',56797,true,'Divović','$2y$10$akkM0G2Hjn1Ke9CIpLj9DeFdajveZTtclHUjPfQ8O.TmdB3/y0Juu','066846847','PATIENT','Serbia',8)
+,('4 Temerinska','1993-01-20 01:00:00.000','Novi Sad','gar@maildrop.cc','Doban',6840,true,'Kovačević','$2y$10$o14qrBfyIIRUEmIXLNuG7.9cROZWeXWNn7Wa/DL.VgGgQdmxliqMm','0668468','PATIENT','Serbia',9)
+,('9 Đorđa Magaraševića','1997-05-21 02:00:00.000','Novi Sad','coa@maildrop.cc','Aca',546,true,'Jovanovic','$2y$10$KpnUpRPWr7hkRC0DkYgBbOdqVl3/vRV4TuZ5PHyVDNi9EDAcs7cwS','06654684','PATIENT','Serbia',10)
+;
+INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_activated,last_name,password,phone_number,status,state,health_record_id) VALUES 
+('9 Uspenska','1995-05-05 02:00:00.000','Novi Sad','kaca@maildrop.cc','Katarina',646,true,'Stojanović','$2y$10$egVESQ0mM/VeKP6ytKWAIOZm98yaVgsef26epB/A0zvLV.ArtvkQq','06646446846','PATIENT','Serbia',11)
+,('2 Zlatne Grede','1964-05-07 01:00:00.000','Novi Sad','vuja@maildrop.cc','Vukasin',651,true,'Vučević','$2y$10$6a3kRwiYGYZs9nP1vwkkeuh0ta7fYX09flmGY5ODqiU4fItywPl5q','0658554684','PATIENT','Serbia',12)
 ;
 
 
-INSERT INTO appointments ("date",deleted,discount,status,"version",doctor_id,examination_report_id,nurse_id,patient_id,procedure_type_id,room_id) VALUES 
+INSERT INTO appointments (date,deleted,discount,status,version,doctor_id,examination_report_id,nurse_id,patient_id,procedure_type_id,room_id) VALUES 
 ('2020-05-01 08:00:00.000',false,20,'AVAILABLE',0,2,NULL,1,NULL,1,3)
 ,('2020-04-03 10:00:00.000',false,20,'AVAILABLE',0,2,NULL,1,NULL,1,3)
 ,('2020-04-23 10:00:00.000',false,20,'AVAILABLE',0,4,NULL,1,NULL,3,2)
 ,('2020-04-23 10:00:00.000',false,20,'AVAILABLE',0,4,NULL,1,NULL,3,2)
 ;
-
 
 
