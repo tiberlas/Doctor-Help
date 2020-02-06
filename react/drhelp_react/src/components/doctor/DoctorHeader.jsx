@@ -10,7 +10,7 @@ class DoctorHeader extends Component {
 
     render() { 
         return ( 
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="dark" expand="sm">
            <Navbar.Brand >
               <Nav> 
                   <Nav.Link>
@@ -29,7 +29,7 @@ class DoctorHeader extends Component {
                   </Nav.Link>
 
                   <Nav.Link>
-                          <Link exact to='/doctor/patients' class="nav-link">Patients</Link>
+                          <Link exact to='/doctor/patients' class="nav-link">Patient&nbsp;list</Link>
                   </Nav.Link>
 
                   {this.props.operation &&

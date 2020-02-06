@@ -1,11 +1,5 @@
 import React, { Fragment } from 'react'
 import axios from 'axios'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Button from 'react-bootstrap/Button'
 import AddDiagnosisModal from './AddDiagnosisModal';
 
 
@@ -77,9 +71,9 @@ class DiagnosesOverview extends React.Component {
 
     renderArrowName = () => {
         if(this.state.currentSort === 'name_up') {
-            return '\u2191'
+            return <i class="fas fa-long-arrow-alt-up fa-lg"> </i>
         } else if(this.state.currentSort === 'name_down') {
-            return '\u2193'
+            return <i class="fas fa-long-arrow-alt-down fa-lg"> </i>
         } else {
             return ''
         }
@@ -105,40 +99,37 @@ class DiagnosesOverview extends React.Component {
     render() {
         let i = 0
         return (
-            <Fragment> 
-               <div style={{ overflow: "auto" }} >
-                <Table class="table table-hover">
-                    <TableHead class="table-active">
-                        <TableRow class="table-active" style={{height: "35px"}}>
-                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('name')}>Name{this.renderArrowName()}</TableCell>
-                            <TableCell class="text-success">Description</TableCell>
-                            <TableCell class="text-success"><Button class="btn btn-success" onClick={this.toggle}>Add</Button></TableCell>
-                        </TableRow>
-                    </TableHead>
-                </Table>
-                <div style={{ overflow: 'auto', height: '250px' }}>
-                <Table style={{tableLayout: 'fixed'}}>
-                    <TableBody >
+           
+               <div >
+                   <br/>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-success cursor-pointer" onClick={() => this.onSortChange('name')}>{this.renderArrowName()} <i class="fas fa-stethoscope"></i>  Name</th>
+                            <th class="text-success"><i class="far fa-sticky-note"></i>  Description</th>
+                            <th class="text-success"><button button class='btn btn-success rounded-circle float-right mr-5'  onClick={this.toggle}><i class="fas fa-plus"></i></button></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {/* <div class="scrollit">  */}
                         {this.state.diagnoses.sort(sortTypes[this.state.currentSort].fn).map (c => (
-                            <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <TableCell class='text text-white'>&nbsp;{c.name}</TableCell>
-                                <TableCell class='text text-white'>{c.description}</TableCell>
-                                <TableCell><button class='btn btn-danger' onClick={() => this.handleDelete(c)} disabled={c.reserved}>Delete</button></TableCell>
-                            </TableRow>
+                            <tr className={(++i)%2? `table-dark` : ``} >
+                                <td class='text text-white'>&nbsp;{c.name}</td>
+                                <td class='text text-white'>{c.description}</td>
+                                <td><button class='btn btn-danger' onClick={() => this.handleDelete(c)} disabled={c.reserved}>Delete</button></td>
+                            </tr>
                         ))  }
-
-                    </TableBody>
+                        {/* </div> */}
+                    </tbody>
                     
-                </Table>
-                </div>
-                </div>
+                </table>
+                
 
                 {this.state.showAddModal && <AddDiagnosisModal modal={this.state.showAddModal}
                                     toggle={this.toggle}
                                     update={this.update}/>}
                 
-               
-            </Fragment>
+                </div>
         )
     }
 }

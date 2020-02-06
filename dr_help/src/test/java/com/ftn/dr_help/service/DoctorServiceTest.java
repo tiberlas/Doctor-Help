@@ -1,17 +1,19 @@
 package com.ftn.dr_help.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.comon.schedule.CalculateFirstFreeSchedule;
+import com.ftn.dr_help.dto.AbsenceInnerDTO;
 import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
 import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
 import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
+import com.ftn.dr_help.repository.AppointmentRepository;
 import com.ftn.dr_help.repository.ClinicRepository;
 import com.ftn.dr_help.repository.DoctorRepository;
 import com.ftn.dr_help.repository.DoctorReviewRepository;
@@ -35,10 +39,10 @@ import com.ftn.dr_help.repository.DoctorReviewRepository;
 @SpringBootTest
 public class DoctorServiceTest {
 
-	@Mock
+	@InjectMocks
 	private DoctorService service;
 	
-	@Mock
+	@MockBean
 	private DoctorRepository doctorRepository;
 	
 	@Autowired
@@ -55,6 +59,8 @@ public class DoctorServiceTest {
 	
 	@MockBean
 	private DoctorReviewRepository doctorReviewRepository;
+	
+	@MockBean AppointmentRepository appointmentRepository;
 	
 	private DoctorPOJO dr0 = new DoctorPOJO();
 	private DoctorPOJO dr1 = new DoctorPOJO();
@@ -220,391 +226,391 @@ public class DoctorServiceTest {
 		
 	}
 	
-//	@Test
-//	public void testMocking() {
-//		System.out.println(1);
-//		
-//		DoctorPOJO doca = new DoctorPOJO();
-//		doca.setId(1l);
-//		doca.setDeleted(false);
-//		doca.setFirstName("TIBI");
-//		Mockito.when(this.doctorRepository.findById(0l)).thenReturn(Optional.of(doca));
-//		
-//		DoctorPOJO dr = doctorRepository.findById(0l).orElse(null);
-//		
-//		assertEquals("TIBI", dr.getFirstName());
-//	}
-//	
-//	@Test
-//	public void findScheduleTest() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin = dateConverter.stringToDate("2020-01-15 08:00");
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 16, 22, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
+	@Test
+	public void testMocking() {
+		System.out.println(1);
+		
+		DoctorPOJO doca = new DoctorPOJO();
+		doca.setId(1l);
+		doca.setDeleted(false);
+		doca.setFirstName("TIBI");
+		Mockito.when(this.doctorRepository.findById(0l)).thenReturn(Optional.of(doca));
+		
+		DoctorPOJO dr = doctorRepository.findById(0l).orElse(null);
+		
+		assertEquals("TIBI", dr.getFirstName());
+	}
+	
+	@Test
+	public void findScheduleTest() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin = dateConverter.stringToDate("2020-01-15 08:00");
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 16, 22, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void findScheduleJumpTest() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 13, 12, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+
+			Calendar newDate  = Calendar.getInstance();
+			newDate.set(2020, 0, 13, 14, 10, 0);
+			newDate.set(Calendar.MILLISECOND, 0);
+			dates0.add(2, newDate.getTime());
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 14, 8, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void findScheduleBeforeTest() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 12, 12, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 13, 10, 10, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void findScheduleAfterTest() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 13, 18, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+
+			dr0.setTuesday(Shift.NONE);
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 16, 22, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void findScheduleTest1() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 11, 18, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			
+			Calendar newDate  = Calendar.getInstance();
+			newDate.set(2020, 0, 13, 10, 10, 0);
+			newDate.set(Calendar.MILLISECOND, 0);
+			dates0.add(1, newDate.getTime());
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 13, 14, 10, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void findScheduleWithHolidayTest() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 7, 18, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			
+			List<AbsenceInnerDTO> absence = new ArrayList<>();
+			Calendar absenceBegin = Calendar.getInstance();
+			Calendar absenceEnd = Calendar.getInstance();
+			
+			absenceBegin.set(2020, 0, 8, 0, 0, 0);
+			absenceEnd.set(2020, 0, 12, 0, 0, 0);
+			
+			absence.add(new AbsenceInnerDTO(absenceBegin.getTime(), absenceEnd.getTime()));
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, absence);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 13, 10, 10, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void findScheduleWithHolidayTest1() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 13, 18, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			
+			List<AbsenceInnerDTO> absence = new ArrayList<>();
+			Calendar absenceBegin = Calendar.getInstance();
+			Calendar absenceEnd = Calendar.getInstance();
+			
+			absenceBegin.set(2020, 0, 14, 0, 0, 0);
+			absenceEnd.set(2020, 0, 18, 0, 0, 0);
+			
+			absence.add(new AbsenceInnerDTO(absenceBegin.getTime(), absenceEnd.getTime()));
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, absence);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 20, 8, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void findScheduleWithHolidayTest2() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 13, 18, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			
+			List<AbsenceInnerDTO> absence = new ArrayList<>();
+			Calendar absenceBegin = Calendar.getInstance();
+			Calendar absenceEnd = Calendar.getInstance();
+			
+			absenceBegin.set(2020, 0, 25, 0, 0, 0);
+			absenceEnd.set(2020, 0, 28, 0, 0, 0);
+			
+			absence.add(new AbsenceInnerDTO(absenceBegin.getTime(), absenceEnd.getTime()));
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, absence);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 14, 8, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void FindFirstScheduleOperationTest() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin = dateConverter.stringToDate("2020-01-15 08:00");
+			
+			dr2.setThursday(Shift.NONE);
+			dates2.remove(3);
+			dates2.remove(2);
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 17, 16, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void FindFirstEqualShiftOperation2Test() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin = dateConverter.stringToDate("2020-01-17 08:00");
+			
+			dr2.setFriday(Shift.NONE);
+			dr1.setFriday(Shift.NONE);
+			dr0.setFriday(Shift.NONE);
+			dr0.setMonday(Shift.FIRST);
+			dr1.setMonday(Shift.FIRST);
+			dr2.setMonday(Shift.FIRST);
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 20, 8, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void FindFirstEqualShiftOperation3Test() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin = dateConverter.stringToDate("2020-01-17 08:00");
+			
+			dr2.setFriday(Shift.NONE);
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 23, 16, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
 //			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void findScheduleJumpTest() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 13, 12, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//
-//			Calendar newDate  = Calendar.getInstance();
-//			newDate.set(2020, 0, 13, 14, 10, 0);
-//			newDate.set(Calendar.MILLISECOND, 0);
-//			dates0.add(2, newDate.getTime());
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 14, 8, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void findScheduleBeforeTest() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 12, 12, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 13, 10, 10, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void findScheduleAfterTest() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 13, 18, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//
-//			dr0.setTuesday(Shift.NONE);
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 16, 22, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void findScheduleTest1() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 11, 18, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//			
-//			Calendar newDate  = Calendar.getInstance();
-//			newDate.set(2020, 0, 13, 10, 10, 0);
-//			newDate.set(Calendar.MILLISECOND, 0);
-//			dates0.add(1, newDate.getTime());
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, null);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 13, 14, 10, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void findScheduleWithHolidayTest() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 7, 18, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//			
-//			List<AbsenceInnerDTO> absence = new ArrayList<>();
-//			Calendar absenceBegin = Calendar.getInstance();
-//			Calendar absenceEnd = Calendar.getInstance();
-//			
-//			absenceBegin.set(2020, 0, 8, 0, 0, 0);
-//			absenceEnd.set(2020, 0, 12, 0, 0, 0);
-//			
-//			absence.add(new AbsenceInnerDTO(absenceBegin.getTime(), absenceEnd.getTime()));
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, absence);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 13, 10, 10, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//
-//	@Test
-//	public void findScheduleWithHolidayTest1() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 13, 18, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//			
-//			List<AbsenceInnerDTO> absence = new ArrayList<>();
-//			Calendar absenceBegin = Calendar.getInstance();
-//			Calendar absenceEnd = Calendar.getInstance();
-//			
-//			absenceBegin.set(2020, 0, 14, 0, 0, 0);
-//			absenceEnd.set(2020, 0, 18, 0, 0, 0);
-//			
-//			absence.add(new AbsenceInnerDTO(absenceBegin.getTime(), absenceEnd.getTime()));
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, absence);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 20, 8, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void findScheduleWithHolidayTest2() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 13, 18, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//			
-//			List<AbsenceInnerDTO> absence = new ArrayList<>();
-//			Calendar absenceBegin = Calendar.getInstance();
-//			Calendar absenceEnd = Calendar.getInstance();
-//			
-//			absenceBegin.set(2020, 0, 25, 0, 0, 0);
-//			absenceEnd.set(2020, 0, 28, 0, 0, 0);
-//			
-//			absence.add(new AbsenceInnerDTO(absenceBegin.getTime(), absenceEnd.getTime()));
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForDoctor(workSchedule.fromDoctor(dr0), begin, dates0, absence);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 14, 8, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void FindFirstScheduleOperationTest() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin = dateConverter.stringToDate("2020-01-15 08:00");
-//			
-//			dr2.setThursday(Shift.NONE);
-//			dates2.remove(3);
-//			dates2.remove(2);
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 17, 16, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void FindFirstEqualShiftOperation2Test() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin = dateConverter.stringToDate("2020-01-17 08:00");
-//			
-//			dr2.setFriday(Shift.NONE);
-//			dr1.setFriday(Shift.NONE);
-//			dr0.setFriday(Shift.NONE);
-//			dr0.setMonday(Shift.FIRST);
-//			dr1.setMonday(Shift.FIRST);
-//			dr2.setMonday(Shift.FIRST);
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 20, 8, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void FindFirstEqualShiftOperation3Test() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin = dateConverter.stringToDate("2020-01-17 08:00");
-//			
-//			dr2.setFriday(Shift.NONE);
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 23, 16, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-////			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void FindFirstEqualShiftOperation4Test() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin = dateConverter.stringToDate("2020-01-16 08:00");
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 16, 22, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void FindFirstEqualShiftOperation5Test() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin = dateConverter.stringToDate("2020-01-13 08:00");
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 16, 22, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void FindFirstEqualShiftOperation6Test() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin = dateConverter.stringToDate("2020-01-12 08:00");
-//			
-//			dates0.remove(dates0.size()-1);
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 16, 21, 20, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
-//	
-//	@Test
-//	public void SkipDayOperationTest() throws ParseException {
-//		try {
-//			Calendar begin = Calendar.getInstance();
-//			begin.set(2020, 0, 13, 12, 30, 0);
-//			begin.set(Calendar.MILLISECOND, 0);
-//			
-//			dr0.setMonday(Shift.FIRST);
-//			dr1.setMonday(Shift.FIRST);
-//			dr2.setMonday(Shift.FIRST);
-//			
-//			Calendar newDate  = Calendar.getInstance();
-//			newDate.set(2020, 0, 13, 14, 10, 0);
-//			newDate.set(Calendar.MILLISECOND, 0);
-//			dates0.add(2, newDate.getTime());
-//			
-//			Calendar finded;
-//			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
-//		
-//			Calendar expected = Calendar.getInstance();
-//			expected.set(2020, 0, 16, 22, 0, 0);
-//			expected.set(Calendar.MILLISECOND, 0);
-//			
-//			assertEquals(expected, finded);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
-//	}
+		}
+	}
+	
+	@Test
+	public void FindFirstEqualShiftOperation4Test() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin = dateConverter.stringToDate("2020-01-16 08:00");
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 16, 22, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void FindFirstEqualShiftOperation5Test() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin = dateConverter.stringToDate("2020-01-13 08:00");
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 16, 22, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	 
+	@Test
+	public void FindFirstEqualShiftOperation6Test() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin = dateConverter.stringToDate("2020-01-12 08:00");
+			
+			dates0.remove(dates0.size()-1);
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 16, 21, 20, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void SkipDayOperationTest() throws ParseException {
+		try {
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 13, 12, 30, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			
+			dr0.setMonday(Shift.FIRST);
+			dr1.setMonday(Shift.FIRST);
+			dr2.setMonday(Shift.FIRST);
+			
+			Calendar newDate  = Calendar.getInstance();
+			newDate.set(2020, 0, 13, 14, 10, 0);
+			newDate.set(Calendar.MILLISECOND, 0);
+			dates0.add(2, newDate.getTime());
+			
+			Calendar finded;
+			finded = calculate.findFirstScheduleForOperation(dr0, dr1, dr2, dates0, dates1, dates2, null, null, null, begin);
+		
+			Calendar expected = Calendar.getInstance();
+			expected.set(2020, 0, 16, 22, 0, 0);
+			expected.set(Calendar.MILLISECOND, 0);
+			
+			assertEquals(expected, finded);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
 	
 	@Test
 	public void doctorListingShouldPass () {
@@ -667,7 +673,32 @@ public class DoctorServiceTest {
 		assertEquals("Pera", actual3.get(0).getFirstName());
 		assertEquals("Peric", actual3.get(0).getLastName());
 		assertEquals("3.8", actual3.get(0).getRating());
-		assertEquals(0, actual3.get(0).getTerms().size());
+		assertEquals(25, actual3.get(0).getTerms().size());
+		assertEquals("8:0", actual3.get(0).getTerms().get(0));
+		assertEquals("8:15", actual3.get(0).getTerms().get(1));
+		assertEquals("8:30", actual3.get(0).getTerms().get(2));
+		assertEquals("8:45", actual3.get(0).getTerms().get(3));
+		assertEquals("9:0", actual3.get(0).getTerms().get(4));
+		assertEquals("9:15", actual3.get(0).getTerms().get(5));
+		assertEquals("9:30", actual3.get(0).getTerms().get(6));
+		assertEquals("9:45", actual3.get(0).getTerms().get(7));
+		assertEquals("10:0", actual3.get(0).getTerms().get(8));
+		assertEquals("10:15", actual3.get(0).getTerms().get(9));
+		assertEquals("10:30", actual3.get(0).getTerms().get(10));
+		assertEquals("10:45", actual3.get(0).getTerms().get(11));
+		assertEquals("11:0", actual3.get(0).getTerms().get(12));
+		assertEquals("11:15", actual3.get(0).getTerms().get(13));
+		assertEquals("11:30", actual3.get(0).getTerms().get(14));
+		assertEquals("11:45", actual3.get(0).getTerms().get(15));
+		assertEquals("12:0", actual3.get(0).getTerms().get(16));
+		assertEquals("12:15", actual3.get(0).getTerms().get(17));
+		assertEquals("12:30", actual3.get(0).getTerms().get(18));
+		assertEquals("12:45", actual3.get(0).getTerms().get(19));
+		assertEquals("13:0", actual3.get(0).getTerms().get(20));
+		assertEquals("13:15", actual3.get(0).getTerms().get(21));
+		assertEquals("13:30", actual3.get(0).getTerms().get(22));
+		assertEquals("13:45", actual3.get(0).getTerms().get(23));
+		assertEquals("14:0", actual3.get(0).getTerms().get(24));
 		
 		assertEquals(0, actual4.size());
 
