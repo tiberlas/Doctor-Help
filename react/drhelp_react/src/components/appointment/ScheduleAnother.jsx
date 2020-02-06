@@ -187,7 +187,7 @@ class ScheduleAnother extends Component {
                 <div class="form-group row">
                     <div class="col-sm-10">
 
-                        <p>Select a type of the schedule:</p>
+                        <p>Schedule type:</p>
 
                         <span class="form-grup">
                             <div class="custom-control custom-radio">
@@ -250,7 +250,7 @@ class ScheduleAnother extends Component {
                         </div>
 
                         <br />
-                        <input type="submit" class="btn btn-success" value="request" disabled={this.state.disableSubmit || this.state.successedSchedule} />
+                        <input type="submit" class="btn btn-success" value="Request" disabled={this.state.disableSubmit || this.state.successedSchedule} />
                         {this.state.successedSchedule &&
                             <p class='text-success'>
                                 Successfully sent a request.
