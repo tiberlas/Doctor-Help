@@ -46,7 +46,7 @@ class LoginPage extends React.Component {
 		
 		if (email.value.length >= 3) {
 			if  (password.value.length >= 3) {
-				fetch ('http:localhost:8080/api/login', {
+				fetch ('https://dr-help-backend.herokuapp.com/api/login', {
 					method: 'post',
 					headers: {'Content-Type' : 'application/json'},
 					body: JSON.stringify ({
@@ -199,7 +199,7 @@ class LoginPage extends React.Component {
 							<br/>
 							<br/>
 							<br/>
-							<h2 class='text-success'>Sign in, get help</h2>
+							<h2 class='text-success'>Sign in</h2>
 							<br/>
 							<form onSubmit={this.handleSubmit}>
 							<div class="form-group ">
