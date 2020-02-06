@@ -87,13 +87,14 @@ INSERT INTO room (deleted,name,number,clinic_id,proceduras_types_id) VALUES
 ;
 
 --password: 4321
-INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,password,phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id) VALUES 
+INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,"password",phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id) VALUES 
 ('8 Jevrejska','1982-04-20 01:00:00.000','Novi Sad',false,'erzi@maildrop.cc','Eržebet','FIRST','Anđelić','FIRST',false,'$2y$10$NObeGyGkY5gD5dB1AqGUledF314v6C93dtVcT83/Y2Cpt4Fa./Mzi','066704035','NURSE','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',1)
 ,('3 Miletićeva','1983-09-04 02:00:00.000','Novi Sad',false,'simona@maildrop.cc','Simona','THIRD','Bašić','THIRD',false,'$2y$10$f.Umhw9GYabu4pGwhQgoTuCPNXzNufvhaUHuqkt0f/g4i6nespDme','064851515522','NURSE','THIRD','Serbia','THIRD','THIRD','THIRD','THIRD',1)
 ,('3 Aleksandra Tišme','1985-08-30 02:00:00.000','Novi Sad',false,'dragana@maildrop.cc','Dragana','SECOND','Crnogorac','SECOND',false,'$2y$10$D4f5Szywhr6s0jNcqfX.fu89e6/avSGulHH.dyVDAx9N.UBw0ulT2','2196761','NURSE','SECOND','Serbia','SECOND','SECOND','SECOND','SECOND',1)
 ,('7 Novosadskog Sajma','1984-12-03 01:00:00.000','Novi Sad',false,'aca@maildrop.cc','Aleksandar','FIRST','Milošević','FIRST',false,'$2y$10$6V67ngsX.aXf.u5IhqjnN.LFtyl9nDZ1LB2IeULOCYLUhMnRY8Jw6','0625814512','NURSE','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',2)
 ,('2 Stevana Musića','1985-04-12 02:00:00.000','Novi Sad',false,'acka@maildrop.cc','Aleksandra','SECOND','Milošev','SECOND',false,'$2y$10$13gnvIT.d9SGAHyLSGyId.EppNiX/fwjT0mEwcEkChRm/InEi1h/e','02165101','NURSE','SECOND','Serbia','SECOND','SECOND','SECOND','SECOND',2)
 ,('2 Albertirsai köz','1999-03-01 01:00:00.000','Budapest',false,'vesna@maildrop.cc','Veszna','NONE','Korosi','FIRST',false,'$2y$10$b3cvXf00D8ArvSobhoObxOeAj8QYHI62Pdw9F5Qxffs36mF1NlZli','640646441','NURSE','NONE','Hungary','NONE','NONE','FIRST','FIRST',5)
+,('3 Nikole Pašića','1976-02-04 01:00:00.000','Novi Sad',false,'sanja@maildrop.cc','Sanja','THIRD','Gajić','THIRD',false,'$2y$10$LZFBB7k224bmJynIKc5bxO.pwmb.izdHqn89dAI8qb6wHhFrtwPZC','06698795578','NURSE','THIRD','Serbia','THIRD','THIRD','THIRD','THIRD',2)
 ;
 
 
