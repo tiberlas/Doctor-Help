@@ -96,8 +96,10 @@ INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_na
 ,('2 Albertirsai köz','1999-03-01 01:00:00.000','Budapest',false,'vesna@maildrop.cc','Veszna','NONE','Korosi','FIRST',false,'$2y$10$b3cvXf00D8ArvSobhoObxOeAj8QYHI62Pdw9F5Qxffs36mF1NlZli','640646441','NURSE','NONE','Hungary','NONE','NONE','FIRST','FIRST',5)
 ;
 
-
-
+--password: whoppa42
+INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_activated,last_name,"password",phone_number,status,state,health_record_id) VALUES 
+('2 Simeona Simića','1997-12-03 01:00:00.000','Novi Sad','happymeal@maildrop.cc','Tanja',604,true,'Blejic','$2y$10$hlvthdh7lrpHPn3WDgmYLebFwr78p.B5MWzL0zC44QOovakT4vqWq','063870485510','PATIENT','Serbia',NULL)
+;
 
 
 

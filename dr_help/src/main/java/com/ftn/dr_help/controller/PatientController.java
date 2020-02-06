@@ -27,8 +27,6 @@ import com.ftn.dr_help.dto.PatientNameDTO;
 import com.ftn.dr_help.dto.PatientProfileDTO;
 import com.ftn.dr_help.dto.PatientRequestDTO;
 import com.ftn.dr_help.dto.PerscriptionDisplayDTO;
-import com.ftn.dr_help.model.enums.BloodTypeEnum;
-import com.ftn.dr_help.model.pojo.AllergyPOJO;
 import com.ftn.dr_help.model.pojo.HealthRecordPOJO;
 import com.ftn.dr_help.model.pojo.PatientPOJO;
 import com.ftn.dr_help.service.HealthRecordService;
@@ -164,6 +162,18 @@ public class PatientController {
 			@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
 		
 		AppointmentListDTO retVal = patientService.getHistory(currentUser.getEmail(), date, doctorId, clinicId, procedureTypeId);
+		if (retVal == null ) {
+			return new ResponseEntity<> (retVal, HttpStatus.OK);
+		}
+		
+		List<String> temp = new ArrayList<String> ();
+		temp.add("-");
+		retVal.setPossibleClinics(temp);
+		retVal.setPossibleDates(temp);
+		retVal.setPossibleDoctors(temp);
+		retVal.setPossibleTypes(temp);
+		
+	
 		if (retVal.getAppointmentList() == null) {
 			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}

@@ -87,7 +87,7 @@ class PatientHistory extends Component {
 
 				let dateList = [];
 				let dateSize = 0;
-				if (response.data.possibleDates !== []) {
+				if ((response.data.possibleDates !== []) && (response.data.possibleDates !== undefined)) {
 					dateSize = response.data.possibleDates.length;
 				}
 				if (dateSize > 0) {
@@ -105,7 +105,7 @@ class PatientHistory extends Component {
 				
 				let doctorList = [];
 				let doctorSize = 0;
-				if (response.data.possibleDoctors !== null) {
+				if ((response.data.possibleDoctors !== null) && (response.data.possibleDoctors !== undefined)) {
 					doctorSize = response.data.possibleDoctors.length;
 				}
 				if (doctorSize > 0) {
@@ -124,7 +124,7 @@ class PatientHistory extends Component {
 
 				let clinicList = []
 				let clinicSize = 0; 
-				if (response.data.possibleClinics !== null) {
+				if ((response.data.possibleClinics !== null) && (response.data.possibleClinics !== undefined)) {
 					clinicSize = response.data.possibleClinics.length;
 				}
 
@@ -144,7 +144,7 @@ class PatientHistory extends Component {
 
 				let typeList = [];
 				let typeSize = 0;
-				if (response.data.possibleTypes !== null) {
+				if ((response.data.possibleTypes !== null) && (response.data.possibleTypes !== undefined)) {
 					typeSize = response.data.possibleTypes.length;
 				}
 				
@@ -931,6 +931,7 @@ class PatientHistory extends Component {
 								</TableRow>
 							</TableHead>
 								{
+									(this.state.reports !== undefined) &&
 									this.state.reports.sort((a, b) => (this.state.sortDate === 'ascending') ? (a.date < b.date) : (a.date > b.date)).map (row => (
 										<TableBody>
 											<TableRow key={row.examinationReportId}>
