@@ -80,6 +80,7 @@ class NewAdminForm extends React.Component {
             let items = []
             let size = Object.keys(this.state.clinicList).length
             for (let i = 0; i < size; i++) {
+               
                 let option = {
                     label: this.state.clinicList[i].name,
                     value: this.state.clinicList[i].id
@@ -166,30 +167,27 @@ class NewAdminForm extends React.Component {
             <div class="row d-flex justify-content-center">
                 <div class='col-md-11'>
   
-                    <Form onSubmit = {this.handleSubmit}>
-                    <div className={`form-group ${(this.state.errorMail || this.state.errorMailResponse)? 'has-danger': ''}`}>
-                    <Form.Group controlId="formAdminEmail">
-                        <Form.Control type="email" name = "email" placeholder="email" onChange = {this.handleChange} className={`form-control ${(this.state.errorMailResponse) ? 'is-invalid': ''}`}/>
+                    <form onSubmit = {this.handleSubmit}>
+                    <div className={`block form-group ${(this.state.errorMail || this.state.errorMailResponse)? 'has-danger': ''}`}>
+                   
+                                            {/* <div class="input-group-addon"><i class="fas fa-envelope-open"></i></div> */}  
+                        {/* <div class="block"> <label style={{display: 'inline-block', textAlign: 'right'}}><i class="fas fa-envelope-open"> </i>  <strong> Mail </strong></label>   */}
+                        <FormControl type="email" name = "email" placeholder="Email" onChange = {this.handleChange} className={`form-control ${(this.state.errorMailResponse) ? 'is-invalid': ''}`}/>
                         {this.state.errorMailResponse && <div class="invalid-feedback"> Admin with given mail already registered. </div>}
-                    </Form.Group>
+                    {/* </div>  */}
                     </div>
 
                     <div className={`form-group ${this.state.errorFirstName ? 'has-danger': ''}`}>
-                    <Form.Group controlId="formAdminFirstName">
-                        <Form.Control type="text" name = "firstName" placeholder="first name" onChange = {this.handleChange} className={`form-control ${(this.state.errorFirstName) ? 'is-invalid': 'is-valid'}`}/>
-                    </Form.Group>
+                        <FormControl type="text" name = "firstName" placeholder="First name" onChange = {this.handleChange} className={`form-control ${(this.state.errorFirstName) ? 'is-invalid': 'is-valid'}`}/>
                     </div>
 
-                    <Form.Group controlId="formAdminBirthday">
+                    <div className="form-group"> 
                     <FormControl required type="date" placeholder="Date of birth, in format: dd/mm/yyyy" id="ad_birthday"/>
-                    </Form.Group>
-                    <div className={`form-group ${this.state.errorLastName ? 'has-danger': ''}`}>
-                    <Form.Group controlId="formAdminLastName">
-                        <Form.Control type="text" name = "lastName" placeholder="last name" onChange = {this.handleChange} className={`form-control ${(this.state.errorLastName) ? 'is-invalid': 'is-valid'}`}/>
-                    </Form.Group>
                     </div>
 
-                    <Form.Group controlId="formAdminRole">
+                    <div className={`form-group ${this.state.errorLastName ? 'has-danger': ''}`}>
+                    <FormControl type="text" name = "lastName" placeholder="Last name" onChange = {this.handleChange} className={`form-control ${(this.state.errorLastName) ? 'is-invalid': 'is-valid'}`}/>
+                    </div>
                             
                     <strong> Role:  </strong>&emsp;
 
@@ -211,8 +209,7 @@ class NewAdminForm extends React.Component {
                                 onChange={this.handleChange}
                             /> Clinical centre
                         </label>
-                    </Form.Group>
-                        <Form.Group controlId="formSelectClinic">
+                 
 
                        {this.state.adminRole==="clinic" 
                        && <Fragment>
@@ -230,7 +227,7 @@ class NewAdminForm extends React.Component {
                                     name="diagnosis" 
                                     autosize={true}
                                     options={this.state.clinicOptions} 
-                                    defaultValue={this.state.clinicOptions[0]} 
+                                    required
                                     onChange = {this.handleClinicChange}
                                 />
                             </div>
@@ -239,9 +236,8 @@ class NewAdminForm extends React.Component {
 
                              {this.state.success && <div class="valid-feedback d-block">Successfully added new administrator. </div>  }
                              {this.state.loading && <div> <p class="text-info">Loading... </p> </div>}
-                        
-                    </Form.Group>
-                    </Form>
+                  
+                    </form>
                 </div>
             </div>
             </div>
