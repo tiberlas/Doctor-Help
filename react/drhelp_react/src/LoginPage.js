@@ -46,7 +46,7 @@ class LoginPage extends React.Component {
 		
 		if (email.value.length >= 3) {
 			if  (password.value.length >= 3) {
-				fetch ('http://localhost:8080/api/login', {
+				fetch ('http:localhost:8080/api/login', {
 					method: 'post',
 					headers: {'Content-Type' : 'application/json'},
 					body: JSON.stringify ({
