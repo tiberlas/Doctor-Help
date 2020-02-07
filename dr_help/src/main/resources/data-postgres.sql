@@ -55,6 +55,8 @@ INSERT INTO procedures_type (deleted,duration,is_operation,name,price,clinic_id)
 ,(false,'00:30:00',false,'General exam',20,2)
 ,(false,'01:30:00',false,'Hearing exam',40,2)
 ,(false,'00:45:00',false,'Psychotherapy',35,5)
+,(false,'01:30:00',true,'Colonoscopy',50,1)
+,(false,'03:00:00',true,'Colectomy',70,1)
 ;
 
 --password: doca
@@ -67,6 +69,11 @@ INSERT INTO doctors (address,birthday,city,deleted,email,first_name,friday,last_
 ,('12 Turgenjeva','1989-05-16 02:00:00.000','Novi Sad',false,'akica@maildrop.cc','Aleksandra','FIRST','Jović','NONE',false,'$2y$10$LsUE7k5QbmvTWoCDYmDiXON8/zMaunviQcRuPODD88BDUjj0nRno2','06825535525','DOCTOR','FIRST','Serbia','THIRD','FIRST','NONE','NONE',2,5)
 ,('19 Bulevar Oslobođenja','1959-05-14 01:00:00.000','Novi Sad',false,'zivko@maildrop.cc','Živojin','NONE','Karađorđević','NONE',false,'$2y$10$HuKLwN.sEffouqqzZU0KHePvcEliMo.nWTjHSka3G/eQV0C3gsAmi','060289029','DOCTOR','NONE','Serbia','THIRD','THIRD','THIRD','THIRD',2,6)
 ,('24 Harmat u. ','1994-02-03 01:00:00.000','Budapest',false,'isa@maildrop.cc','Isztvan','NONE','Balasz','FIRST',false,'$2y$10$sUnjqDY8rkJFASMZ5ghsIuTz.uNFCAaWi7x2x4pRBFlUlS843fohu','406165320166','DOCTOR','NONE','Hungary','NONE','NONE','FIRST','FIRST',5,7)
+,('4 Bore Prodanovića','1983-02-03 01:00:00.000','Novi Sad',false,'milo@maildrop.cc','Milo','FIRST','Bašić','FIRST',false,'$2y$10$Ms8sY/S7.XYerhHKXW.WAu2LzGoKBnn3c8ZA/lyucxb1KxH2hen42','0684804840','DOCTOR','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',1,8)
+,('24 Čenejski put','1989-05-21 02:00:00.000','Čenej',false,'sale@maildrop.cc','Sale','FIRST','Ačanski','FIRST',false,'$2y$10$JGrHEu/KdMmhLuIbewpa8.2JklwU.rCaz9K3AQEOzcNbbEM9Cx6S2','06848405','DOCTOR','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',1,8)
+;
+INSERT INTO doctors (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,password,phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id,procedure_type_id) VALUES 
+('11 Beogradski kej','1993-02-16 01:00:00.000','Novi Sad',false,'dado@maildrop.cc','Dado','FIRST','Jovičić','FIRST',false,'$2y$10$5403wNUlk/Fa12lVYPQCXe4OIV8/bYjqzYLRVMYLWYzTFDh4wIgGO','06854984','DOCTOR','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',1,8)
 ;
 
 
@@ -87,7 +94,7 @@ INSERT INTO room (deleted,name,number,clinic_id,proceduras_types_id) VALUES
 ;
 
 --password: 4321
-INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,"password",phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id) VALUES 
+INSERT INTO nurse (address,birthday,city,deleted,email,first_name,friday,last_name,monday,must_change_password,password,phone_number,status,saturday,state,sunday,thursday,tuesday,wednesday,clinic_id) VALUES 
 ('8 Jevrejska','1982-04-20 01:00:00.000','Novi Sad',false,'erzi@maildrop.cc','Eržebet','FIRST','Anđelić','FIRST',false,'$2y$10$NObeGyGkY5gD5dB1AqGUledF314v6C93dtVcT83/Y2Cpt4Fa./Mzi','066704035','NURSE','FIRST','Serbia','FIRST','FIRST','FIRST','FIRST',1)
 ,('3 Miletićeva','1983-09-04 02:00:00.000','Novi Sad',false,'simona@maildrop.cc','Simona','THIRD','Bašić','THIRD',false,'$2y$10$f.Umhw9GYabu4pGwhQgoTuCPNXzNufvhaUHuqkt0f/g4i6nespDme','064851515522','NURSE','THIRD','Serbia','THIRD','THIRD','THIRD','THIRD',1)
 ,('3 Aleksandra Tišme','1985-08-30 02:00:00.000','Novi Sad',false,'dragana@maildrop.cc','Dragana','SECOND','Crnogorac','SECOND',false,'$2y$10$D4f5Szywhr6s0jNcqfX.fu89e6/avSGulHH.dyVDAx9N.UBw0ulT2','2196761','NURSE','SECOND','Serbia','SECOND','SECOND','SECOND','SECOND',1)
@@ -134,11 +141,86 @@ INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_
 ;
 
 
+INSERT INTO perscriptionpojo (diagnosis_id,examination_report_id,signing_nurse_id,therapy_id) VALUES 
+--(NULL,1,NULL,1)
+--,(1,2,NULL,2)
+(3,null,NULL,null)
+,(1,null,NULL,null)
+;
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+-- Dopuniti therapy id
+-----------------------------------------------------------------------------------------------------------------------------
+INSERT INTO examination_reportpojo (appointment_id,clinic_id,health_record_id,perscription_id) VALUES 
+--(13,1,1,1)
+--,(15,1,1,2)
+(null,1,1,1)
+,(null,1,1,2)
+;
+
+
+UPDATE perscriptionpojo SET examination_report_id = 1 WHERE id = 1;
+UPDATE perscriptionpojo SET examination_report_id = 2 WHERE id = 2;
+
+
+
+insert into therapypojo (advice, perscription_id) values 
+('Take your vitamin D and calcium, and try to move as little as possible. ', 1),
+('A week of bedrest should do wonders for you. ', 2);
+
+update perscriptionpojo set therapy_id = 1 where id = 1;
+update perscriptionpojo set therapy_id = 2 where id = 2;
+
+
 INSERT INTO appointments (date,deleted,discount,status,version,doctor_id,examination_report_id,nurse_id,patient_id,procedure_type_id,room_id) VALUES 
 ('2020-05-01 08:00:00.000',false,20,'AVAILABLE',0,2,NULL,1,NULL,1,3)
 ,('2020-04-03 10:00:00.000',false,20,'AVAILABLE',0,2,NULL,1,NULL,1,3)
 ,('2020-04-23 10:00:00.000',false,20,'AVAILABLE',0,4,NULL,1,NULL,3,2)
 ,('2020-04-23 10:00:00.000',false,20,'AVAILABLE',0,4,NULL,1,NULL,3,2)
+,('2020-04-06 08:15:00.000',false,0,'AVAILABLE',0,5,NULL,4,NULL,4,4)
+,('2020-04-06 11:15:00.000',false,0,'AVAILABLE',0,5,NULL,4,NULL,4,4)
+,('2020-04-29 08:30:00.000',false,50,'AVAILABLE',0,5,NULL,4,NULL,4,4)
+,('2020-04-17 08:30:00.000',false,35,'AVAILABLE',0,6,NULL,4,NULL,5,7)
+,('2020-04-19 00:00:00.000',false,15,'AVAILABLE',0,7,NULL,7,NULL,6,9)
+,('2020-04-27 08:15:00.000',false,45,'AVAILABLE',0,8,NULL,6,NULL,7,10)
+;
+INSERT INTO appointments (date,deleted,discount,status,version,doctor_id,examination_report_id,nurse_id,patient_id,procedure_type_id,room_id) VALUES 
+('2020-05-04 08:15:00.000',false,60,'AVAILABLE',0,8,NULL,6,NULL,7,11)
+,('2020-02-10 08:15:00.000',true,-1,'APPROVED',1,2,NULL,1,1,1,3)
+,('2020-02-07 00:16:44.535',false,-1,'DONE',2,2,1,1,1,1,3)
+,('2020-02-17 08:15:00.000',false,-1,'REQUESTED',0,2,NULL,NULL,1,1,NULL)
+,('2020-02-07 00:40:21.100',false,-1,'DONE',2,2,2,1,1,1,3)
 ;
 
 
+UPDATE examination_reportpojo SET appointment_id = 13 WHERE id = 1;
+UPDATE examination_reportpojo SET appointment_id = 15 WHERE id = 2;
+
+
+INSERT INTO user_requestpojo (address,birthday,city,email,first_name,insurance_number,last_name,password,phone_number,state,version) VALUES 
+('3 Novosadskog Sajma','1996-04-08 02:00:00.000','Novi Sad','andrea@maildrop.cc','Andrea',5845,'Perišić','whoppa42','0654085458','Serbia',0)
+,('8 Katolička Porta','1986-04-02 02:00:00.000','Novi Sad','uros@maildrop.cc','Uroš',504,'Bošković','whoppa42','0654848488','Serbia',0)
+,('4 Dunavska','1989-05-05 02:00:00.000','Novi Sad','desa@maildrop.cc','Desanka',965,'Nikolić','whoppa42','066556695','Serbia',0)
+,('2 Bulevar Oslobođenja','1968-04-08 01:00:00.000','Novi Sad','irena@maildrop.cc','Irena',84,'Filipović','whoppa42','0684844844','Serbia',0)
+,('24 Maksima Gorkog','1985-12-19 01:00:00.000','Novi Sad','djole@maildrop.cc','Đorđe',448,'Lazarević','whoppa42','0654848449','Serbbia',0)
+;
+
+
+
+INSERT INTO clinic_rewiew (rating,clinic_id,patient_id) VALUES 
+(3,1,1)
+;
+
+
+INSERT INTO doctor_reviewpojo (rating,doctor_id,patient_id) VALUES 
+(5,2,1)
+;
+
+
+insert into perscriptionpojo_medication_list (perscription_id, medication_list_id) values 
+(1, 5), 
+(1, 6),
+(2, 1),
+(2, 2), 
+(2, 3);

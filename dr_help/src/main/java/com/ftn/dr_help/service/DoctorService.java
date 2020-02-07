@@ -764,7 +764,7 @@ public class DoctorService {
 		if(!doctor.getSunday().toString().equals("NONE")) { //ako radi petkom = Shift != NONE
 			BusinessDayHoursDTO businessDayHoursDTO = new BusinessDayHoursDTO();
 			List<Integer> day = new ArrayList<Integer>();	
-			day.add(7); //5 == Friday
+			day.add(0); //5 == Friday
 			businessDayHoursDTO.setDaysOfWeek(day);
 			if(doctor.getSunday().toString().equals("FIRST")) { //ako radi prvu smenu
 				businessDayHoursDTO.setStartTime("08:00");
