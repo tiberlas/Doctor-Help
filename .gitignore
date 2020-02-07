@@ -21,7 +21,7 @@
 
 # folder #
 dr_help/target*
-dr_help/src/main/resources/application.properties
+# dr_help/src/main/resources/application.properties
 
 
 #za maven update
