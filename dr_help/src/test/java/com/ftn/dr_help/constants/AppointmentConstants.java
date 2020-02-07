@@ -14,9 +14,4 @@ public class AppointmentConstants {
 	public static final String STATUS_NAME = "nzm";
 	
 	
-	//integ.
-	public static final Long RESERVE_PATIENT_ID = 1L;
-	public static final Long AVAILABLE_APPOINTMENT_ID = 30L; //od 27-do 31 su available
-	public static final Long UNAVAILABLE_APPOINTMENT_ID = 1L; //od 27-do 31 su available
-	
 }

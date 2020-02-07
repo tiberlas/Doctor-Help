@@ -25,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.ftn.dr_help.TestUtil;
 import com.ftn.dr_help.constants.AppointmentConstants;
 import com.ftn.dr_help.constants.LoginConstants;
+import com.ftn.dr_help.constants.PredefinedAppointmentConstants;
 import com.ftn.dr_help.dto.AppointmentDeleteDTO;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
@@ -71,8 +72,8 @@ public class AppointmentReservePredefinedIntegrationTest {
     @Test
     public void appointmentReserveShouldReturnTrue() throws Exception {
     	AppointmentDeleteDTO dto = new AppointmentDeleteDTO();
-		dto.setPatientId(AppointmentConstants.RESERVE_PATIENT_ID);
-		dto.setAppointmentId(AppointmentConstants.AVAILABLE_APPOINTMENT_ID);
+		dto.setPatientId(PredefinedAppointmentConstants.RESERVE_PATIENT_ID);
+		dto.setAppointmentId(PredefinedAppointmentConstants.AVAILABLE_APPOINTMENT_ID);
     	
     	String json = TestUtil.json(dto);
     	
@@ -88,8 +89,8 @@ public class AppointmentReservePredefinedIntegrationTest {
     @Test
     public void appointmentReserveShouldReturnFalse() throws Exception {
     	AppointmentDeleteDTO dto = new AppointmentDeleteDTO();
-		dto.setPatientId(AppointmentConstants.RESERVE_PATIENT_ID);
-		dto.setAppointmentId(AppointmentConstants.UNAVAILABLE_APPOINTMENT_ID);
+		dto.setPatientId(PredefinedAppointmentConstants.RESERVE_PATIENT_ID);
+		dto.setAppointmentId(PredefinedAppointmentConstants.UNAVAILABLE_APPOINTMENT_ID);
     	
     	String json = TestUtil.json(dto);
     	
