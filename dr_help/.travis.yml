@@ -10,6 +10,10 @@ before_install:
   - sudo service postgresql restart
   - sleep 1
 
+install:
+- mvn -N io.takari:maven:wrapper
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
 addons:
   sonarcloud:
     organization: "tiberlas"
