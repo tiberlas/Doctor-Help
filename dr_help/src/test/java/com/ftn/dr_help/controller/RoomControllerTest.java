@@ -33,14 +33,13 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 import com.ftn.dr_help.TestUtil;
+import com.ftn.dr_help.constants.RoomsConstants;
+import com.ftn.dr_help.constants.UserConstants;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
 import com.ftn.dr_help.dto.RoomDTO;
 import com.ftn.dr_help.dto.RoomSearchDTO;
 import com.ftn.dr_help.service.RoomService;
-
-import constants.RoomsConstants;
-import constants.UserConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)

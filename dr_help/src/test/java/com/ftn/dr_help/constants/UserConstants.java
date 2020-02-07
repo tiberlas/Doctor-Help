@@ -1,4 +1,4 @@
-package constants;
+package com.ftn.dr_help.constants;
 
 public class UserConstants {
 

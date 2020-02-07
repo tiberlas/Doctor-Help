@@ -1,7 +1,5 @@
 package com.ftn.dr_help.controller;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.fail;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,17 +28,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import com.ftn.dr_help.constants.AppointmentConstants;
+import static org.hamcrest.Matchers.hasItem;
+import com.ftn.dr_help.constants.ProcedureConstants;
+import com.ftn.dr_help.constants.RoomsConstants;
 import com.ftn.dr_help.constants.UserConstants;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
-import com.ftn.dr_help.dto.RequestingAppointmentDTO;
-import com.ftn.dr_help.service.AppointmentService;
+import com.ftn.dr_help.dto.ProcedureTypeDTO;
+import com.ftn.dr_help.service.ProcedureTypeService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-public class AppointmentControllerTest {
+public class ProcedureTypeControllerTest {
 
 	@Autowired
     private TestRestTemplate restTemplate;
@@ -50,9 +49,7 @@ public class AppointmentControllerTest {
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private AppointmentService appointmentService;
-	
-	private List<RequestingAppointmentDTO> requests = new ArrayList<>();
+	private ProcedureTypeService typeService;
 	
 	@Autowired
     private WebApplicationContext webApplicationContext;
@@ -61,12 +58,15 @@ public class AppointmentControllerTest {
 			MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype());
 	
+	private List<ProcedureTypeDTO> procedureList;
+	
 	@PostConstruct
     public void setUp() {
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
+
     }
 	
 	@Before
@@ -77,95 +77,37 @@ public class AppointmentControllerTest {
 						LoginResponseDTO.class);
 		accessToken = "Bearer "+responseEntity.getBody().getJwtToken();
 		
+		ProcedureTypeDTO procedure = new ProcedureTypeDTO(
+									ProcedureConstants.ID, 
+									ProcedureConstants.NAME, 
+									ProcedureConstants.PRICE, 
+									ProcedureConstants.DURATION, 
+									ProcedureConstants.OPERATION, 
+									ProcedureConstants.USE);
 		
-		RequestingAppointmentDTO newAppointemnt = new RequestingAppointmentDTO(
-				AppointmentConstants.APPOINTMENT_ID, 
-				AppointmentConstants.DATE, 
-				AppointmentConstants.TYPE, 
-				AppointmentConstants.DOCTOR_NAME, 
-				AppointmentConstants.NURSE_NAME, 
-				AppointmentConstants.PATIENT_NAME, 
-				AppointmentConstants.TYPE_ID, 
-				AppointmentConstants.DURATION);
-		requests.add(newAppointemnt);
+		procedureList = new ArrayList<>();
+		procedureList.add(procedure);
 	}
 	
 	@Test
-	public void smokeTestNotFound() {
-		try {
-
-			mockMvc.perform(get(AppointmentConstants.REQUEST_ONE_NOT_URL)
-					.contentType(contentType)
-					.header("Authorization", accessToken))
-				    .andExpect(status().isNotFound());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
-	@Test
-	public void smokeTestOK() {
-		try {
-
-			Mockito.when(
-					appointmentService.getAllRequests(
-							Mockito.any(String.class))
-					).thenReturn(requests);
-			
-			mockMvc.perform(get(AppointmentConstants.REQUEST_ALL_URL)
-					.contentType(contentType)
-					.header("Authorization", accessToken))
-				    .andExpect(status().isOk());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
-	@Test
-	public void testAll() throws Exception {
-		Mockito.when(appointmentService.getAllRequests(Mockito.any(String.class))).thenReturn(requests);
+	public void testAll() {
+		Mockito.when(typeService.getAll(Mockito.any(String.class))).thenReturn(procedureList);
 		
 		try {
 			
-			this.mockMvc.perform(get(AppointmentConstants.REQUEST_ALL_URL)
+			this.mockMvc.perform(get(ProcedureConstants.URL)
 					.contentType(contentType)
 					.header("Authorization", accessToken))
 			.andDo(print())
 			.andExpect(status()
 					.isOk())
 			.andExpect(content().contentType(contentType))
-	        .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(AppointmentConstants.APPOINTMENT_ID.intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(ProcedureConstants.ID.intValue())));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
 	}
-	
-	@Test
-	public void testOne() throws Exception {
-		Mockito.when(appointmentService.getOneRequests(Mockito.any(Long.class))).thenReturn(requests.get(0));
-		
-		try {
-			
-			this.mockMvc.perform(get(AppointmentConstants.REQUEST_ONE_URL)
-					.contentType(contentType)
-					.header("Authorization", accessToken))
-			.andDo(print())
-			.andExpect(status()
-					.isOk())
-			.andExpect(content().contentType(contentType))
-			.andExpect(jsonPath("$.id").value(AppointmentConstants.APPOINTMENT_ID.intValue()));
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
+
 }

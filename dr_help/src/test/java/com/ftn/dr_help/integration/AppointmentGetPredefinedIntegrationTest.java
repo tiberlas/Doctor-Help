@@ -26,11 +26,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.ftn.dr_help.constants.AppointmentConstants;
 import com.ftn.dr_help.constants.LoginConstants;
+import com.ftn.dr_help.constants.UserConstants;
 import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
-
-import constants.UserConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
