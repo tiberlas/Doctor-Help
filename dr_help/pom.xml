@@ -30,11 +30,15 @@
 	<dependencies>
 	
 		<dependency>
-		    <groupId>org.hamcrest</groupId>
-		    <artifactId>hamcrest</artifactId>
-		    <version>2.1</version>
-		    <scope>test</scope>
-		</dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.9.10</version>
+        </dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
