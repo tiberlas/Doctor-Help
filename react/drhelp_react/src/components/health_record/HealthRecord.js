@@ -64,7 +64,9 @@ class HealthRecord extends React.Component {
     }
 
     allergyDisplay = () => {
-
+        if (this.state.health_record.allergyList === undefined) {
+            return;
+        }
         let allergies = ""
         for(let i = 0; i < this.state.health_record.allergyList.length; i++) {
             allergies += this.state.health_record.allergyList[i]
@@ -89,6 +91,10 @@ class HealthRecord extends React.Component {
     }
 
     bloodTypeDisplay = () => {
+        
+        if ((this.state.health_record.bloodType === undefined) || (this.state.health_record.bloodType === null)) {
+            return;
+        }
         let bloodType = ""
 
         bloodType = this.state.health_record.bloodType.replace('_', ' ')

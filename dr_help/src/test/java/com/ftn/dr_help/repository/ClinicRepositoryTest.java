@@ -1,5 +1,10 @@
 package com.ftn.dr_help.repository;
 
+
+import static org.junit.Assert.assertEquals;
+
+
+
 import java.util.List;
 
 import org.junit.Before;
@@ -8,12 +13,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@TestPropertySource("classpath:application-test.properties")
 public class ClinicRepositoryTest {
 
 	@Autowired
@@ -29,7 +36,7 @@ public class ClinicRepositoryTest {
 	
 	@Before
 	public void setUp () {
-		
+
 		c1 = new ClinicPOJO();
 		c1.setAddress("7A Bulevar despota Stefana");
 		c1.setCity("Novi Sad");
@@ -70,6 +77,7 @@ public class ClinicRepositoryTest {
 		
 		List<ClinicPOJO> actualClinicList = this.clinicRepository.findAll();
 		
+
 		System.out.println("");
 		System.out.println("");
 		System.out.println("Listing the clinics out: ");
@@ -79,8 +87,25 @@ public class ClinicRepositoryTest {
 		System.out.println("");
 		System.out.println("");
 		
-		
-		
+
+		assertEquals(5, actualClinicList.size());
+	
 	}
 	
+	@Test
+	public void testGetByExistingProcedureType () {
+		
+		List<ClinicPOJO> actualList = this.clinicRepository.getClinicsByProcedureType("Psychotherapy");
+		
+		assertEquals (3, actualList.size());
+	}
+	
+	@Test
+	public void testGetByUnexistingProcedureType () {
+		
+		List<ClinicPOJO> actualList = this.clinicRepository.getClinicsByProcedureType("PPhrenollogy");
+		
+		assertEquals (0, actualList.size());
+	}
+
 }

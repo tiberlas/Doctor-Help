@@ -80,9 +80,6 @@ public class CalculateFirstFreeSchedule {
 		Calendar begin = Calendar.getInstance();
 		begin = setWorkingDay(doctor, start, absenceDates);
 		
-		if(begin.compareTo(start) < 0) {
-			System.out.println("GONE BACK TO FUTURE");
-		}
 		
 		//nadje trajanje za schedule
 		Calendar duration = Calendar.getInstance();
@@ -186,7 +183,7 @@ public class CalculateFirstFreeSchedule {
 			//datum je dobar
 			return date;
 		}
-		
+
 		Calendar oldDate = Calendar.getInstance();
 		oldDate = (Calendar) date.clone();
 		

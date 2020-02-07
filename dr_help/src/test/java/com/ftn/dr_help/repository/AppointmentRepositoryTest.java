@@ -1,6 +1,7 @@
 package com.ftn.dr_help.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -208,7 +209,52 @@ public class AppointmentRepositoryTest {
 		assertThat(afterDeleting).hasSize(beforeDeleting.size() - 1);
 	}
 	
-	
+	@Test
+	public void testGetDoctorsAppointments () {
+		// 20.4.2020
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+		
+		startTime.set(Calendar.YEAR, 2020);
+		startTime.set(Calendar.MONTH, 3);
+		startTime.set(Calendar.DAY_OF_MONTH, 3);
+		startTime.set(Calendar.HOUR_OF_DAY, 0);
+		startTime.set(Calendar.MINUTE, 0);
+		startTime.set(Calendar.SECOND, 0);
+		
+		endTime.set(Calendar.YEAR, 2020);
+		endTime.set(Calendar.MONTH, 3);
+		endTime.set(Calendar.DAY_OF_MONTH, 3);
+		endTime.set(Calendar.HOUR_OF_DAY, 23);
+		endTime.set(Calendar.MINUTE, 59);
+		endTime.set(Calendar.SECOND, 59);
+		
+		List<AppointmentPOJO> actualList1 = appointmentRepository.getDoctorsAppointments(2L, startTime, endTime);
+		
+		startTime.add(Calendar.DAY_OF_MONTH, 4);
+		endTime.add(Calendar.DAY_OF_MONTH, 4);
+		
+		List<AppointmentPOJO> actualList2 = appointmentRepository.getDoctorsAppointments(2L, startTime, endTime);
+		List<AppointmentPOJO> actualList3 = appointmentRepository.getDoctorsAppointments(420L, startTime, endTime);
+		
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("Apointments: ");
+//		for(AppointmentPOJO a : actualList) {
+////			String s = "Appointment: " + a.getDate().getTime() + "; " + a.getProcedureType().getName();
+////			System.out.println(s);// + "; Procedure type: " + a.getProcedureType().getName() + "; Patient: " + a.getPatient().getFirstName());
+//		}
+//		System.out.println("");
+//		System.out.println("");
+		
+		assertEquals (1, actualList1.size());
+		assertEquals ("Fri Apr 03 10:00:00 CEST 2020", actualList1.get(0).getDate().getTime().toString());
+		assertEquals ("General exam", actualList1.get(0).getProcedureType().getName());
+		
+		assertEquals (0, actualList2.size());
+		
+		assertEquals (0, actualList3.size());
+	}
 
 	@Test
 	@Transactional
