@@ -1,7 +1,5 @@
 package com.ftn.dr_help.repository;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 
 import org.junit.Test;
@@ -15,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.model.pojo.RoomPOJO;
+
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -36,7 +35,7 @@ public class RoomRepositoryTest {
 		
 		before = RoomRepository.getAllReservedRooms();
 		
-		entityManager.merge(before.get(0));
+		//entityManager.merge(before.get(0));
 	}
 
 }

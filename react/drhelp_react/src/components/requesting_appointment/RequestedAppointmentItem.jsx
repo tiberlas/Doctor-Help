@@ -14,10 +14,10 @@ class RequestedAppointmentItem extends Component {
 
     render() { 
         return (
-            <Fragment>
+            <Fragment id={"fragment_", this.state.id}>
                 <TableCell class='text text-white'>{this.state.date}</TableCell>
                 <TableCell class='text text-white'>{this.state.procedure}&nbsp;{this.state.duration}&nbsp;H</TableCell>
-                <TableCell class='text text-white'>{this.state.doctor}</TableCell>
+                <TableCell id={'doca_', this.state.id } class='text text-white'>{this.state.doctor}</TableCell>
                 <TableCell class='text text-white'>{this.state.nurse}</TableCell>
                 <TableCell class='text text-white'>{this.state.patient}</TableCell>
             </Fragment>
