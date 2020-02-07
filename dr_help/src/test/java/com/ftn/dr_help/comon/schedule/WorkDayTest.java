@@ -77,11 +77,7 @@ public class WorkDayTest {
 		Calendar duration = Calendar.getInstance();
 		duration.set(2020, 5, 2, 1, 0, 0);//1h
 		doctor = new MedicalStaffWorkSchedularPOJO(
-<<<<<<< HEAD
 				Shift.SECOND, //MONDAY 
-=======
-				Shift.FIRST, //MONDAY 
->>>>>>> origin/student1
 				Shift.NONE, 
 				Shift.NONE, 
 				Shift.NONE, 
@@ -146,7 +142,6 @@ public class WorkDayTest {
 		
 		assertEquals(expected, actual);
 	}
-<<<<<<< HEAD
 	
 	@Test
 	public void test6() {
@@ -274,7 +269,5 @@ public class WorkDayTest {
 		
 		assertEquals(schedule.getTime(), actual.getTime());
 	}
-=======
->>>>>>> origin/student1
 
 }

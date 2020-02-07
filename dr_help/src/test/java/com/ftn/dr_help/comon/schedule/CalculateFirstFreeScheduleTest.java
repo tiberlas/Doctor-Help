@@ -289,7 +289,6 @@ public class CalculateFirstFreeScheduleTest {
 		begin.set(Calendar.MILLISECOND, 0);
 		
 		dates.clear();
-<<<<<<< HEAD
 		Calendar day = Calendar.getInstance();
 		day.set(Calendar.MILLISECOND, 0);
 		
@@ -309,41 +308,7 @@ public class CalculateFirstFreeScheduleTest {
 		dates.add(day.getTime());
 		day.set(2020, 0, 7, 15, 0, 0);
 		dates.add(day.getTime());
-=======
-		try {
-			begin = convert.stringToDate("2020-01-7 1:0");
-			
-			Calendar day = convert.stringToDate("2020-01-7 8:0");
-			day.set(Calendar.AM_PM, Calendar.AM);
-			dates.add(day.getTime());
-			Calendar day1 = convert.stringToDate("2020-01-7 9:0");
-			day1.set(Calendar.AM_PM, Calendar.AM);
-			dates.add(day1.getTime());
-//			Calendar day2 = convert.stringToDate("2020-01-7 10:0");
-//			day2.set(Calendar.AM_PM, Calendar.AM);
-//			dates.add(day2.getTime());
-			day1 = convert.stringToDate("2020-01-7 11:0");
-			day1.set(Calendar.AM_PM, Calendar.AM);
-			dates.add(day1.getTime());
-			day1 = convert.stringToDate("2020-01-7 0:0");
-			day1.set(Calendar.AM_PM, Calendar.PM);
-			dates.add(day1.getTime());
-			day = convert.stringToDate("2020-01-7 1:0");
-			day.set(Calendar.AM_PM, Calendar.PM);
-			dates.add(day.getTime());
-			day1 = convert.stringToDate("2020-01-7 2:0");
-			day1.set(Calendar.AM_PM, Calendar.PM);
-			dates.add(day1.getTime());
-			day1 = convert.stringToDate("2020-01-7 3:0");
-			day1.set(Calendar.AM_PM, Calendar.PM);
-			dates.add(day1.getTime());
-			day1 = convert.stringToDate("2020-01-7 4:0");
-			day1.set(Calendar.AM_PM, Calendar.PM);
-			dates.add(day1.getTime());
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
->>>>>>> origin/student1
+		
 		
 		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, absence);
 

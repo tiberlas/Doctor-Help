@@ -1,10 +1,7 @@
 
 package com.ftn.dr_help.comon;
 
-<<<<<<< HEAD
 import static org.junit.Assert.assertTrue;
-=======
->>>>>>> origin/student1
 import static org.junit.Assert.fail;
 
 import org.junit.Test;

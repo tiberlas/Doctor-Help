@@ -5,13 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.print.Doc;
-
-
-
-
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +15,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -32,7 +25,6 @@ import com.ftn.dr_help.model.pojo.DoctorPOJO;
 public class DoctorRepositoryTest {
 
 	@Autowired
-
 	private DoctorRepository doctorRepository;
 	
 	@Autowired
@@ -106,15 +98,7 @@ public class DoctorRepositoryTest {
 		
 		List<DoctorPOJO> actualList = doctorRepository.findAllByClinic_id(1L);
 		
-		assertEquals (4, actualList.size());
+		assertEquals (8, actualList.size());
 	}
-	
-	@Test
-	public void testFilterByClinicAndProcedureType () {
-		
-		List<DoctorPOJO> actualList = doctorRepository.filterByClinicAndProcedureType(1L, "Psychotherapy");
-		
-		assertEquals (1, actualList.size());
-	}
-	
+
 }
