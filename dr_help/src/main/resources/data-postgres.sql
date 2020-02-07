@@ -91,6 +91,8 @@ INSERT INTO room (deleted,name,number,clinic_id,proceduras_types_id) VALUES
 ;
 INSERT INTO room (deleted,name,number,clinic_id,proceduras_types_id) VALUES 
 (false,'pszichoterápiás szoba',2,5,7)
+,(false,'Surgery',8,1,8)
+,(false,'Surgery',9,1,9)
 ;
 
 --password: 4321
@@ -187,7 +189,7 @@ INSERT INTO appointments (date,deleted,discount,status,version,doctor_id,examina
 ;
 INSERT INTO appointments (date,deleted,discount,status,version,doctor_id,examination_report_id,nurse_id,patient_id,procedure_type_id,room_id) VALUES 
 ('2020-05-04 08:15:00.000',false,60,'AVAILABLE',0,8,NULL,6,NULL,7,11)
-,('2020-02-10 08:15:00.000',true,-1,'APPROVED',1,2,NULL,1,1,1,3)
+,('2020-04-20 08:15:00.000',true,-1,'APPROVED',1,2,NULL,1,1,1,3)
 ,('2020-02-07 00:16:44.535',false,-1,'DONE',2,2,1,1,1,1,3)
 ,('2020-02-17 08:15:00.000',false,-1,'REQUESTED',0,2,NULL,NULL,1,1,NULL)
 ,('2020-02-07 00:40:21.100',false,-1,'DONE',2,2,2,1,1,1,3)
@@ -224,3 +226,14 @@ insert into perscriptionpojo_medication_list (perscription_id, medication_list_i
 (2, 1),
 (2, 2), 
 (2, 3);
+
+
+INSERT INTO public.leave_requests (first_day,last_day,leave_status,leave_type,request_note,staff_role,version,doctor_id,nurse_id) VALUES 
+('2020-04-13 02:00:00.000','2020-04-17 02:00:00.000','REQUESTED','PERSONAL','','DOCTOR',0,2,NULL)
+,('2020-04-27 02:00:00.000','2020-04-28 02:00:00.000','REQUESTED','ANNUAL','','DOCTOR',0,2,NULL)
+;
+
+
+INSERT INTO operations (date,deleted,status,first_doctor_id,operation_type_id,patient_id,requested_doctor_id,room_id,second_doctor_id,third_doctor_id) VALUES 
+('2020-02-14 09:00:00.000',false,'REQUESTED',NULL,8,1,2,NULL,NULL,NULL)
+;

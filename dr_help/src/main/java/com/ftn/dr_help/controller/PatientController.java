@@ -165,18 +165,11 @@ public class PatientController {
 		if (retVal == null ) {
 			return new ResponseEntity<> (retVal, HttpStatus.OK);
 		}
-		
-		List<String> temp = new ArrayList<String> ();
-		temp.add("-");
-		retVal.setPossibleClinics(temp);
-		retVal.setPossibleDates(temp);
-		retVal.setPossibleDoctors(temp);
-		retVal.setPossibleTypes(temp);
-		
-	
+
 		if (retVal.getAppointmentList() == null) {
 			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
+		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
