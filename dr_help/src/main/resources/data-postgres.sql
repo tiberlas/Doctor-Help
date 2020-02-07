@@ -148,6 +148,8 @@ INSERT INTO perscriptionpojo (diagnosis_id,examination_report_id,signing_nurse_i
 --,(1,2,NULL,2)
 (3,null,NULL,null)
 ,(1,null,NULL,null)
+,(1,null,NULL,null)
+,(1,null,NULL,null)
 ;
 
 
@@ -159,11 +161,15 @@ INSERT INTO examination_reportpojo (appointment_id,clinic_id,health_record_id,pe
 --,(15,1,1,2)
 (null,1,1,1)
 ,(null,1,1,2)
+,(null,1,1,2)
+,(null,2,1,2)
 ;
 
 
 UPDATE perscriptionpojo SET examination_report_id = 1 WHERE id = 1;
 UPDATE perscriptionpojo SET examination_report_id = 2 WHERE id = 2;
+UPDATE perscriptionpojo SET examination_report_id = 3 WHERE id = 3;
+UPDATE perscriptionpojo SET examination_report_id = 4 WHERE id = 4;
 
 
 
@@ -173,6 +179,8 @@ insert into therapypojo (advice, perscription_id) values
 
 update perscriptionpojo set therapy_id = 1 where id = 1;
 update perscriptionpojo set therapy_id = 2 where id = 2;
+update perscriptionpojo set therapy_id = 1 where id = 3;
+update perscriptionpojo set therapy_id = 1 where id = 4;
 
 
 INSERT INTO appointments (date,deleted,discount,status,version,doctor_id,examination_report_id,nurse_id,patient_id,procedure_type_id,room_id) VALUES 
@@ -193,11 +201,15 @@ INSERT INTO appointments (date,deleted,discount,status,version,doctor_id,examina
 ,('2020-02-07 00:16:44.535',false,-1,'DONE',2,2,1,1,1,1,3)
 ,('2020-02-17 08:15:00.000',false,-1,'REQUESTED',0,2,NULL,NULL,1,1,NULL)
 ,('2020-02-07 00:40:21.100',false,-1,'DONE',2,2,2,1,1,1,3)
+,('2020-01-31 00:40:21.100',false,-1,'DONE',2,1,2,1,1,1,3)
+,('2020-02-03 08:40:21.100',false,-1,'DONE',2,5,2,4,1,5,6)
 ;
 
 
 UPDATE examination_reportpojo SET appointment_id = 13 WHERE id = 1;
 UPDATE examination_reportpojo SET appointment_id = 15 WHERE id = 2;
+UPDATE examination_reportpojo SET appointment_id = 16 WHERE id = 3;
+UPDATE examination_reportpojo SET appointment_id = 17 WHERE id = 4;
 
 
 INSERT INTO user_requestpojo (address,birthday,city,email,first_name,insurance_number,last_name,password,phone_number,state,version) VALUES 
