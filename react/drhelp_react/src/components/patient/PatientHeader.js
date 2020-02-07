@@ -53,7 +53,7 @@ class PatientHeader extends Component {
             <Collapse id="basic-navbar-nav" isOpen={this.state.dropdownAdd} navbar className="collapse">
                 <Nav className="mr-auto">
                     <Nav.Link>
-                        <Link exact to='/patient/clinicList' class="nav-link">Clinics</Link>
+                        <Link exact to='/patient/clinicList' class="nav-link"><span id="clinics_nav"> Clinics </span></Link>
                     </Nav.Link>
 
                     <Collapse isOpen={true} navbar className="collapse">

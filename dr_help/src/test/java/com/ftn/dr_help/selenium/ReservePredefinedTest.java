@@ -43,8 +43,11 @@ public class ReservePredefinedTest {
   public void tearDown() {
     driver.quit();
   }
+  
+  
+  
   @Test
-  public void test() {
+  public void doYourMagic() {
     driver.get("http://localhost:3000/login");
     driver.findElement(By.id("tb_email")).click();
     driver.findElement(By.id("tb_email")).sendKeys("happymeal@maildrop.cc");
@@ -77,7 +80,7 @@ public class ReservePredefinedTest {
       Actions builder = new Actions(driver);
       builder.moveToElement(element, 0, 0).perform();
     }
-    (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.className("select_type")));
+    (new WebDriverWait(driver, 15)).until(ExpectedConditions.visibilityOfElementLocated(By.className("select_type")));
     driver.findElement(By.className("select_type")).click();
     (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("react-select-5-option-1")));
     driver.findElement(By.id("react-select-5-option-1")).click();
