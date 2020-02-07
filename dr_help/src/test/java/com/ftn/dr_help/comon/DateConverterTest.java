@@ -1,9 +1,8 @@
 
 package com.ftn.dr_help.comon;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.text.ParseException;
 import java.util.Calendar;
 

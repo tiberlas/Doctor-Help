@@ -1,6 +1,6 @@
 package com.ftn.dr_help.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +26,7 @@ import com.ftn.dr_help.model.pojo.LeaveRequestPOJO;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@TestPropertySource("classpath:test.properties")
+@TestPropertySource("classpath:application-test.properties")
 public class LeaveRequestRepositoryTest {
 
 	@Autowired

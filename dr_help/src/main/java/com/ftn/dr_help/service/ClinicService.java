@@ -21,7 +21,6 @@ import com.ftn.dr_help.dto.ClinicPreviewDTO;
 import com.ftn.dr_help.dto.DatePeriodDTO;
 import com.ftn.dr_help.dto.HeldAppointmentsChartDataDTO;
 import com.ftn.dr_help.dto.HeldAppointmentsRequestDTO;
-import com.ftn.dr_help.dto.DiagnosisDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;

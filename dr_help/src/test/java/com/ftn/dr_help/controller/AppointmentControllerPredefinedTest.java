@@ -108,8 +108,7 @@ public class AppointmentControllerPredefinedTest {
 	@Test
 	public void getSomeFilteredPredefinedAppointments() throws Exception {
 		
-		AppointmentListDTO appList = setUpAppointmentList(AppointmentConstants.DOCTOR_ID,
-				AppointmentConstants.CLINIC_ID, AppointmentConstants.PROCEDURE_TYPE_ID, AppointmentConstants.FILTER_DATE);
+		AppointmentListDTO appList = setUpAppointmentList();
 		
 		Mockito.when(this.appointmentService.getPredefinedAppointments(Mockito.any(String.class), 
 				Mockito.any(String.class), 
@@ -136,7 +135,7 @@ public class AppointmentControllerPredefinedTest {
 	
 	
 	
-	private AppointmentListDTO setUpAppointmentList(String doc_id, String clinic_id, String procedure_id, String date) {
+	private AppointmentListDTO setUpAppointmentList() {
 		AppointmentListDTO appList = new AppointmentListDTO();
 		
 		List<String> possibleClinics = new ArrayList<String>();
