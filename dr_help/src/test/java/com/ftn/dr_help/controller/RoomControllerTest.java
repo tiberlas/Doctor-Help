@@ -3,7 +3,6 @@ package com.ftn.dr_help.controller;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.fail;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,7 +30,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
+import com.ftn.dr_help.TestUtil;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
 import com.ftn.dr_help.dto.RoomDTO;
@@ -70,6 +71,7 @@ public class RoomControllerTest {
                 .webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
+
     }
 	
 	@Before
@@ -157,28 +159,37 @@ public class RoomControllerTest {
 	
 	@Test
 	public void testSearch() {
+		RoomSearchDTO room = new RoomSearchDTO(
+				RoomsConstants.NAME, 
+				new Long(RoomsConstants.NUMBER), 
+				RoomsConstants.PROCEDURE_ID, 
+				RoomsConstants.FIRST_FREE);
+
 		Mockito.when(roomService.search(Mockito.any(RoomSearchDTO.class), Mockito.any(String.class))).thenReturn(roomList);
 		
 		try {
-			RoomSearchDTO room = new RoomSearchDTO(
-								RoomsConstants.NAME, 
-								new Long(RoomsConstants.NUMBER), 
-								RoomsConstants.PROCEDURE_ID, 
-								RoomsConstants.FIRST_FREE);
 			
-			String json = TestUtil.json(room)
+			String json = TestUtil.json(room);
 			this.mockMvc.perform(post(RoomsConstants.SEARCH_URL)			
 					.contentType(contentType)
 					.content(json)
 					.header("Authorization", accessToken))
 			.andDo(print())
 			.andExpect(status()
-					.isNotFound());
+					.isOk())
+			.andExpect(content().contentType(contentType))
+			.andExpect(jsonPath("$", hasSize(1)))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(RoomsConstants.ID.intValue())));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
+	}
+	
+	@Test
+	public void test() {
+		
 	}
 
 }

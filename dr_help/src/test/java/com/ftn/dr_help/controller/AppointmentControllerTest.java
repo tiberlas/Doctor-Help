@@ -161,8 +161,7 @@ public class AppointmentControllerTest {
 			.andExpect(status()
 					.isOk())
 			.andExpect(content().contentType(contentType))
-
-            .andExpect(jsonPath("$.id").value(AppointmentConstants.APPOINTMENT_ID.intValue()));
+			.andExpect(jsonPath("$.id").value(AppointmentConstants.APPOINTMENT_ID.intValue()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

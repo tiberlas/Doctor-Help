@@ -15,4 +15,5 @@ public class RoomsConstants {
 	public static final boolean RESERVED = false;
 	public static final String FIRST_FREE = "02/25/2020 15:56";
 
+
 }

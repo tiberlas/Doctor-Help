@@ -34,7 +34,7 @@ class CentreAdminHeader extends Component {
 
       
         return ( 
-            <Navbar bg="light" expand="lg" id="navbarColor01">
+            <Navbar bg="dark" expand="sm" id="navbarColor01">
               {/* <div class="navbar-inner" style={{background: "transparent"}}> */}
             <Navbar.Brand >
               <Nav> 

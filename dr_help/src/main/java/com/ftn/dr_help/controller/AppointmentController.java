@@ -261,8 +261,9 @@ public class AppointmentController {
 				@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
 		AppointmentListDTO retVal = appointmentService.getPredefinedAppointments(doctorId, procedureTypeId, clinicId, date);
 		
-		if (retVal.getAppointmentList() == null) {
-			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
+		if (retVal == null) {
+			 retVal = new AppointmentListDTO();
+			
 		}
 		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);

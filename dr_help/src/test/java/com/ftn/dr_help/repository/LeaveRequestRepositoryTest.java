@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.model.enums.LeaveStatusEnum;
@@ -25,6 +26,7 @@ import com.ftn.dr_help.model.pojo.LeaveRequestPOJO;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@TestPropertySource("classpath:application-test.properties")
 public class LeaveRequestRepositoryTest {
 
 	@Autowired
@@ -36,6 +38,8 @@ public class LeaveRequestRepositoryTest {
 	
 	@Autowired
 	private DoctorRepository doctorRepository;
+	
+	
 	
 	private LeaveRequestPOJO leaveRequest;
 	private LeaveRequestPOJO leaveRequest1;
@@ -125,6 +129,7 @@ public class LeaveRequestRepositoryTest {
 		this.em.persist(leaveRequest);
 		this.em.persist(leaveRequest1);
 		this.em.persist(leaveRequest2);
+		
 		DoctorPOJO foundDoctor = doctorRepository.findOneByEmail("per1a@gmail");
 		System.out.println("DOCTOR IS " + foundDoctor.getId());
 		Calendar date = Calendar.getInstance();
