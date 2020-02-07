@@ -146,7 +146,7 @@ public class AppointmentControllerGetPredefinedTest {
 					.isOk())
 			.andExpect(content().contentType(contentType))
 			//.andExpect(jsonPath("$").value(hasSize(LIST_AVAILABLE_DOCTORS_COUNT)))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(1l)))
+            .andExpect(jsonPath("$.[*].id").value(1l))
             .andExpect(jsonPath("$.[*].id").value(hasItem(NEW_DOCTOR_2_ID.intValue())));
 					
 //					andExpect(content().json("[{"
