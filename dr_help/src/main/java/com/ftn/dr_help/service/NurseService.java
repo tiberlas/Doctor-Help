@@ -325,7 +325,6 @@ public class NurseService {
 			businessDayList.add(businessDayHoursDTO);
 		}
 		
-		
 		return businessDayList;	
 	}
 	
