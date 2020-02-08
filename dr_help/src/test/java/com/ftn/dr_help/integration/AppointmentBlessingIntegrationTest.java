@@ -1,15 +1,16 @@
 package com.ftn.dr_help.integration;
 
-import javax.annotation.PostConstruct;
-
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.fail;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import javax.annotation.PostConstruct;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,14 +27,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.ftn.dr_help.TestUtil;
 import com.ftn.dr_help.constants.UserConstants;
+import com.ftn.dr_help.dto.AppointmentForSchedulingDTO;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
-public class DoctorControllerIntegrationTest {
+public class AppointmentBlessingIntegrationTest {
 
 	private String accessToken;
 
@@ -67,17 +70,24 @@ public class DoctorControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testOpstaPraksa() {
+	public void testBless() {
 		try {
+			AppointmentForSchedulingDTO appointment = new AppointmentForSchedulingDTO(
+					"digimon@gmail.com", 
+					"j.milinkovic@gmail",
+					2l,
+					2l,
+					"2020-02-04 15:30",
+					22l);
 			
-			this.mockMvc.perform(get("/api/doctors/all/specialization="+1)
+			String json = TestUtil.json(appointment);
+			this.mockMvc.perform(post("/api/appointments/bless")
 					.contentType(contentType)
+					.content(json)
 					.header("Authorization", accessToken))
 			.andDo(print())
 			.andExpect(status()
-					.isOk())
-			.andExpect(content().contentType(contentType))
-	        .andExpect(jsonPath("$", hasSize(2)));
+					.isAccepted());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,18 +96,24 @@ public class DoctorControllerIntegrationTest {
 	}
 	
 	@Test
-	public void testOperacija() {
+	public void testBlessNot() {
 		try {
+			AppointmentForSchedulingDTO appointment = new AppointmentForSchedulingDTO(
+					"happymeal@gmail.com", 
+					"pera@gmail",
+					2l,
+					2l,
+					"2020-02-01 12:30",
+					40l);
 			
-			this.mockMvc.perform(get("/api/doctors/all/specialization="+7)
+			String json = TestUtil.json(appointment);
+			this.mockMvc.perform(post("/api/appointments/bless")
 					.contentType(contentType)
+					.content(json)
 					.header("Authorization", accessToken))
 			.andDo(print())
 			.andExpect(status()
-					.isOk())
-			.andExpect(content().contentType(contentType))
-	        .andExpect(jsonPath("$", hasSize(4)));
-			
+					.isNotAcceptable());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
