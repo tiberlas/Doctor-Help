@@ -922,10 +922,10 @@ class PatientHistory extends Component {
 									this.state.reports.sort((a, b) => (this.state.sortDate === 'ascending') ? (a.date < b.date) : (a.date > b.date)).map (row => (
 										<TableBody>
 											<TableRow key={row.examinationReportId}>
-												<TableCell><p class='text-white'>{row.date.split(' ')[0]}</p></TableCell>
+												<TableCell class='text-white'>{row.date.split(' ')[0]}</TableCell>
 												<TableCell><p class='text-white'>{row.date.split(' ')[1]}</p></TableCell>
 												<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
-												<TableCell><p class='text-white' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>{row.status}</p></TableCell>
+												<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><p class='text-white' >{row.status}</p></TableCell>
 												<TableCell><p class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></p></TableCell>
 												<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
 												<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
