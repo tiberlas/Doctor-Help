@@ -127,7 +127,7 @@ public class AppointmentControllerPredefinedTest {
 				.andExpect(jsonPath("$.possibleStatuses").isArray())
 				.andExpect(jsonPath("$.possibleTypes").isArray())
 				.andExpect(jsonPath("$.possibleClinics", hasItem(AppointmentConstants.CLINIC_NAME)))
-				.andExpect(jsonPath("$.possibleDoctors", hasItem(AppointmentConstants.DOCTOR_NAME)))
+				.andExpect(jsonPath("$.possibleDoctors", hasItem(AppointmentConstants.DOCTOR_NAME_PERA)))
 				.andExpect(jsonPath("$.possibleTypes", hasItem(AppointmentConstants.PROCEDURE_NAME)))
 				.andExpect(jsonPath("$.possibleStatuses", hasItem(AppointmentConstants.STATUS_NAME)))
 				.andExpect(status().isOk());

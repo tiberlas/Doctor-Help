@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import PatientItem from './PatientItem';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
@@ -175,7 +170,7 @@ class HandlePatientList extends Component {
                                         </div>
                                         </td>
                                         <td> </td>
-                                        
+
                                    
                         </tr>
                         <tr>

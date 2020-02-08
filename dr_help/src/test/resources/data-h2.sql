@@ -1,25 +1,53 @@
 --SQL skripta koja se pokrece sa Spring boot app i daje dummy podatke
 -- enkripcija sa sajta: https://bcrypt-generator.com/
 
+--password: sifra
+
+truncate table centre_administrator;
+truncate table clinic_administrator;
+--truncate table clinic;
+--truncate table patiens;
+--truncate table nurse;
+--truncate table procedures_type;
+--truncate table doctors;
+--truncate table operations;
+--truncate table room;
+--truncate table healthrecord;
+--truncate table allergypojo;
+--truncate table appointments;
+--truncate table doctor_requested;
+--truncate table examination_reportpojo;
+--truncate table allergypojo;
+--truncate table diagnosispojo;
+--truncate table therapypojo;
+--truncate table medicationpojo;
+--truncate table perscriptionpojo;
+--truncate table perscriptionpojo_medication_list;
+--truncate table doctor_reviewpojo;
+--truncate table clinic_rewiew;
+--truncate table leave_requests;
+
+
+
+insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, must_change_password) 
+	values(
+		'Đura','Đurić', '$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG', 'CENTRE_ADMINISTRATOR', 'glavni@sef',
+		 '06555555', 'Serbia', 'Novi Sad', 'A dom', '2003-2-1'::timestamp, false
+	);
+
+
 insert into clinic(address, city, state, name, description) values('7A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Klinika zdravog uma', 'Klinika je namenjena za kreativne opise. ');
 insert into clinic(address, city, state, name, description) values('7 Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Arkham', 'Assylum for the criminally insane.');
 insert into clinic(address, city, state, name, description) values('5A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic.');
 insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
 insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Podgorica', 'Montenegro', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
 
---password: sifra
-insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday) 
-	values(
-		'Đura','Đurić', '$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG', 'CENTRE_ADMINISTRATOR', 'glavni@sef',
-		 '06555555', 'Serbia', 'Novi Sad', 'A dom', '2003-2-1'::timestamp
-	);
-
 	 
 --password: 1234
-insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
+insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, must_change_password) 
 	values(
 		'Borislav','Borisavljević', '$2y$10$5ozpUNr/gCI4YGtih/eSiuWZ6C8L6FLlt4sGuJJbkbD0WxCQe3Mqe', 'CLINICAL_ADMINISTRATOR', 
-		'admin@admin', '06555555', 'Serbia', 'Novi Sad', 'Dom Kulture', '2003-2-1'::timestamp, 1 
+		'admin@admin', '06555555', 'Serbia', 'Novi Sad', 'Dom Kulture', '2003-2-1'::timestamp, 1, false
 	);
 
 --password: maxBezbedno
@@ -448,15 +476,5 @@ insert into leave_requests (first_day, last_day, leave_status, leave_type, reque
 
 --novi novi podaci
 	
-INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_activated,last_name,password,phone_number,status,state,health_record_id) VALUES 
-('2 Simeona Simića','1997-12-03 01:00:00.000','Novi Sad','happymeal@maildrop.cc','Tanja',604,true,'Blejic','$2y$10$hlvthdh7lrpHPn3WDgmYLebFwr78p.B5MWzL0zC44QOovakT4vqWq','063870485510','PATIENT','Serbia',1)
-,('9 Turgenjeva','1995-02-04 01:00:00.000','Novi Sad','juro@maildrop.cc','Juro',6454,true,'Joksimović','$2y$10$jcZESKu1emvnNuQ78KDX1uhrAANJfj4ExBaFvbrN2.1aGki2.zNpW','069560165','PATIENT','Serbia',2)
-,('9 Jovana Dučića','1995-03-07 01:00:00.000','Beograd','zeljko@maildrop.cc','Željko',547,true,'Stublić','$2y$10$CYLhk2wPxobNi2ha2WS1YeYjRYwzXxaV1r13l1UhB604ssHsUr5O.','066545605','PATIENT','Serbia',3)
-,('9 Trg Slobode','1998-03-05 01:00:00.000','Novi Sad','stole@maildrop.cc','Stojadin',684,false,'Milunović','$2y$10$m0s2dP6xXy0oNKpSp6tw..yhIeHF3DpwpUJdU/44oisJfWrJd0sTa','066846846486','PATIENT','Serbia',4)
-,('5 Stevana Sremca','1996-04-05 02:00:00.000','Novi Sad','milovan@maildrop.cc','Milovan',56046,true,'Borojević','$2y$10$0X5Dtp5A28luoka0eP1fbe/lWMVE2c2HVlRLd7ylC7jx276b45yVW','06680465416','PATIENT','Serbia',5)
-,('8 Laze Telečkog','1994-02-03 01:00:00.000','Novi Sad','borislav@maildrop.cc','Borislav',21,true,'Gajić','$2y$10$OYBaOnoA2otfDZ.DKROlqegSHdV9R4SVav9CHlQzHGHhkZH/mA.yi','066546564','PATIENT','Serbia',6)
-,('3 Bulevar Evrope','1985-02-06 01:00:00.000','Novi Sad','gavra@maildrop.cc','Dejan',6476,true,'Gavrilović','$2y$10$npbIU.sDfhV3Kar86ZQEdufO1KGetGwO7QCZ58FMqugB8S/JycP6a','06684684684','PATIENT','Serbia',7)
-,('9 Bulevar Evrope','1995-03-08 01:00:00.000','Novi Sad','goran@maildrop.cc','Goran',56797,true,'Divović','$2y$10$akkM0G2Hjn1Ke9CIpLj9DeFdajveZTtclHUjPfQ8O.TmdB3/y0Juu','066846847','PATIENT','Serbia',8)
-,('4 Temerinska','1993-01-20 01:00:00.000','Novi Sad','gar@maildrop.cc','Doban',6840,true,'Kovačević','$2y$10$o14qrBfyIIRUEmIXLNuG7.9cROZWeXWNn7Wa/DL.VgGgQdmxliqMm','0668468','PATIENT','Serbia',9)
-,('9 Đorđa Magaraševića','1997-05-21 02:00:00.000','Novi Sad','coa@maildrop.cc','Aca',546,true,'Jovanovic','$2y$10$KpnUpRPWr7hkRC0DkYgBbOdqVl3/vRV4TuZ5PHyVDNi9EDAcs7cwS','06654684','PATIENT','Serbia',10)
-;
+--INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_activated,last_name,password,phone_number,status,state,health_record_id) VALUES 
+--('2 Simeona Simića','1997-12-03 01:00:00.000','Novi Sad','happymeal@maildrop.cc','Tanja',604,true,'Blejic','$2y$10$hlvthdh7lrpHPn3WDgmYLebFwr78p.B5MWzL0zC44QOovakT4vqWq','063870485510','PATIENT','Serbia',1);
