@@ -1,5 +1,7 @@
 package com.ftn.dr_help.repository;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -12,7 +14,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ftn.dr_help.model.enums.AppointmentStateEnum;
+import com.ftn.dr_help.model.pojo.AppointmentPOJO;
 import com.ftn.dr_help.model.pojo.RoomPOJO;
+
 
 
 @RunWith(SpringRunner.class)
@@ -29,13 +34,40 @@ public class RoomRepositoryTest {
 	@Test
 	@Transactional
 	@Rollback(true)
-	public void test() {
+	public void testDeleted() {
 		List<RoomPOJO> before;
 		List<RoomPOJO> after;
 		
 		before = RoomRepository.getAllReservedRooms();
 		
-		//entityManager.merge(before.get(0));
+		before.get(0).setDeleted(true);
+		entityManager.merge(before.get(0));
+		
+		after = RoomRepository.getAllReservedRooms();
+		
+		assertEquals(before.size()-1, after.size());
 	}
+	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testStatus() {
+		List<RoomPOJO> before;
+		List<RoomPOJO> after;
+		
+		before = RoomRepository.getAllReservedRooms();
+		
+		for(AppointmentPOJO appointment : before.get(0).getAppointments()) {
+			appointment.setStatus(AppointmentStateEnum.DONE);
+		}
+		
+		entityManager.merge(before.get(0));
+		
+		after = RoomRepository.getAllReservedRooms();
+		
+		assertEquals(before.size()-1, after.size());
+	}
+	
+	
 
 }
