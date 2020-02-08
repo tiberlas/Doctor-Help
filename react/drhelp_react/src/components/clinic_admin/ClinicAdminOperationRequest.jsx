@@ -49,26 +49,33 @@ class ClinicAdminOperationRequest extends Component {
     render() {
         let i = 0;
         return (
-            <div class='row d-flex justify-content-center'>
-                <div class='col-md-7'>
+            <div>
                     {this.state.redirectState &&
                         <Redirect exact to={`/request/operation/${this.state.id}`} />
                     }
                     <br />
-                    <h3>Clinic {this.state.name}</h3>
-                    <h4>List of requested operations</h4>
-                    <br />
+                    <div class='row d-flex justify-content-center'>
+                <div class='col-md-4'>
+                    <h3> <i class="fas fa-hospital-alt"></i> {this.state.name}</h3>
+
+                    </div>
+                    </div>
+
+
+                    <div class='row d-flex justify-content-center'>
+                <div class='col-md-11'> 
+                <br/>
                     <Table class="table table-hover ">
-                        <TableHead class="table-active">
+                        <TableHead>
                             <TableRow class="table-active">
-                                <TableCell class="text-success cursor-pointer" >date and time</TableCell>
-                                <TableCell class="text-success cursor-pointer" >procedure</TableCell>
-                                <TableCell class="text-success cursor-pointer" >patient</TableCell>
+                                <TableCell class="text-success cursor-pointer" > <i class="fas fa-clock"></i>  Date</TableCell>
+                                <TableCell class="text-success cursor-pointer" ><i class="fas fa-procedures"></i> Procedure</TableCell>
+                                <TableCell class="text-success cursor-pointer" ><i class="fas fa-user-injured"></i> Patient</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {this.state.operations.map(c => (
-                                <TableRow
+                                <TableRow style={{cursor: 'pointer'}}
                                     className={(++i) % 2 ? `table-dark` : ``}
                                     onClick={(id) => this.handleRedirect(c.operationId)}
                                 >
@@ -79,6 +86,7 @@ class ClinicAdminOperationRequest extends Component {
                         </TableBody>
                     </Table>
                 </div>
+            </div>
             </div>
         );
     }

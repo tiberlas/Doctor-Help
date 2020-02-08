@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { ClinicAdminContext } from "../../context/ClinicAdminContextProvider";
 import axios from "axios";
 import Table from "@material-ui/core/Table";
@@ -52,38 +52,45 @@ class ClinicAdminAppointmentRequests extends Component {
 	render() {
 		let i = 0;
 		return (
+			<Fragment>
 			<div class="row d-flex justify-content-center">
-				<div class="col-md-7">
+				<div class="col-md-4">
 			{this.state.redirectState &&
 				<Redirect extact to={`/request/appointment/${this.state.id}`} />
 			}
 					<br />
-					<h3>Clinic {this.state.name}</h3>
-					<h4>List of requested appointments</h4>
+					<h3><i class="fas fa-hospital-alt"></i> {this.state.name}</h3>
+					</div>
+					</div>
+					
 					<br />
+
+					<div class="row d-flex justify-content-center">
+				<div class="col-md-11"> 
 					<Table class="table table-hover ">
-						<TableHead class="table-active">
-							<TableRow class="table-active">
+						<TableHead>
+							<TableRow>
 								<TableCell class="text-success cursor-pointer">
-									date and time
+								<i class="fas fa-clock"></i>  Date
 								</TableCell>
 								<TableCell class="text-success cursor-pointer">
-									procedure
+								<i class="fas fa-procedures"></i> Procedure
 								</TableCell>
 								<TableCell class="text-success cursor-pointer">
-									doctor
+								<i class="fas fa-user-md"></i> Doctor
 								</TableCell>
 								<TableCell class="text-success cursor-pointer">
-									nurse
+								<i class="fas fa-user-nurse"></i> 	Nurse
 								</TableCell>
 								<TableCell class="text-success cursor-pointer">
-									patient
+								<i class="fas fa-user-injured"></i>  Patient
 								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{this.state.appointments.map((c) => (
 								<TableRow 
+								 style={{cursor: 'pointer'}}
 									className={++i % 2 ? `table-dark` : ``}
 									onClick={(id) => this.handleRedirectPage(c.id)}
 								>
@@ -98,7 +105,8 @@ class ClinicAdminAppointmentRequests extends Component {
 						</TableBody>
 					</Table>
 				</div>
-			</div>
+				</div>
+				</Fragment>
 		);
 	}
 }

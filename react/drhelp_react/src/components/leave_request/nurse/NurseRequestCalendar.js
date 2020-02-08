@@ -110,6 +110,7 @@ class NurseRequestCalendar extends React.Component {
                       click: this.handleHelpModal
                   }}
                 }
+                
                 header={{
                     left: 'helpButton',
                     center: "title",
