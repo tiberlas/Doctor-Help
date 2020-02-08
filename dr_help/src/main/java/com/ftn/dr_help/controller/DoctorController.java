@@ -259,6 +259,18 @@ public class DoctorController {
 		}
 	}
 	
+	@GetMapping(value = "/all/without-nurse/specialization=", produces="application/json")
+	@PreAuthorize("hasAuthority('DOCTOR') or hasAuthority('CLINICAL_ADMINISTRATOR')")
+	public ResponseEntity<List<MedicalStaffNameDTO>> getSpecializedDoctorsWithoutNurse(@PathVariable("id") Long id) {
+		List<MedicalStaffNameDTO> doctors = service.getSpecializedDoctorsWithoutNurse(id);
+		
+		if(doctors == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(doctors, HttpStatus.OK);
+		}
+	}
+	
 	@GetMapping(value = "/schedules/operation/requested", produces = "application/json")
 	@PreAuthorize("hasAuthority('DOCTOR')")
 	public ResponseEntity<List<RequestedOperationScheduleDTO>> getAllOperationRequest() {
