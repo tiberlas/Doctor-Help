@@ -293,9 +293,20 @@ public class AppointmentService {
 
 		DoctorPOJO doctor = doctorRepository.getOne(doctorId);
 			
+//		System.out.println("");
+//		System.out.println("");
+//		if (doctor == null) {
+//			System.out.println("Nisam pronasao doktora...");
+//		}
+//		else {
+//			System.out.println("Pronasao sam doktora " + doctor.getFirstName() + " " + doctor.getLastName());
+//		}
+//		System.out.println("");
+//		System.out.println("");
+		
 		AppointmentPOJO newAppointment = new AppointmentPOJO ();
 		SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
-//		
+		
 //		System.out.println("");
 //		System.out.println("");
 //		System.out.println("");
@@ -304,8 +315,8 @@ public class AppointmentService {
 //		System.out.println("");
 //		System.out.println("");
 //		System.out.println("");
-//		
-//		
+		
+		
 		
 		Date date = sdf.parse(dateString);
 		Calendar calendar = Calendar.getInstance();
@@ -395,6 +406,15 @@ public class AppointmentService {
 //		System.out.println("Definitive end time: " + endTime.getTime());
 		
 		List<AppointmentPOJO> appointments = appointmentRepository.getDoctorsAppointments(doctor.getId(), startTime, endTime);
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Before deciding: ");
+		System.out.println(doctor.getId());
+		System.out.println(startTime.getTime());
+		System.out.println(endTime.getTime());
+		System.out.println("");
+		System.out.println("");
 		
 		if (appointments.size() == 0) {
 //			System.out.println("*****    Nemam nista => slobodan sam    *****");
