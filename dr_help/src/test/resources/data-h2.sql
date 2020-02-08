@@ -2,7 +2,7 @@
 -- enkripcija sa sajta: https://bcrypt-generator.com/
 
 --password: sifra
-
+--
 truncate table centre_administrator;
 truncate table clinic_administrator;
 --truncate table clinic;
@@ -474,7 +474,6 @@ insert into leave_requests (first_day, last_day, leave_status, leave_type, reque
 insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
 	values ('2020-02-01', '2020-02-04', 'REQUESTED', 'PERSONAL', 'release me from my flesh prison', 'NURSE', null, 1, 0);
 
---novi novi podaci
-	
---INSERT INTO patiens (address,birthday,city,email,first_name,insurance_number,is_activated,last_name,password,phone_number,status,state,health_record_id) VALUES 
---('2 Simeona Simića','1997-12-03 01:00:00.000','Novi Sad','happymeal@maildrop.cc','Tanja',604,true,'Blejic','$2y$10$hlvthdh7lrpHPn3WDgmYLebFwr78p.B5MWzL0zC44QOovakT4vqWq','063870485510','PATIENT','Serbia',1);
+-- potreban za 1 test
+	insert into appointments(date, deleted, discount, status, version, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2020-02-12 1:30', false, 50, 'APPROVED', 0, 1, null, 1, 2, 1, 1);

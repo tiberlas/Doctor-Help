@@ -101,12 +101,7 @@ public class AppointmentController {
 	@PostMapping (value = "add", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<Boolean> add (@RequestBody AddAppointmentDTO dto) throws NumberFormatException, ParseException {
-//		try {
-//			TimeUnit.SECONDS.sleep(10);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
 		String dateString = dto.getDate() + " " + dto.getTime() + ":00";
 
 		Boolean retVal = appointmentService.addAppointment(Long.parseLong(dto.getDoctorId()), dateString, Long.parseLong(dto.getPatientId()));

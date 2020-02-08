@@ -26,5 +26,11 @@ public class AppointmentConstants {
 	public static final String DURATION = "02:00";
 	public static final Long TYPE_ID = 25L;
 	
+	//for a patient made appointment request
+	public static final String MANUAL_REQUEST_DOCTOR_ID = "1";
+	public static final String MANUAL_REQUEST_PATIENT_ID = "1";
+	public static final String MANUAL_REQUEST_DATE = "2020-02-12";
+	public static final String MANUAL_REQUEST_TIME = "0:15";
+	
 	
 }
