@@ -68,6 +68,40 @@ public class RoomRepositoryTest {
 		assertEquals(before.size()-1, after.size());
 	}
 	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testGetAllWithType() {
+		List<RoomPOJO> before;
+		List<RoomPOJO> after;
+		
+		before = RoomRepository.findAllWithType("admin@admin", 2l);
+		
+		before.get(0).setDeleted(true);
+		entityManager.merge(before.get(0));
+		
+		after = RoomRepository.findAllWithType("admin@admin", 2l);
+		
+		assertEquals(before.size()-1, after.size());
+	}
+	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testGetAllWithTypeFromClinic() {
+		List<RoomPOJO> before;
+		List<RoomPOJO> after;
+		
+		before = RoomRepository.getAllRoomFromClinicWithProcedure(1l, 2l);
+		
+		before.get(0).setDeleted(true);
+		entityManager.merge(before.get(0));
+		
+		after = RoomRepository.getAllRoomFromClinicWithProcedure(1l, 2l);
+		
+		assertEquals(before.size()-1, after.size());
+	}
+	
 	
 
 }
