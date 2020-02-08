@@ -1,25 +1,53 @@
 --SQL skripta koja se pokrece sa Spring boot app i daje dummy podatke
 -- enkripcija sa sajta: https://bcrypt-generator.com/
 
+--password: sifra
+--
+truncate table centre_administrator;
+truncate table clinic_administrator;
+--truncate table clinic;
+--truncate table patiens;
+--truncate table nurse;
+--truncate table procedures_type;
+--truncate table doctors;
+--truncate table operations;
+--truncate table room;
+--truncate table healthrecord;
+--truncate table allergypojo;
+--truncate table appointments;
+--truncate table doctor_requested;
+--truncate table examination_reportpojo;
+--truncate table allergypojo;
+--truncate table diagnosispojo;
+--truncate table therapypojo;
+--truncate table medicationpojo;
+--truncate table perscriptionpojo;
+--truncate table perscriptionpojo_medication_list;
+--truncate table doctor_reviewpojo;
+--truncate table clinic_rewiew;
+--truncate table leave_requests;
+
+
+
+insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, must_change_password) 
+	values(
+		'Đura','Đurić', '$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG', 'CENTRE_ADMINISTRATOR', 'glavni@sef',
+		 '06555555', 'Serbia', 'Novi Sad', 'A dom', '2003-2-1'::timestamp, false
+	);
+
+
 insert into clinic(address, city, state, name, description) values('7A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Klinika zdravog uma', 'Klinika je namenjena za kreativne opise. ');
 insert into clinic(address, city, state, name, description) values('7 Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Arkham', 'Assylum for the criminally insane.');
 insert into clinic(address, city, state, name, description) values('5A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Princeton Plainsborrough general hospital', 'Free, publically open clinic.');
 insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Novi Sad', 'Serbia', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
 insert into clinic(address, city, state, name, description) values('2A Bulevar despota Stefana', 'Podgorica', 'Montenegro', 'Nasa Mala Klinika', 'Mali svet pun radosti.');
 
---password: sifra
-insert into centre_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday) 
-	values(
-		'Đura','Đurić', '$2y$10$.LtaQ8h1eF5Y9mz7cZwTqeXf0TyGRLbyOD27/eRb4N9WMuOZHwYMG', 'CENTRE_ADMINISTRATOR', 'glavni@sef',
-		 '06555555', 'Serbia', 'Novi Sad', 'A dom', '2003-2-1'::timestamp
-	);
-
 	 
 --password: 1234
-insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id) 
+insert into clinic_administrator(first_name, last_name, password, status, email, phone_number, state, city, address, birthday, clinic_id, must_change_password) 
 	values(
 		'Borislav','Borisavljević', '$2y$10$5ozpUNr/gCI4YGtih/eSiuWZ6C8L6FLlt4sGuJJbkbD0WxCQe3Mqe', 'CLINICAL_ADMINISTRATOR', 
-		'admin@admin', '06555555', 'Serbia', 'Novi Sad', 'Dom Kulture', '2003-2-1'::timestamp, 1 
+		'admin@admin', '06555555', 'Serbia', 'Novi Sad', 'Dom Kulture', '2003-2-1'::timestamp, 1, false
 	);
 
 --password: maxBezbedno
@@ -445,3 +473,6 @@ insert into leave_requests (first_day, last_day, leave_status, leave_type, reque
 insert into leave_requests (first_day, last_day, leave_status, leave_type, request_note, staff_role, doctor_id, nurse_id, version)
 	values ('2020-02-01', '2020-02-04', 'REQUESTED', 'PERSONAL', 'release me from my flesh prison', 'NURSE', null, 1, 0);
 
+-- potreban za 1 test
+	insert into appointments(date, deleted, discount, status, version, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id)
+values ('2020-02-12 1:30', false, 50, 'APPROVED', 0, 1, null, 1, 2, 1, 1);

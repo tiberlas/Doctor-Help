@@ -25,6 +25,6 @@ public class LoginPage {
 	}
 	
 	public WebElement getLoginSubmit() {
-		return driver.findElement(By.id("tb_submit"));
+		return driver.findElement(By.id("tb_login"));
 	}
 }

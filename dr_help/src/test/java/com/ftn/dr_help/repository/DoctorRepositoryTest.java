@@ -5,8 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.print.Doc;
-
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.model.pojo.DoctorPOJO;
+
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -84,6 +84,21 @@ public class DoctorRepositoryTest {
 		after = doctorRepository.findAllDoctorsWihtSpetialization(1L);
 		
 		assertTrue(after.isEmpty());
+	}
+
+
+	
+	@Before
+	public void setUp () {
+		
+	}
+	
+	@Test
+	public void testFindAllByClinic_id () {
+		
+		List<DoctorPOJO> actualList = doctorRepository.findAllByClinic_id(1L);
+		
+		assertEquals (8, actualList.size());
 	}
 
 }

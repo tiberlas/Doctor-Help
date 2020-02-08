@@ -134,13 +134,7 @@ public class DoctorController {
 		ClinicPOJO clinic = clinicRepository.getOne(clinicId);
 		retVal.setClinicName(clinic.getName());
 		retVal.setAddress(clinic.getAddress());
-		//		System.out.println("Appointment type: " + appointmentType);
 
-		
-		
-		//		System.out.println("Clinic id: " + clinicId);
-//		System.out.println("Date: " + appointmentDate);
-		
 		if (appointmentType.equals("unfiltered") || appointmentDate.equals("unfiltered")) {
 			List<DoctorListingDTO> doctors = service.filterByClinic(clinicId);
 			retVal.setDoctorListing(doctors);

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.DateConverter;
 import com.ftn.dr_help.dto.ProcedureIdAndDateDTO;
 import com.ftn.dr_help.dto.RoomCalendarDTO;
@@ -52,6 +53,9 @@ public class RoomService {
 	
 	@Autowired
 	private DateConverter dateConvertor;
+	
+	@Autowired
+	private CurrentUser currentUser;
 	
 	@Transactional(readOnly = true)
 	public List<RoomDTO> findAll(String email) {
@@ -134,12 +138,14 @@ public class RoomService {
 
 		try {
 			
-			RoomPOJO exist = repository.findOneByNumber(newRoom.getNumber()).orElse(null);
-			if(exist != null) {
-				return null;
-			}
-			
 			ClinicAdministratorPOJO admin = adminRepository.findOneByEmail(email);
+			
+			List<RoomPOJO> list = repository.findAllByClinic_id(admin.getClinic().getId());
+			for (RoomPOJO r : list) {
+				if (r.getNumber() == newRoom.getNumber()) {
+					return null;
+				}
+			}
 			
 			ClinicPOJO clinic = admin.getClinic();
 			RoomPOJO room = new RoomPOJO();

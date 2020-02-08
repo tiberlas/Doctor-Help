@@ -25,82 +25,91 @@ import org.springframework.web.context.WebApplicationContext;
 import com.ftn.dr_help.TestUtil;
 import com.ftn.dr_help.constants.AppointmentConstants;
 import com.ftn.dr_help.constants.LoginConstants;
-import com.ftn.dr_help.constants.UserConstants;
-import com.ftn.dr_help.constants.PredefinedAppointmentConstants;
-import com.ftn.dr_help.dto.AppointmentDeleteDTO;
+import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
-public class AppointmentReservePredefinedIntegrationTest {
+public class AppointmentControllerRequestIntegrationTest {
 
-	private String accessToken;
-
-    private MediaType contentType = new MediaType(
+	
+	private MediaType contentType = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype());
 
-    private MockMvc mockMvc;
 
-    @Autowired
+	private MockMvc mockMvc;
+
+	
+	@Autowired
     private TestRestTemplate restTemplate;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @PostConstruct
-    public void setUp() {
-        this.mockMvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .apply(springSecurity())
-                .build();
-    }
-    
-    @Before
-	public void login() throws Exception {
+	
+	 @Autowired
+	    private WebApplicationContext webApplicationContext;
+	
+	  @PostConstruct
+	    public void setUp() {
+	        this.mockMvc = MockMvcBuilders
+	                .webAppContextSetup(webApplicationContext)
+	                .apply(springSecurity())
+	                .build();
+	    }
+	
+	// JWT token
+	private String accessToken;
+	
+	
+	@Before
+	public void login() {
 		ResponseEntity<LoginResponseDTO> responseEntity = 
-				restTemplate.postForEntity(UserConstants.LOGIN_URL, 
+				restTemplate.postForEntity("/api/login", 
 						new LoginRequestDTO(LoginConstants.PATIENT_USERNAME, LoginConstants.PATIENT_PASSWORD), 
 						LoginResponseDTO.class);
-		accessToken = "Bearer "+ responseEntity.getBody().getJwtToken();
+		accessToken = "Bearer " + responseEntity.getBody().getJwtToken();
+	
 	}
-    
-    
-    @Test
-    public void appointmentReserveShouldReturnTrue() throws Exception {
-    	AppointmentDeleteDTO dto = new AppointmentDeleteDTO();
-		dto.setPatientId(PredefinedAppointmentConstants.RESERVE_PATIENT_ID);
-		dto.setAppointmentId(PredefinedAppointmentConstants.AVAILABLE_APPOINTMENT_ID);
-    	
-    	String json = TestUtil.json(dto);
-    	
-    	mockMvc.perform(
-				post("/api/appointments/predefined/reserve")
+	
+	
+	@Test
+	public void makeAnAppointmentRequest() throws Exception {
+		AddAppointmentDTO dto = new AddAppointmentDTO();
+		dto.setDoctorId(AppointmentConstants.MANUAL_REQUEST_DOCTOR_ID);
+		dto.setPatientId(AppointmentConstants.MANUAL_REQUEST_PATIENT_ID);
+		dto.setDate(AppointmentConstants.MANUAL_REQUEST_DATE);
+		dto.setTime(AppointmentConstants.MANUAL_REQUEST_TIME);
+		
+		String dateTime = dto.getDate() + " " + dto.getTime() + ":00";
+		String json = TestUtil.json(dto);
+
+		mockMvc.perform(post("/api/appointments/add")
 				.contentType(contentType)
 				.header("Authorization", accessToken)
 				.content(json))
-				.andExpect(status().isOk())
-				.andExpect(content().string("true"));
-    }
-    
-    @Test
-    public void appointmentReserveShouldReturnFalse() throws Exception {
-    	AppointmentDeleteDTO dto = new AppointmentDeleteDTO();
-		dto.setPatientId(PredefinedAppointmentConstants.RESERVE_PATIENT_ID);
-		dto.setAppointmentId(PredefinedAppointmentConstants.UNAVAILABLE_APPOINTMENT_ID);
-    	
-    	String json = TestUtil.json(dto);
-    	
-    	mockMvc.perform(
-				post("/api/appointments/predefined/reserve")
+				.andExpect(content().string("true"))
+				.andExpect(status().isOk());
+	}
+	
+	
+	@Test
+	public void makeABadAppointmentRequest() throws Exception {
+		AddAppointmentDTO dto = new AddAppointmentDTO();
+		dto.setDoctorId(AppointmentConstants.MANUAL_REQUEST_DOCTOR_ID);
+		dto.setPatientId(AppointmentConstants.MANUAL_REQUEST_PATIENT_ID);
+		dto.setDate(AppointmentConstants.MANUAL_REQUEST_DATE);
+		dto.setTime("1:30");
+		
+		String dateTime = dto.getDate() + " " + dto.getTime() + ":00";
+		String json = TestUtil.json(dto);
+
+		mockMvc.perform(post("/api/appointments/add")
 				.contentType(contentType)
 				.header("Authorization", accessToken)
 				.content(json))
-				.andExpect(status().isOk())
-				.andExpect(content().string("false"));
-    }
-    
-    
+				.andExpect(content().string("false"))
+				.andExpect(status().isOk());
+	}
+	
 }

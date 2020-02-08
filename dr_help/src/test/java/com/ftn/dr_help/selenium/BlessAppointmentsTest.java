@@ -1,11 +1,11 @@
 package com.ftn.dr_help.selenium;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.annotations.BeforeMethod;
-import org.junit.Test;
 
 import com.ftn.dr_help.selenium.pages.LoginPage;
 
@@ -16,7 +16,7 @@ public class BlessAppointmentsTest {
 	
 	private LoginPage loginPage;
 	
-	@BeforeMethod
+	@Before
     public void setUp() {
         //instantiate chrome browser
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
@@ -35,7 +35,7 @@ public class BlessAppointmentsTest {
     public void login() {
 		WebElement emailForm = loginPage.getLoginEmailForm();
 		emailForm.click();
-		emailForm.sendKeys("admin@admin");
+		emailForm.sendKeys("admin1@maildrop.cc");
 		
 		WebElement passwordForm = loginPage.getLoginPasswordForm();
 		passwordForm.click();

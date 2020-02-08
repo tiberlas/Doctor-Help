@@ -1,17 +1,16 @@
 package com.ftn.dr_help.integration;
 
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasItem;
 import javax.annotation.PostConstruct;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -28,6 +27,7 @@ import com.ftn.dr_help.constants.AppointmentConstants;
 import com.ftn.dr_help.constants.LoginConstants;
 import com.ftn.dr_help.constants.UserConstants;
 import com.ftn.dr_help.dto.AppointmentListDTO;
+import com.ftn.dr_help.constants.PredefinedAppointmentConstants;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
 
@@ -67,24 +67,52 @@ public class AppointmentGetPredefinedIntegrationTest {
 		accessToken = "Bearer "+ responseEntity.getBody().getJwtToken();
 	}
     
+    /* 
+     * gets all predefined appointments, unfiltered, that are present in the sql script.
+     * 
+     * returns 5 predefined appointments.
+     * */
+    @Test 
+	public void getUnfilteredPredefinedAppointments() throws Exception {
+		
+		mockMvc.perform(get("/api/appointments/predefined/doctor=" + PredefinedAppointmentConstants.UNFILTERED
+				+"/procedure_type="+PredefinedAppointmentConstants.UNFILTERED+"/clinic="
+				+ PredefinedAppointmentConstants.UNFILTERED + "/date="+PredefinedAppointmentConstants.UNFILTERED)
+				.contentType(contentType)
+				.header("Authorization", accessToken))
+				.andExpect(jsonPath("$.possibleClinics").isArray())
+				.andExpect(jsonPath("$.possibleDoctors").isArray())
+				.andExpect(jsonPath("$.possibleStatuses").isArray())
+				.andExpect(jsonPath("$.possibleTypes").isArray())
+				.andExpect(jsonPath("$.appointmentList").isArray())
+				.andExpect(jsonPath("$.appointmentList[*]", hasSize(5)))
+				.andExpect(status().isOk());
+	}
     
-//    @Test
-//	public void getSomeFilteredPredefinedAppointments() throws Exception {
-//		
-//		mockMvc.perform(get("/api/appointments/predefined/doctor=" + AppointmentConstants.DOCTOR_ID
-//				+"/procedure_type="+AppointmentConstants.PROCEDURE_TYPE_ID+"/clinic="
-//				+ AppointmentConstants.CLINIC_ID + "/date="+AppointmentConstants.FILTER_DATE)
-//				.contentType(contentType)
-//				.header("Authorization", accessToken))
-//				.andExpect(jsonPath("$.possibleClinics").isArray())
-//				.andExpect(jsonPath("$.possibleDoctors").isArray())
-//				.andExpect(jsonPath("$.possibleStatuses").isArray())
-//				.andExpect(jsonPath("$.possibleTypes").isArray())
-//				.andExpect(jsonPath("$.possibleClinics", hasItem(AppointmentConstants.CLINIC_NAME)))
-//				.andExpect(jsonPath("$.possibleDoctors", hasItem(AppointmentConstants.DOCTOR_NAME)))
-//				.andExpect(jsonPath("$.possibleTypes", hasItem(AppointmentConstants.PROCEDURE_NAME)))
-//				.andExpect(jsonPath("$.possibleStatuses", hasItem(AppointmentConstants.STATUS_NAME)))
-//				.andExpect(status().isOk());
-//		
-//	}
+     /* 
+     * filters predefined by a criteria. 
+     * 
+     * filtered by date: 03-03-2020 and clinic: Klinika zdravog uma
+     * 
+     * returns 2 appointments.
+     * */
+    @Test 
+    public void getFilteredPredefinedAppointments() throws Exception {
+    	
+    	
+    	mockMvc.perform(get("/api/appointments/predefined/doctor=" + PredefinedAppointmentConstants.UNFILTERED
+				+"/procedure_type="+PredefinedAppointmentConstants.UNFILTERED+"/clinic="
+				+ PredefinedAppointmentConstants.FILTER_CLINIC_NAME + "/date="+PredefinedAppointmentConstants.FILTER_DATE)
+				.contentType(contentType)
+				.header("Authorization", accessToken))
+				.andExpect(jsonPath("$.possibleClinics").isArray())
+				.andExpect(jsonPath("$.possibleDoctors").isArray())
+				.andExpect(jsonPath("$.possibleStatuses").isArray())
+				.andExpect(jsonPath("$.possibleTypes").isArray())
+				.andExpect(jsonPath("$.appointmentList").isArray())
+				.andExpect(jsonPath("$.appointmentList[*]", hasSize(2)))
+				.andExpect(jsonPath("$.possibleClinics", hasItem("Klinika zdravog uma")))
+				.andExpect(jsonPath("$.possibleDates", hasItem("03.03.2020.")))
+				.andExpect(status().isOk());
+	}
 }

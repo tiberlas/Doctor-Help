@@ -6,4 +6,5 @@ public class LoginConstants {
 	public static final String PATIENT_PASSWORD = "whoppa42";
 	
 	
+	
 }

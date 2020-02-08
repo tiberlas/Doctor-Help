@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import PatientItem from './PatientItem';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
@@ -132,7 +127,7 @@ class HandlePatientList extends Component {
     }
 
     handleChange = (event) => {
-        this.setState({filterString: event.target.value})
+        this.setState({[event.target.name]: event.target.value})
     }
 
     handleFilter = () => {
@@ -169,12 +164,13 @@ class HandlePatientList extends Component {
                                     <td/>
                                     <td/>
                                         <td > 
-                                        <div class="input-group"> <input type = "text" class="form-control"  placeholder="Filter patients..." name = "filter" onChange = {this.handleChange}/> 
-                                        <Button class="primary" onClick = {this.filterSubmit}><i class="fas fa-search"></i> 
+                                        <div class="input-group"> <input type = "text" class="form-control"  placeholder="Filter patients..." name = "filterString" onChange = {this.handleChange}/> 
+                                        <Button class="primary" onClick = {this.handleFilter}><i class="fas fa-search"></i> 
                                         </Button>
                                         </div>
                                         </td>
                                         <td> </td>
+
                                    
                         </tr>
                         <tr>

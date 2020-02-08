@@ -1,5 +1,6 @@
 package com.ftn.dr_help.controller;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,12 +25,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.ArgumentMatchers.any;
+
 import com.ftn.dr_help.TestUtil;
 import com.ftn.dr_help.constants.AppointmentConstants;
 import com.ftn.dr_help.constants.LoginConstants;
@@ -42,7 +43,7 @@ import com.ftn.dr_help.service.AppointmentService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-
+@TestPropertySource("classpath:application-test.properties")
 public class AppointmentControllerPredefinedTest {
 
 	private MediaType contentType = new MediaType(
@@ -126,7 +127,7 @@ public class AppointmentControllerPredefinedTest {
 				.andExpect(jsonPath("$.possibleStatuses").isArray())
 				.andExpect(jsonPath("$.possibleTypes").isArray())
 				.andExpect(jsonPath("$.possibleClinics", hasItem(AppointmentConstants.CLINIC_NAME)))
-				.andExpect(jsonPath("$.possibleDoctors", hasItem(AppointmentConstants.DOCTOR_NAME)))
+				.andExpect(jsonPath("$.possibleDoctors", hasItem(AppointmentConstants.DOCTOR_NAME_PERA)))
 				.andExpect(jsonPath("$.possibleTypes", hasItem(AppointmentConstants.PROCEDURE_NAME)))
 				.andExpect(jsonPath("$.possibleStatuses", hasItem(AppointmentConstants.STATUS_NAME)))
 				.andExpect(status().isOk());

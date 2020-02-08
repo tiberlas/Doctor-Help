@@ -4,6 +4,11 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +24,6 @@ import com.ftn.dr_help.model.pojo.RoomPOJO;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@TestPropertySource("classpath:application-test.properties")
 public class ProcedureTypeRepositoryTest {
 
 	@Autowired
@@ -37,7 +41,7 @@ public class ProcedureTypeRepositoryTest {
 		
 		before = procedureTypeRepository.getProcedureTypes();
 		
-		ProceduresTypePOJO procedure = procedureTypeRepository.getOne(1l);
+		ProceduresTypePOJO procedure = procedureTypeRepository.getOne(2l);
 		procedure.setDeleted(true);
 		entityManager.merge(procedure);
 		
@@ -46,4 +50,17 @@ public class ProcedureTypeRepositoryTest {
 		assertEquals(before.size()-1, after.size());
 	}
 
+	@Test
+	public void testGetPrice () {
+		
+		Double actualValue1 = procedureTypeRepository.getPrice(1L, "Psychotherapy");
+		Double actualValue2 = procedureTypeRepository.getPrice(5L, "Psychotherapy");
+		Double actualValue3 = procedureTypeRepository.getPrice(1L, "Phrenollogy");
+		
+		assertEquals (30, actualValue1.floatValue(), 0.001);
+		assertEquals (35, actualValue2.floatValue(), 0.001);
+		assertEquals (null, actualValue3);
+		
+	}
+	
 }

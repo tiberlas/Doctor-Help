@@ -176,6 +176,7 @@ class DoctorListing extends Component {
 				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide}>
 					<FormControl class='text-black'>
 						<Select 
+						className="react-select-terms"
 							style="width:500px"
 							onChange = {this.handleSelect.bind(this, row)}
 							options={row.terms.map(term => ({ label: term, value: term }))}
@@ -183,7 +184,7 @@ class DoctorListing extends Component {
 					</FormControl>
 				</TableCell>
 				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide} >
-					<Button onClick={() => this.handleRequest(row)}>
+					<Button id="confirm_request_button" onClick={() => this.handleRequest(row)}>
 						Request
 					</Button>
 				</TableCell>
@@ -313,7 +314,7 @@ class DoctorListing extends Component {
 						</Modal.Body>
 
 						<Modal.Footer>
-							<Button variant="primary" onClick={() => this.closeDialog()}>
+							<Button id="confirm_reserving_button" variant="primary" onClick={() => this.closeDialog()}>
 								Confirm
 							</Button>
 						</Modal.Footer>
@@ -329,7 +330,7 @@ class DoctorListing extends Component {
 						</Modal.Body>
 
 						<Modal.Footer>
-							<Button variant="primary" onClick={() => this.closeMissingDialog()}>
+							<Button id="error_not_selected_time_close_button" variant="primary" onClick={() => this.closeMissingDialog()}>
 								Close
 							</Button>
 						</Modal.Footer>
@@ -347,7 +348,7 @@ class DoctorListing extends Component {
 						</Modal.Body>
 
 						<Modal.Footer>
-							<Button variant="primary" onClick={() => this.closeFinishedDialog()}>
+							<Button id="close_success_button" variant="primary" onClick={() => this.closeFinishedDialog()}>
 								Close
 							</Button>
 						</Modal.Footer>
@@ -363,7 +364,7 @@ class DoctorListing extends Component {
 						</Modal.Body>
 
 						<Modal.Footer>
-							<Button variant="primary" onClick={() => this.closeErrorDialog()}>
+							<Button id="close_failed_button" variant="primary" onClick={() => this.closeErrorDialog()}>
 								Close
 							</Button>
 						</Modal.Footer>

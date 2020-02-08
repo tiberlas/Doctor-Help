@@ -309,18 +309,19 @@ class DoctorCalendar extends React.Component {
           {this.props.regime==='schedule' &&  
           <Fragment> 
             <br/>
-          <FullCalendar id="FullCalendar" defaultView="dayGridMonth" //ako si na stranici za raspored, daygrid view
+          <FullCalendar id="FullCalendar" defaultView="listYear" //ako si na stranici za raspored, daygrid view
           header={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
+            left: 'prev,next today',
+            center: 'title',
+            right: 'timeGridWeek, dayGridMonth, listYear'
           }}
-          // buttonText={
-          //   {
-          //     prev: '<',
-          //     next: '>'
-          //   }
-          // }  
+
+          views={ {
+             listYear: {
+               buttonText: "year"
+             }
+           } 
+          }
 
           buttonIcons={
             {
@@ -343,7 +344,7 @@ class DoctorCalendar extends React.Component {
           
           eventRender={this.handleEventRender}
           eventClick={this.handleEventClick}
-          plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
+          plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction, listPlugin]} 
           themeSystem = 'bootstrap' /> 
           </Fragment> } 
 
@@ -369,12 +370,7 @@ class DoctorCalendar extends React.Component {
             center: "title",
             right: "prev, next"
           }}
-          // buttonText={
-          //   {
-          //     prev: '<',
-          //     next: '>'
-          //   }
-          // } 
+
           buttonIcons={
             {
               prev: 'left-single-arrow',

@@ -426,7 +426,8 @@ class ClinicListing extends Component {
 								<TableRow>
 									<TableCell colSpan="4">
 										<form>
-											<Select 
+											<Select
+											className="select-procedure-type"
 												styles={crniFont}
 												placeholder={(this.state.activeFilter === 'unfiltered') ? ('Choose a procedure type') : (this.state.activeFilter.replace('_', ' '))}
 												onChange={this.handleFilterType.bind(this)}
@@ -530,7 +531,7 @@ class ClinicListing extends Component {
 						</Modal.Body>
 
 						<Modal.Footer>
-							<Button variant="secondary" onClick={() => this.switchDialog()}>Close</Button>
+							<Button id= "close_clinic_modal_button" variant="secondary" onClick={() => this.switchDialog()}>Close</Button>
 						</Modal.Footer>
 					</Modal>
 
@@ -549,6 +550,7 @@ class ClinicListing extends Component {
 								<TableCell width="50px" class="text-success">
 									<Button onClick={() => this.switchDialog()} 
 										type = "button"
+										id="filter_clinics_button"
 									>	
 										Filter
 									</Button>

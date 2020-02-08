@@ -87,7 +87,7 @@ class PatientHistory extends Component {
 
 				let dateList = [];
 				let dateSize = 0;
-				if (response.data.possibleDates !== []) {
+				if ((response.data.possibleDates !== []) && (response.data.possibleDates !== undefined)) {
 					dateSize = response.data.possibleDates.length;
 				}
 				if (dateSize > 0) {
@@ -105,7 +105,7 @@ class PatientHistory extends Component {
 				
 				let doctorList = [];
 				let doctorSize = 0;
-				if (response.data.possibleDoctors !== null) {
+				if ((response.data.possibleDoctors !== null) && (response.data.possibleDoctors !== undefined)) {
 					doctorSize = response.data.possibleDoctors.length;
 				}
 				if (doctorSize > 0) {
@@ -124,7 +124,7 @@ class PatientHistory extends Component {
 
 				let clinicList = []
 				let clinicSize = 0; 
-				if (response.data.possibleClinics !== null) {
+				if ((response.data.possibleClinics !== null) && (response.data.possibleClinics !== undefined)) {
 					clinicSize = response.data.possibleClinics.length;
 				}
 
@@ -144,7 +144,7 @@ class PatientHistory extends Component {
 
 				let typeList = [];
 				let typeSize = 0;
-				if (response.data.possibleTypes !== null) {
+				if ((response.data.possibleTypes !== null) && (response.data.possibleTypes !== undefined)) {
 					typeSize = response.data.possibleTypes.length;
 				}
 				
@@ -718,19 +718,6 @@ class PatientHistory extends Component {
 		});
 	}
 
-	// handleCancel (appointmentId, appointmentDate) {
-	// 	axios.delete ("http://localhost:8080/api/appointments/delete", {
-	// 		data: {
-	// 			appointmentId : appointmentId
-	// 		}
-	// 	})
-	// 	.then (date => {
-	// 		this.updateComponent();
-	// 	});
-	// }
-
-
-
 	render () {
 		
 		// When viewing patient history, display a perscription Link;
@@ -783,15 +770,19 @@ class PatientHistory extends Component {
 											<FormHelperText class='text-success'>Clinic filter</FormHelperText>
 										</FormControl>
 									</TableRow>
-									<TableRow>
+									<TableRow >
 										<FormControl class='text-success'>
+											<span id="select_appointment_type"> 
 											<Select 
+												className="select_type"
+												inputId="select_type"
 												style="width:500px"
 												styles={crniFont}
 												onChange = {this.handleTypeFilter.bind(this)}
 												options={this.state.types}
 												placeholder={(this.state.activeTypeFilter === 'unfiltered') ? ('-') : (this.state.activeTypeFilter)}
 											></Select>
+											</span>
 											<FormHelperText class='text-success'>Appointment type filter</FormHelperText>
 										</FormControl>
 									</TableRow>
@@ -810,7 +801,7 @@ class PatientHistory extends Component {
 								</Table>
 							</ModalBody>
 							<ModalFooter>
-								<Button onClick={() => this.switchFilter()}>
+								<Button id="filter_close" onClick={() => this.switchFilter()}>
 									Close
 								</Button>
 							</ModalFooter>
@@ -904,7 +895,7 @@ class PatientHistory extends Component {
 									</Table>
 								</Modal.Body>
 							<Modal.Footer>
-								<Button variant="primary" onClick={this.handleClose}>
+								<Button id="modal_button_reserve" variant="primary" onClick={this.handleClose}>
 									Close
 								</Button>
 							</Modal.Footer>
@@ -927,10 +918,11 @@ class PatientHistory extends Component {
 									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Price</p></TableCell>
 									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Discount</p></TableCell>
 									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Reserve</p></TableCell>
-									<TableCell><Button onClick = {() => this.switchFilter()}>Filter</Button></TableCell>
+									<TableCell><Button id="button_filter" onClick = {() => this.switchFilter()}>Filter</Button></TableCell>
 								</TableRow>
 							</TableHead>
 								{
+									(this.state.reports !== undefined) &&
 									this.state.reports.sort((a, b) => (this.state.sortDate === 'ascending') ? (a.date < b.date) : (a.date > b.date)).map (row => (
 										<TableBody>
 											<TableRow key={row.examinationReportId}>
@@ -946,7 +938,7 @@ class PatientHistory extends Component {
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.room}</p></TableCell>
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.price}</p></TableCell>
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p style={{ color: '#E99002' }}>{row.discount}%</p></p></TableCell>
-												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} onClick={() => this.handleReservationClick(row)} > <Button disabled={this.state.waiting}>Reserve</Button> </p></TableCell>
+												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} onClick={() => this.handleReservationClick(row)} > <Button id="button_reserve" disabled={this.state.waiting}>Reserve</Button> </p></TableCell>
 												<TableCell>
 													<p hidden={row.status !== "Approved"}>
 														<Button onClick={() => this.confirmAppointment(row)}>

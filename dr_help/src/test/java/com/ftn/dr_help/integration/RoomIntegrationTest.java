@@ -102,8 +102,7 @@ public class RoomIntegrationTest {
 			.andExpect(status()
 					.isOk())
 			.andExpect(content().contentType(contentType))
-	        .andExpect(jsonPath("$.id").value(2))
-	        .andExpect(jsonPath("$.name").value("Opšta A"));
+	        .andExpect(jsonPath("$.id").value(2));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
