@@ -136,14 +136,9 @@ class DoctorRequestCalendar extends React.Component {
                     header={{
                         left: 'helpButton',
                         center: "title",
-                        right: "prev,next"
+                        right: "prev, next"
                     }}
-                    buttonText={
-                      {
-                        prev: '<',
-                        next: '>'
-                      }
-                    }
+
                     businessHours = { 
                       this.state.businessHours
                     }

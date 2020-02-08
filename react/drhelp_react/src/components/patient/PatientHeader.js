@@ -53,11 +53,13 @@ class PatientHeader extends Component {
             <Collapse id="basic-navbar-nav" isOpen={this.state.dropdownAdd} navbar className="collapse">
                 <Nav className="mr-auto">
                     <Nav.Link>
-                        <Link exact to='/patient/clinicList' class="nav-link">Clinics</Link>
+                        <Link exact to='/patient/clinicList' class="nav-link"><span id="clinics_nav"> Clinics </span></Link>
                     </Nav.Link>
 
                     <Collapse isOpen={true} navbar className="collapse">
                         <Nav>
+
+                            <div id="appointments_nav"> 
                             <NavDropdown
                                 onMouseEnter = { this.handleOpenManage }
                                 onMouseLeave = { this.handleCloseManage }
@@ -65,6 +67,7 @@ class PatientHeader extends Component {
                                 noCaret
                                 id="language-switcher-container"
                                 title="Appointments"
+                                
                             >
                                 <LinkContainer exact to="/patient/appointmentList">
                                     <DropdownItem >Pending apppointments</DropdownItem>
@@ -73,9 +76,10 @@ class PatientHeader extends Component {
                                     <DropdownItem> History</DropdownItem>
                                 </LinkContainer>
                                 <LinkContainer exact to="/patient/predefined">
-                                    <DropdownItem >Book predefined appointment</DropdownItem>
+                                    <DropdownItem id="book_predefined_appointment">Book predefined appointment</DropdownItem>
                                 </LinkContainer>                
                             </NavDropdown>
+                            </div>
                         </Nav>
                     </Collapse>
                     <Nav.Link>

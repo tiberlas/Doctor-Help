@@ -17,8 +17,19 @@ public class DrHelpApplicationTests {
 
 	@Test
 	public void shouldNotPass() {
-		assertTrue(true);
+
+		NursePOJO nurse = new NursePOJO();
+		nurse.setFirstName("ANA");
+
+		assertEquals("ANA", nurse.getFirstName());
 	}
 
+	@Test
+	public void shouldPass() {
+		NursePOJO nurse = new NursePOJO();
+		nurse.setFirstName("ANA");
+
+		assertEquals("ANA", nurse.getFirstName());
+	}
 	
 }

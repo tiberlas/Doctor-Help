@@ -163,9 +163,14 @@ public class PatientController {
 			@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date) {
 		
 		AppointmentListDTO retVal = patientService.getHistory(currentUser.getEmail(), date, doctorId, clinicId, procedureTypeId);
+		if (retVal == null ) {
+			return new ResponseEntity<> (retVal, HttpStatus.OK);
+		}
+
 		if (retVal.getAppointmentList() == null) {
 			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
 		}
+		
 		return new ResponseEntity<> (retVal, HttpStatus.OK);
 	}
 	
@@ -173,14 +178,14 @@ public class PatientController {
 	@PreAuthorize("hasAuthority('PATIENT')")	
 	public ResponseEntity<AppointmentListDTO> getPendingAppointments (@PathVariable("dr_id") String doctorId, @PathVariable("proc_type_id") String procedureTypeId, 
 			@PathVariable("clinic_id") String clinicId, @PathVariable("app_date") String date, @PathVariable("appointment_status") String appointmentStatus) {
-		
-		System.out.println("");
-		System.out.println("");
-		System.out.println("    Appointment status is: " + appointmentStatus);
-		System.out.println("    Appointment date is:   " + date);
-		System.out.println("");
-		System.out.println("");
-		
+//		
+//		System.out.println("");
+//		System.out.println("");
+//		System.out.println("    Appointment status is: " + appointmentStatus);
+//		System.out.println("    Appointment date is:   " + date);
+//		System.out.println("");
+//		System.out.println("");
+//		
 		AppointmentListDTO retVal = patientService.getPending(currentUser.getEmail(), date, doctorId, clinicId, procedureTypeId, appointmentStatus);
 		if (retVal.getAppointmentList() == null) {
 			retVal.setAppointmentList(new ArrayList<PatientHistoryDTO> ());
