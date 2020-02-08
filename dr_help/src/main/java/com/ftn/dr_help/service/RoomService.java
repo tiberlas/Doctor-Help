@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ftn.dr_help.comon.DateConverter;
@@ -449,6 +450,7 @@ public class RoomService {
 		return findFirstFreeScheduleFromDate(room, begin);
 	}
 	
+	@Transactional(readOnly = true,  propagation = Propagation.MANDATORY)
 	public String findFirstFreeScheduleFromDate(Long roomId, Calendar begin) {
 		try {
 			RoomPOJO room = repository.getOne(roomId);
@@ -460,6 +462,7 @@ public class RoomService {
 		
 	}
 	
+	@Transactional(readOnly = true,  propagation = Propagation.MANDATORY)
 	public Calendar findFirstFreeScheduleFromDateInRawformat(RoomPOJO room, Calendar begin) {
 		/**
 		 * nadje priv slobodan termin za sobu od trenutka (begin)
@@ -520,6 +523,7 @@ public class RoomService {
 	
 	}
 	
+	@Transactional(readOnly = true, propagation = Propagation.MANDATORY)
 	public String findFirstFreeScheduleFromDate(RoomPOJO room, Calendar begin) {
 			
 		Calendar finded = findFirstFreeScheduleFromDateInRawformat(room, begin);

@@ -2,7 +2,6 @@ package com.ftn.dr_help.controller;
 
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +23,12 @@ import com.ftn.dr_help.comon.CurrentUser;
 import com.ftn.dr_help.comon.Mail;
 import com.ftn.dr_help.dto.AddAppointmentDTO;
 import com.ftn.dr_help.dto.AppointmentDeleteDTO;
-import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.AppointmentForSchedulingDTO;
 import com.ftn.dr_help.dto.AppointmentInternalBlessedDTO;
+import com.ftn.dr_help.dto.AppointmentListDTO;
 import com.ftn.dr_help.dto.DoctorAppointmentDTO;
 import com.ftn.dr_help.dto.DoctorRequestAppointmentDTO;
 import com.ftn.dr_help.dto.ExaminationReportDTO;
-import com.ftn.dr_help.dto.PatientHistoryDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.dto.nurse.NurseAppointmentDTO;
 import com.ftn.dr_help.model.pojo.AppointmentPOJO;
@@ -284,18 +282,22 @@ public class AppointmentController {
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> checkAppointemnt(@RequestBody AppointmentForSchedulingDTO appointment) {
 		
-		String adminMeil = currentUser.getEmail();
-		AppointmentInternalBlessedDTO response = blesingService.blessing(appointment, adminMeil);
-		
-		switch(response.getBlessingLvl()) {
-			case BLESSED:
-				return new ResponseEntity<>("OK", HttpStatus.ACCEPTED);
-			case BAD_DOCTOR:
-				return new ResponseEntity<>("DOCTOR#"+response.getMessage() , HttpStatus.NOT_ACCEPTABLE); //406
-			case BAD_DATE:
-				return new ResponseEntity<>("DATE#"+response.getMessage(), HttpStatus.NOT_ACCEPTABLE); //406
-			default:
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		try {
+			String adminMeil = currentUser.getEmail();
+			AppointmentInternalBlessedDTO response = blesingService.blessing(appointment, adminMeil);
+			
+			switch(response.getBlessingLvl()) {
+				case BLESSED:
+					return new ResponseEntity<>("OK", HttpStatus.ACCEPTED);
+				case BAD_DATE:
+					return new ResponseEntity<>("DATE#"+response.getMessage(), HttpStatus.NOT_ACCEPTABLE); //406
+				default:
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				case BAD_DOCTOR:
+					return new ResponseEntity<>("DOCTOR#"+response.getMessage() , HttpStatus.NOT_ACCEPTABLE); //406
+			}
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
