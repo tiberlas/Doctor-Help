@@ -6,4 +6,14 @@ public class ClinicConstants {
 	
 	public static final String UNFILTERED = "unfiltered";
 	public static final String PROCEDURE_TYPE_FILTER = "General practice";
+	
+	
+	public static final String INTEGRATION_PROCEDURE_TYPE_FILTER = "psiho analiza";
+	public static final String INTEGRATION_CITY_FILTER = "Novi Sad";
+	public static final String INTEGRATION_ADDRESS_FILTER = "7A Bulevar despota Stefana";
+	public static final String INTEGRATION_MINIMAL_RATING = "3";
+	public static final String INTEGRATION_STATE_FILTER = "Serbia";
+	
+	public static final Integer INTEGRATION_CLINIC_NUMBERS = 1;
+	
 }
