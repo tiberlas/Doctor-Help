@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +31,18 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.ftn.dr_help.constants.ClinicConstants;
 import com.ftn.dr_help.constants.LoginConstants;
-import com.ftn.dr_help.dto.ClinicListingDTO;
-import com.ftn.dr_help.dto.ClinicPreviewDTO;
+import com.ftn.dr_help.dto.DoctorListingDTO;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
-import com.ftn.dr_help.service.ClinicService;
-import com.ftn.dr_help.service.ProcedureTypeService;
+import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.repository.ClinicRepository;
+import com.ftn.dr_help.service.DoctorService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
-public class ClinicControllerListingTest {
+public class DoctorControllerListingTest {
+
 
 	private MediaType contentType = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
@@ -63,14 +65,15 @@ public class ClinicControllerListingTest {
 	                .build();
 	    }
 	
-	// JWT token
 	private String accessToken;
 	
-	@MockBean
-	private ClinicService clinicService;
 	
 	@MockBean
-	private ProcedureTypeService procedureTypeService;
+	private DoctorService doctorService;
+	
+	
+	@MockBean 
+	private ClinicRepository clinicRepository;
 	
 	
 	@Before
@@ -80,50 +83,33 @@ public class ClinicControllerListingTest {
 						new LoginRequestDTO(LoginConstants.PATIENT_USERNAME, LoginConstants.PATIENT_PASSWORD), 
 						LoginResponseDTO.class);
 		accessToken = "Bearer " + responseEntity.getBody().getJwtToken();
+	
 	}
 	
+	
 	@Test
-	public void getClinicListFilteredByProcedureType() throws Exception {
+	public void getDoctorListForAppointmentRequest() throws Exception{
 		
+		ClinicPOJO fakeClinic = new ClinicPOJO();
+		fakeClinic.setName("My fake clinic");
+		fakeClinic.setAddress("My fake address");
 		
-		List<String> mockProcedureTypes = new ArrayList<String>();
-		mockProcedureTypes.add("Nikolina psiho-analiza");
-		mockProcedureTypes.add("Nikolina operacija");
+		List<DoctorListingDTO> doctors = new ArrayList<>();
+		List<String> terms = new ArrayList<String>();
+		doctors.add(new DoctorListingDTO("Pera", "Peric", "2", 1L, terms));
 		
-		List<ClinicPreviewDTO> mockClinicDTO = new ArrayList<>();
-		mockClinicDTO.add(new ClinicPreviewDTO(1L, "Nikolina bolnica", 
-				"Nikolina adresa u lil twat",
-				"Nikolin grad",
-				"Nikolina drzava",
-				"Nikolina ocena",
-				"Nikolina cena"));
+		Mockito.when(this.clinicRepository.getOne(Mockito.any(Long.class))).thenReturn(fakeClinic);
+		Mockito.when(this.doctorService.filterByClinicDateProcedureType(Mockito.any(Long.class), Mockito.any(String.class), Mockito.any(String.class)))
+		.thenReturn(doctors);
 		
-		ClinicListingDTO clinicList = new ClinicListingDTO(mockClinicDTO, 
-				mockProcedureTypes, ClinicConstants.UNFILTERED, ClinicConstants.UNFILTERED);
-		clinicList.setAddressString("Nikolina adresa");
-		clinicList.setCityString("Nikolin grad");
-		clinicList.setStateString("Nikolino stanje");
-		clinicList.setProcedureTypeString(ClinicConstants.PROCEDURE_TYPE_FILTER);
-		
-		Mockito.when(this.procedureTypeService.getProcedureTypes()).thenReturn(mockProcedureTypes);
-		Mockito.when(this.clinicService.doOtherFilters(Mockito.any(ClinicListingDTO.class), 
-				Mockito.any(String.class), 
-				Mockito.any(String.class), 
-				Mockito.any(String.class), 
-				Mockito.any(String.class), 
-				Mockito.any(String.class), 
-				Mockito.any(String.class), 
-				Mockito.any(String.class)))
-				.thenReturn(clinicList);
-		
-		mockMvc.perform(
-				get("/api/clinics/listing/proc_type="+ClinicConstants.PROCEDURE_TYPE_FILTER+"/date="+ClinicConstants.UNFILTERED +
-						"/stat="+ClinicConstants.UNFILTERED+"/cit="+ClinicConstants.UNFILTERED+"/adr="+ClinicConstants.UNFILTERED+"/min_rat="+ClinicConstants.UNFILTERED
-						+ "/max_rat="+ClinicConstants.UNFILTERED+"/min_price="+ClinicConstants.UNFILTERED + "/max_price="+ClinicConstants.UNFILTERED)
-						.contentType(contentType)
-						.header("Authorization", accessToken))
-						.andExpect(jsonPath("$.clinicList").isArray())
-						.andExpect(jsonPath("$.procedureTypeString").value(ClinicConstants.PROCEDURE_TYPE_FILTER))
-						.andExpect(status().isOk());
+		mockMvc.perform(get("/api/doctors/listing/clinic=1&appointment="+ClinicConstants.MOCK_PROCEDURE_TYPE_NAME+
+				"&date="+ClinicConstants.MOCK_SEARCH_DATE)
+				.contentType(contentType)
+				.header("Authorization", accessToken))
+				.andExpect(jsonPath("$").isArray())
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$.[*].firstName").value("Pera"))
+				.andExpect(status().isOk());
 	}
+	
 }

@@ -1,4 +1,4 @@
-package com.ftn.dr_help.controller;
+package com.ftn.dr_help.integration;
 
 import javax.annotation.PostConstruct;
 

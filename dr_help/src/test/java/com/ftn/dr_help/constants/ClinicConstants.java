@@ -16,4 +16,7 @@ public class ClinicConstants {
 	
 	public static final Integer INTEGRATION_CLINIC_NUMBERS = 1;
 	
+	public static final String MOCK_PROCEDURE_TYPE_NAME = "opsta_praksa";
+	public static final String MOCK_SEARCH_DATE = "2020-02-12";
+	
 }
