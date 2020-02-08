@@ -13,7 +13,7 @@ As a developer, here's what you'll need to install the app, and how to run it.
 
 * [Java 8](http://www.dropwizard.io/1.0.2/docs/) or larger
 * [Maven](https://maven.apache.org/)
-* [pgAdmin4] (https://www.pgadmin.org/)
+* [pgAdmin4](https://www.pgadmin.org/)
 * [npm](https://www.npmjs.com/) - Used to start up the react
 * your preferred IDE.
 
