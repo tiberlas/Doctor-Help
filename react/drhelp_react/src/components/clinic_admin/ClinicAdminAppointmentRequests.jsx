@@ -58,7 +58,7 @@ class ClinicAdminAppointmentRequests extends Component {
 				<Redirect extact to={`/request/appointment/${this.state.id}`} />
 			}
 					<br />
-					<h3>Clinic {this.state.name}</h3>
+					<h3 id="clinic_name">Clinic {this.state.name}</h3>
 					<h4>List of requested appointments</h4>
 					<br />
 					<Table class="table table-hover ">
@@ -85,6 +85,7 @@ class ClinicAdminAppointmentRequests extends Component {
 							{this.state.appointments.map((c) => (
 								<TableRow 
 									className={++i % 2 ? `table-dark` : ``}
+									id={'table_row_'+c.id}
 									onClick={(id) => this.handleRedirectPage(c.id)}
 								>
 									<RequestedAppointmentItem

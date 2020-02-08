@@ -781,8 +781,8 @@ public class PatientService {
 		p.setHealthRecord(healthRecord);
 		
 		patientRepository.save(p);
-		healthRecord.setPatient(p);
-		healthRecordRepository.save(healthRecord);
+//		healthRecord.setPatient(p);
+//		healthRecordRepository.save(healthRecord);
 		
 		System.out.println("Health record created.");
 		return p;

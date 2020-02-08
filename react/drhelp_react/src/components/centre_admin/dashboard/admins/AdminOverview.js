@@ -1,12 +1,8 @@
 import React, { Fragment, Component } from 'react'
 import axios from 'axios'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Button from 'react-bootstrap/Button'
 import AddAdminModal from './AddAdminModal';
+import '../../../../customRadioButton.css';
 
 const sortTypes = {
     name_up: {
@@ -84,9 +80,9 @@ export class AdminOverview extends Component {
 
     renderArrowName = () => {
         if(this.state.currentSort === 'name_up') {
-            return '\u2191'
+            return <i class="fas fa-long-arrow-alt-up fa-lg"> </i>
         } else if(this.state.currentSort === 'name_down') {
-            return '\u2193'
+            return <i class="fas fa-long-arrow-alt-down fa-lg"> </i>
         } else {
             return ''
         }
@@ -119,78 +115,86 @@ export class AdminOverview extends Component {
         let i = 0
         return (
             <Fragment> 
+                <br/>
             <div class="row d-flex justify-content-center">
-                <div class='col-md-10'>
+                <div class='col-md-3'>
+                    <h3> Administrators.</h3>
+                    </div>
+                </div>
+            <div class="row d-flex justify-content-center">
+                <div class='col-md-11'>
                <div >
-                <Table class="table table-hover">
-                    <TableHead class="table-active">
-                        <TableRow class="table-active" style={{height: "35px"}}>
-                            <TableCell class="text-success cursor-pointer" onClick={() => this.onSortChange('email')}>Email{this.renderArrowName()}</TableCell>
-                            <TableCell class="text-success">First name</TableCell>
-                            {this.state.adminType === 'CLINIC' && <TableCell colSpan="6"></TableCell>}
-                            <TableCell class="text-success">Last name</TableCell>
-                            {this.state.adminType === 'CLINIC' && <TableCell colSpan="6"></TableCell>}
-                            {this.state.adminType === 'CLINIC' && <TableCell class="text-success">Clinic</TableCell>}
+                   <br/>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-success cursor-pointer" onClick={() => this.onSortChange('email')}>{this.renderArrowName()} <i class="fa fa-envelope-open"></i> Email</th>
+                            <th class="text-success"><i class="fas fa-user-circle"></i> First name</th>
+                            <th class="text-success"><i class="fas fa-user-circle"></i> Last name</th>
+                            {this.state.adminType === 'CLINIC' && <th class="text-success"><i class="fas fa-clinic-medical"></i> Clinic</th>}
+                            <th colSpan = "2">
+                            <ul>
+								<li> 
                             
-                            <TableCell> 
-                            <label>
                             <input required
                                 type="radio" 
                                 name="adminType"
                                 value="CENTRE"
+                                id="customRadio1"
                                 checked={this.state.adminType === "CENTRE"}
                                 onChange={this.handleCheck}
-                            /> <span class="text text-white"> Centre admins </span>
-                        </label> &nbsp;
-                        <label>
+                            />
+                        <label for="customRadio1" class="text-white"> Centre admins
+                        </label>
+                        <div class="check"></div>
+                        </li> &nbsp;
+                        <li> 
+                        
                             <input required
                                 type="radio" 
                                 name="adminType"
                                 value="CLINIC"
+                                id="customRadio2"
                                 checked={this.state.adminType === "CLINIC"}
                                 onChange={this.handleCheck}
-                            /> 
-                        </label> <span class="text text-white"> Clinic admins </span>
+                            />
+                            <label for="customRadio2" class="text-white">   Clinic admins
+                        </label>
+                        <div class="check"></div>
+                            </li>
+                            </ul>
+                            </th>
 
-                            </TableCell>
-
-                            <TableCell class="text-success"><Button class="btn btn-success" onClick={this.toggle}>Add</Button></TableCell>
-                        </TableRow>
-                    </TableHead>
-                </Table>
-                <div style={{ overflow: 'auto', height: '350px' }}>
-                <Table style={{tableLayout: 'fixed'}}>
-                    <TableBody >
+                            <th class="text-success"><button button class='btn btn-success rounded-circle float-right mr-5'  onClick={this.toggle}><i class="fas fa-plus"></i></button></th>
+                        </tr>
+                    </thead>
+                    <tbody >
                         {this.state.adminType === 'CENTRE' && this.state.centreAdmins.sort(sortTypes[this.state.currentSort].fn).map (c => (
-                            <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <TableCell colspan="1" class='text text-white'>&nbsp;{c.email}</TableCell>
-                                <TableCell class='text text-white'>&nbsp;{c.firstName}</TableCell>
-                                <TableCell class='text text-white'>&nbsp;{c.lastName}</TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              
-                            </TableRow>
+                            <tr className={(++i)%2? `table-dark` : ``} >
+                                <td colspan="1" class='text text-white'>&nbsp;{c.email}</td>
+                                <td class='text text-white'>&nbsp;{c.firstName}</td>
+                                <td class='text text-white'>&nbsp;{c.lastName}</td>
+                              <td></td>
+                              <td/>
+                              <td></td>
+                            </tr>
                         ))  }
 
                         {this.state.adminType === 'CLINIC' && this.state.clinicAdmins.sort(sortTypes[this.state.currentSort].fn).map (c => (
-                            <TableRow className={(++i)%2? `table-dark` : ``} >
-                                <TableCell colspan="1" class='text text-white'>&nbsp;{c.email}</TableCell>
-                                <TableCell class='text text-white'>&nbsp;{c.firstName}</TableCell>
-                                <TableCell  class='text text-white'>&nbsp;{c.lastName}</TableCell>
-                              <TableCell  class='text text-white'>&nbsp;{c.clinicName}</TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                            </TableRow>
+                            <tr className={(++i)%2? `table-dark` : ``} >
+                                <td colspan="1" class='text text-white'>&nbsp;{c.email}</td>
+                                <td class='text text-white'>&nbsp;{c.firstName}</td>
+                                <td  class='text text-white'>&nbsp;{c.lastName}</td>
+                              <td  class='text text-white'>&nbsp;{c.clinicName}</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
                         ))  }
 
-                    </TableBody>
+                    </tbody>
                     
-                </Table>
+                </table>
                 </div>
                 </div>
 
@@ -199,7 +203,7 @@ export class AdminOverview extends Component {
                                     update={this.update}/>}
                 
                </div>
-               </div>
+               
             </Fragment>)
     }
 }

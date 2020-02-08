@@ -278,5 +278,47 @@ public class RoomServiceTest {
 			assertTrue(false);
 		}
 	}
+	
+	@Test
+	public void testNextDay3() {
+		try {
+			Calendar next = Calendar.getInstance();
+			next.set(2020, 0, 19, 1, 32, 0);
+			next.set(Calendar.MILLISECOND, 0);
+			schedules.add(next.getTime());
+			
+			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
+			
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 16, 22, 25, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			String actual = roomService.findFirstFreeScheduleFromDate(room, begin);
+			String expected = "01/17/2020 00:00 AM";
+			
+			assertEquals(expected, actual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void testBefore() {
+		try {
+
+			Mockito.when(this.appointmentRepository.findScheduledDatesOfRoom(101l)).thenReturn(schedules);
+			
+			Calendar begin = Calendar.getInstance();
+			begin.set(2020, 0, 2, 22, 25, 0);
+			begin.set(Calendar.MILLISECOND, 0);
+			String actual = roomService.findFirstFreeScheduleFromDate(room, begin);
+			String expected = "01/02/2020 10:25 PM";
+			
+			assertEquals(expected, actual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+	}
 
 }

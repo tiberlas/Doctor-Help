@@ -212,8 +212,8 @@ class ScheduleAppointment extends Component {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={() => {this.props.onHide(this.state.success)}}>Close</button>
-                        <input type="submit" class="btn btn-success" value="Bless" disabled={this.state.success}/>
+                        <button id="close_dialog" type="button" class="btn btn-secondary" data-dismiss="modal" onClick={() => {this.props.onHide(this.state.success)}}>Close</button>
+                        <input id="bless_appointment" type="submit" class="btn btn-success" value="Bless" disabled={this.state.success}/>
                     </Modal.Footer>
                 </form>
             </Modal>

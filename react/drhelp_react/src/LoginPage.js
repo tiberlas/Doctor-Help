@@ -213,7 +213,7 @@ class LoginPage extends React.Component {
 							</div>
 							<div class="form-group row">
 								<div class='col-md text-left'>
-									<input type="submit" value="Sign in" class="btn btn-outline-success" />
+									<input type="submit" id="tb_submit" value="Sign in" class="btn btn-outline-success" />
 								</div>
 								<div class='col-md text-right'>
 									<Link to="/register">

@@ -12,10 +12,10 @@ import com.ftn.dr_help.model.pojo.NursePOJO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class DrHelpApplicationTests {
+public class DrHelpApplicationTests {
 
 	@Test
-	void shouldNotPass() {
+	public void shouldNotPass() {
 		NursePOJO nurse = new NursePOJO();
 		nurse.setFirstName("ANA");
 
@@ -23,7 +23,7 @@ class DrHelpApplicationTests {
 	}
 
 	@Test
-	void shouldPass() {
+	public void shouldPass() {
 		NursePOJO nurse = new NursePOJO();
 		nurse.setFirstName("ANA");
 

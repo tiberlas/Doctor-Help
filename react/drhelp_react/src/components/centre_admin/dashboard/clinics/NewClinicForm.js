@@ -109,7 +109,7 @@ class NewClinicForm extends React.Component {
                     <Form onSubmit = {this.handleSubmit}>
                     <div className={`form-group ${(this.state.errorName || this.state.errorClinicName)? 'has-danger': ''}`}>
                     <Form.Group controlId="formClinicName">         
-                        <Form.Control type="text" name = "clinicName" placeholder="Enter clinic name" onChange = {this.handleChange} className={`form-control ${(this.state.errorName || this.state.errorClinicName) ? 'is-invalid': 'is-valid'}`}/>
+                        <Form.Control type="text" name = "clinicName" placeholder="Clinic name" onChange = {this.handleChange} className={`form-control ${(this.state.errorName || this.state.errorClinicName) ? 'is-invalid': 'is-valid'}`}/>
                         {this.state.errorClinicName ? <div class="invalid-feedback">Clinic with that name already exists. </div>
                         : <Form.Text className="text-muted">
                         Clinic has to have a sensible name.

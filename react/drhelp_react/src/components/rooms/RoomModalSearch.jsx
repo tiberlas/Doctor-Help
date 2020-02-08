@@ -252,6 +252,7 @@ class RoomModalSearch extends Component {
 								<input
 									type="submit"
 									value="Search"
+									id="submit_select"
 									class="btn btn-success"
 									data-dismiss="modal"
 									disabled={
@@ -263,6 +264,7 @@ class RoomModalSearch extends Component {
 							</div>
 							<div class="col-md text-right">
 								<button
+									id="submit_search"
 									type="button"
 									class="btn btn-secondary"
 									data-dismiss="modal"

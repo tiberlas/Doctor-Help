@@ -88,6 +88,7 @@ public class AppointmentPOJO implements Serializable{
 	private boolean deleted;
 	
 	@Version
+	@Column(name="version", unique=false, nullable=false)
 	private Long version;
 	
 	public AppointmentPOJO() {
