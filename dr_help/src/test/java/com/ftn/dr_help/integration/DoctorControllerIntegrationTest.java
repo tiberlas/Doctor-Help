@@ -26,11 +26,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.ftn.dr_help.constants.UserConstants;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
-
-import constants.AppointmentConstants;
-import constants.UserConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
@@ -69,7 +67,7 @@ public class DoctorControllerIntegrationTest {
 	}
 	
 	@Test
-	public void test() {
+	public void testOpstaPraksa() {
 		try {
 			
 			this.mockMvc.perform(get("/api/doctors/all/specialization="+1)
@@ -80,6 +78,25 @@ public class DoctorControllerIntegrationTest {
 					.isOk())
 			.andExpect(content().contentType(contentType))
 	        .andExpect(jsonPath("$", hasSize(2)));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testOperacija() {
+		try {
+			
+			this.mockMvc.perform(get("/api/doctors/all/specialization="+7)
+					.contentType(contentType)
+					.header("Authorization", accessToken))
+			.andDo(print())
+			.andExpect(status()
+					.isOk())
+			.andExpect(content().contentType(contentType))
+	        .andExpect(jsonPath("$", hasSize(4)));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -80,7 +80,6 @@ public class CalculateFirstFreeSchedule {
 		Calendar begin = Calendar.getInstance();
 		begin = setWorkingDay(doctor, start, absenceDates);
 		
-		
 		//nadje trajanje za schedule
 		Calendar duration = Calendar.getInstance();
 		duration.setTime(doctor.getDuration().getTime());

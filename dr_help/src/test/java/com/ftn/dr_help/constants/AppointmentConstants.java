@@ -34,5 +34,4 @@ public class AppointmentConstants {
 	
 	public static final String MANUAL_RATING = "2";
 	
-	
 }

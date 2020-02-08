@@ -181,19 +181,18 @@ insert into room(name, number, deleted, clinic_id, proceduras_types_id)
 
 	
 	--operacije 
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-19 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-19 12:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', true);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-18 17:00', 1, 1, 6, 7, 8, 4, 7, 'APPROVED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-21 17:00', 2, 2, 9, 7, 8, 5, 7, 'REQUESTED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-18 13:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
-insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted)
-	values('2020-01-21 08:00', 1, 1, 6, 7, 8, 4, 7, 'REQUESTED', false);
-			
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted, version)
+	values('2020-01-19 17:00', 1, 1, 6, 7, 8, null, 7, 'APPROVED', false, 0);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted, version)
+	values('2020-01-19 12:00', 1, 1, 6, 7, 8, null, 7, 'APPROVED', true, 0);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted, version)
+	values('2020-01-18 17:00', 1, 1, 6, 7, 8, null, 7, 'APPROVED', false, 0);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted, version)
+	values('2020-01-21 17:00', 2, 2, 9, 7, 8, null, 7, 'REQUESTED', false, 0);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted, version)
+	values('2020-01-18 13:00', 1, 1, 6, 7, 8, null, 7, 'REQUESTED', false, 0);
+insert into operations(date, patient_id, requested_doctor_id, first_doctor_id, second_doctor_id, third_doctor_id, room_id, operation_type_id, status, deleted, version)
+	values('2020-01-21 08:00', 1, 1, 6, 7, 8, null, 7, 'REQUESTED', false, 0);		
 	
 	
 insert into healthrecord (blood_type, diopter, height, weight)
@@ -284,15 +283,15 @@ values ('2020-02-03 09:30:00', 20, 'APPROVED', 2, null, 1, 4, 2, 2, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)
 values ('2020-02-03 10:30:00', 0, 'APPROVED', 1, null, 1, 1, 2, 2, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)
-values ('2020-02-04 15:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false, 0);
+values ('2020-02-04 15:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, null, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)
-values ('2020-02-04 08:00:00', 0, 'REQUESTED', 1, null, 1, 3, 2, 2, false, 0);
+values ('2020-02-04 08:00:00', 0, 'REQUESTED', 1, null, 1, 3, 2, null, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)
-values ('2020-02-04 09:00:00', 0, 'REQUESTED', 2, null, 1, 4, 2, 2, false, 0);
+values ('2020-02-04 09:00:00', 0, 'REQUESTED', 2, null, 1, 4, 2, null, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)
-values ('2020-02-05 09:30:00', 20, 'REQUESTED', 1, null, 1, 3, 2, 2, false, 0);
+values ('2020-02-05 09:30:00', 20, 'REQUESTED', 1, null, 1, 3, 2, null, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)
-values ('2020-1-22 10:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, 2, false, 0);
+values ('2020-1-22 10:30:00', 0, 'REQUESTED', 2, null, 1, 3, 2, null, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)
 values ('2020-03-28 10:00:00', 1, 'AVAILABLE', 1, null, 1, null, 1, 1, false, 0);
 insert into appointments (date, discount, status, doctor_id, examination_report_id, nurse_id, patient_id, procedure_type_id, room_id, deleted, version)

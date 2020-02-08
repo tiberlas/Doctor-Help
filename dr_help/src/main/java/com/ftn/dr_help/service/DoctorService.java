@@ -98,8 +98,12 @@ public class DoctorService {
 	
 	@Autowired
 	private LeaveRequestRepository leaveRequestRepository;
+	
 	@Autowired 
 	private LeaveRequestService leaveRequestsService;
+	
+	@Autowired
+	private NurseService nurseService;
 	
 	public List<DoctorProfileDTO> findAll(Long clinicID) {
 		if(clinicID == null) {
@@ -582,6 +586,33 @@ public class DoctorService {
 		} catch(Exception e) {
 			System.out.println("ZASTO");
 			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<MedicalStaffNameDTO> getSpecializedDoctorsWithoutNurse(Long procedureTypeId) {
+		try {
+			List<DoctorPOJO> finded = repository.findAllDoctorsWihtSpetialization(procedureTypeId);
+			List<MedicalStaffNameDTO> doctors = new ArrayList<>();
+			
+			if(finded == null) {
+				return doctors;
+			}
+			
+			for(DoctorPOJO doctor : finded) {
+				if(nurseService.hasANurseThatWorks(workSchedule.fromDoctor(doctor), doctor.getClinic().getId())) {
+					doctors.add(new MedicalStaffNameDTO(
+								doctor.getId(),
+								doctor.getFirstName(),
+								doctor.getLastName(),
+								doctor.getEmail()
+							));
+				}
+			}
+			
+			return doctors;
+			
+		} catch(Exception e) {
 			return null;
 		}
 	}

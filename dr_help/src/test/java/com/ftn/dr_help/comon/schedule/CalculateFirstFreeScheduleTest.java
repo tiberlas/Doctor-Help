@@ -309,7 +309,6 @@ public class CalculateFirstFreeScheduleTest {
 		day.set(2020, 0, 7, 15, 0, 0);
 		dates.add(day.getTime());
 		
-		
 		Calendar finded = calculate.findFirstScheduleForDoctor(adapter.fromDoctor(doctor), begin, dates, absence);
 
 		Calendar expected = Calendar.getInstance();

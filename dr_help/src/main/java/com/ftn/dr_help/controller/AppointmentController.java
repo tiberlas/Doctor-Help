@@ -277,18 +277,22 @@ public class AppointmentController {
 	@PreAuthorize("hasAuthority('CLINICAL_ADMINISTRATOR')")
 	public ResponseEntity<String> checkAppointemnt(@RequestBody AppointmentForSchedulingDTO appointment) {
 		
-		String adminMeil = currentUser.getEmail();
-		AppointmentInternalBlessedDTO response = blesingService.blessing(appointment, adminMeil);
-		
-		switch(response.getBlessingLvl()) {
-			case BLESSED:
-				return new ResponseEntity<>("OK", HttpStatus.ACCEPTED);
-			case BAD_DOCTOR:
-				return new ResponseEntity<>("DOCTOR#"+response.getMessage() , HttpStatus.NOT_ACCEPTABLE); //406
-			case BAD_DATE:
-				return new ResponseEntity<>("DATE#"+response.getMessage(), HttpStatus.NOT_ACCEPTABLE); //406
-			default:
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		try {
+			String adminMeil = currentUser.getEmail();
+			AppointmentInternalBlessedDTO response = blesingService.blessing(appointment, adminMeil);
+			
+			switch(response.getBlessingLvl()) {
+				case BLESSED:
+					return new ResponseEntity<>("OK", HttpStatus.ACCEPTED);
+				case BAD_DATE:
+					return new ResponseEntity<>("DATE#"+response.getMessage(), HttpStatus.NOT_ACCEPTABLE); //406
+				default:
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				case BAD_DOCTOR:
+					return new ResponseEntity<>("DOCTOR#"+response.getMessage() , HttpStatus.NOT_ACCEPTABLE); //406
+			}
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

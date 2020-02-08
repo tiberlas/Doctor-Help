@@ -92,6 +92,7 @@ class ClinicAdminAppointmentRequests extends Component {
 								<TableRow 
 								 style={{cursor: 'pointer'}}
 									className={++i % 2 ? `table-dark` : ``}
+									id={'table_row_'+c.id}
 									onClick={(id) => this.handleRedirectPage(c.id)}
 								>
 									<RequestedAppointmentItem

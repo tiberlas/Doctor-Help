@@ -21,8 +21,10 @@ import com.ftn.dr_help.dto.UserDetailDTO;
 import com.ftn.dr_help.dto.business_hours.BusinessDayHoursDTO;
 import com.ftn.dr_help.model.convertor.ConcreteUserDetailInterface;
 import com.ftn.dr_help.model.convertor.WorkScheduleAdapter;
+import com.ftn.dr_help.model.enums.Shift;
 import com.ftn.dr_help.model.pojo.ClinicAdministratorPOJO;
 import com.ftn.dr_help.model.pojo.ClinicPOJO;
+import com.ftn.dr_help.model.pojo.MedicalStaffWorkSchedularPOJO;
 import com.ftn.dr_help.model.pojo.NursePOJO;
 import com.ftn.dr_help.repository.ClinicAdministratorRepository;
 import com.ftn.dr_help.repository.NurseRepository;
@@ -419,5 +421,38 @@ public class NurseService {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+	
+	public boolean hasANurseThatWorks(MedicalStaffWorkSchedularPOJO doctorsSchedule, Long clinicId) {
+		List<NursePOJO> nurses = repository.findAllByClinic_id(clinicId);
+		
+		MedicalStaffWorkSchedularPOJO nurseSchedule = null;
+		for(NursePOJO nurse : nurses) {
+			nurseSchedule = workSchedule.fromNurse(nurse, null);
+			
+			if(!nurseSchedule.getMonday().equals(Shift.NONE) && doctorsSchedule.getMonday().equals(nurseSchedule.getMonday())) {
+				return true;
+			}
+			if(!nurseSchedule.getTuesday().equals(Shift.NONE) && doctorsSchedule.getTuesday().equals(nurseSchedule.getTuesday())) {
+				return true;
+			}
+			if(!nurseSchedule.getWednesday().equals(Shift.NONE) && doctorsSchedule.getWednesday().equals(nurseSchedule.getWednesday())) {
+				return true;
+			}
+			if(!nurseSchedule.getThursday().equals(Shift.NONE) && doctorsSchedule.getThursday().equals(nurseSchedule.getThursday())) {
+				return true;
+			}
+			if(!nurseSchedule.getFriday().equals( Shift.NONE) && doctorsSchedule.getFriday().equals(nurseSchedule.getFriday())) {
+				return true;
+			}
+			if(!nurseSchedule.getSaturday().equals(Shift.NONE) && doctorsSchedule.getSaturday().equals(nurseSchedule.getSaturday())) {
+				return true;
+			}
+			if(!nurseSchedule.getSunday().equals(Shift.NONE) && doctorsSchedule.getSunday().equals(nurseSchedule.getSunday())) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

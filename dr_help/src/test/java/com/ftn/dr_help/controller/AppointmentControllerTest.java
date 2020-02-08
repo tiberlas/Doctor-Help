@@ -33,12 +33,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.ftn.dr_help.constants.AppointmentConstants;
+import com.ftn.dr_help.constants.UserConstants;
 import com.ftn.dr_help.dto.LoginRequestDTO;
 import com.ftn.dr_help.dto.LoginResponseDTO;
 import com.ftn.dr_help.dto.RequestingAppointmentDTO;
 import com.ftn.dr_help.service.AppointmentService;
-
-import constants.UserConstants;
 
 
 @RunWith(SpringRunner.class)
@@ -164,8 +163,7 @@ public class AppointmentControllerTest {
 			.andExpect(status()
 					.isOk())
 			.andExpect(content().contentType(contentType))
-
-            .andExpect(jsonPath("$.id").value(AppointmentConstants.APPOINTMENT_ID.intValue()));
+			.andExpect(jsonPath("$.id").value(AppointmentConstants.APPOINTMENT_ID.intValue()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

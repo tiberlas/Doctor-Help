@@ -20,6 +20,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ftn.dr_help.model.enums.AppointmentStateEnum;
@@ -303,6 +307,7 @@ public class AppointmentRepositoryTest {
 		
 		assertEquals(before.size()-1, after.size());
 	}
+
 
 	@Test
 	@Transactional

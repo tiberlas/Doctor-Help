@@ -1,5 +1,9 @@
 package com.ftn.dr_help.repository;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -10,21 +14,42 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ftn.dr_help.model.pojo.ProceduresTypePOJO;
+import com.ftn.dr_help.model.pojo.RoomPOJO;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ProcedureTypeRepositoryTest {
 
 	@Autowired
-	private TestEntityManager entityManager;
+	private ProcedureTypeRepository procedureTypeRepository;
 	
 	@Autowired
-	private ProcedureTypeRepository procedureTypeRepository;
-
-	@Before
-	public void setUpe () {}
+	private TestEntityManager entityManager;
 	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testGetAll() {
+		List<String> before;
+		List<String> after;
+		
+		before = procedureTypeRepository.getProcedureTypes();
+		
+		ProceduresTypePOJO procedure = procedureTypeRepository.getOne(2l);
+		procedure.setDeleted(true);
+		entityManager.merge(procedure);
+		
+		after = procedureTypeRepository.getProcedureTypes();
+		
+		assertEquals(before.size()-1, after.size());
+	}
+
 	@Test
 	public void testGetPrice () {
 		
@@ -37,18 +62,5 @@ public class ProcedureTypeRepositoryTest {
 		assertEquals (null, actualValue3);
 		
 	}
-	
-	@Test
-	public void testGetProcedureTypes () {
-		List<String> actualTypes1 = procedureTypeRepository.getProcedureTypes();
-
-//		General exam
-//		Hearing exam
-//		Orthopetic exam
-//		Psychotherapy
-
-		assertEquals (4, actualTypes1.size());
-	}
-	
 	
 }

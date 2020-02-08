@@ -67,7 +67,6 @@ public class NiceScheduleBeginning {
 			begin.set(Calendar.MINUTE, 0);
 			begin.set(Calendar.SECOND, 0);
 			begin.set(Calendar.MILLISECOND, 0);
-
 			
 			switch(shift) {
 			case FIRST:

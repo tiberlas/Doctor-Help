@@ -244,6 +244,6 @@ INSERT INTO leave_requests (first_day,last_day,leave_status,leave_type,request_n
 ;
 
 
-INSERT INTO operations (date,deleted,status,first_doctor_id,operation_type_id,patient_id,requested_doctor_id,room_id,second_doctor_id,third_doctor_id) VALUES 
-('2020-02-14 09:00:00.000',false,'REQUESTED',NULL,8,1,2,NULL,NULL,NULL)
+INSERT INTO operations (date,deleted,status,first_doctor_id,operation_type_id,patient_id,requested_doctor_id,room_id,second_doctor_id,third_doctor_id, version) VALUES 
+('2020-02-14 09:00:00.000',false,'REQUESTED',NULL,8,1,2,NULL,NULL,NULL, 0)
 ;
