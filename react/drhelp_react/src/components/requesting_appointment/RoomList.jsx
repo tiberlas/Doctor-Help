@@ -258,6 +258,7 @@ class RoomList extends Component {
 								<TableCell class="text-success">
 									<Button
 										class="btn btn-success"
+										id="all_rooms"
 										onClick={this.handleShowAll}
 									>
 										show all
@@ -266,6 +267,7 @@ class RoomList extends Component {
 								<TableCell>
 									<Button
 										data-testid="searchButton"
+										id="search_rooms"
 										onClick={this.handleSearchClick}
 									>
 										search

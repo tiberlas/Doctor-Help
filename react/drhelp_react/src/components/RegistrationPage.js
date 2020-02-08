@@ -1,6 +1,7 @@
 import React from 'react';
 import FormControl from 'react-bootstrap/FormControl';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 
 class RegistrationPage extends React.Component {
 
@@ -19,7 +20,8 @@ class RegistrationPage extends React.Component {
 			town_length: true, 
 			country_lenght: true, 
 			phone_length: true, 
-			valid_date: true
+			valid_date: true, 
+			toLogin : false
 		}
   	}
 
@@ -37,7 +39,7 @@ class RegistrationPage extends React.Component {
 			town_length: true, 
 			country_lenght: true, 
 			phone_length: true, 
-			valid_date: true
+			valid_date: true, 
 		})
 		event.preventDefault();
 
@@ -158,8 +160,14 @@ class RegistrationPage extends React.Component {
 				this.setState ({
 					registration_valid: true,
 					original_mail: false, 
-        			unique_insurence: false
+					unique_insurence: false 
 				})	
+				
+				setTimeout (() => {
+					this.setState ({
+						toLogin : true
+					})
+				}, 2000);
 			}
 		});	
 		
@@ -169,9 +177,23 @@ class RegistrationPage extends React.Component {
 
 	render () {
 		return (
+
+
+
 			<div class='row d-flex justify-content-center'>
 				<div class='col-md-3'> 
-					<br/>
+
+					<Modal show={this.state.toLogin}>
+
+					</Modal>
+
+
+
+					{
+						this.state.toLogin &&
+						<Redirect exact to="/login"></Redirect>
+					}
+					
 					<form onSubmit={this.handleRegister}>
 						<br/>
 						<br/>

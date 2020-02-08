@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import PatientItem from './PatientItem';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
@@ -132,7 +127,7 @@ class HandlePatientList extends Component {
     }
 
     handleChange = (event) => {
-        this.setState({filterString: event.target.value})
+        this.setState({[event.target.name]: event.target.value})
     }
 
     handleFilter = () => {
@@ -161,36 +156,39 @@ class HandlePatientList extends Component {
         return (
             <div class='row d-flex justify-content-center'>
             <div class='col-md-11'>
+                <table class="table table-hover ">
+                    <thead>
+                        <tr>
+                              
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                        <td > 
+                                        <div class="input-group"> <input type = "text" class="form-control"  placeholder="Filter patients..." name = "filterString" onChange = {this.handleChange}/> 
+                                        <Button class="primary" onClick = {this.handleFilter}><i class="fas fa-search"></i> 
+                                        </Button>
+                                        </div>
+                                        </td>
+                                        <td> </td>
 
-                <br/>
-                <br/>
-                <Table class="table table-hover ">
-                    <TableHead class="table-active">
-                        <TableRow class="table-active">
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell>
-                                <input type = "text" placeholder="Filter..." name = "filterString" onChange = {this.handleChange}/>
-                            </TableCell>
-                            <TableCell>
-                                <Button class="btn btn-success" onClick = {this.handleFilter}>Search</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow class="table-active">
-                            <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('firstName')}>   {this.renderArrowFirst()}  First name   </TableCell>
-                            <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('lastName')}>last name{this.renderArrowLast()}</TableCell>
-                            <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('email')}>email{this.renderArrowEmail()}</TableCell>
-                            <TableCell class='text-success cursor-pointer' onClick={() => this.onSortChange('insurance')}>insurance number{this.renderArrowInsurance()}</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
+                                   
+                        </tr>
+                        <tr>
+                                        <th class='text-success cursor-pointer' onClick={() => this.onSortChange('firstName')}> {this.renderArrowFirst()} <i class="fas fa-user-circle"></i>  First name</th>
+                                        <th class='text-success cursor-pointer' onClick={() => this.onSortChange('lastName')}> {this.renderArrowLast()} <i class="fas fa-user-circle"></i>  Last name</th>
+                                        <th class='text-success cursor-pointer' onClick={() => this.onSortChange('email')}> {this.renderArrowEmail()} <i class="fas fa-envelope-open"></i> Email</th>
+                                        <th class='text-success cursor-pointer' onClick={() => this.onSortChange('insurance')}> {this.renderArrowInsurance()} <i class="fas fa-file-medical"></i> Insurance number</th>
+                                        <td> </td>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {[...this.state.patients].sort(sortTypes[this.state.currentSort].fn).map(patient => (
-                            <TableRow className={`${(++i)%2? 'table-dark': ''} `} onClick={() => this.handleClick(patient.insuranceNumber)}>
+                            <tr style={{cursor: 'pointer'}}className={`${(++i)%2? 'table-dark': ''} `} onClick={() => this.handleClick(patient.insuranceNumber)}>
                                 <PatientItem key={patient.id} id={patient.id} value={patient} />
-                            </TableRow>
+                            </tr>
                         ))}
-                    </TableBody>
-                </Table>
+                    </tbody>
+                </table>
 
             </div>
             </div>

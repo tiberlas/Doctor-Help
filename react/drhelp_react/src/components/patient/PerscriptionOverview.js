@@ -8,8 +8,8 @@ import axios from 'axios';
 class PerscriptionOverview extends Component {
 
 	state = {
-		diagnosis: "",
-		description: "", 
+		diagnosis: "No diagnosis",
+		description: "No description given", 
 		advice: "Nothing in particular. ", 
 		medicationList: []
 	}

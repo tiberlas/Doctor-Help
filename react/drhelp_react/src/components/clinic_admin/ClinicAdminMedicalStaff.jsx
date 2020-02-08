@@ -193,6 +193,9 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     handleFilterRole = () => {
+        if (this.state.shownMedicalStaff.length === 0) {
+            return;
+        }
         if (this.state.checkedMedicalStaff == 'DOCTOR') {
             let items = this.state.medicalStuff.filter(item => item.role === 'DOCTOR');
             this.setState({ shownMedicalStaff: items })
@@ -205,6 +208,9 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     handleFilter = () => {
+        if (this.state.shownMedicalStaff == null) {
+            return;
+        }
         axios.post('http://localhost:8080/api/medical+stuff/filter',
             {
                 string: this.state.filterString,
@@ -315,10 +321,11 @@ class ClinicAdminMedicalStaff extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.shownMedicalStaff.sort(sortTypes[this.state.currentSort].fn).map(c => (
+                            {(this.state.shownMedicalStaff != null) &&
+                                (this.state.shownMedicalStaff.sort(sortTypes[this.state.currentSort].fn).map(c => (
                                 <TableRow className={(++i) % 2 ? `table-dark` : ``} >
                                     <MedicalStuffItem key={i} value={c} handleUpdate={this.handleUpdate} />
-                                </TableRow>
+                                </TableRow>)
                             ))}
                         </TableBody>
                     </Table>

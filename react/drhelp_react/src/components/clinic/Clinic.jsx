@@ -89,7 +89,7 @@ class Clinic extends Component {
             'margin': 'auto'
         }; 
 
-        
+        console.log('USER role', this.context.user.role)
             return ( 
                 <div class="row d-flex justify-content-center">
                     <div class='col-md-10'>
@@ -122,9 +122,9 @@ class Clinic extends Component {
                                     </div>
                                     <br />
                                     <div>
-                                        <Button onClick={() => this.goToPredef()}>
+                                        {this.context.user.role !== 'CLINICAL_ADMINISTRATOR' && <Button onClick={() => this.goToPredef()}>
                                             Predefined appointments
-                                        </Button>
+                                        </Button>}
                                     </div>
                                     <br />    
                                 </div>

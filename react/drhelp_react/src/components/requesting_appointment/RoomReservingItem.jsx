@@ -17,7 +17,7 @@ class RoomReservingItem extends Component {
                 <TableCell class='text text-white'>{this.state.roomNumber}</TableCell>
                 <TableCell colSpan='2' class='text text-white'>{this.state.firstFreeDate}</TableCell>
                 <TableCell>
-                    <Button variant="primary" onClick={(id) => {this.props.handleSchedule(this.state.roomId)}}>
+                    <Button variant="primary" id={"room_selected"+this.state.roomId} onClick={(id) => {this.props.handleSchedule(this.state.roomId)}}>
                         schedule
                     </Button>
                 </TableCell>

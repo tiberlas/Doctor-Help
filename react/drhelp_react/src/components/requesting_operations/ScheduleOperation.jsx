@@ -437,7 +437,7 @@ class ScheduleOperation extends Component {
 						)}
 						{this.state.fatalError && (
 							<p class="text-danger">
-								Fatal error, please reaload the page
+								Something went wrong, please refresh the page and try again.
 							</p>
 						)}
 					</Modal.Body>

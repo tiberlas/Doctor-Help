@@ -184,22 +184,23 @@ class NurseCalendar extends React.Component {
         return(
             <div className='demo-app-calendar'> 
             
-                  {this.props.regime === 'schedule' && <Fragment> <br/> <FullCalendar defaultView="dayGridMonth" 
+                  {this.props.regime === 'schedule' && <Fragment> <br/> <FullCalendar defaultView="listYear" 
               header={{
                   left: "prev,next, today",
                   center: "title",
-                  right: "dayGridYear, dayGridMonth,timeGridWeek,timeGridDay"
+                  right: "timeGridWeek, dayGridMonth, listYear"
               }}
-              // buttonText={
-              //   {
-              //     prev: '<',
-              //     next: '>'
-              //   }
-              // }
+
+              views={{
+                listYear: {
+                  buttonText: 'year'
+                }
+              }}
+
               buttonIcons={
                 {
                   prev: 'left-single-arrow',
-                  next: 'right-single-arrow'
+                  next: 'right-single-arrow',
                 }
               }
               businessHours = { 
@@ -214,7 +215,7 @@ class NurseCalendar extends React.Component {
               eventLimit = {true}
               eventRender={this.handleEventRender}
               eventClick={this.handleEventClick}
-              plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
+              plugins={[ listPlugin, dayGridPlugin, timeGridPlugin, bootstrapPlugin, interaction]} 
               themeSystem = 'bootstrap' /> </Fragment>}
 
 

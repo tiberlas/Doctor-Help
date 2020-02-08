@@ -9,7 +9,7 @@ class NurseHeader extends Component {
 
     render() { 
         return ( 
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="dark" expand="sm">
             <Navbar.Brand >
               <Nav> 
                   <Nav.Link>
@@ -24,6 +24,10 @@ class NurseHeader extends Component {
                 <Nav className="mr-auto">
                     
                     <Nav.Link>
+                            <Link exact to='/nurse/schedule' class="nav-link">Schedule</Link>
+                    </Nav.Link>
+
+                    <Nav.Link>
                             <Link exact to='/nurse/patient-list' class="nav-link">Patient&nbsp;list</Link>
                     </Nav.Link>
 
@@ -31,9 +35,7 @@ class NurseHeader extends Component {
                             <Link exact to='/nurse/perscription-list' class="nav-link">Pending&nbsp;perscriptions</Link>
                     </Nav.Link>
 
-                    <Nav.Link>
-                            <Link exact to='/nurse/schedule' class="nav-link">Schedule</Link>
-                    </Nav.Link>
+                  
 
                     <Nav.Link>
                             <Link exact to='/nurse/leave-request' class="nav-link">Leave&nbsp;request</Link>

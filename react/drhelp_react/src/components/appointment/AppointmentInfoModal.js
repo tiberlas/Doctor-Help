@@ -79,6 +79,13 @@ class AppointmentInfoModal extends React.Component {
         return firstCharacter + restOfCharacters
     }
 
+    displayDiscount = () => {
+        if(this.props.event.discount == -1) {
+            return '0'
+        } else 
+            return this.props.event.discount
+    }
+
     showAppointmentInfo = () => {
         let profileUrl = '/profile/' + this.props.event.patientInsurance
         return <Fragment> 
@@ -90,7 +97,7 @@ class AppointmentInfoModal extends React.Component {
                      <i class="fas fa-sign-out-alt"></i> Status: <strong> {this.displayStatus()} </strong> <br/>
                     <i class="fas fa-procedures"></i> Procedure: {this.props.event.procedure}<br/>
                     <i class="fab fa-bitcoin"></i> Price: {this.props.event.price}<br/>
-                    <i class="fas fa-hand-holding-usd"></i> Discount: {this.props.event.discount}% <br/>
+                    <i class="fas fa-hand-holding-usd"></i> Discount: {this.displayDiscount()}% <br/>
                     <i class="fab fa-bitcoin"></i> Total: {(this.props.event.price * (1 - (this.props.event.discount / 100)).toFixed(2))}<br/>
         </Fragment>
     }
