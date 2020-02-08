@@ -16,7 +16,7 @@ class PatientProfile extends Component {
 					<div class='col-md-7'>
 					<ViewProfile profile={this.context.patient}/>
 						<div >
-                    		<label class="white"><strong>Insurance Number:</strong></label>&nbsp;&nbsp;&nbsp;
+                    		<strong class="white"><i class="fas fa-file-medical"></i> Insurance Number:</strong>&nbsp;&nbsp;&nbsp;
                     		<label >{this.context.patient.insuranceNumber}</label>
                 		</div>
 						{/* <div>

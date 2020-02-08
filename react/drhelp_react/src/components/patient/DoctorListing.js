@@ -121,7 +121,7 @@ class DoctorListing extends Component {
 				if (response.data) {
 					this.setState ({
 						showFinished : true, 
-						finishedTitle : "Congratulations!!!1!", 
+						finishedTitle : "Congratulations! =D", 
 						finishedContent : "Your request has been sent. "
 					})
 				}
@@ -170,8 +170,8 @@ class DoctorListing extends Component {
 		
 		return (
 			<Fragment>
-				<TableCell hidden={hide}><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
-				<TableCell hidden={hide}><p class='text-white'>{row.lastName}</p></TableCell>
+				<TableCell hidden={hide}><Link exact to = {profileUrl + row.id}>{row.firstName} {row.lastName}</Link></TableCell>
+				{/* <TableCell hidden={hide}><p class='text-white'>{row.lastName}</p></TableCell> */}
 				<TableCell hidden={hide}><p class='text-white'>{row.rating}</p></TableCell>
 				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide}>
 					<FormControl class='text-black'>
@@ -184,7 +184,7 @@ class DoctorListing extends Component {
 				</TableCell>
 				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide} >
 					<Button onClick={() => this.handleRequest(row)}>
-						Request
+						<i class="fas fa-clipboard-check"></i> Confirm
 					</Button>
 				</TableCell>
 			</Fragment>
@@ -314,7 +314,7 @@ class DoctorListing extends Component {
 
 						<Modal.Footer>
 							<Button variant="primary" onClick={() => this.closeDialog()}>
-								Confirm
+								<i class="fas fa-clipboard-check"></i>Confirm
 							</Button>
 						</Modal.Footer>
 					</Modal>
@@ -330,20 +330,20 @@ class DoctorListing extends Component {
 
 						<Modal.Footer>
 							<Button variant="primary" onClick={() => this.closeMissingDialog()}>
-								Close
+							<i class="fas fa-ban"></i> Close
 							</Button>
 						</Modal.Footer>
 					</Modal>
 
 					<Modal show={this.state.showFinished} onHide={() => this.closeFinishedDialog()}>
 						<Modal.Header closeButton>
-							<Modal.Title>{this.state.finishedTitle}}</Modal.Title>
+							<Modal.Title>{this.state.finishedTitle}</Modal.Title>
 						</Modal.Header>
 
 						<Modal.Body>
 							{this.state.finishedContent}
 							<br />
-							<a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a>
+							{/* <a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a> */}
 						</Modal.Body>
 
 						<Modal.Footer>
@@ -377,11 +377,11 @@ class DoctorListing extends Component {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell><p class='text-success'>First Name</p></TableCell>
-								<TableCell><p class='text-success'>Last Name</p></TableCell>
-								<TableCell><p class='text-success'>Rating</p></TableCell>
-								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Terms</p></TableCell>
-								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Confirm</p></TableCell>
+								<TableCell><p class='text-success'><i class="fas fa-stethoscope"></i> Name</p></TableCell>
+								{/* <TableCell><p class='text-success'>Last Name</p></TableCell> */}
+								<TableCell><p class='text-success'><i class="fas fa-star"></i> Rating</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'><i class="fas fa-clock"></i> Terms</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'><i class="fas fa-clipboard-check"></i> Confirm</p></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

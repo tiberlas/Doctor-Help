@@ -901,20 +901,20 @@ class PatientHistory extends Component {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Date{this.renderArrowDate()}</p></TableCell>
-									<TableCell><p class='text-success' onClick={() => this.onSortChange('date')}>Time</p></TableCell>
-									<TableCell><p class='text-success'>Procedure Type</p></TableCell>
-									<TableCell><p class='text-success' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>Status</p></TableCell>
-									<TableCell><p class='text-success'>Doctor</p></TableCell>
-									<TableCell><p class='text-success'>Nurse</p></TableCell>
-									<TableCell><p class='text-success' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>Perscription</p></TableCell>
-									<TableCell><p class='text-success'>Clinic</p></TableCell>
-									<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}>Cancel appointment</p></TableCell>
-									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Room</p></TableCell>
-									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Price</p></TableCell>
-									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Discount</p></TableCell>
-									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-success' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>Reserve</p></TableCell>
-									<TableCell><Button onClick = {() => this.switchFilter()}>Filter</Button></TableCell>
+									<TableCell class='text-success' onClick={() => this.onSortChange('date')}><i class="far fa-calendar-alt"></i> Date{this.renderArrowDate()}</TableCell>
+									<TableCell class='text-success' onClick={() => this.onSortChange('date')}><i class="fas fa-clock"></i> Time</TableCell>
+									<TableCell class='text-success'><i class="fas fa-list"></i> Procedure Type</TableCell>
+									<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)} class='text-success'><i class="fas fa-clipboard-check"></i> Status</TableCell>
+									<TableCell class='text-success'><i class="fas fa-stethoscope"></i> Doctor</TableCell>
+									<TableCell class='text-success'><i class="fas fa-user-nurse"></i> Nurse</TableCell>
+									<TableCell hidden={(this.props.filter === 'NONE') ? (false) : (true)} class='text-success'><i class="fas fa-file-medical"></i> Perscription</TableCell>
+									<TableCell class='text-success'><i class="fas fa-plus-circle"></i> Clinic</TableCell>
+									<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)} class='text-success'><i class="fas fa-ban"></i> Cancel appointment</TableCell>
+									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-success'><i class="fas fa-hospital"></i> Room</TableCell>
+									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-success'><i class="fas fa-dollar-sign"></i> Price</TableCell>
+									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-success'><i class="fas fa-percent"></i> Discount</TableCell>
+									<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-success'><i class="fas fa-clipboard-check"></i> Reserve</TableCell>
+									<TableCell><Button onClick = {() => this.switchFilter()}><i class="fas fa-search"></i> Search</Button></TableCell>
 								</TableRow>
 							</TableHead>
 								{
@@ -923,24 +923,22 @@ class PatientHistory extends Component {
 										<TableBody>
 											<TableRow key={row.examinationReportId}>
 												<TableCell class='text-white'>{row.date.split(' ')[0]}</TableCell>
-												<TableCell><p class='text-white'>{row.date.split(' ')[1]}</p></TableCell>
-												<TableCell><p class='text-white'>{row.procedureType}</p></TableCell>
-												<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><p class='text-white' >{row.status}</p></TableCell>
-												<TableCell><p class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></p></TableCell>
-												<TableCell><p class='text-white'>{row.nurse}</p></TableCell>
-												<TableCell><p class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</p></TableCell>
-												<TableCell><p class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></p></TableCell>
-												<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><Button  hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}>Cancel</Button></p></TableCell>
-												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.room}</p></TableCell>
-												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}>{row.price}</p></TableCell>
-												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p style={{ color: '#E99002' }}>{row.discount}%</p></p></TableCell>
-												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)}><p class='text-white' hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} onClick={() => this.handleReservationClick(row)} > <Button disabled={this.state.waiting}>Reserve</Button> </p></TableCell>
-												<TableCell>
-													<p hidden={row.status !== "Approved"}>
-														<Button onClick={() => this.confirmAppointment(row)}>
-															Confirm
-														</Button>
-													</p>
+												<TableCell class='text-white'>{row.date.split(' ')[1]}</TableCell>
+												<TableCell class='text-white'>{row.procedureType}</TableCell>
+												<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)} class='text-white'>{row.status}</TableCell>
+												<TableCell class='text-white'><Link to={"/doctor/profile/" + row.doctorId}>{row.doctor}</Link></TableCell>
+												<TableCell class='text-white'>{row.nurse}</TableCell>
+												<TableCell class='text-white' hidden={(this.props.filter === 'NONE') ? (false) : (true)}>{(row.date === "") ? ("") : (<Link to={"/patient/perscription/" + row.examinationReportId}>Perscription</Link>)}</TableCell>
+												<TableCell class='text-white'><Link to={"/clinic/" + row.clinicId}>{row.clinicName}</Link></TableCell>
+												<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)} class='text-white'><p  hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><Button  hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}><i class="fas fa-ban"></i> Cancel</Button></p></TableCell>
+												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white'>{row.room}</TableCell>
+												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white'>{row.price}</TableCell>
+												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white' style={{ color: '#E99002' }}>{row.discount}%</TableCell>
+												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white'><Button disabled={this.state.waiting} onClick={() => this.handleReservationClick(row)}><i class="fas fa-clipboard-check"></i> Reserve</Button></TableCell>
+												<TableCell hidden={row.status !== "Approved"}>
+													<Button onClick={() => this.confirmAppointment(row)}>
+														<i class="fas fa-clipboard-check"></i> Confirm
+													</Button>
 												</TableCell>
 											</TableRow>
 										</TableBody>
