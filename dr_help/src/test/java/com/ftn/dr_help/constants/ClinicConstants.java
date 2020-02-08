@@ -16,7 +16,17 @@ public class ClinicConstants {
 	
 	public static final Integer INTEGRATION_CLINIC_NUMBERS = 1;
 	
-	public static final String MOCK_PROCEDURE_TYPE_NAME = "opsta_praksa";
+	public static final String MOCK_PROCEDURE_TYPE_NAME = "opsti_pregled";
 	public static final String MOCK_SEARCH_DATE = "2020-02-12";
 	
+	public static final Long FILTER_CLINIC_ID = 1L;
+	
+	
+	//DoctorControllerListing
+	public static final String INTEGRATION_DOCTOR_NAME = "Pera";
+	public static final String INTEGRATION_DOCTOR_LASTNAME = "Perić";
+	public static final String INTEGRATION_DOCTOR_RATING = "1";
+	
+	public static final String INTEGRATION_PROCEDURE_TYPE_NAME = "psiho_analiza";
+	public static final String INTEGRATION_SEARCH_DATE = "2020-02-12";
 }
