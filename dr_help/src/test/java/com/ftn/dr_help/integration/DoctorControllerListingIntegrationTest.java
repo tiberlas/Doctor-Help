@@ -70,7 +70,7 @@ public class DoctorControllerListingIntegrationTest {
 	/* 
 	 * query params: clinic=1 & appointment=opsta_praksa  & date=2020-02-12
 	 * 
-	 * returns: Doctor Jovan Milinkovic, Rating 2.5
+	 * returns: Doctors Jovan Milinkovic and Pera Peric, Criteria rating = 1
 	 * */
 	
 	@Test
@@ -82,7 +82,7 @@ public class DoctorControllerListingIntegrationTest {
 				.andExpect(jsonPath("$.doctorListing").isArray())
 				.andExpect(jsonPath("$.doctorListing", hasSize(2)))
 				.andExpect(jsonPath("$.doctorListing[*].firstName", hasItem(ClinicConstants.INTEGRATION_DOCTOR_NAME)))
-				.andExpect(jsonPath("$.doctorListing[*].lastName", hasItem(ClinicConstants.INTEGRATION_DOCTOR_LASTNAME)))
+				.andExpect(jsonPath("$.doctorListing[*].rating", hasItem(ClinicConstants.INTEGRATION_DOCTOR_RATING)))
 				.andExpect(status().isOk());
 	}
 }

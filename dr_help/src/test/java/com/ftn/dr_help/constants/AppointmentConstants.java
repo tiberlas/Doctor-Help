@@ -32,5 +32,7 @@ public class AppointmentConstants {
 	public static final String MANUAL_REQUEST_DATE = "2020-02-12";
 	public static final String MANUAL_REQUEST_TIME = "0:15";
 	
+	public static final String MANUAL_RATING = "2";
+	
 	
 }

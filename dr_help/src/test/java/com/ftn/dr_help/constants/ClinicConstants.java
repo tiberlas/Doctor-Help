@@ -25,8 +25,10 @@ public class ClinicConstants {
 	//DoctorControllerListing
 	public static final String INTEGRATION_DOCTOR_NAME = "Pera";
 	public static final String INTEGRATION_DOCTOR_LASTNAME = "Perić";
-	public static final String INTEGRATION_DOCTOR_RATING = "1";
+	public static final String INTEGRATION_DOCTOR_RATING = "1.0";
 	
 	public static final String INTEGRATION_PROCEDURE_TYPE_NAME = "psiho_analiza";
 	public static final String INTEGRATION_SEARCH_DATE = "2020-02-12";
+	
+	public static final String INTEGRATION_RATING_FK = "2";
 }

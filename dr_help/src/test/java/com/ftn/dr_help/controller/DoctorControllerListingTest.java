@@ -106,9 +106,9 @@ public class DoctorControllerListingTest {
 				"&date="+ClinicConstants.MOCK_SEARCH_DATE)
 				.contentType(contentType)
 				.header("Authorization", accessToken))
-				.andExpect(jsonPath("$").isArray())
-				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$.[*].firstName").value("Pera"))
+				.andExpect(jsonPath("$.doctorListing").isArray())
+				.andExpect(jsonPath("$.doctorListing", hasSize(1)))
+				.andExpect(jsonPath("$.doctorListing[*].firstName").value("Pera"))
 				.andExpect(status().isOk());
 	}
 	
