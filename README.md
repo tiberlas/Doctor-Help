@@ -1,4 +1,4 @@
-# dr-help
+# doctor help
 
 Doctor Help is an open source online web health service with a dark mode twist.
 At it's core, dr-help is an online tool for booking your next doctor visits. 
@@ -38,7 +38,7 @@ React:
 
 ## Deployment
 * On the other hand, app is also deployed via [heroku](https://heroku.com) on https://dr-help.herokuapp.com
-* Deployment repo: --to be added.
+* Deployment repo: https://github.com/tiberlas/dr-help-backend
 
 
 ### Authors of this hippie magic beast app.
