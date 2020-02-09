@@ -49,7 +49,7 @@ class ScheduleOperation extends Component {
 				)
 				.then((response) => {
 					this.setState({
-						room: response.data.name + ": " + response.data.number,
+						room: response.data.name + " #" + response.data.number,
 					});
 				});
 
@@ -66,7 +66,7 @@ class ScheduleOperation extends Component {
 								response.data.procedureName +
 								" " +
 								response.data.procedureDuration +
-								" H",
+								"h",
 							procedureId: response.data.procedureId,
 							patient: response.data.patient,
 						},
@@ -297,64 +297,35 @@ class ScheduleOperation extends Component {
 			>
 				<Modal.Header closeButton onClick={this.props.onHide}>
 					<Modal.Title id="contained-modal-title-vcenter">
-						Schedule operation{this.props.operationId}
+						Assign an operating room
 					</Modal.Title>
 				</Modal.Header>
 				<form onSubmit={this.handleBless}>
 					<Modal.Body>
 						<div class="form-group">
-							<fieldset disabled="">
 								<label
 									class="control-label"
 									for="disabledInput"
 								>
-									Procerure
+									<i class="fas fa-procedures"></i> Procedure &emsp; {this.state.procedure}
 								</label>
-								<input
-									style={fontStyles}
-									class="form-control"
-									id="disabledInput"
-									type="text"
-									value={this.state.procedure}
-									disabled="true"
-								/>
-							</fieldset>
+								
 						</div>
 						<div class="form-group">
-							<fieldset disabled="">
 								<label
 									class="control-label"
 									for="disabledInput"
 								>
-									Pacient
+									<i class="fas fa-user-injured"></i> Patient&emsp;{this.state.patient}
 								</label>
-								<input
-									style={fontStyles}
-									class="form-control"
-									id="disabledInput"
-									type="text"
-									value={this.state.patient}
-									disabled="true"
-								/>
-							</fieldset>
 						</div>
 						<div class="form-group">
-							<fieldset disabled="true">
 								<label
 									class="control-label"
 									for="disabledInput"
 								>
-									Room
+									<i class="fas fa-door-open"></i> Room &emsp; {this.state.room}
 								</label>
-								<input
-									style={fontStyles}
-									class="form-control"
-									id="disabledInput"
-									type="text"
-									value={this.state.room}
-									disabled=""
-								/>
-							</fieldset>
 						</div>
 						<hr class="my-4" />
 
@@ -363,7 +334,7 @@ class ScheduleOperation extends Component {
 								this.state.errorDoctor ? "has-danger" : ""
 							}`}
 						>
-							<label for="doctorsSelect">Select doctors</label>
+							<label for="doctorsSelect">Doctors</label>
 							<Select
 								id="doctorsSelect"
 								styles={fontStyles}
@@ -379,19 +350,18 @@ class ScheduleOperation extends Component {
 						</div>
 						{this.state.errorDoctoCount && (
 							<p class="text-warning">
-								Must select exact 3 doctors
+								3 doctors have to be selected.
 							</p>
 						)}
 						{this.state.doctorScheduleError && (
 							<p class="text-danger">
-								Doctors are bussy, try a difrent combination of
-								doctors, or change the date to{" "}
+								Unfortunately, some doctors are unavailable. Try with {" "}
 								{this.state.scheduleRecomendedDate}.
 							</p>
 						)}
 
 						<div>
-							<label for="date">date</label>
+							<label for="date">Date</label>
 							<FormControl
 								type="date"
 								id="date"
@@ -407,7 +377,7 @@ class ScheduleOperation extends Component {
 							/>
 						</div>
 						<div>
-							<label for="time">time</label>
+							<label for="time">Time</label>
 							<TimePicker
 								name="duration"
 								id="time"
@@ -425,14 +395,14 @@ class ScheduleOperation extends Component {
 						{this.state.errorDateAndTime && (
 							<div class="text-danger">
 								{" "}
-								Schedule is occupied, try{" "}
-								{this.state.scheduleRecomendedDate}{" "}
+								Work schedule is occupied. Available date-time is {" "}
+								{this.state.scheduleRecomendedDate}.{" "}
 							</div>
 						)}
 
 						{this.state.success && (
 							<p class="text-success">
-								Successfully blessed appointment
+								Successfully blessed operation!
 							</p>
 						)}
 						{this.state.fatalError && (

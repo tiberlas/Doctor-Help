@@ -39,25 +39,28 @@ class RequestedAppointment extends Component {
     render() {
         return (
             <div>
-            <div class='row d-flex justify-content-center'>
-            <div class='col-md-7'> 
-                <br/>
+          <div class='row d-flex justify-content-center'>
+                    <div class='col-md-5'>
+                        <br/>
+                            <h3> Requested appointment. </h3>
+                        </div>
+                    </div>
+
+                    <div class='row d-flex justify-content-center'>
+                    <div class='col-md-11'>
                 <Table class="table table-hover ">
                     <TableHead class="table-active">
-                        <TableRow class="table-active">
-                            <TableCell colSpan='5' class='text text-success text-center' align='center'>Requested appointment</TableCell>
-                        </TableRow>
-                        <TableRow class="table-active">
-                            <TableCell class="text-success cursor-pointer" >date and time</TableCell>
-                            <TableCell class="text-success cursor-pointer" >procedure</TableCell>
-                            <TableCell class="text-success cursor-pointer" >doctor</TableCell>
-                            <TableCell class="text-success cursor-pointer" >nurse</TableCell>
-                            <TableCell class="text-success cursor-pointer" >patient</TableCell>
+                        <TableRow>
+                            <TableCell class="text-success cursor-pointer" ><i class="fas fa-clock"></i>  Date</TableCell>
+                            <TableCell class="text-success cursor-pointer" ><i class="fas fa-procedures"></i> Procedure</TableCell>
+                            <TableCell class="text-success cursor-pointer" ><i class="fas fa-user-md"></i>  Doctor</TableCell>
+                            <TableCell class="text-success cursor-pointer" ><i class="fas fa-user-nurse"></i>  Nurse</TableCell>
+                            <TableCell class="text-success cursor-pointer" ><i class="fas fa-user-injured"></i>  Patient</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         <TableCell class='text text-white'>{this.state.date}</TableCell>
-                        <TableCell class='text text-white'>{this.state.procedure}&nbsp;{this.state.duration}&nbsp;H</TableCell>
+                        <TableCell class='text text-white'>{this.state.procedure}&nbsp;{this.state.duration}h</TableCell>
                         <TableCell class='text text-white'>{this.state.doctor}</TableCell>
                         <TableCell class='text text-white'>{this.state.nurse}</TableCell>
                         <TableCell class='text text-white'>{this.state.patient}</TableCell>
