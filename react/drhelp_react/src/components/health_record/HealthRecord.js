@@ -110,28 +110,28 @@ class HealthRecord extends React.Component {
                 <table class="table table-hover">
                 <tbody>
                     <tr>
-                        <th scope="row">Age:</th>
+                        <th scope="row"><i class="fas fa-birthday-cake"></i> Age:</th>
                             <td>{this.ageDisplay()}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Height: </th>
+                        <th scope="row"><i class="fas fa-arrows-alt-v"></i> Height: </th>
                         <td>{this.heightDisplay()} m</td>
                     </tr>
                     <tr>
-                        <th scope="row">Weight:</th>
+                        <th scope="row"><i class="fas fa-weight"></i> Weight:</th>
                             <td>{this.weightDisplay()} kg</td>
                     </tr>
                     <tr>
-                        <th scope="row">Diopter:</th>
+                        <th scope="row"><i class="fas fa-glasses"></i> Diopter:</th>
                             <td>{this.diopterDisplay()}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Allergies:</th>
+                        <th scope="row"><i class="fas fa-fan"></i> Allergies:</th>
                             <td>{this.allergyDisplay()}</td>
                     </tr>
     
                     <tr>
-                        <th scope="row">Blood type:</th>
+                        <th scope="row"><i class="fas fa-atom"></i> Blood type:</th>
                             <td>{this.bloodTypeDisplay()}</td>
                     </tr>
                     

@@ -51,7 +51,7 @@ class ChangeProcedureTypeModal extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        axios.put('http://localhost:8080/api/procedure+types/change', {
+        axios.put('/api/procedure+types/change', {
                     id: this.state.id,            
                     name: this.state.name,
                     price: parseInt(this.state.price),

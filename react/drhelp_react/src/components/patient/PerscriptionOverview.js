@@ -19,7 +19,7 @@ class PerscriptionOverview extends Component {
 	componentDidMount () {
 		let url = window.location.href.split ('perscription/')[1];
 		
-		axios.get("http://localhost:8080/api/patients/examinationReportId=" + url + "/perscription")
+		axios.get("/api/patients/examinationReportId=" + url + "/perscription")
 		.then (response => {
 			this.setState ({
 				diagnosis: response.data.diagnosis, 

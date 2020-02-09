@@ -47,18 +47,18 @@ class DoctorRequestCalendar extends React.Component {
       }
 
     componentDidMount() {
-        let url = 'http://localhost:8080/api/appointments/leave-request-appointments/doctor=' + this.context.doctor.id 
+        let url = '/api/appointments/leave-request-appointments/doctor=' + this.context.doctor.id 
         axios.get(url).then((response) => {
             this.setState({
             appointments: response.data,
             loading: false
             })
         })
-        axios.get('http://localhost:8080/api/operations/all-approved/doctor='+this.context.doctor.id)
+        axios.get('/api/operations/all-approved/doctor='+this.context.doctor.id)
         .then(response => {
           this.setState({operations: response.data})
         })
-        axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id+'/business-hours')
+        axios.get('/api/doctors/doctor='+this.context.doctor.id+'/business-hours')
         .then(response => {
         this.setState({businessHours: response.data}, () => {
         })

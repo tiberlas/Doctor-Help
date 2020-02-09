@@ -29,7 +29,7 @@ class ExaminationReport extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/diagnoses/all').then( response => {
+        axios.get('/api/diagnoses/all').then( response => {
             this.setState({
                 diagnosisList: response.data
             })
@@ -53,7 +53,7 @@ class ExaminationReport extends React.Component {
             })
         })
 
-        axios.get('http://localhost:8080/api/medication/all').then(response => {
+        axios.get('/api/medication/all').then(response => {
             this.setState({medicationList: response.data})
 
             let items = []; 

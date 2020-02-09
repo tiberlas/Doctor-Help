@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import axios from 'axios'
 import BasicHeader from './BasicHeader'
 
+const baseUlr = 'http://localhost:8080';
+const baseFrontUrl = 'http://localhost:3000';
 class ActivatePatient extends React.Component {
 
 
@@ -11,7 +13,7 @@ class ActivatePatient extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/api/patients/confirmAccount', { //fetch jer user nema jwt
+        fetch(baseUlr+'/api/patients/confirmAccount', { //fetch jer user nema jwt
             method: 'put',
             headers: {
               'Content-Type': 'application/json'
@@ -44,13 +46,13 @@ class ActivatePatient extends React.Component {
                 ?  <Fragment>
                     <h2>Success.</h2>
                     <br/>
-                    <span> Your account has been confirmed. <br/>Click the <a href="http://localhost:3000/login"> link </a> 
+                    <span> Your account has been confirmed. <br/>Click the <a href={baseFrontUrl+"/login"}> link </a> 
                 to log in with your credentials. </span>  
                 </Fragment> : <Fragment> 
                         <h2> Error. </h2>
                         <br/>
                         <span> Request with email <strong> {this.props.email} </strong>  not found. 
-                        <br/><a href="http://localhost:3000/login">Back</a> to login page.</span>
+                        <br/><a href={baseFrontUrl+"/login"}>Back</a> to login page.</span>
                     </Fragment>}
                   </div>
               </div>

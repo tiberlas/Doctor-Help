@@ -22,7 +22,7 @@ class ShowPatientHealthRecord extends React.Component {
     }
 
     componentWillMount() {
-        let url = 'http://localhost:8080/api/healthRecord/get/patient='+this.context.patient.insuranceNumber
+        let url = '/api/healthRecord/get/patient='+this.context.patient.insuranceNumber
         axios.get(url).then(response => {
             this.setState( prevState => ({
                 health_record: {

@@ -74,7 +74,7 @@ class NewAdminForm extends React.Component {
 
 
     componentDidMount = () => {
-        axios.get(`http://localhost:8080/api/clinics/all`)
+        axios.get(`/api/clinics/all`)
       .then(res => {
         this.setState({ clinicList: res.data })
             let items = []
@@ -118,7 +118,7 @@ class NewAdminForm extends React.Component {
 
     submitCentreAdmin = () => {
         let birthdayForm = document.getElementById('ad_birthday').value;
-            axios.post('http://localhost:8080/api/centreAdmins/newAdmin', { 
+            axios.post('/api/centreAdmins/newAdmin', { 
                 email: this.state.email,
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
@@ -135,7 +135,7 @@ class NewAdminForm extends React.Component {
 
     submitClinicAdmin = () => {
         let birthdayForm = document.getElementById('ad_birthday').value;
-        axios.post('http://localhost:8080/api/clinicAdmins/newAdmin', { 
+        axios.post('/api/clinicAdmins/newAdmin', { 
 
             email: this.state.email,
             firstName: this.state.firstName,

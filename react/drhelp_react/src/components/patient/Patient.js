@@ -14,6 +14,7 @@ import PatientChangePassword from './PatientChangePassword.js';
 import DoctorListing from './DoctorListing.js';
 import DoctorProfilePreview from './DoctorProfilePreview';
 import ShowPatientHealthRecord from '../health_record/ShowPatientHealthRecord.js';
+import PatientManual from './PatientManual.js';
 
 
 class Patient extends Component {
@@ -42,7 +43,7 @@ class Patient extends Component {
     }
 
     handlePatient = () => {
-        let path = "http://localhost:8080/api/patients/profile";
+        let path = "/api/patients/profile";
         axios.get (path)
         .then (response => {
             this.setState ({
@@ -78,6 +79,9 @@ class Patient extends Component {
                     <PatientHeader logout={() => this.props.logout ()}/>
                     <div>
                         <Switch>
+                            <Route exact path="/home">
+                                <PatientManual/>
+                            </Route>
                             <Route exact path="/patient/profile">
                                 <PatientProfile />
                             </Route>

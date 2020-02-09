@@ -37,7 +37,7 @@ class DoctorListing extends Component {
 	componentDidMount () {
 		let url = window.location.href.split ('/');
 		if (url.length > 5) {
-			let request = 'http://localhost:8080/api/doctors/listing';
+			let request = '/api/doctors/listing';
 			request += '/clinic=' + url[4];
 			request += '&appointment=' + url[5];
 			request += '&date=' + url[6];
@@ -60,7 +60,7 @@ class DoctorListing extends Component {
 			})
 		}
 		else {
-			let request = 'http://localhost:8080/api/doctors/listing/clinic=';
+			let request = '/api/doctors/listing/clinic=';
 			request += window.location.href.split('/')[4];
 			request += '&appointment=unfiltered&date=unfiltered';
 			axios.get (request)
@@ -81,7 +81,7 @@ class DoctorListing extends Component {
 	handleUpdate () {
 		let url = window.location.href.split ('/');
 
-		let request = 'http://localhost:8080/api/doctors/listing';
+		let request = '/api/doctors/listing';
 		request += '/clinic=' + url[4];
 		request += '&appointment=' + url[5];
 		request += '&date=' + url[6];
@@ -111,7 +111,7 @@ class DoctorListing extends Component {
 			})
 		} 
 		else {
-			axios.post ('http://localhost:8080/api/appointments/add', {
+			axios.post ('/api/appointments/add', {
 				doctorId : row.id, 
 				date: window.location.href.split('/')[6], 
 				time: row.selectedTime, 
@@ -121,7 +121,7 @@ class DoctorListing extends Component {
 				if (response.data) {
 					this.setState ({
 						showFinished : true, 
-						finishedTitle : "Congratulations!!!1!", 
+						finishedTitle : "Congratulations! =D", 
 						finishedContent : "Your request has been sent. "
 					})
 				}
@@ -170,8 +170,8 @@ class DoctorListing extends Component {
 		
 		return (
 			<Fragment>
-				<TableCell hidden={hide}><Link exact to = {profileUrl + row.id}>{row.firstName}</Link></TableCell>
-				<TableCell hidden={hide}><p class='text-white'>{row.lastName}</p></TableCell>
+				<TableCell hidden={hide}><Link exact to = {profileUrl + row.id}>{row.firstName} {row.lastName}</Link></TableCell>
+				{/* <TableCell hidden={hide}><p class='text-white'>{row.lastName}</p></TableCell> */}
 				<TableCell hidden={hide}><p class='text-white'>{row.rating}</p></TableCell>
 				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide}>
 					<FormControl class='text-black'>
@@ -185,7 +185,7 @@ class DoctorListing extends Component {
 				</TableCell>
 				<TableCell hidden={((this.state.filtered) ? (false) : (true)) || hide} >
 					<Button id="confirm_request_button" onClick={() => this.handleRequest(row)}>
-						Request
+						<i class="fas fa-clipboard-check"></i> Confirm
 					</Button>
 				</TableCell>
 			</Fragment>
@@ -315,7 +315,7 @@ class DoctorListing extends Component {
 
 						<Modal.Footer>
 							<Button id="confirm_reserving_button" variant="primary" onClick={() => this.closeDialog()}>
-								Confirm
+								<i class="fas fa-clipboard-check"></i>Confirm
 							</Button>
 						</Modal.Footer>
 					</Modal>
@@ -330,21 +330,21 @@ class DoctorListing extends Component {
 						</Modal.Body>
 
 						<Modal.Footer>
-							<Button id="error_not_selected_time_close_button" variant="primary" onClick={() => this.closeMissingDialog()}>
-								Close
+							<Button id="close_success_button" variant="primary" onClick={() => this.closeMissingDialog()}>
+							<i class="fas fa-ban"></i> Close
 							</Button>
 						</Modal.Footer>
 					</Modal>
 
 					<Modal show={this.state.showFinished} onHide={() => this.closeFinishedDialog()}>
 						<Modal.Header closeButton>
-							<Modal.Title>{this.state.finishedTitle}}</Modal.Title>
+							<Modal.Title>{this.state.finishedTitle}</Modal.Title>
 						</Modal.Header>
 
 						<Modal.Body>
 							{this.state.finishedContent}
 							<br />
-							<a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a>
+							{/* <a href="https://www.youtube.com/watch?v=1Bix44C1EzY" target="blank">Congratulations!!!1!</a> */}
 						</Modal.Body>
 
 						<Modal.Footer>
@@ -378,11 +378,11 @@ class DoctorListing extends Component {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell><p class='text-success'>First Name</p></TableCell>
-								<TableCell><p class='text-success'>Last Name</p></TableCell>
-								<TableCell><p class='text-success'>Rating</p></TableCell>
-								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Terms</p></TableCell>
-								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'>Confirm</p></TableCell>
+								<TableCell><p class='text-success'><i class="fas fa-stethoscope"></i> Name</p></TableCell>
+								{/* <TableCell><p class='text-success'>Last Name</p></TableCell> */}
+								<TableCell><p class='text-success'><i class="fas fa-star"></i> Rating</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'><i class="fas fa-clock"></i> Terms</p></TableCell>
+								<TableCell hidden={(this.state.filtered) ? (false) : (true)}><p class='text-success'><i class="fas fa-clipboard-check"></i> Confirm</p></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

@@ -15,7 +15,7 @@ class LeaveRequests extends React.Component {
      componentDidMount = () => {
         // this._isMounted = true
 
-        axios.get('http://localhost:8080/api/leave-requests/get-admin',)
+        axios.get('/api/leave-requests/get-admin',)
         .then(res =>  {
             this.setState({leaveRequests: res.data})
         })
@@ -37,7 +37,7 @@ class LeaveRequests extends React.Component {
 
     update = () => {
         setTimeout(()=>{
-             axios.get('http://localhost:8080/api/leave-requests/get-admin',)
+             axios.get('/api/leave-requests/get-admin',)
         .then(res =>  {
             this.setState({leaveRequests: res.data, showRequestModal: false})
         })

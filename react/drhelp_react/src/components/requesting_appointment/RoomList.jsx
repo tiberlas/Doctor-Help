@@ -79,7 +79,7 @@ class RoomList extends Component {
 
 	handleGetAllRooms = () => {
 		axios
-			.post("http://localhost:8080/api/rooms/all/", {
+			.post("/api/rooms/all/", {
 				typeId: this.state.type,
 				date: this.state.date,
 			})
@@ -179,7 +179,7 @@ class RoomList extends Component {
 		console.log(rname, rnumber, rdate);
 
 		axios
-			.post("http://localhost:8080/api/rooms/search", {
+			.post("/api/rooms/search", {
 				name: rname,
 				number: rnumber,
 				typeId: this.state.type,
@@ -231,29 +231,29 @@ class RoomList extends Component {
 		let i = 0;
 		return (
 			<div class="row d-flex justify-content-center">
-				<div class="col-md-7">
-					<h4>List of rooms</h4>
+				<div class="col-md-11">
+					<h4>Room list:</h4>
 					<br />
 					<Table class="table table-hover ">
-						<TableHead class="table-active">
+						<TableHead >
 							<TableRow class="table-active">
 								<TableCell
 									class="text-success cursor-pointer"
 									onClick={() => this.onSortChange("name")}
 								>
-									room name{this.renderArrowName()}
+									<i class="fas fa-door-open"></i> Name {this.renderArrowName()}
 								</TableCell>
 								<TableCell
 									class="text-success cursor-pointer"
 									onClick={() => this.onSortChange("number")}
 								>
-									number{this.renderArrowNumber()}
+									<i class="fas fa-door-open"></i> Number #{this.renderArrowNumber()}
 								</TableCell>
 								<TableCell
 									class="text-success cursor-pointer"
 									onClick={() => this.onSortChange("date")}
 								>
-									first free date{this.renderArrowDate()}
+									<i class="fas fa-clock"></i> Available date{this.renderArrowDate()}
 								</TableCell>
 								<TableCell class="text-success">
 									<Button
@@ -261,7 +261,7 @@ class RoomList extends Component {
 										id="all_rooms"
 										onClick={this.handleShowAll}
 									>
-										show all
+										Show all
 									</Button>
 								</TableCell>
 								<TableCell>
@@ -270,7 +270,7 @@ class RoomList extends Component {
 										id="search_rooms"
 										onClick={this.handleSearchClick}
 									>
-										search
+										Search
 									</Button>
 								</TableCell>
 							</TableRow>

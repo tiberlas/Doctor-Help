@@ -44,7 +44,7 @@ class DiagnosesOverview extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/diagnoses/all').then( response => {
+        axios.get('/api/diagnoses/all').then( response => {
             this.setState({diagnoses: response.data})
         })
     }
@@ -84,7 +84,7 @@ class DiagnosesOverview extends React.Component {
     }
 
     update = () => {
-        axios.get('http://localhost:8080/api/diagnoses/all').then( response => {
+        axios.get('/api/diagnoses/all').then( response => {
             this.setState({diagnoses: response.data, showAddModal: false})
         })
     }
@@ -93,7 +93,7 @@ class DiagnosesOverview extends React.Component {
         if(diagnosis.reserved)
             return
 
-        axios.delete('http://localhost:8080/api/diagnoses/delete='+diagnosis.id).then(this.update)
+        axios.delete('/api/diagnoses/delete='+diagnosis.id).then(this.update)
     }
 
     render() {

@@ -42,7 +42,7 @@ class ScheduleAnother extends Component {
     componentDidMount() {
         this.getFirstFreeAppoiintment()
 
-        axios.get("http://localhost:8080/api/procedure+types/operation/all")
+        axios.get("/api/procedure+types/operation/all")
             .then(response => {
                 this.setState({ procedures: response.data }, () => {
                     if (this.state.procedures.length == 0) {
@@ -55,7 +55,7 @@ class ScheduleAnother extends Component {
     }
 
     getFirstFreeAppoiintment = () => {
-        axios.get("http://localhost:8080/api/doctors/schedules/first_free")
+        axios.get("/api/doctors/schedules/first_free")
             .then(response => {
                 this.setState({ firstFreeDate: response.data })
             })
@@ -100,7 +100,7 @@ class ScheduleAnother extends Component {
                 }
 
                 if (this.state.selectedOption === 'appointment') {
-                    axios.post("http://localhost:8080/api/doctors/schedules/check", {
+                    axios.post("/api/doctors/schedules/check", {
                         dateAndTimeString: dateAndTime
                     }).then(response => {
                         if (response.status === 201) {
@@ -158,7 +158,7 @@ class ScheduleAnother extends Component {
         event.preventDefault();
         if (this.state.selectedOption === 'appointment') {
 
-            axios.post('http://localhost:8080/api/appointments/request/doctor', {
+            axios.post('/api/appointments/request/doctor', {
                 oldAppointmentID: parseInt(this.state.currentAppointment),
                 dateAndTime: this.state.date + " " + this.state.time,
             }).then(respense => {
@@ -169,7 +169,7 @@ class ScheduleAnother extends Component {
 
         } else {
 
-            axios.post('http://localhost:8080/api/operations/request/doctor', {
+            axios.post('/api/operations/request/doctor', {
                 appointmentId: parseInt(this.state.currentAppointment),
                 dateAndTimeString: this.state.date + " " + this.state.time,
                 procedureTypeId: this.state.procedureTypeId

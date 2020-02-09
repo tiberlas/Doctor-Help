@@ -34,7 +34,7 @@ componentDidMount() {
 }
 
 handleCentreAdmin = () => {
-    axios.get("http://localhost:8080/api/centreAdmins/profile")
+    axios.get("/api/centreAdmins/profile")
         .then(response =>  {
             this.setState({
                 admin: {

@@ -28,7 +28,7 @@ class PatientRequests extends Component {
     componentDidMount = () => {
         this._isMounted = true
 
-        axios.get('http://localhost:8080/api/centreAdmins/requests',)
+        axios.get('/api/centreAdmins/requests',)
         .then(res =>  {
             this.setState({patientInfo: res.data})
         })
@@ -39,7 +39,7 @@ class PatientRequests extends Component {
 
 
     update = () => {
-        setTimeout(() => {axios.get('http://localhost:8080/api/centreAdmins/requests',)
+        setTimeout(() => {axios.get('/api/centreAdmins/requests',)
         .then(res =>  {
             this.setState({patientInfo: res.data, showRequestModal: false}, ()=>{this.forceUpdate()})
         })

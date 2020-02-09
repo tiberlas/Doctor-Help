@@ -34,7 +34,7 @@ class Doctor extends Component {
     componentDidMount() {
         this.handleDoctor();
 
-        axios.get('http://localhost:8080/api/doctors/schedules/operation/requested/count')
+        axios.get('/api/doctors/schedules/operation/requested/count')
             .then(response => {
                 if(response.data == 'OPERATIONS') {
                     this.setState({operation: true})
@@ -43,7 +43,7 @@ class Doctor extends Component {
     }
 
     handleDoctor = () => {
-        axios.get("http://localhost:8080/api/doctors/profile")
+        axios.get("/api/doctors/profile")
             .then(response =>  {
                 this.setState({
                     id: response.data.id,

@@ -23,7 +23,7 @@ class LeaveRequestStaffModal extends React.Component {
     componentDidMount() {
         console.log('request info', this.state.request)
         if(this.state.request.staffRole === 'NURSE') {
-            axios.post('http://localhost:8080/api/leave-requests/get-admin/validate/nurse', {
+            axios.post('/api/leave-requests/get-admin/validate/nurse', {
                 firstName: this.state.request.firstName,
                 lastName: this.state.request.lastName,
                 startDate: this.state.request.startDate,
@@ -45,7 +45,7 @@ class LeaveRequestStaffModal extends React.Component {
             })
 
         } else {
-            axios.post('http://localhost:8080/api/leave-requests/get-admin/validate/doctor', {
+            axios.post('/api/leave-requests/get-admin/validate/doctor', {
                 firstName: this.state.request.firstName,
                 lastName: this.state.request.lastName,
                 startDate: this.state.request.startDate,
@@ -95,7 +95,7 @@ class LeaveRequestStaffModal extends React.Component {
         if(this.props.request.staffRole === 'NURSE') {
             this.setState({declining: false, sending: true, success: false}, ()=> {
                 this.forceUpdate()
-                axios.put('http://localhost:8080/api/leave-requests/decline-nurse/request='+this.props.request.id, {
+                axios.put('/api/leave-requests/decline-nurse/request='+this.props.request.id, {
                     staffId: this.state.request.staffId,
                     staffRole: this.state.request.staffRole,
                     note: this.state.declineReason
@@ -110,7 +110,7 @@ class LeaveRequestStaffModal extends React.Component {
         } else {
             this.setState({declining: false, sending: true, success: false}, ()=> {
                 this.forceUpdate()
-                axios.put('http://localhost:8080/api/leave-requests/decline-doctor/request='+this.props.request.id, {
+                axios.put('/api/leave-requests/decline-doctor/request='+this.props.request.id, {
                     staffId: this.state.request.staffId,
                     staffRole: this.state.request.staffRole,
                     note: this.state.declineReason
@@ -128,7 +128,7 @@ class LeaveRequestStaffModal extends React.Component {
     sendAccept = () => {
         if(this.props.request.staffRole === 'NURSE') {
             this.setState({decline: false, sending: true, success: false}, () => {
-                axios.put('http://localhost:8080/api/leave-requests/accept-nurse/request='+this.props.request.id, {
+                axios.put('/api/leave-requests/accept-nurse/request='+this.props.request.id, {
                     firstName: this.state.request.firstName,
                     lastName: this.state.request.lastName,
                     startDate: this.state.request.startDate,
@@ -149,7 +149,7 @@ class LeaveRequestStaffModal extends React.Component {
             })
         } else {
             this.setState({decline: false, sending: true, success: false}, () => {
-                axios.put('http://localhost:8080/api/leave-requests/accept-doctor/request='+this.props.request.id, {
+                axios.put('/api/leave-requests/accept-doctor/request='+this.props.request.id, {
                     firstName: this.state.request.firstName,
                     lastName: this.state.request.lastName,
                     startDate: this.state.request.startDate,

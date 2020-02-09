@@ -8,9 +8,9 @@ class MedicalStuffItem extends Component {
     onDelite = () => {
         let url = ''
         if(this.props.value.role === 'DOCTOR') {
-            url = "http://localhost:8080/api/doctors/delete/id="+this.props.value.id
+            url = "/api/doctors/delete/id="+this.props.value.id
         } else {
-            url = "http://localhost:8080/api/nurses/delete/id="+this.props.value.id
+            url = "/api/nurses/delete/id="+this.props.value.id
         }
 
         axios.delete(url)

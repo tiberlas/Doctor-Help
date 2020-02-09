@@ -18,7 +18,7 @@ class OperationItem extends Component {
     }
 
     onDelite = () => {
-        axios.delete('http://localhost:8080/api/operations/requested='+this.state.id+'/delete')
+        axios.delete('/api/operations/requested='+this.state.id+'/delete')
             .then(response => {
                 this.props.handleUpdate(this.state.id);
             }).catch(error => {

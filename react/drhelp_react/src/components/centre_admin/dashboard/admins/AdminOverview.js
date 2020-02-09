@@ -48,9 +48,9 @@ export class AdminOverview extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/centreAdmins/all').then( response => {
+        axios.get('/api/centreAdmins/all').then( response => {
             this.setState({centreAdmins: response.data}, () => {
-                axios.get('http://localhost:8080/api/clinicAdmins/all').then(response => {
+                axios.get('/api/clinicAdmins/all').then(response => {
                     this.setState({clinicAdmins: response.data})
                 })
             })
@@ -101,11 +101,11 @@ export class AdminOverview extends Component {
 
     update = () => {
         if(this.state.adminType === 'CENTRE') {
-            axios.get('http://localhost:8080/api/centreAdmins/all').then( response => {
+            axios.get('/api/centreAdmins/all').then( response => {
                 this.setState({centreAdmins: response.data, admins: response.data, showAddModal: false})
             })
         } else if(this.state.adminType === 'CLINIC') {
-            axios.get('http://localhost:8080/api/clinicAdmins/all').then( response => {
+            axios.get('/api/clinicAdmins/all').then( response => {
                 this.setState({clinicAdmins: response.data, admins: response.data, showAddModal: false})
             })
         }

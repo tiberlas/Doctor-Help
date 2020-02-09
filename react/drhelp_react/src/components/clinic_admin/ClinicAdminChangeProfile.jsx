@@ -25,7 +25,7 @@ class ClinicAdminChangeProfile extends Component {
         this.setState({go_profile: false})
         this.setState({errorBack: false})
 
-        axios.put('http://localhost:8080/api/clinicAdmins/change', {
+        axios.put('/api/clinicAdmins/change', {
                     id: this.state.id,
                     firstName: user.firstName,
                     lastName: user.lastName,

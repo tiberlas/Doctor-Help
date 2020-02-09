@@ -35,7 +35,7 @@ class CreateMedicalStaff extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/procedure+types/all')
+        axios.get('/api/procedure+types/all')
             .then(response => {
                 this.setState({ procedures: response.data })
             })
@@ -100,9 +100,9 @@ class CreateMedicalStaff extends Component {
         event.preventDefault();
         let url = ''
         if (this.state.typeDoctor === true) {
-            url = 'http://localhost:8080/api/doctors/new+doctor'
+            url = '/api/doctors/new+doctor'
         } else {
-            url = 'http://localhost:8080/api/nurses/new+nurse'
+            url = '/api/nurses/new+nurse'
         }
         let id = ''
         if (this.state.procedureID !== "") {

@@ -80,7 +80,7 @@ class NewClinicForm extends React.Component {
     }
 
     submitClinic = () => {
-        axios.post('http://localhost:8080/api/clinics/newClinic', { 
+        axios.post('/api/clinics/newClinic', { 
 
             name: this.state.clinicName,
             address: this.state.clinicAddress,

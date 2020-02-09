@@ -31,7 +31,7 @@ class Clinic extends Component {
      }
 
      handleUpdate () {
-        axios.get('http://localhost:8080/api/clinics/id='+this.props.clinicId)
+        axios.get('/api/clinics/id='+this.props.clinicId)
         .then(response => {
             this.setState({
                 name: response.data.name,
@@ -43,7 +43,7 @@ class Clinic extends Component {
             });
         })
         if (this.context.user.role === "PATIENT") {
-            Axios.get ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4])
+            Axios.get ("/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4])
             .then (response => {
                 this.setState ({
                     haveInteracted : response.data.haveInteracted, 
@@ -59,7 +59,7 @@ class Clinic extends Component {
         this.setState ({
             myRating : nextValue
         }); 
-        Axios.post ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4] + "/" + nextValue)
+        Axios.post ("/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4] + "/" + nextValue)
         .then (data => {
             this.handleUpdate();
         })
@@ -69,7 +69,7 @@ class Clinic extends Component {
         this.setState ({
             myRating : 0
         })
-        Axios.post ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4] + "/" + 0)
+        Axios.post ("/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4] + "/" + 0)
         .then (data => {
             this.handleUpdate();
         })

@@ -50,7 +50,7 @@ class ClinicAdministrator extends Component {
     }
 
     handleClinicAdmin = () => {
-        axios.get("http://localhost:8080/api/clinicAdmins/profile")
+        axios.get("/api/clinicAdmins/profile")
             .then(response =>  {
                 this.setState({
                     email: response.data.email,

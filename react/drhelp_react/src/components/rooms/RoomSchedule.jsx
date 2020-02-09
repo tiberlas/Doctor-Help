@@ -21,7 +21,7 @@ class RoomSchedule extends React.Component {
 
   componentDidMount() {
     let path_parts = window.location.pathname.split('schedule/')
-    axios.get(`http://localhost:8080/api/rooms/room=${path_parts[1]}/schedule`)
+    axios.get(`/api/rooms/room=${path_parts[1]}/schedule`)
         .then((response) => {
             this.setState({appointments: response.data})
         })

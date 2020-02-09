@@ -21,7 +21,7 @@ class AppointmentInfoModal extends React.Component {
     }
 
     handleDelete = () => {
-        axios.delete('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/delete')
+        axios.delete('/api/appointments/requested='+this.props.event.id+'/delete')
             .then(response => {
                 this.setState({showRequestDeclinedOK: true})
             }).catch(error=> {
@@ -42,7 +42,7 @@ class AppointmentInfoModal extends React.Component {
         this.setState({ showConfirmModal: props.showConfirmModal, canDecline: false, showRequestDeclinedOK: false, showRequestDeclinedBAD: false}, () => {
 
             if(props.event.status == 'DONE') {
-                axios.get('http://localhost:8080/api/appointments/get-examination-report/appointment='+props.event.id+'/doctor='+this.context.doctor.id).then(response => {
+                axios.get('/api/appointments/get-examination-report/appointment='+props.event.id+'/doctor='+this.context.doctor.id).then(response => {
                     this.setState({report: response.data, showReport: true}, () => {this.handleCanDecline()})
                 })
             } else {
@@ -53,7 +53,7 @@ class AppointmentInfoModal extends React.Component {
 
     handleCanDecline = () => {
         if(this.props.event.id > 0) {
-            axios.get('http://localhost:8080/api/appointments/requested='+this.props.event.id+'/can+delete')
+            axios.get('/api/appointments/requested='+this.props.event.id+'/can+delete')
             .then(response => {
                 if(response.data == 'CAN BE DELETED') {
                     this.setState({canDecline: true});

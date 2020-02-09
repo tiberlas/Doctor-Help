@@ -12,32 +12,32 @@ class ViewProfile extends Component {
                 </div>
                 
                 <div >
-                    <label class="badge badge-success text-right">Email:</label>&nbsp;&nbsp;&nbsp;
+                    <strong><i class="fa fa-envelope-open"></i> Email:</strong>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.email}</label>
                 </div>
                
                 <div>
-                    <label class="badge badge-success text-right">Address:</label>&nbsp;&nbsp;&nbsp;
+                    <strong><i class="fas fa-map-marker-alt"></i> Address:</strong>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.address}</label>
                 </div>
                
                 <div >
-                    <label class="badge badge-success text-right">City:</label>&nbsp;&nbsp;&nbsp;
+                    <strong><i class="fas fa-city"></i> City:</strong>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.city}</label>
                 </div>
                 
                 <div >
-                    <label class="badge badge-success text-right">State:</label>&nbsp;&nbsp;&nbsp;
+                    <strong><i class="fas fa-globe-africa"></i> State:</strong>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.state}</label>
                 </div>
                 
                 <div >
-                    <label class="badge badge-success text-right">Phone Number:</label>&nbsp;&nbsp;&nbsp;
+                    <strong><i class="fas fa-mobile-alt"></i> Phone Number:</strong>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.phoneNumber}</label>
                 </div>
                 
                 <div >
-                    <label class="badge badge-success text-right">Birthday:</label>&nbsp;&nbsp;&nbsp;
+                    <strong><i class="fas fa-birthday-cake"></i> Birthday:</strong>&nbsp;&nbsp;&nbsp;
                     <label>{this.props.profile.birthday}</label>
                 </div>
                 </Fragment>

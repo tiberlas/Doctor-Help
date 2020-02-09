@@ -12,7 +12,7 @@ import FirstTimePasswordChange from './components/FirstTimePasswordChange'
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import { Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 
-
+const baseBackendUrl = "http://localhost:8080";
 class LoginPage extends React.Component {
 
 
@@ -46,7 +46,7 @@ class LoginPage extends React.Component {
 		
 		if (email.value.length >= 3) {
 			if  (password.value.length >= 3) {
-				fetch ('http://localhost:8080/api/login', {
+				fetch (baseBackendUrl+'/api/login', {
 					method: 'post',
 					headers: {'Content-Type' : 'application/json'},
 					body: JSON.stringify ({

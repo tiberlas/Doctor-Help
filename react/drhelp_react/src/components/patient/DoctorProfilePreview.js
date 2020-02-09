@@ -23,7 +23,7 @@ class DoctorProfilePreview extends Component {
 	componentDidMount () {
 		let parts = window.location.href.split ('/');
 		let tempId = parts[parts.length - 1];
-		axios.get ("http://localhost:8080/api/doctors/preview/" + tempId + "/" + this.context.user.id)
+		axios.get ("/api/doctors/preview/" + tempId + "/" + this.context.user.id)
 		.then (response => {
 			this.setState ({
 				firstName : response.data.firstName, 
@@ -41,7 +41,7 @@ class DoctorProfilePreview extends Component {
 	handleUpdate () {
 		let parts = window.location.href.split ('/');
 		let tempId = parts[parts.length - 1];
-		axios.get ("http://localhost:8080/api/doctors/preview/" + tempId + "/" + this.context.user.id)
+		axios.get ("/api/doctors/preview/" + tempId + "/" + this.context.user.id)
 		.then (response => {
 			this.setState ({
 				firstName : response.data.firstName, 
@@ -61,7 +61,7 @@ class DoctorProfilePreview extends Component {
 		this.setState ({
 			myRating : nextValue
 		})
-		axios.post ("http://localhost:8080/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + nextValue)
+		axios.post ("/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + nextValue)
 		.then (data => {
 			this.handleUpdate();
 		});
@@ -71,7 +71,7 @@ class DoctorProfilePreview extends Component {
 		this.setState ({
 			myRating : 0
 		})
-		axios.post ("http://localhost:8080/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + 0)
+		axios.post ("/api/doctors/review/" + this.context.user.id + "/" + this.state.id + "/" + 0)
 		.then (data => {
 			this.handleUpdate();
 		});

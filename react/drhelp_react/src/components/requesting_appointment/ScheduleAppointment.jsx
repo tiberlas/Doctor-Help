@@ -42,7 +42,7 @@ class ScheduleAppointment extends Component {
     }
     
     handleGetDoctors = () => {
-        axios.get('http://localhost:8080/api/doctors/all/specialization='+this.state.procedureId)
+        axios.get('/api/doctors/all/specialization='+this.state.procedureId)
             .then(response => {
                 this.setState({doctorList: response.data})
             })
@@ -69,14 +69,14 @@ class ScheduleAppointment extends Component {
     
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.roomId !== this.props.roomId) {
-            axios.get('http://localhost:8080/api/rooms/one/room='+this.props.roomId)
+            axios.get('/api/rooms/one/room='+this.props.roomId)
                 .then(response => {
-                    this.setState({room: response.data.name+': '+response.data.number})
+                    this.setState({room: response.data.name+' #'+response.data.number+''})
                 })
 
-            axios.get('http://localhost:8080/api/appointments/requests/id='+this.props.appointmentId)
+            axios.get('/api/appointments/requests/id='+this.props.appointmentId)
                 .then(response => {
-                    this.setState({procedure: response.data.type+' '+response.data.duration+' H',
+                    this.setState({procedure: response.data.type+' '+response.data.duration+'h',
                                     patient: response.data.patient,
                                     doctorSelected: response.data.doctor,
                                     procedureId: response.data.typeId,
@@ -123,7 +123,7 @@ class ScheduleAppointment extends Component {
         event.preventDefault();
 
         this.setState({errorDateAndTime: false, errorDoctor: false}, () => {
-            axios.post('http://localhost:8080/api/appointments/bless', {
+            axios.post('/api/appointments/bless', {
                 patientEmail: this.state.patient,
                 doctorEmail: this.state.doctorSelected,
                 roomId: this.props.roomId,
@@ -159,27 +159,19 @@ class ScheduleAppointment extends Component {
             >
 
                 <Modal.Header closeButton onClick={this.props.onHide}>
-                    <Modal.Title id="contained-modal-title-vcenter">Schedule appointment</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">Assign a room</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={this.handleBless}>
                     <Modal.Body>
                         <div class="form-group">
-                            <fieldset disabled="">
-                                <label class="control-label" for="disabledInput">Procerure</label>
-                                <input style={fontStyles} class="form-control" id="disabledInput" type="text" value={this.state.procedure} disabled="true" />
-                            </fieldset>
+                                <label class="control-label" for="disabledInput"><i class="fas fa-procedures"></i> Procedure: &emsp; {this.state.procedure} </label>
+                            
                         </div>
                         <div class="form-group">
-                            <fieldset disabled="">
-                                <label class="control-label" for="disabledInput">Pacient</label>
-                                <input style={fontStyles} class="form-control" id="disabledInput" type="text" value={this.state.patient} disabled="true" />
-                            </fieldset>
+                                <label class="control-label" for="disabledInput"><i class="fas fa-user-injured"></i> Patient: &emsp; {this.state.patient} </label>
                         </div>
                         <div class="form-group">
-                            <fieldset disabled="true">
-                                <label class="control-label" for="disabledInput">Room</label>
-                                <input style={fontStyles} class="form-control" id="disabledInput" type="text" value={this.state.room} disabled="" />
-                            </fieldset>
+                                <label class="control-label" for="disabledInput"><i class="fas fa-door-open"></i>  Room&emsp;{this.state.room}</label>
                         </div>
                         <hr class="my-4" />
 
@@ -188,23 +180,23 @@ class ScheduleAppointment extends Component {
                             <select multiple="" className={`form-control ${this.state.errorDoctor? 'is-invalid': 'is-valid'}`} id="doctor" name='doctor' onChange={this.handlerChangeDoctor} disabled={this.state.success}>
                                 {this.createDoctorItems()}
                             </select>
-                            { (this.state.errorDoctor) && <div class="invalid-feedback"> Doctor is occupied for this schedule, try {this.state.doctorRecomendedDate} </div>}
+                            { (this.state.errorDoctor) && <div class="invalid-feedback"> Work schedule is occupied. Try assigning {this.state.doctorRecomendedDate} </div>}
                         </div>
 
                         <div>
-                            <label for='date'>date</label>
+                            <label for='date'>Date</label>
                             <FormControl type="date" id='date' placeholder="Date in format: dd/mm/yyyy" onChange={this.handleChangeDate} value={this.state.date} className={`form-control ${this.state.errorDate? 'is-invalid': 'is-valid'}`} disabled={this.state.success}/>
                         </div>
                         <div>
-                            <label for='time'>time</label>
+                            <label for='time'>Time</label>
                             <TimePicker name='duration' id='time' onChange={this.handleChangeTime} locale="us" value={this.state.time} className={`form-control ${this.state.errorTime? 'is-invalid': 'is-valid'}`} disabled={this.state.success}/>
                         </div>
                         {this.state.errorDateAndTime && 
-                            <div class="text-danger"> Schedule is occupied, try {this.state.scheduleRecomendedDate} </div>
+                            <div class="text-danger"> Work schedule or there is an assigned appointment. Try assigning {this.state.scheduleRecomendedDate} </div>
                         }
 
                         {this.state.success &&
-                            <p class="text-success">Successfully blessed appointment</p>
+                            <p class="text-success">Successfully blessed appointment!</p>
                         }
                         {this.state.fatalError &&
                             <p class="text-danger">Something went wrong, please refresh the page and try again.</p>

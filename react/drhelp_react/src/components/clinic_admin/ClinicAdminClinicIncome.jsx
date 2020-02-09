@@ -18,7 +18,7 @@ class CLinicAdminClinicIncome extends Component {
     componentDidMount() {
         axios
 			.get(
-				"http://localhost:8080/api/clinics/id=" +
+				"/api/clinics/id=" +
 				this.context.admin.clinicId,
 			)
 			.then((response) => {
@@ -52,7 +52,7 @@ class CLinicAdminClinicIncome extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.post('http://localhost:8080/api/clinics/income', {
+        axios.post('/api/clinics/income', {
             beginDate: this.state.startDate,
             endDate: this.state.endDate
         }).then(response => {

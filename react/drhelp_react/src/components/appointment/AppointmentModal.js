@@ -45,7 +45,7 @@ class AppointmentModal extends React.Component {
 
 
     handleFinish = () => {
-        let url = 'http://localhost:8080/api/appointments/done=' + this.props.event.id
+        let url = '/api/appointments/done=' + this.props.event.id
         axios.put(url, {
             diagnosis: this.state.selectedDiagnosis,
             medicationList: this.state.selectedMedication,

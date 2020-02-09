@@ -13,7 +13,7 @@ class DoctorRequestedOperations extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/doctors/schedules/operation/requested')
+        axios.get('/api/doctors/schedules/operation/requested')
             .then(response => {
                 this.setState({operations: response.data})
             })

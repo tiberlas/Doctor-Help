@@ -16,7 +16,7 @@ class ViewClinic extends Component {
     static contextType = UserContext;
 
     componentDidMount () {
-        Axios.get ("http://localhost:8080/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4])
+        Axios.get ("/api/clinics/review/" + this.context.user.id + "/" + window.location.href.split('/')[4])
         .then (response => {
             this.setState ({
                 haveInteracted : response.data.haveInteracted, 

@@ -14,7 +14,7 @@ class NurseLeaveRequest extends React.Component {
 
 
     componentDidMount() {
-            axios.get('http://localhost:8080/api/leave-requests/get-all/nurse='+this.context.nurse.id)
+            axios.get('/api/leave-requests/get-all/nurse='+this.context.nurse.id)
             .then(response=>{
                 this.setState({
                     requests: response.data
@@ -23,7 +23,7 @@ class NurseLeaveRequest extends React.Component {
     }
 
     update = () => {
-        axios.get('http://localhost:8080/api/leave-requests/get-all/nurse='+this.context.nurse.id)
+        axios.get('/api/leave-requests/get-all/nurse='+this.context.nurse.id)
         .then(response=>{
             this.setState({
                 requests: response.data

@@ -18,7 +18,7 @@ class RoomReservingItem extends Component {
                 <TableCell colSpan='2' class='text text-white'>{this.state.firstFreeDate}</TableCell>
                 <TableCell>
                     <Button variant="primary" id={"room_selected"+this.state.roomId} onClick={(id) => {this.props.handleSchedule(this.state.roomId)}}>
-                        schedule
+                        Assign
                     </Button>
                 </TableCell>
             </Fragment>

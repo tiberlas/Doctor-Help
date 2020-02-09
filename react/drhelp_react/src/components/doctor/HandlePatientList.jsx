@@ -45,7 +45,7 @@ class HandlePatientList extends Component {
     }
 
     componentDidMount () {
-		axios.get ('http://localhost:8080/api/patients/all')
+		axios.get ('/api/patients/all')
 		.then (response => {
 			this.setState ({
 				patients: response.data
@@ -131,7 +131,7 @@ class HandlePatientList extends Component {
     }
 
     handleFilter = () => {
-        axios.post('http://localhost:8080/api/patients/filter', 
+        axios.post('/api/patients/filter', 
             {
                 filterResults: this.state.filterString
             }).then(response => {

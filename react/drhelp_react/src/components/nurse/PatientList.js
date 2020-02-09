@@ -50,7 +50,7 @@ class PatientList extends Component {
 	}
 
 	componentDidMount () {
-		axios.get ('http://localhost:8080/api/nurses/patientList')
+		axios.get ('/api/nurses/patientList')
 		.then (response => {
 			this.setState ({
 				patients: response.data
@@ -139,7 +139,7 @@ class PatientList extends Component {
 
     filterSubmit = (event) => {
         event.preventDefault()
-        axios.post('http://localhost:8080/api/nurses/filterPatients', {
+        axios.post('/api/nurses/filterPatients', {
             filterResults: this.state.filter
         }).then(response => {
             this.setState({

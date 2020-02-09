@@ -57,7 +57,7 @@ class HandlingRooms extends Component {
 
 		axios
 			.get(
-				"http://localhost:8080/api/clinics/id=" +
+				"/api/clinics/id=" +
 				this.context.admin.clinicId,
 			)
 			.then((response) => {
@@ -158,7 +158,7 @@ class HandlingRooms extends Component {
 	};
 
 	handleShowAll = () => {
-		axios.get("http://localhost:8080/api/rooms/all").then((response) => {
+		axios.get("/api/rooms/all").then((response) => {
 			this.setState({
 				rooms: response.data,
 			});
@@ -188,7 +188,7 @@ class HandlingRooms extends Component {
 		console.log(rname, rnumber, rtype, rdate);
 
 		axios
-			.post("http://localhost:8080/api/rooms/search", {
+			.post("/api/rooms/search", {
 				name: rname,
 				number: rnumber,
 				typeId: rtype,

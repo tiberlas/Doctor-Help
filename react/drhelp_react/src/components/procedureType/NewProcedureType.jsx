@@ -49,7 +49,7 @@ class NewProcedureType extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        axios.post('http://localhost:8080/api/procedure+types/new+procedure+type', {
+        axios.post('/api/procedure+types/new+procedure+type', {
             name: this.state.name,
             price: parseInt(this.state.price),
             duration: this.state.duration,

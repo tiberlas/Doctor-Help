@@ -26,7 +26,7 @@ class CentreAdminChangeProfile extends Component {
 
     handleSubmit = (user) => {
 
-        axios.put('http://localhost:8080/api/centreAdmins/change', {
+        axios.put('/api/centreAdmins/change', {
                     id: this.state.id,
                     firstName: user.firstName,
                     lastName: user.lastName,

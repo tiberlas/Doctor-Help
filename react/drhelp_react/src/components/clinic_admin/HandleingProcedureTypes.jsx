@@ -57,7 +57,7 @@ class HandleingProcedureTypes extends Component {
 
 		axios
 			.get(
-				"http://localhost:8080/api/clinics/id=" +
+				"/api/clinics/id=" +
 				this.context.admin.clinicId,
 			)
 			.then((response) => {
@@ -69,7 +69,7 @@ class HandleingProcedureTypes extends Component {
 
 	handleAllProcedureType = () => {
 		axios
-			.get("http://localhost:8080/api/procedure+types/all")
+			.get("/api/procedure+types/all")
 			.then((response) => {
 				this.setState({
 					procedures: response.data,
@@ -172,7 +172,7 @@ class HandleingProcedureTypes extends Component {
 
 	handleFilter = () => {
 		axios
-			.post("http://localhost:8080/api/procedure+types/filter", {
+			.post("/api/procedure+types/filter", {
 				string: this.state.filterString,
 				operation: 'NOT_DEFINED',
 			})
