@@ -36,21 +36,26 @@ class requestedOperation extends Component {
         return (
             <div>
                 <div class='row d-flex justify-content-center'>
-                    <div class='col-md-7'>
+                    <div class='col-md-5'>
+                        <br/>
+                            <h3> Requested operation. </h3>
+                        </div>
+                        </div>
+
+                        <div class='row d-flex justify-content-center'>
+                    <div class='col-md-11'>
+                        <br/>
                         <Table class="table table-hover ">
-                            <TableHead class="table-active">
-                                <TableRow class="table-active">
-                                    <TableCell colSpan='6' class='text text-success text-center' align='center'>Requested operations</TableCell>
-                                </TableRow>
-                                <TableRow class="table-active">
-                                    <TableCell class="text-success cursor-pointer" >date and time</TableCell>
-                                    <TableCell class="text-success cursor-pointer" >procedure</TableCell>
-                                    <TableCell class="text-success cursor-pointer" >patient</TableCell>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell class="text-success cursor-pointer" ><i class="fas fa-clock"></i> Date</TableCell>
+                                    <TableCell class="text-success cursor-pointer" ><i class="fas fa-procedures"></i> Procedure</TableCell>
+                                    <TableCell class="text-success cursor-pointer" ><i class="fas fa-user-injured"></i> Patient</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 <TableCell class="text-white" >{this.state.date}</TableCell>
-                                <TableCell class='text text-white'>{this.state.procedureName}&nbsp;{this.state.procedureDuration}&nbsp;H</TableCell>
+                                <TableCell class='text text-white'>{this.state.procedureName}&nbsp;{this.state.procedureDuration}h</TableCell>
                                 <TableCell class='text text-white'>{this.state.patient}</TableCell>
                             </TableBody>
                         </Table>
