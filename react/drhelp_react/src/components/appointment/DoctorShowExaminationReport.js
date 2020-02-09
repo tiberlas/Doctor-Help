@@ -31,7 +31,7 @@ class DoctorShowExaminationReport extends React.Component {
 
     handleUpdate = () => {
         this.setState({showUpdate: false}, ()=> {
-            axios.put('http://localhost:8080/api/appointments/update/appointment='+this.props.event.id,
+            axios.put('/api/appointments/update/appointment='+this.props.event.id,
                 {
                     note: this.state.note
                 }

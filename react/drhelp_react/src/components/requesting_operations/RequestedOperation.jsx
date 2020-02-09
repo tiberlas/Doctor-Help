@@ -19,7 +19,7 @@ class requestedOperation extends Component {
 
     componentDidMount() {
         let path_parts = window.location.pathname.split('operation/')
-        axios.get('http://localhost:8080/api/operations/requests/id=' + path_parts[1])
+        axios.get('/api/operations/requests/id=' + path_parts[1])
             .then(responce => {
                 this.setState({
                     operationId: responce.data.operationId,

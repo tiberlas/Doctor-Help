@@ -17,7 +17,7 @@ class ClinicAdminHeldAppointments extends Component {
     componentDidMount() {
         axios
 			.get(
-				"http://localhost:8080/api/clinics/id=" +
+				"/api/clinics/id=" +
 				this.context.admin.clinicId,
 			)
 			.then((response) => {
@@ -44,7 +44,7 @@ class ClinicAdminHeldAppointments extends Component {
     }
 
     handleGetGraph = () => {
-        axios.post('http://localhost:8080/api/clinics/held_appointments', {
+        axios.post('/api/clinics/held_appointments', {
             detailLvl: this.state.graphGranularity,
             referentDate: this.state.date
         }).then(response => {

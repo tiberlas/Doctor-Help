@@ -52,7 +52,7 @@ class NewMedicationForm extends React.Component {
     }
 
     submitMedication = () => {
-        axios.post('http://localhost:8080/api/medication/new', { 
+        axios.post('/api/medication/new', { 
 
             name: this.state.medicationName,
             description: this.state.medicationDescription

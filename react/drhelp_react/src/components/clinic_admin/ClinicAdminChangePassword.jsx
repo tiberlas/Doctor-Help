@@ -15,7 +15,7 @@ class ClinicAdminChangePassword extends Component {
     handleSubmit = (data) => {
         this.setState({errorBack: false})
 
-        axios.put('http://localhost:8080/api/clinicAdmins/change/password', {
+        axios.put('/api/clinicAdmins/change/password', {
                     oldPassword: data.oldPassword,
                     newPassword: data.newPassword
         }).then((responce) => {

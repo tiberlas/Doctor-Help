@@ -45,7 +45,7 @@ class NurseRequestCalendar extends React.Component {
       }
 
     componentDidMount() {
-        let url = 'http://localhost:8080/api/appointments/leave-request-appointments/nurse=' + this.context.nurse.id 
+        let url = '/api/appointments/leave-request-appointments/nurse=' + this.context.nurse.id 
         axios.get(url).then((response) => {
             this.setState({
             appointments: response.data,
@@ -53,7 +53,7 @@ class NurseRequestCalendar extends React.Component {
             })
         })
 
-        axios.get('http://localhost:8080/api/nurses/nurse='+this.context.nurse.id+'/business-hours')
+        axios.get('/api/nurses/nurse='+this.context.nurse.id+'/business-hours')
         .then(response => {
         this.setState({businessHours: response.data}, () => {
             console.log('business hours:', this.state.businessHours)

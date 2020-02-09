@@ -42,17 +42,17 @@ class NewPredefinedAppointment extends Component {
     static contextType = ClinicAdminContext
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/doctors/clinic=' + this.context.admin.clinicId + '/all')
+        axios.get('/api/doctors/clinic=' + this.context.admin.clinicId + '/all')
             .then(response => {
                 this.setState({ doctorList: response.data })
             })
 
-        axios.get('http://localhost:8080/api/rooms/all')
+        axios.get('/api/rooms/all')
             .then(response => {
                 this.setState({ roomList: response.data })
             })
 
-        axios.get('http://localhost:8080/api/procedure+types/appointments/all')
+        axios.get('/api/procedure+types/appointments/all')
             .then(response => {
                 this.setState({ procedureList: response.data })
             })
@@ -186,7 +186,7 @@ class NewPredefinedAppointment extends Component {
         event.preventDefault();
         this.setState({ errorNotAvailable: false, fatalError: false }, () => {
 
-            axios.post('http://localhost:8080/api/predefined+appointments/newPredefinedAppointment', {
+            axios.post('/api/predefined+appointments/newPredefinedAppointment', {
                 dateAndTime: this.state.dateAndTime,
                 procedureTypeId: this.state.procedureTypeId,
                 roomId: this.state.roomId,

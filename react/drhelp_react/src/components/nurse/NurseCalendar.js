@@ -40,20 +40,20 @@ class NurseCalendar extends React.Component {
 
     componentDidMount() {
       if(this.props.regime === 'schedule') {
-            let url = 'http://localhost:8080/api/appointments/all_appointments/nurse=' + this.context.nurse.id 
+            let url = '/api/appointments/all_appointments/nurse=' + this.context.nurse.id 
             axios.get(url).then((response) => {
                 this.setState({
                   appointments: response.data
                 })
             })
 
-            axios.get('http://localhost:8080/api/nurses/nurse='+this.context.nurse.id+'/business-hours')
+            axios.get('/api/nurses/nurse='+this.context.nurse.id+'/business-hours')
             .then(response => {
               this.setState({businessHours: response.data}, () => {
               })
             })
 
-            axios.get('http://localhost:8080/api/leave-requests/get-approved/nurse='+this.context.nurse.id)
+            axios.get('/api/leave-requests/get-approved/nurse='+this.context.nurse.id)
               .then(response => {
                 this.setState({approvedLeaves: response.data})
               })
@@ -64,7 +64,7 @@ class NurseCalendar extends React.Component {
       componentWillReceiveProps(props) {
         if(props.regime === 'history') {
           let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
-          let url = 'http://localhost:8080/api/appointments/done_appointments/nurse/patient='+id
+          let url = '/api/appointments/done_appointments/nurse/patient='+id
           axios.get(url).then((response) => {
             this.setState({
               appointments: response.data

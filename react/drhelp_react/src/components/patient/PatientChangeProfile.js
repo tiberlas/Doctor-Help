@@ -27,7 +27,7 @@ class PatientChangeProfile extends Component {
 		this.setState({to_profile: false})
         this.setState({errorBack: false})
 
-		axios.put ('http://localhost:8080/api/patients/change', {
+		axios.put ('/api/patients/change', {
 			
 				id: this.context.patient.id, 
 				firstName: user.firstName,

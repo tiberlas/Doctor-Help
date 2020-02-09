@@ -68,7 +68,7 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     handleCLinicName = () => {
-        axios.get("http://localhost:8080/api/clinics/id=" + this.context.admin.clinicId)
+        axios.get("/api/clinics/id=" + this.context.admin.clinicId)
             .then(response => {
                 this.setState({
                     clinicName: response.data.name
@@ -77,7 +77,7 @@ class ClinicAdminMedicalStaff extends Component {
     }
 
     handleMedicalStuff = () => {
-        axios.get("http://localhost:8080/api/medical+stuff/clinic=" + this.context.admin.clinicId + "/all")
+        axios.get("/api/medical+stuff/clinic=" + this.context.admin.clinicId + "/all")
             .then(response => {
                 this.setState({
                     medicalStuff: response.data,
@@ -211,7 +211,7 @@ class ClinicAdminMedicalStaff extends Component {
         if (this.state.shownMedicalStaff == null) {
             return;
         }
-        axios.post('http://localhost:8080/api/medical+stuff/filter',
+        axios.post('/api/medical+stuff/filter',
             {
                 string: this.state.filterString,
                 role: 'DISABLED'

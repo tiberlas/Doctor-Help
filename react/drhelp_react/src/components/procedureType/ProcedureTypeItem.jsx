@@ -23,7 +23,7 @@ class ProcedureTypeItem extends Component {
     }
     
     onDelite = () => {
-        axios.delete("http://localhost:8080/api/procedure+types/delete/id="+this.state.id)
+        axios.delete("/api/procedure+types/delete/id="+this.state.id)
         .then(response => {
             this.props.handleUpdate(this.state.id);
         }).catch(error => {

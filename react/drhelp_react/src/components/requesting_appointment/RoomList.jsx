@@ -79,7 +79,7 @@ class RoomList extends Component {
 
 	handleGetAllRooms = () => {
 		axios
-			.post("http://localhost:8080/api/rooms/all/", {
+			.post("/api/rooms/all/", {
 				typeId: this.state.type,
 				date: this.state.date,
 			})
@@ -179,7 +179,7 @@ class RoomList extends Component {
 		console.log(rname, rnumber, rdate);
 
 		axios
-			.post("http://localhost:8080/api/rooms/search", {
+			.post("/api/rooms/search", {
 				name: rname,
 				number: rnumber,
 				typeId: this.state.type,

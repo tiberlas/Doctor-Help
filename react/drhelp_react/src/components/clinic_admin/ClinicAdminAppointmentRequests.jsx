@@ -26,7 +26,7 @@ class ClinicAdminAppointmentRequests extends Component {
 
 	handleGetRequests = () => {
 		axios
-			.get("http://localhost:8080/api/appointments/requests/all")
+			.get("/api/appointments/requests/all")
 			.then((response) => {
 				this.setState({ appointments: response.data });
 			});
@@ -35,7 +35,7 @@ class ClinicAdminAppointmentRequests extends Component {
 	handleClinicName = () => {
 		axios
 			.get(
-				"http://localhost:8080/api/clinics/id=" +
+				"/api/clinics/id=" +
 					this.context.admin.clinicId,
 			)
 			.then((response) => {

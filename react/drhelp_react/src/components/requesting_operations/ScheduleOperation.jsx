@@ -44,7 +44,7 @@ class ScheduleOperation extends Component {
 		if (prevProps.roomId != this.props.roomId) {
 			axios
 				.get(
-					"http://localhost:8080/api/rooms/one/room=" +
+					"/api/rooms/one/room=" +
 						this.props.roomId,
 				)
 				.then((response) => {
@@ -55,7 +55,7 @@ class ScheduleOperation extends Component {
 
 			axios
 				.get(
-					"http://localhost:8080/api/operations/requests/id=" +
+					"/api/operations/requests/id=" +
 						this.props.operationId,
 				)
 				.then((response) => {
@@ -130,7 +130,7 @@ class ScheduleOperation extends Component {
 	getDoctors = () => {
 		axios
 			.get(
-				`http://localhost:8080/api/doctors/all/specialization=${this.state.procedureId}`,
+				`/api/doctors/all/specialization=${this.state.procedureId}`,
 			)
 			.then((response) => {
 				let items = [];
@@ -182,7 +182,7 @@ class ScheduleOperation extends Component {
 				this.setState({ errorDoctoCount: false });
 				axios
 					.post(
-						"http://localhost:8080/api/operations/schedules/check",
+						"/api/operations/schedules/check",
 						{
 							doctor0: this.state.selectedDoctor[0],
 							doctor1: this.state.selectedDoctor[1],
@@ -242,7 +242,7 @@ class ScheduleOperation extends Component {
 		event.preventDefault();
 		let dateAndTimeString = this.state.date + " " + this.state.time;
 		axios
-			.post("http://localhost:8080/api/operations/schedules/bless", {
+			.post("/api/operations/schedules/bless", {
 				dateAndTimeString: dateAndTimeString,
 				operationId: this.props.operationId,
 				doctor0: this.state.selectedDoctor[0],

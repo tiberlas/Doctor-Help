@@ -25,7 +25,7 @@ class ClinicAdminOperationRequest extends Component {
     }
 
     getAllOperations = () => {
-        axios.get('http://localhost:8080/api/operations/requested/all')
+        axios.get('/api/operations/requested/all')
             .then(response => {
                 this.setState({
                     operations: response.data
@@ -34,7 +34,7 @@ class ClinicAdminOperationRequest extends Component {
     }
 
     handleClinicName = () => {
-        axios.get('http://localhost:8080/api/clinics/id=' + this.context.admin.clinicId)
+        axios.get('/api/clinics/id=' + this.context.admin.clinicId)
             .then(response => {
                 this.setState({
                     name: response.data.name

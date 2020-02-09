@@ -34,7 +34,7 @@ class RoomItem extends Component {
 	onDelite = () => {
 		axios
 			.delete(
-				"http://localhost:8080/api/rooms/delete/id=" + this.state.id,
+				"/api/rooms/delete/id=" + this.state.id,
 			)
 			.then((response) => {
 				this.props.handleUpdate(this.state.id);

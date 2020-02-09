@@ -20,7 +20,7 @@ class AppointmentHealthRecord extends React.Component {
     }
 
     componentWillMount() {
-        let url = 'http://localhost:8080/api/doctors/appointment='+this.props.data.id+'/health_record'
+        let url = '/api/doctors/appointment='+this.props.data.id+'/health_record'
         axios.get(url).then(response => {
             this.setState( prevState => ({
                 health_record: {

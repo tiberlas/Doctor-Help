@@ -19,7 +19,7 @@ class HealthRecord extends Component {
 	static contextType = PatientContext;
 
 	componentDidMount () {
-		let path = "http://localhost:8080/api/patients/health_record";
+		let path = "/api/patients/health_record";
 		axios.get (path)
         .then (response => {
 			if (response.status === 404) {

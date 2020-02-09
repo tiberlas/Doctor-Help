@@ -15,7 +15,7 @@ class PatientChangePassword extends Component {
     handleSubmit = (data) => {
         this.setState({errorBack: false})
 
-        axios.put('http://localhost:8080/api/patients/change/password', {
+        axios.put('/api/patients/change/password', {
                     oldPassword: data.oldPassword,
                     newPassword: data.newPassword
         }).then((responce) => {

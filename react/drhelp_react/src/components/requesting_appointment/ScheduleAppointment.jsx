@@ -42,7 +42,7 @@ class ScheduleAppointment extends Component {
     }
     
     handleGetDoctors = () => {
-        axios.get('http://localhost:8080/api/doctors/all/specialization='+this.state.procedureId)
+        axios.get('/api/doctors/all/specialization='+this.state.procedureId)
             .then(response => {
                 this.setState({doctorList: response.data})
             })
@@ -69,12 +69,12 @@ class ScheduleAppointment extends Component {
     
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.roomId !== this.props.roomId) {
-            axios.get('http://localhost:8080/api/rooms/one/room='+this.props.roomId)
+            axios.get('/api/rooms/one/room='+this.props.roomId)
                 .then(response => {
                     this.setState({room: response.data.name+' #'+response.data.number+''})
                 })
 
-            axios.get('http://localhost:8080/api/appointments/requests/id='+this.props.appointmentId)
+            axios.get('/api/appointments/requests/id='+this.props.appointmentId)
                 .then(response => {
                     this.setState({procedure: response.data.type+' '+response.data.duration+'h',
                                     patient: response.data.patient,
@@ -123,7 +123,7 @@ class ScheduleAppointment extends Component {
         event.preventDefault();
 
         this.setState({errorDateAndTime: false, errorDoctor: false}, () => {
-            axios.post('http://localhost:8080/api/appointments/bless', {
+            axios.post('/api/appointments/bless', {
                 patientEmail: this.state.patient,
                 doctorEmail: this.state.doctorSelected,
                 roomId: this.props.roomId,

@@ -54,7 +54,7 @@ class ClinicListing extends Component {
 	}
 
 	componentDidMount () {
-		axios.get ('http://localhost:8080/api/clinics/listing/proc_type=unfiltered/date=unfiltered/stat=unfiltered/cit=unfiltered/adr=unfiltered/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered')
+		axios.get ('/api/clinics/listing/proc_type=unfiltered/date=unfiltered/stat=unfiltered/cit=unfiltered/adr=unfiltered/min_rat=unfiltered/max_rat=unfiltered/min_price=unfiltered/max_price=unfiltered')
 		.then (response => {
 			this.setState ({
 				clinics : response.data.clinicList, 
@@ -224,29 +224,48 @@ class ClinicListing extends Component {
 		let element = document.getElementById ("picker");
 		let value = element.value;
 		let text = this.state.activeFilter;
-		// text = text.replace (' ', '_');
 		
-		// alert ("Filter date: " + value + "; Filter type: " + text);
-		
-		if (value === "") {
-			value = "unfiltered";
-			// alert ("I am in if")
+		let year = value.split("-")[0];
+		let month = value.split("-")[1];
+		let day = value.split("-")[2];
+
+		let actualDate = new Date();
+		if (actualDate.getFullYear() > year) {
+			// alert ("Selected is in the past")
+			value = "";
+		}
+		else {
+			// alert (actualDate.getDate() + " " +  (actualDate.getMonth() + 1) + " " + actualDate.getFullYear());
+			if ((actualDate.getMonth() + 1) > month) {
+				// alert ("Selected is in the past");
+				value = "";
+			}
+			else {
+				if (actualDate.getDate() >= day) {
+					// alert ("Selected is in the past")
+					value = "";
+				}
+				else {
+					// alert ("Selected is in the future");
+				}
+			}
 		}
 
-		// alert ("Filter date: " + value + "; Filter type: " + text);
+		if (value === "") {
+			value = "unfiltered";
+		}
+
 		this.setState ({
 			selectedDate : value,
 			activeFilter : text
 		})
 
 		if ((value === 'unfiltered') || (text === 'unfiltered')) {
-			// alert ("Unfiltered =D");
 			this.setState ({
 				cantReserve : true
 			})
 		}
 		else {
-			// alert ("Filtered")
 			this.setState ({
 				cantReserve : false
 			})
@@ -365,7 +384,7 @@ class ClinicListing extends Component {
 	fetchData (dil, dat, sFilter, cFilter, aFilter, minrFilter, maxrFilter, minpFilter, maxpFilter) {
 		// let text = this.state.activeFilter;
 		// let date = this.state.selectedDate;
-		let requestPartOne = 'http://localhost:8080/api/clinics/listing/proc_type=';
+		let requestPartOne = '/api/clinics/listing/proc_type=';
 		let requestPartTwo = dil + '/date=' + dat;
 		requestPartTwo += '/stat=' + sFilter;
 		requestPartTwo += '/cit=' + cFilter;
@@ -444,7 +463,7 @@ class ClinicListing extends Component {
 										</form>		
 									</TableCell>	
 									<TableCell></TableCell>		
-									<TableCell>{(this.state.selectedDate === 'unfiltered') ? ("") : ("Current: " + this.state.selectedDate)}</TableCell>		
+									<TableCell>{(this.state.selectedDate === 'unfiltered') ? ("Date must be after dotay") : ("Current: " + this.state.selectedDate)}</TableCell>		
 									<TableCell></TableCell>					
 								</TableRow>
 								<TableRow>
@@ -541,18 +560,18 @@ class ClinicListing extends Component {
 					<Table >
 						<TableHead>
 							<TableRow> 
-								<TableCell width="150px" class="text-success">Clinic Name</TableCell>
-								<TableCell width="100px" class="text-success">Address</TableCell>
-								<TableCell width="75px" class="text-success">City</TableCell>
-								<TableCell width="50px" class="text-success">State</TableCell>
-								<TableCell width="50px" class="text-success">Rating</TableCell>
-								<TableCell width="50px" class="text-success">Price</TableCell>
+								<TableCell width="150px" class="text-success"><i class="fas fa-plus-circle"></i> Clinic Name</TableCell>
+								<TableCell width="100px" class="text-success"><i class="fas fa-map-marker-alt"></i> Address</TableCell>
+								<TableCell width="75px" class="text-success"><i class="fas fa-city"></i> City</TableCell>
+								<TableCell width="50px" class="text-success"><i class="fas fa-globe-africa"></i> State</TableCell>
+								<TableCell width="50px" class="text-success"><i class="fas fa-star"></i> Rating</TableCell>
+								<TableCell width="50px" class="text-success"><i class="fab fa-bitcoin"></i> Price</TableCell>
 								<TableCell width="50px" class="text-success">
 									<Button onClick={() => this.switchDialog()} 
 										type = "button"
 										id="filter_clinics_button"
 									>	
-										Filter
+										<i class="fas fa-search"></i> Search
 									</Button>
 								</TableCell>
 							</TableRow>

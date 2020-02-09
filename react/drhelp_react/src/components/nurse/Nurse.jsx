@@ -35,7 +35,7 @@ class Nurse extends Component {
     }
 
     handleNurse = () => {
-        axios.get("http://localhost:8080/api/nurses/profile")
+        axios.get("/api/nurses/profile")
             .then(response =>  {
                 this.setState({
                     id: response.data.id,

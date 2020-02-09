@@ -43,7 +43,7 @@ class MedicationOverview extends Component {
 
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/medication/all').then( response => {
+        axios.get('/api/medication/all').then( response => {
             this.setState({medication: response.data})
         })
     }
@@ -84,7 +84,7 @@ class MedicationOverview extends Component {
     }
 
     update = () => {
-        axios.get('http://localhost:8080/api/medication/all').then( response => {
+        axios.get('/api/medication/all').then( response => {
             this.setState({medication: response.data, showAddModal: false})
         })
     }
@@ -93,7 +93,7 @@ class MedicationOverview extends Component {
         if(medication.reserved)
             return
 
-        axios.delete('http://localhost:8080/api/medication/delete='+medication.id).then(this.update)
+        axios.delete('/api/medication/delete='+medication.id).then(this.update)
     }
 
 

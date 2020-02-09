@@ -21,7 +21,7 @@ class DoctorChangeProfile extends Component {
 
     handleSubmit = (user) => {
 
-        axios.put('http://localhost:8080/api/doctors/change', {
+        axios.put('/api/doctors/change', {
                     id: 100,
                     firstName: user.firstName,
                     lastName: user.lastName,

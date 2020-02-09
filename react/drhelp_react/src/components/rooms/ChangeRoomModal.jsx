@@ -15,7 +15,7 @@ class ChangeRoomModal extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/procedure+types/all')
+        axios.get('/api/procedure+types/all')
         .then(response => {
             this.setState({procedureList: response.data})
         })
@@ -41,7 +41,7 @@ class ChangeRoomModal extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        axios.put('http://localhost:8080/api/rooms/change', {
+        axios.put('/api/rooms/change', {
                     id: this.state.id,            
                     name: this.state.name,
                     number: parseInt(this.state.number),

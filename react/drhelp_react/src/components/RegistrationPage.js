@@ -3,6 +3,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import { Link, Redirect } from 'react-router-dom';
 import { Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 
+const baseBackUrl = "http://localhost:8080";
 class RegistrationPage extends React.Component {
 
 	constructor () {
@@ -120,7 +121,7 @@ class RegistrationPage extends React.Component {
 			return;
 		}
 
-		fetch ('http://localhost:8080/api/register', {
+		fetch (baseBackUrl+'/api/register', {
 			method: 'post', 
 			headers: {'Content-Type' : 'application/json'}, 
 			body: JSON.stringify ({

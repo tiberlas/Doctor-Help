@@ -23,7 +23,7 @@ class ClinicChangeProfile extends Component {
     }
 
     handelUpdate = () => {
-       axios.get('http://localhost:8080/api/clinics/id='+this.props.clinicId)
+       axios.get('/api/clinics/id='+this.props.clinicId)
        .then(response => {
            this.setState({
                name: response.data.name,
@@ -51,7 +51,7 @@ class ClinicChangeProfile extends Component {
         event.preventDefault();
         this.setState({gotoProfile: false, errorBack: false})
 
-        axios.put('http://localhost:8080/api/clinics/change', {
+        axios.put('/api/clinics/change', {
                     id: this.props.clinicId,
                     name: this.state.name,
                     description: this.state.description,

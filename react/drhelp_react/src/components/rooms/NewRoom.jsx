@@ -17,7 +17,7 @@ class NewRoom extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/procedure+types/all')
+        axios.get('/api/procedure+types/all')
             .then(response => {
                 this.setState({ procedureList: response.data })
             })
@@ -45,7 +45,7 @@ class NewRoom extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        axios.post('http://localhost:8080/api/rooms/new+room', {
+        axios.post('/api/rooms/new+room', {
             name: this.state.name,
             number: parseInt(this.state.number),
             procedureTypeId: this.state.procedureTypeId

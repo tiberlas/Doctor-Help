@@ -21,7 +21,7 @@ class RequestedAppointment extends Component {
 
     componentDidMount() {
         let path_parts = window.location.pathname.split('appointment/')
-        axios.get('http://localhost:8080/api/appointments/requests/id=' + path_parts[1])
+        axios.get('/api/appointments/requests/id=' + path_parts[1])
             .then(responce => {
                 this.setState({
                     id: responce.data.id,

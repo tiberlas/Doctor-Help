@@ -15,7 +15,7 @@ class CentreAdminChangePassword extends Component {
     handleSubmit = (data) => {
         this.setState({errorBack: false})
 
-        axios.put('http://localhost:8080/api/centreAdmins/change/password', {
+        axios.put('/api/centreAdmins/change/password', {
                     oldPassword: data.oldPassword,
                     newPassword: data.newPassword
         }).then((responce) => {

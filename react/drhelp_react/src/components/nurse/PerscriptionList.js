@@ -16,7 +16,7 @@ class PerscriptionList extends Component {
     static contextType = NurseContext
 
     componentDidMount () {
-		axios.get('http://localhost:8080/api/nurses/pendingPerscriptions/nurse='+this.context.nurse.id)
+		axios.get('/api/nurses/pendingPerscriptions/nurse='+this.context.nurse.id)
 		.then (response => {
 			this.setState ({
 				perscriptions: response.data
@@ -26,7 +26,7 @@ class PerscriptionList extends Component {
 
     handleClick = (event) => {
         event.preventDefault()
-        let url = 'http://localhost:8080/api/nurses/signOff/' + this.context.nurse.id + '/' + event.target.value
+        let url = '/api/nurses/signOff/' + this.context.nurse.id + '/' + event.target.value
         axios.put (url)
 		.then (response => {
             console.log("response data" + response.data)

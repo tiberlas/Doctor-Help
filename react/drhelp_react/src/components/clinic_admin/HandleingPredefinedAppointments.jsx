@@ -48,7 +48,7 @@ class HandleingPredefinedAppointments extends Component {
 
 		axios
 			.get(
-				"http://localhost:8080/api/clinics/id=" +
+				"/api/clinics/id=" +
 					this.context.admin.clinicId,
 			)
 			.then((response) => {
@@ -61,7 +61,7 @@ class HandleingPredefinedAppointments extends Component {
 	handleAllPredefinedAppointments = () => {
 		axios
 		.get(
-			"http://localhost:8080/api/predefined+appointments/clinic=" +
+			"/api/predefined+appointments/clinic=" +
 				this.context.admin.clinicId +
 				"/all",
 		)

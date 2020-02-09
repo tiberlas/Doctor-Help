@@ -117,31 +117,31 @@ class DoctorCalendar extends React.Component {
 
 
   getScheduleData = () => {
-    let url = 'http://localhost:8080/api/appointments/all_appointments/doctor=' + this.context.doctor.id 
+    let url = '/api/appointments/all_appointments/doctor=' + this.context.doctor.id 
     axios.get(url).then((response) => {
         this.setState({
           appointments: response.data
         })
     })
 
-    axios.get('http://localhost:8080/api/operations/all-approved/doctor='+this.context.doctor.id).then(response => {
+    axios.get('/api/operations/all-approved/doctor='+this.context.doctor.id).then(response => {
       this.setState({operations: response.data})
     })
 
-    axios.get('http://localhost:8080/api/doctors/doctor='+this.context.doctor.id +'/business-hours')
+    axios.get('/api/doctors/doctor='+this.context.doctor.id +'/business-hours')
         .then(response => {
           this.setState({businessHours: response.data}, () => {
           })
         })
 
-    axios.get('http://localhost:8080/api/leave-requests/get-approved/doctor='+this.context.doctor.id)
+    axios.get('/api/leave-requests/get-approved/doctor='+this.context.doctor.id)
         .then(response => {this.setState({approvedLeaves: response.data})})
 
   } 
 
   getProfileData = () => {
     let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
-    let url = 'http://localhost:8080/api/appointments/approved_appointments/doctor='+this.context.doctor.id+'/patient='+id
+    let url = '/api/appointments/approved_appointments/doctor='+this.context.doctor.id+'/patient='+id
     axios.get(url).then((response) => {
       this.setState({
         appointments: response.data
@@ -151,7 +151,7 @@ class DoctorCalendar extends React.Component {
 
   getHistory = () => {
     let id = window.location.href.split('profile/')[1] //get the forwarded insurance id from url
-    let url = 'http://localhost:8080/api/appointments/done_appointments/doctor/patient='+id
+    let url = '/api/appointments/done_appointments/doctor/patient='+id
     axios.get(url).then((response) => {
       this.setState({
         appointments: response.data

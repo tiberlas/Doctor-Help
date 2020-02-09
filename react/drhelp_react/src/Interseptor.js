@@ -1,6 +1,8 @@
 import axios from "axios"
 
-axios.defaults.baseURL = "http://localhost:8080"
+axios.defaults.baseURL = "http://localhost:8080";
+const baseBackendUrl = "http://localhost:8080";
+const baseFrontUrl = "http://localhost:3000";
 
 const interceptor = axios.interceptors.request.use( (config) => {
 const token = JSON.parse(localStorage.getItem('token'))
@@ -8,7 +10,7 @@ const token = JSON.parse(localStorage.getItem('token'))
 if ( token != null ) {
     
     //axios.interceptors.request.eject(interceptor);
-    fetch('http://localhost:8080/api/refreshToken', { 
+    fetch(baseBackendUrl+'/api/refreshToken', { 
         method: "post",
         headers: {
             'Content-Type': 'application/json'
@@ -19,7 +21,7 @@ if ( token != null ) {
     }).then(response => {
         if(response.status === 404 || response.status === 401) {
             localStorage.removeItem('token')
-            window.location.href = 'http://localhost:3000/login'//temp solution
+            window.location.href = baseFrontUrl+'/login'//temp solution
         }
 
         return response.json()
@@ -41,7 +43,7 @@ return config;
     alert("ERROR")
     if ( err.status === 401 ) {
         localStorage.removeItem('token')
-        window.location.href = 'http://localhost:3000/login'//temp solution
+        window.location.href = baseFrontUrl+'/login'//temp solution
     }
   return Promise.reject(err);
 

@@ -45,7 +45,7 @@ export class ClinicOverview extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/clinics/admin-all').then( response => {
+        axios.get('/api/clinics/admin-all').then( response => {
             this.setState({clinics: response.data})
         })
     }
@@ -85,7 +85,7 @@ export class ClinicOverview extends React.Component {
     }
 
     update = () => {
-        axios.get('http://localhost:8080/api/clinics/admin-all').then( response => {
+        axios.get('/api/clinics/admin-all').then( response => {
             this.setState({clinics: response.data, showAddModal: false})
         })
     }
@@ -94,7 +94,7 @@ export class ClinicOverview extends React.Component {
         if(clinic.hasAdmin)
             return
 
-         axios.delete('http://localhost:8080/api/clinics/delete='+clinic.id).then(this.update)
+         axios.delete('/api/clinics/delete='+clinic.id).then(this.update)
     }
 
 

@@ -154,7 +154,7 @@ class LeaveRequestModal extends React.Component {
         endDate.setDate(endDate.getDate()-1)
 
         if(this.state.role === 'NURSE') {
-            axios.post('http://localhost:8080/api/leave-requests/add/nurse='+this.state.id, 
+            axios.post('/api/leave-requests/add/nurse='+this.state.id, 
             {
                 leaveType: leaveTypeData,
                 note: this.state.note,
@@ -170,7 +170,7 @@ class LeaveRequestModal extends React.Component {
             })
             
         } else if(this.state.role === 'DOCTOR') {
-            axios.post('http://localhost:8080/api/leave-requests/add/doctor='+this.state.id, 
+            axios.post('/api/leave-requests/add/doctor='+this.state.id, 
             {
                 leaveType: leaveTypeData,
                 note: this.state.note,
