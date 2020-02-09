@@ -3,7 +3,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import { Link, Redirect } from 'react-router-dom';
 import { Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 
-const baseBackUrl = "http://localhost:8080";
+const baseBackUrl = "https://dr-help-backend.herokuapp.com";
 class RegistrationPage extends React.Component {
 
 	constructor () {

@@ -12,7 +12,7 @@ import FirstTimePasswordChange from './components/FirstTimePasswordChange'
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import { Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 
-const baseBackendUrl = "http://localhost:8080";
+const baseBackendUrl = "https://dr-help-backend.herokuapp.com";
 class LoginPage extends React.Component {
 
 

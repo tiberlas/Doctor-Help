@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 import axios from 'axios'
 import BasicHeader from './BasicHeader'
 
-const baseUlr = 'http://localhost:8080';
-const baseFrontUrl = 'http://localhost:3000';
+const baseUlr = 'https://dr-help-backend.herokuapp.com';
+const baseFrontUrl = 'https://dr-help.herokuapp.com';
 class ActivatePatient extends React.Component {
 
 

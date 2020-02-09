@@ -1,8 +1,8 @@
 import axios from "axios"
 
-axios.defaults.baseURL = "http://localhost:8080";
-const baseBackendUrl = "http://localhost:8080";
-const baseFrontUrl = "http://localhost:3000";
+axios.defaults.baseURL = "https://dr-help-backend.herokuapp.com";
+const baseBackendUrl = "https://dr-help-backend.herokuapp.com";
+const baseFrontUrl = "https://dr-help.herokuapp.com";
 
 const interceptor = axios.interceptors.request.use( (config) => {
 const token = JSON.parse(localStorage.getItem('token'))
