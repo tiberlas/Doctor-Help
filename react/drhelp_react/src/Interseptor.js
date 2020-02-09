@@ -1,5 +1,7 @@
 import axios from "axios"
 
+axios.defaults.baseURL = "http://localhost:8080"
+
 const interceptor = axios.interceptors.request.use( (config) => {
 const token = JSON.parse(localStorage.getItem('token'))
 
