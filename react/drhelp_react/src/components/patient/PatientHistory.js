@@ -882,7 +882,7 @@ class PatientHistory extends Component {
 													<strong>Discount: </strong>
 												</TableCell>
 												<TableCell class='text-white'>
-													<p style={{ color: 'red' }}>
+													<p style={{ color: '#F39C12' }}>
 														{this.state.reservedAppointment.discount}%
 													</p>
 												</TableCell>
@@ -933,7 +933,7 @@ class PatientHistory extends Component {
 												<TableCell hidden={(this.props.filter === 'PENDING') ? (false) : (true)} class='text-white'><p  hidden={(this.props.filter === 'PENDING') ? (false) : (true)}><Button  hidden={row.canCancel} onClick={() => this.handleCancel(row.appointmentId, row.date)}><i class="fas fa-ban"></i> Cancel</Button></p></TableCell>
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white'>{row.room}</TableCell>
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white'>{row.price}</TableCell>
-												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white' style={{ color: '#E99002' }}>{row.discount}%</TableCell>
+												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white' style={{ color: '#F39C12' }}>{row.discount}%</TableCell>
 												<TableCell hidden={(this.props.filter === 'PREDEFINED') ? (false) : (true)} class='text-white'><Button disabled={this.state.waiting} onClick={() => this.handleReservationClick(row)}><i class="fas fa-clipboard-check"></i> Reserve</Button></TableCell>
 												<TableCell hidden={row.status !== "Approved"}>
 													<Button onClick={() => this.confirmAppointment(row)}>
