@@ -94,7 +94,7 @@ public class RequestManualTest {
     WebElement searchDate = driver.findElement(By.id("picker"));
     searchDate.clear();
     searchDate.sendKeys("04");
-    searchDate.sendKeys("26");
+    searchDate.sendKeys("29");
     searchDate.sendKeys("2020");
     
     (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("close_clinic_modal_button")));
