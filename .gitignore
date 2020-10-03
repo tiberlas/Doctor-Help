@@ -19,6 +19,8 @@
 *.tar.gz
 *.rar
 
+.metadata
+
 # folder #
 dr_help/target*
 
